@@ -1,0 +1,297 @@
+﻿{
+    "name":  "Chicken Normandy (Apple Cider Braised Chicken)",
+    "slug":  "chicken-normandy-apple-cider",
+    "cuisine":  "French",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.jocooks.com/recipes/chicken-normandy/",
+    "source_site":  "jocooks.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 200g (src scale)",
+                   "base +10% (Rice)",
+                   "protein +5% (Boneless Skinless Chicken Thigh)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Source lists 518 cal / 23g protein - clears calories as written, protein needs a small meat bump. Cream-and-cider braise using apples, which the board already tracks as a produce staple, so it is a genuinely cheap \u0027fancy\u0027 dinner. Confidence high. | HARVEST: ",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 200g (src scale)",
+                         "TUNING: base +10% (Rice)",
+                         "TUNING: protein +5% (Boneless Skinless Chicken Thigh)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  567,
+                 "protein":  26,
+                 "carbs":  66,
+                 "fat":  21,
+                 "cost_ps":  "1.16"
+             },
+    "intro_html":  "Normandy is apple country, and their cooking shows it. Chicken braises in apple cider with onions, mustard, and cream until the sauce goes silky and the apple slices soften into it. It tastes like a restaurant dish and costs less than most weeknight chicken. Each bowl carries 567 calories and \u003cstrong\u003e26 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$1.16 a serving\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 3.25 lb (1470 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 3.5 tbsp (49 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 (245 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)",
+                                "\u003cstrong\u003eApple (generic):\u003c/strong\u003e 7 (1260 g)",
+                                "\u003cstrong\u003eApple Juice (generic (USDA)):\u003c/strong\u003e 2.5 cups (651 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.75 cups (420 g)",
+                                "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 1.75 cups (416 g)",
+                                "\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 2.25 tbsp (35 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.25 cups dry (772 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Thigh, 3.25 lb: ~$5.74. \u003cstrong\u003eBuy 4 lbs: $7.08.\u003c/strong\u003e",
+                       "Olive Oil, 3.5 tbsp: ~$0.66. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Butter, 3.5 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Yellow Onion, 2: ~$0.62. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Apple, 7: ~$2.81. \u003cstrong\u003eBuy 8 each: $3.12.\u003c/strong\u003e",
+                       "Apple Juice, 2.5 cups: ~$0.77. \u003cstrong\u003eBuy 1 64floz bottle: $2.24.\u003c/strong\u003e",
+                       "Chicken Broth, 1.75 cups: ~$0.56. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Heavy Cream, 1.75 cups: ~$2.58. \u003cstrong\u003eBuy 1 pint: $2.94.\u003c/strong\u003e",
+                       "Dijon Mustard, 2.25 tbsp: ~$0.18. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 4.25 cups dry: ~$0.95. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, dried thyme): ~$0.51. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $16.20 across 14 servings, so roughly $1.16 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $22.94 across 14 servings, roughly $1.64 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.61 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $40.55. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.16 a serving\u003c/strong\u003e, which is the second cheapest dish in this whole batch. Apples, onions, and chicken thighs are all everyday grocery items, and the cream is used in a small enough amount that it barely moves the number.",
+    "shop_smart":  [
+                       "Apples are the flavor of this dish and they are cheapest in fall. A firm variety holds its shape in the pan while a soft one dissolves into applesauce, so pick something crisp rather than something mealy.",
+                       "Apple juice stands in for hard cider here and it works. Buy the big bottle, use what the recipe needs, and drink the rest, which is a much better outcome than a half used bottle of cooking cider going flat in the fridge.",
+                       "Heavy cream is the priciest thing on the list and you need less of it than you think. Buy a pint, use what the recipe calls for, and it will hold in the fridge for weeks.",
+                       "Boneless thighs are the cheap cut and the right one. Cream sauces are unforgiving to dry meat, and breast dries out in exactly this kind of braise."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Season the chicken thighs with salt, pepper, and thyme and brown them in the olive oil and butter until they have real color on both sides. Set them aside.",
+                    "Cook the sliced onions in the same pan until soft and golden, then add the garlic for a minute.",
+                    "Add the apples cut into thick wedges and cook 3 or 4 minutes just until they start to color at the edges. Do not cook them soft yet, because they still have the braise to get through.",
+                    "Pour in the apple juice and chicken broth and scrape the bottom of the pan clean, then return the chicken.",
+                    "Cover and simmer 25 minutes until the chicken is cooked through and the liquid has reduced by about a third.",
+                    "Stir the dijon mustard into the heavy cream in a bowl first, then add that mixture to the pan off the boil. Cream added to a hard boiling pan can split, and the mustard tempers it.",
+                    "Simmer gently 5 more minutes until the sauce coats a spoon. Cook the rice and taste the sauce for salt before portioning."
+                ],
+    "portion_html":  "Weigh the rice into each container, then set the pan on the scale, subtract the empty weight you wrote down, and divide by 14. Spoon the sauce evenly, since that is where the calories and most of the flavor live. Every portion lands at \u003cstrong\u003e567 calories\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.jocooks.com/recipes/chicken-normandy/\" target=\"_blank\" rel=\"noopener\"\u003ejocooks.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A French cream and cider braise for about \u003cstrong\u003e$1.16 a serving\u003c/strong\u003e. Members get the whole Meal Prep library along with every money lesson, calculator, and tool on the site for $1 a month.",
+    "cost_batch":  16.2,
+    "cost_batch_true":  22.94,
+    "cost_per_serving":  1.16,
+    "cost_per_serving_true":  1.64,
+    "cost_pantry_add":  17.61,
+    "cost_first_run":  40.55,
+    "scaler":  {
+                   "cost":  "22.94",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  1470,
+                                   "buy":  "3.25 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  21,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  47,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  49,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  245,
+                                   "buy":  "2",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  35,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Apple",
+                                   "canon":  "Apple",
+                                   "grams":  1260,
+                                   "buy":  "7",
+                                   "bid":  "apple",
+                                   "gpu":  "175.000"
+                               },
+                               {
+                                   "item":  "Apple Juice",
+                                   "canon":  "Apple Juice",
+                                   "grams":  651,
+                                   "buy":  "2.5 cups",
+                                   "bid":  "apple-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  420,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Heavy Cream",
+                                   "canon":  "Heavy Cream",
+                                   "grams":  416,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "heavy-cream",
+                                   "gpu":  "29.800"
+                               },
+                               {
+                                   "item":  "Dijon Mustard",
+                                   "canon":  "Dijon Mustard",
+                                   "grams":  35,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "dijon-mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  4,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  772,
+                                   "buy":  "4.25 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Chicken Normandy, French chicken thighs braised in apple cider with mustard and cream, rebuilt for 14 meal prep servings at about $1.16 a serving.",
+                 "keywords":  "chicken normandy, apple cider chicken, creamy braised chicken, french chicken recipe, budget chicken dinner, cheap meal prep, make ahead chicken",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M",
+                 "costPerServing":  1.16,
+                 "recipeIngredient":  [
+                                          "3.25 lb boneless skinless chicken thighs",
+                                          "7 apples",
+                                          "2.5 cups apple juice",
+                                          "1.75 cups heavy cream",
+                                          "2.25 tbsp dijon mustard",
+                                          "2 yellow onions",
+                                          "4 tbsp minced garlic",
+                                          "1 lb chicken broth",
+                                          "3.5 tbsp olive oil",
+                                          "3.5 tbsp butter",
+                                          "4.25 cups dry rice",
+                                          "Pantry: dried thyme, salt, black pepper"
+                                      ],
+                 "steps":  [
+                               "Season and brown the chicken thighs in olive oil and butter, then set aside.",
+                               "Soften the onions, add garlic, then color the apple wedges briefly.",
+                               "Deglaze with apple juice and chicken broth and return the chicken.",
+                               "Simmer covered 25 minutes until cooked through and reduced.",
+                               "Stir the mustard into the cream, add off the boil, and simmer 5 minutes to thicken.",
+                               "Weigh rice and chicken into 14 containers with the sauce."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  1470
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  49
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  245
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Apple",
+                                  "grams":  1260
+                              },
+                              {
+                                  "item":  "Apple Juice",
+                                  "grams":  651
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Heavy Cream",
+                                  "grams":  416
+                              },
+                              {
+                                  "item":  "Dijon Mustard",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  772
+                              }
+                          ]
+}

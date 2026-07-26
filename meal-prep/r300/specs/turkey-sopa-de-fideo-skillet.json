@@ -1,0 +1,260 @@
+﻿{
+    "name":  "Turkey Sopa de Fideo Skillet",
+    "slug":  "turkey-sopa-de-fideo-skillet",
+    "cuisine":  "Mexican",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://farmtojar.com/sopa-de-fideo-mexican-noodle-soup-with-leftover-turkey/",
+    "source_site":  "farmtojar.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Spaghetti)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Toasted-fideo tomato-chipotle noodle skillet, a Mexican staple with zero catalog presence. Source verified at 6 servings, 383 cal / 36g protein; cooked down to a thick skillet (not soup) at our portion it is ~520 cal / 40g. | HARVEST: Source is a soup, not a skillet dish.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Spaghetti)",
+                         "OVERRIDE Turkey Breast: [BUMP x1.3] source \u00273 cups chopped\u0027 (420 g) for 6; house = 560 g",
+                         "OVERRIDE Spaghetti: [BUMP x2.0] source 6 oz fideo for 6 is a brothy side; house dinner = 12 oz (wave-4: 454 overshot to 50 oz dry/batch after tuner scaling)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  562,
+                 "protein":  37,
+                 "carbs":  85,
+                 "fat":  9,
+                 "cost_ps":  "1.93"
+             },
+    "intro_html":  "Sopa de fideo is the first thing a lot of Mexican kids learn to love and one of the last things they stop craving. Thin noodles toasted in oil until they turn the color of a penny, then simmered in a blended tomato broth. Cooked down thick instead of soupy it becomes sopa seca, and it holds in the fridge far better than any brothy version would. Each serving carries \u003cstrong\u003e37 grams of protein\u003c/strong\u003e and 562 calories for about \u003cstrong\u003e$1.93\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2.4 cans (992 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (257 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.75 tbsp (23 g)",
+                                "\u003cstrong\u003eChipotle in Adobo (La Costena):\u003c/strong\u003e 5 tbsp (84 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 5.75 tbsp (79 g)",
+                                "\u003cstrong\u003eSpaghetti (Great Value):\u003c/strong\u003e 50.25 oz dry (1425 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 3.6 cartons (3360 g)",
+                                "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 3 lb (1307 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Diced Tomatoes, 2.4 cans: ~$2.32. \u003cstrong\u003eBuy 3 cans: $2.88.\u003c/strong\u003e",
+                       "Yellow Onion, 2.3: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 2.75 tbsp: ~$0.33. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Chipotle in Adobo, 5 tbsp: ~$0.69. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 5.75 tbsp: ~$1.11. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Spaghetti, 50.25 oz dry: ~$3.05. \u003cstrong\u003eBuy 4 16oz boxes: $3.88.\u003c/strong\u003e",
+                       "Chicken Broth, 3.6 cartons: ~$4.51. \u003cstrong\u003ePantry staple; this batch alone uses about 4 32oz cartons.\u003c/strong\u003e",
+                       "Turkey Breast, 3 lb: ~$13.87. \u003cstrong\u003eBuy 1 3lb frozen roast: $14.44.\u003c/strong\u003e",
+                       "Pantry seasonings (dried oregano, brown sugar, salt, black pepper): ~$0.51. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $27.04 across 14 servings, so roughly $1.93 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $29.74 across 14 servings, roughly $2.12 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $21.16 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.90. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.93 a serving\u003c/strong\u003e. Pasta and canned tomatoes cost almost nothing, and a couple of chipotles in adobo bring more smoke and depth than a whole spice rack would.",
+    "shop_smart":  [
+                       "Fideo and broken spaghetti are the same thing once they hit the pan. Buy whichever is cheaper per ounce, and snap the spaghetti into short pieces with your hands.",
+                       "A small can of chipotles in adobo costs about a dollar and lasts for months. Freeze the leftovers in single-pepper portions on a sheet of parchment.",
+                       "Canned diced tomatoes go on sale by the case constantly and keep for years. Store brand blends into the sauce indistinguishably.",
+                       "One frozen turkey breast roast covers the whole batch. Roast it, chop it, and it costs a fraction of anything sliced at a deli counter."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Break the spaghetti into pieces about an inch long. This takes a few minutes and it is what makes the dish fideo instead of just pasta.",
+                    "Heat the olive oil in your largest pot over medium and toast the broken pasta, stirring constantly, for 6 to 8 minutes until it turns golden brown. Do not walk away; it goes from toasted to burnt in under a minute.",
+                    "Scoop the toasted pasta out and set it aside, then blend the canned diced tomatoes with the onion, garlic, and chipotles in adobo until smooth.",
+                    "Pour the blended sauce into the hot pot and fry it for 5 minutes, stirring, until it darkens and thickens. Frying the sauce is the step most people skip and it is the one that matters.",
+                    "Add the chicken broth, the dried oregano, the brown sugar, salt, and black pepper, then bring it to a boil.",
+                    "Return the toasted pasta to the pot, drop to a simmer, and cook uncovered 12 to 15 minutes until the noodles are tender and most of the liquid is gone.",
+                    "Fold in the chopped turkey breast, warm it through for 3 minutes, and let the pot stand 10 minutes so the noodles absorb the last of the sauce."
+                ],
+    "portion_html":  "Weigh the pot, subtract the empty pot weight you noted, and divide by 14. Fideo keeps tightening as it cools, so scoop it while it is still loose and let the scale keep the containers even. Each serving comes to \u003cstrong\u003e562 calories\u003c/strong\u003e and 37 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://farmtojar.com/sopa-de-fideo-mexican-noodle-soup-with-leftover-turkey/\" target=\"_blank\" rel=\"noopener\"\u003efarmtojar.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A Mexican kitchen staple for about $1.93 a serving, and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "cost_batch":  27.04,
+    "cost_batch_true":  29.74,
+    "cost_per_serving":  1.93,
+    "cost_per_serving_true":  2.12,
+    "cost_pantry_add":  21.16,
+    "cost_first_run":  50.9,
+    "scaler":  {
+                   "cost":  "29.74",
+                   "ing":  [
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  992,
+                                   "buy":  "2.4 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  257,
+                                   "buy":  "2.3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  23,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  5,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chipotle in Adobo",
+                                   "canon":  "Chipotle in Adobo",
+                                   "grams":  84,
+                                   "buy":  "5 tbsp",
+                                   "bid":  "chipotle-adobo",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "canon":  "Brown Sugar",
+                                   "grams":  10,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  79,
+                                   "buy":  "5.75 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Spaghetti",
+                                   "canon":  "Spaghetti",
+                                   "grams":  1425,
+                                   "buy":  "50.25 oz dry",
+                                   "bid":  "pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  3360,
+                                   "buy":  "3.6 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Turkey Breast",
+                                   "canon":  "Turkey Breast",
+                                   "grams":  1307,
+                                   "buy":  "3 lb",
+                                   "bid":  "turkey-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey sopa de fideo skillet meal prep: toasted fideo noodles simmered in a chipotle tomato broth with turkey. 562 calories, 37g protein, about $1.93 a serving.",
+                 "keywords":  "sopa de fideo, fideo seco, mexican noodle skillet, chipotle tomato pasta, leftover turkey recipes, budget meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT40M",
+                 "totalTime":  "PT55M",
+                 "costPerServing":  1.93,
+                 "recipeIngredient":  [
+                                          "9.25 cups chopped cooked turkey breast",
+                                          "50 oz dry spaghetti",
+                                          "7.5 lb chicken broth",
+                                          "2.4 cans diced tomatoes",
+                                          "5 tbsp chipotle in adobo",
+                                          "2.3 yellow onions",
+                                          "2.75 tbsp garlic",
+                                          "5.75 tbsp olive oil"
+                                      ],
+                 "steps":  [
+                               "Break the spaghetti into inch-long pieces and toast them in olive oil until golden, then set aside.",
+                               "Blend the diced tomatoes with onion, garlic, and chipotles in adobo until smooth.",
+                               "Fry the blended sauce in the hot pot for 5 minutes until it darkens.",
+                               "Add the broth, oregano, brown sugar, salt, and pepper, bring to a boil, and return the pasta.",
+                               "Simmer uncovered 12 to 15 minutes, fold in the chopped turkey, rest 10 minutes, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  992
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  257
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  23
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Chipotle in Adobo",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Brown Sugar",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  79
+                              },
+                              {
+                                  "item":  "Spaghetti",
+                                  "grams":  1425
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  3360
+                              },
+                              {
+                                  "item":  "Turkey Breast",
+                                  "grams":  1307
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

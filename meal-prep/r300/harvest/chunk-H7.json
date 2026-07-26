@@ -1,0 +1,233 @@
+﻿{
+    "chunk":  "H7",
+    "recipes":  [
+                    {
+                        "slug":  "hungarian-beef-goulash",
+                        "name":  "Hungarian Beef Goulash",
+                        "protein":  "beef",
+                        "source_url":  "https://www.recipetineats.com/hungarian-goulash-recipe/"
+                    },
+                    {
+                        "slug":  "greek-stifado-beef-onion-stew",
+                        "name":  "Greek Stifado (Beef and Onion Stew)",
+                        "protein":  "beef",
+                        "source_url":  "https://www.mygreekdish.com/recipe/beef-stifado-mosharaki-stifado/"
+                    },
+                    {
+                        "slug":  "moussaka-greek-beef-eggplant-bake",
+                        "name":  "Moussaka (Greek Beef and Eggplant Bake)",
+                        "protein":  "beef",
+                        "source_url":  "https://www.recipetineats.com/moussaka-greek-eggplant-beef-bake/"
+                    },
+                    {
+                        "slug":  "moroccan-beef-tagine-chickpeas",
+                        "name":  "Moroccan Beef Tagine with Chickpeas",
+                        "protein":  "beef",
+                        "source_url":  "https://www.supergoldenbakes.com/beef-tagine/"
+                    },
+                    {
+                        "slug":  "beef-rendang-rice-bowls",
+                        "name":  "Beef Rendang Rice Bowls",
+                        "protein":  "beef",
+                        "source_url":  "https://www.chilipeppermadness.com/recipes/beef-rendang/"
+                    },
+                    {
+                        "slug":  "massaman-beef-curry-potatoes",
+                        "name":  "Massaman Beef Curry with Potatoes",
+                        "protein":  "beef",
+                        "source_url":  "https://www.recipetineats.com/massaman-curry/"
+                    },
+                    {
+                        "slug":  "taiwanese-braised-beef-noodle-bowls",
+                        "name":  "Taiwanese Braised Beef Noodle Bowls",
+                        "protein":  "beef",
+                        "source_url":  "https://thewoksoflife.com/taiwanese-beef-noodle-soup-instant-pot/"
+                    },
+                    {
+                        "slug":  "vietnamese-bo-kho-lemongrass-beef-stew",
+                        "name":  "Vietnamese Bo Kho (Lemongrass Beef Stew)",
+                        "protein":  "beef",
+                        "source_url":  "https://thewoksoflife.com/bo-kho-spicy-vietnamese-beef-stew/"
+                    },
+                    {
+                        "slug":  "gyudon-japanese-beef-onion-rice-bowls",
+                        "name":  "Gyudon (Japanese Beef and Onion Rice Bowls)",
+                        "protein":  "beef",
+                        "source_url":  "https://www.justonecookbook.com/gyudon/"
+                    },
+                    {
+                        "slug":  "beef-bulgogi-rice-bowls",
+                        "name":  "Beef Bulgogi Rice Bowls",
+                        "protein":  "beef",
+                        "source_url":  "https://www.recipetineats.com/korean-beef-bulgogi-rice-bowls-the-easy-way/"
+                    },
+                    {
+                        "slug":  "pepper-steak-with-rice",
+                        "name":  "Pepper Steak with Rice",
+                        "protein":  "beef",
+                        "source_url":  "https://www.chilipeppermadness.com/recipes/pepper-steak/"
+                    },
+                    {
+                        "slug":  "beef-honey-black-pepper-sauce-bowls",
+                        "name":  "Chinese Beef with Honey Black Pepper Sauce",
+                        "protein":  "beef",
+                        "source_url":  "https://www.recipetineats.com/chinese-beef-with-honey-and-black-pepper-sauce/"
+                    },
+                    {
+                        "slug":  "filipino-beef-caldereta",
+                        "name":  "Filipino Beef Caldereta",
+                        "protein":  "beef",
+                        "source_url":  "https://panlasangpinoy.com/caldereta/"
+                    },
+                    {
+                        "slug":  "korean-braised-chicken-potatoes-dakdoritang",
+                        "name":  "Korean Braised Chicken and Potatoes (Dakdoritang)",
+                        "protein":  "chicken",
+                        "source_url":  "https://www.beyondkimchee.com/spicy-korean-chicken-stew/"
+                    },
+                    {
+                        "slug":  "andong-jjimdak-braised-chicken",
+                        "name":  "Andong Jjimdak (Korean Soy-Braised Chicken with Noodles)",
+                        "protein":  "chicken",
+                        "source_url":  "https://www.beyondkimchee.com/korean-braised-chicken-jjimdak/"
+                    },
+                    {
+                        "slug":  "dak-galbi-chicken-cabbage-skillet",
+                        "name":  "Dak Galbi (Korean Chicken and Cabbage Skillet)",
+                        "protein":  "chicken",
+                        "source_url":  "https://mykoreankitchen.com/dak-galbi/"
+                    },
+                    {
+                        "slug":  "taiwanese-three-cup-chicken",
+                        "name":  "Taiwanese Three Cup Chicken",
+                        "protein":  "chicken",
+                        "source_url":  "https://www.beyondkimchee.com/taiwanese-three-cup-chicken-san-bei-ji/"
+                    },
+                    {
+                        "slug":  "claypot-chicken-mushroom-rice",
+                        "name":  "Claypot Chicken and Mushroom Rice",
+                        "protein":  "chicken",
+                        "source_url":  "https://www.wokandskillet.com/rice-cooker-claypot-chicken-rice/"
+                    },
+                    {
+                        "slug":  "hainanese-chicken-rice",
+                        "name":  "Hainanese Chicken Rice",
+                        "protein":  "chicken",
+                        "source_url":  "https://thewoksoflife.com/hainanese-chicken-rice/"
+                    },
+                    {
+                        "slug":  "chicken-fried-rice-skillet",
+                        "name":  "Chicken Fried Rice",
+                        "protein":  "chicken",
+                        "source_url":  "https://thewoksoflife.com/classic-chicken-fried-rice/"
+                    },
+                    {
+                        "slug":  "vietnamese-lemongrass-chicken-bowls",
+                        "name":  "Vietnamese Lemongrass Chicken Bowls",
+                        "protein":  "chicken",
+                        "source_url":  "https://www.theflavorbender.com/easy-lemongrass-chicken-bowls/"
+                    },
+                    {
+                        "slug":  "chicken-vindaloo",
+                        "name":  "Chicken Vindaloo",
+                        "protein":  "chicken",
+                        "source_url":  "https://www.whiskaffair.com/chicken-vindaloo/"
+                    },
+                    {
+                        "slug":  "chicken-jalfrezi",
+                        "name":  "Chicken Jalfrezi",
+                        "protein":  "chicken",
+                        "source_url":  "https://www.seasonsandsuppers.ca/chicken-jalfrezi/"
+                    },
+                    {
+                        "slug":  "chicken-kabsa-spiced-rice",
+                        "name":  "Chicken Kabsa (Saudi Spiced Chicken and Rice)",
+                        "protein":  "chicken",
+                        "source_url":  "https://www.themediterraneandish.com/kabsa-saudi-chicken-and-rice/"
+                    },
+                    {
+                        "slug":  "chicken-marbella",
+                        "name":  "Chicken Marbella",
+                        "protein":  "chicken",
+                        "source_url":  "https://www.themediterraneandish.com/chicken-marbella/"
+                    },
+                    {
+                        "slug":  "coq-au-vin",
+                        "name":  "Coq au Vin",
+                        "protein":  "chicken",
+                        "source_url":  "https://www.theendlessmeal.com/julia-childs-coq-au-vin/"
+                    },
+                    {
+                        "slug":  "chicken-normandy-apple-cider",
+                        "name":  "Chicken Normandy (Apple Cider Braised Chicken)",
+                        "protein":  "chicken",
+                        "source_url":  "https://www.jocooks.com/recipes/chicken-normandy/"
+                    },
+                    {
+                        "slug":  "chicken-provencal",
+                        "name":  "Chicken Provencal",
+                        "protein":  "chicken",
+                        "source_url":  "https://www.jocooks.com/recipes/chicken-provencal/"
+                    },
+                    {
+                        "slug":  "chicken-40-cloves-garlic",
+                        "name":  "Chicken with 40 Cloves of Garlic",
+                        "protein":  "chicken",
+                        "source_url":  "https://www.jocooks.com/recipes/chicken-with-40-cloves-of-garlic/"
+                    },
+                    {
+                        "slug":  "chicken-vesuvio",
+                        "name":  "Chicken Vesuvio",
+                        "protein":  "chicken",
+                        "source_url":  "https://scarlatifamilykitchen.com/chicken-vesuvio/"
+                    },
+                    {
+                        "slug":  "hunters-chicken-bbq-bacon-bake",
+                        "name":  "Hunter\u0027s Chicken (BBQ Bacon Cheese Bake)",
+                        "protein":  "chicken",
+                        "source_url":  "https://www.kitchensanctuary.com/hunters-chicken/"
+                    },
+                    {
+                        "slug":  "smothered-chicken-onion-gravy",
+                        "name":  "Smothered Chicken Thighs with Onion Gravy",
+                        "protein":  "chicken",
+                        "source_url":  "https://www.africanbites.com/smothered-chicken/"
+                    },
+                    {
+                        "slug":  "chicken-and-dumplings",
+                        "name":  "Old-Fashioned Chicken and Dumplings",
+                        "protein":  "chicken",
+                        "source_url":  "https://www.spendwithpennies.com/old-fashioned-chicken-and-dumplings/"
+                    },
+                    {
+                        "slug":  "chicken-sausage-gumbo",
+                        "name":  "Chicken and Sausage Gumbo",
+                        "protein":  "chicken",
+                        "source_url":  "https://www.africanbites.com/chicken-and-sausage-gumbo/"
+                    },
+                    {
+                        "slug":  "chicken-pot-pie-biscuit-casserole",
+                        "name":  "Chicken Pot Pie Casserole with Biscuits",
+                        "protein":  "chicken",
+                        "source_url":  "https://www.spendwithpennies.com/chicken-pot-pie-casserole/"
+                    },
+                    {
+                        "slug":  "chicken-divan-broccoli-bake",
+                        "name":  "Chicken Divan (Broccoli Cheese Bake)",
+                        "protein":  "chicken",
+                        "source_url":  "https://www.spendwithpennies.com/quick-simple-chicken-broccoli-divan/"
+                    },
+                    {
+                        "slug":  "chicken-cordon-bleu-casserole",
+                        "name":  "Chicken Cordon Bleu Casserole",
+                        "protein":  "chicken",
+                        "source_url":  "https://www.plainchicken.com/easy-chicken-cordon-bleu-casserole/"
+                    },
+                    {
+                        "slug":  "chicken-tetrazzini",
+                        "name":  "Chicken Tetrazzini",
+                        "protein":  "chicken",
+                        "source_url":  "https://natashaskitchen.com/chicken-tetrazzini/"
+                    }
+                ]
+}

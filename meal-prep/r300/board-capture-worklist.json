@@ -1,0 +1,1074 @@
+﻿{
+    "generated":  "2026-07-25 16:21",
+    "batch":  "r300 (21 new commodities)",
+    "readme":  "Walled-store capture worklist. These stores are captured through the owner Chrome (Walmart/Sams = __NEXT_DATA__ fetch; Aldi/Fareway = Instacart offscreen-iframe, IN-STORE fulfillment mode REQUIRED - the Pickup/Delivery price is marked up and violates the in-store rule). A new commodity gets ZERO coverage from their scheduled pulls, so every id below needs a human-driven capture. After importing: compare-deals -\u003e diff-board vs out\\comparison-\u003cdate\u003e.json -\u003e any EXISTING cell that moves is a collision to fix, not noise.",
+    "price_mode_rule":  "in-store shelf price ONLY (audit-price-mode.ps1 enforces it for Aldi/Fareway).",
+    "importers":  {
+                      "walmart":  "grocery\\import-walmart-batch.ps1",
+                      "sams":  "grocery\\import-sams-prices.ps1 / build-sams-deals.ps1",
+                      "aldi":  "grocery\\import-aldi-batch.ps1",
+                      "fareway":  "grocery\\import-instacart-batch.ps1 -Store Fareway"
+                  },
+    "stores":  [
+                   {
+                       "store":  "Walmart",
+                       "missing":  20,
+                       "items":  [
+                                     {
+                                         "id":  "turkey-breast",
+                                         "label":  "Turkey Breast (raw)",
+                                         "unit":  "lb",
+                                         "search_term":  "turkey breast",
+                                         "typical_size":  "3 lb roast",
+                                         "include":  [
+                                                         "turkey\\s+breasts?\\b",
+                                                         "breast\\s+of\\s+turkey",
+                                                         "turkey\\s+london\\s+broil"
+                                                     ],
+                                         "note":  "RAW whole-muscle only (bone-in, boneless roast, tenderloin). Deli/lunchmeat and frozen dinners are excluded by rule - do not capture them."
+                                     },
+                                     {
+                                         "id":  "dried-arbol-chiles",
+                                         "label":  "Dried Arbol Chiles",
+                                         "unit":  "oz",
+                                         "search_term":  "chile de arbol",
+                                         "typical_size":  "2.5 oz bag",
+                                         "include":  [
+                                                         "rbol\\b"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "dried-guajillo-chiles",
+                                         "label":  "Dried Guajillo Chiles",
+                                         "unit":  "oz",
+                                         "search_term":  "guajillo chiles",
+                                         "typical_size":  "3 oz bag",
+                                         "include":  [
+                                                         "guajillo"
+                                                     ],
+                                         "note":  "ZERO coverage at all three headless stores - Hispanic-aisle cello bags. Whole pods only; powder/molido is chili-powder."
+                                     },
+                                     {
+                                         "id":  "dried-ancho-chiles",
+                                         "label":  "Dried Ancho Chiles",
+                                         "unit":  "oz",
+                                         "search_term":  "ancho chiles",
+                                         "typical_size":  "3 oz bag",
+                                         "include":  [
+                                                         "\\bancho\\b",
+                                                         "ancho\\s+chil"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "diced-ham",
+                                         "label":  "Diced / Cubed Ham",
+                                         "unit":  "oz",
+                                         "search_term":  "diced ham",
+                                         "typical_size":  "8 oz tub",
+                                         "include":  [
+                                                         "diced\\s+ham",
+                                                         "cubed\\s+ham",
+                                                         "ham\\s+(?:cubes|dices|pieces)",
+                                                         "chopped\\s+ham"
+                                                     ],
+                                         "note":  "Diced/cubed tubs. Deli sliced ham is the existing deli-ham row."
+                                     },
+                                     {
+                                         "id":  "sazon-seasoning",
+                                         "label":  "Sazon Seasoning",
+                                         "unit":  "oz",
+                                         "search_term":  "sazon",
+                                         "typical_size":  "1.41 oz box",
+                                         "include":  [
+                                                         "\\bsaz.n\\b"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "eggplant",
+                                         "label":  "Eggplant (each)",
+                                         "unit":  "each",
+                                         "search_term":  "eggplant",
+                                         "typical_size":  "1 eggplant",
+                                         "include":  [
+                                                         "\\beggplants?\\b",
+                                                         "\\baubergines?\\b"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "brown-gravy-mix",
+                                         "label":  "Brown Gravy Mix (dry packet)",
+                                         "unit":  "oz",
+                                         "search_term":  "brown gravy mix",
+                                         "typical_size":  "0.87 oz packet",
+                                         "include":  [
+                                                         "brown\\s+gravy\\s+mix",
+                                                         "gravy\\s+mix,?\\s+brown",
+                                                         "brown\\s+gravy\\b.{0,15}\\b(?:packet|envelope|dry)"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "chicken-livers",
+                                         "label":  "Chicken Livers",
+                                         "unit":  "lb",
+                                         "search_term":  "chicken livers",
+                                         "typical_size":  "20 oz tub",
+                                         "include":  [
+                                                         "chicken\\s+livers?\\b",
+                                                         "livers?\\b.{0,15}chicken"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "sweet-soy-sauce",
+                                         "label":  "Sweet Soy Sauce (Kecap Manis)",
+                                         "unit":  "floz",
+                                         "search_term":  "sweet soy sauce",
+                                         "typical_size":  "21 oz bottle",
+                                         "include":  [
+                                                         "sweet\\s+soy\\s+sauce",
+                                                         "ke[ct]jap\\s+manis",
+                                                         "kecap\\s+manis"
+                                                     ],
+                                         "note":  "Kecap manis / sweet soy. NOT regular soy sauce (that row already exists)."
+                                     },
+                                     {
+                                         "id":  "caraway-seeds",
+                                         "label":  "Caraway Seeds",
+                                         "unit":  "oz",
+                                         "search_term":  "caraway seed",
+                                         "typical_size":  "1.75 oz jar",
+                                         "include":  [
+                                                         "caraway"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "poultry-seasoning",
+                                         "label":  "Poultry Seasoning",
+                                         "unit":  "oz",
+                                         "search_term":  "poultry seasoning",
+                                         "typical_size":  "0.65 oz jar",
+                                         "include":  [
+                                                         "poultry\\s+seasoning",
+                                                         "poultry\\s+herb\\s+blend"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "wild-rice",
+                                         "label":  "Wild Rice",
+                                         "unit":  "oz",
+                                         "search_term":  "wild rice",
+                                         "typical_size":  "8 oz box",
+                                         "include":  [
+                                                         "wild\\s+rice"
+                                                     ],
+                                         "note":  "100% wild rice only - long grain \u0026 wild BLENDS are excluded by rule (mostly white rice, they would undercut the real per-oz)."
+                                     },
+                                     {
+                                         "id":  "doubanjiang",
+                                         "label":  "Doubanjiang (Chili Bean Paste)",
+                                         "unit":  "oz",
+                                         "search_term":  "chili bean sauce",
+                                         "typical_size":  "8 oz jar",
+                                         "include":  [
+                                                         "doubanjiang",
+                                                         "dou\\s*ban\\s*jiang",
+                                                         "toban\\s*-?\\s*djan",
+                                                         "chili\\s+bean\\s+sauce",
+                                                         "broad\\s+bean\\s+(?:chili\\s+)?(?:paste|sauce)",
+                                                         "pixian"
+                                                     ],
+                                         "note":  "ZERO coverage at all three headless stores. Look for Lee Kum Kee Chili Bean Sauce (Toban Djan) or Pixian broad bean paste in the Asian aisle. Do NOT accept a canned chili-bean product."
+                                     },
+                                     {
+                                         "id":  "ground-fennel",
+                                         "label":  "Fennel Seed / Ground Fennel",
+                                         "unit":  "oz",
+                                         "search_term":  "fennel seed",
+                                         "typical_size":  "1 oz jar",
+                                         "include":  [
+                                                         "fennel\\s+seeds?",
+                                                         "ground\\s+fennel",
+                                                         "fennel,?\\s+ground"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "snow-peas",
+                                         "label":  "Snow / Sugar Snap Peas (fresh)",
+                                         "unit":  "oz",
+                                         "search_term":  "snow peas",
+                                         "typical_size":  "8 oz bag",
+                                         "include":  [
+                                                         "snow\\s+peas",
+                                                         "sugar\\s+snap\\s+peas",
+                                                         "\\bsnap\\s+peas",
+                                                         "pea\\s+pods"
+                                                     ],
+                                         "note":  "FRESH snow / sugar snap peas. Frozen bags are excluded by rule."
+                                     },
+                                     {
+                                         "id":  "corned-beef-brisket",
+                                         "label":  "Corned Beef Brisket (raw)",
+                                         "unit":  "lb",
+                                         "search_term":  "corned beef brisket",
+                                         "typical_size":  "3 lb point cut",
+                                         "include":  [
+                                                         "corned\\s+beef\\s+brisket",
+                                                         "corned\\s+beef\\b.{0,20}\\b(?:point|flat)\\s+cut",
+                                                         "brisket\\b.{0,20}corned\\s+beef"
+                                                     ],
+                                         "note":  "SEASONAL (peaks around March). If a store does not carry it today, record NOT-CARRIED - do not substitute canned corned beef or hash."
+                                     },
+                                     {
+                                         "id":  "pigeon-peas",
+                                         "label":  "Pigeon Peas / Gandules (canned)",
+                                         "unit":  "oz",
+                                         "search_term":  "pigeon peas",
+                                         "typical_size":  "15 oz can",
+                                         "include":  [
+                                                         "pigeon\\s+peas",
+                                                         "gandules"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "aji-amarillo-paste",
+                                         "label":  "Aji Amarillo Paste",
+                                         "unit":  "oz",
+                                         "search_term":  "aji amarillo paste",
+                                         "typical_size":  "7.5 oz jar",
+                                         "include":  [
+                                                         "aj.\\s+amarillo",
+                                                         "amarillo\\s+(?:chili|chile|hot\\s+)?pepper\\s+paste"
+                                                     ],
+                                         "note":  "ZERO coverage at all three headless stores. Goya jar, Hispanic aisle. Do NOT accept Arroz Amarillo (yellow rice)."
+                                     },
+                                     {
+                                         "id":  "rye-bread",
+                                         "label":  "Rye Bread (loaf)",
+                                         "unit":  "each",
+                                         "search_term":  "rye bread",
+                                         "typical_size":  "16 oz loaf",
+                                         "include":  [
+                                                         "\\brye\\s+bread\\b",
+                                                         "jewish\\s+rye",
+                                                         "marble\\s+rye",
+                                                         "pumpernickel",
+                                                         "rye\\s+loaf",
+                                                         "bread,?\\s+rye"
+                                                     ],
+                                         "note":  "BLOCKED ON UNIT, not on data: 31 rye loaves are already in the FF/Hy-Vee/Bakers files but the commodity unit is each and those rows carry oz sizes, which the engine refuses to convert to a count. A Walmart capture whose size reads each/1 ct WILL price. See RUN-STATE for the unit decision Brad/main session needs to make."
+                                     }
+                                 ]
+                   },
+                   {
+                       "store":  "Sam\u0027s Club",
+                       "missing":  21,
+                       "items":  [
+                                     {
+                                         "id":  "turkey-breast",
+                                         "label":  "Turkey Breast (raw)",
+                                         "unit":  "lb",
+                                         "search_term":  "turkey breast",
+                                         "typical_size":  "3 lb roast",
+                                         "include":  [
+                                                         "turkey\\s+breasts?\\b",
+                                                         "breast\\s+of\\s+turkey",
+                                                         "turkey\\s+london\\s+broil"
+                                                     ],
+                                         "note":  "RAW whole-muscle only (bone-in, boneless roast, tenderloin). Deli/lunchmeat and frozen dinners are excluded by rule - do not capture them."
+                                     },
+                                     {
+                                         "id":  "dried-arbol-chiles",
+                                         "label":  "Dried Arbol Chiles",
+                                         "unit":  "oz",
+                                         "search_term":  "chile de arbol",
+                                         "typical_size":  "2.5 oz bag",
+                                         "include":  [
+                                                         "rbol\\b"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "dried-guajillo-chiles",
+                                         "label":  "Dried Guajillo Chiles",
+                                         "unit":  "oz",
+                                         "search_term":  "guajillo chiles",
+                                         "typical_size":  "3 oz bag",
+                                         "include":  [
+                                                         "guajillo"
+                                                     ],
+                                         "note":  "ZERO coverage at all three headless stores - Hispanic-aisle cello bags. Whole pods only; powder/molido is chili-powder."
+                                     },
+                                     {
+                                         "id":  "dried-ancho-chiles",
+                                         "label":  "Dried Ancho Chiles",
+                                         "unit":  "oz",
+                                         "search_term":  "ancho chiles",
+                                         "typical_size":  "3 oz bag",
+                                         "include":  [
+                                                         "\\bancho\\b",
+                                                         "ancho\\s+chil"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "diced-ham",
+                                         "label":  "Diced / Cubed Ham",
+                                         "unit":  "oz",
+                                         "search_term":  "diced ham",
+                                         "typical_size":  "8 oz tub",
+                                         "include":  [
+                                                         "diced\\s+ham",
+                                                         "cubed\\s+ham",
+                                                         "ham\\s+(?:cubes|dices|pieces)",
+                                                         "chopped\\s+ham"
+                                                     ],
+                                         "note":  "Diced/cubed tubs. Deli sliced ham is the existing deli-ham row."
+                                     },
+                                     {
+                                         "id":  "sazon-seasoning",
+                                         "label":  "Sazon Seasoning",
+                                         "unit":  "oz",
+                                         "search_term":  "sazon",
+                                         "typical_size":  "1.41 oz box",
+                                         "include":  [
+                                                         "\\bsaz.n\\b"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "eggplant",
+                                         "label":  "Eggplant (each)",
+                                         "unit":  "each",
+                                         "search_term":  "eggplant",
+                                         "typical_size":  "1 eggplant",
+                                         "include":  [
+                                                         "\\beggplants?\\b",
+                                                         "\\baubergines?\\b"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "brown-gravy-mix",
+                                         "label":  "Brown Gravy Mix (dry packet)",
+                                         "unit":  "oz",
+                                         "search_term":  "brown gravy mix",
+                                         "typical_size":  "0.87 oz packet",
+                                         "include":  [
+                                                         "brown\\s+gravy\\s+mix",
+                                                         "gravy\\s+mix,?\\s+brown",
+                                                         "brown\\s+gravy\\b.{0,15}\\b(?:packet|envelope|dry)"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "chicken-livers",
+                                         "label":  "Chicken Livers",
+                                         "unit":  "lb",
+                                         "search_term":  "chicken livers",
+                                         "typical_size":  "20 oz tub",
+                                         "include":  [
+                                                         "chicken\\s+livers?\\b",
+                                                         "livers?\\b.{0,15}chicken"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "sweet-soy-sauce",
+                                         "label":  "Sweet Soy Sauce (Kecap Manis)",
+                                         "unit":  "floz",
+                                         "search_term":  "sweet soy sauce",
+                                         "typical_size":  "21 oz bottle",
+                                         "include":  [
+                                                         "sweet\\s+soy\\s+sauce",
+                                                         "ke[ct]jap\\s+manis",
+                                                         "kecap\\s+manis"
+                                                     ],
+                                         "note":  "Kecap manis / sweet soy. NOT regular soy sauce (that row already exists)."
+                                     },
+                                     {
+                                         "id":  "caraway-seeds",
+                                         "label":  "Caraway Seeds",
+                                         "unit":  "oz",
+                                         "search_term":  "caraway seed",
+                                         "typical_size":  "1.75 oz jar",
+                                         "include":  [
+                                                         "caraway"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "poultry-seasoning",
+                                         "label":  "Poultry Seasoning",
+                                         "unit":  "oz",
+                                         "search_term":  "poultry seasoning",
+                                         "typical_size":  "0.65 oz jar",
+                                         "include":  [
+                                                         "poultry\\s+seasoning",
+                                                         "poultry\\s+herb\\s+blend"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "wild-rice",
+                                         "label":  "Wild Rice",
+                                         "unit":  "oz",
+                                         "search_term":  "wild rice",
+                                         "typical_size":  "8 oz box",
+                                         "include":  [
+                                                         "wild\\s+rice"
+                                                     ],
+                                         "note":  "100% wild rice only - long grain \u0026 wild BLENDS are excluded by rule (mostly white rice, they would undercut the real per-oz)."
+                                     },
+                                     {
+                                         "id":  "doubanjiang",
+                                         "label":  "Doubanjiang (Chili Bean Paste)",
+                                         "unit":  "oz",
+                                         "search_term":  "chili bean sauce",
+                                         "typical_size":  "8 oz jar",
+                                         "include":  [
+                                                         "doubanjiang",
+                                                         "dou\\s*ban\\s*jiang",
+                                                         "toban\\s*-?\\s*djan",
+                                                         "chili\\s+bean\\s+sauce",
+                                                         "broad\\s+bean\\s+(?:chili\\s+)?(?:paste|sauce)",
+                                                         "pixian"
+                                                     ],
+                                         "note":  "ZERO coverage at all three headless stores. Look for Lee Kum Kee Chili Bean Sauce (Toban Djan) or Pixian broad bean paste in the Asian aisle. Do NOT accept a canned chili-bean product."
+                                     },
+                                     {
+                                         "id":  "ground-fennel",
+                                         "label":  "Fennel Seed / Ground Fennel",
+                                         "unit":  "oz",
+                                         "search_term":  "fennel seed",
+                                         "typical_size":  "1 oz jar",
+                                         "include":  [
+                                                         "fennel\\s+seeds?",
+                                                         "ground\\s+fennel",
+                                                         "fennel,?\\s+ground"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "snow-peas",
+                                         "label":  "Snow / Sugar Snap Peas (fresh)",
+                                         "unit":  "oz",
+                                         "search_term":  "snow peas",
+                                         "typical_size":  "8 oz bag",
+                                         "include":  [
+                                                         "snow\\s+peas",
+                                                         "sugar\\s+snap\\s+peas",
+                                                         "\\bsnap\\s+peas",
+                                                         "pea\\s+pods"
+                                                     ],
+                                         "note":  "FRESH snow / sugar snap peas. Frozen bags are excluded by rule."
+                                     },
+                                     {
+                                         "id":  "horseradish-sauce",
+                                         "label":  "Horseradish Sauce (creamy)",
+                                         "unit":  "oz",
+                                         "search_term":  "horseradish sauce",
+                                         "typical_size":  "8.5 oz bottle",
+                                         "include":  [
+                                                         "horseradish\\s+sauce",
+                                                         "creamy\\s+horseradish",
+                                                         "cream\\s+style\\s+horseradish",
+                                                         "horseradish\\s+cream"
+                                                     ],
+                                         "note":  "Creamy SAUCE. Prepared horseradish root is the existing horseradish row."
+                                     },
+                                     {
+                                         "id":  "corned-beef-brisket",
+                                         "label":  "Corned Beef Brisket (raw)",
+                                         "unit":  "lb",
+                                         "search_term":  "corned beef brisket",
+                                         "typical_size":  "3 lb point cut",
+                                         "include":  [
+                                                         "corned\\s+beef\\s+brisket",
+                                                         "corned\\s+beef\\b.{0,20}\\b(?:point|flat)\\s+cut",
+                                                         "brisket\\b.{0,20}corned\\s+beef"
+                                                     ],
+                                         "note":  "SEASONAL (peaks around March). If a store does not carry it today, record NOT-CARRIED - do not substitute canned corned beef or hash."
+                                     },
+                                     {
+                                         "id":  "pigeon-peas",
+                                         "label":  "Pigeon Peas / Gandules (canned)",
+                                         "unit":  "oz",
+                                         "search_term":  "pigeon peas",
+                                         "typical_size":  "15 oz can",
+                                         "include":  [
+                                                         "pigeon\\s+peas",
+                                                         "gandules"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "aji-amarillo-paste",
+                                         "label":  "Aji Amarillo Paste",
+                                         "unit":  "oz",
+                                         "search_term":  "aji amarillo paste",
+                                         "typical_size":  "7.5 oz jar",
+                                         "include":  [
+                                                         "aj.\\s+amarillo",
+                                                         "amarillo\\s+(?:chili|chile|hot\\s+)?pepper\\s+paste"
+                                                     ],
+                                         "note":  "ZERO coverage at all three headless stores. Goya jar, Hispanic aisle. Do NOT accept Arroz Amarillo (yellow rice)."
+                                     },
+                                     {
+                                         "id":  "rye-bread",
+                                         "label":  "Rye Bread (loaf)",
+                                         "unit":  "each",
+                                         "search_term":  "rye bread",
+                                         "typical_size":  "16 oz loaf",
+                                         "include":  [
+                                                         "\\brye\\s+bread\\b",
+                                                         "jewish\\s+rye",
+                                                         "marble\\s+rye",
+                                                         "pumpernickel",
+                                                         "rye\\s+loaf",
+                                                         "bread,?\\s+rye"
+                                                     ],
+                                         "note":  "BLOCKED ON UNIT, not on data: 31 rye loaves are already in the FF/Hy-Vee/Bakers files but the commodity unit is each and those rows carry oz sizes, which the engine refuses to convert to a count. A Walmart capture whose size reads each/1 ct WILL price. See RUN-STATE for the unit decision Brad/main session needs to make."
+                                     }
+                                 ]
+                   },
+                   {
+                       "store":  "Aldi",
+                       "missing":  21,
+                       "items":  [
+                                     {
+                                         "id":  "turkey-breast",
+                                         "label":  "Turkey Breast (raw)",
+                                         "unit":  "lb",
+                                         "search_term":  "turkey breast",
+                                         "typical_size":  "3 lb roast",
+                                         "include":  [
+                                                         "turkey\\s+breasts?\\b",
+                                                         "breast\\s+of\\s+turkey",
+                                                         "turkey\\s+london\\s+broil"
+                                                     ],
+                                         "note":  "RAW whole-muscle only (bone-in, boneless roast, tenderloin). Deli/lunchmeat and frozen dinners are excluded by rule - do not capture them."
+                                     },
+                                     {
+                                         "id":  "dried-arbol-chiles",
+                                         "label":  "Dried Arbol Chiles",
+                                         "unit":  "oz",
+                                         "search_term":  "chile de arbol",
+                                         "typical_size":  "2.5 oz bag",
+                                         "include":  [
+                                                         "rbol\\b"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "dried-guajillo-chiles",
+                                         "label":  "Dried Guajillo Chiles",
+                                         "unit":  "oz",
+                                         "search_term":  "guajillo chiles",
+                                         "typical_size":  "3 oz bag",
+                                         "include":  [
+                                                         "guajillo"
+                                                     ],
+                                         "note":  "ZERO coverage at all three headless stores - Hispanic-aisle cello bags. Whole pods only; powder/molido is chili-powder."
+                                     },
+                                     {
+                                         "id":  "dried-ancho-chiles",
+                                         "label":  "Dried Ancho Chiles",
+                                         "unit":  "oz",
+                                         "search_term":  "ancho chiles",
+                                         "typical_size":  "3 oz bag",
+                                         "include":  [
+                                                         "\\bancho\\b",
+                                                         "ancho\\s+chil"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "diced-ham",
+                                         "label":  "Diced / Cubed Ham",
+                                         "unit":  "oz",
+                                         "search_term":  "diced ham",
+                                         "typical_size":  "8 oz tub",
+                                         "include":  [
+                                                         "diced\\s+ham",
+                                                         "cubed\\s+ham",
+                                                         "ham\\s+(?:cubes|dices|pieces)",
+                                                         "chopped\\s+ham"
+                                                     ],
+                                         "note":  "Diced/cubed tubs. Deli sliced ham is the existing deli-ham row."
+                                     },
+                                     {
+                                         "id":  "sazon-seasoning",
+                                         "label":  "Sazon Seasoning",
+                                         "unit":  "oz",
+                                         "search_term":  "sazon",
+                                         "typical_size":  "1.41 oz box",
+                                         "include":  [
+                                                         "\\bsaz.n\\b"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "eggplant",
+                                         "label":  "Eggplant (each)",
+                                         "unit":  "each",
+                                         "search_term":  "eggplant",
+                                         "typical_size":  "1 eggplant",
+                                         "include":  [
+                                                         "\\beggplants?\\b",
+                                                         "\\baubergines?\\b"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "brown-gravy-mix",
+                                         "label":  "Brown Gravy Mix (dry packet)",
+                                         "unit":  "oz",
+                                         "search_term":  "brown gravy mix",
+                                         "typical_size":  "0.87 oz packet",
+                                         "include":  [
+                                                         "brown\\s+gravy\\s+mix",
+                                                         "gravy\\s+mix,?\\s+brown",
+                                                         "brown\\s+gravy\\b.{0,15}\\b(?:packet|envelope|dry)"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "chicken-livers",
+                                         "label":  "Chicken Livers",
+                                         "unit":  "lb",
+                                         "search_term":  "chicken livers",
+                                         "typical_size":  "20 oz tub",
+                                         "include":  [
+                                                         "chicken\\s+livers?\\b",
+                                                         "livers?\\b.{0,15}chicken"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "sweet-soy-sauce",
+                                         "label":  "Sweet Soy Sauce (Kecap Manis)",
+                                         "unit":  "floz",
+                                         "search_term":  "sweet soy sauce",
+                                         "typical_size":  "21 oz bottle",
+                                         "include":  [
+                                                         "sweet\\s+soy\\s+sauce",
+                                                         "ke[ct]jap\\s+manis",
+                                                         "kecap\\s+manis"
+                                                     ],
+                                         "note":  "Kecap manis / sweet soy. NOT regular soy sauce (that row already exists)."
+                                     },
+                                     {
+                                         "id":  "caraway-seeds",
+                                         "label":  "Caraway Seeds",
+                                         "unit":  "oz",
+                                         "search_term":  "caraway seed",
+                                         "typical_size":  "1.75 oz jar",
+                                         "include":  [
+                                                         "caraway"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "poultry-seasoning",
+                                         "label":  "Poultry Seasoning",
+                                         "unit":  "oz",
+                                         "search_term":  "poultry seasoning",
+                                         "typical_size":  "0.65 oz jar",
+                                         "include":  [
+                                                         "poultry\\s+seasoning",
+                                                         "poultry\\s+herb\\s+blend"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "wild-rice",
+                                         "label":  "Wild Rice",
+                                         "unit":  "oz",
+                                         "search_term":  "wild rice",
+                                         "typical_size":  "8 oz box",
+                                         "include":  [
+                                                         "wild\\s+rice"
+                                                     ],
+                                         "note":  "100% wild rice only - long grain \u0026 wild BLENDS are excluded by rule (mostly white rice, they would undercut the real per-oz)."
+                                     },
+                                     {
+                                         "id":  "doubanjiang",
+                                         "label":  "Doubanjiang (Chili Bean Paste)",
+                                         "unit":  "oz",
+                                         "search_term":  "chili bean sauce",
+                                         "typical_size":  "8 oz jar",
+                                         "include":  [
+                                                         "doubanjiang",
+                                                         "dou\\s*ban\\s*jiang",
+                                                         "toban\\s*-?\\s*djan",
+                                                         "chili\\s+bean\\s+sauce",
+                                                         "broad\\s+bean\\s+(?:chili\\s+)?(?:paste|sauce)",
+                                                         "pixian"
+                                                     ],
+                                         "note":  "ZERO coverage at all three headless stores. Look for Lee Kum Kee Chili Bean Sauce (Toban Djan) or Pixian broad bean paste in the Asian aisle. Do NOT accept a canned chili-bean product."
+                                     },
+                                     {
+                                         "id":  "ground-fennel",
+                                         "label":  "Fennel Seed / Ground Fennel",
+                                         "unit":  "oz",
+                                         "search_term":  "fennel seed",
+                                         "typical_size":  "1 oz jar",
+                                         "include":  [
+                                                         "fennel\\s+seeds?",
+                                                         "ground\\s+fennel",
+                                                         "fennel,?\\s+ground"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "snow-peas",
+                                         "label":  "Snow / Sugar Snap Peas (fresh)",
+                                         "unit":  "oz",
+                                         "search_term":  "snow peas",
+                                         "typical_size":  "8 oz bag",
+                                         "include":  [
+                                                         "snow\\s+peas",
+                                                         "sugar\\s+snap\\s+peas",
+                                                         "\\bsnap\\s+peas",
+                                                         "pea\\s+pods"
+                                                     ],
+                                         "note":  "FRESH snow / sugar snap peas. Frozen bags are excluded by rule."
+                                     },
+                                     {
+                                         "id":  "horseradish-sauce",
+                                         "label":  "Horseradish Sauce (creamy)",
+                                         "unit":  "oz",
+                                         "search_term":  "horseradish sauce",
+                                         "typical_size":  "8.5 oz bottle",
+                                         "include":  [
+                                                         "horseradish\\s+sauce",
+                                                         "creamy\\s+horseradish",
+                                                         "cream\\s+style\\s+horseradish",
+                                                         "horseradish\\s+cream"
+                                                     ],
+                                         "note":  "Creamy SAUCE. Prepared horseradish root is the existing horseradish row."
+                                     },
+                                     {
+                                         "id":  "corned-beef-brisket",
+                                         "label":  "Corned Beef Brisket (raw)",
+                                         "unit":  "lb",
+                                         "search_term":  "corned beef brisket",
+                                         "typical_size":  "3 lb point cut",
+                                         "include":  [
+                                                         "corned\\s+beef\\s+brisket",
+                                                         "corned\\s+beef\\b.{0,20}\\b(?:point|flat)\\s+cut",
+                                                         "brisket\\b.{0,20}corned\\s+beef"
+                                                     ],
+                                         "note":  "SEASONAL (peaks around March). If a store does not carry it today, record NOT-CARRIED - do not substitute canned corned beef or hash."
+                                     },
+                                     {
+                                         "id":  "pigeon-peas",
+                                         "label":  "Pigeon Peas / Gandules (canned)",
+                                         "unit":  "oz",
+                                         "search_term":  "pigeon peas",
+                                         "typical_size":  "15 oz can",
+                                         "include":  [
+                                                         "pigeon\\s+peas",
+                                                         "gandules"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "aji-amarillo-paste",
+                                         "label":  "Aji Amarillo Paste",
+                                         "unit":  "oz",
+                                         "search_term":  "aji amarillo paste",
+                                         "typical_size":  "7.5 oz jar",
+                                         "include":  [
+                                                         "aj.\\s+amarillo",
+                                                         "amarillo\\s+(?:chili|chile|hot\\s+)?pepper\\s+paste"
+                                                     ],
+                                         "note":  "ZERO coverage at all three headless stores. Goya jar, Hispanic aisle. Do NOT accept Arroz Amarillo (yellow rice)."
+                                     },
+                                     {
+                                         "id":  "rye-bread",
+                                         "label":  "Rye Bread (loaf)",
+                                         "unit":  "each",
+                                         "search_term":  "rye bread",
+                                         "typical_size":  "16 oz loaf",
+                                         "include":  [
+                                                         "\\brye\\s+bread\\b",
+                                                         "jewish\\s+rye",
+                                                         "marble\\s+rye",
+                                                         "pumpernickel",
+                                                         "rye\\s+loaf",
+                                                         "bread,?\\s+rye"
+                                                     ],
+                                         "note":  "BLOCKED ON UNIT, not on data: 31 rye loaves are already in the FF/Hy-Vee/Bakers files but the commodity unit is each and those rows carry oz sizes, which the engine refuses to convert to a count. A Walmart capture whose size reads each/1 ct WILL price. See RUN-STATE for the unit decision Brad/main session needs to make."
+                                     }
+                                 ]
+                   },
+                   {
+                       "store":  "Fareway",
+                       "missing":  20,
+                       "items":  [
+                                     {
+                                         "id":  "turkey-breast",
+                                         "label":  "Turkey Breast (raw)",
+                                         "unit":  "lb",
+                                         "search_term":  "turkey breast",
+                                         "typical_size":  "3 lb roast",
+                                         "include":  [
+                                                         "turkey\\s+breasts?\\b",
+                                                         "breast\\s+of\\s+turkey",
+                                                         "turkey\\s+london\\s+broil"
+                                                     ],
+                                         "note":  "RAW whole-muscle only (bone-in, boneless roast, tenderloin). Deli/lunchmeat and frozen dinners are excluded by rule - do not capture them."
+                                     },
+                                     {
+                                         "id":  "dried-arbol-chiles",
+                                         "label":  "Dried Arbol Chiles",
+                                         "unit":  "oz",
+                                         "search_term":  "chile de arbol",
+                                         "typical_size":  "2.5 oz bag",
+                                         "include":  [
+                                                         "rbol\\b"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "dried-guajillo-chiles",
+                                         "label":  "Dried Guajillo Chiles",
+                                         "unit":  "oz",
+                                         "search_term":  "guajillo chiles",
+                                         "typical_size":  "3 oz bag",
+                                         "include":  [
+                                                         "guajillo"
+                                                     ],
+                                         "note":  "ZERO coverage at all three headless stores - Hispanic-aisle cello bags. Whole pods only; powder/molido is chili-powder."
+                                     },
+                                     {
+                                         "id":  "dried-ancho-chiles",
+                                         "label":  "Dried Ancho Chiles",
+                                         "unit":  "oz",
+                                         "search_term":  "ancho chiles",
+                                         "typical_size":  "3 oz bag",
+                                         "include":  [
+                                                         "\\bancho\\b",
+                                                         "ancho\\s+chil"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "diced-ham",
+                                         "label":  "Diced / Cubed Ham",
+                                         "unit":  "oz",
+                                         "search_term":  "diced ham",
+                                         "typical_size":  "8 oz tub",
+                                         "include":  [
+                                                         "diced\\s+ham",
+                                                         "cubed\\s+ham",
+                                                         "ham\\s+(?:cubes|dices|pieces)",
+                                                         "chopped\\s+ham"
+                                                     ],
+                                         "note":  "Diced/cubed tubs. Deli sliced ham is the existing deli-ham row."
+                                     },
+                                     {
+                                         "id":  "sazon-seasoning",
+                                         "label":  "Sazon Seasoning",
+                                         "unit":  "oz",
+                                         "search_term":  "sazon",
+                                         "typical_size":  "1.41 oz box",
+                                         "include":  [
+                                                         "\\bsaz.n\\b"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "eggplant",
+                                         "label":  "Eggplant (each)",
+                                         "unit":  "each",
+                                         "search_term":  "eggplant",
+                                         "typical_size":  "1 eggplant",
+                                         "include":  [
+                                                         "\\beggplants?\\b",
+                                                         "\\baubergines?\\b"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "brown-gravy-mix",
+                                         "label":  "Brown Gravy Mix (dry packet)",
+                                         "unit":  "oz",
+                                         "search_term":  "brown gravy mix",
+                                         "typical_size":  "0.87 oz packet",
+                                         "include":  [
+                                                         "brown\\s+gravy\\s+mix",
+                                                         "gravy\\s+mix,?\\s+brown",
+                                                         "brown\\s+gravy\\b.{0,15}\\b(?:packet|envelope|dry)"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "chicken-livers",
+                                         "label":  "Chicken Livers",
+                                         "unit":  "lb",
+                                         "search_term":  "chicken livers",
+                                         "typical_size":  "20 oz tub",
+                                         "include":  [
+                                                         "chicken\\s+livers?\\b",
+                                                         "livers?\\b.{0,15}chicken"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "sweet-soy-sauce",
+                                         "label":  "Sweet Soy Sauce (Kecap Manis)",
+                                         "unit":  "floz",
+                                         "search_term":  "sweet soy sauce",
+                                         "typical_size":  "21 oz bottle",
+                                         "include":  [
+                                                         "sweet\\s+soy\\s+sauce",
+                                                         "ke[ct]jap\\s+manis",
+                                                         "kecap\\s+manis"
+                                                     ],
+                                         "note":  "Kecap manis / sweet soy. NOT regular soy sauce (that row already exists)."
+                                     },
+                                     {
+                                         "id":  "caraway-seeds",
+                                         "label":  "Caraway Seeds",
+                                         "unit":  "oz",
+                                         "search_term":  "caraway seed",
+                                         "typical_size":  "1.75 oz jar",
+                                         "include":  [
+                                                         "caraway"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "poultry-seasoning",
+                                         "label":  "Poultry Seasoning",
+                                         "unit":  "oz",
+                                         "search_term":  "poultry seasoning",
+                                         "typical_size":  "0.65 oz jar",
+                                         "include":  [
+                                                         "poultry\\s+seasoning",
+                                                         "poultry\\s+herb\\s+blend"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "wild-rice",
+                                         "label":  "Wild Rice",
+                                         "unit":  "oz",
+                                         "search_term":  "wild rice",
+                                         "typical_size":  "8 oz box",
+                                         "include":  [
+                                                         "wild\\s+rice"
+                                                     ],
+                                         "note":  "100% wild rice only - long grain \u0026 wild BLENDS are excluded by rule (mostly white rice, they would undercut the real per-oz)."
+                                     },
+                                     {
+                                         "id":  "doubanjiang",
+                                         "label":  "Doubanjiang (Chili Bean Paste)",
+                                         "unit":  "oz",
+                                         "search_term":  "chili bean sauce",
+                                         "typical_size":  "8 oz jar",
+                                         "include":  [
+                                                         "doubanjiang",
+                                                         "dou\\s*ban\\s*jiang",
+                                                         "toban\\s*-?\\s*djan",
+                                                         "chili\\s+bean\\s+sauce",
+                                                         "broad\\s+bean\\s+(?:chili\\s+)?(?:paste|sauce)",
+                                                         "pixian"
+                                                     ],
+                                         "note":  "ZERO coverage at all three headless stores. Look for Lee Kum Kee Chili Bean Sauce (Toban Djan) or Pixian broad bean paste in the Asian aisle. Do NOT accept a canned chili-bean product."
+                                     },
+                                     {
+                                         "id":  "ground-fennel",
+                                         "label":  "Fennel Seed / Ground Fennel",
+                                         "unit":  "oz",
+                                         "search_term":  "fennel seed",
+                                         "typical_size":  "1 oz jar",
+                                         "include":  [
+                                                         "fennel\\s+seeds?",
+                                                         "ground\\s+fennel",
+                                                         "fennel,?\\s+ground"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "snow-peas",
+                                         "label":  "Snow / Sugar Snap Peas (fresh)",
+                                         "unit":  "oz",
+                                         "search_term":  "snow peas",
+                                         "typical_size":  "8 oz bag",
+                                         "include":  [
+                                                         "snow\\s+peas",
+                                                         "sugar\\s+snap\\s+peas",
+                                                         "\\bsnap\\s+peas",
+                                                         "pea\\s+pods"
+                                                     ],
+                                         "note":  "FRESH snow / sugar snap peas. Frozen bags are excluded by rule."
+                                     },
+                                     {
+                                         "id":  "corned-beef-brisket",
+                                         "label":  "Corned Beef Brisket (raw)",
+                                         "unit":  "lb",
+                                         "search_term":  "corned beef brisket",
+                                         "typical_size":  "3 lb point cut",
+                                         "include":  [
+                                                         "corned\\s+beef\\s+brisket",
+                                                         "corned\\s+beef\\b.{0,20}\\b(?:point|flat)\\s+cut",
+                                                         "brisket\\b.{0,20}corned\\s+beef"
+                                                     ],
+                                         "note":  "SEASONAL (peaks around March). If a store does not carry it today, record NOT-CARRIED - do not substitute canned corned beef or hash."
+                                     },
+                                     {
+                                         "id":  "pigeon-peas",
+                                         "label":  "Pigeon Peas / Gandules (canned)",
+                                         "unit":  "oz",
+                                         "search_term":  "pigeon peas",
+                                         "typical_size":  "15 oz can",
+                                         "include":  [
+                                                         "pigeon\\s+peas",
+                                                         "gandules"
+                                                     ],
+                                         "note":  ""
+                                     },
+                                     {
+                                         "id":  "aji-amarillo-paste",
+                                         "label":  "Aji Amarillo Paste",
+                                         "unit":  "oz",
+                                         "search_term":  "aji amarillo paste",
+                                         "typical_size":  "7.5 oz jar",
+                                         "include":  [
+                                                         "aj.\\s+amarillo",
+                                                         "amarillo\\s+(?:chili|chile|hot\\s+)?pepper\\s+paste"
+                                                     ],
+                                         "note":  "ZERO coverage at all three headless stores. Goya jar, Hispanic aisle. Do NOT accept Arroz Amarillo (yellow rice)."
+                                     },
+                                     {
+                                         "id":  "rye-bread",
+                                         "label":  "Rye Bread (loaf)",
+                                         "unit":  "each",
+                                         "search_term":  "rye bread",
+                                         "typical_size":  "16 oz loaf",
+                                         "include":  [
+                                                         "\\brye\\s+bread\\b",
+                                                         "jewish\\s+rye",
+                                                         "marble\\s+rye",
+                                                         "pumpernickel",
+                                                         "rye\\s+loaf",
+                                                         "bread,?\\s+rye"
+                                                     ],
+                                         "note":  "BLOCKED ON UNIT, not on data: 31 rye loaves are already in the FF/Hy-Vee/Bakers files but the commodity unit is each and those rows carry oz sizes, which the engine refuses to convert to a count. A Walmart capture whose size reads each/1 ct WILL price. See RUN-STATE for the unit decision Brad/main session needs to make."
+                                     }
+                                 ]
+                   }
+               ]
+}

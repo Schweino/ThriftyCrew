@@ -1,0 +1,218 @@
+﻿{
+    "name":  "Slow Cooker Steak and Onions over Rice",
+    "slug":  "slow-cooker-steak-and-onions-rice",
+    "cuisine":  "American",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.themagicalslowcooker.com/steak-and-onions/",
+    "source_site":  "themagicalslowcooker.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 300g (src scale)",
+                   "base +40% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified at 341 cal / 31g protein for the beef and gravy at 6 servings; over rice it lands near 580 at 34g protein. Uses the cheapest petite sirloins in the case, which is exactly the cut the board prices well. Confidence: high on the meat nutrition, medium on the assembled bowl. | HARVEST: Rice is a serving suggestion, not in the source ingredient list.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 300g (src scale)",
+                         "TUNING: base +40% (Rice)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  561,
+                 "protein":  40,
+                 "carbs":  70,
+                 "fat":  11,
+                 "cost_ps":  "3.36"
+             },
+    "intro_html":  "This is what the cheapest petite sirloins in the meat case were made for. They go in the slow cooker with a pile of onions and a packet of brown gravy, and six hours later they are tender enough to cut with a spoon, sitting in a gravy the onions built. Six ingredients, and one of them is rice. Each bowl carries \u003cstrong\u003e40 grams of protein\u003c/strong\u003e and 561 calories for about \u003cstrong\u003e$3.36\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 4.75 lb (2117 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 4.7 (513 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.25 tbsp (20 g)",
+                                "\u003cstrong\u003eBrown Gravy Mix (generic dry (USDA)):\u003c/strong\u003e 2 oz (58 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 7 tbsp (56 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.5 cups dry (1034 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Flank/Sirloin Steak, 4.75 lb: ~$41.16. \u003cstrong\u003eBuy 5 lbs: $44.10.\u003c/strong\u003e",
+                       "Yellow Onion, 4.7: ~$1.29. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Garlic, 2.25 tbsp: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Brown Gravy Mix, 2 oz: ~$1.09. \u003cstrong\u003ePantry staple; this batch alone uses about 3 0.87oz packets.\u003c/strong\u003e",
+                       "Cornstarch, 7 tbsp: ~$0.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 5.5 cups dry: ~$1.28. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, italian seasoning): ~$1.66. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $47.01 across 14 servings, so roughly $3.36 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $51.23 across 14 servings, roughly $3.66 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.21 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $60.44. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.36 a bowl\u003c/strong\u003e for steak and gravy, which is the kind of sentence that usually comes with an asterisk. The asterisk here is that you buy the cheap cut and let time do the tenderizing.",
+    "shop_smart":  [
+                       "The small petite sirloins that get marked down because nobody knows what to do with them are exactly right for this. Slow cooking rescues cuts that a grill would ruin.",
+                       "Brown gravy mix comes in multi packet boxes that cost less per packet than singles, and the packets keep in the pantry for a year.",
+                       "Onions are the second ingredient by weight and the source of most of the flavor. Buy the bag, not singles.",
+                       "Cornstarch finishes the gravy for pennies. A box lasts years and it beats buying a second gravy packet just to thicken things."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Season the steaks with salt, black pepper, and Italian seasoning and lay them in the slow cooker in an even layer.",
+                    "Slice the onions thick and pile them over the steaks along with the minced garlic.",
+                    "Whisk the brown gravy mix with about two cups of water and pour it over everything.",
+                    "Cover and cook on low for 6 hours, until the steaks are tender and the onions have collapsed into the gravy.",
+                    "Whisk the cornstarch with a little cold water, stir it into the hot liquid, and cook on high 15 to 20 minutes until the gravy thickens.",
+                    "Break the steaks into large pieces in the gravy and let them sit in it for 10 minutes.",
+                    "Cook the rice separately and keep it plain so the gravy carries the plate."
+                ],
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of steak, onions, and gravy into each container, then add the same weight of rice to every one. Each bowl lands at \u003cstrong\u003e561 calories with 40 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/steak-and-onions/\" target=\"_blank\" rel=\"noopener\"\u003ethemagicalslowcooker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Steak and onions for about $3.36 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  47.01,
+    "cost_batch_true":  51.23,
+    "cost_per_serving":  3.36,
+    "cost_per_serving_true":  3.66,
+    "cost_pantry_add":  9.21,
+    "cost_first_run":  60.44,
+    "scaler":  {
+                   "cost":  "51.23",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Flank/Sirloin Steak",
+                                   "canon":  "Beef Flank/Sirloin Steak",
+                                   "grams":  2117,
+                                   "buy":  "4.75 lb",
+                                   "bid":  "sirloin-steak",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  513,
+                                   "buy":  "4.7",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  7,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  20,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "canon":  "Italian Seasoning",
+                                   "grams":  46,
+                                   "buy":  "11 tbsp",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Brown Gravy Mix",
+                                   "canon":  "Brown Gravy Mix",
+                                   "grams":  58,
+                                   "buy":  "2 oz",
+                                   "bid":  "brown-gravy-mix",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cornstarch",
+                                   "canon":  "Cornstarch",
+                                   "grams":  56,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1034,
+                                   "buy":  "5.5 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Slow cooker steak and onions meal prep: petite sirloin braised 6 hours with onions and brown gravy, served over rice. 561 calories, 40g protein, about $3.36 per serving.",
+                 "keywords":  "slow cooker steak and onions, smothered steak, brown gravy beef, steak over rice, budget meal prep, cheap steak recipes",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT6H",
+                 "totalTime":  "PT6H15M",
+                 "costPerServing":  3.36,
+                 "recipeIngredient":  [
+                                          "4.75 lb beef flank or sirloin steak",
+                                          "4.7 yellow onions",
+                                          "2.25 tbsp garlic",
+                                          "2 oz brown gravy mix",
+                                          "7 tbsp cornstarch",
+                                          "5.5 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Season the steaks and lay them in the slow cooker in one layer.",
+                               "Pile thick sliced onions and garlic over the top.",
+                               "Whisk the brown gravy mix with water and pour it over, then cook on low 6 hours.",
+                               "Stir in a cornstarch slurry and thicken on high 15 to 20 minutes.",
+                               "Break the steaks into the gravy, cook the rice, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Flank/Sirloin Steak",
+                                  "grams":  2117
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  513
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Italian Seasoning",
+                                  "grams":  46
+                              },
+                              {
+                                  "item":  "Brown Gravy Mix",
+                                  "grams":  58
+                              },
+                              {
+                                  "item":  "Cornstarch",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1034
+                              }
+                          ]
+}

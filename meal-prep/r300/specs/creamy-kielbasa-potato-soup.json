@@ -1,0 +1,321 @@
+﻿{
+    "name":  "Creamy Kielbasa and Potato Soup",
+    "slug":  "creamy-kielbasa-potato-soup",
+    "cuisine":  "polish-american",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.saltandlavender.com/creamy-kielbasa-potato-soup/",
+    "source_site":  "saltandlavender.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +50% (Potato)",
+                   "protein +25% (Smoked Turkey Sausage)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Source verifies 494 cal per serving, essentially at the bar already. All eight ingredients are board commodities and the base (potatoes, carrots, celery, corn) is cheap year-round. Distinct from Zuppa Toscana (smoked kielbasa and paprika rather than Italian sausage, bacon and kale). CONFIDENCE: source protein is 14g, so our version needs roughly 1.5x the kielbasa plus a cottage-cheese or evaporated-milk thickener to reach 25g+; protein projected. | HARVEST: ",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +50% (Potato)",
+                         "TUNING: protein +25% (Smoked Turkey Sausage)",
+                         "OVERRIDE Smoked Turkey Sausage: [BUMP x1.2] 6-serving soup; 130 g sausage/serving for the 25 g floor"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  626,
+                 "protein":  26,
+                 "carbs":  48,
+                 "fat":  37,
+                 "cost_ps":  "2.22"
+             },
+    "intro_html":  "A thick, smoky potato soup with browned sausage in every spoonful, built on a real roux instead of a can of condensed anything. Potatoes, carrots, celery and corn keep it cheap all year, and the smoked sausage gives it a flavor that reads far more expensive than it is. It comes in at 26 grams of protein for about $2.22 a bowl.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2.25 tbsp (32 g)",
+                                "\u003cstrong\u003eSmoked Turkey Sausage (Butterball):\u003c/strong\u003e 5 lb (2323 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 4.75 tbsp (65 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (257 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 4.7 (285 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 4.7 (257 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4.75 tbsp (41 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 4.5 tbsp (37 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 9.25 cups (2240 g)",
+                                "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 2.25 cups (555 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 7.6 (1620 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 10.25 oz (289 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 2.25 tbsp: ~$0.45. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Smoked Turkey Sausage, 5 lb: ~$17.32. \u003cstrong\u003eBuy 7 13oz ropes: $19.21.\u003c/strong\u003e",
+                       "Butter, 4.75 tbsp: ~$0.43. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Yellow Onion, 2.3: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 4.7: ~$0.60. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Celery, 4.7: ~$1.35. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Garlic, 4.75 tbsp: ~$0.59. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "All-Purpose Flour, 4.5 tbsp: ~$0.04. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Beef Broth, 9.25 cups: ~$3.01. \u003cstrong\u003ePantry staple; this batch alone uses about 3 32oz cartons.\u003c/strong\u003e",
+                       "Heavy Cream, 2.25 cups: ~$3.45. \u003cstrong\u003eBuy 2 pints: $5.87.\u003c/strong\u003e",
+                       "Potato, 7.6: ~$2.03. \u003cstrong\u003eBuy 4 lbs: $2.27.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 10.25 oz: ~$0.53. \u003cstrong\u003eBuy 1 can: $0.79.\u003c/strong\u003e",
+                       "Pantry seasonings (paprika, italian seasoning, black pepper, salt): ~$0.59. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $31.04 across 14 servings, so roughly $2.22 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $40.82 across 14 servings, roughly $2.92 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $18.95 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.77. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.22 a bowl\u003c/strong\u003e for a soup thick enough to be dinner instead of a starter. A bread bowl version at a soup counter would cost you several times this.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eThe sausage is most of this recipe\u0027s cost.\u003c/strong\u003e Everything else combined runs about a third of it. This is the dish to make the week smoked sausage goes on sale.",
+                       "\u003cstrong\u003eHeavy cream is the second line worth watching.\u003c/strong\u003e Two pints carries the batch. If you want it cheaper, evaporated milk gives you similar body for a fraction of the price.",
+                       "\u003cstrong\u003eCanned corn is the cheapest thing on this list and it adds real sweetness.\u003c/strong\u003e Frozen works too. Either way it earns its place in the pot.",
+                       "\u003cstrong\u003eFlour and butter make the thickener.\u003c/strong\u003e A roux costs pennies and gives you far better texture than a slurry or a can of soup ever will."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Slice the smoked sausage into coins, dice the onion, carrots, celery and potatoes, and mince the garlic.",
+                    "Heat the olive oil in a large pot and brown the sausage coins until the edges get dark. Take them out and leave the fat behind, because that fat is flavor.",
+                    "Melt the butter in the same pot and cook the onion, carrots and celery until they soften, then add the garlic for a minute.",
+                    "Sprinkle the flour over the vegetables and stir constantly for a couple of minutes so it cooks out instead of tasting like paste.",
+                    "Pour in the beef broth slowly while whisking, then add the diced potatoes, paprika, italian seasoning, salt and black pepper.",
+                    "Simmer until the potatoes are soft enough to mash against the side of the pot, then stir in the corn.",
+                    "Return the sausage, turn the heat low, and stir in the heavy cream. Warm it through without letting it boil so it stays smooth."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and ladle the exact amount into each container, stirring the pot between scoops so the sausage and potatoes stay even. Every bowl lands near 626 calories and 26 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.saltandlavender.com/creamy-kielbasa-potato-soup/\" target=\"_blank\" rel=\"noopener\"\u003esaltandlavender.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Thick, filling soups for about $2.22 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  31.04,
+    "cost_batch_true":  40.82,
+    "cost_per_serving":  2.22,
+    "cost_per_serving_true":  2.92,
+    "cost_pantry_add":  18.95,
+    "cost_first_run":  59.77,
+    "scaler":  {
+                   "cost":  "40.82",
+                   "ing":  [
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  32,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Smoked Turkey Sausage",
+                                   "canon":  "Smoked Turkey Sausage",
+                                   "grams":  2323,
+                                   "buy":  "5 lb",
+                                   "bid":  "kielbasa",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  65,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  257,
+                                   "buy":  "2.3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  285,
+                                   "buy":  "4.7",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "canon":  "Celery",
+                                   "grams":  257,
+                                   "buy":  "4.7",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  41,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  5,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "canon":  "Italian Seasoning",
+                                   "grams":  2,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  37,
+                                   "buy":  "4.5 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  2240,
+                                   "buy":  "9.25 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Heavy Cream",
+                                   "canon":  "Heavy Cream",
+                                   "grams":  555,
+                                   "buy":  "2.25 cups",
+                                   "bid":  "heavy-cream",
+                                   "gpu":  "29.800"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  1620,
+                                   "buy":  "7.6",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Sweet Whole Kernel Corn",
+                                   "canon":  "Sweet Whole Kernel Corn",
+                                   "grams":  289,
+                                   "buy":  "10.25 oz",
+                                   "bid":  "canned-corn",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  9,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Creamy smoked kielbasa and potato soup thickened with a real roux, built for 14 servings. 626 calories, 26g protein, about $2.22 per serving.",
+                 "keywords":  "creamy kielbasa potato soup, smoked sausage soup, potato soup meal prep, budget soup recipe, cheap dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT40M",
+                 "totalTime":  "PT1H",
+                 "costPerServing":  2.22,
+                 "recipeIngredient":  [
+                                          "5 lb smoked sausage",
+                                          "7.6 potatoes",
+                                          "4.7 carrots",
+                                          "4.7 celery stalks",
+                                          "2.3 yellow onions",
+                                          "4.75 tbsp garlic",
+                                          "4.75 tbsp butter",
+                                          "4.5 tbsp all-purpose flour",
+                                          "5 lb beef broth",
+                                          "2.25 cups heavy cream",
+                                          "1.75 cups sweet whole kernel corn",
+                                          "2.25 tbsp olive oil"
+                                      ],
+                 "steps":  [
+                               "Brown the sliced smoked sausage in olive oil and set it aside, leaving the fat in the pot.",
+                               "Cook the onion, carrots and celery in butter, add the garlic, then stir in the flour to make a roux.",
+                               "Whisk in the beef broth, then add the diced potatoes, paprika and italian seasoning.",
+                               "Simmer until the potatoes are soft, then stir in the corn.",
+                               "Return the sausage and stir in the heavy cream over low heat without boiling."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  32
+                              },
+                              {
+                                  "item":  "Smoked Turkey Sausage",
+                                  "grams":  2323
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  65
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  257
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  285
+                              },
+                              {
+                                  "item":  "Celery",
+                                  "grams":  257
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  41
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Italian Seasoning",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  37
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  2240
+                              },
+                              {
+                                  "item":  "Heavy Cream",
+                                  "grams":  555
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  1620
+                              },
+                              {
+                                  "item":  "Sweet Whole Kernel Corn",
+                                  "grams":  289
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              }
+                          ]
+}

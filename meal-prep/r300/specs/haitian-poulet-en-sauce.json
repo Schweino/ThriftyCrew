@@ -1,0 +1,276 @@
+﻿{
+    "name":  "Haitian Poulet en Sauce",
+    "slug":  "haitian-poulet-en-sauce",
+    "cuisine":  "Caribbean / Haitian",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.savorythoughts.com/poulet-en-sauce-recipe/",
+    "source_site":  "savorythoughts.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 200g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Haitian braise built on epis (green herb-and-pepper marinade), a distinctly different Caribbean profile from Jamaican jerk/brown stew and PR guisado. Marinate-and-braise scales cleanly. Epis has no board id but is bell-peppers + garlic + green-onions + cilantro + limes + parsley, all tracked. Confidence: MEDIUM - URL from search index, page not individually fetched, no nutrition captured. | HARVEST: Ingredients split into \u0027For The Chicken\u0027 (first 4 lines) and \u0027For The Haitian Chicken Stew\u0027 (rest). Published protein of 12g looks low relative to 10 chicken pieces over 4 servings; treat the source nutrition with caution.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 200g (src scale)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  605,
+                 "protein":  57,
+                 "carbs":  54,
+                 "fat":  15,
+                 "cost_ps":  "1.88"
+             },
+    "intro_html":  "Every Haitian kitchen keeps a jar of epis in the fridge. It is a green marinade of cilantro, garlic, bell pepper, citrus and vinegar, and it goes into almost everything, starting with this. Chicken gets washed in citrus, marinated in epis overnight, browned, then braised down in a tomato sauce until the meat gives up. Over rice, each bowl runs \u003cstrong\u003e605 calories and 57 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$1.88\u003c/strong\u003e. That protein number is one of the highest in this whole batch.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 7.75 lb (3500 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 28 tbsp (28 g)",
+                                "\u003cstrong\u003ePeanuts (Great Value):\u003c/strong\u003e 0.75 cups (126 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 7 (329 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 2 cans (336 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3.5 (420 g)",
+                                "\u003cstrong\u003eApple Cider Vinegar (Great Value):\u003c/strong\u003e 7 tbsp (105 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Thigh, 7.75 lb: ~$13.66. \u003cstrong\u003eBuy 8 lbs: $14.16.\u003c/strong\u003e",
+                       "Fresh Cilantro, 28 tbsp: ~$0.87. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Peanuts, 0.75 cups: ~$0.72. \u003cstrong\u003eBuy 1 16oz jar: $2.58.\u003c/strong\u003e",
+                       "Garlic, 8.25 tbsp: ~$1.01. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Lemon Juice, 7: ~$1.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Tomato Paste, 2 cans: ~$1.70. \u003cstrong\u003eBuy 2 6oz cans: $1.72.\u003c/strong\u003e",
+                       "Green Bell Peppers, 3.5: ~$3.01. \u003cstrong\u003eBuy 4 each: $3.44.\u003c/strong\u003e",
+                       "Apple Cider Vinegar, 7 tbsp: ~$0.26. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, dried thyme, black pepper): ~$1.98. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.28 across 14 servings, so roughly $1.88 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $30.31 across 14 servings, roughly $2.16 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.40 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $40.71. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.88 a bowl\u003c/strong\u003e for one of the most protein-dense dinners on this site. Chicken is the dominant line and the epis that flavors it is built from produce off the cheap end of the department.",
+    "shop_smart":  [
+                       "Make a double batch of epis while the blender is already dirty. Cilantro, garlic, bell pepper and citrus blended together freeze beautifully in an ice cube tray, and having it on hand turns a lot of plain weeknight chicken into something worth eating.",
+                       "Bottled lemon juice is the practical choice here. This recipe uses a real volume of it for both the citrus wash and the marinade, and buying that many fresh lemons would cost several times more.",
+                       "Green bell peppers are cheaper than red almost every week and they are the traditional pepper in epis, so there is nothing to give up by buying the cheap ones.",
+                       "Tomato paste in small cans beats the tube on price per ounce. This recipe uses two cans worth, so buy exactly what you need and nothing dries out in the fridge."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Wash the chicken thighs in a bowl of water with the lemon juice and apple cider vinegar, rubbing the pieces and then draining them well. This citrus wash is a real step in Haitian cooking, not a superstition, and it sets up the flavor.",
+                    "Make the epis: blend the fresh cilantro, garlic, green bell pepper, dried thyme, black pepper and salt with a splash of the lemon juice until it is a coarse green paste. Rub it into the chicken and refrigerate at least four hours or overnight.",
+                    "Scrape the marinade off the chicken and reserve it. Heat a large heavy pot over medium-high and brown the thighs in batches until they take color, then set them aside.",
+                    "Add the diced onion to the pot and cook 5 minutes, then stir in the tomato paste and the reserved epis and cook 3 minutes until the paste turns brick red.",
+                    "Add water or broth to loosen the sauce, scrape the bottom clean, and return the chicken with its juices. Cover and simmer 35 to 40 minutes until the chicken is tender and reads 165F.",
+                    "While it braises, cook the rice and let it steam covered off the heat for 10 minutes. Toast the peanuts in a dry skillet until they smell nutty, then chop them coarsely.",
+                    "Chop the chicken, fold the rice through the sauce, and scatter the toasted chopped peanuts over the top for crunch."
+                ],
+    "portion_html":  "Put the pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. Same amount in all fourteen containers. Each one carries \u003cstrong\u003e605 calories\u003c/strong\u003e, and I would hold the peanuts back and add them at reheat time so they stay crunchy instead of going soft in the sauce.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.savorythoughts.com/poulet-en-sauce-recipe/\" target=\"_blank\" rel=\"noopener\"\u003esavorythoughts.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Haitian poulet en sauce with real epis for about $1.88 a bowl. This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "cost_batch":  26.28,
+    "cost_batch_true":  30.31,
+    "cost_per_serving":  1.88,
+    "cost_per_serving_true":  2.16,
+    "cost_pantry_add":  10.4,
+    "cost_first_run":  40.71,
+    "scaler":  {
+                   "cost":  "30.31",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  3500,
+                                   "buy":  "7.75 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  21,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  28,
+                                   "buy":  "28 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Peanuts",
+                                   "canon":  "Peanuts",
+                                   "grams":  126,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "peanuts",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  70,
+                                   "buy":  "8.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Lemon Juice",
+                                   "canon":  "Lemon Juice",
+                                   "grams":  329,
+                                   "buy":  "7",
+                                   "bid":  "lemon-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  336,
+                                   "buy":  "2 cans",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  420,
+                                   "buy":  "3.5",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  19,
+                                   "buy":  "6.25 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Apple Cider Vinegar",
+                                   "canon":  "Apple Cider Vinegar",
+                                   "grams":  105,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "apple-cider-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  14,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  385,
+                                   "buy":  "3.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Haitian poulet en sauce: chicken marinated in epis and braised in tomato, served over rice. 14 meal prep bowls at 605 calories, 57g protein, about $1.88 each.",
+                 "keywords":  "poulet en sauce, haitian chicken, epis marinade, haitian stewed chicken, caribbean meal prep, high protein chicken bowls",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT50M",
+                 "totalTime":  "PT1H20M",
+                 "costPerServing":  1.88,
+                 "recipeIngredient":  [
+                                          "7.75 lb boneless skinless chicken thighs",
+                                          "28 tbsp fresh cilantro",
+                                          "3.5 green bell peppers",
+                                          "8.25 tbsp garlic",
+                                          "7 lemons worth of lemon juice",
+                                          "2 cans tomato paste",
+                                          "7 tbsp apple cider vinegar",
+                                          "3.5 yellow onions",
+                                          "0.75 cups peanuts",
+                                          "3.75 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Wash the chicken in water with lemon juice and cider vinegar, then drain.",
+                               "Blend cilantro, garlic, bell pepper, thyme and pepper into epis, rub it into the chicken, and marinate overnight.",
+                               "Brown the scraped chicken in batches, then cook onion, tomato paste and the reserved epis together.",
+                               "Return the chicken with liquid, cover, and simmer 35 to 40 minutes until tender.",
+                               "Cook the rice, fold it through, top with toasted chopped peanuts, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  3500
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Peanuts",
+                                  "grams":  126
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Lemon Juice",
+                                  "grams":  329
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  336
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  19
+                              },
+                              {
+                                  "item":  "Apple Cider Vinegar",
+                                  "grams":  105
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

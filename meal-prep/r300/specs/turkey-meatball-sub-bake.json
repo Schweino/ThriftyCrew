@@ -1,0 +1,281 @@
+﻿{
+    "name":  "Turkey Meatball Sub Bake",
+    "slug":  "turkey-meatball-sub-bake",
+    "cuisine":  "italian-american",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.fromvalerieskitchen.com/italian-turkey-meatball-subs/",
+    "source_site":  "fromvalerieskitchen.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Keto Bun)",
+                   "portion factor 1.05"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 7 servings, 488 cal, 34g protein. Bread-based bake rather than a pasta bowl, so it reads distinct from the live Turkey Meatball Marinara Pasta. Batch note: meatballs bake on a sheet and the assembly is by weight into split rolls, which holds at 14 servings. | HARVEST: ",
+                         "SOURCE YIELD: 7 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Keto Bun)",
+                         "TUNING: portion factor 1.05"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  587,
+                 "protein":  55,
+                 "carbs":  68,
+                 "fat":  26,
+                 "cost_ps":  "3.16"
+             },
+    "intro_html":  "A meatball sub is a wonderful thing that turns into a soggy tragedy about four hours after you build it. So we build it in a pan instead: turkey and smoked sausage meatballs baked in marinara, tucked into split rolls under melted mozzarella, assembled fresh when you eat it. Each serving carries \u003cstrong\u003e587 calories and 55 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.16\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 4 large eggs (210 g)",
+                                "\u003cstrong\u003eBread Crumbs (generic):\u003c/strong\u003e 1.5 cups (170 g)",
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 2.75 lb (1191 g)",
+                                "\u003cstrong\u003eSmoked Turkey Sausage (Butterball):\u003c/strong\u003e 2 lb (953 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 3.25 oz (94 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 0.5 cups (60 g)",
+                                "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 2.75 oz (76 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 tbsp (18 g)",
+                                "\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e 5.75 cups (1429 g)",
+                                "\u003cstrong\u003eKeto Bun (Better Goods):\u003c/strong\u003e 26.4 (1320 g)",
+                                "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 16.75 oz (476 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Eggs, 4 large eggs: ~$0.50. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
+                       "Bread Crumbs, 1.5 cups: ~$0.49. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 2.75 lb: ~$10.03. \u003cstrong\u003eBuy 3 lbs: $11.46.\u003c/strong\u003e",
+                       "Smoked Turkey Sausage, 2 lb: ~$7.11. \u003cstrong\u003eBuy 3 13oz ropes: $8.23.\u003c/strong\u003e",
+                       "Parmesan Cheese, 3.25 oz: ~$1.15. \u003cstrong\u003eBuy 1 8oz tub: $2.78.\u003c/strong\u003e",
+                       "Yellow Onion, 0.5 cups: ~$0.15. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "White Mushrooms, 2.75 oz: ~$0.63. \u003cstrong\u003eBuy 1 8oz pack: $1.89.\u003c/strong\u003e",
+                       "Garlic, 2 tbsp: ~$0.26. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Marinara Sauce, 5.75 cups: ~$4.32. \u003cstrong\u003eBuy 3 24oz jars: $6.17.\u003c/strong\u003e",
+                       "Keto Bun, 26.4: ~$15.90. \u003cstrong\u003eBuy 4 bettergoods (Walmart) 14 oz (8 ct)s: $19.12.\u003c/strong\u003e",
+                       "Reduced Fat Mozzarella, 16.75 oz: ~$3.62. \u003cstrong\u003eBuy 3 8oz bags: $5.18.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.15. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $44.31 across 14 servings, so roughly $3.16 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $58.62 across 14 servings, roughly $4.19 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.30 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $64.92. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.16\u003c/strong\u003e for a meatball sub with 55 grams of protein in it. The sandwich shop version costs four times that and gives you half the meat.",
+    "shop_smart":  [
+                       "The buns are the biggest surprise on this list. Any split roll works here, so buy whatever sturdy roll your store discounts. Day-old bread from the bakery rack is even better, since it holds sauce without collapsing.",
+                       "Smoked turkey sausage adds a smoky depth that ground turkey alone cannot reach, and it is not an expensive addition. That is the ingredient doing the flavor heavy lifting.",
+                       "Jarred marinara is the right call. Sauce simmered with meatballs picks up plenty of character on its own, so an expensive jar is wasted money here.",
+                       "Buy parmesan and mozzarella by the tub and the bag rather than the small shaker cans. This recipe uses both, and the cheese aisle punishes small purchases harder than almost any other department."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Chop the smoked turkey sausage fine, or run it through a food processor, and mix it with the ground turkey, the eggs, the bread crumbs, the parmesan, minced garlic, minced onion, chopped mushrooms, salt, and black pepper.",
+                    "Roll the mixture into meatballs and set them on lined sheet pans. Two per serving is the target size, so aim a little bigger than a golf ball.",
+                    "Bake at 400F for 20 minutes until browned and cooked through to 165F.",
+                    "Warm the marinara in a pot, then slide the baked meatballs in and simmer them 15 minutes so they drink up the sauce instead of just wearing it.",
+                    "Cook the rice and move it into your weighed pot.",
+                    "Split the buns and lay them out. Do not assemble them all now, since bread that sits in sauce for four days is a texture nobody wants.",
+                    "Shred or portion out the mozzarella and keep it in its own small container."
+                ],
+    "portion_html":  "Set the pot of rice on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the base in each container. Add an even share of meatballs and sauce, then pack the bun and the mozzarella separately, so you can build and broil the sub fresh when you eat it. Each serving lands at \u003cstrong\u003e587 calories and 55 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.fromvalerieskitchen.com/italian-turkey-meatball-subs/\" target=\"_blank\" rel=\"noopener\"\u003efromvalerieskitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A meatball sub for about \u003cstrong\u003e$3.16\u003c/strong\u003e a serving. This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  44.31,
+    "cost_batch_true":  58.62,
+    "cost_per_serving":  3.16,
+    "cost_per_serving_true":  4.19,
+    "cost_pantry_add":  6.3,
+    "cost_first_run":  64.92,
+    "scaler":  {
+                   "cost":  "58.62",
+                   "ing":  [
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  210,
+                                   "buy":  "4 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Bread Crumbs",
+                                   "canon":  "Bread Crumbs",
+                                   "grams":  170,
+                                   "buy":  "1.5 cups",
+                                   "bid":  "bread-crumbs",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1191,
+                                   "buy":  "2.75 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Smoked Turkey Sausage",
+                                   "canon":  "Smoked Turkey Sausage",
+                                   "grams":  953,
+                                   "buy":  "2 lb",
+                                   "bid":  "kielbasa",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "canon":  "Parmesan Cheese",
+                                   "grams":  94,
+                                   "buy":  "3.25 oz",
+                                   "bid":  "parmesan",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  60,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "White Mushrooms",
+                                   "canon":  "White Mushrooms",
+                                   "grams":  76,
+                                   "buy":  "2.75 oz",
+                                   "bid":  "mushrooms",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  18,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  6,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Marinara Sauce",
+                                   "canon":  "Marinara Sauce",
+                                   "grams":  1429,
+                                   "buy":  "5.75 cups",
+                                   "bid":  "pasta-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Keto Bun",
+                                   "canon":  "Keto Bun",
+                                   "grams":  1320,
+                                   "buy":  "26.4"
+                               },
+                               {
+                                   "item":  "Reduced Fat Mozzarella",
+                                   "canon":  "Reduced Fat Mozzarella",
+                                   "grams":  476,
+                                   "buy":  "16.75 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey meatball sub bake meal prep: turkey and smoked sausage meatballs baked in marinara with mozzarella and split rolls. 587 calories, 55g protein, about $3.16.",
+                 "keywords":  "turkey meatball sub, meatball bake, turkey meal prep, budget meal prep, high protein sandwich, marinara meatballs",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT40M",
+                 "totalTime":  "PT1H5M",
+                 "costPerServing":  3.16,
+                 "recipeIngredient":  [
+                                          "2.5 lb 93/7 ground turkey",
+                                          "2 lb smoked turkey sausage",
+                                          "1.5 cups bread crumbs",
+                                          "4 large eggs",
+                                          "3.25 oz parmesan cheese",
+                                          "5.5 cups marinara sauce",
+                                          "16 oz reduced fat mozzarella",
+                                          "14 split buns",
+                                          "1 cup white mushrooms",
+                                          "0.5 cups yellow onion",
+                                          "2 tbsp garlic",
+                                          "3.75 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Finely chop the smoked turkey sausage and mix it with ground turkey, eggs, bread crumbs, parmesan, garlic, onion, mushrooms, salt, and pepper.",
+                               "Roll into meatballs and bake at 400F for 20 minutes to 165F.",
+                               "Simmer the meatballs in warmed marinara for 15 minutes.",
+                               "Cook the rice.",
+                               "Portion rice by weight into 14 containers and add an even share of meatballs and sauce.",
+                               "Pack the split buns and mozzarella separately to assemble and broil fresh."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Bread Crumbs",
+                                  "grams":  170
+                              },
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1191
+                              },
+                              {
+                                  "item":  "Smoked Turkey Sausage",
+                                  "grams":  953
+                              },
+                              {
+                                  "item":  "Parmesan Cheese",
+                                  "grams":  94
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  60
+                              },
+                              {
+                                  "item":  "White Mushrooms",
+                                  "grams":  76
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  18
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Marinara Sauce",
+                                  "grams":  1429
+                              },
+                              {
+                                  "item":  "Keto Bun",
+                                  "grams":  1320
+                              },
+                              {
+                                  "item":  "Reduced Fat Mozzarella",
+                                  "grams":  476
+                              }
+                          ]
+}

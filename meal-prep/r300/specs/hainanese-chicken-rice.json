@@ -1,0 +1,319 @@
+﻿{
+    "name":  "Hainanese Chicken Rice",
+    "slug":  "hainanese-chicken-rice",
+    "cuisine":  "Singaporean",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://thewoksoflife.com/hainanese-chicken-rice/",
+    "source_site":  "thewoksoflife.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Source lists 746 cal / 26g protein. Built on whole-chicken, the cheapest chicken id on the board, and the poaching broth cooks the rice so nothing is wasted. Poach-and-portion is very batch friendly. Confidence high; protein per calorie is the weakest of the Asian set, so the write-up should lean the portion toward meat over rice. | HARVEST: Source groups under For the Chicken / For the Rice / For the Ginger-Garlic Sauce / For the Sweet Dark Soy Sauce / For the Chili Sauce.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "OVERRIDE Boneless Skinless Chicken Breast: \u00271 small chicken (3-3.5 lb)\u0027 parsed as one 200 g breast; whole bird ~1475 g x 55% meat yield = 810 g",
+                         "OVERRIDE Chicken Broth: \u0027stock from cooking the chicken\u0027 no qty; 4 cups"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  681,
+                 "protein":  40,
+                 "carbs":  84,
+                 "fat":  19,
+                 "cost_ps":  "1.74"
+             },
+    "intro_html":  "Hainanese chicken rice is Singapore\u0027s national dish and it is a masterclass in wasting nothing. You poach the chicken gently, then cook the rice in the poaching broth with garlic and ginger, so the grains carry every bit of flavor the meat gave up. The ginger garlic sauce on the side is what people actually dream about. Each bowl lands at 681 calories and \u003cstrong\u003e40 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$1.74 a serving\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 4.25 lb (1890 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 18 tbsp (108 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 11.75 tbsp (70 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 0.5 cups (132 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 7.75 tbsp (108 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 11 tbsp (93 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 7 cups dry (1295 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2.4 cartons (2240 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 6.75 tbsp (85 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.5 cups (149 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 11 tbsp (98 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 2.25 tbsp (35 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 4.25 lb: ~$13.63. \u003cstrong\u003eBuy 5 lbs: $16.35.\u003c/strong\u003e",
+                       "Ginger, 18 tbsp: ~$0.95. \u003cstrong\u003eBuy 2 pieces: $1.75.\u003c/strong\u003e",
+                       "Green Onions, 11.75 tbsp: ~$0.83. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
+                       "Butter, 0.5 cups: ~$0.87. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Vegetable Oil, 7.75 tbsp: ~$0.26. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 11 tbsp: ~$1.34. \u003cstrong\u003eBuy 3 heads: $1.73.\u003c/strong\u003e",
+                       "Rice, 7 cups dry: ~$1.60. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Chicken Broth, 2.4 cartons: ~$3.01. \u003cstrong\u003ePantry staple; this batch alone uses about 3 32oz cartons.\u003c/strong\u003e",
+                       "Sugar, 6.75 tbsp: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 0.5 cups: ~$0.56. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Jalapeno, 11 tbsp: ~$0.38. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Lime Juice, 2.25 tbsp: ~$0.29. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, sesame oil, rice vinegar, black pepper): ~$0.51. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $24.38 across 14 servings, so roughly $1.74 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.02 across 14 servings, roughly $2.29 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $26.93 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $58.95. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.74 a bowl\u003c/strong\u003e for a dish people fly to Singapore for. Nothing here is expensive. The technique is the whole recipe, and technique is free.",
+    "shop_smart":  [
+                       "The poaching liquid is the point. Never pour it down the drain, because it becomes the rice, and rice cooked in chicken broth instead of water is the entire difference between this dish and plain chicken and rice.",
+                       "Buy rice in the largest bag your store carries. It is the cheapest calorie in the building and it keeps essentially forever in a sealed container.",
+                       "Ginger and garlic are used in real volume here for the sauce, so buy a full hand of ginger rather than the shriveled little knob. It freezes well and grates fine straight from frozen.",
+                       "This dish leans lighter on protein per calorie than most in the lineup, so weigh a slightly generous share of chicken into each container and go a little lighter on the rice if you are watching that ratio."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Bring a big pot of chicken broth to a bare simmer with a few smashed ginger slices and green onion tops. It should barely move, with a bubble breaking every second or two. A rolling boil makes chicken rubbery.",
+                    "Lower the chicken breasts in and poach gently until just cooked through, about 15 minutes depending on thickness. Pull them out and drop them straight into ice water for 5 minutes, which stops the cooking and firms up the texture.",
+                    "Skim the fat off the top of the broth and reserve every drop of the liquid.",
+                    "Melt the butter with some of the vegetable oil in a pot, fry the minced garlic and ginger until fragrant, add the rinsed rice, and toast it for two minutes.",
+                    "Pour in the reserved poaching broth, bring it to a boil, then cover and cook on low until the rice is done, about 18 minutes. Rest it covered for 10 minutes more.",
+                    "Make the sauces while the rice cooks. Blend the rest of the ginger and garlic with the remaining vegetable oil, salt, and lime juice for the ginger garlic sauce, and stir the soy sauce with the sugar for the dark sauce. Blend the jalapeno with a little of each for the chili sauce.",
+                    "Slice the chilled chicken thick across the grain."
+                ],
+    "portion_html":  "Weigh the rice into each container first, then weigh the sliced chicken on top so every portion gets the same amount of meat. Put the sauces in small side containers rather than pouring them over, since they are meant to be added at eating time and they will make the rice soggy if they sit on it all week. Every bowl comes in at \u003cstrong\u003e681 calories\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://thewoksoflife.com/hainanese-chicken-rice/\" target=\"_blank\" rel=\"noopener\"\u003ethewoksoflife.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Singapore\u0027s national dish for about \u003cstrong\u003e$1.74 a bowl\u003c/strong\u003e. Members get the entire Meal Prep library along with every money lesson and calculator on the site for $1 a month.",
+    "cost_batch":  24.38,
+    "cost_batch_true":  32.02,
+    "cost_per_serving":  1.74,
+    "cost_per_serving_true":  2.29,
+    "cost_pantry_add":  26.93,
+    "cost_first_run":  58.95,
+    "scaler":  {
+                   "cost":  "32.02",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  1890,
+                                   "buy":  "4.25 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  78,
+                                   "buy":  "4.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  108,
+                                   "buy":  "18 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  70,
+                                   "buy":  "11.75 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  132,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  108,
+                                   "buy":  "7.75 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  93,
+                                   "buy":  "11 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1295,
+                                   "buy":  "7 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  2240,
+                                   "buy":  "2.4 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  85,
+                                   "buy":  "6.75 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  149,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  98,
+                                   "buy":  "11 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "canon":  "Sesame Oil",
+                                   "grams":  3,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "canon":  "Lime Juice",
+                                   "grams":  35,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Rice Vinegar",
+                                   "canon":  "Rice Vinegar",
+                                   "grams":  6,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "rice-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Hainanese chicken rice with poached chicken, broth cooked rice, and ginger garlic sauce, rebuilt for 14 meal prep servings at about $1.74 a bowl.",
+                 "keywords":  "hainanese chicken rice, poached chicken rice, singapore chicken rice, ginger garlic sauce, cheap meal prep, budget chicken recipe, asian meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT50M",
+                 "totalTime":  "PT1H20M",
+                 "costPerServing":  1.74,
+                 "recipeIngredient":  [
+                                          "4.25 lb boneless skinless chicken breast",
+                                          "7 cups dry rice",
+                                          "5 lb chicken broth",
+                                          "18 tbsp ginger",
+                                          "11 tbsp minced garlic",
+                                          "11.75 tbsp green onions",
+                                          "0.5 cups butter",
+                                          "7.75 tbsp vegetable oil",
+                                          "0.5 cups soy sauce",
+                                          "6.75 tbsp sugar",
+                                          "11 tbsp jalapeno",
+                                          "2.25 tbsp lime juice"
+                                      ],
+                 "steps":  [
+                               "Poach the chicken gently in seasoned broth, then shock it in ice water.",
+                               "Skim and reserve all the poaching broth.",
+                               "Fry garlic and ginger in butter and oil, toast the rinsed rice, then cook it in the reserved broth.",
+                               "Blend the ginger garlic sauce, mix the sweet soy sauce, and blend the chili sauce.",
+                               "Slice the chilled chicken and weigh rice and chicken into 14 containers with sauces on the side."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  1890
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  78
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  108
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  132
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  108
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  93
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1295
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  2240
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  85
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  149
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "Sesame Oil",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Rice Vinegar",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

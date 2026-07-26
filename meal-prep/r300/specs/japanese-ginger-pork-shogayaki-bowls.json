@@ -1,0 +1,265 @@
+﻿{
+    "name":  "Japanese Ginger Pork Shogayaki Bowls",
+    "slug":  "japanese-ginger-pork-shogayaki-bowls",
+    "cuisine":  "Japanese",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.justonecookbook.com/ginger-pork-shogayaki/",
+    "source_site":  "justonecookbook.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 100g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 361 cal / 40g protein per serving on the source page, the second-best protein ratio in the slice, and the rice base carries it over 500 cal. Nearly fully mapped; only sake is unhoused. NOTE for the selector: this is the paired near-duplicate with the Butadon candidate above (both thin pork loin + onion + soy over rice). They differ by ginger-forward vs caramel-sweet and by the shredded cabbage side, but if only one survives, this one has the stronger published protein number. | HARVEST: Source splits into For the Ginger Sauce (first 7 lines) and For the Shogayaki (last 5). Rice not in source ingredient list.",
+                         "SOURCE YIELD: 2 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 100g (src scale)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  612,
+                 "protein":  41,
+                 "carbs":  60,
+                 "fat":  20,
+                 "cost_ps":  "1.35"
+             },
+    "intro_html":  "Shogayaki is one of the most ordered lunches in Japan, and it takes about ten minutes to cook. Thin slices of pork get a light dusting of flour, hit a hot pan, and then a ginger sauce of soy, mirin, and sugar goes in and reduces around them into a glaze. The flour is the trick most people skip, and it is what makes the sauce cling to the meat instead of pooling in the pan. Onions cook down in the same sauce and go on top of the rice with everything else.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 cups (224 g)",
+                                "\u003cstrong\u003eMirin (Mizkan):\u003c/strong\u003e 1 cups (252 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.5 cups (336 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 2.25 tbsp (29 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 12.75 tbsp (77 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)",
+                                "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 5.25 lb (2381 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 7 tbsp (56 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.75 cups (147 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Soy Sauce, 1 cups: ~$0.85. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Mirin, 1 cups: ~$2.22. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 1.5 cups: ~$0.45. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sugar, 2.25 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Ginger, 12.75 tbsp: ~$0.67. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Yellow Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Pork Loin, 5.25 lb: ~$11.23. \u003cstrong\u003eBuy 6 lbs: $12.84.\u003c/strong\u003e",
+                       "All-Purpose Flour, 7 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Vegetable Oil, 0.75 cups: ~$0.36. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, salt): ~$1.24. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $18.95 across 14 servings, so roughly $1.35 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $20.94 across 14 servings, roughly $1.50 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.77 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $35.71. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.35 a bowl\u003c/strong\u003e for a Japanese lunch-counter staple with a serious amount of pork in it.",
+    "shop_smart":  [
+                       "\u003cstrong\u003ePork loin is the cheap cut that works here because it is sliced thin.\u003c/strong\u003e Thin slices cook in seconds and never get the chance to dry out, which is why you do not need to pay up for tenderloin.",
+                       "\u003cstrong\u003eFirm the loin in the freezer for half an hour before slicing.\u003c/strong\u003e That one step lets a regular kitchen knife cut it as thin as the pre-sliced hot pot packs that cost twice as much.",
+                       "\u003cstrong\u003eFresh ginger is the entire identity of this dish.\u003c/strong\u003e Buy a big knob, grate what you need, and freeze the rest. Powder will not get you there.",
+                       "\u003cstrong\u003eMirin and soy sauce are two bottles that cover a dozen dinners.\u003c/strong\u003e Once they are in the pantry the recurring cost of this meal is basically the pork and the rice."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Firm the pork loin in the freezer for about thirty minutes, then slice it as thin as you can against the grain.",
+                    "Grate the ginger and whisk it with the soy sauce, mirin, chicken broth, and sugar to make the ginger sauce.",
+                    "Toss the pork slices in a light coating of the all-purpose flour and shake off the excess.",
+                    "Heat the vegetable oil in a large skillet over medium-high heat and cook the sliced yellow onions until they soften and start to color, then set them aside.",
+                    "Cook the pork in batches in a single layer, about a minute per side, until just browned. Crowding the pan is what turns this into a steamed gray mess.",
+                    "Return all the pork and the onions to the pan, pour in the ginger sauce, and let it bubble until it thickens and coats everything.",
+                    "Cook the rice according to the package and season the pork with salt and black pepper to taste."
+                ],
+    "portion_html":  "Weigh the rice pot and the pork pan separately, subtracting the empty-pot weight from Step 1, and divide each by 14. Even rice underneath, even weight of pork and glazed onion on top, and pour the extra sauce over the containers rather than leaving it in the pan. Every bowl lands near \u003cstrong\u003e612 calories with 41 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.justonecookbook.com/ginger-pork-shogayaki/\" target=\"_blank\" rel=\"noopener\"\u003ejustonecookbook.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Ten-minute Japanese dinners for about $1.35 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  18.95,
+    "cost_batch_true":  20.94,
+    "cost_per_serving":  1.35,
+    "cost_per_serving_true":  1.5,
+    "cost_pantry_add":  14.77,
+    "cost_first_run":  35.71,
+    "scaler":  {
+                   "cost":  "20.94",
+                   "ing":  [
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  224,
+                                   "buy":  "1 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Mirin",
+                                   "canon":  "Mirin",
+                                   "grams":  252,
+                                   "buy":  "1 cups",
+                                   "bid":  "mirin",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  336,
+                                   "buy":  "1.5 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  29,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  77,
+                                   "buy":  "12.75 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  385,
+                                   "buy":  "3.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Pork Loin",
+                                   "canon":  "Pork Loin",
+                                   "grams":  2381,
+                                   "buy":  "5.25 lb",
+                                   "bid":  "pork-loin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  56,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  147,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  28,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Japanese ginger pork shogayaki bowls rebuilt for 14-serving meal prep: thin pork loin glazed in ginger, soy, and mirin over rice. 612 calories, 41g protein, about $1.35 per serving.",
+                 "keywords":  "shogayaki, ginger pork, japanese pork bowls, mirin soy glaze, japanese meal prep, high protein budget dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT20M",
+                 "totalTime":  "PT45M",
+                 "costPerServing":  1.35,
+                 "recipeIngredient":  [
+                                          "5.25 lb pork loin",
+                                          "12.75 tbsp fresh ginger",
+                                          "1 cup soy sauce",
+                                          "1 cup mirin",
+                                          "2.25 tbsp sugar",
+                                          "3.5 yellow onions",
+                                          "3.75 cups dry rice",
+                                          "7 tbsp all-purpose flour",
+                                          "0.75 cups vegetable oil",
+                                          "0.75 lb chicken broth"
+                                      ],
+                 "steps":  [
+                               "Firm the pork loin in the freezer and slice it very thin.",
+                               "Whisk grated ginger with soy sauce, mirin, broth, and sugar.",
+                               "Dust the pork slices lightly with flour.",
+                               "Cook the sliced onions until softened, then set aside.",
+                               "Sear the pork in batches, return the onions, and add the ginger sauce to glaze.",
+                               "Cook the rice and portion the pork and sauce over it into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  224
+                              },
+                              {
+                                  "item":  "Mirin",
+                                  "grams":  252
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  336
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  29
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  77
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Pork Loin",
+                                  "grams":  2381
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  147
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

@@ -1,0 +1,297 @@
+﻿{
+    "name":  "Pork Fried Rice Bowls",
+    "slug":  "pork-fried-rice-bowls",
+    "cuisine":  "Chinese-American",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.dinneratthezoo.com/pork-fried-rice/",
+    "source_site":  "dinneratthezoo.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Rice)",
+                   "portion factor 1.1"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Fully mapped, all eleven ingredients are tracked commodities. Verified 318 cal / 25g protein per serving on the source page, so the protein ratio is already at the bar and only portion size needs scaling to clear 500 cal. Big-batch fried rice is standard restaurant practice, so 14 servings is realistic. Distinct protein from the live ground-beef fried rice. | HARVEST: ",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Rice)",
+                         "TUNING: portion factor 1.1"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  580,
+                 "protein":  32,
+                 "carbs":  75,
+                 "fat":  15,
+                 "cost_ps":  "1.40"
+             },
+    "intro_html":  "Fried rice was invented to use up yesterday\u0027s rice, which makes it the original meal prep dish. Restaurants cook it in enormous batches all day long, so scaling this to fourteen containers is not some clever adaptation. It is just how the dish has always been made. Pork tenderloin, egg, peas, carrots, and a hit of sesame oil at the end. Use cold rice from the fridge and you get separate, chewy grains. Use warm rice and you get porridge, so plan ahead by a day.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 5 tbsp (69 g)",
+                                "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 3 lb (1310 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 (221 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 7.7 (470 g)",
+                                "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 9 oz (258 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.5 tbsp (22 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 1.25 tbsp (8 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 8 large eggs (385 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 6.5 cups dry (1182 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.75 cups (185 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 3.75 tbsp (52 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 8 tbsp (48 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Vegetable Oil, 5 tbsp: ~$0.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pork Tenderloin, 3 lb: ~$11.47. \u003cstrong\u003eBuy 3 lbs: $11.91.\u003c/strong\u003e",
+                       "Yellow Onion, 2: ~$0.56. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 7.7: ~$0.99. \u003cstrong\u003eBuy 2 lbs: $1.91.\u003c/strong\u003e",
+                       "Frozen Green Peas, 9 oz: ~$0.56. \u003cstrong\u003eBuy 1 12oz bag: $0.73.\u003c/strong\u003e",
+                       "Garlic, 2.5 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Ginger, 1.25 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Eggs, 8 large eggs: ~$0.92. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
+                       "Rice, 6.5 cups dry: ~$1.46. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Soy Sauce, 0.75 cups: ~$0.70. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sesame Oil, 3.75 tbsp: ~$1.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Onions, 8 tbsp: ~$0.57. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, salt): ~$0.69. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $19.57 across 14 servings, so roughly $1.40 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $23.76 across 14 servings, roughly $1.70 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.56 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $35.32. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.40 a bowl\u003c/strong\u003e for fried rice with a real cut of pork in it, not the three mystery cubes the takeout box gives you.",
+    "shop_smart":  [
+                       "\u003cstrong\u003ePork tenderloin goes on sale constantly and freezes perfectly.\u003c/strong\u003e It is lean, it slices thin without a fight, and buying two when the price drops sets up two batches.",
+                       "\u003cstrong\u003eCook your rice the day before.\u003c/strong\u003e This is a free upgrade. Cold rice fries properly, hot rice steams, and the difference is the whole texture of the dish.",
+                       "\u003cstrong\u003eFrozen peas beat canned and fresh on every count here.\u003c/strong\u003e Cheaper per ounce, better color, and they go in straight from the bag with no thawing.",
+                       "\u003cstrong\u003eSesame oil goes in at the end, not in the pan.\u003c/strong\u003e It is expensive per bottle and its flavor cooks right off, so a small drizzle at the finish gets you far more out of it."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice a day ahead if you can, spread it on a sheet pan to cool, and refrigerate it uncovered.",
+                    "Slice the pork tenderloin thin against the grain and season it with salt and black pepper.",
+                    "Heat some of the vegetable oil in a large skillet or wok over high heat and cook the pork in batches until just done, then set it aside.",
+                    "Beat the eggs, scramble them in the same pan until barely set, and set them aside with the pork.",
+                    "Add the rest of the oil and cook the diced onion, carrots, garlic, and ginger until the carrots soften.",
+                    "Add the cold rice and the frozen peas and stir-fry hard, pressing the rice against the hot pan so it toasts rather than steams.",
+                    "Return the pork and egg, pour in the soy sauce, toss everything together, then finish off the heat with the sesame oil and the sliced green onions."
+                ],
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight from Step 1, and divide by 14. Weigh that number into each container instead of eyeballing scoops, because fried rice packs unevenly. Every bowl lands near \u003cstrong\u003e580 calories with 32 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.dinneratthezoo.com/pork-fried-rice/\" target=\"_blank\" rel=\"noopener\"\u003edinneratthezoo.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Takeout favorites for about $1.40 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  19.57,
+    "cost_batch_true":  23.76,
+    "cost_per_serving":  1.4,
+    "cost_per_serving_true":  1.7,
+    "cost_pantry_add":  11.56,
+    "cost_first_run":  35.32,
+    "scaler":  {
+                   "cost":  "23.76",
+                   "ing":  [
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  69,
+                                   "buy":  "5 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Pork Tenderloin",
+                                   "canon":  "Pork Tenderloin",
+                                   "grams":  1310,
+                                   "buy":  "3 lb",
+                                   "bid":  "pork-tenderloin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  221,
+                                   "buy":  "2",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  470,
+                                   "buy":  "7.7",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Frozen Green Peas",
+                                   "canon":  "Frozen Green Peas",
+                                   "grams":  258,
+                                   "buy":  "9 oz",
+                                   "bid":  "frozen-peas",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  22,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  8,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  385,
+                                   "buy":  "8 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1182,
+                                   "buy":  "6.5 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  185,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "canon":  "Sesame Oil",
+                                   "grams":  52,
+                                   "buy":  "3.75 tbsp",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  15,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  48,
+                                   "buy":  "8 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  22,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Pork fried rice bowls rebuilt for 14-serving meal prep with tenderloin, egg, peas, and carrots. 580 calories, 32g protein, about $1.40 per serving.",
+                 "keywords":  "pork fried rice, fried rice meal prep, pork tenderloin recipe, budget takeout at home, high protein rice bowls, chinese american meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT25M",
+                 "totalTime":  "PT45M",
+                 "costPerServing":  1.4,
+                 "recipeIngredient":  [
+                                          "3 lb pork tenderloin",
+                                          "6.5 cups dry rice",
+                                          "8 large eggs",
+                                          "2 cups frozen green peas",
+                                          "7.7 carrots",
+                                          "2 yellow onions",
+                                          "0.75 cups soy sauce",
+                                          "3.75 tbsp sesame oil",
+                                          "5 tbsp vegetable oil",
+                                          "2.5 tbsp garlic",
+                                          "1.25 tbsp fresh ginger",
+                                          "8 tbsp green onions"
+                                      ],
+                 "steps":  [
+                               "Cook the rice ahead and chill it uncovered so the grains dry out.",
+                               "Slice the pork thin, season it, and sear it in batches over high heat.",
+                               "Scramble the eggs in the same pan and set aside.",
+                               "Cook the onion, carrots, garlic, and ginger until softened.",
+                               "Add the cold rice and peas and stir-fry hard until toasted.",
+                               "Return pork and egg, add soy sauce, finish with sesame oil and green onions, then portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  69
+                              },
+                              {
+                                  "item":  "Pork Tenderloin",
+                                  "grams":  1310
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  221
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  470
+                              },
+                              {
+                                  "item":  "Frozen Green Peas",
+                                  "grams":  258
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  22
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1182
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  185
+                              },
+                              {
+                                  "item":  "Sesame Oil",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  48
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  22
+                              }
+                          ]
+}

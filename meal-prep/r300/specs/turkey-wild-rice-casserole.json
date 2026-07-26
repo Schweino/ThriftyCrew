@@ -1,0 +1,345 @@
+﻿{
+    "name":  "Turkey Wild Rice Casserole",
+    "slug":  "turkey-wild-rice-casserole",
+    "cuisine":  "American",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://diethood.com/turkey-wild-rice-casserole/",
+    "source_site":  "diethood.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Wild Rice)",
+                   "portion factor 1.2"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Minnesota hotdish classic; no creamy wild-rice dish in the catalog. Board carries rice and brown-rice but not a wild-rice blend, so we would build it on a rice base with a partial wild-rice add. Source verified at 6 servings, 339 cal / 21g; our build ~550 cal / 36g. | HARVEST: ",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Wild Rice)",
+                         "TUNING: portion factor 1.2",
+                         "OVERRIDE Turkey Breast: [BUMP x1.7] source \u00272-3 cups\u0027 (350 g) for 6; house = 600 g for protein floor"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  575,
+                 "protein":  49,
+                 "carbs":  53,
+                 "fat":  19,
+                 "cost_ps":  "3.71"
+             },
+    "intro_html":  "Wild rice is not really rice, it is a marsh grass that Minnesota has been harvesting by canoe for centuries, and it tastes like nothing else in the grain aisle. Here it goes into a creamy turkey bake with mushrooms, celery, and Swiss cheese. Each serving carries \u003cstrong\u003e49 grams of protein\u003c/strong\u003e and 575 calories for about \u003cstrong\u003e$3.71\u003c/strong\u003e. That is the most expensive dish in this batch, and the wild rice is the reason. It is also the reason it tastes like a supper club instead of a casserole.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eWild Rice (generic (USDA)):\u003c/strong\u003e 5.25 cups (855 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 5.5 tbsp (78 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 (196 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 5.6 (308 g)",
+                                "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 1.5 lb (635 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5 tbsp (42 g)",
+                                "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 3.75 lb (1680 g)",
+                                "\u003cstrong\u003eSwiss Cheese (generic (USDA)):\u003c/strong\u003e 11.25 oz (316 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 1.5 cups (343 g)",
+                                "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 0.75 cups (167 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 0.75 cups (168 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 2.25 oz (63 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Wild Rice, 5.25 cups: ~$20.72. \u003cstrong\u003eBuy 2 16oz bags: $22.00.\u003c/strong\u003e",
+                       "Butter, 5.5 tbsp: ~$0.51. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Yellow Onion, 2: ~$0.49. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Celery, 5.6: ~$1.62. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "White Mushrooms, 1.5 lb: ~$5.29. \u003cstrong\u003eBuy 3 8oz packs: $5.67.\u003c/strong\u003e",
+                       "Garlic, 5 tbsp: ~$0.60. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Turkey Breast, 3.75 lb: ~$17.83. \u003cstrong\u003eBuy 2 3lb frozen roasts: $28.88.\u003c/strong\u003e",
+                       "Swiss Cheese, 11.25 oz: ~$2.33. \u003cstrong\u003eBuy 2 8ozes: $3.35.\u003c/strong\u003e",
+                       "Milk, 1.5 cups: ~$0.27. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
+                       "Heavy Cream, 0.75 cups: ~$1.04. \u003cstrong\u003eBuy 1 pint: $2.94.\u003c/strong\u003e",
+                       "Chicken Broth, 0.75 cups: ~$0.23. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Parmesan Cheese, 2.25 oz: ~$0.77. \u003cstrong\u003eBuy 1 8oz tub: $2.78.\u003c/strong\u003e",
+                       "Pantry seasonings (garlic powder, onion powder, smoked paprika, salt, black pepper, ground nutmeg): ~$0.29. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $51.99 across 14 servings, so roughly $3.71 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $76.80 across 14 servings, roughly $5.49 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.25 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $89.05. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.71 a serving\u003c/strong\u003e, which makes this the splurge of the collection. Wild rice costs several times what white rice does per pound. If that number is too rich for the week, this bake also works with a wild rice blend, which stretches the real thing with long grain and cuts the price hard.",
+    "shop_smart":  [
+                       "Wild rice is the whole cost story. A blend labeled wild rice blend costs a fraction of pure wild rice and still gives you the nutty flavor and the chew, so check both bags before you commit.",
+                       "White mushrooms in 8 oz packs cost far less than pre-sliced baby bellas and cook down identically in a cream sauce. Slice them yourself.",
+                       "Buy the whole celery bunch rather than celery hearts. You use most of it here, and the outer ribs are the flavorful ones anyway.",
+                       "Two frozen turkey breast roasts cover this batch. Roast both at once, dice, and freeze half for the next bake so you only heat the oven one time."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Rinse the wild rice and simmer it in salted water for 40 to 45 minutes, until the grains split open and are tender but still chewy, then drain well.",
+                    "Melt the butter in a large pot over medium heat and cook the diced onion, sliced celery, and sliced mushrooms for 10 minutes, until the mushroom liquid cooks away.",
+                    "Add the garlic and cook one minute, then stir in the chicken broth, milk, and heavy cream and bring it to a low simmer.",
+                    "Season with the garlic powder, onion powder, smoked paprika, salt, black pepper, and a small pinch of nutmeg, then melt in the shredded Swiss until the sauce is smooth.",
+                    "Fold in the cooked wild rice and the diced turkey breast, checking that the mixture is loose. Wild rice keeps drinking liquid in the oven, so a little extra broth here is insurance.",
+                    "Spread it into a greased 9x13 pan, top with the parmesan, and bake at 350F for 30 to 35 minutes until bubbling and browned at the edges.",
+                    "Rest 10 minutes before portioning so the sauce tightens up around the rice."
+                ],
+    "portion_html":  "Put the pan on the scale, subtract the empty pan weight, and divide by 14. Weigh each scoop into its container, because wild rice settles unevenly and eyeballing will short somebody. Every serving lands at \u003cstrong\u003e575 calories\u003c/strong\u003e and 49 grams of protein, the highest protein count in this whole group.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://diethood.com/turkey-wild-rice-casserole/\" target=\"_blank\" rel=\"noopener\"\u003ediethood.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Even the splurge lands at about $3.71 a serving, and most of the recipes on this site come in well under that. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "cost_batch":  51.99,
+    "cost_batch_true":  76.8,
+    "cost_per_serving":  3.71,
+    "cost_per_serving_true":  5.49,
+    "cost_pantry_add":  12.25,
+    "cost_first_run":  89.05,
+    "scaler":  {
+                   "cost":  "76.80",
+                   "ing":  [
+                               {
+                                   "item":  "Wild Rice",
+                                   "canon":  "Wild Rice",
+                                   "grams":  855,
+                                   "buy":  "5.25 cups",
+                                   "bid":  "wild-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  78,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  196,
+                                   "buy":  "2",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "canon":  "Celery",
+                                   "grams":  308,
+                                   "buy":  "5.6",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "White Mushrooms",
+                                   "canon":  "White Mushrooms",
+                                   "grams":  635,
+                                   "buy":  "1.5 lb",
+                                   "bid":  "mushrooms",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  42,
+                                   "buy":  "5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Turkey Breast",
+                                   "canon":  "Turkey Breast",
+                                   "grams":  1680,
+                                   "buy":  "3.75 lb",
+                                   "bid":  "turkey-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Swiss Cheese",
+                                   "canon":  "Swiss Cheese",
+                                   "grams":  316,
+                                   "buy":  "11.25 oz",
+                                   "bid":  "swiss-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  343,
+                                   "buy":  "1.5 cups",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "Heavy Cream",
+                                   "canon":  "Heavy Cream",
+                                   "grams":  167,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "heavy-cream",
+                                   "gpu":  "29.800"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  168,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Onion Powder",
+                                   "canon":  "Onion Powder",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "onion-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Smoked Paprika",
+                                   "canon":  "Smoked Paprika",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  8,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Nutmeg",
+                                   "canon":  "Ground Nutmeg",
+                                   "grams":  1,
+                                   "buy":  "0.04 oz",
+                                   "bid":  "ground-nutmeg",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "canon":  "Parmesan Cheese",
+                                   "grams":  63,
+                                   "buy":  "2.25 oz",
+                                   "bid":  "parmesan",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey wild rice casserole meal prep: creamy Swiss and mushroom bake with wild rice and turkey breast. 575 calories, 49g protein, about $3.71 a serving.",
+                 "keywords":  "turkey wild rice casserole, minnesota hotdish, creamy wild rice bake, leftover turkey recipes, high protein casserole, turkey meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT1H20M",
+                 "totalTime":  "PT1H45M",
+                 "costPerServing":  3.71,
+                 "recipeIngredient":  [
+                                          "12 cups diced cooked turkey breast",
+                                          "5.25 cups wild rice",
+                                          "9 cups white mushrooms",
+                                          "11.25 oz Swiss cheese",
+                                          "5.6 stalks celery",
+                                          "1.5 cups milk",
+                                          "0.75 cups heavy cream",
+                                          "0.25 lb chicken broth",
+                                          "2.25 oz parmesan cheese",
+                                          "5.5 tbsp butter",
+                                          "2 yellow onions",
+                                          "5 tbsp garlic"
+                                      ],
+                 "steps":  [
+                               "Simmer the rinsed wild rice in salted water 40 to 45 minutes until the grains split, then drain.",
+                               "Cook the onion, celery, and mushrooms in butter for 10 minutes, then add the garlic.",
+                               "Stir in the broth, milk, and cream, season, and melt in the shredded Swiss until smooth.",
+                               "Fold in the cooked wild rice and diced turkey and spread into a greased 9x13 pan.",
+                               "Top with parmesan, bake at 350F for 30 to 35 minutes, rest 10 minutes, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Wild Rice",
+                                  "grams":  855
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  78
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Celery",
+                                  "grams":  308
+                              },
+                              {
+                                  "item":  "White Mushrooms",
+                                  "grams":  635
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Turkey Breast",
+                                  "grams":  1680
+                              },
+                              {
+                                  "item":  "Swiss Cheese",
+                                  "grams":  316
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  343
+                              },
+                              {
+                                  "item":  "Heavy Cream",
+                                  "grams":  167
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  168
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Onion Powder",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Smoked Paprika",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Ground Nutmeg",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Parmesan Cheese",
+                                  "grams":  63
+                              }
+                          ]
+}

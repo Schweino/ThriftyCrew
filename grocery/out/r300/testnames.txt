@@ -1,0 +1,61 @@
+﻿# r300 registration probe corpus - realistic Omaha shelf product names for the 21 new commodities
+# plus DECOYS (products that must stay with their existing commodity).
+turkey-breast	Honeysuckle White Bone-In Turkey Breast
+turkey-breast	Jennie-O Boneless Turkey Breast Roast, 3 lb
+turkey-breast	Butterball Frozen Boneless Skinless Turkey Breast
+turkey-breast	Fresh Young Turkey Breast, per lb
+turkey-lunchmeat	Oscar Mayer Deli Fresh Oven Roasted Turkey Breast, 9 oz
+turkey-lunchmeat	Jennie-O Turkey Breast Lunch Meat, Sliced
+ground-turkey	Jennie-O Ground Turkey 93/7, 1 lb
+dried-arbol-chiles	El Guapo Chile de Arbol, 2.5 oz
+dried-arbol-chiles	Badia Arbol Chile Pods, 6 oz
+dried-guajillo-chiles	El Guapo Chile Guajillo, 3 oz
+dried-guajillo-chiles	Badia Guajillo Chile Pods Dried, 6 oz
+dried-ancho-chiles	El Guapo Chile Ancho, 3 oz
+dried-ancho-chiles	Badia Ancho Chile Pods, 6 oz
+chili-powder	El Guapo Ancho Chile Powder, 1.75 oz
+chili-powder	McCormick Chili Powder, 2.5 oz
+diced-ham	Great Value Diced Ham, 8 oz
+diced-ham	John Morrell Diced Ham Water Added, 8 oz
+deli-ham	Hy-Vee Thin Sliced Deli Ham, 9 oz
+sazon-seasoning	Sazon Goya con Culantro y Achiote, 3.52 oz
+sazon-seasoning	Goya Sazon Coriander and Annatto Seasoning, 1.41 oz
+sazon-seasoning	Badia Sazon Tropical Seasoning, 3.5 oz
+eggplant	Eggplant, each
+eggplant	Fresh Italian Eggplant
+brown-gravy-mix	McCormick Brown Gravy Mix, 0.87 oz
+brown-gravy-mix	Great Value Brown Gravy Mix, 0.87 oz
+jarred-gravy	Heinz HomeStyle Rich Mushroom Gravy, 12 oz jar
+chicken-livers	Tyson Chicken Livers, 20 oz
+chicken-livers	Fresh Chicken Livers, per lb
+sweet-soy-sauce	ABC Sweet Soy Sauce Kecap Manis, 21 oz
+sweet-soy-sauce	Kecap Manis Indonesian Sweet Soy Sauce, 20 oz
+soy-sauce	Kikkoman Soy Sauce, 15 oz
+caraway-seeds	McCormick Caraway Seed, 1.75 oz
+caraway-seeds	Badia Caraway Seeds Whole, 2 oz
+poultry-seasoning	McCormick Poultry Seasoning, 0.65 oz
+poultry-seasoning	Great Value Poultry Seasoning, 0.75 oz
+wild-rice	Lundberg Organic Wild Rice, 8 oz
+wild-rice	Great Value Wild Rice, 8 oz
+rice	Great Value Long Grain White Rice, 5 lb
+# EXPECT nobody (wild-rice blend is deliberately unclaimed by BOTH rice and wild-rice):  Rice Select Royal Blend Texmati White Brown Wild Rice, 21 oz
+doubanjiang	Lee Kum Kee Chili Bean Sauce Toban Djan, 8 oz
+doubanjiang	Pixian Doubanjiang Broad Bean Paste, 16 oz
+ground-fennel	Badia Fennel Seed Ground, 2 oz
+ground-fennel	McCormick Fennel Seed, 1 oz
+snow-peas	Fresh Snow Peas, 8 oz
+snow-peas	Sugar Snap Peas, 8 oz bag
+frozen-peas	Great Value Frozen Sweet Peas, 12 oz
+horseradish-sauce	Great Value Horseradish Sauce, 8.5 oz
+horseradish-sauce	Kraft Horseradish Sauce, 12 oz
+horseradish	Hy-Vee Prepared Horseradish, 5 oz
+corned-beef-brisket	Corned Beef Brisket Point Cut, per lb
+corned-beef-brisket	Grillmaster Flat Cut Corned Beef Brisket
+corned-beef-hash	Hormel Mary Kitchen Corned Beef Hash, 14 oz
+pigeon-peas	Goya Green Pigeon Peas, 15 oz
+pigeon-peas	La Preferida Gandules Verdes Green Pigeon Peas, 15 oz
+aji-amarillo-paste	Goya Aji Amarillo Yellow Pepper Paste, 7.5 oz
+aji-amarillo-paste	Incas Food Aji Amarillo Paste, 7.5 oz
+rye-bread	Pepperidge Farm Jewish Rye Bread, 16 oz
+rye-bread	Rotellas Marble Rye Bread Loaf
+bread	Great Value White Sandwich Bread, 20 oz

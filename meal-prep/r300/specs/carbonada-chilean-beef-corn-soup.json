@@ -1,0 +1,349 @@
+﻿{
+    "name":  "Carbonada (Chilean Beef, Corn and Squash Soup)",
+    "slug":  "carbonada-chilean-beef-corn-soup",
+    "cuisine":  "Chilean",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.curiouscuisiniere.com/carbonada-chilean-beef-soup/",
+    "source_site":  "curiouscuisiniere.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Potato)",
+                   "portion factor 1.35"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Hearty enough to be dinner when cooked thick, and dirt cheap because vegetables carry the volume. Confidence: page verified via site listing; calories estimated, and this is the lowest-calorie candidate in the slice, so it only qualifies with a generous portion and the rice included. | HARVEST: Source publishes calories only; protein grams not published.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Potato)",
+                         "TUNING: portion factor 1.35",
+                         "OVERRIDE Potato: [BUMP x4 vs 1 cup] source is a thin soup (1 cup potato for 6); house dinner carbonada = 100 g potato/serving",
+                         "OVERRIDE Rice: [BUMP x3 vs 1/4 cup] house 25 g dry rice/serving to carry the 550 gate in a chunky-soup format"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  578,
+                 "protein":  32,
+                 "carbs":  82,
+                 "fat":  14,
+                 "cost_ps":  "2.73"
+             },
+    "intro_html":  "Carbonada is the Chilean answer to a cold week: beef and every vegetable in the drawer, simmered together until the pot goes thick. Traditionally it leans on zapallo squash, and sweet potato plays that role here. Rice cooks right in and turns a soup into dinner. Each bowl carries \u003cstrong\u003e32 grams of protein\u003c/strong\u003e and 578 calories for about \u003cstrong\u003e$2.73\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 6.25 tbsp (88 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.6 (181 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3.75 tbsp (32 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 0.6 (72 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 3 (159 g)",
+                                "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 3.25 lb (1429 g)",
+                                "\u003cstrong\u003eSweet Potatoes:\u003c/strong\u003e 3 (419 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 16 (3394 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3 (173 g)",
+                                "\u003cstrong\u003eGreen Beans (generic):\u003c/strong\u003e 3 oz (87 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 4.5 oz (130 g)",
+                                "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 3.75 oz (106 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 2.5 cups dry (473 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Vegetable Oil, 6.25 tbsp: ~$0.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 1.6: ~$0.46. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 3.75 tbsp: ~$0.46. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Red Bell Pepper, 0.6: ~$0.52. \u003cstrong\u003eBuy 1 each: $0.86.\u003c/strong\u003e",
+                       "Celery, 3: ~$0.84. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Beef Flank/Sirloin Steak, 3.25 lb: ~$27.79. \u003cstrong\u003eBuy 4 lbs: $35.28.\u003c/strong\u003e",
+                       "Sweet Potatoes, 3: ~$1.37. \u003cstrong\u003eBuy 1 lb: $1.48.\u003c/strong\u003e",
+                       "Potato, 16: ~$4.25. \u003cstrong\u003eBuy 8 lbs: $4.54.\u003c/strong\u003e",
+                       "Carrots, 3: ~$0.36. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Green Beans, 3 oz: ~$0.19. \u003cstrong\u003eBuy 1 12oz bag: $0.73.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 4.5 oz: ~$0.24. \u003cstrong\u003eBuy 1 can: $0.79.\u003c/strong\u003e",
+                       "Frozen Green Peas, 3.75 oz: ~$0.23. \u003cstrong\u003eBuy 1 12oz bag: $0.73.\u003c/strong\u003e",
+                       "Rice, 2.5 cups dry: ~$0.58. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, dried oregano, paprika, black pepper, ground cumin): ~$0.69. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $38.19 across 14 servings, so roughly $2.73 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $50.93 across 14 servings, roughly $3.64 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.90 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $62.83. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.73 a bowl\u003c/strong\u003e. Vegetables carry the volume in this pot, not the beef, and that is exactly why the number is where it is.",
+    "shop_smart":  [
+                       "Potatoes are the biggest vegetable line here. Buy the largest bag your household will get through, because the per pound price falls off a cliff as the bag gets bigger.",
+                       "Frozen peas and green beans beat fresh on both price and convenience in a soup. They go in at the end straight from the bag with no prep at all.",
+                       "Sweet potato stands in for the traditional zapallo squash. It brings the same sweetness and body and it is on the shelf year round.",
+                       "One can of corn is plenty. Buy it when the canned vegetables go on the multi can promotion and keep a few in the pantry."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the chopped onion, garlic, red bell pepper, and celery in the vegetable oil until soft, about 8 minutes.",
+                    "Cut the beef into small cubes, season with salt and pepper, and brown it in the same pot in batches.",
+                    "Add the paprika, cumin, and oregano and stir for a minute so the spices bloom in the fat.",
+                    "Cover everything with water, bring it to a simmer, and cook 35 to 40 minutes until the beef starts to give.",
+                    "Add the potatoes, sweet potatoes, and carrots and simmer 15 minutes more.",
+                    "Stir in the rice and cook another 15 to 18 minutes, until the rice is tender and the soup has gone properly thick.",
+                    "Add the green beans, corn, and peas in the last 5 minutes, then taste and correct the salt."
+                ],
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Ladle that weight into each of 14 containers, stirring hard between scoops because everything in this pot sinks. Each bowl lands at \u003cstrong\u003e578 calories with 32 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.curiouscuisiniere.com/carbonada-chilean-beef-soup/\" target=\"_blank\" rel=\"noopener\"\u003ecuriouscuisiniere.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Chilean carbonada for about $2.73 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  38.19,
+    "cost_batch_true":  50.93,
+    "cost_per_serving":  2.73,
+    "cost_per_serving_true":  3.64,
+    "cost_pantry_add":  11.9,
+    "cost_first_run":  62.83,
+    "scaler":  {
+                   "cost":  "50.93",
+                   "ing":  [
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  88,
+                                   "buy":  "6.25 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  181,
+                                   "buy":  "1.6",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  32,
+                                   "buy":  "3.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "canon":  "Red Bell Pepper",
+                                   "grams":  72,
+                                   "buy":  "0.6",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "canon":  "Celery",
+                                   "grams":  159,
+                                   "buy":  "3",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Beef Flank/Sirloin Steak",
+                                   "canon":  "Beef Flank/Sirloin Steak",
+                                   "grams":  1429,
+                                   "buy":  "3.25 lb",
+                                   "bid":  "sirloin-steak",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Sweet Potatoes",
+                                   "canon":  "Sweet Potatoes",
+                                   "grams":  419,
+                                   "buy":  "3",
+                                   "bid":  "sweet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  3394,
+                                   "buy":  "16",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  173,
+                                   "buy":  "3",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Beans",
+                                   "canon":  "Green Beans",
+                                   "grams":  87,
+                                   "buy":  "3 oz",
+                                   "bid":  "frozen-green-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sweet Whole Kernel Corn",
+                                   "canon":  "Sweet Whole Kernel Corn",
+                                   "grams":  130,
+                                   "buy":  "4.5 oz",
+                                   "bid":  "canned-corn",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Frozen Green Peas",
+                                   "canon":  "Frozen Green Peas",
+                                   "grams":  106,
+                                   "buy":  "3.75 oz",
+                                   "bid":  "frozen-peas",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  473,
+                                   "buy":  "2.5 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  38,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  6,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Chilean carbonada meal prep: beef simmered with potatoes, sweet potato, corn, peas, and rice into a thick vegetable soup. 578 calories, 32g protein, about $2.73 per serving.",
+                 "keywords":  "carbonada, chilean beef soup, beef and corn soup, vegetable beef soup, budget meal prep, chilean recipes",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT1H15M",
+                 "totalTime":  "PT1H40M",
+                 "costPerServing":  2.73,
+                 "recipeIngredient":  [
+                                          "3.25 lb beef flank or sirloin steak",
+                                          "6.25 tbsp vegetable oil",
+                                          "1.6 yellow onions",
+                                          "3.75 tbsp garlic",
+                                          "0.6 red bell pepper",
+                                          "3 celery stalks",
+                                          "3 sweet potatoes",
+                                          "16 potatoes",
+                                          "3 carrots",
+                                          "0.75 cups green beans",
+                                          "0.75 cups sweet whole kernel corn",
+                                          "0.75 cups frozen green peas",
+                                          "2.5 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Soften onion, garlic, red pepper, and celery in oil.",
+                               "Brown the cubed beef in batches, then bloom the paprika, cumin, and oregano.",
+                               "Cover with water and simmer 35 to 40 minutes.",
+                               "Add potatoes, sweet potatoes, and carrots, then stir in the rice and cook until thick.",
+                               "Add green beans, corn, and peas at the end and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  88
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  181
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  32
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  72
+                              },
+                              {
+                                  "item":  "Celery",
+                                  "grams":  159
+                              },
+                              {
+                                  "item":  "Beef Flank/Sirloin Steak",
+                                  "grams":  1429
+                              },
+                              {
+                                  "item":  "Sweet Potatoes",
+                                  "grams":  419
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  3394
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  173
+                              },
+                              {
+                                  "item":  "Green Beans",
+                                  "grams":  87
+                              },
+                              {
+                                  "item":  "Sweet Whole Kernel Corn",
+                                  "grams":  130
+                              },
+                              {
+                                  "item":  "Frozen Green Peas",
+                                  "grams":  106
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  473
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  38
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  2
+                              }
+                          ]
+}

@@ -1,0 +1,249 @@
+﻿{
+    "name":  "Chile Relleno Casserole with Ground Beef",
+    "slug":  "chile-relleno-casserole-ground-beef",
+    "cuisine":  "Mexican",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.thespruceeats.com/chiles-rellenos-casserole-3057402",
+    "source_site":  "thespruceeats.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 300g (src scale)",
+                   "base +30% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: The casserole form of a dish that is otherwise fried to order, which is exactly the adaptation the batch rule asks for. Egg-and-cheese custard means high protein without more meat. Fully board-mapped. Confidence: page verified; calories estimated. | HARVEST: Recovered via browser after WebFetch block. Nutrition per serving (406 cal / 35g protein / 23g fat / 13g carbs). Green chile quantity is a 2-to-3-can range; parser should resolve (use 3 cans for the 14-serving scale).",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 300g (src scale)",
+                         "TUNING: base +30% (Rice)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  566,
+                 "protein":  36,
+                 "carbs":  62,
+                 "fat":  18,
+                 "cost_ps":  "1.91"
+             },
+    "intro_html":  "A real chile relleno is a roasted poblano, stuffed by hand, dipped in whipped egg batter, and fried one at a time. It is delicious and it is a terrible idea for fourteen servings. The casserole version keeps everything that matters and throws out the part that does not scale. Roasted poblanos and seasoned beef layer into a dish, a cheddar and egg custard gets poured over the whole thing, and it bakes into something that puffs up golden and sets like a savory pudding. Same flavors, one dish, no standing at a fryer.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 2.25 lb (1058 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 (134 g)",
+                                "\u003cstrong\u003ePoblano Peppers (generic):\u003c/strong\u003e 8 (662 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 14 oz (396 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 3.5 cups (858 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 9 tbsp (73 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 9 large eggs (467 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5 cups dry (938 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Beef, 2.25 lb: ~$15.47. \u003cstrong\u003eBuy 3 lbs: $19.90.\u003c/strong\u003e",
+                       "Yellow Onion, 1: ~$0.34. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Poblano Peppers, 8: ~$4.76. \u003cstrong\u003eBuy 2 lbs: $6.52.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 14 oz: ~$3.01. \u003cstrong\u003eBuy 2 8oz bags: $3.45.\u003c/strong\u003e",
+                       "Milk, 3.5 cups: ~$0.68. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
+                       "All-Purpose Flour, 9 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Eggs, 9 large eggs: ~$1.11. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
+                       "Rice, 5 cups dry: ~$1.16. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, hot sauce): ~$0.18. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.78 across 14 servings, so roughly $1.91 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $36.87 across 14 servings, roughly $2.63 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.35 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $49.22. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.91 a bowl\u003c/strong\u003e for chile relleno flavor without the frying, which is the whole reason this casserole exists.",
+    "shop_smart":  [
+                       "\u003cstrong\u003ePoblanos are the second biggest line and there is no substitute.\u003c/strong\u003e Buy them when they are cheap and roast a big batch at once. Roasted peppers freeze beautifully in bags.",
+                       "\u003cstrong\u003eEggs and cheese push the protein up cheaply.\u003c/strong\u003e That custard is doing real nutritional work here, which is why the beef amount can stay modest.",
+                       "\u003cstrong\u003eShred cheddar off a block.\u003c/strong\u003e Bagged shreds carry a starch coating that makes an egg custard grainy, and the block is cheaper per ounce anyway.",
+                       "\u003cstrong\u003eRoast the peppers under the broiler, not on a grill.\u003c/strong\u003e Same char, no charcoal, and you can do a whole sheet pan at once while the beef browns."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Broil the poblano peppers on a sheet pan, turning once, until the skins blister and blacken, then steam them in a covered bowl for ten minutes and slip the skins off.",
+                    "Slit the peppers open, pull out the seeds, and lay them flat.",
+                    "Brown the ground beef with the diced yellow onion, salt, and black pepper until no pink remains, then drain the fat.",
+                    "Layer half the poblanos in a large greased baking dish, spread the beef over them, scatter on most of the cheddar cheese, and top with the remaining poblanos.",
+                    "Whisk the eggs with the milk, all-purpose flour, a dash of hot sauce, and salt until smooth with no lumps.",
+                    "Pour the custard evenly over the layers and let it settle for a few minutes so it works its way down.",
+                    "Bake at 350 degrees until the center is set and no longer jiggles, scatter the last of the cheddar on top, and bake a few minutes more until melted. Cook the rice separately to serve underneath."
+                ],
+    "portion_html":  "Weigh the rice pot and the baking dish separately, subtracting the empty weight each time, and divide by 14. Cut the casserole to weight rather than into squares, because the pepper layers make it uneven. Every serving comes in at \u003cstrong\u003e566 calories with 36 grams of protein\u003c/strong\u003e. Let it rest twenty minutes before cutting so the custard finishes firming up.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.thespruceeats.com/chiles-rellenos-casserole-3057402\" target=\"_blank\" rel=\"noopener\"\u003ethespruceeats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Tex-Mex favorites for about $1.91 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  26.78,
+    "cost_batch_true":  36.87,
+    "cost_per_serving":  1.91,
+    "cost_per_serving_true":  2.63,
+    "cost_pantry_add":  12.35,
+    "cost_first_run":  49.22,
+    "scaler":  {
+                   "cost":  "36.87",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "canon":  "93/7 Ground Beef",
+                                   "grams":  1058,
+                                   "buy":  "2.25 lb",
+                                   "bid":  "ground-beef-8020",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  134,
+                                   "buy":  "1",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Poblano Peppers",
+                                   "canon":  "Poblano Peppers",
+                                   "grams":  662,
+                                   "buy":  "8",
+                                   "bid":  "poblano-peppers",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "canon":  "Cheddar Cheese, Shredded",
+                                   "grams":  396,
+                                   "buy":  "14 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  858,
+                                   "buy":  "3.5 cups",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  73,
+                                   "buy":  "9 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  467,
+                                   "buy":  "9 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Hot Sauce",
+                                   "canon":  "Hot Sauce",
+                                   "grams":  1,
+                                   "buy":  "0.07 tbsp",
+                                   "bid":  "hot-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  938,
+                                   "buy":  "5 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Chile relleno casserole with ground beef, rebuilt for 14-serving meal prep: roasted poblanos and beef under a cheddar egg custard. 566 calories, 36g protein, about $1.91 per serving.",
+                 "keywords":  "chile relleno casserole, ground beef poblano bake, mexican casserole, egg custard casserole, budget mexican meal prep, high protein bake",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT75M",
+                 "costPerServing":  1.91,
+                 "recipeIngredient":  [
+                                          "2.25 lb 93/7 ground beef",
+                                          "8 poblano peppers",
+                                          "14 oz shredded cheddar cheese",
+                                          "9 large eggs",
+                                          "3.5 cups milk",
+                                          "9 tbsp all-purpose flour",
+                                          "5 cups dry rice",
+                                          "1 yellow onion"
+                                      ],
+                 "steps":  [
+                               "Broil the poblanos until blistered, steam them, and peel off the skins.",
+                               "Slit and seed the peppers and lay them flat.",
+                               "Brown the beef with onion and seasoning, then drain.",
+                               "Layer peppers, beef, and cheddar in a baking dish, ending with peppers.",
+                               "Whisk eggs, milk, flour, and hot sauce and pour the custard over.",
+                               "Bake at 350F until set, top with cheese, and portion with rice into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "93/7 Ground Beef",
+                                  "grams":  1058
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  134
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Poblano Peppers",
+                                  "grams":  662
+                              },
+                              {
+                                  "item":  "Cheddar Cheese, Shredded",
+                                  "grams":  396
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  858
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  73
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  467
+                              },
+                              {
+                                  "item":  "Hot Sauce",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  938
+                              }
+                          ]
+}

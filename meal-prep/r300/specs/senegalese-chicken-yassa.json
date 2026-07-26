@@ -1,0 +1,292 @@
+﻿{
+    "name":  "Senegalese Chicken Yassa (Lemon Onion Chicken)",
+    "slug":  "senegalese-chicken-yassa",
+    "cuisine":  "West African / Senegalese",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.africanbites.com/yassa-chickenpoulet-au-yassa/",
+    "source_site":  "africanbites.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 300g (src scale)",
+                   "base +20% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Page verified: full recipe, 6 servings, 546 cal / 38g protein. Braise of chicken in jammy onions, mustard and lemon; holds and reheats well, portions over rice. Onion-forward so it is cheap per serving; every ingredient maps to the board (dijon-mustard, green-olives, lemons all tracked). Distinct from every live chicken dish - nothing on the site is mustard-lemon based. Confidence: high. | HARVEST: ",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 300g (src scale)",
+                         "TUNING: base +20% (Rice)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  567,
+                 "protein":  47,
+                 "carbs":  57,
+                 "fat":  14,
+                 "cost_ps":  "1.51"
+             },
+    "intro_html":  "Yassa is proof that onions are the most underrated ingredient in the grocery store. Six pounds of them cook down into something jammy and almost sweet, sharpened with lemon and dijon mustard, with chicken braised right in the middle of it. Senegal has been making this dish for generations and the ingredient list has barely changed, because it did not need to. Each bowl runs \u003cstrong\u003e567 calories and 47 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$1.51\u003c/strong\u003e served over rice.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 6.5 lb (2917 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 5.75 tbsp (35 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5.5 tbsp (47 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2.5 cups (588 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 4.7 (219 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 2.5 tbsp (35 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 6.4 (700 g)",
+                                "\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 4.75 tbsp (70 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 3.75 tbsp (33 g)",
+                                "\u003cstrong\u003eOlives (generic):\u003c/strong\u003e 2 cups (280 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.5 cups dry (851 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Thigh, 6.5 lb: ~$11.38. \u003cstrong\u003eBuy 7 lbs: $12.39.\u003c/strong\u003e",
+                       "Ginger, 5.75 tbsp: ~$0.31. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Garlic, 5.5 tbsp: ~$0.68. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Chicken Broth, 2.5 cups: ~$0.79. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lemon Juice, 4.7: ~$0.83. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Vegetable Oil, 2.5 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 6.4: ~$1.76. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Dijon Mustard, 4.75 tbsp: ~$0.35. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Jalapeno, 3.75 tbsp: ~$0.13. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Olives, 2 cups: ~$3.08. \u003cstrong\u003eBuy 2 6oz cans: $3.74.\u003c/strong\u003e",
+                       "Rice, 4.5 cups dry: ~$1.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, bay leaves, salt): ~$0.72. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $21.16 across 14 servings, so roughly $1.51 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $26.02 across 14 servings, roughly $1.86 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.55 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $39.57. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.51 a bowl\u003c/strong\u003e. The flavor here comes from onions, lemon and mustard, which are three of the cheapest things you can put in a pot, and that is the entire reason this number is what it is.",
+    "shop_smart":  [
+                       "Onions are the star, not the filler, so buy the big mesh bag instead of picking them one at a time. The per-pound price on a two or five pound bag is a fraction of the loose bin, and they keep for a month in a dry cabinet.",
+                       "Bottled lemon juice is the right call here. This recipe wants a real slug of it, and squeezing that much fresh citrus costs several times more for a braise where nobody will taste the difference.",
+                       "Green olives are the second biggest line after the chicken. They are optional if you are pinching, but they are what makes the dish taste finished, so buy the small cans on sale and keep them on the shelf.",
+                       "Dijon mustard is doing heavy lifting for pennies. One jar covers this batch many times over, and the store brand performs exactly like the imported one once it hits a hot pot."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Toss the chicken thighs with the lemon juice, half the sliced onion, the minced garlic, grated ginger, black pepper and salt. Let that sit in the fridge for at least an hour, or overnight if you plan ahead.",
+                    "Lift the chicken out and shake off the onion. Heat the vegetable oil in your largest pot over medium-high and brown the thighs in batches until they have real color, then set them aside.",
+                    "Dump every bit of the onion, the marinade included, into the pot. Turn the heat to medium and let them cook down for 20 to 25 minutes, stirring occasionally, until they collapse into a soft golden jam. This step is the recipe. Do not rush it.",
+                    "Stir in the dijon mustard, the minced jalapeno and the bay leaves, then pour in the chicken broth and scrape the bottom of the pot clean.",
+                    "Return the chicken and its juices, cover, and simmer 30 to 35 minutes until the thighs are tender and read 165F.",
+                    "While it simmers, cook the rice and let it steam covered off the heat for 10 minutes.",
+                    "Pull the bay leaves, stir in the olives, chop the chicken into bite-size pieces, and fold the cooked rice through the pot so every serving gets sauce and grain together."
+                ],
+    "portion_html":  "Put the pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. Same scoop in every container. Each one carries \u003cstrong\u003e567 calories\u003c/strong\u003e and the onion sauce keeps the chicken from drying out no matter how many times you reheat it.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.africanbites.com/yassa-chickenpoulet-au-yassa/\" target=\"_blank\" rel=\"noopener\"\u003eafricanbites.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Senegalese lemon onion chicken over rice for about $1.51 a bowl. This is one of a few hundred recipes at that price. Members get every recipe in the Meal Prep section plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  21.16,
+    "cost_batch_true":  26.02,
+    "cost_per_serving":  1.51,
+    "cost_per_serving_true":  1.86,
+    "cost_pantry_add":  13.55,
+    "cost_first_run":  39.57,
+    "scaler":  {
+                   "cost":  "26.02",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  2917,
+                                   "buy":  "6.5 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  9,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  35,
+                                   "buy":  "5.75 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  47,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  588,
+                                   "buy":  "2.5 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Lemon Juice",
+                                   "canon":  "Lemon Juice",
+                                   "grams":  219,
+                                   "buy":  "4.7",
+                                   "bid":  "lemon-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  35,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  700,
+                                   "buy":  "6.4",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  2,
+                                   "buy":  "0.07 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dijon Mustard",
+                                   "canon":  "Dijon Mustard",
+                                   "grams":  70,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "dijon-mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  33,
+                                   "buy":  "3.75 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olives",
+                                   "canon":  "Olives",
+                                   "grams":  280,
+                                   "buy":  "2 cups",
+                                   "bid":  "green-olives",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  851,
+                                   "buy":  "4.5 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Senegalese chicken yassa: thighs braised in jammy lemon and dijon onions with olives, over rice. 14 meal prep bowls at 567 calories, 47g protein, about $1.51 each.",
+                 "keywords":  "chicken yassa, poulet au yassa, senegalese chicken, lemon onion chicken, west african meal prep, budget chicken thighs",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT1H5M",
+                 "totalTime":  "PT1H30M",
+                 "costPerServing":  1.51,
+                 "recipeIngredient":  [
+                                          "6.5 lb boneless skinless chicken thighs",
+                                          "6.4 yellow onions",
+                                          "4.7 lemons worth of lemon juice",
+                                          "4.75 tbsp dijon mustard",
+                                          "2 cups green olives",
+                                          "4.5 cups dry rice",
+                                          "1.25 lb chicken broth",
+                                          "5.5 tbsp garlic",
+                                          "5.75 tbsp ginger",
+                                          "3.75 tbsp jalapeno"
+                                      ],
+                 "steps":  [
+                               "Marinate the chicken thighs in lemon juice, onion, garlic, ginger and pepper for at least an hour.",
+                               "Brown the drained thighs in oil in batches and set aside.",
+                               "Cook all the onion and marinade down for 20 to 25 minutes until soft and golden.",
+                               "Stir in dijon, jalapeno and bay leaves, add broth, return the chicken, and simmer 30 to 35 minutes.",
+                               "Cook the rice, stir in the olives, chop the chicken, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  2917
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  588
+                              },
+                              {
+                                  "item":  "Lemon Juice",
+                                  "grams":  219
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Dijon Mustard",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  33
+                              },
+                              {
+                                  "item":  "Olives",
+                                  "grams":  280
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  851
+                              }
+                          ]
+}

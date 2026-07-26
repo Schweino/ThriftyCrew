@@ -1,0 +1,311 @@
+﻿{
+    "name":  "Turkey Corn Chowder",
+    "slug":  "turkey-corn-chowder",
+    "cuisine":  "american",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://bowl-me-over.com/turkey-corn-chowder/",
+    "source_site":  "bowl-me-over.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Potato)",
+                   "portion factor 1.3"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 6 servings, 600 cal, 65g protein, the highest protein figure I found and it clears both gates as published. Chowder is a format the catalog has zero of, and the build is potatoes, corn and bacon, all cheap board staples. | HARVEST: Published nutrition (600 cal / 65g protein per serving) looks implausibly high for the ingredient quantities; recorded as published but flag for recompute.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Potato)",
+                         "TUNING: portion factor 1.3",
+                         "OVERRIDE Turkey Breast: [BUMP x1.8] source \u00272 cups\u0027 (280 g) for 6; house chowder = 500 g"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  581,
+                 "protein":  36,
+                 "carbs":  58,
+                 "fat":  21,
+                 "cost_ps":  "2.41"
+             },
+    "intro_html":  "A proper chowder is potatoes, dairy and something smoky, and this one checks all three boxes before the turkey even shows up. Bacon renders down, potatoes go soft enough to thicken the pot on their own, sweet corn adds pop, and a few dashes of hot sauce at the end wakes the whole thing up. Thick, filling, and built almost entirely out of the cheapest aisles in the store.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHickory Smoked Bacon (Great Value):\u003c/strong\u003e 0.25 lb (146 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 (334 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 6 (334 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1.75 tbsp (15 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 15.3 (3268 g)",
+                                "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 3.25 lb (1517 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 2.3 cans (1001 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 3 tbsp (42 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3 tbsp (41 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 6 tbsp (49 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 3 cartons (2912 g)",
+                                "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 1.5 cups (361 g)",
+                                "\u003cstrong\u003eHot Sauce (Frank\u0027s RedHot):\u003c/strong\u003e 2 tbsp (30 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Hickory Smoked Bacon, 0.25 lb: ~$1.27. \u003cstrong\u003eBuy 1 lb: $3.96.\u003c/strong\u003e",
+                       "Yellow Onion, 3: ~$0.84. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Celery, 6: ~$1.76. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Garlic, 1.75 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Potato, 15.3: ~$4.09. \u003cstrong\u003eBuy 8 lbs: $4.54.\u003c/strong\u003e",
+                       "Turkey Breast, 3.25 lb: ~$16.10. \u003cstrong\u003eBuy 2 3lb frozen roasts: $28.88.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 2.3 cans: ~$1.83. \u003cstrong\u003eBuy 3 cans: $2.37.\u003c/strong\u003e",
+                       "Butter, 3 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Olive Oil, 3 tbsp: ~$0.58. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "All-Purpose Flour, 6 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 3 cartons: ~$3.91. \u003cstrong\u003ePantry staple; this batch alone uses about 4 32oz cartons.\u003c/strong\u003e",
+                       "Heavy Cream, 1.5 cups: ~$2.24. \u003cstrong\u003eBuy 1 pint: $2.94.\u003c/strong\u003e",
+                       "Hot Sauce, 2 tbsp: ~$0.31. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.22. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $33.70 across 14 servings, so roughly $2.41 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $54.83 across 14 servings, roughly $3.92 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $21.03 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $75.86. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.41 a bowl\u003c/strong\u003e for a thick, bacon-smoked chowder. Potatoes and canned corn are two of the cheapest things you can buy, and here they are doing most of the heavy lifting.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy potatoes in the big bag.\u003c/strong\u003e This chowder leans on them hard, and the per pound price on an eight or ten pound bag is a fraction of what loose potatoes cost.",
+                       "\u003cstrong\u003eCanned corn beats frozen for a chowder.\u003c/strong\u003e It is cheaper, it is already soft, and the liquid in the can can go right into the pot instead of down the drain.",
+                       "\u003cstrong\u003eBacon is the flavor engine, so a little goes far.\u003c/strong\u003e Render it first, cook everything else in that fat, and you get smoke through the entire pot from a quarter pound.",
+                       "\u003cstrong\u003eTurkey breast is the one line worth shopping.\u003c/strong\u003e Buy a frozen roast when the holiday price hits, cook it, and freeze it pulled and portioned for chowders and soups all winter."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Chop the bacon and render it in your big pot with the olive oil until crisp. Lift the bacon out and leave the fat.",
+                    "Add the butter, then the diced onion and celery, and cook until soft. Stir in the garlic for the last minute.",
+                    "Sprinkle the flour over the vegetables and stir for two minutes so it loses the raw taste and coats everything.",
+                    "Pour in the chicken broth while stirring, add the peeled and cubed potatoes, and simmer until the potatoes are fork tender and starting to break down.",
+                    "Add the drained corn and the cooked turkey breast and bring it back to a simmer.",
+                    "Stir in the heavy cream and the hot sauce, warm it through without boiling, then season with salt and black pepper and scatter the reserved bacon back on top."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide by 14 and ladle that exact weight into each container. Every bowl lands near 581 calories with 36 grams of protein. Potato chowders thicken hard in the fridge, so a splash of broth on reheat brings it right back.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://bowl-me-over.com/turkey-corn-chowder/\" target=\"_blank\" rel=\"noopener\"\u003ebowl-me-over.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cem\u003eA thick, smoky chowder for about $2.41 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "cost_batch":  33.7,
+    "cost_batch_true":  54.83,
+    "cost_per_serving":  2.41,
+    "cost_per_serving_true":  3.92,
+    "cost_pantry_add":  21.03,
+    "cost_first_run":  75.86,
+    "scaler":  {
+                   "cost":  "54.83",
+                   "ing":  [
+                               {
+                                   "item":  "Hickory Smoked Bacon",
+                                   "canon":  "Hickory Smoked Bacon",
+                                   "grams":  146,
+                                   "buy":  "0.25 lb",
+                                   "bid":  "bacon",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  334,
+                                   "buy":  "3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "canon":  "Celery",
+                                   "grams":  334,
+                                   "buy":  "6",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  15,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  3268,
+                                   "buy":  "15.3",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Turkey Breast",
+                                   "canon":  "Turkey Breast",
+                                   "grams":  1517,
+                                   "buy":  "3.25 lb",
+                                   "bid":  "turkey-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Sweet Whole Kernel Corn",
+                                   "canon":  "Sweet Whole Kernel Corn",
+                                   "grams":  1001,
+                                   "buy":  "2.3 cans",
+                                   "bid":  "canned-corn",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  42,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  41,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  49,
+                                   "buy":  "6 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  2912,
+                                   "buy":  "3 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Heavy Cream",
+                                   "canon":  "Heavy Cream",
+                                   "grams":  361,
+                                   "buy":  "1.5 cups",
+                                   "bid":  "heavy-cream",
+                                   "gpu":  "29.800"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  18,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Hot Sauce",
+                                   "canon":  "Hot Sauce",
+                                   "grams":  30,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "hot-sauce",
+                                   "gpu":  "29.570"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Bacon, potatoes, sweet corn and turkey breast in a thick creamy chowder. A 14 serving cold weather batch portioned by weight for meal prep.",
+                 "keywords":  "turkey corn chowder, leftover turkey recipe, potato corn chowder, budget meal prep, cheap soup recipe, bacon chowder",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT40M",
+                 "totalTime":  "PT1H5M",
+                 "costPerServing":  2.41,
+                 "recipeIngredient":  [
+                                          "Hickory Smoked Bacon",
+                                          "Butter",
+                                          "Olive Oil",
+                                          "Yellow Onion",
+                                          "Celery",
+                                          "Garlic",
+                                          "All-Purpose Flour",
+                                          "Chicken Broth",
+                                          "Potato",
+                                          "Sweet Whole Kernel Corn",
+                                          "Turkey Breast",
+                                          "Heavy Cream",
+                                          "Hot Sauce"
+                                      ],
+                 "steps":  [
+                               "Render the chopped bacon in the pot, remove it, and keep the fat.",
+                               "Cook the onion, celery and garlic in the fat and butter, then dust with flour.",
+                               "Add the chicken broth and cubed potatoes and simmer until the potatoes break down.",
+                               "Stir in the corn and cooked turkey breast and return to a simmer.",
+                               "Finish with heavy cream and hot sauce, season, and top with the bacon."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Hickory Smoked Bacon",
+                                  "grams":  146
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  334
+                              },
+                              {
+                                  "item":  "Celery",
+                                  "grams":  334
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  3268
+                              },
+                              {
+                                  "item":  "Turkey Breast",
+                                  "grams":  1517
+                              },
+                              {
+                                  "item":  "Sweet Whole Kernel Corn",
+                                  "grams":  1001
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  41
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  49
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  2912
+                              },
+                              {
+                                  "item":  "Heavy Cream",
+                                  "grams":  361
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  18
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Hot Sauce",
+                                  "grams":  30
+                              }
+                          ]
+}

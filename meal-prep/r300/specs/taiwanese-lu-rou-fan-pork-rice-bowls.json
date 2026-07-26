@@ -1,0 +1,293 @@
+﻿{
+    "name":  "Taiwanese Lu Rou Fan Pork Rice Bowls",
+    "slug":  "taiwanese-lu-rou-fan-pork-rice-bowls",
+    "cuisine":  "Taiwanese",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://redhousespice.com/lu-rou-fan/",
+    "source_site":  "redhousespice.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Braised minced/diced pork ragu ladled over rice. Scales perfectly to a 14-serving pot and portions by weight. Source uses pork belly (no board id); swap to board-tracked pork shoulder ground or hand-diced keeps it budget and raises protein density. Confidence: source page publishes NO nutrition, so est_cal is my estimate for a shoulder-based build over 1 cup rice, not a verified number. | HARVEST: Source yield stated as \"4 bowls\". No nutrition data published.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "OVERRIDE Rice: \u00274 portions plain steamed rice\u0027 = 75 g dry/serving x 4",
+                         "OVERRIDE Broccoli Florets: \u0027Blanched green vegetable, see note 1\u0027 no qty; house side portion for 4",
+                         "OVERRIDE Vegetable Oil: FRY-OIL HOUSE RULE: \u00271 cup neutral cooking oil\u0027 fries the shallots and is mostly drained; 84 g/14-serving batch = 24 g at source 4"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  689,
+                 "protein":  38,
+                 "carbs":  76,
+                 "fat":  25,
+                 "cost_ps":  "2.07"
+             },
+    "intro_html":  "Lu rou fan is the dish Taiwan runs on. Diced pork braised slowly in soy sauce, caramelized sugar and five spice until it turns glossy and falls apart, ladled over rice with a braised egg on top. Street vendors sell it for pocket change and it deserves the reputation. Our version uses pork shoulder instead of belly, which cuts the fat and pushes it to 38 grams of protein for about $2.07.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 6 tbsp (84 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 4.5 (490 g)",
+                                "\u003cstrong\u003ePork Shoulder (generic (USDA)):\u003c/strong\u003e 3.5 lb (1575 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 10.25 tbsp (88 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 5.5 tbsp (70 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.75 cups (168 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 0.5 cups (112 g)",
+                                "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 11 oz (315 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 14 large eggs (700 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.75 cups dry (1050 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 3 lb (1400 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Vegetable Oil, 6 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 4.5: ~$1.23. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Pork Shoulder, 3.5 lb: ~$12.40. \u003cstrong\u003eBuy 4 lbs: $14.28.\u003c/strong\u003e",
+                       "Garlic, 10.25 tbsp: ~$1.27. \u003cstrong\u003eBuy 3 heads: $1.73.\u003c/strong\u003e",
+                       "Sugar, 5.5 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 0.75 cups: ~$0.64. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 0.5 cups: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "White Mushrooms, 11 oz: ~$2.62. \u003cstrong\u003eBuy 2 8oz packs: $3.78.\u003c/strong\u003e",
+                       "Eggs, 14 large eggs: ~$1.66. \u003cstrong\u003eBuy 2 dozens: $2.85.\u003c/strong\u003e",
+                       "Rice, 5.75 cups dry: ~$1.30. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Broccoli Florets, 3 lb: ~$6.55. \u003cstrong\u003eBuy 5 12oz bags: $7.95.\u003c/strong\u003e",
+                       "Pantry seasonings (five-spice powder, black pepper, salt): ~$0.81. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $28.95 across 14 servings, so roughly $2.07 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $36.09 across 14 servings, roughly $2.58 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $22.94 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.03. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.07 a bowl\u003c/strong\u003e for a braise that takes an afternoon and pays you back all week. Like most braises, it is better on day three than it was the day you made it.",
+    "shop_smart":  [
+                       "\u003cstrong\u003ePork shoulder instead of pork belly is the budget and health move.\u003c/strong\u003e Belly is traditional and it is also mostly fat you are paying for. Shoulder braises just as tender and carries far more protein per dollar.",
+                       "\u003cstrong\u003eFried onions replace the fried shallots.\u003c/strong\u003e Traditional lu rou fan starts with crispy fried shallots, which are pricey. Yellow onions fried golden in the same oil get you most of the way there.",
+                       "\u003cstrong\u003eFive spice powder is the whole soul of the dish.\u003c/strong\u003e One small jar lasts a year of batches. This is not the ingredient to substitute or skip.",
+                       "\u003cstrong\u003eEggs braised in the sauce are cheap protein.\u003c/strong\u003e Hard boil them, peel them, and let them sit in the braise. They soak up the flavor and add real protein for very little money."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Hand dice the pork shoulder into small pieces rather than grinding it. The texture of lu rou fan comes from distinct little cubes, not a paste.",
+                    "Hard boil the eggs, cool them, and peel them so they are ready to go into the braise.",
+                    "Heat the vegetable oil in a heavy pot and fry the sliced onions until they turn deep golden and crisp at the edges, then lift most of them out and set them aside.",
+                    "Brown the diced pork in that same oil until the pieces have color and the fat starts to render.",
+                    "Add the garlic and the sugar and stir until the sugar melts and coats everything in a dark glaze, which takes only a minute or two and is the step that makes this dish look right.",
+                    "Pour in the soy sauce and the chicken broth, add the sliced mushrooms, the five spice powder and the black pepper, then return the fried onions.",
+                    "Add the peeled eggs, cover, and simmer very low until the pork is falling apart. Cook the rice and blanch the broccoli near the end so both are fresh."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and ladle the exact amount over rice in each container, with an even share of egg and broccoli in each one. Every bowl lands near 689 calories and 38 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://redhousespice.com/lu-rou-fan/\" target=\"_blank\" rel=\"noopener\"\u003eredhousespice.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Street food classics for about $2.07 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  28.95,
+    "cost_batch_true":  36.09,
+    "cost_per_serving":  2.07,
+    "cost_per_serving_true":  2.58,
+    "cost_pantry_add":  22.94,
+    "cost_first_run":  59.03,
+    "scaler":  {
+                   "cost":  "36.09",
+                   "ing":  [
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  84,
+                                   "buy":  "6 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  490,
+                                   "buy":  "4.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Pork Shoulder",
+                                   "canon":  "Pork Shoulder",
+                                   "grams":  1575,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "pork-shoulder",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  88,
+                                   "buy":  "10.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  70,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  168,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  112,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Five-Spice Powder",
+                                   "canon":  "Five-Spice Powder",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "five-spice-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "White Mushrooms",
+                                   "canon":  "White Mushrooms",
+                                   "grams":  315,
+                                   "buy":  "11 oz",
+                                   "bid":  "mushrooms",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  700,
+                                   "buy":  "14 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1050,
+                                   "buy":  "5.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "canon":  "Broccoli Florets",
+                                   "grams":  1400,
+                                   "buy":  "3 lb",
+                                   "bid":  "broccoli",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Taiwanese lu rou fan with soy braised diced pork, five spice, mushrooms and braised eggs over rice. 14 servings, 689 calories, 38g protein, about $2.07 each.",
+                 "keywords":  "lu rou fan, taiwanese braised pork rice, soy braised pork, five spice pork, asian meal prep, budget dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT1H30M",
+                 "totalTime":  "PT2H",
+                 "costPerServing":  2.07,
+                 "recipeIngredient":  [
+                                          "3.5 lb pork shoulder",
+                                          "14 large eggs",
+                                          "5.75 cups dry rice",
+                                          "0.75 cups soy sauce",
+                                          "4.5 cups white mushrooms",
+                                          "4.5 yellow onions",
+                                          "10.25 tbsp garlic",
+                                          "5.5 tbsp sugar",
+                                          "0.25 lb chicken broth",
+                                          "16.5 cups broccoli florets",
+                                          "6 tbsp vegetable oil"
+                                      ],
+                 "steps":  [
+                               "Hand dice the pork shoulder into small cubes and hard boil and peel the eggs.",
+                               "Fry the sliced onions in vegetable oil until deep golden, then remove most of them.",
+                               "Brown the diced pork in the same oil, then add garlic and sugar and stir until it glazes dark.",
+                               "Add the soy sauce, chicken broth, mushrooms, five spice and pepper, and return the fried onions.",
+                               "Add the peeled eggs and simmer covered until the pork falls apart, then serve over rice with blanched broccoli."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  490
+                              },
+                              {
+                                  "item":  "Pork Shoulder",
+                                  "grams":  1575
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  88
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  168
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  112
+                              },
+                              {
+                                  "item":  "Five-Spice Powder",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "White Mushrooms",
+                                  "grams":  315
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1050
+                              },
+                              {
+                                  "item":  "Broccoli Florets",
+                                  "grams":  1400
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              }
+                          ]
+}

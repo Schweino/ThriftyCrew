@@ -1,0 +1,163 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"cambodian-beef-lok-lak-rice-bowls","base":14,"cost":47.00,"ing":[{"item":"Beef Flank/Sirloin Steak","grams":1750,"buy":"3.75 lb","bid":"sirloin-steak","gpu":453.592},{"item":"Vegetable Oil","grams":49,"buy":"3.5 tbsp","bid":"vegetable-oil","gpu":28.000},{"item":"Red Onion","grams":385,"buy":"3.5","bid":"onions","gpu":453.592},{"item":"Diced Tomatoes","grams":1438,"buy":"3.5 cans","bid":"diced-tomatoes","gpu":28.350},{"item":"Rice","grams":1035,"buy":"5.5 cups dry","bid":"rice","gpu":453.592},{"item":"Oyster Sauce","grams":189,"buy":"0.75 cups","bid":"oyster-sauce","gpu":29.570},{"item":"Soy Sauce","grams":112,"buy":"7 tbsp","bid":"soy-sauce","gpu":29.570},{"item":"Sweet Soy Sauce","grams":37,"buy":"1.25 oz","bid":"sweet-soy-sauce","gpu":38.000},{"item":"Black Pepper","grams":16,"buy":"2.25 tbsp","bid":"black-pepper","gpu":28.350},{"item":"All-Purpose Flour","grams":9,"buy":"1 tbsp","bid":"flour","gpu":453.592},{"item":"Baking Soda","grams":9,"buy":"0.25 oz","bid":"baking-soda","gpu":28.350},{"item":"Garlic","grams":35,"buy":"4 tbsp","bid":"garlic","gpu":50.000},{"item":"Sugar","grams":15,"buy":"1.25 tbsp","bid":"sugar","gpu":453.592},{"item":"Lime Juice","grams":158,"buy":"0.75 cups","bid":"limes","gpu":30.000},{"item":"Salt","grams":21,"buy":"1.25 tbsp","bid":"salt","gpu":28.350}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~570 cal &middot; 36g protein &middot; 75g carbs &middot; 12g fat &middot; ~$3.22 per serving.</strong></p>
+
+<p>Lok lak means to shake, which is what you do to the pan while the beef sears. Cambodia's version leans hard on black pepper, and Kampot pepper from the southern coast is what makes people write love letters about this dish. Beef gets marinated in oyster sauce and soy, seared fast and hard, then piled over rice with tomato and red onion. Lime juice goes over the top at the end. Fast, sharp, and completely unlike anything else in our library.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Beef Flank/Sirloin Steak (generic):</strong> 3.75 lb (1750 g)</li>
+<li><strong>Vegetable Oil (Great Value):</strong> 3.5 tbsp (49 g)</li>
+<li><strong>Red Onion:</strong> 3.5 (385 g)</li>
+<li><strong>Diced Tomatoes (Great Value):</strong> 3.5 cans (1438 g)</li>
+<li><strong>Rice (Member's Mark):</strong> 5.5 cups dry (1035 g)</li>
+<li><strong>Oyster Sauce (Lee Kum Kee):</strong> 0.75 cups (189 g)</li>
+<li><strong>Soy Sauce (generic):</strong> 7 tbsp (112 g)</li>
+<li><strong>Sweet Soy Sauce (ABC (Kecap Manis)):</strong> 1.25 oz (37 g)</li>
+<li><strong>Garlic:</strong> 4 tbsp (35 g)</li>
+<li><strong>Sugar (Great Value):</strong> 1.25 tbsp (15 g)</li>
+<li><strong>Lime Juice:</strong> 0.75 cups (158 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Beef Flank/Sirloin Steak, 3.75 lb: ~$34.03. <strong>Buy 4 lbs: $35.28.</strong></li>
+<li>Vegetable Oil, 3.5 tbsp: ~$0.12. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Red Onion, 3.5: ~$0.97. <strong>Buy 1 lb: $1.14.</strong></li>
+<li>Diced Tomatoes, 3.5 cans: ~$3.36. <strong>Buy 4 cans: $3.84.</strong></li>
+<li>Rice, 5.5 cups dry: ~$1.28. <strong>Pantry staple; this batch alone uses about 2 2lb bags.</strong></li>
+<li>Oyster Sauce, 0.75 cups: ~$1.65. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Soy Sauce, 7 tbsp: ~$0.42. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Sweet Soy Sauce, 1.25 oz: ~$0.58. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Garlic, 4 tbsp: ~$0.50. <strong>Buy 1 head: $0.58.</strong></li>
+<li>Sugar, 1.25 tbsp: ~$0.03. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Lime Juice, 0.75 cups: ~$1.32. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Pantry seasonings (black pepper, all-purpose flour, baking soda, salt): ~$0.76. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $45.02 across 14 servings, so roughly $3.22 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $47.00 across 14 servings, roughly $3.36 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $34.94 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $81.94. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$3.22 a bowl</strong> for a Cambodian pepper beef that most American kitchens have never attempted.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li><strong>The beef is the entire cost of this dish.</strong> Buy steak when the case marks it down and freeze it. Slicing it thin means a smaller amount goes a long way per bowl.</li>
+<li><strong>Freeze the steak thirty minutes before slicing.</strong> Firm meat slices thin with a regular knife, and thin slices sear in seconds instead of stewing in their own juice.</li>
+<li><strong>Black pepper is the star, so grind it fresh.</strong> Pre-ground pepper has already lost most of what makes this dish worth making, and a peppermill pays for itself fast.</li>
+<li><strong>Oyster sauce and kecap manis are two bottles that keep for months.</strong> They are what give the marinade its depth, and they cost pennies per batch once they are in your pantry.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Firm the beef in the freezer for about thirty minutes, then slice it thin against the grain.</li>
+<li>Toss the beef with the oyster sauce, soy sauce, sweet soy sauce, garlic, sugar, a pinch of baking soda, the all-purpose flour, and a heavy hand of freshly ground black pepper, and let it sit at least twenty minutes.</li>
+<li>Cook the rice according to the package while the beef marinates.</li>
+<li>Slice the red onions and cut the drained tomatoes into wedges, then set them aside.</li>
+<li>Heat the vegetable oil in a large skillet until it is smoking, and sear the beef in batches in a single layer, shaking the pan, until browned outside and barely done inside.</li>
+<li>Return all the beef to the pan with any marinade left in the bowl and let it bubble down into a glaze for about a minute.</li>
+<li>Kill the heat, add the lime juice, more black pepper, and salt to taste, and toss the red onion and tomato through so they warm without cooking.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Weigh the rice pot and the beef pan separately, subtracting the empty-pot weight from Step 1, and divide each by 14. Even rice base, even weight of beef and sauce, and make sure the onion and tomato get spread around. Every bowl comes in at <strong>570 calories with 36 grams of protein</strong>.</p>
+
+<p><em>Recipe adapted from <a href="https://www.marionskitchen.com/cambodian-pepper-beef-lok-lak/" target="_blank" rel="noopener">marionskitchen.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>Sharp, peppery dinners for about $3.22 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.</em></p>

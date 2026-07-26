@@ -1,0 +1,157 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"carne-en-su-jugo-bowls","base":14,"cost":79.64,"ing":[{"item":"Hickory Smoked Bacon","grams":794,"buy":"1.75 lb","bid":"bacon","gpu":453.592},{"item":"Beef Flank/Sirloin Steak","grams":2646,"buy":"5.75 lb","bid":"sirloin-steak","gpu":453.592},{"item":"Salt","grams":42,"buy":"2.25 tbsp","bid":"salt","gpu":28.350},{"item":"Tomatillos","grams":476,"buy":"16.75 oz","bid":"tomatillos","gpu":453.592},{"item":"Jalapeno","grams":98,"buy":"11 tbsp","bid":"jalapenos","gpu":453.592},{"item":"Fresh Cilantro","grams":62,"buy":"62 tbsp","bid":"cilantro","gpu":57.000},{"item":"Garlic","grams":35,"buy":"4 tbsp","bid":"garlic","gpu":50.000},{"item":"Ground Cumin","grams":2,"buy":"0.25 tbsp","bid":"ground-cumin","gpu":28.350},{"item":"Black Pepper","grams":3,"buy":"0.5 tbsp","bid":"black-pepper","gpu":28.350},{"item":"Kidney Beans","grams":1190,"buy":"4.7 cans","bid":"kidney-beans","gpu":28.350},{"item":"Yellow Onion","grams":350,"buy":"3","bid":"onions","gpu":453.592}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~770 cal &middot; 69g protein &middot; 25g carbs &middot; 40g fat &middot; ~$5.00 per serving.</strong></p>
+
+<p>Carne en su jugo translates to meat in its own juice, and that is exactly the technique. Thin sliced steak simmers in a tomatillo and jalapeno salsa with crisped bacon and beans until the whole thing turns into a brothy bowl that eats like a stew. It is a Jalisco classic and the highest protein dish in this batch by a wide margin. Each bowl carries <strong>69 grams of protein</strong> and 770 calories for about <strong>$5.00</strong>.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Hickory Smoked Bacon (Great Value):</strong> 1.75 lb (794 g)</li>
+<li><strong>Beef Flank/Sirloin Steak (generic):</strong> 5.75 lb (2646 g)</li>
+<li><strong>Tomatillos (generic):</strong> 16.75 oz (476 g)</li>
+<li><strong>Jalapeno:</strong> 11 tbsp (98 g)</li>
+<li><strong>Fresh Cilantro:</strong> 62 tbsp (62 g)</li>
+<li><strong>Garlic:</strong> 4 tbsp (35 g)</li>
+<li><strong>Kidney Beans (generic):</strong> 4.7 cans (1190 g)</li>
+<li><strong>Yellow Onion:</strong> 3 (350 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Hickory Smoked Bacon, 1.75 lb: ~$6.93. <strong>Buy 2 lbs: $7.92.</strong></li>
+<li>Beef Flank/Sirloin Steak, 5.75 lb: ~$51.45. <strong>Buy 6 lbs: $52.92.</strong></li>
+<li>Tomatillos, 16.75 oz: ~$3.86. <strong>Buy 2 lbs: $7.36.</strong></li>
+<li>Jalapeno, 11 tbsp: ~$0.38. <strong>Buy 1 lb: $1.76.</strong></li>
+<li>Fresh Cilantro, 62 tbsp: ~$1.94. <strong>Buy 2 bunches: $3.56.</strong></li>
+<li>Garlic, 4 tbsp: ~$0.50. <strong>Buy 1 head: $0.58.</strong></li>
+<li>Kidney Beans, 4.7 cans: ~$3.83. <strong>Buy 5 cans: $4.11.</strong></li>
+<li>Yellow Onion, 3: ~$0.88. <strong>Buy 1 lb: $1.14.</strong></li>
+<li>Pantry seasonings (salt, ground cumin, black pepper): ~$0.29. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $70.06 across 14 servings, so roughly $5.00 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $79.64 across 14 servings, roughly $5.69 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $6.80 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $86.44. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$5.00 a bowl</strong>. Beans and bacon do a lot of the lifting here, which is why a bowl with this much protein in it does not cost more.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>Tomatillos are cheapest in season and at Latin groceries, where they are often sold loose by the pound rather than in a shrink wrapped tray.</li>
+<li>Canned beans are the right call for a batch this size. Dried beans are cheaper still if you plan ahead, but canned keeps the cook to one afternoon.</li>
+<li>Bacon ends and pieces work perfectly since everything gets chopped anyway. Where a store sells them, they cost far less than sliced bacon.</li>
+<li>Cilantro goes in by the bunch, twice, in the salsa and on top. Buy two bunches and store them stems down in water in the fridge.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Chop the bacon and cook it in a large pot until crisp. Lift it out with a slotted spoon and leave the fat behind.</li>
+<li>Slice the steak thin against the grain, season it with salt, cumin, and black pepper, and sear it in the bacon fat in batches until just browned.</li>
+<li>Husk and rinse the tomatillos, then blend them with the jalapenos, most of the cilantro, and the garlic into a rough green salsa.</li>
+<li>Pour the salsa into the pot, scraping up everything stuck to the bottom, and simmer 10 minutes until it darkens slightly.</li>
+<li>Return the beef with enough water to make it brothy, and simmer 20 to 25 minutes until the meat is tender.</li>
+<li>Drain and rinse the beans and stir them in, then cook 5 more minutes so they warm through and pick up the salsa.</li>
+<li>Finish each bowl with the crisped bacon, chopped raw onion, and the remaining cilantro.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Ladle that weight into each of 14 containers, stirring between scoops so the beans and beef split evenly, and keep the bacon and raw onion in a separate bag so they stay crisp. Each bowl lands at <strong>770 calories with 69 grams of protein</strong>.</p>
+
+<p><em>Recipe adapted from <a href="https://www.isabeleats.com/carne-en-su-jugo/" target="_blank" rel="noopener">isabeleats.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>Carne en su jugo for about $5.00 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.</em></p>

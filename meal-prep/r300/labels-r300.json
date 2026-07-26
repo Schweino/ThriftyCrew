@@ -1,0 +1,52 @@
+[
+  {
+    "item": "Bulgur Wheat",
+    "brand": "Rani",
+    "product": "Rani Cracked Wheat Fine (Kansar, Bulgur) 32oz",
+    "package_size": "32 oz",
+    "package_price_usd": 11.99,
+    "price_source": "https://www.walmart.com/ip/621670365 (captured 2026-07-25, marketplace listing - premium vs grocery-aisle typical; only bulgur at Walmart)",
+    "status": "price-only",
+    "notes": "Macros already in food-macros-db (USDA entry from mapper). This row supplies the package price basis only."
+  },
+  {
+    "item": "Pasta Shells - jumbo",
+    "brand": "Barilla",
+    "product": "Barilla Classic Blue Box Oven Pasta Jumbo Shells 12 oz",
+    "package_size": "12 oz",
+    "package_price_usd": 7.50,
+    "price_source": "https://www.walmart.com/ip/5202205898 (captured 2026-07-25, marketplace listing - in-store Barilla shells typically cheaper; flagged premium)",
+    "status": "price-only",
+    "notes": "Mapper ruled jumbo shells are 2x the dry-pasta price class, so they get their own package price rather than the pasta board row. Macros = pasta DB item."
+  },
+  {
+    "item": "Keto Bun",
+    "brand": "bettergoods (Walmart)",
+    "product": "bettergoods Keto Friendly Hamburger Buns, 14 oz, 8 Count",
+    "package_size": "14 oz (8 ct)",
+    "package_price_usd": 4.78,
+    "price_source": "https://www.walmart.com/ip/5352547355 (captured 2026-07-25, Walmart house brand, store price 34.1 c/oz)",
+    "status": "price-only",
+    "notes": "Macros already in food-macros-db. 8 buns per package."
+  },
+  {
+    "item": "Korean Rice Cakes",
+    "brand": "Fusion Select",
+    "product": "Fusion Select Korean Rice Cakes (Tteokbokki Sticks), 600g",
+    "package_size": "21.16 oz",
+    "package_price_usd": 11.99,
+    "price_source": "https://www.walmart.com/ip/3731710175 (captured 2026-07-25, marketplace listing - Asian-market in-store typically cheaper; flagged premium)",
+    "status": "price-only",
+    "notes": "Macros already in food-macros-db. 600 g = 21.16 oz package."
+  },
+  {
+    "item": "Sumac",
+    "brand": "The Spice Way",
+    "product": "The Spice Way Ground Sumac 8 oz",
+    "package_size": "8 oz",
+    "package_price_usd": 8.99,
+    "price_source": "https://www.walmart.com/ip/440994818 (captured 2026-07-25, marketplace listing)",
+    "status": "price-only",
+    "notes": "Macros already in food-macros-db. Identity spice for musakhan; used in small quantities so package premium barely moves cost/serving."
+  }
+]

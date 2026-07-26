@@ -1,0 +1,167 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"greek-turkey-moussaka","base":14,"cost":44.80,"ing":[{"item":"Olive Oil","grams":92,"buy":"6.75 tbsp","bid":"olive-oil","gpu":28.000},{"item":"Eggplant","grams":3754,"buy":"8.3","bid":"eggplant","gpu":548.000},{"item":"Black Pepper","grams":18,"buy":"2.5 tbsp","bid":"black-pepper","gpu":28.350},{"item":"Yellow Onion","grams":341,"buy":"3","bid":"onions","gpu":453.592},{"item":"Garlic","grams":34,"buy":"4 tbsp","bid":"garlic","gpu":50.000},{"item":"Dried Oregano","grams":2,"buy":"0.75 tbsp","bid":"dried-oregano","gpu":28.350},{"item":"Ground Cinnamon","grams":6,"buy":"0.75 tbsp","bid":"ground-cinnamon","gpu":28.350},{"item":"93/7 Ground Turkey","grams":1033,"buy":"2.25 lb","bid":"ground-turkey","gpu":453.592},{"item":"Beef Broth","grams":364,"buy":"1.5 cups","bid":"beef-broth","gpu":29.570},{"item":"Tomato Sauce","grams":279,"buy":"1.25 cups","bid":"tomato-sauce","gpu":28.350},{"item":"Red Wine Vinegar","grams":11,"buy":"0.75 tbsp","bid":"red-wine-vinegar","gpu":29.570},{"item":"Butter","grams":127,"buy":"0.5 cups","bid":"butter","gpu":453.592},{"item":"All-Purpose Flour","grams":73,"buy":"9 tbsp","bid":"flour","gpu":453.592},{"item":"Milk","grams":1115,"buy":"4.5 cups","bid":"milk","gpu":3785.000},{"item":"Bay Leaves","grams":1,"buy":"0.04 oz","bid":"bay-leaves","gpu":28.350},{"item":"Ground Nutmeg","grams":1,"buy":"0.04 oz","bid":"ground-nutmeg","gpu":28.350},{"item":"Eggs","grams":114,"buy":"2 large eggs","bid":"eggs","gpu":600.000},{"item":"Parmesan Cheese","grams":38,"buy":"1.25 oz","bid":"parmesan","gpu":28.350},{"item":"Potato","grams":3268,"buy":"15.3","bid":"russet-potatoes","gpu":453.592},{"item":"Salt","grams":26,"buy":"1.5 tbsp","bid":"salt","gpu":28.350}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~575 cal &middot; 29g protein &middot; 68g carbs &middot; 22g fat &middot; ~$2.35 per serving.</strong></p>
+
+<p>Moussaka is the Greek casserole everybody admires and almost nobody makes, because it has three parts and a reputation. Here is the truth: roasted eggplant, a cinnamon-warmed turkey tomato sauce, and a bechamel you whisk in eight minutes. Bake it, cut it into squares, set each square over rice, and you have <strong>575 calories and 29 grams of protein</strong> for about <strong>$2.35</strong> a container.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Olive Oil:</strong> 6.75 tbsp (92 g)</li>
+<li><strong>Eggplant:</strong> 8.3 (3754 g)</li>
+<li><strong>Yellow Onion:</strong> 3 (341 g)</li>
+<li><strong>Garlic:</strong> 4 tbsp (34 g)</li>
+<li><strong>93/7 Ground Turkey (Jennie-O):</strong> 2.25 lb (1033 g)</li>
+<li><strong>Beef Broth (Great Value):</strong> 1.5 cups (364 g)</li>
+<li><strong>Tomato Sauce (generic):</strong> 1.25 cups (279 g)</li>
+<li><strong>Butter (generic):</strong> 0.5 cups (127 g)</li>
+<li><strong>All-Purpose Flour (Great Value):</strong> 9 tbsp (73 g)</li>
+<li><strong>Milk (Fairlife):</strong> 4.5 cups (1115 g)</li>
+<li><strong>Eggs (Great Value):</strong> 2 large eggs (114 g)</li>
+<li><strong>Parmesan Cheese (Great Value):</strong> 1.25 oz (38 g)</li>
+<li><strong>Potato (generic):</strong> 15.3 (3268 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Olive Oil, 6.75 tbsp: ~$1.30. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Eggplant, 8.3: ~$12.47. <strong>Buy 7 each: $12.74.</strong></li>
+<li>Yellow Onion, 3: ~$0.86. <strong>Buy 1 lb: $1.14.</strong></li>
+<li>Garlic, 4 tbsp: ~$0.49. <strong>Buy 1 head: $0.58.</strong></li>
+<li>93/7 Ground Turkey, 2.25 lb: ~$8.70. <strong>Buy 3 lbs: $11.46.</strong></li>
+<li>Beef Broth, 1.5 cups: ~$0.49. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Tomato Sauce, 1.25 cups: ~$0.63. <strong>Buy 1 15oz can: $0.96.</strong></li>
+<li>Butter, 0.5 cups: ~$0.83. <strong>Buy 1 lb box: $2.98.</strong></li>
+<li>All-Purpose Flour, 9 tbsp: ~$0.07. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Milk, 4.5 cups: ~$0.89. <strong>Buy 1 gallon: $3.02.</strong></li>
+<li>Eggs, 2 large eggs: ~$0.27. <strong>Buy 1 dozen: $1.43.</strong></li>
+<li>Parmesan Cheese, 1.25 oz: ~$0.46. <strong>Buy 1 8oz tub: $2.78.</strong></li>
+<li>Potato, 15.3: ~$4.09. <strong>Buy 8 lbs: $4.54.</strong></li>
+<li>Pantry seasonings (black pepper, dried oregano, ground cinnamon, red wine vinegar, bay leaves, ground nutmeg, salt): ~$1.31. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $32.86 across 14 servings, so roughly $2.35 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $44.80 across 14 servings, roughly $3.20 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $23.98 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $68.78. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$2.35</strong> a container for a dish restaurants treat as a special occasion. The eggplant is the single biggest line on the list, and it is still a vegetable.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>Eggplant is the biggest line on this list, so buy it in season when the price per each drops. Late summer is when it practically gives itself away in the Midwest.</li>
+<li>The bechamel is butter, flour, milk, an egg, and a little parmesan. That is a small pile of dairy doing the job of a sauce most people think is fancy.</li>
+<li>A gallon of milk costs about the same as a quart-size specialty carton, and you only need a few cups here. Buy the gallon, use the rest for breakfast, and stop paying the small-container tax.</li>
+<li>Parmesan by the tub keeps for months in the fridge and one ounce goes into this whole batch. It is a jar that earns its shelf space across dozens of recipes.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Slice the eggplant into rounds, salt them, and let them sit 20 minutes to draw out water. Pat them dry, brush them with the olive oil, and roast at 425F for about 25 minutes until they are soft and browned.</li>
+<li>While the eggplant roasts, cook the diced onion in a large pot until soft, add the garlic for a minute, then brown the ground turkey until it reaches 165F.</li>
+<li>Add the tomato sauce, beef broth, cinnamon, oregano, red wine vinegar, bay leaves, salt, and pepper. Simmer 20 minutes until the sauce is thick and almost dry, because a wet meat layer means a soggy casserole.</li>
+<li>Make the bechamel: melt the butter, whisk in the flour and cook two minutes, then pour in the milk slowly while whisking until it thickens. Off the heat, whisk in the beaten eggs, the parmesan, nutmeg, salt, and pepper.</li>
+<li>Layer the roasted eggplant and the meat sauce in your baking pans, pour the bechamel over the top, and smooth it flat.</li>
+<li>Bake at 350F for 45 minutes until the top is set and golden, then let it rest at least 20 minutes so the squares hold together when you cut them.</li>
+<li>Cook the rice, move it into your weighed pot, and cut the moussaka into 14 even squares.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Set the pot of rice on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the rice bed in each container. Lay one moussaka square on top of each bed and you are done, no guessing required. Each portion lands at <strong>575 calories and 29 grams of protein</strong>.</p>
+
+<p><em>Recipe adapted from <a href="https://coleycooks.com/turkey-moussaka/" target="_blank" rel="noopener">coleycooks.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>Greek moussaka for about <strong>$2.35</strong> a container. This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.</em></p>

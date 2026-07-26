@@ -1,0 +1,308 @@
+﻿{
+    "name":  "Loaded Ground Turkey Nacho Bake",
+    "slug":  "loaded-ground-turkey-nacho-bake",
+    "cuisine":  "Tex-Mex",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://muybuenoblog.com/ground-turkey-nachos/",
+    "source_site":  "muybuenoblog.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +5% (Tortilla)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Sheet-pan nacho bake, portioned by weight rather than plated to order. Source verified at 4-6 servings, ~390 cal / 41g protein; at our portion with a heavier chip base it is ~545 cal / 42g. Note: the live Frito pie casserole is beef and corn-chip-based, this is a tortilla-chip bake. | HARVEST: Source yield is a range, \"4 to 6 servings\"; midpoint 5 recorded. Tortilla chips are listed without a quantity.",
+                         "SOURCE YIELD: 5 servings, rebuilt to 14.",
+                         "TUNING: base +5% (Tortilla)",
+                         "OVERRIDE Salsa: topping, no qty; house 120 g",
+                         "OVERRIDE Tortilla: \u0027corn tortilla chips\u0027 are the BASE of a nacho bake, no qty; ~11 oz chips for 5 servings"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  561,
+                 "protein":  37,
+                 "carbs":  46,
+                 "fat":  26,
+                 "cost_ps":  "2.23"
+             },
+    "intro_html":  "Nachos are usually a plate you build to order and eat standing up. Baked as a sheet pan instead, they portion by weight and reheat without turning into a soggy mess, which is the whole trick. Tortilla chips under seasoned turkey, black beans, tomatoes and jalapenos, buried in cheese and finished with cilantro, sour cream and salsa. Each serving runs 561 calories with \u003cstrong\u003e37 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.23\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2.75 tbsp (38 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.5 (161 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 1 (129 g)",
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 2.75 lb (1270 g)",
+                                "\u003cstrong\u003eTortilla (La Banderita):\u003c/strong\u003e 31 oz (882 g)",
+                                "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 2.8 cans (714 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 5.6 cans (2302 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 8.75 tbsp (78 g)",
+                                "\u003cstrong\u003eMexican Cheese Blend (Great Value):\u003c/strong\u003e 22.25 oz (633 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 25 tbsp (25 g)",
+                                "\u003cstrong\u003eLight Sour Cream (generic):\u003c/strong\u003e 1.25 cups (300 g)",
+                                "\u003cstrong\u003eSalsa (Pace):\u003c/strong\u003e 1.25 cups (336 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 2.75 tbsp: ~$0.53. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 1.5: ~$0.40. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Green Bell Peppers, 1: ~$0.92. \u003cstrong\u003eBuy 2 each: $1.72.\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 2.75 lb: ~$10.70. \u003cstrong\u003eBuy 3 lbs: $11.46.\u003c/strong\u003e",
+                       "Tortilla, 31 oz: ~$2.08. \u003cstrong\u003eBuy 3 10ct packs: $2.12.\u003c/strong\u003e",
+                       "Seasoned Black Beans, 2.8 cans: ~$2.41. \u003cstrong\u003eBuy 3 cans: $2.58.\u003c/strong\u003e",
+                       "Diced Tomatoes, 5.6 cans: ~$5.38. \u003cstrong\u003eBuy 6 cans: $5.76.\u003c/strong\u003e",
+                       "Jalapeno, 8.75 tbsp: ~$0.30. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Mexican Cheese Blend, 22.25 oz: ~$4.81. \u003cstrong\u003eBuy 3 8oz bags: $5.18.\u003c/strong\u003e",
+                       "Fresh Cilantro, 25 tbsp: ~$0.78. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Light Sour Cream, 1.25 cups: ~$1.08. \u003cstrong\u003eBuy 1 16oz tub: $1.64.\u003c/strong\u003e",
+                       "Salsa, 1.25 cups: ~$1.46. \u003cstrong\u003eBuy 1 16oz jar: $1.97.\u003c/strong\u003e",
+                       "Pantry seasonings (garlic powder, salt, black pepper): ~$0.32. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $31.17 across 14 servings, so roughly $2.23 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $37.96 across 14 servings, roughly $2.71 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.61 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.57. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.23 a serving\u003c/strong\u003e. Tortilla chips and canned beans are cheap; the cheese and the turkey are where the money goes, and both are doing real work here.",
+    "shop_smart":  [
+                       "Buy the largest bag of tortilla chips and use the sturdy ones from the middle. Thin chips collapse under a wet topping, so restaurant-style rounds hold up far better than the delicate kind.",
+                       "Canned black beans are the cheapest protein in this recipe. Rinse them well and they add bulk without adding cost.",
+                       "Canned diced tomatoes are far cheaper than fresh out of season and this recipe uses a lot of them. Drain them hard so the chip layer keeps some backbone.",
+                       "Cheese is the cost driver. Compare the 8 oz shredded bags against a block you grate yourself, because at nearly a pound and a half the gap adds up."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Heat the olive oil in a large skillet and brown the ground turkey, seasoning it with the garlic powder, salt, and black pepper as it cooks.",
+                    "Add the diced onion and green bell pepper and cook 5 minutes, then stir in the drained black beans and the drained diced tomatoes and simmer 10 minutes until the mixture thickens.",
+                    "The filling needs to be thick, not saucy. If liquid is still pooling in the pan, keep cooking, because a wet filling ruins the chips instantly.",
+                    "Spread half the tortilla chips across two greased sheet pans or a large baking dish, then spoon half the turkey mixture over them and scatter half the cheese.",
+                    "Repeat with the remaining chips, filling, and cheese, then add the sliced jalapenos across the top.",
+                    "Bake at 400F for 12 to 15 minutes, only long enough to melt the cheese and warm everything through. Any longer and the chips give up.",
+                    "Finish out of the oven with the chopped cilantro, dollops of light sour cream, and the salsa spooned over the top."
+                ],
+    "portion_html":  "Weigh the pans, subtract the empty pan weight, and divide by 14. Portion right away while the chips still have structure, then add the cold toppings to each container. Each serving comes to \u003cstrong\u003e561 calories\u003c/strong\u003e and 37 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://muybuenoblog.com/ground-turkey-nachos/\" target=\"_blank\" rel=\"noopener\"\u003emuybuenoblog.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Loaded nachos that survive the week, about $2.23 a serving. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "cost_batch":  31.17,
+    "cost_batch_true":  37.96,
+    "cost_per_serving":  2.23,
+    "cost_per_serving_true":  2.71,
+    "cost_pantry_add":  15.61,
+    "cost_first_run":  53.57,
+    "scaler":  {
+                   "cost":  "37.96",
+                   "ing":  [
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  38,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  161,
+                                   "buy":  "1.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  129,
+                                   "buy":  "1",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1270,
+                                   "buy":  "2.75 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  9,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  17,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tortilla",
+                                   "canon":  "Tortilla",
+                                   "grams":  882,
+                                   "buy":  "31 oz",
+                                   "bid":  "tortillas",
+                                   "gpu":  "45.000"
+                               },
+                               {
+                                   "item":  "Seasoned Black Beans",
+                                   "canon":  "Seasoned Black Beans",
+                                   "grams":  714,
+                                   "buy":  "2.8 cans",
+                                   "bid":  "canned-black-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  2302,
+                                   "buy":  "5.6 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  78,
+                                   "buy":  "8.75 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Mexican Cheese Blend",
+                                   "canon":  "Mexican Cheese Blend",
+                                   "grams":  633,
+                                   "buy":  "22.25 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  25,
+                                   "buy":  "25 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Light Sour Cream",
+                                   "canon":  "Light Sour Cream",
+                                   "grams":  300,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "sour-cream",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salsa",
+                                   "canon":  "Salsa",
+                                   "grams":  336,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "salsa",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Loaded ground turkey nacho bake meal prep: tortilla chips layered with seasoned turkey, black beans, tomatoes, and cheese. 561 calories, 37g protein, about $2.23 a serving.",
+                 "keywords":  "ground turkey nachos, sheet pan nachos, nacho bake, black bean nachos, tex mex meal prep, budget high protein dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  2.23,
+                 "recipeIngredient":  [
+                                          "2.75 lb 93/7 ground turkey",
+                                          "31 oz tortilla chips",
+                                          "2.8 cans seasoned black beans",
+                                          "5.6 cans diced tomatoes",
+                                          "22.25 oz Mexican cheese blend",
+                                          "8.75 tbsp jalapeno",
+                                          "1.25 cups light sour cream",
+                                          "1.25 cups salsa",
+                                          "25 tbsp fresh cilantro",
+                                          "1.5 yellow onions",
+                                          "1 green bell pepper",
+                                          "2.75 tbsp olive oil"
+                                      ],
+                 "steps":  [
+                               "Brown the ground turkey in olive oil with garlic powder, salt, and pepper.",
+                               "Add the onion and green pepper, then the drained black beans and drained tomatoes, and simmer 10 minutes until thick.",
+                               "Layer half the chips, half the filling, and half the cheese across greased sheet pans, then repeat.",
+                               "Top with sliced jalapenos and bake at 400F for 12 to 15 minutes just until the cheese melts.",
+                               "Finish with cilantro, sour cream, and salsa, then portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  38
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  161
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  129
+                              },
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1270
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  17
+                              },
+                              {
+                                  "item":  "Tortilla",
+                                  "grams":  882
+                              },
+                              {
+                                  "item":  "Seasoned Black Beans",
+                                  "grams":  714
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  2302
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  78
+                              },
+                              {
+                                  "item":  "Mexican Cheese Blend",
+                                  "grams":  633
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  25
+                              },
+                              {
+                                  "item":  "Light Sour Cream",
+                                  "grams":  300
+                              },
+                              {
+                                  "item":  "Salsa",
+                                  "grams":  336
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

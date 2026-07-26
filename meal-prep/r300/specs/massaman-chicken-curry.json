@@ -1,0 +1,335 @@
+﻿{
+    "name":  "Massaman Chicken Curry",
+    "slug":  "massaman-chicken-curry",
+    "cuisine":  "Thai",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://tastesbetterfromscratch.com/massaman-curry/",
+    "source_site":  "tastesbetterfromscratch.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Page verified: full recipe, 5 servings, 402 cal / 29g protein before rice - already clears the protein bar as written. Potato-and-carrot body makes it the cheapest of the three Thai curries per serving and gives it a distinct texture from green/panang. Confidence: high, nutrition read from the recipe card. | HARVEST: ",
+                         "SOURCE YIELD: 5 servings, rebuilt to 14.",
+                         "OVERRIDE Peanuts: splitter split \u00271/2 c. chopped roasted peanuts\u0027"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  668,
+                 "protein":  30,
+                 "carbs":  37,
+                 "fat":  45,
+                 "cost_ps":  "2.34"
+             },
+    "intro_html":  "Massaman is the gentlest of the Thai curries and the one with the longest passport. It came into southern Thailand through Persian and Indian traders, which is why it carries potatoes and peanuts and a sweetness that the other curries do not have. It is thick, mild enough that kids will eat it, and it is basically a stew wearing a curry\u0027s clothes. Each serving lands at \u003cstrong\u003e668 calories and 30 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.34\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 5.75 tbsp (76 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.4 (154 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 2.75 lb (1270 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 5.6 (1193 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 5.6 (342 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 1.75 tbsp (11 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3.25 tbsp (28 g)",
+                                "\u003cstrong\u003eRed Curry Paste (Thai Kitchen):\u003c/strong\u003e 11.25 oz (318 g)",
+                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 5.6 cans (2240 g)",
+                                "\u003cstrong\u003ePeanut Butter (generic):\u003c/strong\u003e 2.75 tbsp (45 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 5.75 tbsp (76 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 3 tbsp (45 g)",
+                                "\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 2 tbsp (34 g)",
+                                "\u003cstrong\u003ePeanuts (Great Value):\u003c/strong\u003e 1.25 cups (182 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 25 tbsp (25 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 5.75 tbsp: ~$1.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 1.4: ~$0.39. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 2.75 lb: ~$9.16. \u003cstrong\u003eBuy 3 lbs: $9.81.\u003c/strong\u003e",
+                       "Potato, 5.6: ~$1.49. \u003cstrong\u003eBuy 3 lbs: $1.70.\u003c/strong\u003e",
+                       "Carrots, 5.6: ~$0.72. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Ginger, 1.75 tbsp: ~$0.10. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Garlic, 3.25 tbsp: ~$0.40. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Red Curry Paste, 11.25 oz: ~$5.06. \u003cstrong\u003eBuy 3 4oz jars: $5.40.\u003c/strong\u003e",
+                       "Coconut Milk, 5.6 cans: ~$11.11. \u003cstrong\u003eBuy 6 13.5oz cans: $11.91.\u003c/strong\u003e",
+                       "Peanut Butter, 2.75 tbsp: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Brown Sugar, 5.75 tbsp: ~$0.43. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lime Juice, 3 tbsp: ~$0.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fish Sauce, 2 tbsp: ~$0.33. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Peanuts, 1.25 cups: ~$1.03. \u003cstrong\u003eBuy 1 16oz jar: $2.58.\u003c/strong\u003e",
+                       "Fresh Cilantro, 25 tbsp: ~$0.78. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $32.83 across 14 servings, so roughly $2.34 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $39.32 across 14 servings, roughly $2.81 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $29.26 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $68.58. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.34 a serving\u003c/strong\u003e. Coconut milk is the single largest line all by itself, bigger than the chicken, and it is not optional, because massaman without a proper coconut body is just potato soup with ambition.",
+    "shop_smart":  [
+                       "Coconut milk is the dominant line here by a distance. Buy full fat store brand cans and buy them when they are on sale, since a stack of cans in the pantry keeps for a year and this recipe wants several.",
+                       "Potatoes and carrots are what make this the cheapest-eating of the Thai curries, because they add real volume for pennies. Buy both by the bag rather than loose.",
+                       "Peanut butter and chopped peanuts both go in, and one jar of each covers many batches. Buy the plain sixteen ounce jar rather than anything specialty.",
+                       "Chicken breast is the largest single line. Thighs would cut that noticeably and would survive the long simmer better, so make the swap if the price matters more than the label."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Spoon the thick cream off the top of the unshaken coconut milk cans into your largest pot, keeping the thin liquid aside. Cook it with the olive oil over medium-high for 3 to 5 minutes until the oil separates.",
+                    "Add the curry paste and the diced onion and fry them in that oil for 3 minutes, stirring, until the paste darkens and smells toasted.",
+                    "Add the chicken cut into chunks along with the garlic and grated ginger, and turn everything until coated.",
+                    "Pour in the reserved coconut liquid, then add the cubed potatoes and sliced carrots. Bring it to a simmer.",
+                    "Stir in the peanut butter, brown sugar and fish sauce, then simmer uncovered 30 to 35 minutes until the potatoes are fork tender and the sauce has reduced and thickened around them.",
+                    "Turn off the heat and stir in the lime juice, tasting as you go. Massaman should read sweet first, salty second and sour last, in that order.",
+                    "Fold in most of the chopped peanuts and the cilantro, holding some of each back to scatter on top."
+                ],
+    "portion_html":  "Set the loaded pot on the scale, subtract the empty-pot weight, and divide by 14. Same amount in every container. Each one carries \u003cstrong\u003e668 calories\u003c/strong\u003e, and the potatoes mean this holds its texture on reheat better than a rice-heavy bowl does.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://tastesbetterfromscratch.com/massaman-curry/\" target=\"_blank\" rel=\"noopener\"\u003etastesbetterfromscratch.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Massaman chicken curry with potatoes and peanuts for about $2.34 a serving. This is one of a few hundred recipes on the site. Members get every recipe in the Meal Prep section plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  32.83,
+    "cost_batch_true":  39.32,
+    "cost_per_serving":  2.34,
+    "cost_per_serving_true":  2.81,
+    "cost_pantry_add":  29.26,
+    "cost_first_run":  68.58,
+    "scaler":  {
+                   "cost":  "39.32",
+                   "ing":  [
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  76,
+                                   "buy":  "5.75 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  154,
+                                   "buy":  "1.4",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  1270,
+                                   "buy":  "2.75 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  1193,
+                                   "buy":  "5.6",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  342,
+                                   "buy":  "5.6",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  11,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  28,
+                                   "buy":  "3.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Red Curry Paste",
+                                   "canon":  "Red Curry Paste",
+                                   "grams":  318,
+                                   "buy":  "11.25 oz",
+                                   "bid":  "red-curry-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Coconut Milk",
+                                   "canon":  "Coconut Milk",
+                                   "grams":  2240,
+                                   "buy":  "5.6 cans",
+                                   "bid":  "coconut-milk-canned",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Peanut Butter",
+                                   "canon":  "Peanut Butter",
+                                   "grams":  45,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "peanut-butter",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "canon":  "Brown Sugar",
+                                   "grams":  76,
+                                   "buy":  "5.75 tbsp",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "canon":  "Lime Juice",
+                                   "grams":  45,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Fish Sauce",
+                                   "canon":  "Fish Sauce",
+                                   "grams":  34,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "fish-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Peanuts",
+                                   "canon":  "Peanuts",
+                                   "grams":  182,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "peanuts",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  25,
+                                   "buy":  "25 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Massaman chicken curry with potatoes, carrots and peanuts in a thick coconut sauce. Built as 14 meal prep servings at 668 calories, 30g protein, about $2.34 each.",
+                 "keywords":  "massaman curry, thai chicken curry, coconut potato curry, peanut curry, thai meal prep, mild curry recipe",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H10M",
+                 "costPerServing":  2.34,
+                 "recipeIngredient":  [
+                                          "2.75 lb boneless skinless chicken breast",
+                                          "5.6 cans coconut milk",
+                                          "11.25 oz thai curry paste",
+                                          "5.6 potatoes",
+                                          "5.6 carrots",
+                                          "1.25 cups peanuts",
+                                          "2.75 tbsp peanut butter",
+                                          "5.75 tbsp brown sugar",
+                                          "2 tbsp fish sauce",
+                                          "3 tbsp lime juice",
+                                          "25 tbsp fresh cilantro"
+                                      ],
+                 "steps":  [
+                               "Fry the thick coconut cream with oil until it splits, then fry the curry paste and onion 3 minutes.",
+                               "Add the chunked chicken, garlic and ginger and coat in the paste.",
+                               "Add the reserved coconut liquid, potatoes and carrots and bring to a simmer.",
+                               "Stir in peanut butter, brown sugar and fish sauce and simmer uncovered 30 to 35 minutes until thick.",
+                               "Finish with lime juice, chopped peanuts and cilantro, then portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  76
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  154
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  1270
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  1193
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  342
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Red Curry Paste",
+                                  "grams":  318
+                              },
+                              {
+                                  "item":  "Coconut Milk",
+                                  "grams":  2240
+                              },
+                              {
+                                  "item":  "Peanut Butter",
+                                  "grams":  45
+                              },
+                              {
+                                  "item":  "Brown Sugar",
+                                  "grams":  76
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  45
+                              },
+                              {
+                                  "item":  "Fish Sauce",
+                                  "grams":  34
+                              },
+                              {
+                                  "item":  "Peanuts",
+                                  "grams":  182
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  25
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

@@ -1,0 +1,321 @@
+﻿{
+    "name":  "Vietnamese Lemongrass Chicken Bowls",
+    "slug":  "vietnamese-lemongrass-chicken-bowls",
+    "cuisine":  "Vietnamese",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.theflavorbender.com/easy-lemongrass-chicken-bowls/",
+    "source_site":  "theflavorbender.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Source lists 535 cal / 43g protein - the best protein-per-calorie in the slice and every ingredient maps to a board id (lemongrass-paste is already tracked). Marinate-and-roast thighs, portion over rice, zero assembly fuss. Confidence high. | HARVEST: Source says 4 generous servings (8-9 thighs, may serve 4-6). Published nutrition is per serving of 2 chicken thighs and does not include rice/bowl vegetables. Groups: Lemongrass Chicken (Marinade) / Nuoc Cham Sauce / To Serve.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "OVERRIDE Carrots: \u0027Shredded carrots\u0027 topping, no qty"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  668,
+                 "protein":  58,
+                 "carbs":  76,
+                 "fat":  12,
+                 "cost_ps":  "2.75"
+             },
+    "intro_html":  "This is the bowl every Vietnamese lunch spot builds its reputation on. Chicken thighs marinated in lemongrass, fish sauce, garlic, and honey, roasted until the edges caramelize, then piled over rice with cucumber, carrot, and cilantro and drenched in nuoc cham. It has the best protein per calorie of anything in this batch: 668 calories and \u003cstrong\u003e58 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.75 a serving\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 1.5 cups (441 g)",
+                                "\u003cstrong\u003eLemongrass Paste (Gourmet Garden (McCormick)):\u003c/strong\u003e 7.5 oz (210 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 12.25 tbsp (105 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 0.75 cups (220 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 7 tbsp (112 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 7.75 lb (3500 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 0.75 cups (131 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 0.75 cups (158 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 3.5 tbsp (32 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 5.7 (350 g)",
+                                "\u003cstrong\u003eCucumber:\u003c/strong\u003e 1 (300 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 25 tbsp (25 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Fish Sauce, 1.5 cups: ~$4.24. \u003cstrong\u003ePantry staple; this batch alone uses about 3 6.76floz bottles.\u003c/strong\u003e",
+                       "Lemongrass Paste, 7.5 oz: ~$9.24. \u003cstrong\u003ePantry staple; this batch alone uses about 2 4oz tubes.\u003c/strong\u003e",
+                       "Garlic, 12.25 tbsp: ~$1.51. \u003cstrong\u003eBuy 3 heads: $1.73.\u003c/strong\u003e",
+                       "Honey, 0.75 cups: ~$4.18. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 7 tbsp: ~$0.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Thigh, 7.75 lb: ~$13.66. \u003cstrong\u003eBuy 8 lbs: $14.16.\u003c/strong\u003e",
+                       "Sugar, 0.75 cups: ~$0.23. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lime Juice, 0.75 cups: ~$1.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Jalapeno, 3.5 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Carrots, 5.7: ~$0.74. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Cucumber, 1: ~$0.76. \u003cstrong\u003eBuy 1 each: $0.76.\u003c/strong\u003e",
+                       "Fresh Cilantro, 25 tbsp: ~$0.78. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, cayenne pepper, salt): ~$0.43. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $38.49 across 14 servings, so roughly $2.75 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $42.06 across 14 servings, roughly $3.00 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $22.72 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $64.78. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.75 a bowl\u003c/strong\u003e for the highest protein dish in the lineup. The marinade ingredients look like a long list, but almost all of them are bottles you buy once and use for months.",
+    "shop_smart":  [
+                       "Lemongrass paste in a tube is the single best shortcut in Vietnamese cooking. Fresh stalks are tough, wasteful, and more expensive, and the paste keeps in the fridge for months.",
+                       "Fish sauce smells alarming in the bottle and tastes like nothing but savory depth in the finished dish. One bottle covers many batches, so do not let the price of the good stuff scare you off.",
+                       "Boneless thighs are correct here for the same reason they are correct everywhere else in this batch. They roast without drying out and they cost a fraction of breast.",
+                       "Cucumber, carrot, and cilantro are the cheapest way to make a bowl look and taste fresh. Keep them raw and separate and they hold their crunch all week."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Whisk most of the fish sauce with the lemongrass paste, garlic, honey, soy sauce, black pepper, and a little sugar into a marinade. Hold back some fish sauce, sugar, lime juice, and the jalapeno for the sauce.",
+                    "Toss the chicken thighs in the marinade and refrigerate at least 2 hours. Overnight is better and this is one of the few recipes where that really shows.",
+                    "Make the nuoc cham by stirring the reserved fish sauce, lime juice, sugar, and warm water together until the sugar dissolves, then add the minced jalapeno. Taste it. It should be sharp, salty, and sweet all at once.",
+                    "Heat the oven to 425F, lay the chicken on a sheet pan in a single layer, and roast 25 to 30 minutes until the edges char. Crowding the pan steams the chicken and you lose the caramelization entirely, so use two pans if you have to.",
+                    "Cook the rice while the chicken roasts.",
+                    "Rest the chicken 5 minutes, then slice it across the grain and toss it with any juices left on the pan.",
+                    "Shred the carrots, slice the cucumber thin, and chop the cilantro."
+                ],
+    "portion_html":  "Weigh the rice into each container, then weigh the sliced chicken on top so nobody gets shorted on the protein. Add the cucumber and carrot to one side and keep the nuoc cham in a small side container so the vegetables stay crisp. Every bowl lands at \u003cstrong\u003e668 calories\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.theflavorbender.com/easy-lemongrass-chicken-bowls/\" target=\"_blank\" rel=\"noopener\"\u003etheflavorbender.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Vietnamese lemongrass chicken bowls for about \u003cstrong\u003e$2.75 a serving\u003c/strong\u003e. Members get the whole Meal Prep library, every money lesson, and all the calculators and tools on the site for $1 a month.",
+    "cost_batch":  38.49,
+    "cost_batch_true":  42.06,
+    "cost_per_serving":  2.75,
+    "cost_per_serving_true":  3,
+    "cost_pantry_add":  22.72,
+    "cost_first_run":  64.78,
+    "scaler":  {
+                   "cost":  "42.06",
+                   "ing":  [
+                               {
+                                   "item":  "Fish Sauce",
+                                   "canon":  "Fish Sauce",
+                                   "grams":  441,
+                                   "buy":  "1.5 cups",
+                                   "bid":  "fish-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Lemongrass Paste",
+                                   "canon":  "Lemongrass Paste",
+                                   "grams":  210,
+                                   "buy":  "7.5 oz",
+                                   "bid":  "lemongrass-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  105,
+                                   "buy":  "12.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "canon":  "Honey",
+                                   "grams":  220,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  8,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  112,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Cayenne Pepper",
+                                   "canon":  "Cayenne Pepper",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "cayenne-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  3500,
+                                   "buy":  "7.75 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  131,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "canon":  "Lime Juice",
+                                   "grams":  158,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  32,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  350,
+                                   "buy":  "5.7",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cucumber",
+                                   "canon":  "Cucumber",
+                                   "grams":  300,
+                                   "buy":  "1",
+                                   "bid":  "cucumbers",
+                                   "gpu":  "300.000"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  25,
+                                   "buy":  "25 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Vietnamese lemongrass chicken bowls with roasted marinated thighs, rice, fresh vegetables, and nuoc cham, at about $2.75 per meal prep serving.",
+                 "keywords":  "lemongrass chicken, vietnamese chicken bowls, nuoc cham, marinated chicken thighs, vietnamese meal prep, high protein meal prep, budget chicken bowls",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT1H",
+                 "costPerServing":  2.75,
+                 "recipeIngredient":  [
+                                          "7.75 lb boneless skinless chicken thighs",
+                                          "7.5 oz lemongrass paste",
+                                          "1.5 cups fish sauce",
+                                          "12.25 tbsp minced garlic",
+                                          "0.75 cups honey",
+                                          "7 tbsp soy sauce",
+                                          "0.75 cups sugar",
+                                          "0.75 cups lime juice",
+                                          "3.5 tbsp jalapeno",
+                                          "3.75 cups dry rice",
+                                          "5.7 carrots",
+                                          "1 cucumber",
+                                          "25 tbsp fresh cilantro"
+                                      ],
+                 "steps":  [
+                               "Whisk fish sauce, lemongrass paste, garlic, honey, and soy sauce into a marinade.",
+                               "Marinate the chicken thighs at least 2 hours or overnight.",
+                               "Stir the nuoc cham from fish sauce, lime juice, sugar, water, and minced jalapeno.",
+                               "Roast the chicken at 425F for 25 to 30 minutes until the edges char, and cook the rice.",
+                               "Slice the chicken and weigh it over rice in 14 containers with fresh vegetables and sauce on the side."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Fish Sauce",
+                                  "grams":  441
+                              },
+                              {
+                                  "item":  "Lemongrass Paste",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  105
+                              },
+                              {
+                                  "item":  "Honey",
+                                  "grams":  220
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  112
+                              },
+                              {
+                                  "item":  "Cayenne Pepper",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  3500
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  131
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  158
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  32
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  350
+                              },
+                              {
+                                  "item":  "Cucumber",
+                                  "grams":  300
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  25
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              }
+                          ]
+}

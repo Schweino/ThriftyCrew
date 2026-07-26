@@ -1,0 +1,233 @@
+﻿{
+    "chunk":  "H5",
+    "recipes":  [
+                    {
+                        "slug":  "ants-climbing-a-tree-pork-noodles",
+                        "name":  "Ants Climbing a Tree Pork Noodles",
+                        "protein":  "pork",
+                        "source_url":  "https://thewoksoflife.com/ants-climbing-a-tree/"
+                    },
+                    {
+                        "slug":  "beijing-zha-jiang-mian-pork-noodles",
+                        "name":  "Beijing Zha Jiang Mian Pork Noodles",
+                        "protein":  "pork",
+                        "source_url":  "https://thewoksoflife.com/beijing-fried-sauce-noodles-zha-jiang-mian/"
+                    },
+                    {
+                        "slug":  "pork-egg-roll-in-a-bowl",
+                        "name":  "Pork Egg Roll in a Bowl",
+                        "protein":  "pork",
+                        "source_url":  "https://www.yellowblissroad.com/one-pan-egg-roll-in-a-bowl-crack-slaw/"
+                    },
+                    {
+                        "slug":  "thai-basil-pork-pad-kra-pao-bowls",
+                        "name":  "Thai Basil Pork Pad Kra Pao Bowls",
+                        "protein":  "pork",
+                        "source_url":  "https://hungryinthailand.com/pad-kra-pao/"
+                    },
+                    {
+                        "slug":  "pasta-alla-norcina-creamy-sausage-pasta",
+                        "name":  "Pasta alla Norcina Creamy Sausage Pasta",
+                        "protein":  "pork",
+                        "source_url":  "https://pinabresciani.com/pasta-alla-norcina/"
+                    },
+                    {
+                        "slug":  "louisiana-red-beans-and-rice-with-sausage",
+                        "name":  "Louisiana Red Beans and Rice with Sausage",
+                        "protein":  "pork",
+                        "source_url":  "https://www.smalltownwoman.com/red-beans-and-rice-2/"
+                    },
+                    {
+                        "slug":  "pork-fried-rice-bowls",
+                        "name":  "Pork Fried Rice Bowls",
+                        "protein":  "pork",
+                        "source_url":  "https://www.dinneratthezoo.com/pork-fried-rice/"
+                    },
+                    {
+                        "slug":  "indonesian-babi-kecap-pork-rice-bowls",
+                        "name":  "Indonesian Babi Kecap Pork Rice Bowls",
+                        "protein":  "pork",
+                        "source_url":  "https://thewoksoflife.com/babi-kecap-indonesian-chinese-braised-pork-belly/"
+                    },
+                    {
+                        "slug":  "chuletas-guisadas-stewed-pork-chops-and-rice",
+                        "name":  "Chuletas Guisadas Stewed Pork Chops and Rice",
+                        "protein":  "pork",
+                        "source_url":  "https://www.budgetbytes.com/chuletas-guisadas/"
+                    },
+                    {
+                        "slug":  "irish-dublin-coddle-sausage-and-potatoes",
+                        "name":  "Irish Dublin Coddle Sausage and Potatoes",
+                        "protein":  "pork",
+                        "source_url":  "https://www.budgetbytes.com/dublin-coddle/"
+                    },
+                    {
+                        "slug":  "filipino-pork-menudo-rice-bowls",
+                        "name":  "Filipino Pork Menudo Rice Bowls",
+                        "protein":  "pork",
+                        "source_url":  "https://www.kawalingpinoy.com/pork-menudo/"
+                    },
+                    {
+                        "slug":  "japanese-pork-nikujaga-potato-stew",
+                        "name":  "Japanese Pork Nikujaga Potato Stew",
+                        "protein":  "pork",
+                        "source_url":  "https://www.justonecookbook.com/nikujaga/"
+                    },
+                    {
+                        "slug":  "pork-ginger-carrot-rice-bowls",
+                        "name":  "Pork Ginger Carrot Rice Bowls",
+                        "protein":  "pork",
+                        "source_url":  "https://thewoksoflife.com/pork-ginger-carrot-bowls/"
+                    },
+                    {
+                        "slug":  "greek-pork-souvlaki-rice-bowls",
+                        "name":  "Greek Pork Souvlaki Rice Bowls",
+                        "protein":  "pork",
+                        "source_url":  "https://www.themediterraneandish.com/pork-souvlaki/"
+                    },
+                    {
+                        "slug":  "ham-and-potato-cheddar-casserole",
+                        "name":  "Ham and Potato Cheddar Casserole",
+                        "protein":  "pork",
+                        "source_url":  "https://www.spendwithpennies.com/ham-and-potato-casserole/"
+                    },
+                    {
+                        "slug":  "japanese-ginger-pork-shogayaki-bowls",
+                        "name":  "Japanese Ginger Pork Shogayaki Bowls",
+                        "protein":  "pork",
+                        "source_url":  "https://www.justonecookbook.com/ginger-pork-shogayaki/"
+                    },
+                    {
+                        "slug":  "kafta-bil-sanieh-beef-potato-bake",
+                        "name":  "Lebanese Baked Kafta and Potatoes (Kafta bil Sanieh)",
+                        "protein":  "beef",
+                        "source_url":  "https://thematbakh.com/kafta-bil-sanieh/"
+                    },
+                    {
+                        "slug":  "south-african-bobotie-beef-bake",
+                        "name":  "South African Bobotie (Curried Beef Custard Bake)",
+                        "protein":  "beef",
+                        "source_url":  "https://www.curiouscuisiniere.com/bobotie/"
+                    },
+                    {
+                        "slug":  "ethiopian-minchet-abish-berbere-beef-bowls",
+                        "name":  "Ethiopian Berbere Ground Beef (Minchet Abish)",
+                        "protein":  "beef",
+                        "source_url":  "https://twosleevers.com/ethiopian-beef-stew/"
+                    },
+                    {
+                        "slug":  "japanese-soboro-don-beef-egg-rice-bowls",
+                        "name":  "Japanese Soboro Don (Sweet Soy Beef and Egg Rice Bowls)",
+                        "protein":  "beef",
+                        "source_url":  "https://aaronandclaire.com/soboro-don-japanese-ground-beef-bowl/"
+                    },
+                    {
+                        "slug":  "albondigas-en-chipotle-rice-bowls",
+                        "name":  "Albondigas en Chipotle (Mexican Meatballs in Chipotle Sauce)",
+                        "protein":  "beef",
+                        "source_url":  "https://www.mexicoinmykitchen.com/chipotle-sauce-meatballs-albondigas/"
+                    },
+                    {
+                        "slug":  "sopa-de-fideo-con-carne-molida",
+                        "name":  "Sopa de Fideo con Carne Molida (Mexican Beef and Noodle Skillet)",
+                        "protein":  "beef",
+                        "source_url":  "https://24bite.com/easy-fideo-soup-with-beef-and-tomato/"
+                    },
+                    {
+                        "slug":  "pastel-de-choclo-chilean-beef-corn-bake",
+                        "name":  "Pastel de Choclo (Chilean Beef and Corn Casserole)",
+                        "protein":  "beef",
+                        "source_url":  "https://www.recipetineats.com/pastel-de-choclo-chilean-corn-and-beef-casserole/"
+                    },
+                    {
+                        "slug":  "escondidinho-de-carne-brazilian-beef-bake",
+                        "name":  "Escondidinho de Carne (Brazilian Beef and Potato Bake)",
+                        "protein":  "beef",
+                        "source_url":  "https://easybrazilianfood.com/brazilian-dutch-oven-shepherds-pie-escondidinho/"
+                    },
+                    {
+                        "slug":  "youvarlakia-avgolemono-greek-meatball-bowls",
+                        "name":  "Youvarlakia Avgolemono (Greek Beef and Rice Meatballs in Lemon Sauce)",
+                        "protein":  "beef",
+                        "source_url":  "https://www.themediterraneandish.com/youvarlakia-greek-meatball-soup/"
+                    },
+                    {
+                        "slug":  "kenyan-beef-pilau-rice",
+                        "name":  "Kenyan Beef Pilau",
+                        "protein":  "beef",
+                        "source_url":  "https://cheflolaskitchen.com/east-african-pilau/"
+                    },
+                    {
+                        "slug":  "cantonese-beef-tomato-egg-rice",
+                        "name":  "Cantonese Beef, Tomato and Egg over Rice",
+                        "protein":  "beef",
+                        "source_url":  "https://auntieemily.com/tomato-egg-and-beef-on-rice/"
+                    },
+                    {
+                        "slug":  "cambodian-beef-lok-lak-rice-bowls",
+                        "name":  "Cambodian Beef Lok Lak Rice Bowls",
+                        "protein":  "beef",
+                        "source_url":  "https://www.marionskitchen.com/cambodian-pepper-beef-lok-lak/"
+                    },
+                    {
+                        "slug":  "pakistani-chapli-kebab-rice-bowls",
+                        "name":  "Pakistani Chapli Kebab Rice Bowls",
+                        "protein":  "beef",
+                        "source_url":  "https://www.teaforturmeric.com/chapli-kabab/"
+                    },
+                    {
+                        "slug":  "peruvian-tallarines-verdes-con-carne",
+                        "name":  "Peruvian Tallarines Verdes con Carne (Green Spaghetti with Beef)",
+                        "protein":  "beef",
+                        "source_url":  "https://cravingsjournal.com/tallarines-verdes/"
+                    },
+                    {
+                        "slug":  "chile-relleno-casserole-ground-beef",
+                        "name":  "Chile Relleno Casserole with Ground Beef",
+                        "protein":  "beef",
+                        "source_url":  "https://www.thespruceeats.com/chiles-rellenos-casserole-3057402"
+                    },
+                    {
+                        "slug":  "korean-beef-japchae-noodle-bowls",
+                        "name":  "Korean Beef Japchae Noodle Bowls",
+                        "protein":  "beef",
+                        "source_url":  "https://www.recipetineats.com/japchae-korean-noodles/"
+                    },
+                    {
+                        "slug":  "kerala-beef-ularthiyathu-rice-bowls",
+                        "name":  "Kerala Beef Ularthiyathu (South Indian Beef Fry) Rice Bowls",
+                        "protein":  "beef",
+                        "source_url":  "https://www.paintthekitchenred.com/kerala-beef-fry-beef-ularthiathu/"
+                    },
+                    {
+                        "slug":  "loobia-polo-persian-beef-green-bean-rice",
+                        "name":  "Loobia Polo (Persian Beef and Green Bean Rice)",
+                        "protein":  "beef",
+                        "source_url":  "https://www.themediterraneandish.com/loobia-polo-persian-beef-and-green-bean-rice/"
+                    },
+                    {
+                        "slug":  "giouvetsi-greek-beef-orzo-bake",
+                        "name":  "Giouvetsi (Greek Beef and Orzo Bake)",
+                        "protein":  "beef",
+                        "source_url":  "https://www.mygreekdish.com/recipe/giouvetsi-beef-stew-with-orzo-pasta/"
+                    },
+                    {
+                        "slug":  "beef-spinach-chickpea-stew-rice-bowls",
+                        "name":  "Middle Eastern Beef, Spinach and Chickpea Stew",
+                        "protein":  "beef",
+                        "source_url":  "https://www.hungrypaprikas.com/spinach-stew/"
+                    },
+                    {
+                        "slug":  "turkish-pasta-garlic-yogurt-beef",
+                        "name":  "Turkish Pasta with Garlic Yogurt and Spiced Butter",
+                        "protein":  "beef",
+                        "source_url":  "https://www.giverecipe.com/turkish-pasta/"
+                    },
+                    {
+                        "slug":  "beef-mushroom-stir-fry-rice-plate",
+                        "name":  "Beef and Mushroom Stir-Fry Rice Plate",
+                        "protein":  "beef",
+                        "source_url":  "https://thewoksoflife.com/beef-and-mushroom-stir-fry/"
+                    }
+                ]
+}

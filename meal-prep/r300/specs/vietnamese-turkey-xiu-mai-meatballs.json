@@ -1,0 +1,282 @@
+﻿{
+    "name":  "Vietnamese Turkey Xiu Mai Meatballs over Rice",
+    "slug":  "vietnamese-turkey-xiu-mai-meatballs",
+    "cuisine":  "vietnamese",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://takestwoeggs.com/xiu-mai/",
+    "source_site":  "takestwoeggs.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Meatballs braised in a garlicky tomato sauce - a braise, so it is one of the few Vietnamese dishes that genuinely improves on day three. Verified source: full recipe, 4 servings, 526 cal / 31g protein - already clears both bars. Source is ground pork; turkey is our swap. Nothing similar live: the Vietnamese entries in the catalog are caramelized beef and banh mi bowls. | HARVEST: Source uses ground pork; adapt to turkey.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "OVERRIDE Rice Noodles: \u0027French Bread, rice or rice Noodles\u0027 to serve, no qty; house 50 g dry/serving x 4",
+                         "OVERRIDE Garlic: WAVE-4: source \u002720 cloves minced\u0027 scaled to 9 heads/350 g at batch scale; capped at 10 cloves src (~35 cloves/batch)",
+                         "OVERRIDE Ground Pork: TITLE-PROTEIN SWAP: titled turkey; ground pork -\u003e ground turkey, grams kept"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  586,
+                 "protein":  41,
+                 "carbs":  72,
+                 "fat":  13,
+                 "cost_ps":  "3.29"
+             },
+    "intro_html":  "Xiu mai are the Vietnamese meatballs that get braised in a garlicky tomato sauce and traditionally scooped up with a torn piece of baguette. We serve them over rice noodles instead so they portion clean. Because they braise rather than fry, they get better as the week goes on, which is exactly what you want out of a container that has to survive until Friday. Each one runs \u003cstrong\u003e586 calories and 41 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.29\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 5.25 lb (2380 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 4.5 (490 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 0.12 cups (28 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 8.25 tbsp (102 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1.25 cups (175 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 3.5 cans (595 g)",
+                                "\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 0.75 cups (189 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 7 cans (2877 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 10 tbsp (60 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 35 tbsp (35 g)",
+                                "\u003cstrong\u003eRice Noodles (Thai Kitchen):\u003c/strong\u003e 24.75 oz dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 5.25 lb: ~$20.05. \u003cstrong\u003eBuy 6 lbs: $22.93.\u003c/strong\u003e",
+                       "Yellow Onion, 4.5: ~$1.23. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Chicken Broth, 0.12 cups: ~$0.04. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sugar, 8.25 tbsp: ~$0.18. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 1.25 cups: ~$2.52. \u003cstrong\u003eBuy 5 heads: $2.88.\u003c/strong\u003e",
+                       "Tomato Paste, 3.5 cans: ~$3.01. \u003cstrong\u003eBuy 4 6oz cans: $3.44.\u003c/strong\u003e",
+                       "Fish Sauce, 0.75 cups: ~$1.82. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Diced Tomatoes, 7 cans: ~$6.72. \u003cstrong\u003eBuy 7 cans: $6.72.\u003c/strong\u003e",
+                       "Green Onions, 10 tbsp: ~$0.71. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
+                       "Fresh Cilantro, 35 tbsp: ~$1.09. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Rice Noodles, 24.75 oz dry: ~$8.40. \u003cstrong\u003eBuy 2 14oz boxes: $9.52.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $46.00 across 14 servings, so roughly $3.29 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $52.89 across 14 servings, roughly $3.78 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.78 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $62.67. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.29\u003c/strong\u003e a container. Meatballs braised in tomato with fish sauce depth, and it costs less than the parking meter outside most restaurants that serve it.",
+    "shop_smart":  [
+                       "Fish sauce is the ingredient that makes this taste Vietnamese rather than Italian. One bottle costs a couple dollars, lasts a year, and turns up in a dozen Southeast Asian recipes after this one.",
+                       "The turkey is the biggest line by far. The 6 pound buy is the cheapest per pound, and this is the recipe where you use the whole thing.",
+                       "Rice noodles are the second biggest line. Buy them at an Asian market where the same product usually runs a third less than the boxed brand in the grocery store international aisle.",
+                       "Tomato paste in the small cans is what builds the sauce color and body. Buy four, use them all, and skip the ritual of a half-used can turning gray in your fridge."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Finely dice about a third of the onion and mix it into the ground turkey with a good portion of the minced garlic, some of the fish sauce, a spoon of the sugar, salt, and black pepper.",
+                    "Roll the mixture into large meatballs, about golf ball size, and chill them 15 minutes so they hold their shape when they hit the pan.",
+                    "Cook the rest of the diced onion and garlic in a wide pot until soft and fragrant, about 6 minutes. There is a lot of garlic here and that is the point of the dish.",
+                    "Stir in the tomato paste and fry it for 2 minutes until it darkens, then add the diced tomatoes, the rest of the fish sauce, the sugar, and the chicken broth.",
+                    "Lower the meatballs into the sauce, cover, and simmer gently for 30 minutes, turning them once, until they are cooked through to 165F and the sauce has thickened around them.",
+                    "Taste the sauce and adjust with a little more sugar or fish sauce. It should be savory, faintly sweet, and unmistakably garlicky.",
+                    "Soak and boil the rice noodles just to tender, rinse them cold, and move them into your weighed pot with the chopped cilantro and green onions folded through."
+                ],
+    "portion_html":  "Set the pot of noodles on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the noodle bed for each container. Then divide the meatballs by count across all 14 and spoon the sauce over the top. Each container lands at \u003cstrong\u003e586 calories and 41 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://takestwoeggs.com/xiu-mai/\" target=\"_blank\" rel=\"noopener\"\u003etakestwoeggs.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Vietnamese braised meatballs for about \u003cstrong\u003e$3.29\u003c/strong\u003e a container. This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  46,
+    "cost_batch_true":  52.89,
+    "cost_per_serving":  3.29,
+    "cost_per_serving_true":  3.78,
+    "cost_pantry_add":  9.78,
+    "cost_first_run":  62.67,
+    "scaler":  {
+                   "cost":  "52.89",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  2380,
+                                   "buy":  "5.25 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  490,
+                                   "buy":  "4.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  21,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  28,
+                                   "buy":  "0.12 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  102,
+                                   "buy":  "8.25 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  175,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  595,
+                                   "buy":  "3.5 cans",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fish Sauce",
+                                   "canon":  "Fish Sauce",
+                                   "grams":  189,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "fish-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  2877,
+                                   "buy":  "7 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  60,
+                                   "buy":  "10 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  35,
+                                   "buy":  "35 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Rice Noodles",
+                                   "canon":  "Rice Noodles",
+                                   "grams":  700,
+                                   "buy":  "24.75 oz dry",
+                                   "bid":  "rice-noodles",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Vietnamese turkey xiu mai meatballs over rice noodles, braised in a garlicky tomato and fish sauce braise. 586 calories, 41g protein, about $3.29 a serving.",
+                 "keywords":  "xiu mai, vietnamese meatballs, turkey meatballs, turkey meal prep, budget meal prep, fish sauce tomato braise",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H15M",
+                 "costPerServing":  3.29,
+                 "recipeIngredient":  [
+                                          "5.25 lb 93/7 ground turkey",
+                                          "24.75 oz dry rice noodles",
+                                          "7 cans diced tomatoes",
+                                          "3.5 cans tomato paste",
+                                          "0.75 cups fish sauce",
+                                          "2.5 cups garlic",
+                                          "4.5 yellow onions",
+                                          "8.25 tbsp sugar",
+                                          "0.06 lb chicken broth",
+                                          "35 tbsp fresh cilantro",
+                                          "10 tbsp green onions"
+                                      ],
+                 "steps":  [
+                               "Mix ground turkey with diced onion, garlic, fish sauce, sugar, salt, and pepper, then roll into large meatballs and chill.",
+                               "Cook the remaining onion and garlic until soft, then fry the tomato paste 2 minutes.",
+                               "Add diced tomatoes, fish sauce, sugar, and broth to build the sauce.",
+                               "Simmer the meatballs in the sauce covered for 30 minutes to 165F.",
+                               "Cook and rinse the rice noodles and fold in cilantro and green onions.",
+                               "Portion the noodles by weight into 14 containers and divide the meatballs and sauce evenly."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  2380
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  490
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  102
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  175
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  595
+                              },
+                              {
+                                  "item":  "Fish Sauce",
+                                  "grams":  189
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  2877
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  60
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Rice Noodles",
+                                  "grams":  700
+                              }
+                          ]
+}

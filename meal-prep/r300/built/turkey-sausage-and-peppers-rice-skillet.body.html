@@ -1,0 +1,159 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"turkey-sausage-and-peppers-rice-skillet","base":14,"cost":41.64,"ing":[{"item":"Smoked Turkey Sausage","grams":2026,"buy":"4.5 lb","bid":"kielbasa","gpu":453.592},{"item":"Olive Oil","grams":32,"buy":"2.25 tbsp","bid":"olive-oil","gpu":28.000},{"item":"Red Onion","grams":257,"buy":"2.3","bid":"onions","gpu":453.592},{"item":"Red Bell Pepper","grams":560,"buy":"4.7","bid":"bell-peppers","gpu":120.000},{"item":"Garlic","grams":35,"buy":"4 tbsp","bid":"garlic","gpu":50.000},{"item":"Rice","grams":911,"buy":"5 cups dry","bid":"rice","gpu":453.592},{"item":"Chicken Broth","grams":1680,"buy":"1.8 cartons","bid":"chicken-broth","gpu":29.570},{"item":"Fresh Basil","grams":14,"buy":"9.25 tbsp","bid":"fresh-basil","gpu":28.350},{"item":"Salt","grams":14,"buy":"0.75 tbsp","bid":"salt","gpu":28.350},{"item":"Garlic Powder","grams":7,"buy":"0.75 tbsp","bid":"garlic-powder","gpu":28.350},{"item":"Onion Powder","grams":6,"buy":"0.75 tbsp","bid":"onion-powder","gpu":28.350},{"item":"Dried Oregano","grams":2,"buy":"0.75 tbsp","bid":"dried-oregano","gpu":28.350},{"item":"Basil Pesto","grams":280,"buy":"1.25 cups","bid":"pesto","gpu":28.350},{"item":"Black Pepper","grams":4,"buy":"0.5 tbsp","bid":"black-pepper","gpu":28.350}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~620 cal &middot; 26g protein &middot; 72g carbs &middot; 25g fat &middot; ~$2.30 per serving.</strong></p>
+
+<p>Sausage and peppers is street fair food, the smell that pulls you across a parking lot in July. Usually it lands on a hoagie roll. Here it goes over rice cooked in the same pan, which means all the sausage fat and pepper juice end up in the grain instead of soaking through bread. Each serving runs 620 calories with <strong>26 grams of protein</strong> for about <strong>$2.30</strong>. A spoonful of pesto stirred in at the end does more for it than any amount of extra seasoning.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Smoked Turkey Sausage (Butterball):</strong> 4.5 lb (2026 g)</li>
+<li><strong>Olive Oil:</strong> 2.25 tbsp (32 g)</li>
+<li><strong>Red Onion:</strong> 2.3 (257 g)</li>
+<li><strong>Red Bell Pepper (generic):</strong> 4.7 (560 g)</li>
+<li><strong>Garlic:</strong> 4 tbsp (35 g)</li>
+<li><strong>Rice (Member's Mark):</strong> 5 cups dry (911 g)</li>
+<li><strong>Chicken Broth (Swanson):</strong> 1.8 cartons (1680 g)</li>
+<li><strong>Fresh Basil:</strong> 9.25 tbsp (14 g)</li>
+<li><strong>Basil Pesto (Classico (USDA SR)):</strong> 1.25 cups (280 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Smoked Turkey Sausage, 4.5 lb: ~$15.11. <strong>Buy 6 13oz ropes: $16.47.</strong></li>
+<li>Olive Oil, 2.25 tbsp: ~$0.45. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Red Onion, 2.3: ~$0.65. <strong>Buy 1 lb: $1.14.</strong></li>
+<li>Red Bell Pepper, 4.7: ~$4.01. <strong>Buy 5 each: $4.30.</strong></li>
+<li>Garlic, 4 tbsp: ~$0.50. <strong>Buy 1 head: $0.58.</strong></li>
+<li>Rice, 5 cups dry: ~$1.12. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Chicken Broth, 1.8 cartons: ~$2.26. <strong>Pantry staple; this batch alone uses about 2 32oz cartons.</strong></li>
+<li>Fresh Basil, 9.25 tbsp: ~$1.76. <strong>Buy 1 0.5oz pack: $1.76.</strong></li>
+<li>Basil Pesto, 1.25 cups: ~$5.88. <strong>Buy 1 22oz jar: $13.11.</strong></li>
+<li>Pantry seasonings (salt, garlic powder, onion powder, dried oregano, black pepper): ~$0.45. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $32.19 across 14 servings, so roughly $2.30 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $41.64 across 14 servings, roughly $2.97 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $17.59 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.23. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$2.30 a serving</strong>. The turkey sausage and the red peppers are the cost here, and building it on rice rather than pasta keeps it from climbing higher.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>Red bell peppers cost noticeably more than green ones. If the price gap is wide that week, swap half of them for green and the dish loses nothing but a little sweetness.</li>
+<li>Smoked turkey sausage ropes freeze for months. This recipe uses four and a half pounds, so buy them when they cycle on sale and stack the freezer.</li>
+<li>Basil pesto in a jar looks expensive per ounce but you use very little and the jar keeps for weeks in the fridge under a film of oil. It is worth the line item.</li>
+<li>Fresh basil is optional if the packs look sad. The pesto is already carrying the basil flavor, so dried oregano alone will do the job.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Slice the smoked turkey sausage into coins and brown them in the olive oil in your largest deep skillet over medium-high until both cut faces are dark, then set them aside.</li>
+<li>Add the sliced red onion and the red bell pepper strips to the same pan and cook 8 minutes, letting them pick up color from the browned bits on the bottom.</li>
+<li>Stir in the garlic, dried oregano, garlic powder, onion powder, salt, and black pepper and cook one minute until it smells like a pizzeria.</li>
+<li>Add the dry rice and stir for two minutes so every grain gets coated in the seasoned fat. This step is what keeps the rice separate rather than sticky.</li>
+<li>Pour in the chicken broth, return the sausage to the pan, bring it to a boil, then cover and simmer on low for 18 to 20 minutes without lifting the lid.</li>
+<li>Take the pan off the heat and let it stand covered for 10 minutes so the last of the liquid absorbs and the rice finishes steaming.</li>
+<li>Fluff with a fork, stir in the basil pesto until it is evenly distributed, and finish with torn fresh basil.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Weigh the skillet, subtract the empty pan weight you noted, and divide by 14. Stir from the bottom before each scoop so the sausage coins get spread across all the containers. Each serving comes to <strong>620 calories</strong> and 26 grams of protein.</p>
+
+<p><em>Recipe adapted from <a href="https://www.jennieo.com/recipes/italian-one-pot-sausage-and-rice-skillet/" target="_blank" rel="noopener">jennieo.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>Street fair sausage and peppers for about $2.30 a serving, and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.</em></p>

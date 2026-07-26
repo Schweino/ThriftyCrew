@@ -1,0 +1,353 @@
+﻿{
+    "name":  "Country Pork Meatballs with Onion Gravy over Mashed Potatoes",
+    "slug":  "country-pork-meatballs-onion-gravy",
+    "cuisine":  "American",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.recipetineats.com/country-pork-meatballs-with-onion-gravy/",
+    "source_site":  "recipetineats.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Source verified at 548 cal / 28g protein per serving over 4 servings before mashed potatoes, so plated it is a 640 cal dinner. Ground-pork is board-tracked and among the cheapest proteins we buy. Bake the meatballs on sheet pans and the gravy in one pot and it scales to 14 easily. The catalog\u0027s only pork meatball is Thai-style. | HARVEST: Ingredient list runs meatballs, then onion gravy, then serving items; source section headers were not preserved in the fetch.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14."
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  663,
+                 "protein":  32,
+                 "carbs":  48,
+                 "fat":  38,
+                 "cost_ps":  "1.75"
+             },
+    "intro_html":  "This is the dinner that smells like somebody\u0027s grandmother is still in the kitchen. Seasoned pork meatballs baked on sheet pans, a slow-cooked onion gravy built in one pot, and a pile of real mashed potatoes underneath. Ground pork is one of the cheapest proteins we track on the board, so a plate that eats like a diner special lands at 32 grams of protein for about $1.75.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 5.25 tbsp (71 g)",
+                                "\u003cstrong\u003eGround Pork:\u003c/strong\u003e 3.75 lb (1750 g)",
+                                "\u003cstrong\u003eBread Crumbs (generic):\u003c/strong\u003e 3.5 cups (378 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 4 large eggs (175 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 17.5 tbsp (105 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6 tbsp (52 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 7.5 tbsp (105 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 4.5 (490 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 10.5 tbsp (84 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 7 cups (1680 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1.25 tbsp (20 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 6.6 (1400 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 5.25 tbsp: ~$1.00. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Ground Pork, 3.75 lb: ~$13.16. \u003cstrong\u003eBuy 4 lbs: $13.64.\u003c/strong\u003e",
+                       "Bread Crumbs, 3.5 cups: ~$1.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Eggs, 4 large eggs: ~$0.42. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
+                       "Green Onions, 17.5 tbsp: ~$1.25. \u003cstrong\u003eBuy 2 bunches: $2.14.\u003c/strong\u003e",
+                       "Garlic, 6 tbsp: ~$0.75. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Butter, 7.5 tbsp: ~$0.69. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Yellow Onion, 4.5: ~$1.23. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "All-Purpose Flour, 10.5 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Beef Broth, 7 cups: ~$2.26. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Worcestershire Sauce, 1.25 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Potato, 6.6: ~$1.75. \u003cstrong\u003eBuy 4 lbs: $2.27.\u003c/strong\u003e",
+                       "Pantry seasonings (italian seasoning, onion powder, paprika, dried thyme, salt, black pepper, soy sauce): ~$0.73. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $24.47 across 14 servings, so roughly $1.75 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $31.11 across 14 servings, roughly $2.22 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $22.42 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.53. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.75 a bowl\u003c/strong\u003e for meatballs, gravy and mashed potatoes. Order that same plate at a diner and you will not see change back.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy the four pound pack of ground pork.\u003c/strong\u003e The cost line already assumes it. Pork is usually the cheapest ground meat in the case, and what you do not use freezes flat in a bag.",
+                       "\u003cstrong\u003eBread crumbs and flour are pennies here.\u003c/strong\u003e Both are pantry items that carry a dozen batches. If you have heels of bread going stale, dry them in the oven and pulse them yourself for free.",
+                       "\u003cstrong\u003eBeef broth is the whole gravy.\u003c/strong\u003e Store brand does the job. Buy the big carton rather than the little cans and the per batch cost drops to almost nothing.",
+                       "\u003cstrong\u003eGrab onions by the bag, not by the each.\u003c/strong\u003e Two pounds of yellow onions costs barely more than a couple of loose ones, and onions keep on the counter for weeks."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Heat the oven to 400F and line two sheet pans. Put a pot of salted water on for the potatoes.",
+                    "In a big bowl combine the ground pork, bread crumbs, eggs, green onions, garlic, italian seasoning, onion powder, paprika, dried thyme, salt and black pepper. Mix with your hands only until it comes together, because overworking it makes the meatballs tough.",
+                    "Roll even meatballs, space them out on the sheet pans, and bake until browned and cooked through.",
+                    "Peel and chunk the potatoes, boil until a fork slides in easy, then drain and mash with a little of the butter, salt and pepper.",
+                    "Melt the rest of the butter in a wide pot and cook the sliced yellow onion low and slow until it turns deep golden and sweet. That patience is the whole flavor of the gravy.",
+                    "Sprinkle the flour over the onions and stir for a minute, then pour in the beef broth along with the worcestershire and soy sauce. Whisk until it thickens into a glossy gravy.",
+                    "Slide the baked meatballs into the gravy and let them simmer a few minutes so they drink some of it up."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container, mashed potatoes first, then meatballs and gravy over the top. Every bowl lands near 663 calories and 32 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.recipetineats.com/country-pork-meatballs-with-onion-gravy/\" target=\"_blank\" rel=\"noopener\"\u003erecipetineats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Comfort food dinners for about $1.75 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  24.47,
+    "cost_batch_true":  31.11,
+    "cost_per_serving":  1.75,
+    "cost_per_serving_true":  2.22,
+    "cost_pantry_add":  22.42,
+    "cost_first_run":  53.53,
+    "scaler":  {
+                   "cost":  "31.11",
+                   "ing":  [
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  71,
+                                   "buy":  "5.25 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Ground Pork",
+                                   "canon":  "Ground Pork",
+                                   "grams":  1750,
+                                   "buy":  "3.75 lb",
+                                   "bid":  "ground-pork",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Bread Crumbs",
+                                   "canon":  "Bread Crumbs",
+                                   "grams":  378,
+                                   "buy":  "3.5 cups",
+                                   "bid":  "bread-crumbs",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  175,
+                                   "buy":  "4 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  105,
+                                   "buy":  "17.5 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  52,
+                                   "buy":  "6 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "canon":  "Italian Seasoning",
+                                   "grams":  5,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Onion Powder",
+                                   "canon":  "Onion Powder",
+                                   "grams":  8,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "onion-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  21,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  6,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  105,
+                                   "buy":  "7.5 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  490,
+                                   "buy":  "4.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  84,
+                                   "buy":  "10.5 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  1680,
+                                   "buy":  "7 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "canon":  "Worcestershire Sauce",
+                                   "grams":  20,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "worcestershire",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  7,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  1400,
+                                   "buy":  "6.6",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Baked pork meatballs in slow-cooked onion gravy over mashed potatoes, built for 14 servings. 663 calories, 32g protein, about $1.75 per serving.",
+                 "keywords":  "pork meatballs, onion gravy, mashed potatoes, ground pork meal prep, budget comfort food, cheap dinner recipe",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H10M",
+                 "costPerServing":  1.75,
+                 "recipeIngredient":  [
+                                          "3.75 lb ground pork",
+                                          "3.5 cups bread crumbs",
+                                          "4 large eggs",
+                                          "17.5 tbsp green onions",
+                                          "6 tbsp garlic",
+                                          "7.5 tbsp butter",
+                                          "4.5 yellow onions",
+                                          "10.5 tbsp all-purpose flour",
+                                          "3.75 lb beef broth",
+                                          "1.25 tbsp Worcestershire sauce",
+                                          "6.6 potatoes",
+                                          "5.25 tbsp olive oil"
+                                      ],
+                 "steps":  [
+                               "Mix the ground pork with bread crumbs, eggs, green onions, garlic and seasonings, then roll into meatballs.",
+                               "Bake the meatballs on lined sheet pans at 400F until browned and cooked through.",
+                               "Boil the potatoes until tender and mash with butter, salt and pepper.",
+                               "Cook the sliced onions in butter until deep golden, stir in flour, then whisk in beef broth, Worcestershire and soy sauce until thickened.",
+                               "Simmer the meatballs in the gravy, then serve over the mashed potatoes."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  71
+                              },
+                              {
+                                  "item":  "Ground Pork",
+                                  "grams":  1750
+                              },
+                              {
+                                  "item":  "Bread Crumbs",
+                                  "grams":  378
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  175
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  105
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Italian Seasoning",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Onion Powder",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  105
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  490
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  1680
+                              },
+                              {
+                                  "item":  "Worcestershire Sauce",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  1400
+                              }
+                          ]
+}

@@ -1,0 +1,159 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"chicken-maqluba","base":14,"cost":28.24,"ing":[{"item":"Rice","grams":853,"buy":"4.5 cups dry","bid":"rice","gpu":453.592},{"item":"Salt","grams":26,"buy":"1.5 tbsp","bid":"salt","gpu":28.350},{"item":"Black Pepper","grams":5,"buy":"0.75 tbsp","bid":"black-pepper","gpu":28.350},{"item":"Eggplant","grams":578,"buy":"1.3","bid":"eggplant","gpu":548.000},{"item":"Olive Oil","grams":191,"buy":"1 cups","bid":"olive-oil","gpu":28.000},{"item":"Broccoli Florets","grams":385,"buy":"13.5 oz","bid":"broccoli","gpu":453.592},{"item":"Boneless Skinless Chicken Thigh","grams":1746,"buy":"3.75 lb","bid":"chicken-thighs","gpu":453.592},{"item":"Ground Allspice","grams":5,"buy":"0.25 oz","bid":"ground-allspice","gpu":28.350},{"item":"Ground Cinnamon","grams":5,"buy":"0.75 tbsp","bid":"ground-cinnamon","gpu":28.350},{"item":"Yellow Onion","grams":141,"buy":"1.3","bid":"onions","gpu":453.592},{"item":"Garlic","grams":19,"buy":"2.25 tbsp","bid":"garlic","gpu":50.000},{"item":"Bay Leaves","grams":2,"buy":"0.07 oz","bid":"bay-leaves","gpu":28.350},{"item":"Garam Masala","grams":2,"buy":"0.25 tbsp","bid":"garam-masala","gpu":28.350},{"item":"Diced Tomatoes","grams":791,"buy":"2 cans","bid":"diced-tomatoes","gpu":28.350},{"item":"Ground Turmeric","grams":1,"buy":"0.11 tbsp","bid":"ground-turmeric","gpu":28.350},{"item":"Almonds","grams":92,"buy":"0.75 cups","bid":"almonds","gpu":28.350}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~574 cal &middot; 33g protein &middot; 57g carbs &middot; 22g fat &middot; ~$1.37 per serving.</strong></p>
+
+<p>Maqluba means upside down in Arabic, and the traditional finish is a piece of theater: the whole pot gets flipped onto a platter at the table and everyone holds their breath. For meal prep we skip the drama and scoop it out, which changes nothing about the taste. What matters is the layering, chicken on the bottom, then vegetables, then rice, all cooking in one pot with allspice and cinnamon running through it. Each bowl comes in at <strong>574 calories and 33 grams of protein</strong> for about <strong>$1.37</strong>.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Rice (Member's Mark):</strong> 4.5 cups dry (853 g)</li>
+<li><strong>Eggplant:</strong> 1.3 (578 g)</li>
+<li><strong>Olive Oil:</strong> 1 cups (191 g)</li>
+<li><strong>Broccoli Florets (Great Value):</strong> 13.5 oz (385 g)</li>
+<li><strong>Boneless Skinless Chicken Thigh (Member's Mark):</strong> 3.75 lb (1746 g)</li>
+<li><strong>Yellow Onion:</strong> 1.3 (141 g)</li>
+<li><strong>Garlic:</strong> 2.25 tbsp (19 g)</li>
+<li><strong>Diced Tomatoes (Great Value):</strong> 2 cans (791 g)</li>
+<li><strong>Almonds (generic (USDA)):</strong> 0.75 cups (92 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Rice, 4.5 cups dry: ~$1.05. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Eggplant, 1.3: ~$1.92. <strong>Buy 2 each: $3.64.</strong></li>
+<li>Olive Oil, 1 cups: ~$2.69. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Broccoli Florets, 13.5 oz: ~$1.80. <strong>Buy 2 12oz bags: $3.18.</strong></li>
+<li>Boneless Skinless Chicken Thigh, 3.75 lb: ~$6.81. <strong>Buy 4 lbs: $7.08.</strong></li>
+<li>Yellow Onion, 1.3: ~$0.35. <strong>Buy 1 lb: $1.14.</strong></li>
+<li>Garlic, 2.25 tbsp: ~$0.27. <strong>Buy 1 head: $0.58.</strong></li>
+<li>Diced Tomatoes, 2 cans: ~$1.85. <strong>Buy 2 cans: $1.92.</strong></li>
+<li>Almonds, 0.75 cups: ~$1.38. <strong>Buy 1 14oz bag: $5.96.</strong></li>
+<li>Pantry seasonings (salt, black pepper, ground allspice, ground cinnamon, bay leaves, garam masala, ground turmeric): ~$1.00. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $19.12 across 14 servings, so roughly $1.37 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $28.24 across 14 servings, roughly $2.02 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $20.69 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.93. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$1.37 a bowl</strong> for a Palestinian one-pot dinner. Chicken thighs and olive oil are the top two lines, and the rice that makes up most of the volume is one of the smallest numbers on the whole list.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>Eggplant is the priciest vegetable in this recipe and it swings hard with the season. If it is expensive the week you shop, lean harder on the broccoli florets, which are tracked cheap and roast the same way.</li>
+<li>Frozen broccoli florets are cheaper than fresh, need no trimming, and roast perfectly well straight from the bag. This is one of the places where frozen genuinely beats fresh on both price and convenience.</li>
+<li>Almonds go on top for crunch. Buy the big bag rather than a small pouch, toast them yourself in a dry pan, and the rest of the bag will feed a month of snacks.</li>
+<li>Allspice and cinnamon are the signature of Palestinian rice dishes, and both are far cheaper in the bagged section of an international grocer than in a branded jar on the spice aisle.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Rinse the rice until the water runs clear and leave it to soak while you cook everything else.</li>
+<li>Cube the eggplant, toss it with some of the olive oil and salt, and roast it at 425F for 20 to 25 minutes with the broccoli florets on a second pan until both are browned at the edges. Roasting instead of frying saves you a lot of oil.</li>
+<li>Meanwhile, brown the chicken thighs in the rest of the olive oil in your largest heavy pot over medium-high, seasoned with the ground allspice, ground cinnamon, garam masala, ground turmeric, salt and black pepper.</li>
+<li>Add the diced onion and garlic to the pot for 4 minutes, then the diced tomatoes and bay leaves. Cook 5 minutes until the tomato darkens.</li>
+<li>Layer it properly: chicken and sauce on the bottom of the pot, then the roasted eggplant and broccoli, then the drained rice spread evenly across the top. Do not stir it. The layers are the recipe.</li>
+<li>Pour hot water or broth gently over the back of a spoon until the liquid sits about an inch above the rice. Cover tightly and cook on the lowest heat 30 to 35 minutes, then rest it covered another 15 minutes off the heat.</li>
+<li>Scoop it out in sections rather than flipping it, toasting the almonds in a dry pan while you work, and scatter them over the top.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Set the pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. Fourteen containers, no arguments. Each one carries <strong>574 calories</strong>, and hold the toasted almonds in a separate bag so they stay crunchy through the week.</p>
+
+<p><em>Recipe adapted from <a href="https://www.themediterraneandish.com/maqluba-recipe/" target="_blank" rel="noopener">themediterraneandish.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>Palestinian chicken maqluba for about $1.37 a bowl, made in one pot. This is one of a few hundred recipes here. Members get the whole Meal Prep section plus every money lesson, calculator, and tool on the site for $1 a month.</em></p>

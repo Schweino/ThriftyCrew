@@ -1,0 +1,254 @@
+﻿{
+    "name":  "Sopa de Fideo con Carne Molida (Mexican Beef and Noodle Skillet)",
+    "slug":  "sopa-de-fideo-con-carne-molida",
+    "cuisine":  "Mexican",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://24bite.com/easy-fideo-soup-with-beef-and-tomato/",
+    "source_site":  "24bite.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +50% (Spaghetti)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Fideo maps to the board\u0027s pasta commodity; cooked thick (the stew-style version) it eats as a dinner, not a starter soup. One-pot, very cheap. Confidence: page verified; calories estimated because published versions vary from soupy to thick. | HARVEST: ",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +50% (Spaghetti)",
+                         "OVERRIDE 93/7 Ground Beef: [BUMP ~x3 vs \u00271 cup cooked\u0027] source lists 1 cup cooked crumbles (~150 g raw-equivalent 220 g) for 6; house beef-noodle dinner = 1.5 lb raw",
+                         "OVERRIDE Spaghetti: [BUMP x3.0] source 4 oz fideo for 6 is sopita scale; house dinner = 12 oz"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  570,
+                 "protein":  37,
+                 "carbs":  76,
+                 "fat":  14,
+                 "cost_ps":  "2.15"
+             },
+    "intro_html":  "Fideo is thin noodle, and sopa de fideo is the tomato noodle dish that Mexican kids come home to. The move that makes it work is toasting the dry noodles in oil until they turn the color of a brown paper bag before any liquid goes near them. That toasting is where all the flavor comes from. Cooked thin it is a starter soup. Cooked thick, with ground beef in it, it becomes dinner, and that is the version we built. Five ingredients plus your spice rack.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 4.75 tbsp (65 g)",
+                                "\u003cstrong\u003eSpaghetti (Great Value):\u003c/strong\u003e 45.5 oz dry (1292 g)",
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1587 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2.3 cans (959 g)",
+                                "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 1.2 cans (529 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 0.05 cups (12 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Vegetable Oil, 4.75 tbsp: ~$0.16. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Spaghetti, 45.5 oz dry: ~$2.76. \u003cstrong\u003eBuy 3 16oz boxes: $2.91.\u003c/strong\u003e",
+                       "93/7 Ground Beef, 3.5 lb: ~$23.21. \u003cstrong\u003eBuy 4 lbs: $26.53.\u003c/strong\u003e",
+                       "Diced Tomatoes, 2.3 cans: ~$2.24. \u003cstrong\u003eBuy 3 cans: $2.88.\u003c/strong\u003e",
+                       "Tomato Sauce, 1.2 cans: ~$1.19. \u003cstrong\u003eBuy 2 15oz cans: $1.92.\u003c/strong\u003e",
+                       "Chicken Broth, 0.05 cups: ~$0.02. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (onion powder, garlic powder, dried oregano, ground cumin, salt, black pepper): ~$0.51. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $30.09 across 14 servings, so roughly $2.15 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $34.93 across 14 servings, roughly $2.50 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.67 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.60. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.15 a bowl\u003c/strong\u003e for a five-ingredient beef and noodle skillet that eats like a much bigger recipe.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eRegular spaghetti broken into short pieces is fideo.\u003c/strong\u003e The little bags of pre-cut fideo cost more per ounce for a noodle you can make with your hands in ten seconds.",
+                       "\u003cstrong\u003eThe beef is the entire receipt.\u003c/strong\u003e Five ingredients means nowhere to hide, so buy ground beef when it is marked down and freeze it in batch portions.",
+                       "\u003cstrong\u003eCanned tomatoes and tomato sauce cost almost nothing and do everything.\u003c/strong\u003e Stock up when they hit the low price, because they keep for years.",
+                       "\u003cstrong\u003eToast the noodles. It is free.\u003c/strong\u003e That one step is the whole difference between this and boiled pasta with tomato sauce on it."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Break the spaghetti into pieces roughly an inch long.",
+                    "Heat the vegetable oil in a large wide pot and toast the broken pasta over medium heat, stirring constantly, until it turns golden brown. Watch it closely, because it goes from perfect to burnt in about thirty seconds.",
+                    "Scoop the toasted pasta out and set it aside.",
+                    "Add the ground beef to the same pot and cook until browned with no pink remaining.",
+                    "Stir in the onion powder, garlic powder, dried oregano, ground cumin, salt, and black pepper and cook for a minute.",
+                    "Add the diced tomatoes, tomato sauce, and chicken broth and bring it to a boil.",
+                    "Return the toasted pasta, lower the heat, and simmer uncovered until the noodles are tender and the liquid has cooked down to a thick sauce rather than a soup."
+                ],
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight from Step 1, and divide by 14. Weigh it into the containers, because toasted fideo settles unevenly and scoops lie to you. Every serving comes in at \u003cstrong\u003e570 calories with 37 grams of protein\u003c/strong\u003e. It thickens overnight, so add a splash of water when you reheat.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://24bite.com/easy-fideo-soup-with-beef-and-tomato/\" target=\"_blank\" rel=\"noopener\"\u003e24bite.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Simple Mexican dinners for about $2.15 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  30.09,
+    "cost_batch_true":  34.93,
+    "cost_per_serving":  2.15,
+    "cost_per_serving_true":  2.5,
+    "cost_pantry_add":  13.67,
+    "cost_first_run":  48.6,
+    "scaler":  {
+                   "cost":  "34.93",
+                   "ing":  [
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  65,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Spaghetti",
+                                   "canon":  "Spaghetti",
+                                   "grams":  1292,
+                                   "buy":  "45.5 oz dry",
+                                   "bid":  "pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "canon":  "93/7 Ground Beef",
+                                   "grams":  1587,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "ground-beef-8020",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  959,
+                                   "buy":  "2.3 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Sauce",
+                                   "canon":  "Tomato Sauce",
+                                   "grams":  529,
+                                   "buy":  "1.2 cans",
+                                   "bid":  "tomato-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  12,
+                                   "buy":  "0.05 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Onion Powder",
+                                   "canon":  "Onion Powder",
+                                   "grams":  6,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "onion-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  7,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  2,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Sopa de fideo con carne molida rebuilt for 14-serving meal prep: toasted noodles and ground beef in a thick tomato sauce. 570 calories, 37g protein, about $2.15 per serving.",
+                 "keywords":  "sopa de fideo, fideo con carne molida, mexican beef noodle skillet, toasted noodle soup, budget mexican meal prep, ground beef pasta",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT10M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT40M",
+                 "costPerServing":  2.15,
+                 "recipeIngredient":  [
+                                          "3.5 lb 93/7 ground beef",
+                                          "45.5 oz dry spaghetti",
+                                          "2.3 cans diced tomatoes",
+                                          "1.2 cans tomato sauce",
+                                          "4.75 tbsp vegetable oil"
+                                      ],
+                 "steps":  [
+                               "Break the spaghetti into short pieces.",
+                               "Toast the pasta in oil until golden brown, then set it aside.",
+                               "Brown the ground beef in the same pot.",
+                               "Add the dried seasonings and cook briefly.",
+                               "Add diced tomatoes, tomato sauce, and broth and bring to a boil.",
+                               "Return the pasta and simmer until tender and thick, then portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  65
+                              },
+                              {
+                                  "item":  "Spaghetti",
+                                  "grams":  1292
+                              },
+                              {
+                                  "item":  "93/7 Ground Beef",
+                                  "grams":  1587
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  959
+                              },
+                              {
+                                  "item":  "Tomato Sauce",
+                                  "grams":  529
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Onion Powder",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

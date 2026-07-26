@@ -1,0 +1,305 @@
+﻿{
+    "name":  "Ground Turkey Lasagna Casserole",
+    "slug":  "ground-turkey-lasagna-casserole",
+    "cuisine":  "italian-american",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://masonfit.com/healthy-ground-turkey-lasagna-casserole/",
+    "source_site":  "masonfit.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Pasta Shells - jumbo)",
+                   "portion factor 1.05"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: No layered lasagna in the catalog at all (baked ziti and creamy shells are the nearest and both read as different dishes). Pan bake, weigh-and-divide, scales cleanly to 14. Source page verified: 6 servings, 380 cal, 36g protein at its lean portion; est_cal 560 reflects our bigger 14-serving portion with full-fat cheese. Confidence: high on the page, medium on est_cal (our own scaling, not the source number). | HARVEST: Recipe card title is \u002730-Minute Turkey Lasagna Casserole\u0027; verified on a second fetch (it genuinely uses manicotti shells).",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Pasta Shells - jumbo)",
+                         "TUNING: portion factor 1.05"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  572,
+                 "protein":  37,
+                 "carbs":  52,
+                 "fat":  24,
+                 "cost_ps":  "2.78"
+             },
+    "intro_html":  "Lasagna is wonderful and lasagna is a project. This is the version that skips the project: jumbo shells instead of flat noodles, everything stirred and baked in one pan, ricotta and mozzarella melted right through it. Nobody at your table is going to file a complaint about the shape. Each portion runs \u003cstrong\u003e572 calories and 37 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.78\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1.25 tbsp (17 g)",
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 2.5 lb (1111 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.5 (270 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.75 tbsp (24 g)",
+                                "\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e 6.75 cups (1667 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.2 cartons (1176 g)",
+                                "\u003cstrong\u003ePasta Shells - jumbo (Great Value):\u003c/strong\u003e 22.25 oz dry (633 g)",
+                                "\u003cstrong\u003eRicotta Cheese (Great Value):\u003c/strong\u003e 36.75 oz (1042 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 2 large eggs (123 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 1.25 oz (35 g)",
+                                "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 9.75 oz (278 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 1.25 tbsp: ~$0.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 2.5 lb: ~$9.36. \u003cstrong\u003eBuy 3 lbs: $11.46.\u003c/strong\u003e",
+                       "Yellow Onion, 2.5: ~$0.68. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 2.75 tbsp: ~$0.35. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Marinara Sauce, 6.75 cups: ~$5.04. \u003cstrong\u003eBuy 3 24oz jars: $6.17.\u003c/strong\u003e",
+                       "Chicken Broth, 1.2 cartons: ~$1.58. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Pasta Shells - jumbo, 22.25 oz dry: ~$13.96. \u003cstrong\u003eBuy 2 Barilla 12 ozes: $15.00.\u003c/strong\u003e",
+                       "Ricotta Cheese, 36.75 oz: ~$4.18. \u003cstrong\u003eBuy 3 15oz tubs: $5.12.\u003c/strong\u003e",
+                       "Eggs, 2 large eggs: ~$0.29. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
+                       "Parmesan Cheese, 1.25 oz: ~$0.43. \u003cstrong\u003eBuy 1 8oz tub: $2.78.\u003c/strong\u003e",
+                       "Reduced Fat Mozzarella, 9.75 oz: ~$2.11. \u003cstrong\u003eBuy 2 8oz bags: $3.45.\u003c/strong\u003e",
+                       "Pantry seasonings (red pepper flakes, italian seasoning, salt, black pepper): ~$0.75. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $38.97 across 14 servings, so roughly $2.78 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $49.70 across 14 servings, roughly $3.55 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.85 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $66.55. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.78\u003c/strong\u003e a container for lasagna. The frozen aisle version costs three times that and comes in a tray you could read a newspaper through.",
+    "shop_smart":  [
+                       "Jumbo shells are the surprise big line on this list. Any large pasta shape works here since it all gets stirred together, so grab whatever big shape is cheapest that week.",
+                       "Ricotta by the 15 ounce tub is the budget size. Buy three, use them all, and skip the smaller containers that charge more per ounce for less cheese.",
+                       "Jarred marinara beats making sauce from scratch on both price and time once you count the canned tomatoes, the herbs, and the hour. Buy the store brand and taste it before you judge it.",
+                       "Reduced fat mozzarella in the 8 ounce bag melts fine in a covered bake. Shred-your-own from a block is cheaper still if your store prices blocks below bags, which about half of them do."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Boil the jumbo shells to just under done, about 2 minutes short of the box time, then drain them. They finish in the oven and overcooked pasta in a bake turns to paste.",
+                    "Heat the olive oil in a large pot, cook the diced onion 5 minutes, add the garlic for a minute, then brown the ground turkey until it is cooked through to 165F.",
+                    "Add the marinara sauce, the chicken broth, the italian seasoning, red pepper flakes, salt, and black pepper, and simmer 10 minutes so it thickens up.",
+                    "Stir the ricotta together with the eggs and the parmesan in a separate bowl. The egg is what keeps the ricotta from weeping water into your casserole.",
+                    "Fold the drained shells into the meat sauce, then dollop the ricotta mixture through it and stir just twice so you get ribbons of white instead of a uniform pink.",
+                    "Spread it in your baking pans, cover with the mozzarella, and bake at 375F for 30 minutes until it bubbles at the edges and the cheese browns in spots.",
+                    "Let it rest 15 minutes, cook the rice, and move the rice into your weighed pot."
+                ],
+    "portion_html":  "Set the pot of rice on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the base layer in each container. Then cut the casserole into 14 even squares and lay one on each bed so the portions come out honest instead of eyeballed. Every serving lands at \u003cstrong\u003e572 calories and 37 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://masonfit.com/healthy-ground-turkey-lasagna-casserole/\" target=\"_blank\" rel=\"noopener\"\u003emasonfit.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Lasagna for about \u003cstrong\u003e$2.78\u003c/strong\u003e a container. This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  38.97,
+    "cost_batch_true":  49.7,
+    "cost_per_serving":  2.78,
+    "cost_per_serving_true":  3.55,
+    "cost_pantry_add":  16.85,
+    "cost_first_run":  66.55,
+    "scaler":  {
+                   "cost":  "49.70",
+                   "ing":  [
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  17,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1111,
+                                   "buy":  "2.5 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  270,
+                                   "buy":  "2.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  24,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Red Pepper Flakes",
+                                   "canon":  "Red Pepper Flakes",
+                                   "grams":  20,
+                                   "buy":  "3.75 tbsp",
+                                   "bid":  "red-pepper-flakes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "canon":  "Italian Seasoning",
+                                   "grams":  3,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Marinara Sauce",
+                                   "canon":  "Marinara Sauce",
+                                   "grams":  1667,
+                                   "buy":  "6.75 cups",
+                                   "bid":  "pasta-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  1176,
+                                   "buy":  "1.2 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Pasta Shells - jumbo",
+                                   "canon":  "Pasta Shells - jumbo",
+                                   "grams":  633,
+                                   "buy":  "22.25 oz dry"
+                               },
+                               {
+                                   "item":  "Ricotta Cheese",
+                                   "canon":  "Ricotta Cheese",
+                                   "grams":  1042,
+                                   "buy":  "36.75 oz",
+                                   "bid":  "cottage-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  123,
+                                   "buy":  "2 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "canon":  "Parmesan Cheese",
+                                   "grams":  35,
+                                   "buy":  "1.25 oz",
+                                   "bid":  "parmesan",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Reduced Fat Mozzarella",
+                                   "canon":  "Reduced Fat Mozzarella",
+                                   "grams":  278,
+                                   "buy":  "9.75 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  21,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Ground turkey lasagna casserole meal prep: jumbo shells baked in turkey marinara with ricotta and mozzarella. 572 calories, 37g protein, about $2.78 a serving.",
+                 "keywords":  "turkey lasagna casserole, baked pasta, ricotta bake, turkey meal prep, budget meal prep, easy lasagna",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M",
+                 "costPerServing":  2.78,
+                 "recipeIngredient":  [
+                                          "2.25 lb 93/7 ground turkey",
+                                          "11.75 oz dry jumbo pasta shells",
+                                          "6.25 cups marinara sauce",
+                                          "2.5 lb chicken broth",
+                                          "35 oz ricotta cheese",
+                                          "9.25 oz reduced fat mozzarella",
+                                          "1.25 oz parmesan cheese",
+                                          "2 large eggs",
+                                          "2.3 yellow onions",
+                                          "2.75 tbsp garlic",
+                                          "1.25 tbsp olive oil",
+                                          "3.75 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Boil the jumbo shells 2 minutes short of done and drain.",
+                               "Cook onion and garlic in olive oil, then brown the ground turkey to 165F.",
+                               "Add marinara, chicken broth, and seasonings and simmer 10 minutes.",
+                               "Mix ricotta with eggs and parmesan, then fold the shells and ricotta into the sauce.",
+                               "Top with mozzarella and bake at 375F for 30 minutes, then rest 15 minutes.",
+                               "Cook the rice, portion it by weight into 14 containers, and set a casserole square on each."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  17
+                              },
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1111
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  270
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  24
+                              },
+                              {
+                                  "item":  "Red Pepper Flakes",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Italian Seasoning",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Marinara Sauce",
+                                  "grams":  1667
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  1176
+                              },
+                              {
+                                  "item":  "Pasta Shells - jumbo",
+                                  "grams":  633
+                              },
+                              {
+                                  "item":  "Ricotta Cheese",
+                                  "grams":  1042
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  123
+                              },
+                              {
+                                  "item":  "Parmesan Cheese",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Reduced Fat Mozzarella",
+                                  "grams":  278
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

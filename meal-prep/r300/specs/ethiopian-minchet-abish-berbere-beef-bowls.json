@@ -1,0 +1,219 @@
+﻿{
+    "name":  "Ethiopian Berbere Ground Beef (Minchet Abish)",
+    "slug":  "ethiopian-minchet-abish-berbere-beef-bowls",
+    "cuisine":  "Ethiopian",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://twosleevers.com/ethiopian-beef-stew/",
+    "source_site":  "twosleevers.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 200g (src scale)",
+                   "base +60% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Explicit hunting-ground target and berbere-seasoning is already a tracked commodity. One-pot braise, holds and reheats well, portions by scoop over rice. Confidence: recipe page verified; calorie value is estimated (source lists no panel for the rice-served portion). | HARVEST: ",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 200g (src scale)",
+                         "TUNING: base +60% (Rice)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  574,
+                 "protein":  32,
+                 "carbs":  76,
+                 "fat":  14,
+                 "cost_ps":  "2.14"
+             },
+    "intro_html":  "Minchet abish is the Ethiopian ground beef stew, and the secret is patience with the onions. You cook a mountain of them down slowly in spiced butter until they collapse into a jammy base, and that base is the sauce. No thickener, no flour, just onions that gave up. Then berbere goes in, which is the Ethiopian spice blend built on chilies, fenugreek, and warm spices, and the whole pot turns brick red. It is traditionally scooped up with injera. Over rice it works just as well and it portions a lot cleaner.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 7 tbsp (98 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)",
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 1 can (420 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 6.75 cups dry (1258 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Butter, 7 tbsp: ~$0.64. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Yellow Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "93/7 Ground Beef, 3.5 lb: ~$23.22. \u003cstrong\u003eBuy 4 lbs: $26.53.\u003c/strong\u003e",
+                       "Diced Tomatoes, 1 can: ~$0.98. \u003cstrong\u003eBuy 2 cans: $1.92.\u003c/strong\u003e",
+                       "Rice, 6.75 cups dry: ~$1.55. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (berbere seasoning, salt, black pepper): ~$2.10. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $29.96 across 14 servings, so roughly $2.14 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $36.80 across 14 servings, roughly $2.63 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.19 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.99. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.14 a bowl\u003c/strong\u003e for an Ethiopian stew made from a short list of ingredients and one very good spice blend.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eThis recipe has six things in it.\u003c/strong\u003e Beef, butter, onions, garlic, tomatoes, and rice. When the list is that short, the beef price is the whole game, so buy it marked down and freeze.",
+                       "\u003cstrong\u003eBerbere is worth buying real.\u003c/strong\u003e One jar seasons this pot many times and there is no substitute that gets you close. It is the reason this tastes Ethiopian.",
+                       "\u003cstrong\u003eDo not rush the onions.\u003c/strong\u003e The slow cook is free flavor. Twenty extra minutes on low costs nothing and it is the difference between a great stew and a thin one.",
+                       "\u003cstrong\u003eBuy the onion bag, not the loose bulbs.\u003c/strong\u003e This dish uses a lot of them and the bag price per pound is meaningfully lower."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Dice the yellow onions fine and cook them in a dry pot over medium-low heat until they release their water and start to collapse.",
+                    "Add the butter and keep cooking the onions slowly until they are soft, golden, and jammy. This is the step that makes the dish, so do not hurry it.",
+                    "Stir in the garlic and the berbere seasoning and cook for a minute so the spices bloom in the butter.",
+                    "Add the ground beef, break it up thoroughly, and cook until browned with no pink remaining.",
+                    "Stir in the diced tomatoes and enough water to loosen it, then simmer uncovered until the sauce is thick and the oil starts to separate at the edges.",
+                    "Season with salt and black pepper to taste and let it sit off the heat for a few minutes to settle.",
+                    "Cook the rice according to the package to serve underneath."
+                ],
+    "portion_html":  "Weigh the rice pot and the stew pot separately, subtracting the empty-pot weight from Step 1, and divide each by 14. Even rice base, even ladle of stew. Every bowl lands near \u003cstrong\u003e574 calories with 32 grams of protein\u003c/strong\u003e. Berbere gets stronger overnight, so day three will have more heat than day one.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://twosleevers.com/ethiopian-beef-stew/\" target=\"_blank\" rel=\"noopener\"\u003etwosleevers.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Boldly spiced dinners for about $2.14 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  29.96,
+    "cost_batch_true":  36.8,
+    "cost_per_serving":  2.14,
+    "cost_per_serving_true":  2.63,
+    "cost_pantry_add":  7.19,
+    "cost_first_run":  43.99,
+    "scaler":  {
+                   "cost":  "36.80",
+                   "ing":  [
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  98,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  385,
+                                   "buy":  "3.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  35,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Berbere Seasoning",
+                                   "canon":  "Berbere Seasoning",
+                                   "grams":  48,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "berbere-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  21,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "canon":  "93/7 Ground Beef",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "ground-beef-8020",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  420,
+                                   "buy":  "1 can",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1258,
+                                   "buy":  "6.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Ethiopian minchet abish rebuilt for 14-serving meal prep: berbere-spiced ground beef in slow-cooked onion sauce over rice. 574 calories, 32g protein, about $2.14 per serving.",
+                 "keywords":  "minchet abish, ethiopian beef stew, berbere ground beef, ethiopian meal prep, spiced beef bowls, budget global dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT55M",
+                 "totalTime":  "PT75M",
+                 "costPerServing":  2.14,
+                 "recipeIngredient":  [
+                                          "3.5 lb 93/7 ground beef",
+                                          "3.5 yellow onions",
+                                          "7 tbsp butter",
+                                          "4 tbsp garlic",
+                                          "1 can diced tomatoes",
+                                          "6.75 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Cook finely diced onions dry until they release their water and collapse.",
+                               "Add butter and cook the onions slowly until jammy and golden.",
+                               "Bloom the garlic and berbere seasoning in the butter.",
+                               "Brown the ground beef until no pink remains.",
+                               "Add diced tomatoes and water and simmer until thick and the oil separates.",
+                               "Season, cook rice separately, and portion the stew over it into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Butter",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Berbere Seasoning",
+                                  "grams":  48
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "93/7 Ground Beef",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1258
+                              }
+                          ]
+}

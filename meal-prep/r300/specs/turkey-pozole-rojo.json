@@ -1,0 +1,347 @@
+﻿{
+    "name":  "Turkey Pozole Rojo",
+    "slug":  "turkey-pozole-rojo",
+    "cuisine":  "mexican",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://themodernproper.com/turkey-pozole-rojo",
+    "source_site":  "themodernproper.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Tortilla)",
+                   "portion factor 1.45"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Hominy is a tracked commodity and the catalog\u0027s only pozole is Slow Cooker Chicken Pozole, so the turkey red version is new. Verified 8 servings, 406 cal; the page reports 8g protein which is clearly a nutrition-widget error for a meat stew, so treat the source protein as unreliable and expect our own math to govern. Confidence: page high, source macros LOW. | HARVEST: Published protein of 8g per serving is inconsistent with 4-6 cups of shredded turkey; likely a site error, flag for recompute.",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Tortilla)",
+                         "TUNING: portion factor 1.45",
+                         "OVERRIDE Tortilla: [BUMP vs serve-default 240] tostadas are the pozole plate\u0027s carb; ~1.75 tostadas/serving x 8"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  567,
+                 "protein":  47,
+                 "carbs":  85,
+                 "fat":  14,
+                 "cost_ps":  "3.40"
+             },
+    "intro_html":  "Pozole is a celebration soup in Mexico, the pot that comes out for birthdays, Christmas and the days after. The red version gets its color and its depth from dried ancho and guajillo chiles, toasted and blended into the broth. Hominy gives it that chewy, nutty bite you cannot get from anything else, and the shredded turkey makes it a serious protein dinner. Crisp cabbage, cilantro and lime go on at the table, not in the pot.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 5 tbsp (69 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (381 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 10.5 tbsp (89 g)",
+                                "\u003cstrong\u003eDried Ancho Chiles (generic (USDA)):\u003c/strong\u003e 6 oz (173 g)",
+                                "\u003cstrong\u003eDried Guajillo Chiles (generic (USDA)):\u003c/strong\u003e 2.25 oz (61 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 5.2 cartons (4872 g)",
+                                "\u003cstrong\u003eHominy (generic):\u003c/strong\u003e 5 cans (1726 g)",
+                                "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 4 lb (1776 g)",
+                                "\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 1.25 lb (533 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 36 tbsp (36 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 4.25 tbsp (65 g)",
+                                "\u003cstrong\u003eTortilla (La Banderita):\u003c/strong\u003e 67.5 oz (1914 g)",
+                                "\u003cstrong\u003eWhite Vinegar (generic):\u003c/strong\u003e 7.5 tbsp (114 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 5 tbsp: ~$0.97. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 3.5: ~$0.96. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 10.5 tbsp: ~$1.28. \u003cstrong\u003eBuy 3 heads: $1.73.\u003c/strong\u003e",
+                       "Dried Ancho Chiles, 6 oz: ~$3.43. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Dried Guajillo Chiles, 2.25 oz: ~$3.76. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 5.2 cartons: ~$6.54. \u003cstrong\u003ePantry staple; this batch alone uses about 6 32oz cartons.\u003c/strong\u003e",
+                       "Hominy, 5 cans: ~$3.27. \u003cstrong\u003eBuy 6 cans: $3.87.\u003c/strong\u003e",
+                       "Turkey Breast, 4 lb: ~$18.85. \u003cstrong\u003eBuy 2 3lb frozen roasts: $28.88.\u003c/strong\u003e",
+                       "Green Cabbage, 1.25 lb: ~$1.00. \u003cstrong\u003eBuy 1 head: $1.69.\u003c/strong\u003e",
+                       "Fresh Cilantro, 36 tbsp: ~$1.12. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Lime Juice, 4.25 tbsp: ~$0.54. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Tortilla, 67.5 oz: ~$4.51. \u003cstrong\u003eBuy 7 10ct packs: $4.95.\u003c/strong\u003e",
+                       "White Vinegar, 7.5 tbsp: ~$0.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (dried oregano, ground cumin, bay leaves, salt, black pepper): ~$1.17. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $47.61 across 14 servings, so roughly $3.40 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $60.66 across 14 servings, roughly $4.33 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $34.87 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $95.53. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.40 a bowl\u003c/strong\u003e. The dried chiles and the turkey breast are the two real costs, and the chiles keep for a year in a sealed bag, so the next pot is cheaper than this one.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy dried chiles from the Hispanic aisle, not the spice rack.\u003c/strong\u003e The big bags of ancho and guajillo cost a fraction of what the little branded packets do, and they keep for a year sealed in the pantry.",
+                       "\u003cstrong\u003eCanned hominy is the cheap route.\u003c/strong\u003e Dried hominy needs an overnight soak and hours of cooking. Canned is drained, rinsed and ready, and it costs about the same per serving.",
+                       "\u003cstrong\u003eTurkey breast is a holiday buy.\u003c/strong\u003e Grab a frozen roast when the seasonal price hits, cook and shred it, and freeze it in portions. Pozole is exactly what that freezer stash is for.",
+                       "\u003cstrong\u003eKeep the garnishes separate.\u003c/strong\u003e The shredded cabbage, cilantro and lime go into their own small containers. Add them at the table so they stay crisp instead of going limp in the broth."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Stem and seed the dried ancho and guajillo chiles, toast them in a dry skillet for about 30 seconds a side until they smell nutty, then cover them in hot water and soak 20 minutes.",
+                    "Blend the softened chiles with some of their soaking water, a chunk of the onion and several cloves of garlic into a smooth red sauce, then strain it.",
+                    "Heat the olive oil in your big pot, cook the rest of the diced onion and garlic until soft, and fry the strained chile sauce in the hot oil for five minutes so it darkens and loses its raw edge.",
+                    "Pour in the chicken broth along with the dried oregano, ground cumin, bay leaves, salt and black pepper, then simmer 30 minutes.",
+                    "Add the drained hominy and the shredded turkey breast and simmer another 20 minutes until everything has taken on the red broth. Stir in the splash of white vinegar to brighten it.",
+                    "Shred the cabbage and chop the cilantro into separate containers, cut the lime, and toast or crisp the tortillas to serve alongside."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide by 14 and ladle that exact weight into each container, keeping the cabbage, cilantro, lime and tortillas packed separately. Every bowl lands near 567 calories with 47 grams of protein, which is one of the strongest protein numbers in the whole soup section.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://themodernproper.com/turkey-pozole-rojo\" target=\"_blank\" rel=\"noopener\"\u003ethemodernproper.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cem\u003eA celebration pot of red pozole for about $3.40 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "cost_batch":  47.61,
+    "cost_batch_true":  60.66,
+    "cost_per_serving":  3.4,
+    "cost_per_serving_true":  4.33,
+    "cost_pantry_add":  34.87,
+    "cost_first_run":  95.53,
+    "scaler":  {
+                   "cost":  "60.66",
+                   "ing":  [
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  69,
+                                   "buy":  "5 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  381,
+                                   "buy":  "3.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  89,
+                                   "buy":  "10.5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Dried Ancho Chiles",
+                                   "canon":  "Dried Ancho Chiles",
+                                   "grams":  173,
+                                   "buy":  "6 oz",
+                                   "bid":  "dried-ancho-chiles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Guajillo Chiles",
+                                   "canon":  "Dried Guajillo Chiles",
+                                   "grams":  61,
+                                   "buy":  "2.25 oz",
+                                   "bid":  "dried-guajillo-chiles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  4872,
+                                   "buy":  "5.2 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  4,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  11,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  3,
+                                   "buy":  "0.11 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  38,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Hominy",
+                                   "canon":  "Hominy",
+                                   "grams":  1726,
+                                   "buy":  "5 cans",
+                                   "bid":  "hominy",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Turkey Breast",
+                                   "canon":  "Turkey Breast",
+                                   "grams":  1776,
+                                   "buy":  "4 lb",
+                                   "bid":  "turkey-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Cabbage",
+                                   "canon":  "Green Cabbage",
+                                   "grams":  533,
+                                   "buy":  "1.25 lb",
+                                   "bid":  "cabbage",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  36,
+                                   "buy":  "36 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "canon":  "Lime Juice",
+                                   "grams":  65,
+                                   "buy":  "4.25 tbsp",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Tortilla",
+                                   "canon":  "Tortilla",
+                                   "grams":  1914,
+                                   "buy":  "67.5 oz",
+                                   "bid":  "tortillas",
+                                   "gpu":  "45.000"
+                               },
+                               {
+                                   "item":  "White Vinegar",
+                                   "canon":  "White Vinegar",
+                                   "grams":  114,
+                                   "buy":  "7.5 tbsp",
+                                   "bid":  "white-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  6,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Shredded turkey and hominy in a toasted ancho and guajillo chile broth, with cabbage, cilantro and lime. A 14 serving pozole rojo for meal prep.",
+                 "keywords":  "turkey pozole rojo, pozole recipe, hominy stew, mexican soup recipe, budget meal prep, leftover turkey recipe",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT35M",
+                 "cookTime":  "PT1H",
+                 "totalTime":  "PT1H35M",
+                 "costPerServing":  3.4,
+                 "recipeIngredient":  [
+                                          "Dried Ancho Chiles",
+                                          "Dried Guajillo Chiles",
+                                          "Olive Oil",
+                                          "Yellow Onion",
+                                          "Garlic",
+                                          "Chicken Broth",
+                                          "Hominy",
+                                          "Turkey Breast",
+                                          "White Vinegar",
+                                          "Green Cabbage",
+                                          "Fresh Cilantro",
+                                          "Lime Juice",
+                                          "Tortilla"
+                                      ],
+                 "steps":  [
+                               "Toast and soak the dried ancho and guajillo chiles, then blend with onion and garlic and strain.",
+                               "Cook the remaining onion and garlic in olive oil, then fry the chile sauce until it darkens.",
+                               "Add the chicken broth, oregano, cumin and bay leaves and simmer 30 minutes.",
+                               "Stir in the hominy and shredded turkey and simmer 20 minutes more, finishing with vinegar.",
+                               "Serve with shredded cabbage, cilantro, lime and crisped tortillas on the side."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  69
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  381
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  89
+                              },
+                              {
+                                  "item":  "Dried Ancho Chiles",
+                                  "grams":  173
+                              },
+                              {
+                                  "item":  "Dried Guajillo Chiles",
+                                  "grams":  61
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  4872
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  38
+                              },
+                              {
+                                  "item":  "Hominy",
+                                  "grams":  1726
+                              },
+                              {
+                                  "item":  "Turkey Breast",
+                                  "grams":  1776
+                              },
+                              {
+                                  "item":  "Green Cabbage",
+                                  "grams":  533
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  36
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  65
+                              },
+                              {
+                                  "item":  "Tortilla",
+                                  "grams":  1914
+                              },
+                              {
+                                  "item":  "White Vinegar",
+                                  "grams":  114
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  6
+                              }
+                          ]
+}

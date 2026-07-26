@@ -1,0 +1,306 @@
+﻿{
+    "name":  "Escondidinho de Carne (Brazilian Beef and Potato Bake)",
+    "slug":  "escondidinho-de-carne-brazilian-beef-bake",
+    "cuisine":  "Brazilian",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://easybrazilianfood.com/brazilian-dutch-oven-shepherds-pie-escondidinho/",
+    "source_site":  "easybrazilianfood.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Potato)",
+                   "portion factor 1.2"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Brazil is unrepresented in beef. Two-layer bake, cheesy top, portions by square. Use the potato-topped version and the whole thing maps. Confidence: page verified; calories estimated. | HARVEST: No nutrition published. Source sections: Mashed Potatoes (first 7 lines), Beef Filling \u0026 Topping (last 11).",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Potato)",
+                         "TUNING: portion factor 1.2"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  570,
+                 "protein":  38,
+                 "carbs":  51,
+                 "fat":  24,
+                 "cost_ps":  "2.37"
+             },
+    "intro_html":  "Escondidinho means little hidden thing, and the hidden thing is the meat. Seasoned beef goes on the bottom, creamy mashed potato goes over it like a blanket, cheese goes on top, and it bakes until the whole surface blisters. Brazil makes this with catupiry, a soft tangy cheese that does not exist here, so cream cheese is the standard stand-in and it works. Cilantro through the beef is what keeps it from tasting like a British shepherd\u0027s pie with a tan.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 16 (3422 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 2.75 cups (686 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 5.5 tbsp (78 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 2.25 oz (63 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4.25 tbsp (36 g)",
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 2.75 lb (1270 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 tbsp (13 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.4 (154 g)",
+                                "\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 17.25 oz (487 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 6 tbsp (6 g)",
+                                "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 11 oz (314 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Potato, 16: ~$4.29. \u003cstrong\u003eBuy 8 lbs: $4.54.\u003c/strong\u003e",
+                       "Milk, 2.75 cups: ~$0.55. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
+                       "Butter, 5.5 tbsp: ~$0.51. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Parmesan Cheese, 2.25 oz: ~$0.77. \u003cstrong\u003eBuy 1 8oz tub: $2.78.\u003c/strong\u003e",
+                       "Garlic, 4.25 tbsp: ~$0.52. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "93/7 Ground Beef, 2.75 lb: ~$18.57. \u003cstrong\u003eBuy 3 lbs: $19.90.\u003c/strong\u003e",
+                       "Olive Oil, 1 tbsp: ~$0.18. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 1.4: ~$0.39. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "1/3 Fat Cream Cheese, 17.25 oz: ~$3.19. \u003cstrong\u003eBuy 3 8oz bricks: $4.46.\u003c/strong\u003e",
+                       "Fresh Cilantro, 6 tbsp: ~$0.19. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Reduced Fat Mozzarella, 11 oz: ~$2.39. \u003cstrong\u003eBuy 2 8oz bags: $3.45.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, chili powder, ground cumin): ~$1.65. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $33.20 across 14 servings, so roughly $2.37 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $46.46 across 14 servings, roughly $3.32 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.87 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $62.33. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.37 a bowl\u003c/strong\u003e for a Brazilian bake with a cheese-blistered mashed potato lid.",
+    "shop_smart":  [
+                       "\u003cstrong\u003ePotatoes are the cheapest thing in this dish and they are half of it.\u003c/strong\u003e Buy the big bag and store them cool and dark, and the mash layer costs next to nothing.",
+                       "\u003cstrong\u003eCream cheese replaces catupiry and is a fraction of the price of imported cheese.\u003c/strong\u003e Buy the store brand bricks, which behave identically once melted into a mash.",
+                       "\u003cstrong\u003eShred the mozzarella from a block.\u003c/strong\u003e Bagged shreds are coated in anti-caking starch that keeps them from melting into the smooth sheet this topping wants.",
+                       "\u003cstrong\u003eCilantro is what makes it Brazilian.\u003c/strong\u003e One bunch costs pocket change and it is the difference between this and a generic beef and potato bake."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Peel and boil the potatoes until they fall apart on a fork, then drain them well and let the steam escape for a minute.",
+                    "Mash the potatoes with the milk, butter, parmesan cheese, salt, and black pepper until smooth, then set the mash aside.",
+                    "Heat the olive oil in a large skillet and cook the diced yellow onion and garlic until softened.",
+                    "Add the ground beef, break it up, and cook until browned with no pink remaining, then drain off the excess fat.",
+                    "Stir in the chili powder, ground cumin, salt, and black pepper, then take the pan off the heat and fold in the cream cheese and the chopped cilantro until melted through.",
+                    "Spread the beef in an even layer in a large baking dish and blanket it with the mashed potato.",
+                    "Scatter the mozzarella over the top and bake at 400 degrees until melted, bubbling, and browned in spots."
+                ],
+    "portion_html":  "Weigh the whole baking dish, subtract the empty dish weight, and divide by 14. Cut to that weight so the beef layer gets divided as evenly as the potato does. Every serving comes in at \u003cstrong\u003e570 calories with 38 grams of protein\u003c/strong\u003e. Let it rest fifteen minutes so the layers hold together when you lift them out.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://easybrazilianfood.com/brazilian-dutch-oven-shepherds-pie-escondidinho/\" target=\"_blank\" rel=\"noopener\"\u003eeasybrazilianfood.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Cheesy, layered dinners for about $2.37 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  33.2,
+    "cost_batch_true":  46.46,
+    "cost_per_serving":  2.37,
+    "cost_per_serving_true":  3.32,
+    "cost_pantry_add":  15.87,
+    "cost_first_run":  62.33,
+    "scaler":  {
+                   "cost":  "46.46",
+                   "ing":  [
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  3422,
+                                   "buy":  "16",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  160,
+                                   "buy":  "5.75 oz",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  686,
+                                   "buy":  "2.75 cups",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  78,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "canon":  "Parmesan Cheese",
+                                   "grams":  63,
+                                   "buy":  "2.25 oz",
+                                   "bid":  "parmesan",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  13,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  36,
+                                   "buy":  "4.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "canon":  "93/7 Ground Beef",
+                                   "grams":  1270,
+                                   "buy":  "2.75 lb",
+                                   "bid":  "ground-beef-8020",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  13,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  154,
+                                   "buy":  "1.4",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "1/3 Fat Cream Cheese",
+                                   "canon":  "1/3 Fat Cream Cheese",
+                                   "grams":  487,
+                                   "buy":  "17.25 oz",
+                                   "bid":  "cream-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  6,
+                                   "buy":  "6 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "canon":  "Chili Powder",
+                                   "grams":  22,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  18,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Reduced Fat Mozzarella",
+                                   "canon":  "Reduced Fat Mozzarella",
+                                   "grams":  314,
+                                   "buy":  "11 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Brazilian escondidinho de carne rebuilt for 14-serving meal prep: creamy beef under a mashed potato and mozzarella lid. 570 calories, 38g protein, about $2.37 per serving.",
+                 "keywords":  "escondidinho de carne, brazilian beef and potato bake, brazilian shepherds pie, cream cheese beef bake, brazilian meal prep, cheesy casserole",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT50M",
+                 "totalTime":  "PT75M",
+                 "costPerServing":  2.37,
+                 "recipeIngredient":  [
+                                          "2.75 lb 93/7 ground beef",
+                                          "16 potatoes",
+                                          "17.25 oz cream cheese",
+                                          "11 oz reduced fat mozzarella",
+                                          "2.75 cups milk",
+                                          "5.5 tbsp butter",
+                                          "2.25 oz parmesan cheese",
+                                          "1.4 yellow onions",
+                                          "4.25 tbsp garlic",
+                                          "6 tbsp fresh cilantro",
+                                          "1 tbsp olive oil"
+                                      ],
+                 "steps":  [
+                               "Boil the potatoes until soft, drain, and mash with milk, butter, and parmesan.",
+                               "Cook the onion and garlic in olive oil until softened.",
+                               "Brown the ground beef and drain the fat.",
+                               "Season, then melt in the cream cheese and cilantro off the heat.",
+                               "Layer the beef in a baking dish and blanket it with the mash.",
+                               "Top with mozzarella, bake at 400F until browned, rest, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Potato",
+                                  "grams":  3422
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  160
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  686
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  78
+                              },
+                              {
+                                  "item":  "Parmesan Cheese",
+                                  "grams":  63
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  13
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  36
+                              },
+                              {
+                                  "item":  "93/7 Ground Beef",
+                                  "grams":  1270
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  13
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  154
+                              },
+                              {
+                                  "item":  "1/3 Fat Cream Cheese",
+                                  "grams":  487
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Chili Powder",
+                                  "grams":  22
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  18
+                              },
+                              {
+                                  "item":  "Reduced Fat Mozzarella",
+                                  "grams":  314
+                              }
+                          ]
+}

@@ -1,0 +1,323 @@
+﻿{
+    "name":  "Turkey Meatloaf with Mashed Potatoes",
+    "slug":  "turkey-meatloaf-with-mashed-potatoes",
+    "cuisine":  "American",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://thecozycook.com/turkey-meatloaf-recipe/",
+    "source_site":  "thecozycook.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 400g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Meatloaf is genuinely batch-scalable (three loaf pans or one sheet pan) and slices to weight. Catalog has meatballs but no meatloaf. Source verified at 8 servings, 323 cal / 34g protein for the loaf alone; add mashed potatoes and we are at ~590 cal / 40g. | HARVEST: Source recipe is the meatloaf ONLY - no mashed potato ingredients are published. Nutrition covers the meatloaf only, excludes any potato side.",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 400g (src scale)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  599,
+                 "protein":  32,
+                 "carbs":  62,
+                 "fat":  23,
+                 "cost_ps":  "1.54"
+             },
+    "intro_html":  "Meatloaf gets mocked, and meatloaf does not care. It is one of the few dinners that actually improves after a night in the fridge, and it slices to weight better than almost anything else you can cook. This one is turkey, bound with egg and bread crumbs, glazed with ketchup and barbecue sauce, served over rice. Each serving comes to 599 calories with \u003cstrong\u003e32 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$1.54\u003c/strong\u003e, one of the cheapest plates in the collection.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1.75 tbsp (24 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 (101 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 0.7 (80 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 tbsp (26 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 4 large eggs (175 g)",
+                                "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 1.25 cups (278 g)",
+                                "\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 1.25 tbsp (18 g)",
+                                "\u003cstrong\u003eKetchup (generic):\u003c/strong\u003e 1 cups (258 g)",
+                                "\u003cstrong\u003eBBQ Sauce (generic):\u003c/strong\u003e 1 cups (268 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1.75 tbsp (30 g)",
+                                "\u003cstrong\u003eBread Crumbs (generic):\u003c/strong\u003e 1.25 cups (126 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 7 oz (198 g)",
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Butter, 1.75 tbsp: ~$0.16. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Yellow Onion, 1: ~$0.25. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Green Bell Peppers, 0.7: ~$0.57. \u003cstrong\u003eBuy 1 each: $0.86.\u003c/strong\u003e",
+                       "Garlic, 3 tbsp: ~$0.37. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Eggs, 4 large eggs: ~$0.42. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
+                       "Heavy Cream, 1.25 cups: ~$1.73. \u003cstrong\u003eBuy 1 pint: $2.94.\u003c/strong\u003e",
+                       "Dijon Mustard, 1.25 tbsp: ~$0.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Ketchup, 1 cups: ~$0.44. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "BBQ Sauce, 1 cups: ~$1.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Worcestershire Sauce, 1.75 tbsp: ~$0.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Bread Crumbs, 1.25 cups: ~$0.36. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 7 oz: ~$1.51. \u003cstrong\u003eBuy 1 8oz bag: $1.73.\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 3.5 lb: ~$13.38. \u003cstrong\u003eBuy 4 lbs: $15.29.\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.10. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $21.51 across 14 servings, so roughly $1.54 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $30.07 across 14 servings, roughly $2.15 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.86 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $40.93. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.54 a serving\u003c/strong\u003e. Bread crumbs and egg stretch the turkey without watering down the protein, which is the entire reason meatloaf became a Depression-era staple in the first place.",
+    "shop_smart":  [
+                       "Ground turkey in the largest pack you can freeze is the single biggest lever on this recipe\u0027s price. Everything else in the pan costs pennies by comparison.",
+                       "Bread crumbs are the item people overpay for the most. A canister lasts many batches, and stale sandwich bread run through a food processor is free.",
+                       "Ketchup, barbecue sauce, Worcestershire, and Dijon are all shelf-stable for a year or more. Buy the store-brand bottles once and they will carry you through a dozen recipes.",
+                       "Rice bought in the big bag is the cheapest starch in the store per serving. There is no such thing as rice going bad on you before you use it."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Melt the butter in a skillet and cook the diced onion and green bell pepper for 5 minutes until soft, then add the garlic for one minute and let the mixture cool. Hot vegetables will start cooking the egg.",
+                    "In a large bowl, whisk the eggs with the heavy cream, Dijon mustard, Worcestershire sauce, salt, and black pepper, then stir in the bread crumbs and let them soak for 5 minutes.",
+                    "Add the ground turkey, the cooled vegetables, and the shredded cheddar. Mix with your hands only until it comes together. Overworking meatloaf turns it dense and rubbery.",
+                    "Divide the mixture between three loaf pans or shape it into three free-form loaves on a sheet pan. Smaller loaves cook faster and slice more evenly than one giant brick.",
+                    "Stir the ketchup and barbecue sauce together and brush half of it over the loaves, then bake at 350F for 45 to 55 minutes until the centers read 165F.",
+                    "Brush on the rest of the glaze and return the loaves for 10 minutes so it sets into a lacquer instead of running off.",
+                    "Cook the rice while the loaves rest at least 15 minutes, then slice the meatloaf and portion it over the rice."
+                ],
+    "portion_html":  "Weigh the rice and the sliced meatloaf together, subtract your empty pot weight, and divide by 14. Meatloaf slices look identical and weigh nothing alike, so let the scale settle it. Every serving comes to \u003cstrong\u003e599 calories\u003c/strong\u003e and 32 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://thecozycook.com/turkey-meatloaf-recipe/\" target=\"_blank\" rel=\"noopener\"\u003ethecozycook.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Meatloaf and a side for about $1.54 a serving, and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "cost_batch":  21.51,
+    "cost_batch_true":  30.07,
+    "cost_per_serving":  1.54,
+    "cost_per_serving_true":  2.15,
+    "cost_pantry_add":  10.86,
+    "cost_first_run":  40.93,
+    "scaler":  {
+                   "cost":  "30.07",
+                   "ing":  [
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  24,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  101,
+                                   "buy":  "1",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  80,
+                                   "buy":  "0.7",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  26,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  175,
+                                   "buy":  "4 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Heavy Cream",
+                                   "canon":  "Heavy Cream",
+                                   "grams":  278,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "heavy-cream",
+                                   "gpu":  "29.800"
+                               },
+                               {
+                                   "item":  "Dijon Mustard",
+                                   "canon":  "Dijon Mustard",
+                                   "grams":  18,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "dijon-mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ketchup",
+                                   "canon":  "Ketchup",
+                                   "grams":  258,
+                                   "buy":  "1 cups",
+                                   "bid":  "ketchup",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "BBQ Sauce",
+                                   "canon":  "BBQ Sauce",
+                                   "grams":  268,
+                                   "buy":  "1 cups",
+                                   "bid":  "bbq-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "canon":  "Worcestershire Sauce",
+                                   "grams":  30,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "worcestershire",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  8,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bread Crumbs",
+                                   "canon":  "Bread Crumbs",
+                                   "grams":  126,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "bread-crumbs",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "canon":  "Cheddar Cheese, Shredded",
+                                   "grams":  198,
+                                   "buy":  "7 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey meatloaf meal prep with a ketchup and BBQ glaze, served over rice. 599 calories, 32g protein, about $1.54 a serving across 14 containers.",
+                 "keywords":  "turkey meatloaf, ground turkey meal prep, budget dinner, meatloaf and mashed potatoes, high protein meal prep, cheap family dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT1H5M",
+                 "totalTime":  "PT1H30M",
+                 "costPerServing":  1.54,
+                 "recipeIngredient":  [
+                                          "3.5 lb 93/7 ground turkey",
+                                          "4 large eggs",
+                                          "1.25 cups bread crumbs",
+                                          "1.25 cups heavy cream",
+                                          "7 oz shredded cheddar cheese",
+                                          "1 cup ketchup",
+                                          "1 cup BBQ sauce",
+                                          "1.75 tbsp Worcestershire sauce",
+                                          "1.25 tbsp Dijon mustard",
+                                          "3.75 cups dry rice",
+                                          "1 yellow onion",
+                                          "0.7 green bell pepper",
+                                          "3 tbsp garlic"
+                                      ],
+                 "steps":  [
+                               "Cook the onion, bell pepper, and garlic in butter until soft, then cool.",
+                               "Whisk the eggs with cream, Dijon, Worcestershire, salt, and pepper, stir in the bread crumbs, and soak 5 minutes.",
+                               "Mix in the ground turkey, cooled vegetables, and cheddar by hand, then shape into three loaves.",
+                               "Glaze with half the ketchup and BBQ mixture and bake at 350F for 45 to 55 minutes to 165F, then glaze again and bake 10 minutes more.",
+                               "Cook the rice, rest the loaves 15 minutes, slice, and portion over rice into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Butter",
+                                  "grams":  24
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  101
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  80
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  26
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  175
+                              },
+                              {
+                                  "item":  "Heavy Cream",
+                                  "grams":  278
+                              },
+                              {
+                                  "item":  "Dijon Mustard",
+                                  "grams":  18
+                              },
+                              {
+                                  "item":  "Ketchup",
+                                  "grams":  258
+                              },
+                              {
+                                  "item":  "BBQ Sauce",
+                                  "grams":  268
+                              },
+                              {
+                                  "item":  "Worcestershire Sauce",
+                                  "grams":  30
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Bread Crumbs",
+                                  "grams":  126
+                              },
+                              {
+                                  "item":  "Cheddar Cheese, Shredded",
+                                  "grams":  198
+                              },
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

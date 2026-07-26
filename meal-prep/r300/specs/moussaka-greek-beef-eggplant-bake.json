@@ -1,0 +1,413 @@
+﻿{
+    "name":  "Moussaka (Greek Beef and Eggplant Bake)",
+    "slug":  "moussaka-greek-beef-eggplant-bake",
+    "cuisine":  "Greek",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.recipetineats.com/moussaka-greek-eggplant-beef-bake/",
+    "source_site":  "recipetineats.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 300g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Layered bake, cuts into exact squares, so 14 servings portions perfectly. Greek comfort-food benchmark and the bechamel top gives it a completely different mouth than Pastitsio (pasta) which is the only comparable live dish. Flagging eggplant as unpriceable today. Confidence: medium on calories. | HARVEST: Source groups ingredients under headers Eggplant / Filling / Bechamel Sauce / Topping; lines transcribed in published order.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 300g (src scale)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  706,
+                 "protein":  42,
+                 "carbs":  72,
+                 "fat":  28,
+                 "cost_ps":  "3.02"
+             },
+    "intro_html":  "Moussaka is the Greek answer to lasagna, except the layers are roasted eggplant instead of pasta and the top is a thick bechamel that puffs and browns in the oven. It bakes in one pan and cuts into clean squares, which is exactly what you want when you are portioning out a week. Each square lands at 706 calories and \u003cstrong\u003e42 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.02 a serving\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eEggplant:\u003c/strong\u003e 5 (2333 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 8.25 tbsp (110 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (257 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)",
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.25 lb (1482 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 5.75 cups (1400 g)",
+                                "\u003cstrong\u003eCrushed Tomatoes (generic):\u003c/strong\u003e 1.2 cans (926 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 7 tbsp (112 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 1.25 tbsp (15 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 0.5 cups (140 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 11.5 tbsp (93 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 5.75 cups (1429 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 3.75 oz (105 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 5 large eggs (233 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 0.06 cups (15 g)",
+                                "\u003cstrong\u003eBread Crumbs (generic):\u003c/strong\u003e 12 tbsp (84 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Eggplant, 5: ~$7.75. \u003cstrong\u003eBuy 5 each: $9.10.\u003c/strong\u003e",
+                       "Olive Oil, 8.25 tbsp: ~$1.55. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2.3: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "93/7 Ground Beef, 3.25 lb: ~$21.67. \u003cstrong\u003eBuy 4 lbs: $26.53.\u003c/strong\u003e",
+                       "Beef Broth, 5.75 cups: ~$1.88. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Crushed Tomatoes, 1.2 cans: ~$1.76. \u003cstrong\u003eBuy 2 28oz cans: $3.02.\u003c/strong\u003e",
+                       "Tomato Paste, 7 tbsp: ~$0.57. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "Sugar, 1.25 tbsp: ~$0.03. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Butter, 0.5 cups: ~$0.92. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "All-Purpose Flour, 11.5 tbsp: ~$0.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Milk, 5.75 cups: ~$1.14. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
+                       "Parmesan Cheese, 3.75 oz: ~$1.28. \u003cstrong\u003eBuy 1 8oz tub: $2.78.\u003c/strong\u003e",
+                       "Eggs, 5 large eggs: ~$0.55. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
+                       "Chicken Broth, 0.06 cups: ~$0.02. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Bread Crumbs, 12 tbsp: ~$0.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, bay leaves, dried oregano, ground cinnamon, ground nutmeg, black pepper): ~$0.86. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $42.32 across 14 servings, so roughly $3.02 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $56.97 across 14 servings, roughly $4.07 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $27.46 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $84.43. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.02 a serving\u003c/strong\u003e for a dish that takes real effort. This is a Sunday afternoon recipe, not a Tuesday night one, and the payoff is seven days of dinners that taste like somebody cared.",
+    "shop_smart":  [
+                       "Ground beef is the biggest line on the list, and it is the one to shop on sale. The eggplant is second, and eggplant prices swing hard by season, so a summer batch costs noticeably less than a January one.",
+                       "Crushed tomatoes and tomato paste do more work per dollar here than any fresh tomato could. The sauce simmers long enough that canned is the better ingredient, not just the cheaper one.",
+                       "The bechamel is flour, butter, and milk, which is the cheapest sauce in cooking. Parmesan and eggs give it the body and the color, and both are used in small amounts, so buy the packages and use the rest during the week.",
+                       "Bread crumbs on the bottom of the pan are not decoration. They soak up the liquid the eggplant gives off and keep the bottom layer from turning to soup, and a canister of them lasts through many batches."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Slice the eggplant into thick rounds, salt them, and let them sweat in a colander for 30 minutes. Pat them dry, brush with olive oil, and roast at 425F until soft and golden, about 25 minutes. This step is what keeps moussaka from turning watery.",
+                    "While the eggplant roasts, cook the onion in olive oil until soft, add the garlic, then brown the ground beef and break it up as it cooks.",
+                    "Stir in the crushed tomatoes, tomato paste, beef broth, sugar, cinnamon, oregano, bay leaves, salt, and pepper. Simmer until it thickens and most of the liquid is gone, about 30 minutes. A wet meat sauce makes a sloppy bake.",
+                    "Make the bechamel. Melt the butter, whisk in the flour and cook it for two minutes, then add the milk slowly while whisking until it thickens. Off the heat, stir in the parmesan and nutmeg, then temper in the beaten eggs so they do not scramble.",
+                    "Scatter bread crumbs across the bottom of a large baking dish, then layer roasted eggplant, meat sauce, more eggplant, and pour the bechamel over the top so it reaches every corner.",
+                    "Bake at 350F for 45 minutes, until the top is set and browned in patches. Let it rest at least 30 minutes before cutting. Cut it hot and the layers slide apart.",
+                    "Cook the rice while the bake rests and put a scoop in the bottom of each container to round the meal out."
+                ],
+    "portion_html":  "Weigh the finished bake in its dish, subtract the empty dish weight, and divide by 14 to get your target. Easier still, score the top into 14 even squares before you cut, then check a couple of them on the scale to confirm you are close. Either way each portion comes in at \u003cstrong\u003e706 calories\u003c/strong\u003e and holds its shape in the container all week.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.recipetineats.com/moussaka-greek-eggplant-beef-bake/\" target=\"_blank\" rel=\"noopener\"\u003erecipetineats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A layered Greek bake for about \u003cstrong\u003e$3.02 a serving\u003c/strong\u003e, which is less than the drink that comes with it at a restaurant. Members get the entire Meal Prep library plus every money lesson and calculator on the site for $1 a month.",
+    "cost_batch":  42.32,
+    "cost_batch_true":  56.97,
+    "cost_per_serving":  3.02,
+    "cost_per_serving_true":  4.07,
+    "cost_pantry_add":  27.46,
+    "cost_first_run":  84.43,
+    "scaler":  {
+                   "cost":  "56.97",
+                   "ing":  [
+                               {
+                                   "item":  "Eggplant",
+                                   "canon":  "Eggplant",
+                                   "grams":  2333,
+                                   "buy":  "5",
+                                   "bid":  "eggplant",
+                                   "gpu":  "548.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  24,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  110,
+                                   "buy":  "8.25 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  257,
+                                   "buy":  "2.3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  35,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "canon":  "93/7 Ground Beef",
+                                   "grams":  1482,
+                                   "buy":  "3.25 lb",
+                                   "bid":  "ground-beef-8020",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  1400,
+                                   "buy":  "5.75 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Crushed Tomatoes",
+                                   "canon":  "Crushed Tomatoes",
+                                   "grams":  926,
+                                   "buy":  "1.2 cans",
+                                   "bid":  "crushed-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  112,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  3,
+                                   "buy":  "0.11 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  15,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  5,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cinnamon",
+                                   "canon":  "Ground Cinnamon",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "ground-cinnamon",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  140,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  93,
+                                   "buy":  "11.5 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  1429,
+                                   "buy":  "5.75 cups",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "Ground Nutmeg",
+                                   "canon":  "Ground Nutmeg",
+                                   "grams":  1,
+                                   "buy":  "0.04 oz",
+                                   "bid":  "ground-nutmeg",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "canon":  "Parmesan Cheese",
+                                   "grams":  105,
+                                   "buy":  "3.75 oz",
+                                   "bid":  "parmesan",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  233,
+                                   "buy":  "5 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  15,
+                                   "buy":  "0.06 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bread Crumbs",
+                                   "canon":  "Bread Crumbs",
+                                   "grams":  84,
+                                   "buy":  "12 tbsp",
+                                   "bid":  "bread-crumbs",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Greek moussaka with roasted eggplant, spiced beef, and a thick bechamel top, rebuilt for 14 meal prep servings at about $3.02 a serving.",
+                 "keywords":  "moussaka recipe, greek eggplant beef bake, bechamel casserole, greek meal prep, budget casserole, make ahead dinner, high protein bake",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT45M",
+                 "cookTime":  "PT1H30M",
+                 "totalTime":  "PT2H15M",
+                 "costPerServing":  3.02,
+                 "recipeIngredient":  [
+                                          "5 eggplants",
+                                          "8.25 tbsp olive oil",
+                                          "3.25 lb 93/7 ground beef",
+                                          "2.3 yellow onions",
+                                          "4 tbsp minced garlic",
+                                          "1.2 cans crushed tomatoes",
+                                          "7 tbsp tomato paste",
+                                          "3 lb beef broth",
+                                          "0.5 cups butter",
+                                          "11.5 tbsp all-purpose flour",
+                                          "5.75 cups milk",
+                                          "3.75 oz parmesan cheese",
+                                          "5 large eggs"
+                                      ],
+                 "steps":  [
+                               "Salt, dry, oil, and roast the eggplant slices at 425F until golden.",
+                               "Brown the beef with onion and garlic, then simmer with tomatoes, paste, broth, and spices until thick.",
+                               "Make a bechamel from butter, flour, and milk, then finish it with parmesan and tempered eggs.",
+                               "Layer bread crumbs, eggplant, meat sauce, and eggplant in a large dish and pour the bechamel over the top.",
+                               "Bake at 350F for 45 minutes and rest 30 minutes before cutting into 14 portions."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Eggplant",
+                                  "grams":  2333
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  24
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  110
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  257
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "93/7 Ground Beef",
+                                  "grams":  1482
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  1400
+                              },
+                              {
+                                  "item":  "Crushed Tomatoes",
+                                  "grams":  926
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  112
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Ground Cinnamon",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  93
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  1429
+                              },
+                              {
+                                  "item":  "Ground Nutmeg",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Parmesan Cheese",
+                                  "grams":  105
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  233
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Bread Crumbs",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

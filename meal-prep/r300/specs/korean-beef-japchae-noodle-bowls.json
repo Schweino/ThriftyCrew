@@ -1,0 +1,326 @@
+﻿{
+    "name":  "Korean Beef Japchae Noodle Bowls",
+    "slug":  "korean-beef-japchae-noodle-bowls",
+    "cuisine":  "Korean",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.recipetineats.com/japchae-korean-noodles/",
+    "source_site":  "recipetineats.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Mixes in one giant bowl and holds cold or warm, which is ideal meal-prep behavior. Everything but the noodle itself is tracked. Protein needs the beef ratio pushed up from the source\u0027s proportion to clear 25g. | HARVEST: The first three lines are alternative beef options (choose one), not cumulative. Source sections: Beef option (3), Beef marinade (4), Noodle dressing (6), Noodles \u0026 vegetables (10).",
+                         "SOURCE YIELD: 5 servings, rebuilt to 14.",
+                         "OVERRIDE Beef Chuck Roast: WAVE-4: harvest note - the 3 beef lines are CHOOSE-ONE alternatives; the short-rib pair is dropped, flank kept per the dish",
+                         "OVERRIDE Beef Flank/Sirloin Steak: WAVE-4 + [BUMP x2.27]: the kept choose-one line (300 g steak) raised to 1.5 lb for 5 so the dish carries the 25 g floor alone",
+                         "NAME IT RIGHT: call \"Rice Noodles\" -\u003e \"Korean glass noodles (dangmyeon)\" in every sentence; the canonical name is a macro/pricing basis only."
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  621,
+                 "protein":  40,
+                 "carbs":  56,
+                 "fat":  28,
+                 "cost_ps":  "4.79"
+             },
+    "intro_html":  "Japchae is the dish that shows up at every Korean celebration, and the noodle is the whole reason. Dangmyeon, the Korean glass noodles made from sweet potato starch, turn chewy and translucent instead of soft, and they refuse to go mushy in the fridge. That is a rare quality in a noodle and it makes this one of the better things you can pack into a container. Everything gets cooked separately, then tossed together in one enormous bowl with sesame oil and soy. It eats well warm, and it eats just as well cold straight out of the fridge.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 4.25 lb (1904 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.75 cups (208 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 3.75 tbsp (47 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.25 tbsp (20 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 4.25 tbsp (57 g)",
+                                "\u003cstrong\u003eKorean glass noodles (dangmyeon):\u003c/strong\u003e 24.75 oz dry (700 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.75 cups (157 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 (308 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 2.5 cups (126 g)",
+                                "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 1.25 lb (560 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 5.6 (342 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3 (336 g)",
+                                "\u003cstrong\u003eFrozen Chopped Spinach (generic):\u003c/strong\u003e 2.25 lb (1071 g)",
+                                "\u003cstrong\u003eToasted Sesame Seeds (generic):\u003c/strong\u003e 5.5 tbsp (50 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Flank/Sirloin Steak, 4.25 lb: ~$37.02. \u003cstrong\u003eBuy 5 lbs: $44.10.\u003c/strong\u003e",
+                       "Soy Sauce, 0.75 cups: ~$0.79. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sugar, 3.75 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 2.25 tbsp: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Sesame Oil, 4.25 tbsp: ~$1.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Korean glass noodles (dangmyeon), 24.75 oz dry: ~$8.40. \u003cstrong\u003eBuy 2 14oz boxes: $9.52.\u003c/strong\u003e",
+                       "Vegetable Oil, 0.75 cups: ~$0.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 3: ~$0.77. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Green Onions, 2.5 cups: ~$1.50. \u003cstrong\u003eBuy 2 bunches: $2.14.\u003c/strong\u003e",
+                       "White Mushrooms, 1.25 lb: ~$4.67. \u003cstrong\u003eBuy 3 8oz packs: $5.67.\u003c/strong\u003e",
+                       "Carrots, 5.6: ~$0.72. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Red Bell Pepper, 3: ~$2.41. \u003cstrong\u003eBuy 3 each: $2.58.\u003c/strong\u003e",
+                       "Frozen Chopped Spinach, 2.25 lb: ~$7.56. \u003cstrong\u003eBuy 4 10oz boxes: $8.01.\u003c/strong\u003e",
+                       "Toasted Sesame Seeds, 5.5 tbsp: ~$0.96. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, salt): ~$0.32. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $67.07 across 14 servings, so roughly $4.79 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $78.42 across 14 servings, roughly $5.60 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.90 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $93.32. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.79 a bowl\u003c/strong\u003e, which makes this the most expensive recipe in the batch. Japchae is a celebration dish and the beef and mushrooms are where that shows up.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eThis is the priciest bowl in the batch and the beef is why.\u003c/strong\u003e Cutting the beef back and letting the vegetables carry more of the volume brings the number down fast, which is closer to how japchae is traditionally proportioned anyway.",
+                       "\u003cstrong\u003eDangmyeon comes in big packs and keeps forever.\u003c/strong\u003e Korean glass noodles are shelf stable for a very long time, so buying the large bag once covers several batches with no waste risk.",
+                       "\u003cstrong\u003eMushrooms are the second big line.\u003c/strong\u003e Whole white mushrooms cost less per pound than pre-sliced, and slicing a few packs takes about five minutes.",
+                       "\u003cstrong\u003eFrozen spinach saves real money over fresh.\u003c/strong\u003e Fresh spinach cooks down to almost nothing, so you would be buying several bags to get the same weight the frozen box gives you."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Slice the beef thin against the grain and marinate it with some of the soy sauce, sugar, garlic, sesame oil, and black pepper for at least twenty minutes.",
+                    "Boil the Korean glass noodles until chewy and translucent, drain, rinse briefly, then cut through the pile a few times with scissors so they are manageable.",
+                    "Toss the drained glass noodles with the remaining soy sauce, sugar, and sesame oil while still warm so they absorb the dressing.",
+                    "Thaw and squeeze the frozen chopped spinach dry, then season it lightly with salt and sesame oil.",
+                    "Cook the vegetables separately in the vegetable oil, one type at a time, so each keeps its own texture and color: onions, then carrots, then red bell peppers, then mushrooms.",
+                    "Sear the marinated beef in the hot pan last, in batches, until browned and just cooked through.",
+                    "Combine the dressed glass noodles, all the vegetables, the spinach, and the beef in your biggest bowl, toss thoroughly with your hands or tongs, and finish with the green onions and toasted sesame seeds."
+                ],
+    "portion_html":  "Set the full bowl on the scale, subtract the empty weight from Step 1, and divide by 14. Toss hard right before you weigh, because the noodles sink and the vegetables float, and a scoop off the top is not the same as a scoop from the bottom. Every serving comes in at \u003cstrong\u003e621 calories with 40 grams of protein\u003c/strong\u003e, which is the highest protein number in the batch.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.recipetineats.com/japchae-korean-noodles/\" target=\"_blank\" rel=\"noopener\"\u003erecipetineats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Even the celebration dishes land near $4.79 a bowl here, and most of the library costs a fraction of that. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  67.07,
+    "cost_batch_true":  78.42,
+    "cost_per_serving":  4.79,
+    "cost_per_serving_true":  5.6,
+    "cost_pantry_add":  14.9,
+    "cost_first_run":  93.32,
+    "scaler":  {
+                   "cost":  "78.42",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Flank/Sirloin Steak",
+                                   "canon":  "Beef Flank/Sirloin Steak",
+                                   "grams":  1904,
+                                   "buy":  "4.25 lb",
+                                   "bid":  "sirloin-steak",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  208,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  47,
+                                   "buy":  "3.75 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  20,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  6,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "canon":  "Sesame Oil",
+                                   "grams":  57,
+                                   "buy":  "4.25 tbsp",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  25,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Korean glass noodles (dangmyeon)",
+                                   "canon":  "Rice Noodles",
+                                   "grams":  700,
+                                   "buy":  "24.75 oz dry",
+                                   "bid":  "rice-noodles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  157,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  308,
+                                   "buy":  "3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  126,
+                                   "buy":  "2.5 cups",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "White Mushrooms",
+                                   "canon":  "White Mushrooms",
+                                   "grams":  560,
+                                   "buy":  "1.25 lb",
+                                   "bid":  "mushrooms",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  342,
+                                   "buy":  "5.6",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "canon":  "Red Bell Pepper",
+                                   "grams":  336,
+                                   "buy":  "3",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Frozen Chopped Spinach",
+                                   "canon":  "Frozen Chopped Spinach",
+                                   "grams":  1071,
+                                   "buy":  "2.25 lb",
+                                   "bid":  "spinach",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Toasted Sesame Seeds",
+                                   "canon":  "Toasted Sesame Seeds",
+                                   "grams":  50,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "toasted-sesame-seeds",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Korean beef japchae rebuilt for 14-serving meal prep: chewy dangmyeon glass noodles tossed with beef, mushrooms, spinach, and peppers. 621 calories, 40g protein, about $4.79 per serving.",
+                 "keywords":  "japchae, korean glass noodles, dangmyeon, korean beef noodles, korean meal prep, high protein noodle bowls",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT35M",
+                 "cookTime":  "PT35M",
+                 "totalTime":  "PT70M",
+                 "costPerServing":  4.79,
+                 "recipeIngredient":  [
+                                          "5.5 lb beef chuck roast",
+                                          "1.75 lb beef steak",
+                                          "24.75 oz dry Korean glass noodles (dangmyeon)",
+                                          "12.5 cups frozen chopped spinach",
+                                          "8 cups white mushrooms",
+                                          "5.6 carrots",
+                                          "3 red bell peppers",
+                                          "3 yellow onions",
+                                          "2.5 cups green onions",
+                                          "0.75 cups soy sauce",
+                                          "4.25 tbsp sesame oil",
+                                          "3.75 tbsp sugar",
+                                          "5.5 tbsp toasted sesame seeds"
+                                      ],
+                 "steps":  [
+                               "Slice the beef thin and marinate it in soy sauce, sugar, garlic, and sesame oil.",
+                               "Boil the Korean glass noodles until chewy, drain, and dress them warm with soy sauce and sesame oil.",
+                               "Squeeze the frozen spinach dry and season it.",
+                               "Cook the onions, carrots, peppers, and mushrooms separately so each keeps its texture.",
+                               "Sear the marinated beef in batches.",
+                               "Toss everything together with green onions and sesame seeds, then portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Flank/Sirloin Steak",
+                                  "grams":  1904
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  208
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Sesame Oil",
+                                  "grams":  57
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  25
+                              },
+                              {
+                                  "item":  "Rice Noodles",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  157
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  308
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  126
+                              },
+                              {
+                                  "item":  "White Mushrooms",
+                                  "grams":  560
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  342
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  336
+                              },
+                              {
+                                  "item":  "Frozen Chopped Spinach",
+                                  "grams":  1071
+                              },
+                              {
+                                  "item":  "Toasted Sesame Seeds",
+                                  "grams":  50
+                              }
+                          ]
+}

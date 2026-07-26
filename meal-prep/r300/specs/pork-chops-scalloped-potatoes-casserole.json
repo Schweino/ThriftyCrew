@@ -1,0 +1,205 @@
+﻿{
+    "name":  "Pork Chops and Scalloped Potatoes Casserole",
+    "slug":  "pork-chops-scalloped-potatoes-casserole",
+    "cuisine":  "American",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://bakeatmidnite.com/pork-chops-scalloped-potatoes-casserole/",
+    "source_site":  "bakeatmidnite.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Potato)",
+                   "portion factor 1.15"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Source verified at 399 cal / 37g protein per serving over 6 servings; adding cheese and a slightly heavier potato layer brings it to 500+ with protein intact. Six cheap tracked ingredients. Distinct from the live Cheesy Pork Chop and Hash Brown Casserole (sliced fresh potatoes in cream sauce rather than frozen hash browns) - worth a dedup ruling. | HARVEST: Slow cooker variation also given on the page.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Potato)",
+                         "TUNING: portion factor 1.15"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  573,
+                 "protein":  49,
+                 "carbs":  44,
+                 "fat":  22,
+                 "cost_ps":  "1.98"
+             },
+    "intro_html":  "Scalloped potatoes with a pork chop on top is a dish that has been feeding families in this part of the country for about a hundred years, and the reason is simple. Thin sliced potatoes, onion, and a creamy sauce that comes together from a can of soup and some milk, all baked slowly until the potatoes are tender and the top edges go brown and crusty. Six ingredients. The pork drips down into the potatoes the whole time it bakes, and that is the entire secret.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Chops:\u003c/strong\u003e 6 lb (2737 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.4 (376 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 5.25 tbsp (75 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 13.6 (2891 g)",
+                                "\u003cstrong\u003eCream of Mushroom Soup (Campbell\u0027s (USDA SR)):\u003c/strong\u003e 2.7 cans (818 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 3.25 cups (822 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Chops, 6 lb: ~$19.73. \u003cstrong\u003eBuy 7 lbs: $22.89.\u003c/strong\u003e",
+                       "Yellow Onion, 3.4: ~$0.95. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Butter, 5.25 tbsp: ~$0.49. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Potato, 13.6: ~$3.62. \u003cstrong\u003eBuy 7 lbs: $3.98.\u003c/strong\u003e",
+                       "Cream of Mushroom Soup, 2.7 cans: ~$2.03. \u003cstrong\u003eBuy 3 10.5oz cans: $2.22.\u003c/strong\u003e",
+                       "Milk, 3.25 cups: ~$0.66. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.28. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $27.76 across 14 servings, so roughly $1.98 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $36.51 across 14 servings, roughly $2.61 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.44 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $41.95. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.98 a bowl\u003c/strong\u003e. Potatoes, onion, milk and a can of soup are close to free, so nearly all of that number is the pork chops.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eSlice the potatoes fresh instead of buying frozen scalloped kits.\u003c/strong\u003e The boxed and frozen versions cost several times more per serving and the sliced-by-hand version bakes up better.",
+                       "\u003cstrong\u003eBone-in chops cost less per pound and stay juicier through the bake.\u003c/strong\u003e That is a rare case of the cheaper option also being the better one.",
+                       "\u003cstrong\u003eStore brand cream of mushroom soup, bought by the multipack.\u003c/strong\u003e It is the same soup and it is baked into a cream sauce anyway.",
+                       "\u003cstrong\u003eSlice the potatoes thin and even.\u003c/strong\u003e A mandoline or a steady hand and a sharp knife. Even slices cook at the same rate, which means no crunchy surprises and no wasted oven time."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Heat the oven to 350F and butter a large deep baking dish.",
+                    "Peel the potatoes and slice them thin and even, and slice the onion thin as well.",
+                    "Whisk the cream of mushroom soup with the milk until it is smooth, and season it with salt and black pepper.",
+                    "Layer half the potatoes and half the onion in the dish, pour over half the sauce, then repeat with the rest and dot the top with the butter.",
+                    "Season the pork chops with salt and black pepper, brown them quickly in a hot skillet for color, and lay them on top of the potatoes.",
+                    "Cover with foil and bake for about 75 minutes, then uncover for 20 minutes more until the potatoes are tender all the way through and the top has browned."
+                ],
+    "portion_html":  "Weigh the finished casserole in its dish, subtract the dish weight, divide by 14, and cut portions to that exact weight so every container gets the same ratio of chop to potato. Every serving lands near 573 calories with 49 grams of protein, which is a lot of protein for a dollar and change.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://bakeatmidnite.com/pork-chops-scalloped-potatoes-casserole/\" target=\"_blank\" rel=\"noopener\"\u003ebakeatmidnite.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cem\u003eScalloped potatoes and pork chops for about $1.98 a serving. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "cost_batch":  27.76,
+    "cost_batch_true":  36.51,
+    "cost_per_serving":  1.98,
+    "cost_per_serving_true":  2.61,
+    "cost_pantry_add":  5.44,
+    "cost_first_run":  41.95,
+    "scaler":  {
+                   "cost":  "36.51",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Chops",
+                                   "canon":  "Pork Chops",
+                                   "grams":  2737,
+                                   "buy":  "6 lb",
+                                   "bid":  "pork-chops",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  376,
+                                   "buy":  "3.4",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  75,
+                                   "buy":  "5.25 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  2891,
+                                   "buy":  "13.6",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cream of Mushroom Soup",
+                                   "canon":  "Cream of Mushroom Soup",
+                                   "grams":  818,
+                                   "buy":  "2.7 cans",
+                                   "bid":  "cream-of-mushroom-soup",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  822,
+                                   "buy":  "3.25 cups",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  23,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  5,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Pork chops baked on top of thin sliced scalloped potatoes in a creamy onion sauce. A six ingredient 14 serving casserole built for cheap meal prep.",
+                 "keywords":  "pork chops and scalloped potatoes, potato casserole recipe, cream of mushroom bake, pork chop dinner, budget meal prep, cheap dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT1H35M",
+                 "totalTime":  "PT2H",
+                 "costPerServing":  1.98,
+                 "recipeIngredient":  [
+                                          "Pork Chops",
+                                          "Potato",
+                                          "Yellow Onion",
+                                          "Cream of Mushroom Soup",
+                                          "Milk",
+                                          "Butter"
+                                      ],
+                 "steps":  [
+                               "Heat the oven to 350F and butter a large deep baking dish.",
+                               "Slice the potatoes and onion thin and even.",
+                               "Whisk the cream of mushroom soup with the milk and season it.",
+                               "Layer potatoes, onion and sauce twice, then dot with butter.",
+                               "Brown the seasoned pork chops, set them on top, and bake covered 75 minutes then uncovered 20."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Pork Chops",
+                                  "grams":  2737
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  376
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  75
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  2891
+                              },
+                              {
+                                  "item":  "Cream of Mushroom Soup",
+                                  "grams":  818
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  822
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  23
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  5
+                              }
+                          ]
+}

@@ -1,0 +1,326 @@
+﻿{
+    "name":  "Korean Turkey Japchae",
+    "slug":  "korean-turkey-japchae",
+    "cuisine":  "korean",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://drivemehungry.com/japchae-korean-glass-noodles/",
+    "source_site":  "drivemehungry.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Sweet-savory noodle-and-vegetable toss; vegetable-heavy so cost per serving stays low. Verified source: full recipe, 4 servings, 419 cal / 10g protein, vegetarian as written with a note that meat proteins can be added. Confidence note: the turkey is entirely our addition, so protein and calories both move - treat the source numbers as a floor, not a match. | HARVEST: Source japchae is meatless; turkey is our addition, so published nutrition excludes meat.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "OVERRIDE +93/7 Ground Turkey: ADD title protein: source japchae is egg+vegetable only; turkey version = 1 lb for 4",
+                         "NAME IT RIGHT: call \"Cornstarch\" -\u003e \"Korean glass noodles (dangmyeon)\" in every sentence; the canonical name is a macro/pricing basis only."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "cornstarch",
+                                  "corn starch"
+                              ],
+    "stat":  {
+                 "cal":  609,
+                 "protein":  29,
+                 "carbs":  68,
+                 "fat":  23,
+                 "cost_ps":  "2.58"
+             },
+    "intro_html":  "Japchae is the Korean party dish, sweet potato glass noodles tossed with vegetables in sesame and soy until every strand goes glossy. Those noodles are called dangmyeon and they are the reason this holds up in a container: they stay chewy and springy for days instead of going mushy the way wheat noodles do. We add turkey to turn a side dish into dinner, at \u003cstrong\u003e609 calories and 29 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.58\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eKorean glass noodles (dangmyeon):\u003c/strong\u003e 6.25 cups (794 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 7 large eggs (350 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 7 tbsp (98 g)",
+                                "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 13.25 oz (378 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.6 (175 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3.5 (420 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 2 (126 g)",
+                                "\u003cstrong\u003eFrozen Chopped Spinach (generic):\u003c/strong\u003e 2 lb (892 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6 tbsp (52 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 17.5 tbsp (105 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 cups (224 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 7 tbsp (94 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 5.25 tbsp (71 g)",
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.5 lb (1589 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Korean glass noodles (dangmyeon), 6.25 cups: ~$3.36. \u003cstrong\u003ePantry staple; this batch alone uses about 2 16oz boxes.\u003c/strong\u003e",
+                       "Eggs, 7 large eggs: ~$0.83. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
+                       "Vegetable Oil, 7 tbsp: ~$0.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "White Mushrooms, 13.25 oz: ~$3.15. \u003cstrong\u003eBuy 2 8oz packs: $3.78.\u003c/strong\u003e",
+                       "Yellow Onion, 1.6: ~$0.44. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Red Bell Pepper, 3.5: ~$3.01. \u003cstrong\u003eBuy 4 each: $3.44.\u003c/strong\u003e",
+                       "Carrots, 2: ~$0.27. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Frozen Chopped Spinach, 2 lb: ~$6.29. \u003cstrong\u003eBuy 4 10oz boxes: $8.01.\u003c/strong\u003e",
+                       "Garlic, 6 tbsp: ~$0.75. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Green Onions, 17.5 tbsp: ~$1.25. \u003cstrong\u003eBuy 2 bunches: $2.14.\u003c/strong\u003e",
+                       "Soy Sauce, 1 cups: ~$0.85. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Brown Sugar, 7 tbsp: ~$0.53. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sesame Oil, 5.25 tbsp: ~$1.49. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 3.5 lb: ~$13.39. \u003cstrong\u003eBuy 4 lbs: $15.29.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $36.08 across 14 servings, so roughly $2.58 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $44.03 across 14 servings, roughly $3.14 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.69 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.72. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.58\u003c/strong\u003e a bowl for a dish Koreans traditionally save for birthdays and holidays. Nothing about it is hard, it just looks like it took effort, which is the best kind of cooking.",
+    "shop_smart":  [
+                       "Korean glass noodles come in a big bag that covers this batch several times over for a small share of the batch. Find them at an Asian market where a large pack costs less than the small grocery store box.",
+                       "Frozen chopped spinach is the second biggest line. Fresh spinach would cost several times more for the same cooked volume, since it wilts down to almost nothing.",
+                       "Red bell peppers are one of the pricier produce lines. Buy them in the seasonal window or swap in whatever pepper is cheapest that week, because in a dish this heavily sauced the color matters more than the variety.",
+                       "Sesame oil is the signature flavor and one bottle lasts many batches. Buy the toasted kind, keep it in the fridge so it does not go rancid, and use it as a finisher rather than a cooking oil."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Boil the Korean glass noodles (dangmyeon) for 6 to 7 minutes until springy, drain them, rinse them cold, and cut through the pile a few times with scissors so they are eatable with a fork.",
+                    "Beat the eggs, cook them thin in an oiled pan like a flat omelet, slide it out, and slice it into ribbons for the top.",
+                    "Whisk the sauce: soy sauce, brown sugar, sesame oil, and the minced garlic. Set it aside where you can reach it.",
+                    "Heat the vegetable oil in a wide pan and brown the ground turkey, breaking it up, until it is cooked through to 165F, then move it to a bowl.",
+                    "Stir-fry the vegetables in stages so each one keeps its own texture: mushrooms first, then onion and carrot, then red bell pepper, then the thawed and squeezed spinach. Move each batch to the bowl as it finishes.",
+                    "Return everything to the pan with the noodles, pour the sauce over, and toss over medium heat for 3 minutes until the noodles turn dark and glossy and every strand is coated.",
+                    "Kill the heat, fold in the green onions, and move it into your weighed pot."
+                ],
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is your per-container gram target. Use tongs and lift from the bottom so the vegetables and turkey ride along with the noodles, then lay the egg ribbons across the top of each. Every serving lands at \u003cstrong\u003e609 calories and 29 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://drivemehungry.com/japchae-korean-glass-noodles/\" target=\"_blank\" rel=\"noopener\"\u003edrivemehungry.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Korean japchae for about \u003cstrong\u003e$2.58\u003c/strong\u003e a bowl. This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  36.08,
+    "cost_batch_true":  44.03,
+    "cost_per_serving":  2.58,
+    "cost_per_serving_true":  3.14,
+    "cost_pantry_add":  15.69,
+    "cost_first_run":  59.72,
+    "scaler":  {
+                   "cost":  "44.03",
+                   "ing":  [
+                               {
+                                   "item":  "Korean glass noodles (dangmyeon)",
+                                   "canon":  "Cornstarch",
+                                   "grams":  794,
+                                   "buy":  "6.25 cups",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  350,
+                                   "buy":  "7 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  98,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "White Mushrooms",
+                                   "canon":  "White Mushrooms",
+                                   "grams":  378,
+                                   "buy":  "13.25 oz",
+                                   "bid":  "mushrooms",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  175,
+                                   "buy":  "1.6",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "canon":  "Red Bell Pepper",
+                                   "grams":  420,
+                                   "buy":  "3.5",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  126,
+                                   "buy":  "2",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Frozen Chopped Spinach",
+                                   "canon":  "Frozen Chopped Spinach",
+                                   "grams":  892,
+                                   "buy":  "2 lb",
+                                   "bid":  "spinach",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  52,
+                                   "buy":  "6 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  105,
+                                   "buy":  "17.5 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  224,
+                                   "buy":  "1 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "canon":  "Brown Sugar",
+                                   "grams":  94,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "canon":  "Sesame Oil",
+                                   "grams":  71,
+                                   "buy":  "5.25 tbsp",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1589,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Korean turkey japchae meal prep: sweet potato glass noodles tossed with turkey, spinach, mushrooms, and peppers in sesame soy. 609 calories, 29g protein, about $2.58.",
+                 "keywords":  "japchae, korean glass noodles, dangmyeon, turkey meal prep, budget meal prep, sesame soy noodles",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT1H",
+                 "costPerServing":  2.58,
+                 "recipeIngredient":  [
+                                          "3.5 lb 93/7 ground turkey",
+                                          "6.25 cups Korean glass noodles (dangmyeon)",
+                                          "10.5 cups frozen chopped spinach",
+                                          "5.5 cups white mushrooms",
+                                          "3.5 red bell peppers",
+                                          "2 carrots",
+                                          "1.6 yellow onions",
+                                          "7 large eggs",
+                                          "1 cup soy sauce",
+                                          "7 tbsp brown sugar",
+                                          "5.25 tbsp sesame oil",
+                                          "6 tbsp garlic",
+                                          "17.5 tbsp green onions"
+                                      ],
+                 "steps":  [
+                               "Boil the Korean glass noodles 6 to 7 minutes, rinse cold, and cut them shorter.",
+                               "Cook the beaten eggs into a thin omelet and slice into ribbons.",
+                               "Whisk soy sauce, brown sugar, sesame oil, and garlic into a sauce.",
+                               "Brown the ground turkey to 165F, then stir-fry the mushrooms, onion, carrot, pepper, and spinach in stages.",
+                               "Toss everything with the noodles and sauce over medium heat for 3 minutes.",
+                               "Fold in green onions, portion by weight into 14 containers, and top with egg ribbons."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Cornstarch",
+                                  "grams":  794
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  350
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "White Mushrooms",
+                                  "grams":  378
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  175
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  126
+                              },
+                              {
+                                  "item":  "Frozen Chopped Spinach",
+                                  "grams":  892
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  105
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  224
+                              },
+                              {
+                                  "item":  "Brown Sugar",
+                                  "grams":  94
+                              },
+                              {
+                                  "item":  "Sesame Oil",
+                                  "grams":  71
+                              },
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1589
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

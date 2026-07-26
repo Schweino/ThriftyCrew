@@ -1,0 +1,320 @@
+﻿{
+    "name":  "Beijing Zha Jiang Mian Pork Noodles",
+    "slug":  "beijing-zha-jiang-mian-pork-noodles",
+    "cuisine":  "Chinese (Beijing)",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://thewoksoflife.com/beijing-fried-sauce-noodles-zha-jiang-mian/",
+    "source_site":  "thewoksoflife.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Lo Mein Noodles)",
+                   "portion factor 1.4",
+                   "protein +15% (Pork Shoulder)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: A meat sauce for noodles, which is the single most batch-friendly structure in the catalog (make sauce once, portion over noodles). Distinct from the live Dan Dan Noodles and Spicy Pork Noodles: this is a savory fermented-bean brown sauce with raw cucumber, not sesame or chili oil. Source publishes 410 cal / 7g protein for SAUCE ONLY on a pork belly build; needs ground pork and a bigger meat ratio. Confidence: est numbers are mine, not the source\u0027s. Two bean pastes have no board home. | HARVEST: Published nutrition covers the sauce only, excluding noodles and toppings.",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Lo Mein Noodles)",
+                         "TUNING: portion factor 1.4",
+                         "TUNING: protein +15% (Pork Shoulder)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  598,
+                 "protein":  25,
+                 "carbs":  68,
+                 "fat":  26,
+                 "cost_ps":  "1.72"
+             },
+    "intro_html":  "Zha jiang mian is Beijing comfort food, and it is built exactly the way a meal prepper would design it if you handed them the job. You make one pot of thick, salty, savory brown pork sauce. It sits in the fridge and gets better. Noodles go under it, cool raw cucumber and carrot go on top, and that hot-and-crunchy contrast is the whole point of the dish. If you have had dan dan noodles, this is not that. No sesame, no chili oil, just deep fermented flavor that tastes like it took all day.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Shoulder (generic (USDA)):\u003c/strong\u003e 2.75 lb (1286 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.75 cups (178 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 4.5 cups (220 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 6.25 tbsp (37 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 0.75 cups (157 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 3.75 tbsp (59 g)",
+                                "\u003cstrong\u003eHoisin Sauce (generic):\u003c/strong\u003e 1 cups (274 g)",
+                                "\u003cstrong\u003eLo Mein Noodles (Simply Asia):\u003c/strong\u003e 35.25 oz dry (998 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 4.4 (269 g)",
+                                "\u003cstrong\u003eCucumber:\u003c/strong\u003e 1 (255 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5.75 tbsp (49 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Shoulder, 2.75 lb: ~$10.12. \u003cstrong\u003eBuy 3 lbs: $10.71.\u003c/strong\u003e",
+                       "Vegetable Oil, 0.75 cups: ~$0.43. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Onions, 4.5 cups: ~$2.62. \u003cstrong\u003eBuy 3 bunches: $3.21.\u003c/strong\u003e",
+                       "Ginger, 6.25 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Chicken Broth, 0.75 cups: ~$0.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 3.75 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Hoisin Sauce, 1 cups: ~$2.51. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lo Mein Noodles, 35.25 oz dry: ~$3.83. \u003cstrong\u003eBuy 3 14oz packs: $4.57.\u003c/strong\u003e",
+                       "Carrots, 4.4: ~$0.57. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Cucumber, 1: ~$0.65. \u003cstrong\u003eBuy 1 each: $0.76.\u003c/strong\u003e",
+                       "Garlic, 5.75 tbsp: ~$0.71. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Pantry seasonings (bay leaves, ground cinnamon, black pepper, sugar, salt): ~$1.88. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $24.07 across 14 servings, so roughly $1.72 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $27.48 across 14 servings, roughly $1.96 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.64 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $44.12. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.72 a bowl\u003c/strong\u003e for a noodle dinner with real pork shoulder in it, which is roughly what a single side order costs at the place down the street.",
+    "shop_smart":  [
+                       "\u003cstrong\u003ePork shoulder is the cheapest honest cut in the case.\u003c/strong\u003e It is fatty on purpose, and that fat is what makes this sauce taste rich without a drop of cream. Buy it whole and dice it yourself instead of paying for pre-cut.",
+                       "\u003cstrong\u003eHoisin does the heavy lifting here.\u003c/strong\u003e The traditional sauce leans on two fermented bean pastes most stores do not carry, and hoisin plus soy gets you to the same salty-sweet place from one jar that lasts many batches.",
+                       "\u003cstrong\u003eCucumber and carrot are the cheapest things in this cart.\u003c/strong\u003e Do not skip them thinking they are garnish. The raw crunch against the hot sauce is doing real work.",
+                       "\u003cstrong\u003eCook the noodles the day you eat them if you can.\u003c/strong\u003e Store the sauce on its own and boil a portion fresh, and the texture holds up far better than a pre-mixed container."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Dice the pork shoulder small, roughly pea-sized, so it eats like a sauce rather than a stew.",
+                    "Heat the vegetable oil in a heavy pot and cook the pork over medium-high heat until it browns and renders its fat.",
+                    "Add the garlic, ginger, and the white parts of the green onions and cook until fragrant.",
+                    "Stir in the hoisin sauce and soy sauce and let them fry in the fat for a minute, which is what takes the raw edge off.",
+                    "Pour in the chicken broth, drop the heat to low, and simmer uncovered until the sauce is thick and glossy and the pork is tender.",
+                    "Boil the lo mein noodles to just tender, drain, and rinse briefly so they do not clump.",
+                    "Cut the cucumber and carrots into matchsticks, then serve the sauce over the noodles with the raw vegetables and the green onion tops piled on."
+                ],
+    "portion_html":  "Put the full sauce pot on the scale, subtract the empty-pot weight from Step 1, and divide by 14. Weigh the same amount of cooked noodles into each container, spoon the sauce over, and tuck the cucumber and carrot in last so they stay crisp. Every serving comes in at \u003cstrong\u003e598 calories with 25 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://thewoksoflife.com/beijing-fried-sauce-noodles-zha-jiang-mian/\" target=\"_blank\" rel=\"noopener\"\u003ethewoksoflife.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Deep, savory dinners for about $1.72 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  24.07,
+    "cost_batch_true":  27.48,
+    "cost_per_serving":  1.72,
+    "cost_per_serving_true":  1.96,
+    "cost_pantry_add":  16.64,
+    "cost_first_run":  44.12,
+    "scaler":  {
+                   "cost":  "27.48",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Shoulder",
+                                   "canon":  "Pork Shoulder",
+                                   "grams":  1286,
+                                   "buy":  "2.75 lb",
+                                   "bid":  "pork-shoulder",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  178,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  220,
+                                   "buy":  "4.5 cups",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  37,
+                                   "buy":  "6.25 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  9,
+                                   "buy":  "0.25 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cinnamon",
+                                   "canon":  "Ground Cinnamon",
+                                   "grams":  6,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "ground-cinnamon",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  11,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  157,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  59,
+                                   "buy":  "3.75 tbsp",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Hoisin Sauce",
+                                   "canon":  "Hoisin Sauce",
+                                   "grams":  274,
+                                   "buy":  "1 cups",
+                                   "bid":  "hoisin-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  10,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  7,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lo Mein Noodles",
+                                   "canon":  "Lo Mein Noodles",
+                                   "grams":  998,
+                                   "buy":  "35.25 oz dry",
+                                   "bid":  "egg-noodles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  269,
+                                   "buy":  "4.4",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cucumber",
+                                   "canon":  "Cucumber",
+                                   "grams":  255,
+                                   "buy":  "1",
+                                   "bid":  "cucumbers",
+                                   "gpu":  "300.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  49,
+                                   "buy":  "5.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Beijing zha jiang mian rebuilt as 14-serving meal prep: thick savory pork sauce over lo mein with raw cucumber and carrot. 598 calories, 25g protein, about $1.72 per serving.",
+                 "keywords":  "zha jiang mian, beijing fried sauce noodles, pork noodle meal prep, hoisin pork sauce, budget chinese dinner, lo mein meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT70M",
+                 "costPerServing":  1.72,
+                 "recipeIngredient":  [
+                                          "2.75 lb pork shoulder",
+                                          "0.75 cups vegetable oil",
+                                          "4.5 cups green onions",
+                                          "6.25 tbsp fresh ginger",
+                                          "0.25 lb chicken broth",
+                                          "3.75 tbsp soy sauce",
+                                          "1 cup hoisin sauce",
+                                          "35.25 oz dry lo mein noodles",
+                                          "4.4 carrots",
+                                          "1 cucumber",
+                                          "5.75 tbsp garlic"
+                                      ],
+                 "steps":  [
+                               "Dice the pork shoulder small and brown it in hot oil until the fat renders.",
+                               "Add garlic, ginger, and green onion whites and cook until fragrant.",
+                               "Fry the hoisin and soy sauce in the fat, then pour in the broth.",
+                               "Simmer uncovered until the sauce is thick and the pork is tender.",
+                               "Boil the lo mein noodles and cut the cucumber and carrots into matchsticks.",
+                               "Portion noodles into 14 containers, then top with sauce and raw vegetables."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Pork Shoulder",
+                                  "grams":  1286
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  178
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  220
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  37
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Ground Cinnamon",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  157
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  59
+                              },
+                              {
+                                  "item":  "Hoisin Sauce",
+                                  "grams":  274
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Lo Mein Noodles",
+                                  "grams":  998
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  269
+                              },
+                              {
+                                  "item":  "Cucumber",
+                                  "grams":  255
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  49
+                              }
+                          ]
+}

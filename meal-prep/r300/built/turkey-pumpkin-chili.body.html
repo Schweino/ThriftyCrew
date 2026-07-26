@@ -1,0 +1,166 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"turkey-pumpkin-chili","base":14,"cost":46.46,"ing":[{"item":"Yellow Onion","grams":350,"buy":"3","bid":"onions","gpu":453.592},{"item":"Green Bell Peppers","grams":280,"buy":"2.3","bid":"bell-peppers","gpu":120.000},{"item":"Garlic","grams":70,"buy":"8.25 tbsp","bid":"garlic","gpu":50.000},{"item":"93/7 Ground Turkey","grams":1411,"buy":"3 lb","bid":"ground-turkey","gpu":453.592},{"item":"Cannellini Beans","grams":595,"buy":"2.3 cans","bid":"cannellini-beans","gpu":28.350},{"item":"Diced Tomatoes","grams":959,"buy":"2.3 cans","bid":"diced-tomatoes","gpu":28.350},{"item":"Tomato Paste","grams":153,"buy":"1 can","bid":"tomato-paste","gpu":28.350},{"item":"Pumpkin Puree","grams":926,"buy":"32.75 oz","bid":"canned-pumpkin","gpu":28.350},{"item":"Chicken Broth","grams":560,"buy":"2.25 cups","bid":"chicken-broth","gpu":29.570},{"item":"Chili Powder","grams":37,"buy":"4.5 tbsp","bid":"chili-powder","gpu":28.350},{"item":"Cocoa Powder","grams":37,"buy":"1.25 oz","bid":"cocoa-powder","gpu":28.350},{"item":"Ground Cinnamon","grams":9,"buy":"1.25 tbsp","bid":"ground-cinnamon","gpu":28.350},{"item":"Ground Cumin","grams":12,"buy":"2 tbsp","bid":"ground-cumin","gpu":28.350},{"item":"Salt","grams":14,"buy":"0.75 tbsp","bid":"salt","gpu":28.350},{"item":"Black Pepper","grams":3,"buy":"0.5 tbsp","bid":"black-pepper","gpu":28.350},{"item":"Cayenne Pepper","grams":2,"buy":"0.25 tbsp","bid":"cayenne-pepper","gpu":28.350},{"item":"Frozen Chopped Spinach","grams":793,"buy":"1.75 lb","bid":"spinach","gpu":28.350},{"item":"Light Sour Cream","grams":300,"buy":"1.25 cups","bid":"sour-cream","gpu":28.350},{"item":"Fresh Cilantro","grams":25,"buy":"25 tbsp","bid":"cilantro","gpu":57.000},{"item":"Rice","grams":893,"buy":"4.75 cups dry","bid":"rice","gpu":453.592}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~563 cal &middot; 33g protein &middot; 81g carbs &middot; 11g fat &middot; ~$2.56 per serving.</strong></p>
+
+<p>Do not skip past this one because of the word pumpkin. Canned pumpkin does not make chili taste like pie. It makes it thick, a little sweet in the background, and velvety in a way that usually takes an hour of reducing. Add a spoon of cocoa powder and a pinch of cinnamon, the same move behind a good mole, and you get a chili with more depth than the standard chili powder and beans version. Nobody guesses the pumpkin. Everybody asks what is in it.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Yellow Onion:</strong> 3 (350 g)</li>
+<li><strong>Green Bell Peppers:</strong> 2.3 (280 g)</li>
+<li><strong>Garlic:</strong> 8.25 tbsp (70 g)</li>
+<li><strong>93/7 Ground Turkey (Jennie-O):</strong> 3 lb (1411 g)</li>
+<li><strong>Cannellini Beans (generic):</strong> 2.3 cans (595 g)</li>
+<li><strong>Diced Tomatoes (Great Value):</strong> 2.3 cans (959 g)</li>
+<li><strong>Tomato Paste (Great Value):</strong> 1 can (153 g)</li>
+<li><strong>Pumpkin Puree (generic canned (USDA)):</strong> 32.75 oz (926 g)</li>
+<li><strong>Chicken Broth (Swanson):</strong> 2.25 cups (560 g)</li>
+<li><strong>Frozen Chopped Spinach (generic):</strong> 1.75 lb (793 g)</li>
+<li><strong>Light Sour Cream (generic):</strong> 1.25 cups (300 g)</li>
+<li><strong>Fresh Cilantro:</strong> 25 tbsp (25 g)</li>
+<li><strong>Rice (Member's Mark):</strong> 4.75 cups dry (893 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Yellow Onion, 3: ~$0.88. <strong>Buy 1 lb: $1.14.</strong></li>
+<li>Green Bell Peppers, 2.3: ~$2.01. <strong>Buy 3 each: $2.58.</strong></li>
+<li>Garlic, 8.25 tbsp: ~$1.01. <strong>Buy 2 heads: $1.15.</strong></li>
+<li>93/7 Ground Turkey, 3 lb: ~$11.89. <strong>Buy 4 lbs: $15.29.</strong></li>
+<li>Cannellini Beans, 2.3 cans: ~$1.92. <strong>Buy 3 cans: $2.47.</strong></li>
+<li>Diced Tomatoes, 2.3 cans: ~$2.24. <strong>Buy 3 cans: $2.88.</strong></li>
+<li>Tomato Paste, 1 can: ~$0.77. <strong>Buy 1 6oz can: $0.86.</strong></li>
+<li>Pumpkin Puree, 32.75 oz: ~$3.92. <strong>Buy 2 29oz cans: $6.96.</strong></li>
+<li>Chicken Broth, 2.25 cups: ~$0.75. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Frozen Chopped Spinach, 1.75 lb: ~$5.59. <strong>Buy 3 10oz boxes: $6.01.</strong></li>
+<li>Light Sour Cream, 1.25 cups: ~$1.08. <strong>Buy 1 16oz tub: $1.64.</strong></li>
+<li>Fresh Cilantro, 25 tbsp: ~$0.78. <strong>Buy 1 bunch: $1.78.</strong></li>
+<li>Rice, 4.75 cups dry: ~$1.10. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Pantry seasonings (chili powder, cocoa powder, ground cinnamon, ground cumin, salt, black pepper, cayenne pepper): ~$1.85. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $35.79 across 14 servings, so roughly $2.56 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $46.46 across 14 servings, roughly $3.32 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $14.51 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $60.97. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$2.56 a bowl</strong> for a chili that tastes like it took a lot more effort than it did. Canned pumpkin is one of the cheapest thickeners on the shelf and it brings fiber along with it.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li><strong>Buy plain canned pumpkin, not pie filling.</strong> The pie filling is already sugared and spiced and it costs more. You want the one with a single ingredient on the label.</li>
+<li><strong>Cocoa powder is a savory ingredient too.</strong> A container lasts years and a spoonful of it is what separates a good chili from a flat one. Same idea as a mole.</li>
+<li><strong>Stock up on canned pumpkin in November.</strong> It is the one month of the year the price bottoms out, and the cans are good for a very long time.</li>
+<li><strong>Frozen chopped spinach disappears into chili.</strong> It costs less than fresh, it will not go bad on you, and nobody eating it will notice it is in there.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Cook the rice separately per the package and set it aside covered.</li>
+<li>Brown the ground turkey in your big pot over medium-high heat, breaking it up until it is cooked through.</li>
+<li>Add the diced onion and chopped green bell peppers and cook until soft, then stir in the garlic for the last minute.</li>
+<li>Stir in the chili powder, cocoa powder, ground cinnamon, ground cumin, cayenne, salt and black pepper and toast them against the hot pan for a minute.</li>
+<li>Add the canned pumpkin puree, the tomato paste, the diced tomatoes with their juice and the chicken broth, and stir until the pumpkin is fully blended into the base.</li>
+<li>Add the drained cannellini beans, simmer 30 minutes, then stir in the thawed chopped spinach at the end. Keep the sour cream and cilantro for topping at reheat.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Spread the cooked rice into your 14 containers, then set the chili pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and spoon that exact weight over the rice. Every serving lands near 563 calories with 33 grams of protein once the sour cream and cilantro go on top.</p>
+
+<p><em>Recipe adapted from <a href="https://www.skinnytaste.com/turkey-pumpkin-chili/" target="_blank" rel="noopener">skinnytaste.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em><em>A chili with real depth for about $2.56 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.</em></em></p>

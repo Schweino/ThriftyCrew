@@ -1,0 +1,163 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"kenyan-beef-pilau-rice","base":14,"cost":50.53,"ing":[{"item":"Ground Cloves","grams":5,"buy":"0.25 oz","bid":"ground-cloves","gpu":28.350},{"item":"Ground Cumin","grams":29,"buy":"4.5 tbsp","bid":"ground-cumin","gpu":28.350},{"item":"Black Pepper","grams":8,"buy":"1.25 tbsp","bid":"black-pepper","gpu":28.350},{"item":"Garam Masala","grams":25,"buy":"4.25 tbsp","bid":"garam-masala","gpu":28.350},{"item":"Ground Cinnamon","grams":6,"buy":"0.75 tbsp","bid":"ground-cinnamon","gpu":28.350},{"item":"Rice","grams":863,"buy":"4.75 cups dry","bid":"rice","gpu":453.592},{"item":"Potato","grams":2485,"buy":"11.7","bid":"russet-potatoes","gpu":453.592},{"item":"Vegetable Oil","grams":127,"buy":"0.5 cups","bid":"vegetable-oil","gpu":28.000},{"item":"Red Onion","grams":513,"buy":"4.7","bid":"onions","gpu":453.592},{"item":"Garlic","grams":47,"buy":"5.5 tbsp","bid":"garlic","gpu":50.000},{"item":"Ginger","grams":28,"buy":"4.75 tbsp","bid":"fresh-ginger","gpu":453.592},{"item":"Jalapeno","grams":33,"buy":"3.75 tbsp","bid":"jalapenos","gpu":453.592},{"item":"Beef Broth","grams":1120,"buy":"4.75 cups","bid":"beef-broth","gpu":29.570},{"item":"Fresh Cilantro","grams":9,"buy":"9 tbsp","bid":"cilantro","gpu":57.000},{"item":"Beef Flank/Sirloin Steak","grams":1058,"buy":"2.25 lb","bid":"sirloin-steak","gpu":453.592},{"item":"Diced Tomatoes","grams":2877,"buy":"7 cans","bid":"diced-tomatoes","gpu":28.350},{"item":"Bay Leaves","grams":3,"buy":"0.11 oz","bid":"bay-leaves","gpu":28.350},{"item":"Salt","grams":47,"buy":"2.5 tbsp","bid":"salt","gpu":28.350}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~633 cal &middot; 28g protein &middot; 94g carbs &middot; 15g fat &middot; ~$2.79 per serving.</strong></p>
+
+<p>Pilau is the dish Kenyan families make when there is something to celebrate. It came up the Swahili coast with the spice trade, which is why it tastes like cumin, cardamom, cloves, and cinnamon rather than like the curry powder most Americans expect from East African food. The rice cooks in the same pot as the beef so every grain takes on color and spice. It is one of the few dishes where cooking a huge amount is actually easier than cooking a small one, which makes it a natural fit for fourteen containers.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Rice (Member's Mark):</strong> 4.75 cups dry (863 g)</li>
+<li><strong>Potato (generic):</strong> 11.7 (2485 g)</li>
+<li><strong>Vegetable Oil (Great Value):</strong> 0.5 cups (127 g)</li>
+<li><strong>Red Onion:</strong> 4.7 (513 g)</li>
+<li><strong>Garlic:</strong> 5.5 tbsp (47 g)</li>
+<li><strong>Ginger (generic):</strong> 4.75 tbsp (28 g)</li>
+<li><strong>Jalapeno:</strong> 3.75 tbsp (33 g)</li>
+<li><strong>Beef Broth (Great Value):</strong> 4.75 cups (1120 g)</li>
+<li><strong>Fresh Cilantro:</strong> 9 tbsp (9 g)</li>
+<li><strong>Beef Flank/Sirloin Steak (generic):</strong> 2.25 lb (1058 g)</li>
+<li><strong>Diced Tomatoes (Great Value):</strong> 7 cans (2877 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Rice, 4.75 cups dry: ~$1.07. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Potato, 11.7: ~$3.11. <strong>Buy 6 lbs: $3.41.</strong></li>
+<li>Vegetable Oil, 0.5 cups: ~$0.31. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Red Onion, 4.7: ~$1.29. <strong>Buy 2 lbs: $2.28.</strong></li>
+<li>Garlic, 5.5 tbsp: ~$0.68. <strong>Buy 2 heads: $1.15.</strong></li>
+<li>Ginger, 4.75 tbsp: ~$0.25. <strong>Buy 1 piece: $0.88.</strong></li>
+<li>Jalapeno, 3.75 tbsp: ~$0.13. <strong>Buy 1 lb: $1.76.</strong></li>
+<li>Beef Broth, 4.75 cups: ~$1.50. <strong>Pantry staple; this batch alone uses about 2 32oz cartons.</strong></li>
+<li>Fresh Cilantro, 9 tbsp: ~$0.28. <strong>Buy 1 bunch: $1.78.</strong></li>
+<li>Beef Flank/Sirloin Steak, 2.25 lb: ~$20.57. <strong>Buy 3 lbs: $26.46.</strong></li>
+<li>Diced Tomatoes, 7 cans: ~$6.72. <strong>Buy 7 cans: $6.72.</strong></li>
+<li>Pantry seasonings (ground cloves, ground cumin, black pepper, garam masala, ground cinnamon, bay leaves, salt): ~$3.21. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $39.12 across 14 servings, so roughly $2.79 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $50.53 across 14 servings, roughly $3.61 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $14.82 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $65.35. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$2.79 a bowl</strong> for a celebration rice that East African families make by the potful.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li><strong>The beef is the largest line here by a wide margin.</strong> Buy it when the case is marked down. A cheaper braising cut also works, since everything simmers long enough to tenderize.</li>
+<li><strong>Build your own pilau masala from jars you already own.</strong> Cumin, cloves, cinnamon, black pepper, and garam masala get you there for a fraction of the price of a specialty blend.</li>
+<li><strong>Brown the onions properly and you buy nothing else for color.</strong> Deeply browned onions are what make pilau dark. Skipping that step is why home versions come out pale and flat.</li>
+<li><strong>Potatoes stretch the pot for almost nothing.</strong> They soak up the same spiced broth as the rice and they cost less per pound than anything else in the cart.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Rinse the rice until the water runs clear and let it drain, which keeps the grains separate.</li>
+<li>Heat the vegetable oil in a large heavy pot and cook the sliced red onions over medium heat, patiently, until they go deep brown. This takes longer than you want it to and it is the most important step.</li>
+<li>Add the garlic, ginger, and minced jalapeno and cook until fragrant.</li>
+<li>Stir in the ground cumin, ground cloves, ground cinnamon, garam masala, black pepper, and bay leaves and let them toast in the oil for a minute.</li>
+<li>Add the cubed beef and brown it on all sides, then add the diced tomatoes and cook until the sauce darkens and thickens.</li>
+<li>Add the cubed potatoes and the beef broth, bring to a boil, then stir in the drained rice and season with salt.</li>
+<li>Cover tightly, drop the heat as low as it goes, and cook undisturbed until the liquid is absorbed and the rice is tender, then rest ten minutes off the heat and fluff with the chopped cilantro.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Set the full pot on the scale, subtract the empty-pot weight from Step 1, and divide by 14. Fluff first, then weigh, because rice packs down hard in the bottom of a pot and a scoop from the top is not the same as a scoop from the bottom. Every serving comes in at <strong>633 calories with 28 grams of protein</strong>.</p>
+
+<p><em>Recipe adapted from <a href="https://cheflolaskitchen.com/east-african-pilau/" target="_blank" rel="noopener">cheflolaskitchen.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>Spiced one-pot dinners for about $2.79 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.</em></p>

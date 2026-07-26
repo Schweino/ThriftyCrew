@@ -1,0 +1,349 @@
+﻿{
+    "name":  "Cottage Pie",
+    "slug":  "cottage-pie",
+    "cuisine":  "British",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.recipetineats.com/cottage-pie/",
+    "source_site":  "recipetineats.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Potato)",
+                   "portion factor 1.05"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: One of the biggest gaps in the catalog: no shepherd\u0027s or cottage pie exists at all despite it being a top-tier cheap family dinner. Bakes in a sheet pan or two, cuts into equal squares, so 14-serving portioning is trivially exact. Independent sources report 30-39g protein per serving. Confidence: high. | HARVEST: Source yield is a range of 5-8 servings; midpoint 6.5 rounded to 7. Sections: filling, topping, optional parmesan crust (butter appears twice by design).",
+                         "SOURCE YIELD: 7 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Potato)",
+                         "TUNING: portion factor 1.05"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  584,
+                 "protein":  35,
+                 "carbs":  68,
+                 "fat":  19,
+                 "cost_ps":  "2.62"
+             },
+    "intro_html":  "Cottage pie is the original stretch a pound of beef dinner. Ground beef and a chopped vegetable base go under a thick blanket of mashed potato, the whole thing bakes until the top browns, and it cuts into clean squares which makes portioning almost too easy. Shepherd\u0027s pie is the lamb version; this is the beef one. Each square carries \u003cstrong\u003e35 grams of protein\u003c/strong\u003e and 584 calories for about \u003cstrong\u003e$2.62\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3 tbsp (42 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.5 tbsp (21 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 (231 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 2 (128 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 2 (116 g)",
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1575 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 10.5 tbsp (84 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 7.25 tbsp (116 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 7.5 cups (1816 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 4.25 tbsp (71 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 21 (4526 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 1.5 cups (346 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 0.5 cups (126 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 1.5 oz (42 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 3 tbsp: ~$0.59. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 2.5 tbsp: ~$0.30. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Yellow Onion, 2: ~$0.58. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 2: ~$0.27. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Celery, 2: ~$0.61. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "93/7 Ground Beef, 3.5 lb: ~$23.03. \u003cstrong\u003eBuy 4 lbs: $26.53.\u003c/strong\u003e",
+                       "All-Purpose Flour, 10.5 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Tomato Paste, 7.25 tbsp: ~$0.59. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "Beef Broth, 7.5 cups: ~$2.44. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Worcestershire Sauce, 4.25 tbsp: ~$0.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Potato, 21: ~$5.67. \u003cstrong\u003eBuy 10 lbs: $5.68.\u003c/strong\u003e",
+                       "Milk, 1.5 cups: ~$0.28. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
+                       "Butter, 0.5 cups: ~$0.83. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Parmesan Cheese, 1.5 oz: ~$0.51. \u003cstrong\u003eBuy 1 8oz tub: $2.78.\u003c/strong\u003e",
+                       "Pantry seasonings (dried thyme, bay leaves, salt, black pepper): ~$0.72. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $36.74 across 14 servings, so roughly $2.62 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $50.96 across 14 servings, roughly $3.64 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $18.78 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $69.74. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.62 a serving\u003c/strong\u003e. Potatoes are the reason this number is so low, and they are also the reason it eats like a full dinner instead of a side dish.",
+    "shop_smart":  [
+                       "Potatoes are the largest volume ingredient. Buy the ten pound bag, because the per pound price falls sharply as the bag gets bigger and these keep for weeks.",
+                       "Russets mash lighter and cost less than yellow or red potatoes. For a topping that gets baked, russet is both the cheaper and the better choice.",
+                       "Ground beef is the only expensive line. Buy the club size pack when it is on promotion and freeze it in batch sized portions the day you bring it home.",
+                       "A small amount of parmesan on top is what gives the crust its color and salt. Buy the tub rather than a wedge if you are only using it as a finisher."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Peel and cube the potatoes and boil them in salted water until a knife slides through with no resistance.",
+                    "While they cook, brown the ground beef in the olive oil in a wide pot over medium high heat, breaking it up as it goes, until no pink remains.",
+                    "Add the chopped onion, carrots, celery, and garlic and cook until softened, about 8 minutes.",
+                    "Stir in the flour and tomato paste and cook 2 minutes, then pour in the beef broth and Worcestershire sauce with the thyme and bay leaves.",
+                    "Simmer 20 to 25 minutes until the filling is thick enough to hold a line when you drag a spoon through it. Pull the bay leaves.",
+                    "Drain and mash the potatoes with the milk and butter, season them well, and spread them over the filling in a large baking dish or two sheet pans.",
+                    "Scatter the parmesan on top and bake at 400F for 25 to 30 minutes, until the top is browned and the edges bubble."
+                ],
+    "portion_html":  "Weigh the full pan, subtract the empty-pan number you wrote down, and divide by 14. Easier still, score the baked pie into 14 equal squares with a knife and lift them out one at a time. Each serving lands at \u003cstrong\u003e584 calories with 35 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.recipetineats.com/cottage-pie/\" target=\"_blank\" rel=\"noopener\"\u003erecipetineats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Cottage pie for about $2.62 a serving. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  36.74,
+    "cost_batch_true":  50.96,
+    "cost_per_serving":  2.62,
+    "cost_per_serving_true":  3.64,
+    "cost_pantry_add":  18.78,
+    "cost_first_run":  69.74,
+    "scaler":  {
+                   "cost":  "50.96",
+                   "ing":  [
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  42,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  21,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  231,
+                                   "buy":  "2",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  128,
+                                   "buy":  "2",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "canon":  "Celery",
+                                   "grams":  116,
+                                   "buy":  "2",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "canon":  "93/7 Ground Beef",
+                                   "grams":  1575,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "ground-beef-8020",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  84,
+                                   "buy":  "10.5 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  116,
+                                   "buy":  "7.25 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  1816,
+                                   "buy":  "7.5 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "canon":  "Worcestershire Sauce",
+                                   "grams":  71,
+                                   "buy":  "4.25 tbsp",
+                                   "bid":  "worcestershire",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  2,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  3,
+                                   "buy":  "0.11 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  9,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  4526,
+                                   "buy":  "21",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  346,
+                                   "buy":  "1.5 cups",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  126,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "canon":  "Parmesan Cheese",
+                                   "grams":  42,
+                                   "buy":  "1.5 oz",
+                                   "bid":  "parmesan",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Cottage pie meal prep: seasoned ground beef and vegetable filling under a baked mashed potato and parmesan crust, cut into 14 squares. 584 calories, 35g protein, about $2.62 per serving.",
+                 "keywords":  "cottage pie, shepherds pie beef, ground beef casserole, mashed potato bake, budget meal prep, british recipes",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT50M",
+                 "totalTime":  "PT1H20M",
+                 "costPerServing":  2.62,
+                 "recipeIngredient":  [
+                                          "3.5 lb 93/7 ground beef",
+                                          "21 potatoes",
+                                          "2 yellow onions",
+                                          "2 carrots",
+                                          "2 celery stalks",
+                                          "2.5 tbsp garlic",
+                                          "10.5 tbsp all-purpose flour",
+                                          "7.25 tbsp tomato paste",
+                                          "4 lb beef broth",
+                                          "4.25 tbsp worcestershire sauce",
+                                          "1.5 cups milk",
+                                          "0.5 cups butter",
+                                          "1.5 oz parmesan cheese"
+                                      ],
+                 "steps":  [
+                               "Boil the peeled potatoes until tender.",
+                               "Brown the ground beef, then soften onion, carrot, celery, and garlic with it.",
+                               "Stir in flour and tomato paste, add broth, Worcestershire, thyme, and bay, and simmer until thick.",
+                               "Mash the potatoes with milk and butter and spread them over the filling.",
+                               "Top with parmesan, bake at 400F for 25 to 30 minutes, and cut into 14 squares."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  231
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  128
+                              },
+                              {
+                                  "item":  "Celery",
+                                  "grams":  116
+                              },
+                              {
+                                  "item":  "93/7 Ground Beef",
+                                  "grams":  1575
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  116
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  1816
+                              },
+                              {
+                                  "item":  "Worcestershire Sauce",
+                                  "grams":  71
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  4526
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  346
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  126
+                              },
+                              {
+                                  "item":  "Parmesan Cheese",
+                                  "grams":  42
+                              }
+                          ]
+}

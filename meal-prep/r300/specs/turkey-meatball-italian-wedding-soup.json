@@ -1,0 +1,322 @@
+﻿{
+    "name":  "Turkey Meatball Italian Wedding Soup",
+    "slug":  "turkey-meatball-italian-wedding-soup",
+    "cuisine":  "italian-american",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.sipandfeast.com/italian-wedding-soup/",
+    "source_site":  "sipandfeast.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +30% (Pasta Shells)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 8 servings, 530 cal, 48.2g protein, the single best protein-to-calorie ratio in this slice and it clears both gates as published with zero rework. Meatballs bake on a sheet pan, so 14 servings is just a bigger tray. | HARVEST: Published protein 48.2g per serving; rounded to 48. Ingredient list includes two sub-headings retained verbatim.",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: base +30% (Pasta Shells)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  562,
+                 "protein":  37,
+                 "carbs":  47,
+                 "fat":  24,
+                 "cost_ps":  "2.56"
+             },
+    "intro_html":  "The name has nothing to do with weddings. It comes from the Italian \u003cem\u003eminestra maritata\u003c/em\u003e, the married soup, and the marriage in question is greens and meat. Little turkey meatballs, tender pasta shells, kale and spinach, all floating in a clean chicken broth with parmesan stirred in at the end. It is a soup that looks fancy in the container and costs less than a drive-through combo. That is the whole point of this operation.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePasta Shells (Great Value):\u003c/strong\u003e 18.75 oz dry (532 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3.5 (214 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 3.5 (192 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 4.4 cartons (4200 g)",
+                                "\u003cstrong\u003eKale:\u003c/strong\u003e 12.25 oz (350 g)",
+                                "\u003cstrong\u003eFrozen Chopped Spinach (generic):\u003c/strong\u003e 15.5 oz (438 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 5.5 oz (158 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 0.75 cups (142 g)",
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eBread Crumbs (generic):\u003c/strong\u003e 1.75 cups (189 g)",
+                                "\u003cstrong\u003eFresh Basil:\u003c/strong\u003e 14 tbsp (21 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 4 large eggs (175 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 7.25 tbsp (107 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pasta Shells, 18.75 oz dry: ~$1.14. \u003cstrong\u003eBuy 2 12oz boxes: $1.45.\u003c/strong\u003e",
+                       "Yellow Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 3.5: ~$0.45. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Celery, 3.5: ~$1.01. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Chicken Broth, 4.4 cartons: ~$5.64. \u003cstrong\u003ePantry staple; this batch alone uses about 5 32oz cartons.\u003c/strong\u003e",
+                       "Kale, 12.25 oz: ~$2.07. \u003cstrong\u003eBuy 2 bunches: $2.96.\u003c/strong\u003e",
+                       "Frozen Chopped Spinach, 15.5 oz: ~$3.09. \u003cstrong\u003eBuy 2 10oz boxes: $4.01.\u003c/strong\u003e",
+                       "Parmesan Cheese, 5.5 oz: ~$1.93. \u003cstrong\u003eBuy 1 8oz tub: $2.78.\u003c/strong\u003e",
+                       "Olive Oil, 0.75 cups: ~$2.00. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 3.5 lb: ~$13.38. \u003cstrong\u003eBuy 4 lbs: $15.29.\u003c/strong\u003e",
+                       "Bread Crumbs, 1.75 cups: ~$0.54. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fresh Basil, 14 tbsp: ~$2.64. \u003cstrong\u003eBuy 2 0.5oz packs: $3.52.\u003c/strong\u003e",
+                       "Eggs, 4 large eggs: ~$0.42. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
+                       "Milk, 7.25 tbsp: ~$0.09. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, salt): ~$0.40. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $35.77 across 14 servings, so roughly $2.56 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $47.50 across 14 servings, roughly $3.39 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.16 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.66. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.56 a bowl\u003c/strong\u003e for a soup with real meat, real greens and real pasta in it. The ground turkey is most of the ticket. Everything else in that pot is pocket change.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eThe ground turkey is the entire budget.\u003c/strong\u003e Everything else here is broth, vegetables and pasta. Buy the turkey when the price drops, then freeze it flat in one pound sheets so it thaws in an hour instead of a day.",
+                       "\u003cstrong\u003eFrozen chopped spinach beats fresh for this pot.\u003c/strong\u003e It costs less per usable ounce, it keeps for months, and it goes into hot broth straight from the box. Nobody is washing sand out of anything.",
+                       "\u003cstrong\u003eBuy parmesan in a tub, not a shaker.\u003c/strong\u003e The shaker stuff costs more per ounce and it will not melt into the broth the same way. Grate it yourself and you get a better soup for less money.",
+                       "\u003cstrong\u003eFresh basil is the one splurge here.\u003c/strong\u003e If the packs at the store look tired, leave it out. The soup holds up fine without it and you keep the money."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Mix the ground turkey with the bread crumbs, eggs, milk, some of the grated parmesan and the chopped fresh basil. Season with salt and pepper, then roll the mix into small meatballs about the size of a grape.",
+                    "Line a sheet pan, spread the meatballs out, and bake at 400F until browned, roughly 15 minutes. They finish cooking in the broth later, so do not fuss over the centers.",
+                    "Chop the onion, carrots and celery small and sweat them in olive oil in your big pot over medium heat until soft, about 8 minutes.",
+                    "Pour in the chicken broth, bring it to a simmer, then add the pasta shells and cook until they are just shy of tender.",
+                    "Stir in the kale and the thawed chopped spinach and simmer until the greens go dark and silky.",
+                    "Slide the meatballs into the pot, simmer a few minutes more so the flavors marry, then kill the heat and stir in the rest of the parmesan."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight you wrote down in Step 1. Divide what is left by 14 and ladle that exact weight into each container. Every bowl lands near 562 calories with 37 grams of protein, which makes this a dinner and not a cup of soup you eat before dinner.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.sipandfeast.com/italian-wedding-soup/\" target=\"_blank\" rel=\"noopener\"\u003esipandfeast.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cem\u003eReal dinners for about $2.56 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "cost_batch":  35.77,
+    "cost_batch_true":  47.5,
+    "cost_per_serving":  2.56,
+    "cost_per_serving_true":  3.39,
+    "cost_pantry_add":  14.16,
+    "cost_first_run":  61.66,
+    "scaler":  {
+                   "cost":  "47.50",
+                   "ing":  [
+                               {
+                                   "item":  "Pasta Shells",
+                                   "canon":  "Pasta Shells",
+                                   "grams":  532,
+                                   "buy":  "18.75 oz dry",
+                                   "bid":  "pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  385,
+                                   "buy":  "3.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  214,
+                                   "buy":  "3.5",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "canon":  "Celery",
+                                   "grams":  192,
+                                   "buy":  "3.5",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  6,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  51,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  4200,
+                                   "buy":  "4.4 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Kale",
+                                   "canon":  "Kale",
+                                   "grams":  350,
+                                   "buy":  "12.25 oz",
+                                   "bid":  "kale",
+                                   "gpu":  "250.000"
+                               },
+                               {
+                                   "item":  "Frozen Chopped Spinach",
+                                   "canon":  "Frozen Chopped Spinach",
+                                   "grams":  438,
+                                   "buy":  "15.5 oz",
+                                   "bid":  "spinach",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "canon":  "Parmesan Cheese",
+                                   "grams":  158,
+                                   "buy":  "5.5 oz",
+                                   "bid":  "parmesan",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  142,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Bread Crumbs",
+                                   "canon":  "Bread Crumbs",
+                                   "grams":  189,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "bread-crumbs",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Basil",
+                                   "canon":  "Fresh Basil",
+                                   "grams":  21,
+                                   "buy":  "14 tbsp",
+                                   "bid":  "fresh-basil",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  175,
+                                   "buy":  "4 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  107,
+                                   "buy":  "7.25 tbsp",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Little turkey meatballs, pasta shells, kale and spinach in a clean parmesan broth. A 14 serving Italian wedding soup built for budget meal prep.",
+                 "keywords":  "turkey meatball soup, italian wedding soup, budget meal prep, turkey soup recipe, meal prep soup, cheap dinner ideas",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H15M",
+                 "costPerServing":  2.56,
+                 "recipeIngredient":  [
+                                          "93/7 Ground Turkey",
+                                          "Bread Crumbs",
+                                          "Eggs",
+                                          "Milk",
+                                          "Parmesan Cheese",
+                                          "Fresh Basil",
+                                          "Olive Oil",
+                                          "Yellow Onion",
+                                          "Carrots",
+                                          "Celery",
+                                          "Chicken Broth",
+                                          "Pasta Shells",
+                                          "Kale"
+                                      ],
+                 "steps":  [
+                               "Mix the ground turkey with bread crumbs, eggs, milk, parmesan and basil, then roll into small meatballs.",
+                               "Bake the meatballs on a sheet pan at 400F until browned, about 15 minutes.",
+                               "Sweat the onion, carrots and celery in olive oil, then pour in the chicken broth and bring to a simmer.",
+                               "Cook the pasta shells in the broth, then stir in the kale and chopped spinach until wilted.",
+                               "Add the meatballs, simmer a few minutes, and finish with the remaining parmesan."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Pasta Shells",
+                                  "grams":  532
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  214
+                              },
+                              {
+                                  "item":  "Celery",
+                                  "grams":  192
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  51
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  4200
+                              },
+                              {
+                                  "item":  "Kale",
+                                  "grams":  350
+                              },
+                              {
+                                  "item":  "Frozen Chopped Spinach",
+                                  "grams":  438
+                              },
+                              {
+                                  "item":  "Parmesan Cheese",
+                                  "grams":  158
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  142
+                              },
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Bread Crumbs",
+                                  "grams":  189
+                              },
+                              {
+                                  "item":  "Fresh Basil",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  175
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  107
+                              }
+                          ]
+}

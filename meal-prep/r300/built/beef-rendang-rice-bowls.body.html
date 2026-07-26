@@ -1,0 +1,161 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"beef-rendang-rice-bowls","base":14,"cost":65.16,"ing":[{"item":"Yellow Onion","grams":2053,"buy":"18.7","bid":"onions","gpu":453.592},{"item":"Jalapeno","grams":180,"buy":"6.25 oz","bid":"jalapenos","gpu":453.592},{"item":"Garlic","grams":128,"buy":"1 cups","bid":"garlic","gpu":50.000},{"item":"Ginger","grams":56,"buy":"9.25 tbsp","bid":"fresh-ginger","gpu":453.592},{"item":"Ground Turmeric","grams":42,"buy":"4.75 tbsp","bid":"ground-turmeric","gpu":28.350},{"item":"Black Pepper","grams":16,"buy":"2.25 tbsp","bid":"black-pepper","gpu":28.350},{"item":"Vegetable Oil","grams":65,"buy":"4.75 tbsp","bid":"vegetable-oil","gpu":28.000},{"item":"Beef Chuck Roast","grams":2117,"buy":"4.75 lb","bid":"beef-chuck-roast","gpu":453.592},{"item":"Coconut Milk","grams":1582,"buy":"4 cans","bid":"coconut-milk-canned","gpu":29.570},{"item":"Bay Leaves","grams":6,"buy":"0.25 oz","bid":"bay-leaves","gpu":28.350},{"item":"Lemongrass Paste","grams":56,"buy":"3.75 tbsp","bid":"lemongrass-paste","gpu":28.350},{"item":"Ground Cinnamon","grams":6,"buy":"0.75 tbsp","bid":"ground-cinnamon","gpu":28.350},{"item":"Brown Sugar","grams":32,"buy":"2.25 tbsp","bid":"brown-sugar","gpu":453.592},{"item":"Salt","grams":47,"buy":"2.5 tbsp","bid":"salt","gpu":28.350},{"item":"Rice","grams":770,"buy":"4.25 cups dry","bid":"rice","gpu":453.592}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~836 cal &middot; 38g protein &middot; 71g carbs &middot; 43g fat &middot; ~$4.28 per serving.</strong></p>
+
+<p>Rendang is Indonesian beef cooked in coconut milk until the liquid disappears entirely and what is left clings to the meat like a dark, fragrant paste. It is not a curry you eat with a spoon. It is beef that has absorbed everything in the pot. That dryness is also why it is one of the best meal prep dishes there is, because there is no sauce to separate or go watery by Thursday. Each serving carries 836 calories and <strong>38 grams of protein</strong> for about <strong>$4.28 a serving</strong>.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Yellow Onion:</strong> 18.7 (2053 g)</li>
+<li><strong>Jalapeno:</strong> 6.25 oz (180 g)</li>
+<li><strong>Garlic:</strong> 1 cups (128 g)</li>
+<li><strong>Ginger (generic):</strong> 9.25 tbsp (56 g)</li>
+<li><strong>Vegetable Oil (Great Value):</strong> 4.75 tbsp (65 g)</li>
+<li><strong>Beef Chuck Roast:</strong> 4.75 lb (2117 g)</li>
+<li><strong>Coconut Milk (Thai Kitchen):</strong> 4 cans (1582 g)</li>
+<li><strong>Lemongrass Paste (Gourmet Garden (McCormick)):</strong> 3.75 tbsp (56 g)</li>
+<li><strong>Brown Sugar (generic):</strong> 2.25 tbsp (32 g)</li>
+<li><strong>Rice (Member's Mark):</strong> 4.25 cups dry (770 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Yellow Onion, 18.7: ~$5.16. <strong>Buy 5 lbs: $5.70.</strong></li>
+<li>Jalapeno, 6.25 oz: ~$0.70. <strong>Buy 1 lb: $1.76.</strong></li>
+<li>Garlic, 1 cups: ~$1.84. <strong>Buy 4 heads: $2.30.</strong></li>
+<li>Ginger, 9.25 tbsp: ~$0.49. <strong>Buy 1 piece: $0.88.</strong></li>
+<li>Vegetable Oil, 4.75 tbsp: ~$0.16. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Beef Chuck Roast, 4.75 lb: ~$37.20. <strong>Buy 5 lbs: $39.85.</strong></li>
+<li>Coconut Milk, 4 cans: ~$7.85. <strong>Buy 4 13.5oz cans: $7.94.</strong></li>
+<li>Lemongrass Paste, 3.75 tbsp: ~$2.46. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Brown Sugar, 2.25 tbsp: ~$0.18. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Rice, 4.25 cups dry: ~$0.95. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Pantry seasonings (ground turmeric, black pepper, bay leaves, ground cinnamon, salt): ~$2.98. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $59.97 across 14 servings, so roughly $4.28 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $65.16 across 14 servings, roughly $4.65 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $17.19 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $82.35. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$4.28 a serving</strong>, and the cost above covers the rendang itself. Rice is the cheapest thing in your pantry, so add a scoop when you pack the containers and you have a full bowl for barely more.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>The spice paste is onion, garlic, ginger, and jalapeno blitzed together, which is the cheapest way in the world to build enormous flavor. Buy the onions and garlic in bulk bags and the whole paste costs less than a single jar of curry sauce.</li>
+<li>Canned coconut milk is the second biggest line and the one thing you should not cut corners on. Full fat is what breaks and fries the beef at the end, and light coconut milk will simply never get there.</li>
+<li>Lemongrass paste in a tube keeps for months in the fridge and saves you from buying fresh stalks you will use once. One tube covers several batches.</li>
+<li>Chuck roast is the right cut and the cheap one. Rendang cooks for hours, so a tender expensive cut would just fall apart into nothing and cost you more for the privilege.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Blend the onion, garlic, ginger, and jalapeno into a rough paste. Add a splash of water if the blender needs help moving.</li>
+<li>Heat the vegetable oil in a wide heavy pot and fry the paste over medium heat until it darkens and smells sweet rather than raw, about 10 minutes. This is the single most important step, so do not shortcut it.</li>
+<li>Stir in the lemongrass paste, turmeric, cinnamon, bay leaves, and black pepper and cook another minute.</li>
+<li>Add the beef cut into large cubes and turn it in the paste until every piece is coated.</li>
+<li>Pour in the coconut milk with the brown sugar and salt, bring it to a simmer, and cook uncovered on low for 2 to 3 hours. Stir every 20 minutes or so, more often near the end.</li>
+<li>Keep going past the point where it looks done. The liquid will reduce, then break, then the beef starts frying in the coconut oil that separates out and everything turns deep brown. That is rendang, and it is a different dish from the milky stew it was an hour earlier.</li>
+<li>Taste for salt and pull it off the heat while there is still a little gloss on the meat.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. Scoop to that gram target and each container lands at <strong>836 calories</strong>. Rendang is dense, so the portions look smaller than you expect and eat bigger than you expect. Trust the scale over your eyes.</p>
+
+<p><em>Recipe adapted from <a href="https://www.chilipeppermadness.com/recipes/beef-rendang/" target="_blank" rel="noopener">chilipeppermadness.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>Slow-cooked Indonesian beef for about <strong>$4.28 a serving</strong>, from your own kitchen. Members get every recipe in the Meal Prep section plus the full library of money lessons, calculators, and tools for $1 a month.</em></p>

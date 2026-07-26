@@ -1,0 +1,155 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"pasta-alla-norcina-creamy-sausage-pasta","base":14,"cost":26.83,"ing":[{"item":"Penne Pasta","grams":1102,"buy":"38.75 oz dry","bid":"pasta","gpu":28.350},{"item":"Olive Oil","grams":94,"buy":"7 tbsp","bid":"olive-oil","gpu":28.000},{"item":"Yellow Onion","grams":402,"buy":"3.7","bid":"onions","gpu":453.592},{"item":"Hot Italian Sausage","grams":1260,"buy":"2.75 lb","bid":"italian-sausage","gpu":453.592},{"item":"Chicken Broth","grams":840,"buy":"1 carton","bid":"chicken-broth","gpu":29.570},{"item":"Heavy Cream","grams":1120,"buy":"4.75 cups","bid":"heavy-cream","gpu":29.800},{"item":"Parmesan Cheese","grams":78,"buy":"2.75 oz","bid":"parmesan","gpu":28.350},{"item":"Black Pepper","grams":28,"buy":"4 tbsp","bid":"black-pepper","gpu":28.350},{"item":"Salt","grams":20,"buy":"1 tbsp","bid":"salt","gpu":28.350}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~879 cal &middot; 33g protein &middot; 66g carbs &middot; 54g fat &middot; ~$1.56 per serving.</strong></p>
+
+<p>Norcia is a small town in Umbria that Italy trusts so completely with pork that the word for a butcher shop there became the name of this pasta. The real version is sausage crumbled out of its casing, cooked in cream until the sauce clings, and finished with parmesan. No tomato, nothing fancy, and it is one of the most satisfying things you can put in a container. Restaurants serve it in a portion that could sink a boat. We cut the cream back to something a human can eat five nights in a row.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Penne Pasta (Barilla):</strong> 38.75 oz dry (1102 g)</li>
+<li><strong>Olive Oil:</strong> 7 tbsp (94 g)</li>
+<li><strong>Yellow Onion:</strong> 3.7 (402 g)</li>
+<li><strong>Hot Italian Sausage (Johnsonville):</strong> 2.75 lb (1260 g)</li>
+<li><strong>Chicken Broth (Swanson):</strong> 1 carton (840 g)</li>
+<li><strong>Heavy Cream (Great Value):</strong> 4.75 cups (1120 g)</li>
+<li><strong>Parmesan Cheese (Great Value):</strong> 2.75 oz (78 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Penne Pasta, 38.75 oz dry: ~$2.36. <strong>Buy 3 16oz boxes: $2.91.</strong></li>
+<li>Olive Oil, 7 tbsp: ~$1.32. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Yellow Onion, 3.7: ~$1.01. <strong>Buy 1 lb: $1.14.</strong></li>
+<li>Hot Italian Sausage, 2.75 lb: ~$6.95. <strong>Buy 3 lbs: $7.50.</strong></li>
+<li>Chicken Broth, 1 carton: ~$1.13. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Heavy Cream, 4.75 cups: ~$6.95. <strong>Buy 3 pints: $8.81.</strong></li>
+<li>Parmesan Cheese, 2.75 oz: ~$0.95. <strong>Buy 1 8oz tub: $2.78.</strong></li>
+<li>Pantry seasonings (black pepper, salt): ~$1.24. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $21.91 across 14 servings, so roughly $1.56 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $26.83 across 14 servings, roughly $1.92 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $12.96 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $39.79. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$1.56 a bowl</strong> for a cream and sausage pasta that shows up on Italian restaurant menus at ten times that, usually with less sausage.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li><strong>Hot Italian sausage in the rope or the tray is the same meat.</strong> Squeeze it out of the casing and it becomes crumbles. You are paying for seasoning work someone else already did, and it is still cheaper than buying the spices for one batch.</li>
+<li><strong>Heavy cream is the second biggest line on this receipt.</strong> It is also the one thing you cannot fake here. Half and half breaks under heat and gives you a thin, sad sauce.</li>
+<li><strong>Buy parmesan as a wedge or a tub, not a shaker.</strong> The shelf-stable green can is mostly filler, and this sauce leans on real cheese to thicken.</li>
+<li><strong>Store-brand penne is identical to the name brand.</strong> Pasta is flour and water shaped by a machine, and the machines are the same ones.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Boil the penne in well salted water to just under al dente, since it will finish in the sauce. Save a couple cups of the pasta water before draining.</li>
+<li>Squeeze the sausage out of its casings and break it into rough crumbles.</li>
+<li>Heat the olive oil in a wide pot and cook the sausage over medium-high heat until browned in spots, not just gray.</li>
+<li>Add the finely diced yellow onion and cook until soft and translucent.</li>
+<li>Pour in the chicken broth, scrape the bottom of the pot clean, and let it reduce by about half.</li>
+<li>Lower the heat, stir in the heavy cream, and simmer gently until the sauce coats the back of a spoon. Do not let it boil hard or it will separate.</li>
+<li>Add the drained penne and the parmesan, toss until every piece is coated, loosen with pasta water if needed, and season with salt and plenty of black pepper.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Put the full pot on the scale, subtract the empty-pot weight from Step 1, and divide by 14. Scoop that exact weight into each container so the sauce gets shared evenly instead of pooling in the last three. Every bowl comes in at <strong>879 calories with 33 grams of protein</strong>. Reheat with a splash of milk or water and stir, and the cream comes right back together.</p>
+
+<p><em>Recipe adapted from <a href="https://pinabresciani.com/pasta-alla-norcina/" target="_blank" rel="noopener">pinabresciani.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>Rich, restaurant-grade dinners for about $1.56 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.</em></p>

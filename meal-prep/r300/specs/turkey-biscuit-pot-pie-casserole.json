@@ -1,0 +1,207 @@
+﻿{
+    "name":  "Turkey Biscuit Pot Pie Casserole",
+    "slug":  "turkey-biscuit-pot-pie-casserole",
+    "cuisine":  "American",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.littlesweetbaker.com/leftover-turkey-biscuit-casserole-recipe/",
+    "source_site":  "littlesweetbaker.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +5% (Refrigerated Biscuits)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Biscuit-topped pot pie bakes and portions far better than a pastry pot pie. Source verified but very lean (160 cal / 14g at 8 servings, leftover-turkey quantities); our build uses 3 lb ground turkey plus a full biscuit topping to reach ~555 cal / 36g. Confidence: est_cal is our build, source is much lighter. | HARVEST: ",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: base +5% (Refrigerated Biscuits)",
+                         "OVERRIDE Milk: splitter split \u00271 \u0026 1/2 cups milk\u0027 -\u003e 1.5 cups",
+                         "OVERRIDE Turkey Breast: [BUMP x2.5] source \u00272 cups leftover turkey\u0027 (280 g) for 8 is side-scale; house dinner casserole = 700 g",
+                         "OVERRIDE Refrigerated Biscuits: [BUMP x2.0] source 1 can biscuits topping 8 servings is thin; house biscuit pot pie = 2 cans (dish was 382 cal at tuner max)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  575,
+                 "protein":  33,
+                 "carbs":  68,
+                 "fat":  18,
+                 "cost_ps":  "1.72"
+             },
+    "intro_html":  "A real pot pie means rolling pastry, chilling it, blind baking it, and then watching it collapse the moment you try to portion it. This version says no thank you and drops canned biscuits on top instead. Creamy turkey and peas underneath, golden biscuit lids above, and it slices into containers like it was designed to. Each serving runs 575 calories with \u003cstrong\u003e33 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$1.72\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 2.75 lb (1225 g)",
+                                "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 1.5 lb (704 g)",
+                                "\u003cstrong\u003eCream of Mushroom Soup (Campbell\u0027s (USDA SR)):\u003c/strong\u003e 1.8 cans (522 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 2.5 cups (640 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 5.25 tbsp (42 g)",
+                                "\u003cstrong\u003eRefrigerated Biscuits (Pillsbury):\u003c/strong\u003e 29.3 (1698 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Turkey Breast, 2.75 lb: ~$13.00. \u003cstrong\u003eBuy 1 3lb frozen roast: $14.44.\u003c/strong\u003e",
+                       "Frozen Green Peas, 1.5 lb: ~$1.52. \u003cstrong\u003eBuy 3 12oz bags: $2.20.\u003c/strong\u003e",
+                       "Cream of Mushroom Soup, 1.8 cans: ~$1.30. \u003cstrong\u003eBuy 2 10.5oz cans: $1.48.\u003c/strong\u003e",
+                       "Milk, 2.5 cups: ~$0.51. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
+                       "All-Purpose Flour, 5.25 tbsp: ~$0.04. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Refrigerated Biscuits, 29.3: ~$7.39. \u003cstrong\u003eBuy 4 8ct cans: $8.04.\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, salt): ~$0.35. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $24.11 across 14 servings, so roughly $1.72 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $29.57 across 14 servings, roughly $2.11 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.48 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.05. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.72 a serving\u003c/strong\u003e. Refrigerated biscuits are one of the great cheap-comfort items in the dairy case, and they do a better job here than a pastry crust ever did.",
+    "shop_smart":  [
+                       "Refrigerated biscuit cans go on multi-buy sales constantly and this recipe needs four of them. Watch for the deal, and remember the cans keep in the fridge for weeks past the date.",
+                       "One frozen turkey breast roast covers this whole batch. Roasting it yourself costs a fraction of what deli turkey runs per pound, and the pan drippings make the filling better.",
+                       "Cream of mushroom soup thickens the filling for pennies. Store brand is fine, and two cans is all you need since flour and milk do the rest of the work.",
+                       "Frozen peas are the cheapest way to get vegetables into a pot pie, and the store-brand 12 oz bags beat canned peas on both price and texture."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Whisk the flour into about a cup of the cold milk in a jar until there are no lumps. Doing this cold is the whole trick to a smooth filling.",
+                    "Warm the rest of the milk with the condensed cream of mushroom soup in a large pot over medium heat, stirring until it is smooth.",
+                    "Pour in the flour slurry and cook 4 to 5 minutes, stirring, until the sauce thickens to gravy. Season with salt and plenty of black pepper.",
+                    "Fold in the diced turkey breast and the frozen peas, then pour the filling into a greased 9x13 pan. It should be hot going into the oven so the biscuits cook through from below.",
+                    "Open the biscuit cans and cut each biscuit in half, then arrange the halves cut side down across the top of the filling in even rows.",
+                    "Bake at 375F for 30 to 35 minutes, until the biscuits are deep golden on top and cooked through underneath. If they brown too fast, tent the pan with foil.",
+                    "Rest 10 minutes before portioning so the filling sets under the biscuits instead of running."
+                ],
+    "portion_html":  "Weigh the whole pan, subtract the empty pan weight, and divide by 14. Portion filling and biscuit together into each container so every serving gets its lid. Each one comes to \u003cstrong\u003e575 calories\u003c/strong\u003e and 33 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.littlesweetbaker.com/leftover-turkey-biscuit-casserole-recipe/\" target=\"_blank\" rel=\"noopener\"\u003elittlesweetbaker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Pot pie comfort for about $1.72 a serving, and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "cost_batch":  24.11,
+    "cost_batch_true":  29.57,
+    "cost_per_serving":  1.72,
+    "cost_per_serving_true":  2.11,
+    "cost_pantry_add":  7.48,
+    "cost_first_run":  37.05,
+    "scaler":  {
+                   "cost":  "29.57",
+                   "ing":  [
+                               {
+                                   "item":  "Turkey Breast",
+                                   "canon":  "Turkey Breast",
+                                   "grams":  1225,
+                                   "buy":  "2.75 lb",
+                                   "bid":  "turkey-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Frozen Green Peas",
+                                   "canon":  "Frozen Green Peas",
+                                   "grams":  704,
+                                   "buy":  "1.5 lb",
+                                   "bid":  "frozen-peas",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cream of Mushroom Soup",
+                                   "canon":  "Cream of Mushroom Soup",
+                                   "grams":  522,
+                                   "buy":  "1.8 cans",
+                                   "bid":  "cream-of-mushroom-soup",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  640,
+                                   "buy":  "2.5 cups",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  42,
+                                   "buy":  "5.25 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Refrigerated Biscuits",
+                                   "canon":  "Refrigerated Biscuits",
+                                   "grams":  1698,
+                                   "buy":  "29.3",
+                                   "bid":  "refrigerated-biscuits",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey biscuit pot pie casserole meal prep: creamy turkey and peas under golden biscuit halves. 575 calories, 33g protein, about $1.72 a serving.",
+                 "keywords":  "turkey pot pie casserole, biscuit topped casserole, leftover turkey recipes, turkey meal prep, budget comfort food, easy pot pie",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT35M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  1.72,
+                 "recipeIngredient":  [
+                                          "8.75 cups diced cooked turkey breast",
+                                          "29 refrigerated biscuits",
+                                          "5.25 cups frozen green peas",
+                                          "1.8 cans cream of mushroom soup",
+                                          "2.5 cups milk",
+                                          "5.25 tbsp all-purpose flour"
+                                      ],
+                 "steps":  [
+                               "Whisk the flour into a cup of cold milk until smooth.",
+                               "Heat the remaining milk with the cream of mushroom soup, add the slurry, and cook until it thickens into gravy. Season with salt and pepper.",
+                               "Fold in the diced turkey and frozen peas and pour the hot filling into a greased 9x13 pan.",
+                               "Halve the biscuits and arrange them cut side down over the filling.",
+                               "Bake at 375F for 30 to 35 minutes until golden and cooked through, rest 10 minutes, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Turkey Breast",
+                                  "grams":  1225
+                              },
+                              {
+                                  "item":  "Frozen Green Peas",
+                                  "grams":  704
+                              },
+                              {
+                                  "item":  "Cream of Mushroom Soup",
+                                  "grams":  522
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  640
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Refrigerated Biscuits",
+                                  "grams":  1698
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              }
+                          ]
+}

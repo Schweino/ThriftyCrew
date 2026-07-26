@@ -1,0 +1,159 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"chicken-rogan-josh","base":14,"cost":42.19,"ing":[{"item":"Milk","grams":105,"buy":"7 tbsp","bid":"milk","gpu":3785.000},{"item":"Garam Masala","grams":17,"buy":"2.75 tbsp","bid":"garam-masala","gpu":28.350},{"item":"Garlic","grams":79,"buy":"9.25 tbsp","bid":"garlic","gpu":50.000},{"item":"Greek Yogurt","grams":214,"buy":"0.75 cups","bid":"yogurt","gpu":28.350},{"item":"Chili Powder","grams":84,"buy":"10.5 tbsp","bid":"chili-powder","gpu":28.350},{"item":"Ground Fennel","grams":56,"buy":"2 oz","bid":"ground-fennel","gpu":28.350},{"item":"Ground Ginger","grams":56,"buy":"2 oz","bid":"ground-ginger","gpu":28.350},{"item":"Ground Coriander","grams":19,"buy":"3.5 tbsp","bid":"ground-coriander","gpu":28.350},{"item":"Ground Cumin","grams":15,"buy":"2.5 tbsp","bid":"ground-cumin","gpu":28.350},{"item":"Salt","grams":42,"buy":"2.25 tbsp","bid":"salt","gpu":28.350},{"item":"Vegetable Oil","grams":245,"buy":"1 cups","bid":"vegetable-oil","gpu":28.000},{"item":"Bay Leaves","grams":4,"buy":"0.25 oz","bid":"bay-leaves","gpu":28.350},{"item":"Dried Guajillo Chiles","grams":94,"buy":"3.25 oz","bid":"dried-guajillo-chiles","gpu":28.350},{"item":"Boneless Skinless Chicken Thigh","grams":3500,"buy":"7.75 lb","bid":"chicken-thighs","gpu":453.592},{"item":"Butter","grams":199,"buy":"1 cups","bid":"butter","gpu":453.592}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~659 cal &middot; 54g protein &middot; 16g carbs &middot; 41g fat &middot; ~$2.50 per serving.</strong></p>
+
+<p>Rogan josh is a Kashmiri dish, and the authentic version does something almost no other Indian curry does: it uses no onions and no tomatoes at all. The deep red color comes from Kashmiri chiles, which are more about pigment than punishment. The body comes from yogurt, whisked in slowly so it does not split, and the perfume comes from dried ginger and fennel. It is a short list of ingredients doing very precise work. Each serving runs <strong>659 calories and 54 grams of protein</strong> for about <strong>$2.50</strong>.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Milk (Fairlife):</strong> 7 tbsp (105 g)</li>
+<li><strong>Garlic:</strong> 9.25 tbsp (79 g)</li>
+<li><strong>Greek Yogurt (Great Value):</strong> 0.75 cups (214 g)</li>
+<li><strong>Ground Fennel (generic (USDA)):</strong> 2 oz (56 g)</li>
+<li><strong>Ground Ginger (Great Value):</strong> 2 oz (56 g)</li>
+<li><strong>Vegetable Oil (Great Value):</strong> 1 cups (245 g)</li>
+<li><strong>Dried Guajillo Chiles (generic (USDA)):</strong> 3.25 oz (94 g)</li>
+<li><strong>Boneless Skinless Chicken Thigh (Member's Mark):</strong> 7.75 lb (3500 g)</li>
+<li><strong>Butter (generic):</strong> 1 cups (199 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Milk, 7 tbsp: ~$0.08. <strong>Buy 1 gallon: $3.02.</strong></li>
+<li>Garlic, 9.25 tbsp: ~$1.14. <strong>Buy 2 heads: $1.15.</strong></li>
+<li>Greek Yogurt, 0.75 cups: ~$0.62. <strong>Buy 1 32oz tub: $2.64.</strong></li>
+<li>Ground Fennel, 2 oz: ~$2.22. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Ground Ginger, 2 oz: ~$5.93. <strong>Pantry staple; this batch alone uses about 2 1.6oz jars.</strong></li>
+<li>Vegetable Oil, 1 cups: ~$0.60. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Dried Guajillo Chiles, 3.25 oz: ~$5.79. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Boneless Skinless Chicken Thigh, 7.75 lb: ~$13.66. <strong>Buy 8 lbs: $14.16.</strong></li>
+<li>Butter, 1 cups: ~$1.31. <strong>Buy 1 lb box: $2.98.</strong></li>
+<li>Pantry seasonings (garam masala, chili powder, ground coriander, ground cumin, salt, bay leaves): ~$3.70. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $35.05 across 14 servings, so roughly $2.50 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $42.19 across 14 servings, roughly $3.01 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $21.47 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $63.66. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$2.50 a serving</strong>. This one is priced by its spice cabinet, not its produce, because the recipe skips vegetables entirely. Buy the ginger, fennel and dried chiles once and the next batch costs you a lot less.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>Dried chiles, ground ginger and ground fennel together make up more of this batch than the vegetables in most of our recipes. All three are dramatically cheaper in bags from an international grocer than in branded jars, and all three keep for a year in sealed containers.</li>
+<li>Greek yogurt is the sauce. Buy the big tub of plain full fat, not the flavored cups, and let it come to room temperature before it goes in the pot so it is less likely to split.</li>
+<li>Butter and oil are both here for a reason: the oil takes the heat and the butter carries the flavor. Buy butter in the one pound box rather than sticks sold individually, which run higher per ounce.</li>
+<li>This curry has no rice line, so plan for a starch on the side if you want it. A pot of plain rice adds almost nothing to your cost and stretches the batch further.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Soak the dried chiles in hot water for 20 minutes, then blend them with a little of the soaking liquid into a smooth red paste. That paste is the color and the soul of the dish.</li>
+<li>Whisk the greek yogurt with the milk until it is completely smooth and pourable. Cold, thick yogurt is what splits, so take the minute.</li>
+<li>Heat the vegetable oil and butter together in your largest heavy pot over medium-high, add the bay leaves, and let them sizzle for 20 seconds.</li>
+<li>Add the chicken thighs and sear them, working in batches so the pot stays hot. Return them all to the pot with the minced garlic and cook 2 minutes.</li>
+<li>Stir in the chile paste, chili powder, ground fennel, ground ginger, ground coriander, ground cumin and salt and cook 3 to 4 minutes until the oil turns red and separates.</li>
+<li>Turn the heat to low and add the yogurt mixture a ladle at a time, stirring constantly and letting each addition come together before the next goes in. Rushing this is how you end up with curdled sauce.</li>
+<li>Cover and simmer gently 35 to 40 minutes until the chicken is tender and the sauce is glossy, then stir in the garam masala off the heat.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Set the pot on the scale, subtract the empty-pot weight, and divide by 14. Fourteen even portions, no arguing about it. Each one carries <strong>659 calories</strong>, and reheat this one gently at half power, because a yogurt sauce that boils will break on you.</p>
+
+<p><em>Recipe adapted from <a href="https://www.whiskaffair.com/chicken-rogan-josh-recipe/" target="_blank" rel="noopener">whiskaffair.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>Kashmiri rogan josh, no onions and no tomatoes, for about $2.50 a serving. This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.</em></p>

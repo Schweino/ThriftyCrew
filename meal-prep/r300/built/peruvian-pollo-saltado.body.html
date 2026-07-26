@@ -1,0 +1,169 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"peruvian-pollo-saltado","base":14,"cost":40.42,"ing":[{"item":"Boneless Skinless Chicken Breast","grams":1905,"buy":"4.25 lb","bid":"chicken-breast","gpu":453.592},{"item":"Soy Sauce","grams":179,"buy":"0.75 cups","bid":"soy-sauce","gpu":29.570},{"item":"Ground Cumin","grams":1,"buy":"0.25 tbsp","bid":"ground-cumin","gpu":28.350},{"item":"Dried Oregano","grams":1,"buy":"0.25 tbsp","bid":"dried-oregano","gpu":28.350},{"item":"Black Pepper","grams":3,"buy":"0.5 tbsp","bid":"black-pepper","gpu":28.350},{"item":"Aji Amarillo Paste","grams":67,"buy":"2.25 oz","bid":"aji-amarillo-paste","gpu":28.350},{"item":"White Vinegar","grams":28,"buy":"1.75 tbsp","bid":"white-vinegar","gpu":29.570},{"item":"Salt","grams":1,"buy":"0.06 tbsp","bid":"salt","gpu":28.350},{"item":"Vegetable Oil","grams":137,"buy":"0.75 cups","bid":"vegetable-oil","gpu":28.000},{"item":"Red Onion","grams":196,"buy":"2","bid":"onions","gpu":453.592},{"item":"Red Bell Pepper","grams":336,"buy":"3","bid":"bell-peppers","gpu":120.000},{"item":"Green Bell Peppers","grams":168,"buy":"1.4","bid":"bell-peppers","gpu":120.000},{"item":"Garlic","grams":56,"buy":"6.5 tbsp","bid":"garlic","gpu":50.000},{"item":"Ginger","grams":17,"buy":"2.75 tbsp","bid":"fresh-ginger","gpu":453.592},{"item":"Diced Tomatoes","grams":1726,"buy":"4.2 cans","bid":"diced-tomatoes","gpu":28.350},{"item":"Fries","grams":1680,"buy":"59.25 oz","bid":"fries","gpu":28.350},{"item":"Rice","grams":700,"buy":"3.75 cups dry","bid":"rice","gpu":453.592},{"item":"Fresh Cilantro","grams":25,"buy":"25 tbsp","bid":"cilantro","gpu":57.000}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~635 cal &middot; 39g protein &middot; 74g carbs &middot; 21g fat &middot; ~$2.37 per serving.</strong></p>
+
+<p>Pollo saltado is what happened when Chinese immigrants brought wok cooking to Peru in the 1800s, and Peruvians call the whole cuisine chifa. It is a soy and vinegar stir fry with onions, tomatoes and aji amarillo, and then, because this is Peru, it gets served over rice with french fries thrown right in the pan. Yes, both starches. It sounds like a dare and it works. Each bowl runs <strong>635 calories and 39 grams of protein</strong> for about <strong>$2.37</strong>.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Boneless Skinless Chicken Breast (Member's Mark):</strong> 4.25 lb (1905 g)</li>
+<li><strong>Soy Sauce (generic):</strong> 0.75 cups (179 g)</li>
+<li><strong>Aji Amarillo Paste (Goya (Yellow Hot Pepper Paste)):</strong> 2.25 oz (67 g)</li>
+<li><strong>White Vinegar (generic):</strong> 1.75 tbsp (28 g)</li>
+<li><strong>Vegetable Oil (Great Value):</strong> 0.75 cups (137 g)</li>
+<li><strong>Red Onion:</strong> 2 (196 g)</li>
+<li><strong>Red Bell Pepper (generic):</strong> 3 (336 g)</li>
+<li><strong>Green Bell Peppers:</strong> 1.4 (168 g)</li>
+<li><strong>Garlic:</strong> 6.5 tbsp (56 g)</li>
+<li><strong>Ginger (generic):</strong> 2.75 tbsp (17 g)</li>
+<li><strong>Diced Tomatoes (Great Value):</strong> 4.2 cans (1726 g)</li>
+<li><strong>Fries (Great Value):</strong> 59.25 oz (1680 g)</li>
+<li><strong>Rice (Member's Mark):</strong> 3.75 cups dry (700 g)</li>
+<li><strong>Fresh Cilantro:</strong> 25 tbsp (25 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Boneless Skinless Chicken Breast, 4.25 lb: ~$13.73. <strong>Buy 5 lbs: $16.35.</strong></li>
+<li>Soy Sauce, 0.75 cups: ~$0.68. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Aji Amarillo Paste, 2.25 oz: ~$2.02. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>White Vinegar, 1.75 tbsp: ~$0.05. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Vegetable Oil, 0.75 cups: ~$0.33. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Red Onion, 2: ~$0.49. <strong>Buy 1 lb: $1.14.</strong></li>
+<li>Red Bell Pepper, 3: ~$2.41. <strong>Buy 3 each: $2.58.</strong></li>
+<li>Green Bell Peppers, 1.4: ~$1.20. <strong>Buy 2 each: $1.72.</strong></li>
+<li>Garlic, 6.5 tbsp: ~$0.81. <strong>Buy 2 heads: $1.15.</strong></li>
+<li>Ginger, 2.75 tbsp: ~$0.15. <strong>Buy 1 piece: $0.88.</strong></li>
+<li>Diced Tomatoes, 4.2 cans: ~$4.03. <strong>Buy 5 cans: $4.80.</strong></li>
+<li>Fries, 59.25 oz: ~$5.45. <strong>Buy 2 32oz bags: $5.89.</strong></li>
+<li>Rice, 3.75 cups dry: ~$0.86. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Fresh Cilantro, 25 tbsp: ~$0.78. <strong>Buy 1 bunch: $1.78.</strong></li>
+<li>Pantry seasonings (ground cumin, dried oregano, black pepper, salt): ~$0.19. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $33.18 across 14 servings, so roughly $2.37 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $40.42 across 14 servings, roughly $2.89 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $20.59 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.01. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$2.37 a bowl</strong>. Chicken breast is the biggest line by a wide margin, and the fries that make it saltado are one of the cheapest things in the cart.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>Chicken breast is the largest line here. Thighs would drop it noticeably and hold up better in a screaming hot pan, so make the swap if the number matters more than the cut.</li>
+<li>Frozen fries are shockingly cheap for the volume they add. Bake them separately until properly crisp rather than dumping them in soft, because a soggy fry ruins the whole idea.</li>
+<li>Aji amarillo paste is the flavor that makes this Peruvian rather than generic. One jar costs a couple of dollars, lasts months in the fridge, and there is no honest substitute for it.</li>
+<li>Canned diced tomatoes work better than fresh for a batch this size, since they cook down predictably and cost less. Buy them by the case when they hit a sale.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Slice the chicken breast into thick strips and marinate it with the soy sauce, ground cumin, dried oregano, black pepper, aji amarillo paste and white vinegar for at least 30 minutes.</li>
+<li>Cook the rice and let it steam covered off the heat. Bake the frozen fries on a sheet pan at 425F until they are genuinely crisp, not just hot. Keep them separate for now.</li>
+<li>Heat the vegetable oil in your largest skillet or wok as hot as your burner goes and sear the chicken in batches, 3 to 4 minutes per batch, until browned. Do not crowd it. Set the chicken aside.</li>
+<li>Add the red onion cut into thick wedges, plus the red and green bell pepper strips, and stir fry hard for 2 to 3 minutes. They should stay crunchy; wilted onion is the mark of a saltado gone wrong.</li>
+<li>Add the garlic and grated ginger for 30 seconds, then the drained diced tomatoes, and toss for another minute.</li>
+<li>Return the chicken with all the marinade, let it bubble and reduce for 2 minutes, and taste for salt and vinegar.</li>
+<li>Fold the crisp fries and the chopped cilantro in at the very last second, then combine with the rice in your mixing pot.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Set the pot on the scale, subtract the empty-pot weight, and divide by 14. Same number in every container. Each one lands at <strong>635 calories</strong>, and the fries will soften in the fridge, so if that bothers you, bag them separately and crisp them in a toaster oven at reheat time.</p>
+
+<p><em>Recipe adapted from <a href="https://gypsyplate.com/pollo-saltado/" target="_blank" rel="noopener">gypsyplate.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>Peruvian pollo saltado, fries and rice in the same bowl, for about $2.37. This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.</em></p>

@@ -1,0 +1,161 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"georgian-chicken-chakhokhbili","base":14,"cost":34.29,"ing":[{"item":"Boneless Skinless Chicken Thigh","grams":3500,"buy":"7.75 lb","bid":"chicken-thighs","gpu":453.592},{"item":"Yellow Onion","grams":1575,"buy":"14.3","bid":"onions","gpu":453.592},{"item":"Diced Tomatoes","grams":1911,"buy":"4.6 cans","bid":"diced-tomatoes","gpu":28.350},{"item":"Salt","grams":70,"buy":"4 tbsp","bid":"salt","gpu":28.350},{"item":"Fresh Cilantro","grams":70,"buy":"70 tbsp","bid":"cilantro","gpu":57.000},{"item":"Jalapeno","grams":49,"buy":"5.5 tbsp","bid":"jalapenos","gpu":453.592},{"item":"White Vinegar","grams":175,"buy":"0.75 cups","bid":"white-vinegar","gpu":29.570},{"item":"Vegetable Oil","grams":252,"buy":"1.25 cups","bid":"vegetable-oil","gpu":28.000},{"item":"Bay Leaves","grams":9,"buy":"0.25 oz","bid":"bay-leaves","gpu":28.350},{"item":"Garlic","grams":70,"buy":"8.25 tbsp","bid":"garlic","gpu":50.000},{"item":"Red Bell Pepper","grams":56,"buy":"0.5 cups","bid":"bell-peppers","gpu":120.000},{"item":"Black Pepper","grams":4,"buy":"0.5 tbsp","bid":"black-pepper","gpu":28.350},{"item":"Rice","grams":700,"buy":"3.75 cups dry","bid":"rice","gpu":453.592}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~735 cal &middot; 56g protein &middot; 57g carbs &middot; 28g fat &middot; ~$2.09 per serving.</strong></p>
+
+<p>Chakhokhbili is a Georgian braise, from the country in the Caucasus, and it is built on a ratio most American recipes would call a typo: nearly as much onion as chicken. No water goes in the pot. The onions and tomatoes release everything the dish needs, and it cooks down into something concentrated and herby with a fistful of fresh cilantro stirred in at the very end. Each bowl runs <strong>735 calories and 56 grams of protein</strong> for about <strong>$2.09</strong>, and that protein figure is the highest number on this entire page.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Boneless Skinless Chicken Thigh (Member's Mark):</strong> 7.75 lb (3500 g)</li>
+<li><strong>Yellow Onion:</strong> 14.3 (1575 g)</li>
+<li><strong>Diced Tomatoes (Great Value):</strong> 4.6 cans (1911 g)</li>
+<li><strong>Fresh Cilantro:</strong> 70 tbsp (70 g)</li>
+<li><strong>Jalapeno:</strong> 5.5 tbsp (49 g)</li>
+<li><strong>White Vinegar (generic):</strong> 0.75 cups (175 g)</li>
+<li><strong>Vegetable Oil (Great Value):</strong> 1.25 cups (252 g)</li>
+<li><strong>Garlic:</strong> 8.25 tbsp (70 g)</li>
+<li><strong>Red Bell Pepper (generic):</strong> 0.5 cups (56 g)</li>
+<li><strong>Rice (Member's Mark):</strong> 3.75 cups dry (700 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Boneless Skinless Chicken Thigh, 7.75 lb: ~$13.66. <strong>Buy 8 lbs: $14.16.</strong></li>
+<li>Yellow Onion, 14.3: ~$3.96. <strong>Buy 4 lbs: $4.56.</strong></li>
+<li>Diced Tomatoes, 4.6 cans: ~$4.46. <strong>Buy 5 cans: $4.80.</strong></li>
+<li>Fresh Cilantro, 70 tbsp: ~$2.19. <strong>Buy 2 bunches: $3.56.</strong></li>
+<li>Jalapeno, 5.5 tbsp: ~$0.19. <strong>Buy 1 lb: $1.76.</strong></li>
+<li>White Vinegar, 0.75 cups: ~$0.33. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Vegetable Oil, 1.25 cups: ~$0.61. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Garlic, 8.25 tbsp: ~$1.01. <strong>Buy 2 heads: $1.15.</strong></li>
+<li>Red Bell Pepper, 0.5 cups: ~$0.40. <strong>Buy 1 each: $0.86.</strong></li>
+<li>Rice, 3.75 cups dry: ~$0.86. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Pantry seasonings (salt, bay leaves, black pepper): ~$1.64. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $29.31 across 14 servings, so roughly $2.09 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $34.29 across 14 servings, roughly $2.45 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $10.02 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $44.31. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$2.09 a bowl</strong>, and it is the chicken breast doing that, as the largest line on the list by a mile. Swap to thighs and this drops substantially while the dish gets better, because a long braise rewards fat.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>Chicken breast is by far the biggest line and the easiest thing to fix. Boneless thighs cost considerably less per pound and they are the better cut for an hour in a covered pot.</li>
+<li>Onions are the second largest line and you need a lot of them, so buy the four or five pound bag rather than loose. They keep for a month somewhere cool and dry.</li>
+<li>Canned diced tomatoes provide all the liquid in this braise, which is why the recipe adds no water at all. Buy the cans on sale and stack them, since they keep for a year.</li>
+<li>Cilantro goes in by the bunch at the end, not by the sprig. Buy two bunches the day you cook and keep the stems in water in the fridge, because wilted cilantro adds nothing.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Cut the chicken into large pieces and season it with salt and black pepper. Heat a dry heavy pot over medium-high and brown the chicken in the vegetable oil in batches until it takes color, then set it aside.</li>
+<li>Slice all the onions thin and add them to the pot. Cook them over medium heat for 15 to 20 minutes until they are completely soft and starting to turn gold. This is the largest ingredient in the dish, so it deserves the time.</li>
+<li>Add the garlic, minced jalapeno and diced red bell pepper and cook 3 more minutes.</li>
+<li>Return the chicken with its juices, add the diced tomatoes and the bay leaves, and stir. Add no water at all; the tomatoes and onions provide everything this braise needs, and that concentration is the whole point of chakhokhbili.</li>
+<li>Cover and simmer over low heat for 40 to 50 minutes, stirring occasionally, until the chicken is tender and the sauce has thickened around it.</li>
+<li>Stir in the white vinegar and taste. It should read savory first with a sharp edge behind it. Adjust the salt now, while everything is hot.</li>
+<li>Kill the heat, pull the bay leaves, and fold in the whole pile of chopped cilantro so it wilts but stays green. Cook the rice separately and fold it in or serve the braise over it.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Set the pot on the scale, subtract the empty-pot weight, and divide by 14. Fourteen containers, one number, no favorites. Each one carries <strong>735 calories</strong>, and a handful of fresh cilantro stirred in after reheating brings it right back to day one.</p>
+
+<p><em>Recipe adapted from <a href="https://georgianrecipes.net/2013/11/13/chakhokhbili/" target="_blank" rel="noopener">georgianrecipes.net</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>Georgian chakhokhbili for about $2.09 a bowl, with the swap that makes it cheaper spelled out. This is one of a few hundred recipes here. Members get every recipe in the Meal Prep section plus the full library of money lessons, calculators, and tools, all for $1 a month.</em></p>

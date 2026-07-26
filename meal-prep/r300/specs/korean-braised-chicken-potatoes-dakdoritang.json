@@ -1,0 +1,337 @@
+﻿{
+    "name":  "Korean Braised Chicken and Potatoes (Dakdoritang)",
+    "slug":  "korean-braised-chicken-potatoes-dakdoritang",
+    "cuisine":  "Korean",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.beyondkimchee.com/spicy-korean-chicken-stew/",
+    "source_site":  "beyondkimchee.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Potato)",
+                   "portion factor 1.2"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Bone-in thigh braise, one pot, holds and reheats perfectly at 14 servings; gochujang already on the board so the signature flavor is cheap. Source lists 327 cal / 21g protein for the stew alone (6 servings); est_cal 540 is my plated estimate over 1 cup rice - confidence medium on calories, high on the dish being a real batch braise. Catalog has no Korean chicken dish at all. | HARVEST: ",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Potato)",
+                         "TUNING: portion factor 1.2"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  581,
+                 "protein":  55,
+                 "carbs":  53,
+                 "fat":  14,
+                 "cost_ps":  "2.02"
+             },
+    "intro_html":  "Dakdoritang is the Korean braise where chicken and potatoes cook down in a gochujang sauce until the potatoes are falling apart at the edges and thickening everything around them. It is a one pot dish that gets better the second day, which is exactly what you want from a meal prep recipe. Each bowl carries 581 calories and \u003cstrong\u003e55 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.02 a serving\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 7.75 lb (3500 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 5 (560 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 11.5 (700 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 10.6 (2262 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 8.75 tbsp (78 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 14 tbsp (84 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2.75 cups (672 g)",
+                                "\u003cstrong\u003eGochujang (generic):\u003c/strong\u003e 5.5 tbsp (112 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.75 cups (168 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 4 tbsp (84 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 tbsp (25 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 2.25 tbsp (14 g)",
+                                "\u003cstrong\u003eMirin (Mizkan):\u003c/strong\u003e 4.75 tbsp (84 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 3 tbsp (42 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Thigh, 7.75 lb: ~$13.66. \u003cstrong\u003eBuy 8 lbs: $14.16.\u003c/strong\u003e",
+                       "Yellow Onion, 5: ~$1.41. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Carrots, 11.5: ~$1.47. \u003cstrong\u003eBuy 2 lbs: $1.91.\u003c/strong\u003e",
+                       "Potato, 10.6: ~$2.83. \u003cstrong\u003eBuy 5 lbs: $2.84.\u003c/strong\u003e",
+                       "Jalapeno, 8.75 tbsp: ~$0.30. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Green Onions, 14 tbsp: ~$1.00. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
+                       "Chicken Broth, 2.75 cups: ~$0.90. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Gochujang, 5.5 tbsp: ~$1.03. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 0.75 cups: ~$0.64. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Honey, 4 tbsp: ~$1.60. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 3 tbsp: ~$0.36. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Ginger, 2.25 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Mirin, 4.75 tbsp: ~$0.74. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sesame Oil, 3 tbsp: ~$0.88. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (red pepper flakes, black pepper, salt): ~$1.41. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $28.35 across 14 servings, so roughly $2.02 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.68 across 14 servings, roughly $2.33 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $19.58 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.26. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.02 a bowl\u003c/strong\u003e with that much protein in it. Chicken thighs are the cheapest real protein in the store and gochujang costs pennies per serving, which is how a dish this bold ends up this cheap.",
+    "shop_smart":  [
+                       "Boneless thighs are the whole reason this number works. They cost a fraction of breast per pound, they do not dry out during a braise, and they carry more flavor. For any stew, thighs beat breast on every measure including price.",
+                       "A tub of gochujang costs a few dollars and lasts through many batches. It is the single highest return item you can add to a pantry if you like Korean food, because it turns cheap ingredients into something that tastes engineered.",
+                       "Potatoes and carrots in the big bags are the cheapest bulk in the produce aisle, and here they are not filler. The potato starch is what thickens the braising liquid into a sauce.",
+                       "Sesame oil, mirin, and soy sauce are one-time buys that carry across every Korean and Japanese recipe on the site, so the real cost of this sauce after the first batch is close to nothing."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Whisk the gochujang, soy sauce, honey, mirin, garlic, ginger, sesame oil, red pepper flakes, and black pepper into a sauce. Taste it and decide how hot you want the week to be, because this is your only chance to adjust.",
+                    "Cut the chicken thighs into large pieces and toss them with about half the sauce.",
+                    "Cut the potatoes and carrots into big chunks. Small pieces will disappear into the sauce over a long braise, and you want them to stay recognizable.",
+                    "Put the chicken, potatoes, carrots, and onion into a wide heavy pot, pour the rest of the sauce over, and add the chicken broth. It should come about halfway up, not cover everything.",
+                    "Bring it to a boil, then drop to a low simmer, cover, and cook 25 minutes.",
+                    "Uncover, add the jalapeno, and simmer another 15 to 20 minutes while the liquid reduces into a thick glossy sauce. Stir gently so the potatoes stay whole.",
+                    "Scatter the green onions over the top off the heat."
+                ],
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. Scoop to that gram target and make sure each container gets both chicken and potato rather than one or the other. Every portion lands at \u003cstrong\u003e581 calories\u003c/strong\u003e, and this reheats beautifully because the sauce keeps everything moist.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.beyondkimchee.com/spicy-korean-chicken-stew/\" target=\"_blank\" rel=\"noopener\"\u003ebeyondkimchee.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Korean braised chicken for about \u003cstrong\u003e$2.02 a bowl\u003c/strong\u003e. Members get every recipe in the Meal Prep section plus the whole library of money lessons, calculators, and tools for $1 a month.",
+    "cost_batch":  28.35,
+    "cost_batch_true":  32.68,
+    "cost_per_serving":  2.02,
+    "cost_per_serving_true":  2.33,
+    "cost_pantry_add":  19.58,
+    "cost_first_run":  52.26,
+    "scaler":  {
+                   "cost":  "32.68",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  3500,
+                                   "buy":  "7.75 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  560,
+                                   "buy":  "5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  700,
+                                   "buy":  "11.5",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  2262,
+                                   "buy":  "10.6",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  78,
+                                   "buy":  "8.75 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  84,
+                                   "buy":  "14 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  672,
+                                   "buy":  "2.75 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Gochujang",
+                                   "canon":  "Gochujang",
+                                   "grams":  112,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "gochujang",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Pepper Flakes",
+                                   "canon":  "Red Pepper Flakes",
+                                   "grams":  52,
+                                   "buy":  "9.75 tbsp",
+                                   "bid":  "red-pepper-flakes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  168,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "canon":  "Honey",
+                                   "grams":  84,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  25,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  14,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Mirin",
+                                   "canon":  "Mirin",
+                                   "grams":  84,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "mirin",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "canon":  "Sesame Oil",
+                                   "grams":  42,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  6,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  24,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Dakdoritang, Korean braised chicken and potatoes in a gochujang sauce, rebuilt for 14 meal prep servings at 581 calories and 55g protein for about $2.02.",
+                 "keywords":  "dakdoritang, korean chicken stew, gochujang chicken, braised chicken and potatoes, korean meal prep, budget chicken recipe, high protein meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT50M",
+                 "totalTime":  "PT1H15M",
+                 "costPerServing":  2.02,
+                 "recipeIngredient":  [
+                                          "7.75 lb boneless skinless chicken thighs",
+                                          "10.6 potatoes",
+                                          "11.5 carrots",
+                                          "5 yellow onions",
+                                          "5.5 tbsp gochujang",
+                                          "0.75 cups soy sauce",
+                                          "4 tbsp honey",
+                                          "4.75 tbsp mirin",
+                                          "3 tbsp minced garlic",
+                                          "2.25 tbsp grated ginger",
+                                          "3 tbsp sesame oil",
+                                          "1.5 lb chicken broth",
+                                          "8.75 tbsp jalapeno and 14 tbsp green onions"
+                                      ],
+                 "steps":  [
+                               "Whisk gochujang, soy sauce, honey, mirin, garlic, ginger, sesame oil, and pepper flakes into a sauce.",
+                               "Toss the cut chicken thighs with half the sauce.",
+                               "Add chicken, potatoes, carrots, and onion to a wide pot with the rest of the sauce and the broth.",
+                               "Simmer covered 25 minutes, then uncover, add jalapeno, and reduce 15 to 20 minutes.",
+                               "Top with green onions, then weigh the pot and divide into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  3500
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  560
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  2262
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  78
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  672
+                              },
+                              {
+                                  "item":  "Gochujang",
+                                  "grams":  112
+                              },
+                              {
+                                  "item":  "Red Pepper Flakes",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  168
+                              },
+                              {
+                                  "item":  "Honey",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  25
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Mirin",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Sesame Oil",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  24
+                              }
+                          ]
+}

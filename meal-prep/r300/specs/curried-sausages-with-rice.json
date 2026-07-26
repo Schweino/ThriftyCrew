@@ -1,0 +1,276 @@
+﻿{
+    "name":  "Curried Sausages with Rice",
+    "slug":  "curried-sausages-with-rice",
+    "cuisine":  "australian",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.recipetineats.com/curried-sausages/",
+    "source_site":  "recipetineats.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 569 cal / 28g protein at the source, clears both bars as written. Curry-powder, frozen-peas and carrots are all board-tracked and this is a genuinely cheap build. Distinct from every curry in the catalog (all chicken, beef or turkey; none use whole sausages in a curry gravy). Braise-and-ladle over rice, scales linearly. | HARVEST: Rice is not in the source ingredient list; it is a serving suggestion only.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "OVERRIDE Italian Seasoning: CANON-MAPPER FIX: \u0027600g / 1.2lb sausages, of choice\u0027 mapped to Italian Seasoning; -\u003e Bratwurst at stated 600 g",
+                         "OVERRIDE +Rice: WAVE-4: titled \u0027with Rice\u0027 but no rice line (tuner never fired - dish passed 550 without it); 55 g dry/serving x 4"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  773,
+                 "protein":  34,
+                 "carbs":  64,
+                 "fat":  41,
+                 "cost_ps":  "1.36"
+             },
+    "intro_html":  "Curried sausages are an Australian and New Zealand staple that most Americans have never heard of, which is a shame, because it is one of the cheapest good dinners there is. Whole browned sausages simmered in a curry gravy with carrots and peas, spooned over rice. It carries 34 grams of protein at about $1.36 a bowl.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1.75 tbsp (24 g)",
+                                "\u003cstrong\u003eBratwurst (Johnsonville):\u003c/strong\u003e 4.75 lb (2100 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3.5 (214 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 10.5 tbsp (84 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.8 cartons (1750 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 1.25 tbsp (15 g)",
+                                "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 1 lb (469 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.25 cups dry (770 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Vegetable Oil, 1.75 tbsp: ~$0.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Bratwurst, 4.75 lb: ~$11.58. \u003cstrong\u003eBuy 4 19oz 5-packs: $11.89.\u003c/strong\u003e",
+                       "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Yellow Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 3.5: ~$0.45. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "All-Purpose Flour, 10.5 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 1.8 cartons: ~$2.35. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Sugar, 1.25 tbsp: ~$0.03. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Frozen Green Peas, 1 lb: ~$1.01. \u003cstrong\u003eBuy 2 12oz bags: $1.47.\u003c/strong\u003e",
+                       "Rice, 4.25 cups dry: ~$0.95. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (curry powder, salt, black pepper): ~$1.01. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $18.99 across 14 servings, so roughly $1.36 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $20.51 across 14 servings, roughly $1.46 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.40 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $35.91. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.36 a bowl\u003c/strong\u003e for a curry gravy dinner. The sausages are nearly the whole cost, so a sale on them is the single biggest lever you have on this recipe.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eAny sausage works, so buy whatever is cheapest.\u003c/strong\u003e The original recipe literally says sausages of choice. The curry gravy is doing all the flavor work, so this is not the week to buy premium links.",
+                       "\u003cstrong\u003eCurry powder is a one time purchase that lasts a year.\u003c/strong\u003e One jar seasons many batches. Buy a decent one, keep it away from the stove heat, and replace it when it stops smelling like anything.",
+                       "\u003cstrong\u003eFrozen peas and a bag of carrots are the whole vegetable list.\u003c/strong\u003e Both are among the cheapest produce items we track and neither one spoils on you.",
+                       "\u003cstrong\u003eFlour and broth make the gravy.\u003c/strong\u003e No coconut milk, no curry paste, no jar of sauce. That is why this lands where it does on cost."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Heat the vegetable oil in a large deep skillet and brown the sausages whole on all sides. Take them out and set them aside once they have color.",
+                    "Slice the onions, slice the carrots into coins and mince the garlic.",
+                    "Cook the onions in the sausage drippings until soft, then add the garlic and the carrots.",
+                    "Sprinkle the flour and the curry powder over the vegetables and stir for a full minute. Cooking the curry powder in the fat is what wakes it up, and skipping this leaves it tasting dusty.",
+                    "Stream in the chicken broth while stirring so no lumps form, add the sugar, and bring the gravy to a simmer until it thickens.",
+                    "Slice the browned sausages into thick coins, return them to the pan, and simmer so they soak up the gravy and finish cooking through.",
+                    "Stir in the frozen peas at the very end, season with salt and black pepper, and serve it over hot rice."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and spoon the exact amount over rice in each container, counting sausage coins so the protein lands even. Every bowl comes in near 773 calories and 34 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.recipetineats.com/curried-sausages/\" target=\"_blank\" rel=\"noopener\"\u003erecipetineats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Cheap curry dinners for about $1.36 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  18.99,
+    "cost_batch_true":  20.51,
+    "cost_per_serving":  1.36,
+    "cost_per_serving_true":  1.46,
+    "cost_pantry_add":  15.4,
+    "cost_first_run":  35.91,
+    "scaler":  {
+                   "cost":  "20.51",
+                   "ing":  [
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  24,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Bratwurst",
+                                   "canon":  "Bratwurst",
+                                   "grams":  2100,
+                                   "buy":  "4.75 lb",
+                                   "bid":  "bratwurst",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  35,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  385,
+                                   "buy":  "3.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  214,
+                                   "buy":  "3.5",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Curry Powder",
+                                   "canon":  "Curry Powder",
+                                   "grams":  22,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "curry-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  84,
+                                   "buy":  "10.5 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  1750,
+                                   "buy":  "1.8 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  15,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  10,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Frozen Green Peas",
+                                   "canon":  "Frozen Green Peas",
+                                   "grams":  469,
+                                   "buy":  "1 lb",
+                                   "bid":  "frozen-peas",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  770,
+                                   "buy":  "4.25 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Australian style curried sausages simmered in a curry gravy with carrots and peas, served over rice. 14 servings, 773 calories, 34g protein, about $1.36 each.",
+                 "keywords":  "curried sausages, sausage curry, australian curried sausages, curry gravy, cheap dinner, budget meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT40M",
+                 "totalTime":  "PT55M",
+                 "costPerServing":  1.36,
+                 "recipeIngredient":  [
+                                          "20 sausages",
+                                          "3.5 yellow onions",
+                                          "3.5 carrots",
+                                          "3.5 cups frozen green peas",
+                                          "10.5 tbsp all-purpose flour",
+                                          "3.75 lb chicken broth",
+                                          "1.25 tbsp sugar",
+                                          "4 tbsp garlic",
+                                          "1.75 tbsp vegetable oil"
+                                      ],
+                 "steps":  [
+                               "Brown the whole sausages in vegetable oil and set them aside.",
+                               "Cook the sliced onions in the drippings, then add the garlic and sliced carrots.",
+                               "Stir the flour and curry powder into the vegetables and cook for a minute.",
+                               "Stream in the chicken broth with the sugar and simmer until the gravy thickens.",
+                               "Slice the sausages, return them to the gravy, stir in the peas, and serve over rice."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  24
+                              },
+                              {
+                                  "item":  "Bratwurst",
+                                  "grams":  2100
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  214
+                              },
+                              {
+                                  "item":  "Curry Powder",
+                                  "grams":  22
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  1750
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Frozen Green Peas",
+                                  "grams":  469
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  770
+                              }
+                          ]
+}

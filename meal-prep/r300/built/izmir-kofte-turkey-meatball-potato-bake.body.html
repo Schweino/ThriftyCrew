@@ -1,0 +1,165 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"izmir-kofte-turkey-meatball-potato-bake","base":14,"cost":35.07,"ing":[{"item":"Yellow Onion","grams":385,"buy":"3.5","bid":"onions","gpu":453.592},{"item":"Bread Crumbs","grams":94,"buy":"13.5 tbsp","bid":"bread-crumbs","gpu":28.350},{"item":"Black Pepper","grams":8,"buy":"1.25 tbsp","bid":"black-pepper","gpu":28.350},{"item":"Ground Cumin","grams":4,"buy":"0.75 tbsp","bid":"ground-cumin","gpu":28.350},{"item":"Paprika","grams":8,"buy":"1.25 tbsp","bid":"paprika","gpu":28.350},{"item":"Salt","grams":42,"buy":"2.25 tbsp","bid":"salt","gpu":28.350},{"item":"93/7 Ground Turkey","grams":1750,"buy":"3.75 lb","bid":"ground-turkey","gpu":453.592},{"item":"Eggs","grams":175,"buy":"4 large eggs","bid":"eggs","gpu":600.000},{"item":"Potato","grams":2982,"buy":"14","bid":"russet-potatoes","gpu":453.592},{"item":"Vegetable Oil","grams":84,"buy":"6 tbsp","bid":"vegetable-oil","gpu":28.000},{"item":"Olive Oil","grams":94,"buy":"7 tbsp","bid":"olive-oil","gpu":28.000},{"item":"Tomato Paste","grams":56,"buy":"3.5 tbsp","bid":"tomato-paste","gpu":28.350},{"item":"Crushed Tomatoes","grams":1575,"buy":"2 cans","bid":"crushed-tomatoes","gpu":28.350},{"item":"Garlic","grams":35,"buy":"4 tbsp","bid":"garlic","gpu":50.000},{"item":"Diced Tomatoes","grams":1050,"buy":"2.6 cans","bid":"diced-tomatoes","gpu":28.350},{"item":"Green Bell Peppers","grams":420,"buy":"3.5","bid":"bell-peppers","gpu":120.000}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~587 cal &middot; 34g protein &middot; 59g carbs &middot; 24g fat &middot; ~$2.25 per serving.</strong></p>
+
+<p>Izmir kofte is the Turkish answer to the question every tired cook asks on a Sunday: what if the meatballs and the potatoes just cooked themselves in the same pan? Seasoned turkey kofte and thick potato slices bake together under a tomato and pepper sauce until the potatoes drink up everything around them. Each portion lands at <strong>587 calories and 34 grams of protein</strong> for about <strong>$2.25</strong>, and it comes out of the oven looking like somebody worked a lot harder than you did.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Yellow Onion:</strong> 3.5 (385 g)</li>
+<li><strong>Bread Crumbs (generic):</strong> 13.5 tbsp (94 g)</li>
+<li><strong>93/7 Ground Turkey (Jennie-O):</strong> 3.75 lb (1750 g)</li>
+<li><strong>Eggs (Great Value):</strong> 4 large eggs (175 g)</li>
+<li><strong>Potato (generic):</strong> 14 (2982 g)</li>
+<li><strong>Vegetable Oil (Great Value):</strong> 6 tbsp (84 g)</li>
+<li><strong>Olive Oil:</strong> 7 tbsp (94 g)</li>
+<li><strong>Tomato Paste (Great Value):</strong> 3.5 tbsp (56 g)</li>
+<li><strong>Crushed Tomatoes (generic):</strong> 2 cans (1575 g)</li>
+<li><strong>Garlic:</strong> 4 tbsp (35 g)</li>
+<li><strong>Diced Tomatoes (Great Value):</strong> 2.6 cans (1050 g)</li>
+<li><strong>Green Bell Peppers:</strong> 3.5 (420 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Yellow Onion, 3.5: ~$0.97. <strong>Buy 1 lb: $1.14.</strong></li>
+<li>Bread Crumbs, 13.5 tbsp: ~$0.27. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>93/7 Ground Turkey, 3.75 lb: ~$14.74. <strong>Buy 4 lbs: $15.29.</strong></li>
+<li>Eggs, 4 large eggs: ~$0.42. <strong>Buy 1 dozen: $1.43.</strong></li>
+<li>Potato, 14: ~$3.73. <strong>Buy 7 lbs: $3.98.</strong></li>
+<li>Vegetable Oil, 6 tbsp: ~$0.20. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Olive Oil, 7 tbsp: ~$1.32. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Tomato Paste, 3.5 tbsp: ~$0.28. <strong>Buy 1 6oz can: $0.86.</strong></li>
+<li>Crushed Tomatoes, 2 cans: ~$2.99. <strong>Buy 2 28oz cans: $3.02.</strong></li>
+<li>Garlic, 4 tbsp: ~$0.50. <strong>Buy 1 head: $0.58.</strong></li>
+<li>Diced Tomatoes, 2.6 cans: ~$2.45. <strong>Buy 3 cans: $2.88.</strong></li>
+<li>Green Bell Peppers, 3.5: ~$3.01. <strong>Buy 4 each: $3.44.</strong></li>
+<li>Pantry seasonings (black pepper, ground cumin, paprika, salt): ~$0.66. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $31.54 across 14 servings, so roughly $2.25 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $35.07 across 14 servings, roughly $2.50 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $19.82 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.89. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$2.25</strong> a container for a baked Turkish casserole with real meat in it. The potatoes and the canned tomatoes are doing the heavy lifting on price, and neither one of them has ever been expensive.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>The ground turkey is over half this batch cost by itself. Buy the 4 pound pack instead of two smaller ones, freeze what you do not use that day, and you have a head start on the next batch.</li>
+<li>Canned crushed and diced tomatoes are the sauce here, and they are the ingredient most worth buying deep. Store brand, biggest can, whatever is on the shelf tag that week. Nothing about this sauce cares whose name is on the label.</li>
+<li>Potatoes are cheapest by the bag, not by the each. A 7 pound bag runs close to what a handful of loose ones cost, and potatoes keep for weeks in a cool dark spot.</li>
+<li>The bread crumbs, tomato paste, and both oils are pantry items that outlive this batch by a mile. You pay for the container once and it shows up in a dozen recipes after this one.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Grate or finely mince the onion, then mix it with the ground turkey, bread crumbs, eggs, cumin, paprika, salt, and black pepper. Work it just until it holds together and no further.</li>
+<li>Roll the mixture into small oval kofte, about the size of your thumb, and set them on a sheet pan.</li>
+<li>Peel the potatoes and cut them into thick slices, then toss them with the vegetable oil and a pinch of salt. Spread them on a second sheet pan.</li>
+<li>Roast the kofte and the potatoes at 400F for about 20 minutes, until the meat is browned and cooked through to 165F and the potato edges are starting to color.</li>
+<li>While those roast, build the sauce: warm the olive oil in a pot, soften the sliced garlic and bell peppers for 5 minutes, stir in the tomato paste for a minute, then add the crushed and diced tomatoes with salt and pepper. Simmer 15 minutes.</li>
+<li>Layer the potatoes and kofte in your baking pans, pour the sauce over everything, and bake at 375F for 30 to 35 minutes until the sauce is bubbling and thick.</li>
+<li>Let it sit 10 minutes before you touch it, then transfer the whole bake into your weighed pot and stir gently so every scoop gets sauce.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is your per-container gram target. Scoop it into 14 containers, making sure each one gets kofte, potato, and sauce instead of a lucky draw. Each portion lands at <strong>587 calories and 34 grams of protein</strong>.</p>
+
+<p><em>Recipe adapted from <a href="https://www.giverecipe.com/easy-meatballs-with-potatoes/" target="_blank" rel="noopener">giverecipe.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>A Turkish oven casserole for about <strong>$2.25</strong> a container. This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.</em></p>

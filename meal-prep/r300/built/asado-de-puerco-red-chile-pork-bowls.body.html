@@ -1,0 +1,152 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"asado-de-puerco-red-chile-pork-bowls","base":14,"cost":19.48,"ing":[{"item":"Olive Oil","grams":40,"buy":"3 tbsp","bid":"olive-oil","gpu":28.000},{"item":"Pork Loin","grams":1667,"buy":"3.75 lb","bid":"pork-loin","gpu":453.592},{"item":"Salt","grams":18,"buy":"1 tbsp","bid":"salt","gpu":28.350},{"item":"Garlic","grams":22,"buy":"2.5 tbsp","bid":"garlic","gpu":50.000},{"item":"Enchilada Sauce","grams":1441,"buy":"5 cans","bid":"enchilada-sauce","gpu":28.350},{"item":"Tomato Sauce","grams":450,"buy":"1 can","bid":"tomato-sauce","gpu":28.350},{"item":"Ground Cumin","grams":1,"buy":"0.25 tbsp","bid":"ground-cumin","gpu":28.350},{"item":"Black Pepper","grams":4,"buy":"0.5 tbsp","bid":"black-pepper","gpu":28.350},{"item":"Rice","grams":1320,"buy":"7.25 cups dry","bid":"rice","gpu":453.592}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~567 cal &middot; 32g protein &middot; 82g carbs &middot; 9g fat &middot; ~$1.19 per serving.</strong></p>
+
+<p>In Chihuahua and across the border in El Paso, asado de puerco is the dish that comes out for weddings, baptisms and Christmas Eve. Pork simmered slowly in red chile sauce until the sauce clings to every piece and the meat surrenders. Traditionally you toast and blend the dried chiles yourself. Canned red enchilada sauce gets you most of the way there on a weeknight, which is why this one lands where it does on the receipt.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Olive Oil:</strong> 3 tbsp (40 g)</li>
+<li><strong>Pork Loin:</strong> 3.75 lb (1667 g)</li>
+<li><strong>Garlic:</strong> 2.5 tbsp (22 g)</li>
+<li><strong>Enchilada Sauce (Old El Paso):</strong> 5 cans (1441 g)</li>
+<li><strong>Tomato Sauce (generic):</strong> 1 can (450 g)</li>
+<li><strong>Rice (Member's Mark):</strong> 7.25 cups dry (1320 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Olive Oil, 3 tbsp: ~$0.56. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Pork Loin, 3.75 lb: ~$7.86. <strong>Buy 4 lbs: $8.56.</strong></li>
+<li>Garlic, 2.5 tbsp: ~$0.32. <strong>Buy 1 head: $0.58.</strong></li>
+<li>Enchilada Sauce, 5 cans: ~$5.08. <strong>Buy 6 10oz cans: $5.99.</strong></li>
+<li>Tomato Sauce, 1 can: ~$1.02. <strong>Buy 2 15oz cans: $1.92.</strong></li>
+<li>Rice, 7.25 cups dry: ~$1.63. <strong>Pantry staple; this batch alone uses about 2 2lb bags.</strong></li>
+<li>Pantry seasonings (salt, ground cumin, black pepper): ~$0.24. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $16.71 across 14 servings, so roughly $1.19 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $19.48 across 14 servings, roughly $1.39 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $16.61 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $36.09. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$1.19 a bowl</strong>. That is the cheapest plate in this whole batch, and it does not eat like it. Six ingredients, one pot, and pork loin doing the work.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li><strong>Canned enchilada sauce is the shortcut worth taking.</strong> Toasting and blending dried chiles is better, but it is also an hour and a blender. The canned sauce costs about a dollar and gets you close.</li>
+<li><strong>Pork loin goes on sale hard.</strong> Watch for the whole loin price and cut it down yourself. You will pay a fraction of what precut cubes or chops cost per pound.</li>
+<li><strong>Plain tomato sauce rounds the chile.</strong> One cheap can takes the edge off the heat and gives the sauce body. It is the least expensive ingredient in the pot and it matters.</li>
+<li><strong>Rice from the big bag is why this costs what it does.</strong> The carb here is close to free per serving, which leaves the budget for the meat.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Cut the pork loin into bite-sized cubes and pat them dry, then season with salt, ground cumin and black pepper.</li>
+<li>Sear the pork in the olive oil in a heavy pot over high heat, in batches, until the pieces are browned on at least two sides. Crowding the pan is the one mistake to avoid here.</li>
+<li>Drop the heat, add the minced garlic, and stir for a minute until it smells sweet.</li>
+<li>Pour in the enchilada sauce and the tomato sauce, scrape the bottom of the pot clean, and bring it to a bare simmer.</li>
+<li>Cover and simmer gently for about 90 minutes, stirring now and then, until the pork is tender and the sauce has thickened and darkened.</li>
+<li>Cook the rice per the package while the pork simmers, and taste the sauce for salt at the end.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Spread the cooked rice across your 14 containers, then set the pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and spoon that exact weight of pork and red chile sauce over the rice. Every bowl lands near 567 calories with 32 grams of protein.</p>
+
+<p><em>Recipe adapted from <a href="https://muybuenoblog.com/asado-de-chile-colorado/" target="_blank" rel="noopener">muybuenoblog.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em><em>Northern Mexican red chile pork for about $1.19 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.</em></em></p>

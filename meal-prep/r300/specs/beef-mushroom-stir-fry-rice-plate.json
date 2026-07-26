@@ -1,0 +1,349 @@
+﻿{
+    "name":  "Beef and Mushroom Stir-Fry Rice Plate",
+    "slug":  "beef-mushroom-stir-fry-rice-plate",
+    "cuisine":  "Cantonese",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://thewoksoflife.com/beef-and-mushroom-stir-fry/",
+    "source_site":  "thewoksoflife.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 200g (src scale)",
+                   "base +60% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Mushrooms are a tracked commodity and stretch the beef, which is good for cost per serving. Distinct from the two live beef-and-broccoli recipes. Confidence: page verified via site listing; calories estimated and this one is the closest to the 500 cal floor, so portioning must be generous. | HARVEST: First six lines are the beef marinade. Rice not in source ingredient list.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 200g (src scale)",
+                         "TUNING: base +60% (Rice)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  572,
+                 "protein":  30,
+                 "carbs":  85,
+                 "fat":  11,
+                 "cost_ps":  "2.92"
+             },
+    "intro_html":  "Mushrooms are the reason this dish works. They soak up the oyster sauce gravy, they bring a savory depth that makes a modest amount of beef taste like more, and they cost a fraction of what another pound of steak would. The Cantonese technique here is velveting: the sliced beef gets tossed with cornstarch and a little baking soda before it hits the pan, which is why restaurant beef is tender and yours usually is not. It takes four extra minutes and it is the single biggest upgrade you can make to any stir fry.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 2.75 lb (1191 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 11.5 tbsp (93 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1.25 tbsp (16 g)",
+                                "\u003cstrong\u003eOyster Sauce (Lee Kum Kee):\u003c/strong\u003e 0.5 cups (168 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 8.75 cups (2100 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.5 cups (131 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 0.5 tbsp (8 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 5.25 tbsp (32 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 17.5 tbsp (105 g)",
+                                "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 2.25 lb (992 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 0.25 cups (84 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 3.5 tbsp (49 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 6.75 cups dry (1258 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Flank/Sirloin Steak, 2.75 lb: ~$23.16. \u003cstrong\u003eBuy 3 lbs: $26.46.\u003c/strong\u003e",
+                       "Cornstarch, 11.5 tbsp: ~$0.39. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Vegetable Oil, 1.25 tbsp: ~$0.04. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Oyster Sauce, 0.5 cups: ~$1.47. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Beef Broth, 8.75 cups: ~$2.82. \u003cstrong\u003ePantry staple; this batch alone uses about 3 32oz cartons.\u003c/strong\u003e",
+                       "Soy Sauce, 0.5 cups: ~$0.50. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sesame Oil, 0.5 tbsp: ~$0.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Ginger, 5.25 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Green Onions, 17.5 tbsp: ~$1.25. \u003cstrong\u003eBuy 2 bunches: $2.14.\u003c/strong\u003e",
+                       "White Mushrooms, 2.25 lb: ~$8.27. \u003cstrong\u003eBuy 5 8oz packs: $9.46.\u003c/strong\u003e",
+                       "Chicken Broth, 0.25 cups: ~$0.11. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Butter, 3.5 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Rice, 6.75 cups dry: ~$1.55. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (baking soda, salt, sugar, black pepper): ~$0.09. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $40.92 across 14 servings, so roughly $2.92 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $49.64 across 14 servings, roughly $3.55 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $21.59 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $71.23. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.92 a bowl\u003c/strong\u003e for a Cantonese stir fry with a proper velveted beef texture and a gravy that clings.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eMushrooms stretch the beef and that is the whole strategy.\u003c/strong\u003e Buy whole white mushrooms rather than pre-sliced, since the sliced packs cost noticeably more per pound for thirty seconds of knife work.",
+                       "\u003cstrong\u003eVelveting is free tenderness.\u003c/strong\u003e Cornstarch and a pinch of baking soda cost essentially nothing and they let you use a cheaper cut without it turning chewy.",
+                       "\u003cstrong\u003eOyster sauce is one bottle that keeps for months.\u003c/strong\u003e It is the backbone of the gravy here and of a lot of other stir fries, so the cost per batch is small once you own it.",
+                       "\u003cstrong\u003eCook the rice ahead so it is not the bottleneck.\u003c/strong\u003e This stir fry cooks in about eight minutes once the pan is hot, and you do not want to be standing there waiting on a rice cooker."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Slice the beef thin against the grain and toss it with most of the cornstarch, a pinch of baking soda, some soy sauce, and a splash of water, then let it sit for at least fifteen minutes.",
+                    "Cook the rice according to the package while the beef rests.",
+                    "Stir the remaining cornstarch into a little cold water and mix it with the oyster sauce, the rest of the soy sauce, the beef broth, the chicken broth, sugar, and black pepper to make the sauce.",
+                    "Heat the vegetable oil in a large skillet or wok until it smokes and sear the beef in batches in a single layer, just until browned, then set it aside. Do not cook it through, since it will finish in the sauce.",
+                    "Add the butter to the pan and cook the mushrooms hard, without stirring much, until they release their water, it cooks off, and they brown.",
+                    "Add the ginger, garlic, and the white parts of the green onions and cook until fragrant.",
+                    "Pour in the sauce mixture, bring it to a boil until it thickens and turns glossy, return the beef, add the sesame oil and the green onion tops, and toss to coat."
+                ],
+    "portion_html":  "Weigh the rice pot and the stir fry pan separately, subtracting the empty-pot weight from Step 1, and divide each by 14. Even rice base, even weight of beef, mushrooms, and gravy. Every serving lands near \u003cstrong\u003e572 calories with 30 grams of protein\u003c/strong\u003e, so be generous with the gravy when you portion rather than leaving it in the pan.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://thewoksoflife.com/beef-and-mushroom-stir-fry/\" target=\"_blank\" rel=\"noopener\"\u003ethewoksoflife.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Takeout-quality stir fries for about $2.92 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  40.92,
+    "cost_batch_true":  49.64,
+    "cost_per_serving":  2.92,
+    "cost_per_serving_true":  3.55,
+    "cost_pantry_add":  21.59,
+    "cost_first_run":  71.23,
+    "scaler":  {
+                   "cost":  "49.64",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Flank/Sirloin Steak",
+                                   "canon":  "Beef Flank/Sirloin Steak",
+                                   "grams":  1191,
+                                   "buy":  "2.75 lb",
+                                   "bid":  "sirloin-steak",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cornstarch",
+                                   "canon":  "Cornstarch",
+                                   "grams":  93,
+                                   "buy":  "11.5 tbsp",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  16,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Oyster Sauce",
+                                   "canon":  "Oyster Sauce",
+                                   "grams":  168,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "oyster-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Baking Soda",
+                                   "canon":  "Baking Soda",
+                                   "grams":  5,
+                                   "buy":  "0.25 oz",
+                                   "bid":  "baking-soda",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  2100,
+                                   "buy":  "8.75 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  131,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "canon":  "Sesame Oil",
+                                   "grams":  8,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  10,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  4,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  32,
+                                   "buy":  "5.25 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  35,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  105,
+                                   "buy":  "17.5 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "White Mushrooms",
+                                   "canon":  "White Mushrooms",
+                                   "grams":  992,
+                                   "buy":  "2.25 lb",
+                                   "bid":  "mushrooms",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  84,
+                                   "buy":  "0.25 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  49,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1258,
+                                   "buy":  "6.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Cantonese beef and mushroom stir-fry rice plate rebuilt for 14-serving meal prep with velveted beef and an oyster sauce gravy. 572 calories, 30g protein, about $2.92 per serving.",
+                 "keywords":  "beef and mushroom stir fry, velveted beef, oyster sauce gravy, cantonese stir fry, chinese meal prep, budget rice plate",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT20M",
+                 "totalTime":  "PT45M",
+                 "costPerServing":  2.92,
+                 "recipeIngredient":  [
+                                          "2.75 lb beef steak",
+                                          "14.25 cups white mushrooms",
+                                          "6.75 cups dry rice",
+                                          "0.5 cups oyster sauce",
+                                          "0.5 cups soy sauce",
+                                          "4.75 lb beef broth",
+                                          "11.5 tbsp cornstarch",
+                                          "5.25 tbsp fresh ginger",
+                                          "4 tbsp garlic",
+                                          "17.5 tbsp green onions",
+                                          "3.5 tbsp butter",
+                                          "0.5 tbsp sesame oil"
+                                      ],
+                 "steps":  [
+                               "Slice the beef thin and velvet it with cornstarch, baking soda, and soy sauce.",
+                               "Cook the rice while the beef rests.",
+                               "Mix oyster sauce, soy sauce, broths, sugar, and a cornstarch slurry into a sauce.",
+                               "Sear the beef in batches in smoking hot oil, then set aside.",
+                               "Brown the mushrooms in butter, then add ginger, garlic, and green onion whites.",
+                               "Add the sauce, thicken, return the beef, finish with sesame oil, and portion over rice into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Flank/Sirloin Steak",
+                                  "grams":  1191
+                              },
+                              {
+                                  "item":  "Cornstarch",
+                                  "grams":  93
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  16
+                              },
+                              {
+                                  "item":  "Oyster Sauce",
+                                  "grams":  168
+                              },
+                              {
+                                  "item":  "Baking Soda",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  2100
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  131
+                              },
+                              {
+                                  "item":  "Sesame Oil",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  32
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  105
+                              },
+                              {
+                                  "item":  "White Mushrooms",
+                                  "grams":  992
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  49
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1258
+                              }
+                          ]
+}

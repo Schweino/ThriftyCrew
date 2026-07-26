@@ -1,0 +1,312 @@
+﻿{
+    "name":  "Spanish Turkey Albondigas over Rice",
+    "slug":  "spanish-turkey-albondigas-over-rice",
+    "cuisine":  "spanish",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://foodwishes.blogspot.com/2015/11/turkey-rice-meatballs-albondigas.html",
+    "source_site":  "foodwishes.blogspot.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Rice)",
+                   "portion factor 1.25"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Rice-bound turkey meatballs simmered in smoked-paprika tomato sauce - the rice in the meatball keeps lean turkey tender at batch scale. Verified source: full recipe with quantities, yields 20-24 meatballs, uses ground turkey directly. Confidence note: no nutrition published; est_cal is my estimate. Source author flags the sauce quantities as approximate. | HARVEST: Source states yield as \u0027about 20-24 small meatballs\u0027, not a serving count; source_servings left 0.",
+                         "TUNING: base +60% (Rice)",
+                         "TUNING: portion factor 1.25",
+                         "OVERRIDE Rice: \u00271 packed cup COOKED rice\u0027 in the meatball mix = ~65 g dry-equivalent"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  565,
+                 "protein":  35,
+                 "carbs":  47,
+                 "fat":  25,
+                 "cost_ps":  "2.24"
+             },
+    "intro_html":  "Spanish albondigas have a trick worth stealing: rice goes inside the meatball, not just under it. That rice holds moisture, which is exactly what lean ground turkey needs to survive a week in the fridge. They simmer in a smoked paprika tomato sauce with a little cream stirred in at the end, and each bowl runs \u003cstrong\u003e565 calories and 35 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.24\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 4.25 lb (1984 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 2.75 cups dry (511 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 7.75 tbsp (66 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 4 large eggs (219 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 4.25 tbsp (59 g)",
+                                "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 6.3 cans (2680 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (1050 g)",
+                                "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 1.5 cups (347 g)",
+                                "\u003cstrong\u003eRed Wine Vinegar (generic):\u003c/strong\u003e 4.5 tbsp (66 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 4.25 lb: ~$16.71. \u003cstrong\u003eBuy 5 lbs: $19.11.\u003c/strong\u003e",
+                       "Rice, 2.75 cups dry: ~$0.63. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 7.75 tbsp: ~$0.95. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Eggs, 4 large eggs: ~$0.52. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
+                       "Olive Oil, 4.25 tbsp: ~$0.83. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Tomato Sauce, 6.3 cans: ~$6.05. \u003cstrong\u003eBuy 7 15oz cans: $6.72.\u003c/strong\u003e",
+                       "Chicken Broth, 1 carton: ~$1.41. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Heavy Cream, 1.5 cups: ~$2.15. \u003cstrong\u003eBuy 1 pint: $2.94.\u003c/strong\u003e",
+                       "Red Wine Vinegar, 4.5 tbsp: ~$0.40. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, smoked paprika, ground cumin, cayenne pepper, dried oregano, paprika): ~$1.66. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $31.31 across 14 servings, so roughly $2.24 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $36.28 across 14 servings, roughly $2.59 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $22.20 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $58.48. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.24\u003c/strong\u003e a bowl for tapas-bar meatballs. The bar charges more than that for three of them and calls it a small plate.",
+    "shop_smart":  [
+                       "The turkey is two thirds of this batch, so the 5 pound pack is the buy. Larger packs almost always beat the pound price of the small trays, and turkey freezes without complaint.",
+                       "Tomato sauce in the 15 ounce can is the cheapest sauce base in the store. Seven cans still cost less than one jar of the fancy stuff with a chef on the label.",
+                       "Smoked paprika is the one seasoning that makes this taste Spanish instead of generic. One jar costs a few dollars and lasts a year of cooking, which is the definition of money well spent.",
+                       "A pint of heavy cream covers this batch and keeps for weeks unopened. Do not substitute milk here, since cream is what keeps the sauce from breaking when you reheat it."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook about a third of the rice and let it cool. This is the rice that goes inside the meatballs, so it has to be cooked before it gets mixed in.",
+                    "Mix the ground turkey with the cooled rice, the eggs, half the minced garlic, cumin, smoked paprika, oregano, salt, and black pepper. Mix with a light hand and stop as soon as it comes together.",
+                    "Roll it into small meatballs and set them on sheet pans. Bake at 400F for about 15 minutes to firm them up so they do not fall apart in the sauce.",
+                    "While they bake, heat the olive oil in a wide pot, cook the rest of the garlic for a minute, then add the tomato sauce, chicken broth, red wine vinegar, more smoked paprika, a pinch of cayenne, and black pepper.",
+                    "Slide the meatballs into the sauce, cover, and simmer 20 minutes until they reach 165F and the sauce has tightened up.",
+                    "Stir in the heavy cream off the heat and taste for salt. It should look like tomato soup that went to finishing school.",
+                    "Cook the remaining rice, move it into your weighed pot, and keep the meatballs in their sauce for portioning."
+                ],
+    "portion_html":  "Set the pot of rice on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the rice bed for each container. Then count the meatballs, divide them evenly across all 14, and ladle the sauce over the top. Each bowl lands at \u003cstrong\u003e565 calories and 35 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://foodwishes.blogspot.com/2015/11/turkey-rice-meatballs-albondigas.html\" target=\"_blank\" rel=\"noopener\"\u003efoodwishes.blogspot.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Spanish albondigas for about \u003cstrong\u003e$2.24\u003c/strong\u003e a bowl. This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  31.31,
+    "cost_batch_true":  36.28,
+    "cost_per_serving":  2.24,
+    "cost_per_serving_true":  2.59,
+    "cost_pantry_add":  22.2,
+    "cost_first_run":  58.48,
+    "scaler":  {
+                   "cost":  "36.28",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1984,
+                                   "buy":  "4.25 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  511,
+                                   "buy":  "2.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  66,
+                                   "buy":  "7.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  219,
+                                   "buy":  "4 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  52,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  23,
+                                   "buy":  "3.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Smoked Paprika",
+                                   "canon":  "Smoked Paprika",
+                                   "grams":  10,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  9,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cayenne Pepper",
+                                   "canon":  "Cayenne Pepper",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "cayenne-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  59,
+                                   "buy":  "4.25 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Tomato Sauce",
+                                   "canon":  "Tomato Sauce",
+                                   "grams":  2680,
+                                   "buy":  "6.3 cans",
+                                   "bid":  "tomato-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  1050,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  10,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Heavy Cream",
+                                   "canon":  "Heavy Cream",
+                                   "grams":  347,
+                                   "buy":  "1.5 cups",
+                                   "bid":  "heavy-cream",
+                                   "gpu":  "29.800"
+                               },
+                               {
+                                   "item":  "Red Wine Vinegar",
+                                   "canon":  "Red Wine Vinegar",
+                                   "grams":  66,
+                                   "buy":  "4.5 tbsp",
+                                   "bid":  "red-wine-vinegar",
+                                   "gpu":  "29.570"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Spanish turkey albondigas over rice: rice-bound turkey meatballs simmered in a creamy smoked paprika tomato sauce. 565 calories, 35g protein, about $2.24 a bowl.",
+                 "keywords":  "albondigas, spanish meatballs, turkey meatballs, turkey meal prep, budget meal prep, smoked paprika sauce",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H10M",
+                 "costPerServing":  2.24,
+                 "recipeIngredient":  [
+                                          "4.25 lb 93/7 ground turkey",
+                                          "2.75 cups dry rice",
+                                          "4 large eggs",
+                                          "7.75 tbsp garlic",
+                                          "4.25 tbsp olive oil",
+                                          "6.3 cans tomato sauce",
+                                          "2.25 lb chicken broth",
+                                          "1.5 cups heavy cream",
+                                          "4.5 tbsp red wine vinegar"
+                                      ],
+                 "steps":  [
+                               "Cook part of the rice and cool it for the meatball mix.",
+                               "Mix ground turkey with cooled rice, eggs, garlic, cumin, smoked paprika, oregano, salt, and pepper, then roll into meatballs.",
+                               "Bake the meatballs at 400F for 15 minutes to firm them.",
+                               "Simmer olive oil, garlic, tomato sauce, broth, red wine vinegar, smoked paprika, and cayenne into a sauce.",
+                               "Add the meatballs, simmer 20 minutes to 165F, then stir in the heavy cream off the heat.",
+                               "Cook the remaining rice, portion by weight into 14 containers, and divide the meatballs and sauce evenly."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1984
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  511
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  66
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  219
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  23
+                              },
+                              {
+                                  "item":  "Smoked Paprika",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Cayenne Pepper",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  59
+                              },
+                              {
+                                  "item":  "Tomato Sauce",
+                                  "grams":  2680
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  1050
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Heavy Cream",
+                                  "grams":  347
+                              },
+                              {
+                                  "item":  "Red Wine Vinegar",
+                                  "grams":  66
+                              }
+                          ]
+}

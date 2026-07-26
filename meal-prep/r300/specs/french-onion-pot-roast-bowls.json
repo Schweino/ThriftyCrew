@@ -1,0 +1,215 @@
+﻿{
+    "name":  "Slow Cooker French Onion Pot Roast Bowls",
+    "slug":  "french-onion-pot-roast-bowls",
+    "cuisine":  "American",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.themagicalslowcooker.com/slow-cooker-french-onion-pot-roast/",
+    "source_site":  "themagicalslowcooker.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "protein clamp 302-\u003e240 g/serving",
+                   "added Rice base 300g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Distinct flavor lane from plain pot roast (deep caramelized onion plus melted provolone/swiss finish). Slow Cooker French Onion Chicken Bowls already performs in the catalog, so the flavor is proven on the site, but the beef version does not exist. Confidence: medium on calories, estimated from the onion-soup-mix pot roast family. | HARVEST: ",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: protein clamp 302-\u003e240 g/serving",
+                         "TUNING: added Rice base 300g (src scale)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  671,
+                 "protein":  53,
+                 "carbs":  46,
+                 "fat":  28,
+                 "cost_ps":  "4.59"
+             },
+    "intro_html":  "Take everything good about French onion soup and put a chuck roast in it. Six pounds of onions cook down into something dark and sweet, the beef broth and Worcestershire go deep and savory, and eight hours later you have a pot roast that tastes nothing like the usual one. Each bowl carries \u003cstrong\u003e53 grams of protein\u003c/strong\u003e and 671 calories for about \u003cstrong\u003e$4.59\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 7.5 lb (3360 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 5.75 cups (1389 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 7 tbsp (119 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 6.4 (700 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Chuck Roast, 7.5 lb: ~$59.04. \u003cstrong\u003eBuy 8 lbs: $63.76.\u003c/strong\u003e",
+                       "Beef Broth, 5.75 cups: ~$1.86. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Worcestershire Sauce, 7 tbsp: ~$0.40. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 6.4: ~$1.76. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (dried thyme, garlic powder, salt, black pepper): ~$0.39. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $64.31 across 14 servings, so roughly $4.59 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $69.55 across 14 servings, roughly $4.97 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.78 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $78.33. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.59 a bowl\u003c/strong\u003e for five ingredients and a slow cooker. Onions are the cheapest flavor in the store, and this recipe leans on that harder than almost anything else in the library.",
+    "shop_smart":  [
+                       "Onions are the second star, so buy the big mesh bag. Sweet onions are lovely and unnecessary here, since a long cook makes plain yellow onions sweet on their own.",
+                       "Chuck roast again, and again the advice is the same. Buy it on the sale cycle and freeze what you do not cook this week.",
+                       "A bottle of Worcestershire sauce lasts a year or more and turns up in half the beef recipes on this site. It is one of the best value bottles in the pantry.",
+                       "Boxed beef broth is fine, but bouillon base in a jar costs less per cup and stores in the fridge for months. Either works in a pot this heavily seasoned."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Slice all the onions thin. This is the long part of the prep, so put on something to listen to and get through it.",
+                    "Season the chuck roast with salt, black pepper, garlic powder, and thyme, and set it in the slow cooker.",
+                    "Pile the sliced onions over and around the roast. They will look like far too much and they will cook down to a fraction of that.",
+                    "Pour in the beef broth and the Worcestershire sauce.",
+                    "Cover and cook on low for 8 hours, until the roast shreds under a fork and the onions have collapsed into the liquid.",
+                    "Shred the beef in the cooker and stir it through the onions and broth so every strand picks up the gravy.",
+                    "Cook the rice separately while the beef finishes."
+                ],
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of beef and onions into each container, then add the same weight of rice to every one. Each bowl lands at \u003cstrong\u003e671 calories with 53 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/slow-cooker-french-onion-pot-roast/\" target=\"_blank\" rel=\"noopener\"\u003ethemagicalslowcooker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "French onion pot roast for about $4.59 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  64.31,
+    "cost_batch_true":  69.55,
+    "cost_per_serving":  4.59,
+    "cost_per_serving_true":  4.97,
+    "cost_pantry_add":  8.78,
+    "cost_first_run":  78.33,
+    "scaler":  {
+                   "cost":  "69.55",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Chuck Roast",
+                                   "canon":  "Beef Chuck Roast",
+                                   "grams":  3360,
+                                   "buy":  "7.5 lb",
+                                   "bid":  "beef-chuck-roast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  1389,
+                                   "buy":  "5.75 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "canon":  "Worcestershire Sauce",
+                                   "grams":  119,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "worcestershire",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  700,
+                                   "buy":  "6.4",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  2,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  7,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Slow cooker French onion pot roast meal prep: chuck roast braised 8 hours under a mountain of onions with beef broth and Worcestershire. 671 calories, 53g protein, about $4.59 per serving.",
+                 "keywords":  "french onion pot roast, slow cooker beef, onion pot roast, shredded beef bowls, budget meal prep, chuck roast recipes",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT8H",
+                 "totalTime":  "PT8H20M",
+                 "costPerServing":  4.59,
+                 "recipeIngredient":  [
+                                          "7.5 lb beef chuck roast",
+                                          "3 lb beef broth",
+                                          "7 tbsp worcestershire sauce",
+                                          "6.4 yellow onions",
+                                          "3.75 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Season the chuck roast with salt, pepper, garlic powder, and thyme and set it in the slow cooker.",
+                               "Slice all the onions thin and pile them over the roast.",
+                               "Pour in the beef broth and Worcestershire sauce.",
+                               "Cook on low 8 hours until the roast shreds and the onions collapse.",
+                               "Shred the beef through the onion gravy, cook the rice, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Chuck Roast",
+                                  "grams":  3360
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  1389
+                              },
+                              {
+                                  "item":  "Worcestershire Sauce",
+                                  "grams":  119
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

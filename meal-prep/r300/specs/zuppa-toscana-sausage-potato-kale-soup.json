@@ -1,0 +1,248 @@
+﻿{
+    "name":  "Zuppa Toscana (Sausage, Potato and Kale Soup)",
+    "slug":  "zuppa-toscana-sausage-potato-kale-soup",
+    "cuisine":  "italian-american",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.saltandlavender.com/sausage-bacon-potato-and-kale-soup/",
+    "source_site":  "saltandlavender.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +20% (Potato)",
+                   "protein +20% (Hot Italian Sausage)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 669 cal / 20g protein at the source, calories clear easily and protein needs a modest sausage bump. Recognizable copycat dish (Olive Garden) that pulls search traffic, all ingredients board-tracked, and the catalog has no creamy pork soup. Simmer-and-ladle, scales linearly to 14. | HARVEST: ",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +20% (Potato)",
+                         "TUNING: protein +20% (Hot Italian Sausage)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  604,
+                 "protein":  26,
+                 "carbs":  41,
+                 "fat":  37,
+                 "cost_ps":  "1.50"
+             },
+    "intro_html":  "This is the soup that a certain endless-breadstick chain is famous for, rebuilt at home for a fraction of what a bowl of it costs at the restaurant. Crisped bacon, hot Italian sausage, tender potatoes and kale in a cream broth. It lands at 26 grams of protein for about $1.50, and the honest truth is the homemade version tastes better because you control how much sausage goes in.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHickory Smoked Bacon (Great Value):\u003c/strong\u003e 0.25 lb (140 g)",
+                                "\u003cstrong\u003eHot Italian Sausage (Johnsonville):\u003c/strong\u003e 2.75 lb (1287 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (257 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6.75 tbsp (58 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.2 cartons (1120 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 11.3 (2416 g)",
+                                "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 2.25 cups (555 g)",
+                                "\u003cstrong\u003eKale:\u003c/strong\u003e 1 lb (467 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Hickory Smoked Bacon, 0.25 lb: ~$1.22. \u003cstrong\u003eBuy 1 lb: $3.96.\u003c/strong\u003e",
+                       "Hot Italian Sausage, 2.75 lb: ~$7.10. \u003cstrong\u003eBuy 3 lbs: $7.50.\u003c/strong\u003e",
+                       "Yellow Onion, 2.3: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 6.75 tbsp: ~$0.84. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Chicken Broth, 1.2 cartons: ~$1.50. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Potato, 11.3: ~$3.03. \u003cstrong\u003eBuy 6 lbs: $3.41.\u003c/strong\u003e",
+                       "Heavy Cream, 2.25 cups: ~$3.45. \u003cstrong\u003eBuy 2 pints: $5.87.\u003c/strong\u003e",
+                       "Kale, 1 lb: ~$2.76. \u003cstrong\u003eBuy 2 bunches: $2.96.\u003c/strong\u003e",
+                       "Pantry seasonings (italian seasoning, black pepper, salt): ~$0.47. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $21.02 across 14 servings, so roughly $1.50 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $27.96 across 14 servings, roughly $2.00 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.92 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $34.88. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.50 a bowl\u003c/strong\u003e for a copycat of a soup that restaurants charge real money for by the cup. Fourteen containers of it for the price of one restaurant lunch.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eA quarter pound of bacon is all you need.\u003c/strong\u003e You want the rendered fat and the smoke, not a plate of bacon. Buy a pound and use the rest elsewhere this week.",
+                       "\u003cstrong\u003eHeavy cream is the biggest non meat line.\u003c/strong\u003e Two pints carries the batch. Evaporated milk is a cheaper swap that still gives you body if the cream price is ugly.",
+                       "\u003cstrong\u003ePotatoes in the six pound bag.\u003c/strong\u003e This uses a lot of them and bagged runs close to half the loose price. Russets break down slightly and thicken the broth on their own.",
+                       "\u003cstrong\u003eKale wilts down to almost nothing.\u003c/strong\u003e Two bunches look like a mountain and disappear into the pot, so do not be tempted to buy four."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Chop the bacon, dice the onion, mince the garlic, slice the potatoes into rounds and strip the kale leaves from their stems.",
+                    "Render the chopped bacon in a large pot until it crisps, then lift it out and leave the fat behind.",
+                    "Brown the hot Italian sausage in the bacon fat, breaking it into crumbles, until it is cooked through and browned in spots. Drain off any excess grease.",
+                    "Add the diced onion and cook until soft, then add the garlic and italian seasoning for a minute.",
+                    "Pour in the chicken broth, add the sliced potatoes, and simmer until they are tender enough to cut with a spoon.",
+                    "Turn the heat down and stir in the heavy cream, keeping it below a boil so it does not separate.",
+                    "Fold in the kale and the crisped bacon, cook just until the kale wilts, then season with salt and black pepper."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and ladle the exact amount into each container, stirring as you go so the sausage and potatoes stay even. Every bowl lands near 604 calories and 26 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.saltandlavender.com/sausage-bacon-potato-and-kale-soup/\" target=\"_blank\" rel=\"noopener\"\u003esaltandlavender.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Restaurant copycats for about $1.50 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  21.02,
+    "cost_batch_true":  27.96,
+    "cost_per_serving":  1.5,
+    "cost_per_serving_true":  2,
+    "cost_pantry_add":  6.92,
+    "cost_first_run":  34.88,
+    "scaler":  {
+                   "cost":  "27.96",
+                   "ing":  [
+                               {
+                                   "item":  "Hickory Smoked Bacon",
+                                   "canon":  "Hickory Smoked Bacon",
+                                   "grams":  140,
+                                   "buy":  "0.25 lb",
+                                   "bid":  "bacon",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Hot Italian Sausage",
+                                   "canon":  "Hot Italian Sausage",
+                                   "grams":  1287,
+                                   "buy":  "2.75 lb",
+                                   "bid":  "italian-sausage",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  257,
+                                   "buy":  "2.3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  58,
+                                   "buy":  "6.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  1120,
+                                   "buy":  "1.2 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  2416,
+                                   "buy":  "11.3",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "canon":  "Italian Seasoning",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Heavy Cream",
+                                   "canon":  "Heavy Cream",
+                                   "grams":  555,
+                                   "buy":  "2.25 cups",
+                                   "bid":  "heavy-cream",
+                                   "gpu":  "29.800"
+                               },
+                               {
+                                   "item":  "Kale",
+                                   "canon":  "Kale",
+                                   "grams":  467,
+                                   "buy":  "1 lb",
+                                   "bid":  "kale",
+                                   "gpu":  "250.000"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  9,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Zuppa Toscana copycat with hot Italian sausage, bacon, potatoes and kale in a cream broth. 14 servings, 604 calories, 26g protein, about $1.50 each.",
+                 "keywords":  "zuppa toscana, olive garden copycat soup, sausage potato kale soup, creamy italian soup, budget meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT40M",
+                 "totalTime":  "PT55M",
+                 "costPerServing":  1.5,
+                 "recipeIngredient":  [
+                                          "2.75 lb hot Italian sausage",
+                                          "0.25 lb hickory smoked bacon",
+                                          "11.3 potatoes",
+                                          "22.25 cups kale",
+                                          "2.5 lb chicken broth",
+                                          "2.25 cups heavy cream",
+                                          "2.3 yellow onions",
+                                          "6.75 tbsp garlic"
+                                      ],
+                 "steps":  [
+                               "Render the chopped bacon until crisp and set it aside, leaving the fat in the pot.",
+                               "Brown and crumble the hot Italian sausage in the bacon fat, then drain any excess grease.",
+                               "Cook the diced onion until soft, then add the garlic and italian seasoning.",
+                               "Add the chicken broth and sliced potatoes and simmer until tender.",
+                               "Stir in the heavy cream over low heat, then fold in the kale and bacon and cook until wilted."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Hickory Smoked Bacon",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "Hot Italian Sausage",
+                                  "grams":  1287
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  257
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  58
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  1120
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  2416
+                              },
+                              {
+                                  "item":  "Italian Seasoning",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Heavy Cream",
+                                  "grams":  555
+                              },
+                              {
+                                  "item":  "Kale",
+                                  "grams":  467
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              }
+                          ]
+}

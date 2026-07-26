@@ -1,0 +1,253 @@
+﻿{
+    "name":  "Ham and Potato Cheddar Casserole",
+    "slug":  "ham-and-potato-cheddar-casserole",
+    "cuisine":  "American",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.spendwithpennies.com/ham-and-potato-casserole/",
+    "source_site":  "spendwithpennies.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Potato)",
+                   "portion factor 1.05"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Fully mapped, all eight ingredients are tracked commodities. Source publishes 462 cal / 23g protein per serving, both just under the bars and both easily lifted by increasing the ham. A 9x13 bake portions by weight. Ham is a protein the catalog does not use anywhere in 213 live recipes, which makes this a real category gap rather than a variation. | HARVEST: Source splits the list into Sauce (first 8 lines) and Other (last 4 lines).",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Potato)",
+                         "TUNING: portion factor 1.05",
+                         "OVERRIDE Diced Ham: [BUMP x2.0] source \u00272 cups diced ham\u0027 (280 g) for 8; house 1.25 lb ham for the protein floor"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  579,
+                 "protein":  33,
+                 "carbs":  71,
+                 "fat":  20,
+                 "cost_ps":  "1.70"
+             },
+    "intro_html":  "Ham is the protein everybody forgets about. It is already cooked, already seasoned, and it goes on deep discount around every holiday. Here it goes into a scratch cheddar sauce with potatoes and peas and bakes into the kind of casserole that shows up at church potlucks and disappears first. No condensed soup can involved, which matters more than you would think. A real roux with milk, broth, and shredded cheddar costs less than the canned shortcut and does not taste like a can.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 5.5 tbsp (77 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 6.5 tbsp (51 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 (129 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 1.5 cups (338 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.75 cups (441 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 18.25 oz (519 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 21 (4490 g)",
+                                "\u003cstrong\u003eDiced Ham (John Morrell (Smithfield)):\u003c/strong\u003e 2.25 lb (1029 g)",
+                                "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 1 lb (492 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Butter, 5.5 tbsp: ~$0.51. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "All-Purpose Flour, 6.5 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 1: ~$0.32. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Milk, 1.5 cups: ~$0.27. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
+                       "Chicken Broth, 1.75 cups: ~$0.59. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 18.25 oz: ~$3.95. \u003cstrong\u003eBuy 3 8oz bags: $5.18.\u003c/strong\u003e",
+                       "Potato, 21: ~$5.62. \u003cstrong\u003eBuy 10 lbs: $5.68.\u003c/strong\u003e",
+                       "Diced Ham, 2.25 lb: ~$11.25. \u003cstrong\u003eBuy 3 16oz packs: $14.89.\u003c/strong\u003e",
+                       "Frozen Green Peas, 1 lb: ~$1.06. \u003cstrong\u003eBuy 2 12oz bags: $1.47.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.11. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $23.73 across 14 servings, so roughly $1.70 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.11 across 14 servings, roughly $2.51 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.34 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.45. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.70 a bowl\u003c/strong\u003e for a scratch cheddar casserole that beats the condensed-soup version on both taste and price.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy ham right after a holiday.\u003c/strong\u003e Grocery stores mark down whole and half hams hard the week after Easter and Christmas, and ham freezes for months. That single habit is where most of the savings on this dish lives.",
+                       "\u003cstrong\u003eShred your own cheddar from a block.\u003c/strong\u003e Pre-shredded is coated in starch to keep it from clumping, which is exactly what makes it grainy in a cheese sauce. The block is also cheaper per ounce.",
+                       "\u003cstrong\u003eMake the sauce, skip the can.\u003c/strong\u003e Butter, flour, milk, and broth is a roux, it takes five minutes, and it costs a fraction of two cans of condensed soup.",
+                       "\u003cstrong\u003eFrozen peas go in straight from the bag.\u003c/strong\u003e They thaw in the hot sauce, hold their color through baking, and cost less than canned per ounce."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Peel and slice the potatoes thin and even, about the thickness of a coin, so they cook through at the same rate.",
+                    "Melt the butter in a large pot, stir in the flour, and cook the paste for a minute so it loses its raw taste.",
+                    "Whisk in the milk and chicken broth a little at a time until the sauce is smooth and thickened, then stir in the diced yellow onion.",
+                    "Take the pot off the heat, add most of the shredded cheddar, and stir until it melts. Adding cheese off the heat keeps the sauce from breaking.",
+                    "Fold in the diced ham, the sliced potatoes, and the frozen peas, and season with salt and black pepper.",
+                    "Spread everything into a large baking dish, cover with foil, and bake at 375 degrees until a knife slides through the potatoes with no resistance.",
+                    "Uncover, scatter the remaining cheddar over the top, and bake until browned and bubbling, then let it rest fifteen minutes before portioning."
+                ],
+    "portion_html":  "Weigh the whole baking dish, subtract the empty dish weight, and divide by 14. Cut and scoop to that weight rather than guessing at squares, because a casserole is never as even as it looks. Every serving comes in at \u003cstrong\u003e579 calories with 33 grams of protein\u003c/strong\u003e. Let it cool fully before you snap the lids on or the potatoes go watery.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.spendwithpennies.com/ham-and-potato-casserole/\" target=\"_blank\" rel=\"noopener\"\u003espendwithpennies.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Comfort-food casseroles for about $1.70 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  23.73,
+    "cost_batch_true":  35.11,
+    "cost_per_serving":  1.7,
+    "cost_per_serving_true":  2.51,
+    "cost_pantry_add":  8.34,
+    "cost_first_run":  43.45,
+    "scaler":  {
+                   "cost":  "35.11",
+                   "ing":  [
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  77,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  51,
+                                   "buy":  "6.5 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  129,
+                                   "buy":  "1",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  338,
+                                   "buy":  "1.5 cups",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  441,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  11,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "canon":  "Cheddar Cheese, Shredded",
+                                   "grams":  519,
+                                   "buy":  "18.25 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  4490,
+                                   "buy":  "21",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Ham",
+                                   "canon":  "Diced Ham",
+                                   "grams":  1029,
+                                   "buy":  "2.25 lb",
+                                   "bid":  "diced-ham",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Frozen Green Peas",
+                                   "canon":  "Frozen Green Peas",
+                                   "grams":  492,
+                                   "buy":  "1 lb",
+                                   "bid":  "frozen-peas",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Ham and potato cheddar casserole rebuilt for 14-serving meal prep with a scratch cheese sauce and peas, no condensed soup. 579 calories, 33g protein, about $1.70 per serving.",
+                 "keywords":  "ham and potato casserole, cheddar potato bake, leftover ham recipe, scratch cheese sauce, budget casserole, meal prep casserole",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT60M",
+                 "totalTime":  "PT85M",
+                 "costPerServing":  1.7,
+                 "recipeIngredient":  [
+                                          "7.25 cups diced ham",
+                                          "21 potatoes",
+                                          "18.25 oz shredded cheddar cheese",
+                                          "3.75 cups frozen green peas",
+                                          "1.5 cups milk",
+                                          "1 lb chicken broth",
+                                          "5.5 tbsp butter",
+                                          "6.5 tbsp all-purpose flour",
+                                          "1 yellow onion"
+                                      ],
+                 "steps":  [
+                               "Peel and thinly slice the potatoes.",
+                               "Make a roux with the butter and flour, then whisk in milk and broth with the diced onion.",
+                               "Melt most of the cheddar into the sauce off the heat.",
+                               "Fold in the ham, potatoes, and peas and season.",
+                               "Spread into a baking dish, cover, and bake at 375F until the potatoes are tender.",
+                               "Top with the remaining cheddar, brown uncovered, rest, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Butter",
+                                  "grams":  77
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  51
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  129
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  338
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  441
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Cheddar Cheese, Shredded",
+                                  "grams":  519
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  4490
+                              },
+                              {
+                                  "item":  "Diced Ham",
+                                  "grams":  1029
+                              },
+                              {
+                                  "item":  "Frozen Green Peas",
+                                  "grams":  492
+                              }
+                          ]
+}

@@ -1,0 +1,260 @@
+﻿{
+    "name":  "Ham and White Bean Soup",
+    "slug":  "ham-and-white-bean-soup",
+    "cuisine":  "american",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.spendwithpennies.com/ham-and-bean-soup/",
+    "source_site":  "spendwithpennies.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 300g (src scale)",
+                   "base +60% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 397 cal / 31g protein at the source, an excellent protein ratio; our portion size clears 500 cal. Puts the deli-ham commodity to work, which no live dinner recipe uses. Both flags are format issues rather than missing foods: a meaty ham bone is not board-tracked (diced deli-ham or a tracked ham steak substitutes) and dried beans are not tracked separately (canned-white-beans is). CONFIDENCE: est_cal projected from a larger portion. | HARVEST: ",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 300g (src scale)",
+                         "TUNING: base +60% (Rice)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  574,
+                 "protein":  32,
+                 "carbs":  102,
+                 "fat":  3,
+                 "cost_ps":  "2.05"
+             },
+    "intro_html":  "Ham and bean soup is the original leftover recipe. Somebody figured out a long time ago that the least valuable part of a ham makes the best pot of soup, and nobody has improved on it since. Diced ham, white beans, tomatoes and the usual carrot, celery and onion base. It carries 32 grams of protein for about $2.05 a bowl.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eCannellini Beans (generic):\u003c/strong\u003e 5.2 cans (1323 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 4.7 cartons (4480 g)",
+                                "\u003cstrong\u003eDiced Ham (John Morrell (Smithfield)):\u003c/strong\u003e 2.25 lb (1058 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (257 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 4.7 (257 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 4.7 (285 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2.3 cans (959 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 6.75 cups dry (1257 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Cannellini Beans, 5.2 cans: ~$4.28. \u003cstrong\u003eBuy 6 cans: $4.95.\u003c/strong\u003e",
+                       "Chicken Broth, 4.7 cartons: ~$6.01. \u003cstrong\u003ePantry staple; this batch alone uses about 5 32oz cartons.\u003c/strong\u003e",
+                       "Diced Ham, 2.25 lb: ~$11.57. \u003cstrong\u003eBuy 3 16oz packs: $14.89.\u003c/strong\u003e",
+                       "Yellow Onion, 2.3: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Celery, 4.7: ~$1.35. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Carrots, 4.7: ~$0.60. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Diced Tomatoes, 2.3 cans: ~$2.24. \u003cstrong\u003eBuy 3 cans: $2.88.\u003c/strong\u003e",
+                       "Rice, 6.75 cups dry: ~$1.55. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (chili powder, dried parsley, salt, black pepper): ~$0.44. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $28.69 across 14 servings, so roughly $2.05 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.18 across 14 servings, roughly $2.51 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.04 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.22. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.05 a bowl\u003c/strong\u003e. If you happen to be working with leftover holiday ham instead of buying it fresh, this recipe gets dramatically cheaper, because the ham is the single biggest line on the list.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eLeftover ham is free ham.\u003c/strong\u003e This recipe exists to use up the end of a holiday roast. If you are buying, watch for whole hams on markdown after a holiday and freeze the diced meat in bags.",
+                       "\u003cstrong\u003eCanned white beans skip the overnight soak.\u003c/strong\u003e Dried beans cost less if you plan ahead, but canned means you can decide to make this at four in the afternoon.",
+                       "\u003cstrong\u003eChicken broth is the second biggest line, so buy the big cartons.\u003c/strong\u003e Store brand is fine here. Between the ham and the tomatoes, this soup is already well seasoned.",
+                       "\u003cstrong\u003eCarrots, celery and onion are the cheap backbone.\u003c/strong\u003e Buy them whole rather than pre chopped and the entire vegetable base costs less than the ham trimmings."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Dice the onion, carrots and celery, and drain and rinse the white beans.",
+                    "Heat a large pot and cook the diced ham until the edges brown and it renders a little fat. Browning the ham first is what gives this soup its backbone.",
+                    "Add the onion, carrots and celery to the pot and cook until they soften and pick up the browned bits.",
+                    "Stir in the chili powder, dried parsley, black pepper and bay leaves and cook for a minute.",
+                    "Pour in the chicken broth and the diced tomatoes and bring everything up to a simmer.",
+                    "Add the drained white beans and simmer gently, mashing a scoop of the beans against the side of the pot to thicken the broth naturally.",
+                    "Pull the bay leaves, taste for salt, and cook the rice separately to serve it under the soup."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and ladle the exact amount over rice in each container, stirring between scoops so the ham and beans stay even. Every bowl lands near 574 calories and 32 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.spendwithpennies.com/ham-and-bean-soup/\" target=\"_blank\" rel=\"noopener\"\u003espendwithpennies.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Leftover stretching soups for about $2.05 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  28.69,
+    "cost_batch_true":  35.18,
+    "cost_per_serving":  2.05,
+    "cost_per_serving_true":  2.51,
+    "cost_pantry_add":  8.04,
+    "cost_first_run":  43.22,
+    "scaler":  {
+                   "cost":  "35.18",
+                   "ing":  [
+                               {
+                                   "item":  "Cannellini Beans",
+                                   "canon":  "Cannellini Beans",
+                                   "grams":  1323,
+                                   "buy":  "5.2 cans",
+                                   "bid":  "cannellini-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  4480,
+                                   "buy":  "4.7 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Diced Ham",
+                                   "canon":  "Diced Ham",
+                                   "grams":  1058,
+                                   "buy":  "2.25 lb",
+                                   "bid":  "diced-ham",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  257,
+                                   "buy":  "2.3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "canon":  "Celery",
+                                   "grams":  257,
+                                   "buy":  "4.7",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  285,
+                                   "buy":  "4.7",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  959,
+                                   "buy":  "2.3 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "canon":  "Chili Powder",
+                                   "grams":  10,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Parsley",
+                                   "canon":  "Dried Parsley",
+                                   "grams":  1,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "dried-parsley",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1257,
+                                   "buy":  "6.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Ham and white bean soup with carrots, celery and tomatoes over rice, built for 14 servings. 574 calories, 32g protein, about $2.05 per serving.",
+                 "keywords":  "ham and bean soup, white bean soup, leftover ham recipe, cannellini bean soup, budget meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT50M",
+                 "totalTime":  "PT1H5M",
+                 "costPerServing":  2.05,
+                 "recipeIngredient":  [
+                                          "7.5 cups diced ham",
+                                          "5.2 cans cannellini beans",
+                                          "10 lb chicken broth",
+                                          "2.3 cans diced tomatoes",
+                                          "4.7 carrots",
+                                          "4.7 celery stalks",
+                                          "2.3 yellow onions",
+                                          "6.75 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Brown the diced ham in a large pot until the edges color.",
+                               "Add the diced onion, carrots and celery and cook until softened.",
+                               "Stir in the chili powder, parsley, black pepper and bay leaves.",
+                               "Add the chicken broth and diced tomatoes and bring to a simmer.",
+                               "Stir in the drained white beans, mash some against the pot to thicken, and serve over cooked rice."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Cannellini Beans",
+                                  "grams":  1323
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  4480
+                              },
+                              {
+                                  "item":  "Diced Ham",
+                                  "grams":  1058
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  257
+                              },
+                              {
+                                  "item":  "Celery",
+                                  "grams":  257
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  285
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  959
+                              },
+                              {
+                                  "item":  "Chili Powder",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Dried Parsley",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1257
+                              }
+                          ]
+}

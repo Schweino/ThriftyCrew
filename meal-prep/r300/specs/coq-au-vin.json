@@ -1,0 +1,294 @@
+﻿{
+    "name":  "Coq au Vin",
+    "slug":  "coq-au-vin",
+    "cuisine":  "French",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.theendlessmeal.com/julia-childs-coq-au-vin/",
+    "source_site":  "theendlessmeal.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 200g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Source lists 635 cal / 40g protein using 4 thighs + 4 drumsticks. Classic dark braise, scales to a rondeau, and everything except the wine already sits on the board. Confidence high on numbers. Catalog has no French braise at all. | HARVEST: ",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 200g (src scale)",
+                         "OVERRIDE Butter: \u0027Beurre manie (see notes)\u0027 no qty; 3 tbsp butter kneaded with flour"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  659,
+                 "protein":  51,
+                 "carbs":  59,
+                 "fat":  22,
+                 "cost_ps":  "2.19"
+             },
+    "intro_html":  "Coq au vin is the French farmhouse braise that Julia Child taught America to make: chicken cooked slowly with bacon, mushrooms, onions, and carrots until the sauce turns dark and glossy and the meat gives up without a fight. This build braises in beef and chicken broth so it stays cheap and stays on the grocery board. If you happen to have red wine open, swap a cup of it in for some of the broth and you are back to the original. Each bowl runs 659 calories and \u003cstrong\u003e51 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.19 a serving\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 6.25 lb (2800 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 5.25 cups (1260 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (840 g)",
+                                "\u003cstrong\u003eHickory Smoked Bacon (Great Value):\u003c/strong\u003e 0.25 lb (126 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 10.7 (1179 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 14 (854 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 7 tbsp (112 g)",
+                                "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 1.75 lb (794 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 0.75 cups (158 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Thigh, 6.25 lb: ~$10.93. \u003cstrong\u003eBuy 7 lbs: $12.39.\u003c/strong\u003e",
+                       "Beef Broth, 5.25 cups: ~$1.69. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Chicken Broth, 1 carton: ~$1.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Hickory Smoked Bacon, 0.25 lb: ~$1.10. \u003cstrong\u003eBuy 1 lb: $3.96.\u003c/strong\u003e",
+                       "Yellow Onion, 10.7: ~$2.96. \u003cstrong\u003eBuy 3 lbs: $3.42.\u003c/strong\u003e",
+                       "Carrots, 14: ~$1.80. \u003cstrong\u003eBuy 2 lbs: $1.91.\u003c/strong\u003e",
+                       "Garlic, 8.25 tbsp: ~$1.01. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Tomato Paste, 7 tbsp: ~$0.57. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "White Mushrooms, 1.75 lb: ~$6.62. \u003cstrong\u003eBuy 4 8oz packs: $7.57.\u003c/strong\u003e",
+                       "Butter, 0.75 cups: ~$1.04. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, dried thyme, salt): ~$0.89. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $30.60 across 14 servings, so roughly $2.19 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $38.81 across 14 servings, roughly $2.77 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.91 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.72. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.19 a bowl\u003c/strong\u003e for a dish with a reputation for being complicated and expensive. It is neither. It is chicken thighs, bacon, and vegetables cooked patiently in one pot.",
+    "shop_smart":  [
+                       "Mushrooms are the second biggest line after the chicken, and they earn it. They give the braise its meaty depth. Buy whole white mushrooms and slice them yourself, because pre-sliced costs more and goes slimy faster.",
+                       "A quarter pound of bacon flavors the entire pot. Buy a full pound, use what you need, and freeze the rest in strips so it does not go to waste.",
+                       "Boneless thighs are cheaper than breast and they are the only cut that survives a long braise with the texture intact.",
+                       "Beurre manie, which is just butter kneaded with flour, is how the French thicken a sauce without a packet. Flour and butter cost pennies and the result beats any store bought gravy mix."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the chopped bacon in a heavy pot until crisp, then lift it out and leave the fat behind.",
+                    "Season the chicken thighs with salt and pepper and brown them hard in the bacon fat in batches. This is the color of the finished dish, so take it further than feels comfortable.",
+                    "Add the quartered onions and carrots and cook until they take on color, then add the garlic and tomato paste and cook another minute.",
+                    "Pour in the beef broth and chicken broth, scraping every brown bit off the bottom, and add the thyme and bay leaves. Return the chicken and the bacon.",
+                    "Cover and simmer low for about 45 minutes, until the chicken is tender and the vegetables are soft.",
+                    "Brown the mushrooms separately in butter over high heat and add them at the end. Mushrooms thrown in at the start turn gray and rubbery, and browning them apart is what keeps them worth eating.",
+                    "Knead the rest of the butter with flour into a paste and stir it into the simmering pot a little at a time until the sauce coats a spoon. Cook the rice and serve the braise over it."
+                ],
+    "portion_html":  "Weigh the rice into each container first, then set the pot on the scale, subtract the empty-pot weight, and divide by 14. Make sure each container gets mushrooms and carrots and not just chicken swimming in sauce. Every portion lands at \u003cstrong\u003e659 calories\u003c/strong\u003e, and like every good braise this one improves overnight.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.theendlessmeal.com/julia-childs-coq-au-vin/\" target=\"_blank\" rel=\"noopener\"\u003etheendlessmeal.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A French braise for about \u003cstrong\u003e$2.19 a bowl\u003c/strong\u003e, which is not what most people expect coq au vin to cost. Members get every recipe in the Meal Prep section plus the full library of money lessons and tools for $1 a month.",
+    "cost_batch":  30.6,
+    "cost_batch_true":  38.81,
+    "cost_per_serving":  2.19,
+    "cost_per_serving_true":  2.77,
+    "cost_pantry_add":  6.91,
+    "cost_first_run":  45.72,
+    "scaler":  {
+                   "cost":  "38.81",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  2800,
+                                   "buy":  "6.25 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  1260,
+                                   "buy":  "5.25 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  840,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Hickory Smoked Bacon",
+                                   "canon":  "Hickory Smoked Bacon",
+                                   "grams":  126,
+                                   "buy":  "0.25 lb",
+                                   "bid":  "bacon",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  8,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  1179,
+                                   "buy":  "10.7",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  854,
+                                   "buy":  "14",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  70,
+                                   "buy":  "8.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  112,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  7,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "White Mushrooms",
+                                   "canon":  "White Mushrooms",
+                                   "grams":  794,
+                                   "buy":  "1.75 lb",
+                                   "bid":  "mushrooms",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  158,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Coq au vin, a French chicken braise with bacon, mushrooms, onions, and carrots over rice, rebuilt for 14 meal prep servings at about $2.19 a bowl.",
+                 "keywords":  "coq au vin, french chicken braise, chicken and mushroom stew, julia child chicken, french meal prep, budget braise, high protein meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT1H15M",
+                 "totalTime":  "PT1H45M",
+                 "costPerServing":  2.19,
+                 "recipeIngredient":  [
+                                          "6.25 lb boneless skinless chicken thighs",
+                                          "0.25 lb hickory smoked bacon",
+                                          "10.7 yellow onions",
+                                          "14 carrots",
+                                          "11.25 cups white mushrooms",
+                                          "8.25 tbsp minced garlic",
+                                          "7 tbsp tomato paste",
+                                          "2.75 lb beef broth",
+                                          "1.75 lb chicken broth",
+                                          "0.75 cups butter",
+                                          "3.75 cups dry rice",
+                                          "Pantry: dried thyme, bay leaves, salt, black pepper"
+                                      ],
+                 "steps":  [
+                               "Crisp the chopped bacon and remove it, leaving the fat.",
+                               "Brown the seasoned chicken thighs hard in the bacon fat, then set aside.",
+                               "Color the onions and carrots, add garlic and tomato paste, then deglaze with both broths.",
+                               "Return the chicken and bacon with thyme and bay leaves and simmer covered 45 minutes.",
+                               "Brown the mushrooms separately in butter and add at the end.",
+                               "Thicken with butter kneaded into flour, then portion over rice into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  2800
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  1260
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  840
+                              },
+                              {
+                                  "item":  "Hickory Smoked Bacon",
+                                  "grams":  126
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  1179
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  854
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  112
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "White Mushrooms",
+                                  "grams":  794
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  158
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

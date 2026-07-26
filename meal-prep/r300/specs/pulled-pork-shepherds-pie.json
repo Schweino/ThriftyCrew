@@ -1,0 +1,350 @@
+﻿{
+    "name":  "Pulled Pork Shepherd\u0027s Pie",
+    "slug":  "pulled-pork-shepherds-pie",
+    "cuisine":  "American",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.theendlessmeal.com/pulled-pork-shepherds-pie/",
+    "source_site":  "theendlessmeal.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +20% (Potato)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified at 661 cal / 50g protein per serving over 8 servings - dinner-sized with excellent protein. Mashed-potato-topped bake portions perfectly by weight and reheats better than most. No shepherd\u0027s pie of any protein in the catalog. | HARVEST: Pork slow-cooked, filling built in a skillet, assembled casserole baked.",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: base +20% (Potato)",
+                         "OVERRIDE Pork Shoulder: \u0027Pulled Pork\u0027 header duplicates the \u00274 lb bone-in roast\u0027 line; 4 lb bone-in ~ 75% yield = 1400 g meat, counted once",
+                         "OVERRIDE Potato: \u0027Mashed Potatoes\u0027 header duplicates the \u00272 lb Russet\u0027 line; counted once"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  564,
+                 "protein":  36,
+                 "carbs":  38,
+                 "fat":  29,
+                 "cost_ps":  "2.04"
+             },
+    "intro_html":  "A shepherd\u0027s pie is a filling under a mashed potato roof, and once you understand that, the filling is up for negotiation. This one uses slow cooked pulled pork in a tomato and balsamic gravy with carrots, peas and corn, all of it under a layer of mashed potatoes with cream and butter worked in. It bakes until the top browns in ridges. Of everything in this section, this is the dish that reheats closest to the way it came out of the oven.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Shoulder (generic (USDA)):\u003c/strong\u003e 5.5 lb (2450 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 1.8 cans (744 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1.25 cups (315 g)",
+                                "\u003cstrong\u003eBalsamic Vinegar (generic):\u003c/strong\u003e 1.75 tbsp (28 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 tbsp (18 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 9 (1929 g)",
+                                "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 7 tbsp (104 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 3.5 tbsp (49 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1.75 tbsp (24 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.7 (192 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3.5 (214 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 3.5 tbsp (28 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1.75 tbsp (30 g)",
+                                "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 8.25 oz (234 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 10.25 oz (289 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Shoulder, 5.5 lb: ~$19.28. \u003cstrong\u003eBuy 6 lbs: $21.42.\u003c/strong\u003e",
+                       "Diced Tomatoes, 1.8 cans: ~$1.74. \u003cstrong\u003eBuy 2 cans: $1.92.\u003c/strong\u003e",
+                       "Beef Broth, 1.25 cups: ~$0.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Balsamic Vinegar, 1.75 tbsp: ~$0.23. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 2 tbsp: ~$0.26. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Potato, 9: ~$2.42. \u003cstrong\u003eBuy 5 lbs: $2.84.\u003c/strong\u003e",
+                       "Heavy Cream, 7 tbsp: ~$0.65. \u003cstrong\u003eBuy 1 pint: $2.94.\u003c/strong\u003e",
+                       "Butter, 3.5 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Olive Oil, 1.75 tbsp: ~$0.34. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 1.7: ~$0.48. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 3.5: ~$0.45. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "All-Purpose Flour, 3.5 tbsp: ~$0.03. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Worcestershire Sauce, 1.75 tbsp: ~$0.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Frozen Green Peas, 8.25 oz: ~$0.51. \u003cstrong\u003eBuy 1 12oz bag: $0.73.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 10.25 oz: ~$0.53. \u003cstrong\u003eBuy 1 can: $0.79.\u003c/strong\u003e",
+                       "Pantry seasonings (italian seasoning, black pepper, salt): ~$0.81. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $28.57 across 14 servings, so roughly $2.04 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $38.22 across 14 servings, roughly $2.73 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $22.66 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $60.88. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.04 a bowl\u003c/strong\u003e for a full casserole with pulled pork underneath and real mashed potatoes on top. Potatoes and frozen vegetables are the cheap part, and they are most of the volume.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eRusset potatoes in the big bag make the best mash.\u003c/strong\u003e They are starchy, they whip up fluffy, and they are the least expensive potato in the store by a wide margin.",
+                       "\u003cstrong\u003eFrozen peas and canned corn are pennies a serving.\u003c/strong\u003e They add color, sweetness and bulk to the filling so a smaller amount of pork goes further.",
+                       "\u003cstrong\u003eBalsamic vinegar and Worcestershire are the depth.\u003c/strong\u003e Between them, two cheap bottles give this gravy the savory backbone that usually requires wine or hours of reduction.",
+                       "\u003cstrong\u003eRun a fork across the top before it bakes.\u003c/strong\u003e Those ridges are what brown, and browning is flavor you get for free."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Season the pork shoulder with salt, black pepper and Italian seasoning, sear it in the olive oil, then slow cook it until it shreds and pull it apart.",
+                    "Boil the peeled and quartered potatoes in salted water until they fall off a knife, then drain them well and let the steam escape for a minute.",
+                    "Mash the potatoes with the butter and heavy cream, season with salt and black pepper, and stop as soon as they are smooth. Overworked potatoes turn gluey.",
+                    "Cook the diced onion and sliced carrots in a skillet until soft, add the minced garlic, then sprinkle the flour over and stir for two minutes.",
+                    "Add the diced tomatoes, the beef broth, the balsamic vinegar and the Worcestershire sauce and simmer until it thickens into a gravy, then fold in the pulled pork, the frozen peas and the corn.",
+                    "Spread the filling in a large baking dish, spoon the mashed potatoes over the top and rake ridges into them with a fork, then bake at 400F for 30 minutes until browned and bubbling."
+                ],
+    "portion_html":  "Weigh the finished pie in its dish, subtract the dish weight, divide by 14, and cut portions to that exact weight so nobody gets all potato and no filling. Every serving lands near 564 calories with 36 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.theendlessmeal.com/pulled-pork-shepherds-pie/\" target=\"_blank\" rel=\"noopener\"\u003etheendlessmeal.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cem\u003eShepherd\u0027s pie with pulled pork for about $2.04 a serving. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "cost_batch":  28.57,
+    "cost_batch_true":  38.22,
+    "cost_per_serving":  2.04,
+    "cost_per_serving_true":  2.73,
+    "cost_pantry_add":  22.66,
+    "cost_first_run":  60.88,
+    "scaler":  {
+                   "cost":  "38.22",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Shoulder",
+                                   "canon":  "Pork Shoulder",
+                                   "grams":  2450,
+                                   "buy":  "5.5 lb",
+                                   "bid":  "pork-shoulder",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "canon":  "Italian Seasoning",
+                                   "grams":  12,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  744,
+                                   "buy":  "1.8 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  315,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Balsamic Vinegar",
+                                   "canon":  "Balsamic Vinegar",
+                                   "grams":  28,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "balsamic-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  18,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  1929,
+                                   "buy":  "9",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Heavy Cream",
+                                   "canon":  "Heavy Cream",
+                                   "grams":  104,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "heavy-cream",
+                                   "gpu":  "29.800"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  49,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  35,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  24,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  192,
+                                   "buy":  "1.7",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  214,
+                                   "buy":  "3.5",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  28,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "canon":  "Worcestershire Sauce",
+                                   "grams":  30,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "worcestershire",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Frozen Green Peas",
+                                   "canon":  "Frozen Green Peas",
+                                   "grams":  234,
+                                   "buy":  "8.25 oz",
+                                   "bid":  "frozen-peas",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sweet Whole Kernel Corn",
+                                   "canon":  "Sweet Whole Kernel Corn",
+                                   "grams":  289,
+                                   "buy":  "10.25 oz",
+                                   "bid":  "canned-corn",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Slow cooked pulled pork in a tomato and balsamic gravy with peas and corn, under browned mashed potatoes. A 14 serving shepherd\u0027s pie for meal prep.",
+                 "keywords":  "pulled pork shepherds pie, mashed potato casserole, pork cottage pie, comfort food dinner, budget meal prep, cheap dinner ideas",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT35M",
+                 "cookTime":  "PT4H30M",
+                 "totalTime":  "PT5H5M",
+                 "costPerServing":  2.04,
+                 "recipeIngredient":  [
+                                          "Pork Shoulder",
+                                          "Olive Oil",
+                                          "Yellow Onion",
+                                          "Carrots",
+                                          "Garlic",
+                                          "All-Purpose Flour",
+                                          "Diced Tomatoes",
+                                          "Beef Broth",
+                                          "Balsamic Vinegar",
+                                          "Worcestershire Sauce",
+                                          "Frozen Green Peas",
+                                          "Sweet Whole Kernel Corn",
+                                          "Potato"
+                                      ],
+                 "steps":  [
+                               "Season, sear and slow cook the pork shoulder, then shred it.",
+                               "Boil and mash the potatoes with butter and heavy cream.",
+                               "Cook the onion and carrots, add garlic, and dust with flour.",
+                               "Add the tomatoes, beef broth, balsamic and Worcestershire, then fold in the pork, peas and corn.",
+                               "Top the filling with mashed potatoes, rake with a fork, and bake at 400F for 30 minutes."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Pork Shoulder",
+                                  "grams":  2450
+                              },
+                              {
+                                  "item":  "Italian Seasoning",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  744
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  315
+                              },
+                              {
+                                  "item":  "Balsamic Vinegar",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  18
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  1929
+                              },
+                              {
+                                  "item":  "Heavy Cream",
+                                  "grams":  104
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  49
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  24
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  192
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  214
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Worcestershire Sauce",
+                                  "grams":  30
+                              },
+                              {
+                                  "item":  "Frozen Green Peas",
+                                  "grams":  234
+                              },
+                              {
+                                  "item":  "Sweet Whole Kernel Corn",
+                                  "grams":  289
+                              }
+                          ]
+}

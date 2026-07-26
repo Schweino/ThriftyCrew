@@ -1,0 +1,280 @@
+﻿{
+    "name":  "Sausage, Cabbage and Apple Skillet",
+    "slug":  "sausage-cabbage-apple-skillet",
+    "cuisine":  "american",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.spendwithpennies.com/sausage-cabbage-and-apple-skillet/",
+    "source_site":  "spendwithpennies.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 200g (src scale)",
+                   "base +30% (Rice)",
+                   "protein +25% (Smoked Turkey Sausage)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Sweet-tart apple-and-mustard angle that nothing in the catalog covers, and apples are a board commodity that almost no dinner recipe currently uses. Verified 469 cal / 16g at the source. CONFIDENCE: needs a sausage increase and a served-over-potatoes or egg-noodles base to hit 500+ cal at 25g protein; est_cal projected. Skillet format, scales clean. | HARVEST: ",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 200g (src scale)",
+                         "TUNING: base +30% (Rice)",
+                         "TUNING: protein +25% (Smoked Turkey Sausage)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  624,
+                 "protein":  26,
+                 "carbs":  89,
+                 "fat":  19,
+                 "cost_ps":  "1.77"
+             },
+    "intro_html":  "Smoked sausage, cabbage and apple is one of those old pairings that works because the sweet and the salty need each other. A splash of cider vinegar and a spoon of dijon keep it from tipping into dessert territory. Served over rice it lands at 26 grams of protein for about $1.77, and apples are one of the cheapest fruits on the board most of the year.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)",
+                                "\u003cstrong\u003eSmoked Turkey Sausage (Butterball):\u003c/strong\u003e 4.5 lb (2026 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)",
+                                "\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 1.6 (1470 g)",
+                                "\u003cstrong\u003eApple (generic):\u003c/strong\u003e 7 (1260 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.75 cups (420 g)",
+                                "\u003cstrong\u003eApple Juice (generic (USDA)):\u003c/strong\u003e 1 cups (217 g)",
+                                "\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 2.25 tbsp (35 g)",
+                                "\u003cstrong\u003eApple Cider Vinegar (Great Value):\u003c/strong\u003e 3.5 tbsp (52 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5 cups dry (938 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 3.5 tbsp: ~$0.66. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Smoked Turkey Sausage, 4.5 lb: ~$15.11. \u003cstrong\u003eBuy 6 13oz ropes: $16.47.\u003c/strong\u003e",
+                       "Yellow Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Green Cabbage, 1.6: ~$2.75. \u003cstrong\u003eBuy 2 heads: $3.37.\u003c/strong\u003e",
+                       "Apple, 7: ~$2.81. \u003cstrong\u003eBuy 8 each: $3.12.\u003c/strong\u003e",
+                       "Chicken Broth, 1.75 cups: ~$0.56. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Apple Juice, 1 cups: ~$0.26. \u003cstrong\u003eBuy 1 64floz bottle: $2.24.\u003c/strong\u003e",
+                       "Dijon Mustard, 2.25 tbsp: ~$0.18. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Apple Cider Vinegar, 3.5 tbsp: ~$0.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 5 cups dry: ~$1.16. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (dried thyme, salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $24.82 across 14 servings, so roughly $1.77 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $29.26 across 14 servings, roughly $2.09 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $21.04 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.30. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.77 a bowl\u003c/strong\u003e for a skillet dinner with fruit, vegetables and protein already in it. There is nothing else to cook and nothing else to buy.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy apples loose, not in the bag.\u003c/strong\u003e Bagged apples are usually smaller and priced by convenience. Buying loose lets you pick firm ones that hold up to heat, and it is often cheaper per apple.",
+                       "\u003cstrong\u003eA firm tart apple is the right apple.\u003c/strong\u003e Softer sweet varieties turn to sauce in the pan. You want something that keeps its shape when it cooks.",
+                       "\u003cstrong\u003eCabbage is doing most of the volume work.\u003c/strong\u003e A couple of heads fill the pan for very little. That is why this dish feeds fourteen the way it does.",
+                       "\u003cstrong\u003eApple juice and dijon cost almost nothing per batch.\u003c/strong\u003e A bottle of juice and a jar of mustard both last for months, and together they are what makes this taste finished rather than plain."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Slice the smoked sausage into coins, slice the onion, core and shred the cabbage, and core and slice the apples thick.",
+                    "Heat the olive oil in your largest skillet and brown the sausage coins hard on both sides, then set them aside.",
+                    "Cook the sliced onion in the sausage fat until it softens and picks up the color from the pan.",
+                    "Add the cabbage in batches, letting each handful wilt before the next goes in, and cook until it turns tender and sweet.",
+                    "Add the apple slices and cook just a few minutes. You want them softened but still holding their shape, not collapsed.",
+                    "Whisk the chicken broth, apple juice, dijon mustard, apple cider vinegar and dried thyme together, pour it into the skillet, and simmer until it reduces and glazes everything.",
+                    "Return the sausage, season with salt and black pepper, and cook the rice separately to serve underneath."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount over rice in each container. Every bowl lands near 624 calories and 26 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.spendwithpennies.com/sausage-cabbage-and-apple-skillet/\" target=\"_blank\" rel=\"noopener\"\u003espendwithpennies.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Sweet and savory skillet dinners for about $1.77 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  24.82,
+    "cost_batch_true":  29.26,
+    "cost_per_serving":  1.77,
+    "cost_per_serving_true":  2.09,
+    "cost_pantry_add":  21.04,
+    "cost_first_run":  50.3,
+    "scaler":  {
+                   "cost":  "29.26",
+                   "ing":  [
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  47,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Smoked Turkey Sausage",
+                                   "canon":  "Smoked Turkey Sausage",
+                                   "grams":  2026,
+                                   "buy":  "4.5 lb",
+                                   "bid":  "kielbasa",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  385,
+                                   "buy":  "3.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Cabbage",
+                                   "canon":  "Green Cabbage",
+                                   "grams":  1470,
+                                   "buy":  "1.6",
+                                   "bid":  "cabbage",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Apple",
+                                   "canon":  "Apple",
+                                   "grams":  1260,
+                                   "buy":  "7",
+                                   "bid":  "apple",
+                                   "gpu":  "175.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  420,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Apple Juice",
+                                   "canon":  "Apple Juice",
+                                   "grams":  217,
+                                   "buy":  "1 cups",
+                                   "bid":  "apple-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Dijon Mustard",
+                                   "canon":  "Dijon Mustard",
+                                   "grams":  35,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "dijon-mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Apple Cider Vinegar",
+                                   "canon":  "Apple Cider Vinegar",
+                                   "grams":  52,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "apple-cider-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  2,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  5,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  938,
+                                   "buy":  "5 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Smoked sausage skillet with cabbage, apples and a cider mustard glaze over rice, built for 14 servings. 624 calories, 26g protein, about $1.77 per serving.",
+                 "keywords":  "sausage cabbage and apple skillet, smoked sausage and apples, cabbage skillet dinner, budget meal prep, one pan sausage",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  1.77,
+                 "recipeIngredient":  [
+                                          "4.5 lb smoked sausage",
+                                          "1.6 heads green cabbage",
+                                          "7 apples",
+                                          "3.5 yellow onions",
+                                          "1 lb chicken broth",
+                                          "1 cup apple juice",
+                                          "2.25 tbsp dijon mustard",
+                                          "3.5 tbsp apple cider vinegar",
+                                          "3.5 tbsp olive oil",
+                                          "5 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Brown the sliced smoked sausage in olive oil and set it aside.",
+                               "Cook the sliced onion in the sausage fat, then wilt in the shredded cabbage in batches.",
+                               "Add the sliced apples and cook briefly so they soften but hold their shape.",
+                               "Pour in a mix of chicken broth, apple juice, dijon, cider vinegar and thyme and simmer until it glazes.",
+                               "Return the sausage, season, and serve over cooked rice."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Smoked Turkey Sausage",
+                                  "grams":  2026
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Green Cabbage",
+                                  "grams":  1470
+                              },
+                              {
+                                  "item":  "Apple",
+                                  "grams":  1260
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Apple Juice",
+                                  "grams":  217
+                              },
+                              {
+                                  "item":  "Dijon Mustard",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Apple Cider Vinegar",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  938
+                              }
+                          ]
+}

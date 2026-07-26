@@ -1,0 +1,159 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"turkish-iskender-turkey-bowls","base":14,"cost":52.30,"ing":[{"item":"Turkey Breast","grams":1925,"buy":"4.25 lb","bid":"turkey-breast","gpu":453.592},{"item":"Yellow Onion","grams":424,"buy":"4","bid":"onions","gpu":453.592},{"item":"Black Pepper","grams":13,"buy":"2 tbsp","bid":"black-pepper","gpu":28.350},{"item":"Salt","grams":23,"buy":"1.25 tbsp","bid":"salt","gpu":28.350},{"item":"Red Pepper Flakes","grams":2,"buy":"0.25 tbsp","bid":"red-pepper-flakes","gpu":28.350},{"item":"Olive Oil","grams":208,"buy":"1 cups","bid":"olive-oil","gpu":28.000},{"item":"Tomato Paste","grams":336,"buy":"2 cans","bid":"tomato-paste","gpu":28.350},{"item":"Paprika","grams":18,"buy":"2.5 tbsp","bid":"paprika","gpu":28.350},{"item":"Tortilla","grams":830,"buy":"29.25 oz","bid":"tortillas","gpu":45.000},{"item":"Green Bell Peppers","grams":462,"buy":"4","bid":"bell-peppers","gpu":120.000},{"item":"Diced Tomatoes","grams":1155,"buy":"2.8 cans","bid":"diced-tomatoes","gpu":28.350},{"item":"Butter","grams":216,"buy":"1 cups","bid":"butter","gpu":453.592},{"item":"Greek Yogurt","grams":943,"buy":"3.75 cups","bid":"yogurt","gpu":28.350}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~583 cal &middot; 46g protein &middot; 37g carbs &middot; 31g fat &middot; ~$2.80 per serving.</strong></p>
+
+<p>Iskender kebab is named for Iskender Efendi, the man in Bursa who supposedly turned the lamb spit sideways in the 1860s and changed Turkish cooking. The dish is sliced meat over toasted bread cubes, a bright tomato sauce poured across it, melted butter drizzled over that, and cool yogurt alongside. Each serving carries <strong>46 grams of protein</strong> and 583 calories for about <strong>$2.80</strong>. It is the most expensive plate in this group and the one most worth making when you want to eat something you cannot get locally.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Turkey Breast (generic (USDA)):</strong> 4.25 lb (1925 g)</li>
+<li><strong>Yellow Onion:</strong> 4 (424 g)</li>
+<li><strong>Olive Oil:</strong> 1 cups (208 g)</li>
+<li><strong>Tomato Paste (Great Value):</strong> 2 cans (336 g)</li>
+<li><strong>Tortilla (La Banderita):</strong> 29.25 oz (830 g)</li>
+<li><strong>Green Bell Peppers:</strong> 4 (462 g)</li>
+<li><strong>Diced Tomatoes (Great Value):</strong> 2.8 cans (1155 g)</li>
+<li><strong>Butter (generic):</strong> 1 cups (216 g)</li>
+<li><strong>Greek Yogurt (Great Value):</strong> 3.75 cups (943 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Turkey Breast, 4.25 lb: ~$20.43. <strong>Buy 2 3lb frozen roasts: $28.88.</strong></li>
+<li>Yellow Onion, 4: ~$1.07. <strong>Buy 1 lb: $1.14.</strong></li>
+<li>Olive Oil, 1 cups: ~$2.93. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Tomato Paste, 2 cans: ~$1.70. <strong>Buy 2 6oz cans: $1.72.</strong></li>
+<li>Tortilla, 29.25 oz: ~$1.96. <strong>Buy 3 10ct packs: $2.12.</strong></li>
+<li>Green Bell Peppers, 4: ~$3.31. <strong>Buy 4 each: $3.44.</strong></li>
+<li>Diced Tomatoes, 2.8 cans: ~$2.70. <strong>Buy 3 cans: $2.88.</strong></li>
+<li>Butter, 1 cups: ~$1.42. <strong>Buy 1 lb box: $2.98.</strong></li>
+<li>Greek Yogurt, 3.75 cups: ~$2.74. <strong>Buy 2 32oz tubs: $5.28.</strong></li>
+<li>Pantry seasonings (black pepper, salt, red pepper flakes, paprika): ~$0.93. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $39.19 across 14 servings, so roughly $2.80 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $52.30 across 14 servings, roughly $3.74 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $13.47 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $65.77. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$2.80 a serving</strong>. Turkey breast and a mountain of tomatoes and peppers push this to the top of the range. What you get for it is a dish most people have never had at home, built entirely out of grocery store items.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>Two frozen turkey breast roasts cover this batch. Roast them, chill them completely, and then slice thin against the grain, which is far easier cold than warm.</li>
+<li>Canned diced tomatoes are the base of the sauce and this recipe uses a lot of them. Store brand blends down identically and goes on sale by the case.</li>
+<li>Green peppers cost less than any other color and get charred here, which is the traditional garnish for Iskender. If your store carries Turkish or Anaheim long peppers at a similar price, those are closer to the original.</li>
+<li>Greek yogurt in the 32 oz tub costs far less per ounce than the single-serve cups. The tub also keeps for weeks, so nothing goes to waste.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Cut the flatbread into bite-sized squares, spread them on a sheet pan, and toast at 375F for 8 to 10 minutes until dry and lightly golden. They need to be dry enough to hold up under sauce.</li>
+<li>Char the green peppers whole under the broiler for 8 to 10 minutes, turning once, until the skins blister, then slice them into strips.</li>
+<li>Heat most of the olive oil in a large skillet and cook the sliced onion for 6 minutes, then add the tomato paste, paprika, red pepper flakes, salt, and black pepper and cook two minutes until the paste darkens.</li>
+<li>Add the canned diced tomatoes and simmer 20 to 25 minutes until the sauce reduces and thickens enough to hold its shape on a spoon.</li>
+<li>Sear the sliced turkey breast in the remaining olive oil over high heat in batches, just long enough to get color on the edges without drying it out.</li>
+<li>Whisk the Greek yogurt smooth with a pinch of salt and a splash of water so it pours rather than sits in a lump.</li>
+<li>Build the bowls: toasted bread cubes on the bottom, seared turkey over them, tomato sauce spooned across, melted butter drizzled over the top, charred peppers on the side, and the yogurt in its own corner.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Weigh the bread, turkey, and sauce together, subtract your empty pot weight, and divide by 14, then keep the yogurt in a separate small container for each bowl. Building the base to a weight is what keeps the bread-to-meat ratio honest. Each serving comes to <strong>583 calories</strong> and 46 grams of protein.</p>
+
+<p><em>Recipe adapted from <a href="https://www.hungrypaprikas.com/iskender-kebab/" target="_blank" rel="noopener">hungrypaprikas.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>A Turkish kebab house dinner at home for about $2.80 a serving. Most recipes on this site land well under that. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.</em></p>

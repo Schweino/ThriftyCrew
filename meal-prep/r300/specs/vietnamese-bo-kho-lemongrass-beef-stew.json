@@ -1,0 +1,399 @@
+﻿{
+    "name":  "Vietnamese Bo Kho (Lemongrass Beef Stew)",
+    "slug":  "vietnamese-bo-kho-lemongrass-beef-stew",
+    "cuisine":  "Vietnamese",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://thewoksoflife.com/bo-kho-spicy-vietnamese-beef-stew/",
+    "source_site":  "thewoksoflife.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Aromatic beef stew over rice noodles, both lemongrass-paste and rice-noodles already on the board. The live Vietnamese beef entry is a caramelized ground beef bowl, so there is no overlap. Chuck or shank both work; chuck keeps it cheap. Confidence: medium. | HARVEST: Source groups under For the beef / For the rest of the stew.",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "OVERRIDE Rice Noodles: \u0027Wide rice noodles or egg noodles\u0027 to serve, no qty; 50 g dry/serving x 8"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  593,
+                 "protein":  33,
+                 "carbs":  58,
+                 "fat":  25,
+                 "cost_ps":  "4.12"
+             },
+    "intro_html":  "Bo kho is Vietnamese beef stew, and the two things that make it Vietnamese rather than generic are lemongrass and annatto. The lemongrass gives it that bright citrus edge underneath the beef, and the annatto in the achiote paste turns the broth a deep orange that no amount of tomato could manage. Served over rice noodles, each bowl carries 593 calories and \u003cstrong\u003e33 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.12 a serving\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 4 lb (1786 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 10.25 tbsp (88 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 5.25 tbsp (32 g)",
+                                "\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 0.5 cups (158 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 5.25 tbsp (74 g)",
+                                "\u003cstrong\u003eLemongrass Paste (Gourmet Garden (McCormick)):\u003c/strong\u003e 4.25 tbsp (63 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.7 (293 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 7 tbsp (112 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (840 g)",
+                                "\u003cstrong\u003eAchiote Paste (El Yucateco):\u003c/strong\u003e 0.5 tbsp (9 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 16.5 (1008 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 5.25 tbsp (84 g)",
+                                "\u003cstrong\u003eChili Crisp (Lao Gan Ma (Laoganma)):\u003c/strong\u003e 5.25 tbsp (74 g)",
+                                "\u003cstrong\u003eRice Noodles (Thai Kitchen):\u003c/strong\u003e 24.75 oz dry (700 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 7 tbsp (7 g)",
+                                "\u003cstrong\u003eFresh Basil:\u003c/strong\u003e 14 tbsp (21 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Chuck Roast, 4 lb: ~$31.38. \u003cstrong\u003eBuy 4 lbs: $31.88.\u003c/strong\u003e",
+                       "Garlic, 10.25 tbsp: ~$1.27. \u003cstrong\u003eBuy 3 heads: $1.73.\u003c/strong\u003e",
+                       "Ginger, 5.25 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Fish Sauce, 0.5 cups: ~$1.52. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Vegetable Oil, 5.25 tbsp: ~$0.18. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lemongrass Paste, 4.25 tbsp: ~$2.77. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2.7: ~$0.74. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Tomato Paste, 7 tbsp: ~$0.57. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "Chicken Broth, 1 carton: ~$1.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Achiote Paste, 0.5 tbsp: ~$0.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Carrots, 16.5: ~$2.12. \u003cstrong\u003eBuy 3 lbs: $2.86.\u003c/strong\u003e",
+                       "Soy Sauce, 5.25 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chili Crisp, 5.25 tbsp: ~$1.75. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice Noodles, 24.75 oz dry: ~$8.40. \u003cstrong\u003eBuy 2 14oz boxes: $9.52.\u003c/strong\u003e",
+                       "Fresh Cilantro, 7 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Fresh Basil, 14 tbsp: ~$2.64. \u003cstrong\u003eBuy 2 0.5oz packs: $3.52.\u003c/strong\u003e",
+                       "Pantry seasonings (five-spice powder, brown sugar, black pepper, chili powder, paprika, salt): ~$2.20. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $57.70 across 14 servings, so roughly $4.12 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $64.25 across 14 servings, roughly $4.59 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $31.40 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $95.65. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.12 a bowl\u003c/strong\u003e for a stew that takes three hours and eats like something you waited in line for. Beef is most of it, and the rice noodles are the second biggest line, which tells you how cheap everything else in the pot is.",
+    "shop_smart":  [
+                       "Lemongrass paste in a tube is the smart buy. Fresh stalks cost more, take work, and you throw most of each one away. The tube lives in the fridge for months and covers many batches.",
+                       "Carrots are doing a lot of the work here. They add sweetness, bulk, and color for very little money, and a three pound bag is dramatically cheaper per pound than the little cello packs.",
+                       "Rice noodles are the second biggest expense, so buy the boxes rather than the fancy fresh noodles. They cook in a couple minutes and hold in the fridge better than wheat noodles do.",
+                       "Chili crisp and fish sauce are both one-time buys that last for ages. If you are stocking a pantry for Asian cooking, these two plus soy sauce cover an enormous amount of ground."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cut the chuck into large cubes and marinate it with the garlic, ginger, lemongrass paste, fish sauce, five-spice powder, brown sugar, and black pepper for at least 30 minutes. Overnight is better if you can plan that far ahead.",
+                    "Heat the vegetable oil in a heavy pot and brown the beef in batches. Set it aside and keep the marinade.",
+                    "Cook the sliced onion in the same pot until soft, then stir in the achiote paste, tomato paste, chili powder, and paprika and cook for a minute until the oil goes orange.",
+                    "Return the beef with the remaining marinade, the chicken broth, soy sauce, and bay leaves. Add water until the meat is just covered and bring it to a simmer.",
+                    "Cover and cook low for about 2 hours, then add the carrots in thick chunks and simmer uncovered another 30 minutes until they are tender and the broth has body.",
+                    "Stir in the chili crisp, taste for salt and fish sauce, and pull it off the heat.",
+                    "Cook the rice noodles just to tender, rinse them cold, and portion them into the containers before ladling the stew over. Top with cilantro and torn basil."
+                ],
+    "portion_html":  "Weigh the noodles into each container first, then put the stew pot on the scale, subtract the empty-pot weight, and divide by 14. Ladle to that number and every bowl lands at \u003cstrong\u003e593 calories\u003c/strong\u003e. Keep the herbs in a small bag on the side and add them after reheating, because basil that has been microwaved four days in a row is not doing anybody any favors.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://thewoksoflife.com/bo-kho-spicy-vietnamese-beef-stew/\" target=\"_blank\" rel=\"noopener\"\u003ethewoksoflife.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Vietnamese lemongrass beef stew for about \u003cstrong\u003e$4.12 a bowl\u003c/strong\u003e. Members get the entire Meal Prep library plus every money lesson, calculator, and tool on the site for $1 a month.",
+    "cost_batch":  57.7,
+    "cost_batch_true":  64.25,
+    "cost_per_serving":  4.12,
+    "cost_per_serving_true":  4.59,
+    "cost_pantry_add":  31.4,
+    "cost_first_run":  95.65,
+    "scaler":  {
+                   "cost":  "64.25",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Chuck Roast",
+                                   "canon":  "Beef Chuck Roast",
+                                   "grams":  1786,
+                                   "buy":  "4 lb",
+                                   "bid":  "beef-chuck-roast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  88,
+                                   "buy":  "10.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  32,
+                                   "buy":  "5.25 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Fish Sauce",
+                                   "canon":  "Fish Sauce",
+                                   "grams":  158,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "fish-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Five-Spice Powder",
+                                   "canon":  "Five-Spice Powder",
+                                   "grams":  10,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "five-spice-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "canon":  "Brown Sugar",
+                                   "grams":  12,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  74,
+                                   "buy":  "5.25 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Lemongrass Paste",
+                                   "canon":  "Lemongrass Paste",
+                                   "grams":  63,
+                                   "buy":  "4.25 tbsp",
+                                   "bid":  "lemongrass-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  293,
+                                   "buy":  "2.7",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  112,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  840,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "canon":  "Chili Powder",
+                                   "grams":  5,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Achiote Paste",
+                                   "canon":  "Achiote Paste",
+                                   "grams":  9,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "achiote-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  12,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  1008,
+                                   "buy":  "16.5",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  10,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  84,
+                                   "buy":  "5.25 tbsp",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Chili Crisp",
+                                   "canon":  "Chili Crisp",
+                                   "grams":  74,
+                                   "buy":  "5.25 tbsp",
+                                   "bid":  "chili-crisp",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice Noodles",
+                                   "canon":  "Rice Noodles",
+                                   "grams":  700,
+                                   "buy":  "24.75 oz dry",
+                                   "bid":  "rice-noodles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  7,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Fresh Basil",
+                                   "canon":  "Fresh Basil",
+                                   "grams":  21,
+                                   "buy":  "14 tbsp",
+                                   "bid":  "fresh-basil",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Vietnamese bo kho, a lemongrass and annatto beef stew with carrots over rice noodles, rebuilt for 14 meal prep servings at about $4.12 a bowl.",
+                 "keywords":  "bo kho, vietnamese beef stew, lemongrass beef, rice noodle bowl, vietnamese meal prep, budget beef stew, high protein meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT35M",
+                 "cookTime":  "PT2H45M",
+                 "totalTime":  "PT3H20M",
+                 "costPerServing":  4.12,
+                 "recipeIngredient":  [
+                                          "4 lb beef chuck roast",
+                                          "10.25 tbsp minced garlic",
+                                          "5.25 tbsp grated ginger",
+                                          "4.25 tbsp lemongrass paste",
+                                          "0.5 cups fish sauce",
+                                          "5.25 tbsp vegetable oil",
+                                          "2.7 yellow onions",
+                                          "7 tbsp tomato paste",
+                                          "0.5 tbsp achiote paste",
+                                          "1.75 lb chicken broth and 5.25 tbsp soy sauce",
+                                          "16.5 carrots",
+                                          "5.25 tbsp chili crisp",
+                                          "24.75 oz dry rice noodles"
+                                      ],
+                 "steps":  [
+                               "Marinate the cubed beef with garlic, ginger, lemongrass, fish sauce, five-spice, and brown sugar.",
+                               "Brown the beef in batches, then soften the onion and cook the achiote and tomato paste until the oil turns orange.",
+                               "Return the beef with broth, soy sauce, and bay leaves and simmer covered about 2 hours.",
+                               "Add the carrots and simmer uncovered 30 minutes, then stir in the chili crisp.",
+                               "Cook and rinse the rice noodles, portion into 14 containers, and ladle the stew over with cilantro and basil."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Chuck Roast",
+                                  "grams":  1786
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  88
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  32
+                              },
+                              {
+                                  "item":  "Fish Sauce",
+                                  "grams":  158
+                              },
+                              {
+                                  "item":  "Five-Spice Powder",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Brown Sugar",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  74
+                              },
+                              {
+                                  "item":  "Lemongrass Paste",
+                                  "grams":  63
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  293
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  112
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  840
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Chili Powder",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Achiote Paste",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  1008
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Chili Crisp",
+                                  "grams":  74
+                              },
+                              {
+                                  "item":  "Rice Noodles",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Fresh Basil",
+                                  "grams":  21
+                              }
+                          ]
+}

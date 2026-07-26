@@ -1,0 +1,194 @@
+﻿{
+    "name":  "Haluski and Kielbasa (Cabbage and Egg Noodles)",
+    "slug":  "haluski-and-kielbasa-cabbage-noodles",
+    "cuisine":  "polish",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.meatloafandmelodrama.com/haluski-and-kielbasa/",
+    "source_site":  "meatloafandmelodrama.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Egg Noodles)",
+                   "portion factor 1.2",
+                   "protein +10% (Smoked Turkey Sausage)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Named as a P2 hunting-ground target and nothing haluski-like is in the catalog. Buttery cabbage + egg noodles + smoked sausage is a one-skillet dish that weighs and divides cleanly at 14. Every ingredient is a tracked commodity (kielbasa, cabbage, egg-noodles, onions, butter). CONFIDENCE: source is 387 cal / 13g protein at 10 servings, which is under target; our version needs roughly a 2:1 bump of kielbasa to noodles plus cottage cheese or a leaner butter hand to land 500+ cal at 28g protein. Source numbers verified from the page, our numbers are projected. | HARVEST: ",
+                         "SOURCE YIELD: 10 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Egg Noodles)",
+                         "TUNING: portion factor 1.2",
+                         "TUNING: protein +10% (Smoked Turkey Sausage)",
+                         "OVERRIDE Smoked Turkey Sausage: [BUMP x1.25] 10-serving haluski; 80 g sausage/serving for the 25 g floor"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  595,
+                 "protein":  25,
+                 "carbs":  70,
+                 "fat":  26,
+                 "cost_ps":  "1.42"
+             },
+    "intro_html":  "Haluski is Polish home cooking in its purest form: cabbage cooked down in butter until it goes sweet and golden, tossed with wide egg noodles. Add sliced smoked sausage and it stops being a side dish and becomes dinner. Five ingredients, one skillet, 25 grams of protein, and about $1.42 a bowl.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eEgg Noodles (Great Value wide):\u003c/strong\u003e 36.25 oz dry (1026 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 0.75 cups (191 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.7 (185 g)",
+                                "\u003cstrong\u003eSmoked Turkey Sausage (Butterball):\u003c/strong\u003e 3.25 lb (1482 g)",
+                                "\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 1.7 (1512 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Egg Noodles, 36.25 oz dry: ~$3.94. \u003cstrong\u003eBuy 3 12oz bags: $3.94.\u003c/strong\u003e",
+                       "Butter, 0.75 cups: ~$1.25. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Yellow Onion, 1.7: ~$0.47. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Smoked Turkey Sausage, 3.25 lb: ~$11.05. \u003cstrong\u003eBuy 5 13oz ropes: $13.72.\u003c/strong\u003e",
+                       "Green Cabbage, 1.7: ~$2.83. \u003cstrong\u003eBuy 2 heads: $3.37.\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, salt): ~$0.36. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $19.90 across 14 servings, so roughly $1.42 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $25.51 across 14 servings, roughly $1.82 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.36 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $30.87. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.42 a bowl\u003c/strong\u003e for a skillet dinner built on cabbage and noodles, two of the cheapest things in the store. This is what eating well on a tight week actually looks like.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eCabbage is the best value vegetable in the store, period.\u003c/strong\u003e Two heads cover this whole batch and a head keeps in the fridge for weeks without wilting on you.",
+                       "\u003cstrong\u003eThe smoked sausage is the budget.\u003c/strong\u003e It is most of the cost line by itself, so buy the ropes when they go on sale and freeze them. They freeze and thaw without losing a thing.",
+                       "\u003cstrong\u003eWide egg noodles beat fancy pasta here.\u003c/strong\u003e Store brand twelve ounce bags are the cheapest way to buy them and the wide cut is what holds the buttery cabbage.",
+                       "\u003cstrong\u003eDo not skimp on the butter.\u003c/strong\u003e It is one of the smallest lines on the cost list and it is the entire reason haluski tastes like anything. This is not the line to cut."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Core the cabbage and slice it into thin ribbons. Slice the onion thin as well.",
+                    "Boil the egg noodles in well salted water until just barely tender, then drain them and set them aside.",
+                    "Slice the smoked sausage into coins and brown them in a dry skillet until the edges char a little, then move them to a plate.",
+                    "Melt the butter in that same skillet and cook the onion until it turns soft and translucent.",
+                    "Add the cabbage in batches, letting each addition wilt down before you add more. Cook it slowly until it goes golden and sweet. Rushing this is the one mistake people make.",
+                    "Season with salt and black pepper, then return the sausage to the pan and stir it through.",
+                    "Fold the drained noodles into the cabbage and sausage in your big pot until everything is coated in butter."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container, tossing the pot between scoops so the sausage does not sink to the bottom. Every bowl lands near 595 calories and 25 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.meatloafandmelodrama.com/haluski-and-kielbasa/\" target=\"_blank\" rel=\"noopener\"\u003emeatloafandmelodrama.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Old country comfort food for about $1.42 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  19.9,
+    "cost_batch_true":  25.51,
+    "cost_per_serving":  1.42,
+    "cost_per_serving_true":  1.82,
+    "cost_pantry_add":  5.36,
+    "cost_first_run":  30.87,
+    "scaler":  {
+                   "cost":  "25.51",
+                   "ing":  [
+                               {
+                                   "item":  "Egg Noodles",
+                                   "canon":  "Egg Noodles",
+                                   "grams":  1026,
+                                   "buy":  "36.25 oz dry",
+                                   "bid":  "egg-noodles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  191,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  185,
+                                   "buy":  "1.7",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Smoked Turkey Sausage",
+                                   "canon":  "Smoked Turkey Sausage",
+                                   "grams":  1482,
+                                   "buy":  "3.25 lb",
+                                   "bid":  "kielbasa",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Cabbage",
+                                   "canon":  "Green Cabbage",
+                                   "grams":  1512,
+                                   "buy":  "1.7",
+                                   "bid":  "cabbage",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  24,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Polish haluski with buttery cabbage, wide egg noodles and browned smoked sausage, built for 14 servings. 595 calories, 25g protein, about $1.42 per serving.",
+                 "keywords":  "haluski, kielbasa and cabbage, cabbage and egg noodles, polish comfort food, cheap skillet dinner, budget meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT35M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  1.42,
+                 "recipeIngredient":  [
+                                          "36.25 oz dry wide egg noodles",
+                                          "3.25 lb smoked sausage",
+                                          "1.7 heads green cabbage",
+                                          "0.75 cups butter",
+                                          "1.7 yellow onions"
+                                      ],
+                 "steps":  [
+                               "Slice the cabbage into thin ribbons and slice the onion.",
+                               "Boil the egg noodles until just tender and drain.",
+                               "Brown the sliced smoked sausage in a dry skillet and set aside.",
+                               "Cook the onion in butter, then add the cabbage in batches and cook slowly until golden and sweet.",
+                               "Return the sausage, season, and fold in the drained noodles."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Egg Noodles",
+                                  "grams":  1026
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  191
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  185
+                              },
+                              {
+                                  "item":  "Smoked Turkey Sausage",
+                                  "grams":  1482
+                              },
+                              {
+                                  "item":  "Green Cabbage",
+                                  "grams":  1512
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  24
+                              }
+                          ]
+}

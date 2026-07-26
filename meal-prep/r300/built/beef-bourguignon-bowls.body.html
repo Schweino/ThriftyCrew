@@ -1,0 +1,163 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"beef-bourguignon-bowls","base":14,"cost":64.67,"ing":[{"item":"Beef Chuck Roast","grams":2240,"buy":"5 lb","bid":"beef-chuck-roast","gpu":453.592},{"item":"Carrots","grams":403,"buy":"6.6","bid":"carrots","gpu":453.592},{"item":"Yellow Onion","grams":627,"buy":"5.7","bid":"onions","gpu":453.592},{"item":"Bay Leaves","grams":2,"buy":"0.07 oz","bid":"bay-leaves","gpu":28.350},{"item":"Dried Thyme","grams":8,"buy":"2.75 tbsp","bid":"dried-thyme","gpu":28.350},{"item":"Beef Broth","grams":4116,"buy":"17.25 cups","bid":"beef-broth","gpu":29.570},{"item":"Vegetable Oil","grams":118,"buy":"8.5 tbsp","bid":"vegetable-oil","gpu":28.000},{"item":"Salt","grams":17,"buy":"1 tbsp","bid":"salt","gpu":28.350},{"item":"Black Pepper","grams":3,"buy":"0.5 tbsp","bid":"black-pepper","gpu":28.350},{"item":"White Mushrooms","grams":560,"buy":"1.25 lb","bid":"mushrooms","gpu":28.350},{"item":"Hickory Smoked Bacon","grams":420,"buy":"1 lb","bid":"bacon","gpu":453.592},{"item":"Butter","grams":140,"buy":"0.5 cups","bid":"butter","gpu":453.592},{"item":"Garlic","grams":42,"buy":"5 tbsp","bid":"garlic","gpu":50.000},{"item":"Tomato Paste","grams":90,"buy":"5.5 tbsp","bid":"tomato-paste","gpu":28.350},{"item":"All-Purpose Flour","grams":134,"buy":"1 cups","bid":"flour","gpu":453.592}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~726 cal &middot; 47g protein &middot; 18g carbs &middot; 49g fat &middot; ~$4.22 per serving.</strong></p>
+
+<p>Beef bourguignon has a reputation for being fussy French cooking, and it is really just a beef stew with bacon, mushrooms, and a mountain of onions cooked down into the gravy. The cut it calls for is chuck, the same cheap roast in every other braise on this site. The name is expensive, the groceries are not. Each bowl carries <strong>47 grams of protein</strong> and 726 calories for about <strong>$4.22</strong>.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Beef Chuck Roast:</strong> 5 lb (2240 g)</li>
+<li><strong>Carrots (generic):</strong> 6.6 (403 g)</li>
+<li><strong>Yellow Onion:</strong> 5.7 (627 g)</li>
+<li><strong>Beef Broth (Great Value):</strong> 17.25 cups (4116 g)</li>
+<li><strong>Vegetable Oil (Great Value):</strong> 8.5 tbsp (118 g)</li>
+<li><strong>White Mushrooms:</strong> 1.25 lb (560 g)</li>
+<li><strong>Hickory Smoked Bacon (Great Value):</strong> 1 lb (420 g)</li>
+<li><strong>Butter (generic):</strong> 0.5 cups (140 g)</li>
+<li><strong>Garlic:</strong> 5 tbsp (42 g)</li>
+<li><strong>Tomato Paste (Great Value):</strong> 5.5 tbsp (90 g)</li>
+<li><strong>All-Purpose Flour (Great Value):</strong> 1 cups (134 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Beef Chuck Roast, 5 lb: ~$39.36. <strong>Buy 5 lbs: $39.85.</strong></li>
+<li>Carrots, 6.6: ~$0.85. <strong>Buy 1 lb: $0.95.</strong></li>
+<li>Yellow Onion, 5.7: ~$1.58. <strong>Buy 2 lbs: $2.28.</strong></li>
+<li>Beef Broth, 17.25 cups: ~$5.53. <strong>Pantry staple; this batch alone uses about 5 32oz cartons.</strong></li>
+<li>Vegetable Oil, 8.5 tbsp: ~$0.29. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>White Mushrooms, 1.25 lb: ~$4.67. <strong>Buy 3 8oz packs: $5.67.</strong></li>
+<li>Hickory Smoked Bacon, 1 lb: ~$3.67. <strong>Buy 1 lb: $3.96.</strong></li>
+<li>Butter, 0.5 cups: ~$0.92. <strong>Buy 1 lb box: $2.98.</strong></li>
+<li>Garlic, 5 tbsp: ~$0.60. <strong>Buy 2 heads: $1.15.</strong></li>
+<li>Tomato Paste, 5.5 tbsp: ~$0.45. <strong>Buy 1 6oz can: $0.86.</strong></li>
+<li>All-Purpose Flour, 1 cups: ~$0.13. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Pantry seasonings (bay leaves, dried thyme, salt, black pepper): ~$1.02. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $59.07 across 14 servings, so roughly $4.22 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $64.67 across 14 servings, roughly $4.62 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $11.99 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $76.66. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$4.22 a bowl</strong> for the dish that gets described as special occasion cooking. Bacon, mushrooms, and onions are doing the work that most people assume the wine does.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>This recipe uses onions by the bag, not by the piece. Buy the largest mesh bag your store carries and check the price per pound against the loose bin before you commit.</li>
+<li>Mushrooms are the other big produce line. The whole white button mushrooms cost less than the pre sliced trays and take about a minute to slice yourself.</li>
+<li>Bacon ends and pieces, where you can get them, are perfect here. Nobody sees the strips once they are chopped into a stew.</li>
+<li>Butter goes on sale hard in November and December and freezes for a year. That is the time to buy it for every braise you will make.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Chop the bacon and render it in the pot until crisp. Lift it out and leave the fat.</li>
+<li>Cut the chuck into large cubes, dry them well, season with salt and black pepper, and brown them hard in the bacon fat and vegetable oil in batches.</li>
+<li>Slice the onions and cook them in the same pot, patiently, until they are soft and deeply golden. This takes a while and it is where the sweetness comes from.</li>
+<li>Add the garlic, then stir in the flour and tomato paste and cook 2 minutes.</li>
+<li>Pour in the beef broth, scraping the bottom clean, and add the bay leaves and thyme.</li>
+<li>Return the beef and bacon, cover, and simmer very low for 2.5 hours, until the beef breaks apart under a spoon.</li>
+<li>SautÃƒÂ© the sliced mushrooms and the carrots in the butter in a separate pan until browned, then stir them in for the last 20 minutes so they keep their shape.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Ladle that weight into each of 14 containers, stirring between scoops so the mushrooms and bacon get spread around. Each bowl lands at <strong>726 calories with 47 grams of protein</strong>.</p>
+
+<p><em>Recipe adapted from <a href="https://www.recipetineats.com/beef-bourguignon-beef-burgundy/" target="_blank" rel="noopener">recipetineats.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>Beef bourguignon for about $4.22 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.</em></p>

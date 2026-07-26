@@ -1,0 +1,322 @@
+﻿{
+    "name":  "Kharcho (Georgian Beef and Walnut Rice Soup)",
+    "slug":  "kharcho-georgian-beef-walnut-soup",
+    "cuisine":  "Georgian",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://silkroadrecipes.com/kharcho-georgian-beef-soup/",
+    "source_site":  "silkroadrecipes.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +40% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 472 cal and 37g protein per serving from the source panel, so protein density is excellent even though calories sit just under 500; thickening it (more rice, less broth) clears the bar easily. Walnuts are a tracked commodity and carry the whole dish. Caucasus cuisine is entirely absent from the catalog. | HARVEST: ",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: base +40% (Rice)",
+                         "OVERRIDE Dried Dill: \u00271/4 cup fresh dill\u0027 -\u003e dried equivalent 7 g (no cup density for dried dill)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  562,
+                 "protein":  38,
+                 "carbs":  23,
+                 "fat":  34,
+                 "cost_ps":  "3.70"
+             },
+    "intro_html":  "Kharcho is the soup Georgia built on walnuts. Ground walnuts thicken the broth into something closer to a stew, tomatoes and vinegar keep it sharp, and rice cooked right in the pot makes it a meal instead of a starter. Coriander, cloves, and dill do the rest. Each bowl carries \u003cstrong\u003e38 grams of protein\u003c/strong\u003e and 562 calories for about \u003cstrong\u003e$3.70\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 5.25 lb (2381 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 5.25 tbsp (74 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6 tbsp (52 g)",
+                                "\u003cstrong\u003eWalnuts (Great Value):\u003c/strong\u003e 1.75 cups (205 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 1.7 cans (719 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1.25 cups dry (239 g)",
+                                "\u003cstrong\u003eRed Wine Vinegar (generic):\u003c/strong\u003e 3.5 tbsp (52 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 7 tbsp (7 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Chuck Roast, 5.25 lb: ~$41.84. \u003cstrong\u003eBuy 6 lbs: $47.82.\u003c/strong\u003e",
+                       "Vegetable Oil, 5.25 tbsp: ~$0.18. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 6 tbsp: ~$0.75. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Walnuts, 1.75 cups: ~$4.33. \u003cstrong\u003eBuy 1 8oz bag: $4.80.\u003c/strong\u003e",
+                       "Diced Tomatoes, 1.7 cans: ~$1.68. \u003cstrong\u003eBuy 2 cans: $1.92.\u003c/strong\u003e",
+                       "Rice, 1.25 cups dry: ~$0.30. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Red Wine Vinegar, 3.5 tbsp: ~$0.31. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fresh Cilantro, 7 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, ground cloves, red pepper flakes, ground coriander, garam masala, cayenne pepper, black pepper, dried dill): ~$1.28. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $51.86 across 14 servings, so roughly $3.70 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $60.68 across 14 servings, roughly $4.33 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $20.02 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $80.70. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.70 a bowl\u003c/strong\u003e. Walnuts are the one splurge line on this list, and they are not a garnish here. They are the thickener, the fat, and half the flavor.",
+    "shop_smart":  [
+                       "Walnuts are cheapest in the baking aisle rather than the snack aisle, and cheapest of all around the holidays. Buy then and keep them in the freezer, where they will not go rancid.",
+                       "Rice cooks directly in the soup and thickens it as it goes. That means no separate pot and no separate cost line for a base.",
+                       "Dried dill stands in for fresh without complaint in a long simmer. A jar lasts a year and costs less than two bunches of the fresh stuff.",
+                       "Chuck roast again. A long simmer wants connective tissue, and connective tissue is exactly what the cheap cuts have."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cut the chuck into small cubes and simmer them in salted water for about 75 minutes, skimming the foam, until tender. Keep the broth in the pot.",
+                    "In a separate pan, cook the chopped onion in the vegetable oil until soft and just golden.",
+                    "Grind the walnuts to a coarse paste. A food processor is easiest, but a bag and a rolling pin works.",
+                    "Stir the onions, ground walnuts, and diced tomatoes into the beef pot along with the coriander, cloves, cayenne, and garam masala.",
+                    "Add the rice and simmer gently 20 to 25 minutes, stirring often, until the rice is tender and the soup has thickened.",
+                    "Stir in the minced garlic, the red wine vinegar, and the dried dill and cook 3 more minutes.",
+                    "Kill the heat, fold in the chopped cilantro, and taste for salt. Kharcho should be tangy, so add vinegar before you add salt."
+                ],
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Ladle that weight into each of 14 containers, stirring between scoops because the walnuts and rice sink. Each bowl lands at \u003cstrong\u003e562 calories with 38 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://silkroadrecipes.com/kharcho-georgian-beef-soup/\" target=\"_blank\" rel=\"noopener\"\u003esilkroadrecipes.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Georgian walnut soup for about $3.70 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  51.86,
+    "cost_batch_true":  60.68,
+    "cost_per_serving":  3.7,
+    "cost_per_serving_true":  4.33,
+    "cost_pantry_add":  20.02,
+    "cost_first_run":  80.7,
+    "scaler":  {
+                   "cost":  "60.68",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Chuck Roast",
+                                   "canon":  "Beef Chuck Roast",
+                                   "grams":  2381,
+                                   "buy":  "5.25 lb",
+                                   "bid":  "beef-chuck-roast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  21,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  74,
+                                   "buy":  "5.25 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  385,
+                                   "buy":  "3.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  52,
+                                   "buy":  "6 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ground Cloves",
+                                   "canon":  "Ground Cloves",
+                                   "grams":  1,
+                                   "buy":  "0.04 oz",
+                                   "bid":  "ground-cloves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Walnuts",
+                                   "canon":  "Walnuts",
+                                   "grams":  205,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "walnuts",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Pepper Flakes",
+                                   "canon":  "Red Pepper Flakes",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "red-pepper-flakes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Coriander",
+                                   "canon":  "Ground Coriander",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "ground-coriander",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garam Masala",
+                                   "canon":  "Garam Masala",
+                                   "grams":  4,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "garam-masala",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cayenne Pepper",
+                                   "canon":  "Cayenne Pepper",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "cayenne-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  719,
+                                   "buy":  "1.7 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  239,
+                                   "buy":  "1.25 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Wine Vinegar",
+                                   "canon":  "Red Wine Vinegar",
+                                   "grams":  52,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "red-wine-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Dried Dill",
+                                   "canon":  "Dried Dill",
+                                   "grams":  12,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "dried-dill",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  7,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Georgian kharcho meal prep: beef simmered with ground walnuts, tomatoes, rice, and dill into a thick, tangy soup. 562 calories, 38g protein, about $3.70 per serving.",
+                 "keywords":  "kharcho, georgian beef soup, walnut soup, beef and rice soup, budget meal prep, caucasus recipes",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT2H",
+                 "totalTime":  "PT2H20M",
+                 "costPerServing":  3.7,
+                 "recipeIngredient":  [
+                                          "5.25 lb beef chuck roast",
+                                          "5.25 tbsp vegetable oil",
+                                          "3.5 yellow onions",
+                                          "6 tbsp garlic",
+                                          "1.75 cups walnuts",
+                                          "1.7 cans diced tomatoes",
+                                          "1.25 cups dry rice",
+                                          "3.5 tbsp red wine vinegar",
+                                          "7 tbsp fresh cilantro"
+                                      ],
+                 "steps":  [
+                               "Simmer cubed chuck roast in salted water about 75 minutes until tender.",
+                               "Cook the onion in oil until golden and grind the walnuts to a coarse paste.",
+                               "Stir onions, walnuts, tomatoes, and spices into the beef pot.",
+                               "Add the rice and simmer 20 to 25 minutes until thickened.",
+                               "Finish with garlic, vinegar, dill, and cilantro, then portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Chuck Roast",
+                                  "grams":  2381
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  74
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Ground Cloves",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Walnuts",
+                                  "grams":  205
+                              },
+                              {
+                                  "item":  "Red Pepper Flakes",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Ground Coriander",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Garam Masala",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Cayenne Pepper",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  719
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  239
+                              },
+                              {
+                                  "item":  "Red Wine Vinegar",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Dried Dill",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  7
+                              }
+                          ]
+}

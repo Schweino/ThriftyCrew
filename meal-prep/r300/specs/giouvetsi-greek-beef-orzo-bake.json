@@ -1,0 +1,274 @@
+﻿{
+    "name":  "Giouvetsi (Greek Beef and Orzo Bake)",
+    "slug":  "giouvetsi-greek-beef-orzo-bake",
+    "cuisine":  "Greek",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.mygreekdish.com/recipe/giouvetsi-beef-stew-with-orzo-pasta/",
+    "source_site":  "mygreekdish.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Orzo maps to the board\u0027s pasta commodity. Braise then bake the pasta into the same dish, which is one of the most reliable 14-serving formats we have. Distinct from the live Pastitsio (no bechamel, chunk beef). Confidence: page verified; calories estimated. | HARVEST: Published protein is 35.5 g.",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "OVERRIDE Beef Chuck Roast: splitter split \u00271 kg beef\u0027 -\u003e 1000 g"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  700,
+                 "protein":  39,
+                 "carbs":  62,
+                 "fat":  32,
+                 "cost_ps":  "3.17"
+             },
+    "intro_html":  "Giouvetsi is named after the clay pot it was traditionally baked in, and the method is beautifully simple. Beef braises in a tomato sauce spiced with cinnamon until it is tender, then dry orzo goes straight into the same pot with more liquid and finishes in the oven, drinking up all that braising sauce as it swells. No separate pot of pasta, no draining, nothing lost down the sink. Cinnamon in a savory tomato sauce is a Greek habit worth adopting. It does not read as dessert, it just makes the beef taste deeper.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 3.75 lb (1750 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 3.5 (385 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3.5 (214 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 1.7 cans (719 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 3.5 cans (595 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1.75 cups (420 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 cups (189 g)",
+                                "\u003cstrong\u003eOrzo Pasta (Great Value):\u003c/strong\u003e 30.75 oz dry (875 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 6.25 oz (175 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Chuck Roast, 3.75 lb: ~$30.75. \u003cstrong\u003eBuy 4 lbs: $31.88.\u003c/strong\u003e",
+                       "Red Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 3.5: ~$0.45. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Diced Tomatoes, 1.7 cans: ~$1.68. \u003cstrong\u003eBuy 2 cans: $1.92.\u003c/strong\u003e",
+                       "Tomato Paste, 3.5 cans: ~$3.01. \u003cstrong\u003eBuy 4 6oz cans: $3.44.\u003c/strong\u003e",
+                       "Beef Broth, 1.75 cups: ~$0.56. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 1 cups: ~$2.66. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Orzo Pasta, 30.75 oz dry: ~$1.87. \u003cstrong\u003eBuy 2 16oz boxes: $1.94.\u003c/strong\u003e",
+                       "Parmesan Cheese, 6.25 oz: ~$2.14. \u003cstrong\u003eBuy 1 8oz tub: $2.78.\u003c/strong\u003e",
+                       "Pantry seasonings (sugar, ground cinnamon, salt, black pepper): ~$0.33. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $44.42 across 14 servings, so roughly $3.17 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $47.60 across 14 servings, roughly $3.40 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.62 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $65.22. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.17 a bowl\u003c/strong\u003e for a Greek braise where the pasta cooks in the sauce instead of in a separate pot of water.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eChuck roast is the cut this dish wants.\u003c/strong\u003e It needs a long braise to get tender, so the cheaper cut is also the correct one. Watch for the family pack price.",
+                       "\u003cstrong\u003eOrzo is one of the cheapest pastas per pound.\u003c/strong\u003e It is also the only shape that works here, because it needs to cook in a shallow layer of liquid without clumping.",
+                       "\u003cstrong\u003eCook the pasta in the sauce and save a pot.\u003c/strong\u003e That is not a shortcut, it is the actual traditional method, and it means all the flavor stays in the dish.",
+                       "\u003cstrong\u003eBuy parmesan as a wedge or tub.\u003c/strong\u003e This dish gets a serious amount of it stirred in and scattered on top, and the shaker can costs more per ounce for less cheese."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cut the beef chuck roast into large cubes and season them with salt and black pepper.",
+                    "Heat the olive oil in a large oven-safe pot and brown the beef in batches, giving each piece room, then set it aside.",
+                    "Cook the diced red onions and carrots in the same pot until softened and picking up the browned bits.",
+                    "Stir in the tomato paste and cook it until it darkens, then add the diced tomatoes, ground cinnamon, sugar, and beef broth.",
+                    "Return the beef, cover, and braise in a moderate oven until the meat is fork tender, which is the point of no return for this dish. Do not rush it.",
+                    "Stir the dry orzo into the pot with enough hot water or broth to cover it, since the pasta will drink a surprising amount.",
+                    "Return it to the oven uncovered until the orzo is tender and the liquid is mostly absorbed, then stir in most of the parmesan cheese and scatter the rest over the top."
+                ],
+    "portion_html":  "Weigh the whole pot, subtract the empty-pot weight from Step 1, and divide by 14. Stir it well before you weigh, because the orzo settles and the beef floats. Every serving comes in at \u003cstrong\u003e700 calories with 39 grams of protein\u003c/strong\u003e. Orzo keeps absorbing overnight, so a splash of water on reheat brings it right back.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.mygreekdish.com/recipe/giouvetsi-beef-stew-with-orzo-pasta/\" target=\"_blank\" rel=\"noopener\"\u003emygreekdish.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Slow-braised Greek dinners for about $3.17 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  44.42,
+    "cost_batch_true":  47.6,
+    "cost_per_serving":  3.17,
+    "cost_per_serving_true":  3.4,
+    "cost_pantry_add":  17.62,
+    "cost_first_run":  65.22,
+    "scaler":  {
+                   "cost":  "47.60",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Chuck Roast",
+                                   "canon":  "Beef Chuck Roast",
+                                   "grams":  1750,
+                                   "buy":  "3.75 lb",
+                                   "bid":  "beef-chuck-roast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Onion",
+                                   "canon":  "Red Onion",
+                                   "grams":  385,
+                                   "buy":  "3.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  214,
+                                   "buy":  "3.5",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  719,
+                                   "buy":  "1.7 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  595,
+                                   "buy":  "3.5 cans",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  7,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  420,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Ground Cinnamon",
+                                   "canon":  "Ground Cinnamon",
+                                   "grams":  5,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "ground-cinnamon",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  189,
+                                   "buy":  "1 cups",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Orzo Pasta",
+                                   "canon":  "Orzo Pasta",
+                                   "grams":  875,
+                                   "buy":  "30.75 oz dry",
+                                   "bid":  "pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "canon":  "Parmesan Cheese",
+                                   "grams":  175,
+                                   "buy":  "6.25 oz",
+                                   "bid":  "parmesan",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Greek giouvetsi rebuilt for 14-serving meal prep: cinnamon-scented beef braise with orzo cooked right in the sauce. 700 calories, 39g protein, about $3.17 per serving.",
+                 "keywords":  "giouvetsi, greek beef and orzo, orzo bake, greek braised beef, greek meal prep, one pot pasta bake",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT120M",
+                 "totalTime":  "PT140M",
+                 "costPerServing":  3.17,
+                 "recipeIngredient":  [
+                                          "3.75 lb beef chuck roast",
+                                          "30.75 oz dry orzo pasta",
+                                          "1.7 cans diced tomatoes",
+                                          "3.5 cans tomato paste",
+                                          "1 lb beef broth",
+                                          "3.5 red onions",
+                                          "3.5 carrots",
+                                          "6.25 oz parmesan cheese",
+                                          "1 cup olive oil"
+                                      ],
+                 "steps":  [
+                               "Cube and season the chuck roast, then brown it in batches in olive oil.",
+                               "Cook the red onion and carrots in the same pot until softened.",
+                               "Darken the tomato paste, then add diced tomatoes, cinnamon, sugar, and broth.",
+                               "Return the beef, cover, and braise in the oven until fork tender.",
+                               "Stir in the dry orzo with enough hot liquid to cover it.",
+                               "Bake uncovered until the orzo is tender, stir in parmesan, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Chuck Roast",
+                                  "grams":  1750
+                              },
+                              {
+                                  "item":  "Red Onion",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  214
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  719
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  595
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Ground Cinnamon",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  189
+                              },
+                              {
+                                  "item":  "Orzo Pasta",
+                                  "grams":  875
+                              },
+                              {
+                                  "item":  "Parmesan Cheese",
+                                  "grams":  175
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

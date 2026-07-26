@@ -1,0 +1,50 @@
+{
+  "readme": "R300 browser-captured labels (2026-07-25, main session, Brad's Chrome). Each row transcribed from a photographed/rendered nutrition panel; provenance URL recorded. These complete the 3-item capture-worklist.json.",
+  "items": [
+    {
+      "item": "Sweet Soy Sauce",
+      "brand": "ABC (Kecap Manis)",
+      "serving_qty": 1,
+      "serving_unit": "tbsp",
+      "serving_grams": 20,
+      "calories": 67,
+      "protein_g": 0.3,
+      "carbs_g": 16.2,
+      "fat_g": 0.1,
+      "notes": "EU-import 600ml bottle label (barcode 0711844110618): per-100ml column read directly (444 kcal, fat 0.6, carb 108, sugars 79, protein 1.9, salt 5.5); per-serving derived as the label's printed 15 ml portion = x0.15. 15 ml at syrup density ~1.33 = 20 g serving_grams. Atwater on per-100ml: 445 vs 444 printed. US-jar FDA panel not available on any fetchable listing; flagged for auditor.",
+      "source": "label photo https://images.openfoodfacts.org/images/products/071/184/411/0618/nutrition_en.12.full.jpg (values column read from photo; per-portion column cropped in photo)",
+      "needs_verify": true,
+      "verify_source": "derived-from-label-per-100ml; auditor should re-check if a US FDA panel surfaces"
+    },
+    {
+      "item": "Doubanjiang",
+      "brand": "Lee Kum Kee (Chili Bean Sauce Toban Djan)",
+      "serving_qty": 1,
+      "serving_unit": "tsp",
+      "serving_grams": 6,
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "notes": "Flat FDA panel, read in full: Serv 1 tsp (6 g), ~37 servings per 8 oz (226 g) jar, cal 5, fat 0g, sodium 280mg (12% DV), carb 1g, sugars <1g, protein 0g, vit A 2%. Resolves the FDC contradiction: real household measure is 1 tsp = 6 g (FDC branded row claimed 1 Tbsp = 6 g). Same product sold as 8 oz and 13 oz jars; panel from 8 oz jar image.",
+      "source": "Walmart product image https://i5.walmartimages.com/asr/8dc78b05-8f29-48c0-bd26-a185fa99b051.c6c05f60c2038813e26628fce2847976.jpeg (listing /ip/302995521)",
+      "needs_verify": false,
+      "verify_source": "full panel readable; Atwater 4 vs 5 ok (rounding)"
+    },
+    {
+      "item": "Aji Amarillo Paste",
+      "brand": "Goya (Yellow Hot Pepper Paste)",
+      "serving_qty": 1,
+      "serving_unit": "tbsp",
+      "serving_grams": 14,
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "notes": "Flat linear FDA panel, read in full: Serv 1 Tbsp (14 g), ~15 servings per 7.5 oz (213 g) jar, cal 5, fat 0g, sodium 85mg (4% DV), carb 1g, sugars 1g, protein 0g, vit C 10%, iron 15%. Serving count check: 213/15 = 14.2 g.",
+      "source": "Walmart product image https://i5.walmartimages.com/asr/f673a4e2-71c7-4e71-ae97-893a64f4d807.a059b4caa1b8beb92b55476a5e73a911.jpeg (listing /ip/503548268)",
+      "needs_verify": false,
+      "verify_source": "full panel readable; Atwater 4 vs 5 ok (rounding)"
+    }
+  ]
+}

@@ -1,0 +1,1184 @@
+﻿{
+    "readme":  "Maps recipes-db ingredient item names to price-board commodity ids. grams_per_unit converts ingredient grams into the board row\u0027s pricing unit. Authored 2026-07-07.",
+    "mappings":  [
+                     {
+                         "item":  "1/3 Fat Cream Cheese",
+                         "board_id":  "1-3-fat-cream-cheese",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "93/7 Ground Turkey",
+                         "board_id":  "93-7-ground-turkey",
+                         "board":  "recipe",
+                         "grams_per_unit":  453.592,
+                         "unit":  "lb"
+                     },
+                     {
+                         "item":  "Apple",
+                         "board_id":  "apple",
+                         "board":  "recipe",
+                         "grams_per_unit":  175,
+                         "unit":  "each"
+                     },
+                     {
+                         "item":  "Balsamic Vinegar",
+                         "board_id":  "balsamic-vinegar",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Boneless Skinless Chicken Breast",
+                         "board_id":  "chicken-breast",
+                         "board":  "weekly",
+                         "grams_per_unit":  453.592,
+                         "unit":  "lb"
+                     },
+                     {
+                         "item":  "Boneless Skinless Chicken Thigh",
+                         "board_id":  "boneless-skinless-chicken-thigh",
+                         "board":  "recipe",
+                         "grams_per_unit":  453.592,
+                         "unit":  "lb"
+                     },
+                     {
+                         "item":  "Bread Crumbs",
+                         "board_id":  "bread-crumbs",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Brown Sugar",
+                         "board_id":  "brown-sugar",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Butter",
+                         "board_id":  "butter",
+                         "board":  "recipe",
+                         "grams_per_unit":  453.592,
+                         "unit":  "lb"
+                     },
+                     {
+                         "item":  "Cannellini Beans",
+                         "board_id":  "cannellini-beans",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Carrots",
+                         "board_id":  "shredded-carrots",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Cashews",
+                         "board_id":  "cashews",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Cheddar Cheese, Shredded",
+                         "board_id":  "cheddar-cheese-shredded",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Chickpeas",
+                         "board_id":  "chickpeas",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Cornstarch",
+                         "board_id":  "cornstarch",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Crushed Tomatoes",
+                         "board_id":  "crushed-tomatoes",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Curry Powder",
+                         "board_id":  "curry-powder",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Dijon Mustard",
+                         "board_id":  "dijon-mustard",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Enchilada Sauce",
+                         "board_id":  "enchilada-sauce",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Fries",
+                         "board_id":  "fries",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Frozen Chopped Spinach",
+                         "board_id":  "frozen-chopped-spinach",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Frozen Green Peas",
+                         "board_id":  "frozen-green-peas",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Ginger",
+                         "board_id":  "ginger",
+                         "board":  "recipe",
+                         "grams_per_unit":  453.592,
+                         "unit":  "lb"
+                     },
+                     {
+                         "item":  "Gochujang",
+                         "board_id":  "gochujang",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Golden Raisins",
+                         "board_id":  "golden-raisins",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Greek Yogurt",
+                         "board_id":  "greek-yogurt",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Green Cabbage",
+                         "board_id":  "green-cabbage",
+                         "board":  "recipe",
+                         "grams_per_unit":  453.592,
+                         "unit":  "lb"
+                     },
+                     {
+                         "item":  "Hickory Smoked Bacon",
+                         "board_id":  "hickory-smoked-bacon",
+                         "board":  "recipe",
+                         "grams_per_unit":  453.592,
+                         "unit":  "lb"
+                     },
+                     {
+                         "item":  "Hoisin Sauce",
+                         "board_id":  "hoisin-sauce",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Hominy",
+                         "board_id":  "hominy",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Honey",
+                         "board_id":  "honey",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Honey Dijon Mustard",
+                         "board_id":  "honey-dijon-mustard",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Ketchup",
+                         "board_id":  "ketchup",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Kidney Beans",
+                         "board_id":  "kidney-beans",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Light Sour Cream",
+                         "board_id":  "light-sour-cream",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Marinara Sauce",
+                         "board_id":  "marinara-sauce",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Milk",
+                         "board_id":  "milk",
+                         "board":  "weekly",
+                         "grams_per_unit":  3785,
+                         "unit":  "gallon"
+                     },
+                     {
+                         "item":  "Olives",
+                         "board_id":  "olives",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Orange Juice",
+                         "board_id":  "orange-juice",
+                         "board":  "weekly",
+                         "grams_per_unit":  31,
+                         "unit":  "floz"
+                     },
+                     {
+                         "item":  "Paprika",
+                         "board_id":  "paprika",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Peanut Butter",
+                         "board_id":  "peanut-butter",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Pineapple Chunks",
+                         "board_id":  "pineapple-chunks",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Poblano Peppers",
+                         "board_id":  "poblano-peppers",
+                         "board":  "recipe",
+                         "grams_per_unit":  453.592,
+                         "unit":  "lb"
+                     },
+                     {
+                         "item":  "Potato",
+                         "board_id":  "potato",
+                         "board":  "recipe",
+                         "grams_per_unit":  453.592,
+                         "unit":  "lb"
+                     },
+                     {
+                         "item":  "Provolone Cheese",
+                         "board_id":  "provolone-cheese",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Red Bell Pepper",
+                         "board_id":  "red-bell-pepper",
+                         "board":  "recipe",
+                         "grams_per_unit":  120,
+                         "unit":  "each"
+                     },
+                     {
+                         "item":  "Red Wine Vinegar",
+                         "board_id":  "red-wine-vinegar",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Roasted Red Peppers",
+                         "board_id":  "roasted-red-peppers",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Rotini Pasta",
+                         "board_id":  "rotini-pasta",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Sesame Oil",
+                         "board_id":  "sesame-oil",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Soy Sauce",
+                         "board_id":  "soy-sauce",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Sugar-Free Maple Syrup",
+                         "board_id":  "sugar-free-maple-syrup",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Tahini",
+                         "board_id":  "tahini",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Toasted Sesame Seeds",
+                         "board_id":  "toasted-sesame-seeds",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Tomatillos",
+                         "board_id":  "tomatillos",
+                         "board":  "recipe",
+                         "grams_per_unit":  453.592,
+                         "unit":  "lb"
+                     },
+                     {
+                         "item":  "Tomato Paste",
+                         "board_id":  "tomato-paste",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Tomato Sauce",
+                         "board_id":  "tomato-sauce",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Traditional Pasta Sauce",
+                         "board_id":  "traditional-pasta-sauce",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "White Mushrooms",
+                         "board_id":  "white-mushrooms",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "White Vinegar",
+                         "board_id":  "white-vinegar",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Yellow Onion",
+                         "board_id":  "onions",
+                         "board":  "weekly",
+                         "grams_per_unit":  453.592,
+                         "unit":  "lb"
+                     },
+                     {
+                         "item":  "93/7 Ground Beef",
+                         "board_id":  "93-7-ground-beef",
+                         "board":  "recipe",
+                         "grams_per_unit":  453.592,
+                         "unit":  "lb"
+                     },
+                     {
+                         "item":  "BBQ Sauce (Sugar Free)",
+                         "board_id":  "sugar-free-bbq-sauce",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Beef Broth",
+                         "board_id":  "beef-broth",
+                         "board":  "recipe",
+                         "grams_per_unit":  29.57,
+                         "unit":  "floz"
+                     },
+                     {
+                         "item":  "Beef Chuck Roast",
+                         "board_id":  "beef-chuck-roast",
+                         "board":  "recipe",
+                         "grams_per_unit":  453.592,
+                         "unit":  "lb"
+                     },
+                     {
+                         "item":  "Broccoli Florets",
+                         "board_id":  "frozen-broccoli-florets",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Buffalo Wing Sauce",
+                         "board_id":  "buffalo-wing-sauce",
+                         "board":  "recipe",
+                         "grams_per_unit":  29.57,
+                         "unit":  "floz"
+                     },
+                     {
+                         "item":  "Chicken Broth",
+                         "board_id":  "chicken-broth",
+                         "board":  "recipe",
+                         "grams_per_unit":  29.57,
+                         "unit":  "floz"
+                     },
+                     {
+                         "item":  "Chili Powder",
+                         "board_id":  "chili-powder",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Chipotle in Adobo",
+                         "board_id":  "chipotle-in-adobo",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Coconut Milk",
+                         "board_id":  "coconut-milk",
+                         "board":  "recipe",
+                         "grams_per_unit":  29.57,
+                         "unit":  "floz"
+                     },
+                     {
+                         "item":  "Diced Green Chiles",
+                         "board_id":  "diced-green-chiles",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Diced Tomatoes",
+                         "board_id":  "diced-tomatoes",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Fajita Seasoning",
+                         "board_id":  "fajita-seasoning",
+                         "board":  "recipe",
+                         "grams_per_unit":  35.44,
+                         "unit":  "each"
+                     },
+                     {
+                         "item":  "Garlic",
+                         "board_id":  "garlic",
+                         "board":  "recipe",
+                         "grams_per_unit":  50,
+                         "unit":  "each"
+                     },
+                     {
+                         "item":  "Garlic Powder",
+                         "board_id":  "garlic-powder",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Green Beans",
+                         "board_id":  "frozen-green-beans",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Green Bell Peppers",
+                         "board_id":  "green-bell-pepper",
+                         "board":  "recipe",
+                         "grams_per_unit":  120,
+                         "unit":  "each"
+                     },
+                     {
+                         "item":  "Ground Cumin",
+                         "board_id":  "ground-cumin",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Hot Honey",
+                         "board_id":  "hot-honey",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Hot Italian Sausage",
+                         "board_id":  "hot-italian-sausage",
+                         "board":  "recipe",
+                         "grams_per_unit":  453.592,
+                         "unit":  "lb"
+                     },
+                     {
+                         "item":  "Hot Sauce",
+                         "board_id":  "hot-sauce",
+                         "board":  "recipe",
+                         "grams_per_unit":  29.57,
+                         "unit":  "floz"
+                     },
+                     {
+                         "item":  "Italian Seasoning",
+                         "board_id":  "italian-seasoning",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Lime Juice",
+                         "board_id":  "limes",
+                         "board":  "recipe",
+                         "grams_per_unit":  30,
+                         "unit":  "each"
+                     },
+                     {
+                         "item":  "Olive Oil",
+                         "board_id":  "olive-oil",
+                         "board":  "recipe",
+                         "grams_per_unit":  28,
+                         "unit":  "floz"
+                     },
+                     {
+                         "item":  "Onion Powder",
+                         "board_id":  "onion-powder",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Parmesan Cheese",
+                         "board_id":  "parmesan-cheese",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Penne Pasta",
+                         "board_id":  "penne-pasta",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Pepperoncini",
+                         "board_id":  "pepperoncini",
+                         "board":  "recipe",
+                         "grams_per_unit":  29.57,
+                         "unit":  "floz"
+                     },
+                     {
+                         "item":  "Pork Tenderloin",
+                         "board_id":  "pork-tenderloin",
+                         "board":  "recipe",
+                         "grams_per_unit":  453.592,
+                         "unit":  "lb"
+                     },
+                     {
+                         "item":  "Ranch Seasoning Mix",
+                         "board_id":  "ranch-seasoning-mix",
+                         "board":  "recipe",
+                         "grams_per_unit":  35.44,
+                         "unit":  "each"
+                     },
+                     {
+                         "item":  "Reduced Fat Mozzarella",
+                         "board_id":  "reduced-fat-mozzarella",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Rice",
+                         "board_id":  "jasmine-rice",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Salsa",
+                         "board_id":  "salsa",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Salsa Verde",
+                         "board_id":  "salsa-verde",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Seasoned Black Beans",
+                         "board_id":  "seasoned-black-beans",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Shredded Carrots",
+                         "board_id":  "shredded-carrots",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Sun-Dried Tomatoes",
+                         "board_id":  "sun-dried-tomatoes",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Sweet Whole Kernel Corn",
+                         "board_id":  "canned-sweet-corn",
+                         "board":  "recipe",
+                         "grams_per_unit":  210,
+                         "unit":  "each"
+                     },
+                     {
+                         "item":  "Taco Seasoning",
+                         "board_id":  "taco-seasoning",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Teriyaki Sauce",
+                         "board_id":  "teriyaki-sauce",
+                         "board":  "recipe",
+                         "grams_per_unit":  34,
+                         "unit":  "floz"
+                     },
+                     {
+                         "item":  "Turkey Pepperoni",
+                         "board_id":  "turkey-pepperoni",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Zero-Sugar Soda",
+                         "board_id":  "zero-sugar-soda-2l",
+                         "board":  "recipe",
+                         "grams_per_unit":  29.57,
+                         "unit":  "floz"
+                     },
+                     {
+                         "item":  "Zucchini",
+                         "board_id":  "zucchini",
+                         "board":  "recipe",
+                         "grams_per_unit":  453.592,
+                         "unit":  "lb"
+                     },
+                     {
+                         "item":  "Pork Loin",
+                         "board_id":  "pork-loin",
+                         "board":  "recipe",
+                         "grams_per_unit":  453.592,
+                         "unit":  "lb"
+                     },
+                     {
+                         "item":  "Fat Free Cheddar",
+                         "board_id":  "fat-free-cheddar",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Bay Leaves",
+                         "board_id":  "bay-leaves",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Garam Masala",
+                         "board_id":  "garam-masala",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Rice Vinegar",
+                         "board_id":  "rice-vinegar",
+                         "board":  "recipe",
+                         "grams_per_unit":  29.57,
+                         "unit":  "floz"
+                     },
+                     {
+                         "item":  "Corn Tortillas",
+                         "board_id":  "corn-tortillas",
+                         "board":  "recipe",
+                         "grams_per_unit":  30,
+                         "unit":  "each"
+                     },
+                     {
+                         "item":  "Jerk Seasoning",
+                         "board_id":  "jerk-seasoning",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Dried Oregano",
+                         "board_id":  "dried-oregano",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Salt",
+                         "board_id":  "salt",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Black Pepper",
+                         "board_id":  "black-pepper",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Fresh Cilantro",
+                         "board_id":  "fresh-cilantro",
+                         "board":  "recipe",
+                         "grams_per_unit":  57,
+                         "unit":  "each"
+                     },
+                     {
+                         "item":  "Jalapeno",
+                         "board_id":  "jalapeno",
+                         "board":  "recipe",
+                         "grams_per_unit":  453.592,
+                         "unit":  "lb"
+                     },
+                     {
+                         "item":  "Liquid Smoke",
+                         "board_id":  "liquid-smoke",
+                         "board":  "recipe",
+                         "grams_per_unit":  29.57,
+                         "unit":  "floz"
+                     },
+                     {
+                         "item":  "Eggs",
+                         "board_id":  "eggs",
+                         "board":  "recipe",
+                         "grams_per_unit":  600,
+                         "unit":  "dozen"
+                     },
+                     {
+                         "item":  "Turkey Bacon",
+                         "board_id":  "bacon",
+                         "board":  "recipe",
+                         "grams_per_unit":  453.592,
+                         "unit":  "lb"
+                     },
+                     {
+                         "item":  "Green Olives",
+                         "board_id":  "olives",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Plain Yogurt",
+                         "board_id":  "greek-yogurt",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Green Bell Pepper",
+                         "board_id":  "green-bell-pepper",
+                         "board":  "recipe",
+                         "grams_per_unit":  120,
+                         "unit":  "each"
+                     },
+                     {
+                         "item":  "Spinach",
+                         "board_id":  "frozen-chopped-spinach",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Shallots",
+                         "board_id":  "onions",
+                         "board":  "recipe",
+                         "grams_per_unit":  453.592,
+                         "unit":  "lb"
+                     },
+                     {
+                         "item":  "Orange Zest",
+                         "board_id":  "orange-juice",
+                         "board":  "recipe",
+                         "grams_per_unit":  31,
+                         "unit":  "floz"
+                     },
+                     {
+                         "item":  "Green Chile Sauce",
+                         "board_id":  "salsa-verde",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Red Pepper Flakes",
+                         "board_id":  "red-pepper-flakes",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Ground Ginger",
+                         "board_id":  "ground-ginger",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Dried Thyme",
+                         "board_id":  "dried-thyme",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Smoked Paprika",
+                         "board_id":  "smoked-paprika",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Ground Coriander",
+                         "board_id":  "ground-coriander",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Cayenne Pepper",
+                         "board_id":  "cayenne-pepper",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Ground Cinnamon",
+                         "board_id":  "ground-cinnamon",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Dried Basil",
+                         "board_id":  "dried-basil",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Dried Dill",
+                         "board_id":  "dried-dill",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Ground Nutmeg",
+                         "board_id":  "ground-nutmeg",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Ground Turmeric",
+                         "board_id":  "ground-turmeric",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Ground Allspice",
+                         "board_id":  "ground-allspice",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Dried Rosemary",
+                         "board_id":  "dried-rosemary",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Dried Parsley",
+                         "board_id":  "dried-parsley",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Celery Salt",
+                         "board_id":  "celery-salt",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Au Jus Gravy Mix",
+                         "board_id":  "au-jus-gravy-mix",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Worcestershire Sauce",
+                         "board_id":  "worcestershire-sauce",
+                         "board":  "recipe",
+                         "grams_per_unit":  29.57,
+                         "unit":  "floz"
+                     },
+                     {
+                         "item":  "Apple Cider Vinegar",
+                         "board_id":  "apple-cider-vinegar",
+                         "board":  "recipe",
+                         "grams_per_unit":  29.57,
+                         "unit":  "floz"
+                     },
+                     {
+                         "item":  "White Wine Vinegar",
+                         "board_id":  "white-wine-vinegar",
+                         "board":  "recipe",
+                         "grams_per_unit":  29.57,
+                         "unit":  "floz"
+                     },
+                     {
+                         "item":  "Fish Sauce",
+                         "board_id":  "fish-sauce",
+                         "board":  "recipe",
+                         "grams_per_unit":  29.57,
+                         "unit":  "floz"
+                     },
+                     {
+                         "item":  "Sweet Chili Sauce",
+                         "board_id":  "sweet-chili-sauce",
+                         "board":  "recipe",
+                         "grams_per_unit":  29.57,
+                         "unit":  "floz"
+                     },
+                     {
+                         "item":  "Sriracha",
+                         "board_id":  "sriracha",
+                         "board":  "recipe",
+                         "grams_per_unit":  29.57,
+                         "unit":  "floz"
+                     },
+                     {
+                         "item":  "Vegetable Oil",
+                         "board_id":  "vegetable-oil",
+                         "board":  "recipe",
+                         "grams_per_unit":  28,
+                         "unit":  "floz"
+                     },
+                     {
+                         "item":  "Apple Cider",
+                         "board_id":  "apple-cider",
+                         "board":  "recipe",
+                         "grams_per_unit":  29.57,
+                         "unit":  "floz"
+                     },
+                     {
+                         "item":  "Pineapple Juice",
+                         "board_id":  "pineapple-juice",
+                         "board":  "recipe",
+                         "grams_per_unit":  29.57,
+                         "unit":  "floz"
+                     },
+                     {
+                         "item":  "Half and Half",
+                         "board_id":  "half-and-half",
+                         "board":  "recipe",
+                         "grams_per_unit":  29.57,
+                         "unit":  "floz"
+                     },
+                     {
+                         "item":  "Lemon Juice",
+                         "board_id":  "lemon-juice",
+                         "board":  "recipe",
+                         "grams_per_unit":  29.57,
+                         "unit":  "floz"
+                     },
+                     {
+                         "item":  "Condensed French Onion Soup",
+                         "board_id":  "condensed-french-onion-soup",
+                         "board":  "recipe",
+                         "grams_per_unit":  298,
+                         "unit":  "each"
+                     },
+                     {
+                         "item":  "Celery",
+                         "board_id":  "celery",
+                         "board":  "recipe",
+                         "grams_per_unit":  450,
+                         "unit":  "each"
+                     },
+                     {
+                         "item":  "Green Onions",
+                         "board_id":  "green-onions",
+                         "board":  "recipe",
+                         "grams_per_unit":  100,
+                         "unit":  "each"
+                     },
+                     {
+                         "item":  "Cucumber",
+                         "board_id":  "cucumber",
+                         "board":  "recipe",
+                         "grams_per_unit":  300,
+                         "unit":  "each"
+                     },
+                     {
+                         "item":  "Cheddar Cheese",
+                         "board_id":  "cheddar-cheese",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Mozzarella Cheese",
+                         "board_id":  "mozzarella-cheese",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Feta Cheese",
+                         "board_id":  "feta-cheese",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Swiss Cheese",
+                         "board_id":  "swiss-cheese",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "All-Purpose Flour",
+                         "board_id":  "all-purpose-flour",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Sugar",
+                         "board_id":  "sugar",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Panko Breadcrumbs",
+                         "board_id":  "breadcrumbs",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Frozen Peas",
+                         "board_id":  "frozen-peas",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Five-Spice Powder",
+                         "board_id":  "five-spice-powder",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Fresh Mint",
+                         "board_id":  "fresh-mint",
+                         "board":  "recipe",
+                         "grams_per_unit":  20,
+                         "unit":  "each"
+                     },
+                     {
+                         "item":  "Capers",
+                         "board_id":  "capers",
+                         "board":  "recipe",
+                         "grams_per_unit":  29.57,
+                         "unit":  "floz"
+                     }
+                 ],
+    "unmapped":  [
+
+                 ]
+}

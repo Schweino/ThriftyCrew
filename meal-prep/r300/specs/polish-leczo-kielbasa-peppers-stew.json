@@ -1,0 +1,262 @@
+﻿{
+    "name":  "Polish Leczo (Kielbasa and Peppers Stew)",
+    "slug":  "polish-leczo-kielbasa-peppers-stew",
+    "cuisine":  "polish",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.polonist.com/polish-leczo-kielbasa-and-peppers/",
+    "source_site":  "polonist.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 250g (src scale)",
+                   "base +35% (Rice)",
+                   "protein +35% (Smoked Turkey Sausage)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 571 cal / 29g protein at the source, clears both bars as written. Every ingredient is board-tracked and bell peppers plus onions are the cheapest produce on the board most weeks. Distinct from the live Italian Sausage Penne with Peppers: no pasta, smoked kielbasa instead of Italian sausage, paprika-tomato base served over rice. Simmer-and-ladle, trivially scalable. | HARVEST: Source states 4-6 servings; midpoint 5 recorded. Published nutrition is explicitly based on a yield of 4.",
+                         "SOURCE YIELD: 5 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 250g (src scale)",
+                         "TUNING: base +35% (Rice)",
+                         "TUNING: protein +35% (Smoked Turkey Sausage)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  630,
+                 "protein":  26,
+                 "carbs":  90,
+                 "fat":  20,
+                 "cost_ps":  "2.36"
+             },
+    "intro_html":  "Leczo is the pepper and sausage stew that shows up on Polish and Hungarian tables all summer long, when peppers are stacked cheap at every market. Smoked sausage, a mountain of bell peppers, onions and a paprika tomato base, ladled over rice. It carries 26 grams of protein for about $2.36, and it is one of those pots that tastes better the second day.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 5.6 (616 g)",
+                                "\u003cstrong\u003eSmoked Turkey Sausage (Butterball):\u003c/strong\u003e 4 lb (1772 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 11 (1344 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 5.5 tbsp (78 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3.25 tbsp (28 g)",
+                                "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 6 cans (2520 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 5.5 tbsp (90 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.25 cups dry (985 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Yellow Onion, 5.6: ~$1.55. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Smoked Turkey Sausage, 4 lb: ~$13.22. \u003cstrong\u003eBuy 5 13oz ropes: $13.72.\u003c/strong\u003e",
+                       "Green Bell Peppers, 11: ~$9.63. \u003cstrong\u003eBuy 12 each: $10.32.\u003c/strong\u003e",
+                       "Vegetable Oil, 5.5 tbsp: ~$0.19. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 3.25 tbsp: ~$0.40. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Tomato Sauce, 6 cans: ~$5.69. \u003cstrong\u003eBuy 6 15oz cans: $5.76.\u003c/strong\u003e",
+                       "Tomato Paste, 5.5 tbsp: ~$0.45. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "Rice, 5.25 cups dry: ~$1.22. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, smoked paprika, paprika): ~$0.73. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $33.08 across 14 servings, so roughly $2.36 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.66 across 14 servings, roughly $2.55 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.82 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.48. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.36 a bowl\u003c/strong\u003e for a stew whose price swings almost entirely on what peppers cost that week. Make it when the board shows peppers low and it gets noticeably cheaper.",
+    "shop_smart":  [
+                       "\u003cstrong\u003ePeppers are the price of this dish.\u003c/strong\u003e They are the biggest single line after the sausage. Late summer is when they bottom out, and that is the week to cook a double batch.",
+                       "\u003cstrong\u003eGreen bell peppers are almost always cheaper than red.\u003c/strong\u003e Leczo is traditionally made with whatever is ripe, so green is authentic and easier on the wallet at the same time.",
+                       "\u003cstrong\u003eCanned tomato sauce beats fresh tomatoes here.\u003c/strong\u003e It gives you a consistent base year round for very little, and the stew simmers long enough that fresh would break down anyway.",
+                       "\u003cstrong\u003eSmoked and sweet paprika together are the flavor.\u003c/strong\u003e Both come from jars you keep on hand, so the seasoning line on this recipe is almost nothing."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Slice the onions, cut the bell peppers into wide strips, slice the smoked sausage into coins and mince the garlic.",
+                    "Heat the vegetable oil in a large pot and cook the onions until they turn soft and translucent.",
+                    "Add the sausage coins and brown them so the edges caramelize and leave color in the pot.",
+                    "Add the pepper strips and cook until they slump and start to sweeten, which takes longer than you think it will.",
+                    "Stir in the garlic, then pull the pot off the heat and add the sweet and smoked paprika so it does not scorch.",
+                    "Back on the burner, stir in the tomato sauce and tomato paste, season with salt and black pepper, and simmer uncovered until the sauce thickens and turns glossy.",
+                    "Cook the rice separately and keep it apart from the stew until you portion, so it does not turn to mush in the fridge."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and ladle the exact amount over a scoop of rice in each container. Every bowl lands near 630 calories and 26 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.polonist.com/polish-leczo-kielbasa-and-peppers/\" target=\"_blank\" rel=\"noopener\"\u003epolonist.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Peppers and sausage done right for about $2.36 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  33.08,
+    "cost_batch_true":  35.66,
+    "cost_per_serving":  2.36,
+    "cost_per_serving_true":  2.55,
+    "cost_pantry_add":  10.82,
+    "cost_first_run":  46.48,
+    "scaler":  {
+                   "cost":  "35.66",
+                   "ing":  [
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  616,
+                                   "buy":  "5.6",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Smoked Turkey Sausage",
+                                   "canon":  "Smoked Turkey Sausage",
+                                   "grams":  1772,
+                                   "buy":  "4 lb",
+                                   "bid":  "kielbasa",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  1344,
+                                   "buy":  "11",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  78,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  28,
+                                   "buy":  "3.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  8,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  11,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Smoked Paprika",
+                                   "canon":  "Smoked Paprika",
+                                   "grams":  13,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Sauce",
+                                   "canon":  "Tomato Sauce",
+                                   "grams":  2520,
+                                   "buy":  "6 cans",
+                                   "bid":  "tomato-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  90,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  985,
+                                   "buy":  "5.25 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Polish leczo, a smoked sausage and bell pepper stew in a paprika tomato base over rice, built for 14 servings. 630 calories, 26g protein, about $2.36 per serving.",
+                 "keywords":  "polish leczo, kielbasa and peppers, pepper stew, sausage tomato stew, polish recipe, budget meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M",
+                 "costPerServing":  2.36,
+                 "recipeIngredient":  [
+                                          "4 lb smoked sausage",
+                                          "11 green bell peppers",
+                                          "5.6 yellow onions",
+                                          "6 cans tomato sauce",
+                                          "5.5 tbsp tomato paste",
+                                          "3.25 tbsp garlic",
+                                          "5.5 tbsp vegetable oil",
+                                          "5.25 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Cook the sliced onions in vegetable oil until soft, then brown the sliced smoked sausage.",
+                               "Add the bell pepper strips and cook until they slump and sweeten.",
+                               "Stir in the garlic, then take the pot off the heat and add the sweet and smoked paprika.",
+                               "Return to the heat, add the tomato sauce and tomato paste, season, and simmer until thickened.",
+                               "Cook the rice separately and portion the stew over it."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  616
+                              },
+                              {
+                                  "item":  "Smoked Turkey Sausage",
+                                  "grams":  1772
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  1344
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  78
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Smoked Paprika",
+                                  "grams":  13
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Tomato Sauce",
+                                  "grams":  2520
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  90
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  985
+                              }
+                          ]
+}

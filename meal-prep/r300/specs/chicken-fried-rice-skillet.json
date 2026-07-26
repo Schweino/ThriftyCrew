@@ -1,0 +1,276 @@
+﻿{
+    "name":  "Chicken Fried Rice",
+    "slug":  "chicken-fried-rice-skillet",
+    "cuisine":  "Chinese",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://thewoksoflife.com/classic-chicken-fried-rice/",
+    "source_site":  "thewoksoflife.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Rice)",
+                   "portion factor 1.25",
+                   "protein +25% (Boneless Skinless Chicken Breast)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Source is 327 cal / 15g protein because it uses only 8 oz chicken for 6 - our build doubles the chicken and adds eggs, which lands around 520 cal / 33g. est_cal is my number, not the page\u0027s: confidence medium on calories, high that the page is a real, complete recipe. Cheapest dinner in the slice and a catalog gap (lo mein and pad thai exist, no fried rice). | HARVEST: ",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Rice)",
+                         "TUNING: portion factor 1.25",
+                         "TUNING: protein +25% (Boneless Skinless Chicken Breast)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  586,
+                 "protein":  25,
+                 "carbs":  86,
+                 "fat":  14,
+                 "cost_ps":  "0.78"
+             },
+    "intro_html":  "Fried rice was invented to use up leftovers, which tells you everything about why it belongs in a budget meal prep rotation. Day old rice, a little chicken, a couple of eggs, and soy sauce, cooked fast in a hot pan. This is the cheapest dinner on the entire site and it does not taste like a compromise. Each bowl runs 586 calories and \u003cstrong\u003e25 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$0.78.78 a serving\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 1.75 lb (844 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 5 tbsp (78 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.5 cups (136 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 8 cups dry (1492 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 6 large eggs (292 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 (321 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 7.25 tbsp (44 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 0.25 cups (47 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 1.75 lb: ~$6.08. \u003cstrong\u003eBuy 2 lbs: $6.54.\u003c/strong\u003e",
+                       "Soy Sauce, 5 tbsp: ~$0.30. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Vegetable Oil, 0.5 cups: ~$0.33. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 8 cups dry: ~$1.84. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Eggs, 6 large eggs: ~$0.69. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
+                       "Yellow Onion, 3: ~$0.81. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Green Onions, 7.25 tbsp: ~$0.52. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
+                       "Chicken Broth, 0.25 cups: ~$0.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (cornstarch, sesame oil, sugar, salt, black pepper): ~$0.26. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $10.89 across 14 servings, so roughly $0.78 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $12.97 across 14 servings, roughly $0.93 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $19.21 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $32.18. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$0.78.78 a bowl\u003c/strong\u003e. Read that again. Fourteen dinners for less than what one takeout container of the same thing costs, and yours has more chicken in it.",
+    "shop_smart":  [
+                       "Cook the rice the day before and refrigerate it uncovered. Cold, dried out rice fries into separate grains. Fresh warm rice turns into a sticky clump no matter how good your pan is, and no technique will save it.",
+                       "Eggs are the cheapest protein in the store. Two or three scrambled into a batch of fried rice add real nutrition for pocket change.",
+                       "Chicken breast is used sparingly here on purpose. Fried rice is a rice dish with chicken in it, not the other way around, and stretching a small amount of meat across a big pan is the entire tradition.",
+                       "Soy sauce, sesame oil, and cornstarch are pantry staples that will outlast dozens of batches, so after the first shopping trip this recipe costs almost nothing but rice and eggs."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice a day ahead, spread it on a sheet pan, and chill it uncovered in the fridge overnight. This is not optional if you want real fried rice.",
+                    "Dice the chicken breast small and toss it with a spoonful of cornstarch, a splash of soy sauce, and the chicken broth. Let it sit 15 minutes so it stays tender in a screaming hot pan.",
+                    "Beat the eggs with a pinch of salt. Heat a little of the vegetable oil in your largest skillet, scramble them just until set, and slide them out onto a plate.",
+                    "Add more oil, get the pan very hot, and cook the chicken in a single layer until browned and cooked through. Remove it.",
+                    "Add the rest of the oil and the diced onion and cook 2 minutes, then add the cold rice and press it into the pan. Let it sit undisturbed for a minute at a time so it toasts instead of steaming. Constant stirring is the most common fried rice mistake.",
+                    "Return the chicken and eggs, add the remaining soy sauce, sesame oil, sugar, salt, and pepper, and toss everything together for two minutes.",
+                    "Kill the heat and fold in the sliced green onions."
+                ],
+    "portion_html":  "Set the full skillet on the scale, subtract the empty weight you wrote down, and divide by 14. Toss the pan thoroughly first so the chicken and egg are spread through the rice, otherwise the containers on the bottom of the stack end up as plain rice. Every portion lands at \u003cstrong\u003e586 calories\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://thewoksoflife.com/classic-chicken-fried-rice/\" target=\"_blank\" rel=\"noopener\"\u003ethewoksoflife.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Fried rice for about \u003cstrong\u003e$0.78.78 a serving\u003c/strong\u003e, which is the cheapest dinner on this whole site. Members get every recipe in the Meal Prep section plus the full library of money lessons and tools for $1 a month.",
+    "cost_batch":  10.89,
+    "cost_batch_true":  12.97,
+    "cost_per_serving":  0.78,
+    "cost_per_serving_true":  0.93,
+    "cost_pantry_add":  19.21,
+    "cost_first_run":  32.18,
+    "scaler":  {
+                   "cost":  "12.97",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  844,
+                                   "buy":  "1.75 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  78,
+                                   "buy":  "5 tbsp",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Cornstarch",
+                                   "canon":  "Cornstarch",
+                                   "grams":  8,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "canon":  "Sesame Oil",
+                                   "grams":  6,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  136,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  3,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  18,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1492,
+                                   "buy":  "8 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  292,
+                                   "buy":  "6 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  321,
+                                   "buy":  "3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  44,
+                                   "buy":  "7.25 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  47,
+                                   "buy":  "0.25 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Classic chicken fried rice made with cold day old rice, egg, and green onion, rebuilt for 14 meal prep servings at about $0.78.78 a bowl.",
+                 "keywords":  "chicken fried rice, cheap meal prep, leftover rice recipe, budget dinner, one skillet chicken, easy meal prep, high volume meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT20M",
+                 "totalTime":  "PT40M",
+                 "costPerServing":  0.78,
+                 "recipeIngredient":  [
+                                          "1.75 lb boneless skinless chicken breast",
+                                          "8 cups dry rice, cooked and chilled overnight",
+                                          "6 large eggs",
+                                          "3 yellow onions",
+                                          "7.25 tbsp green onions",
+                                          "5 tbsp soy sauce",
+                                          "0.5 cups vegetable oil",
+                                          "0.1 lb chicken broth",
+                                          "Pantry: cornstarch, sesame oil, sugar, salt, black pepper"
+                                      ],
+                 "steps":  [
+                               "Cook the rice a day ahead and chill it uncovered so it dries out.",
+                               "Toss the diced chicken with cornstarch, soy sauce, and broth and rest 15 minutes.",
+                               "Scramble the eggs in a hot oiled skillet and set aside, then brown the chicken and set aside.",
+                               "Fry the onion and cold rice, pressing it into the pan so it toasts.",
+                               "Return the chicken and eggs with the remaining soy sauce and sesame oil, toss, and finish with green onions.",
+                               "Weigh the skillet and divide into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  844
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  78
+                              },
+                              {
+                                  "item":  "Cornstarch",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Sesame Oil",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  136
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  18
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1492
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  292
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  321
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  44
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  47
+                              }
+                          ]
+}

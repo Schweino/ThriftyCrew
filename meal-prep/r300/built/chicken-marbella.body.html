@@ -1,0 +1,161 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"chicken-marbella","base":14,"cost":30.30,"ing":[{"item":"Boneless Skinless Chicken Breast","grams":2217,"buy":"5 lb","bid":"chicken-breast","gpu":453.592},{"item":"Bay Leaves","grams":4,"buy":"0.25 oz","bid":"bay-leaves","gpu":28.350},{"item":"Garlic","grams":93,"buy":"11 tbsp","bid":"garlic","gpu":50.000},{"item":"Golden Raisins","grams":169,"buy":"1.25 cups","bid":"raisins","gpu":28.350},{"item":"Olives","grams":158,"buy":"1.25 cups","bid":"green-olives","gpu":28.350},{"item":"Capers","grams":75,"buy":"0.5 cups","bid":"capers","gpu":29.570},{"item":"Red Wine Vinegar","grams":140,"buy":"0.5 cups","bid":"red-wine-vinegar","gpu":29.570},{"item":"Olive Oil","grams":126,"buy":"0.5 cups","bid":"olive-oil","gpu":28.000},{"item":"Dried Oregano","grams":14,"buy":"4.75 tbsp","bid":"dried-oregano","gpu":28.350},{"item":"Salt","grams":47,"buy":"2.5 tbsp","bid":"salt","gpu":28.350},{"item":"Black Pepper","grams":9,"buy":"1.25 tbsp","bid":"black-pepper","gpu":28.350},{"item":"Chicken Broth","grams":280,"buy":"1.25 cups","bid":"chicken-broth","gpu":29.570},{"item":"Brown Sugar","grams":124,"buy":"0.5 cups","bid":"brown-sugar","gpu":453.592},{"item":"Rice","grams":772,"buy":"4.25 cups dry","bid":"rice","gpu":453.592}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~566 cal &middot; 41g protein &middot; 66g carbs &middot; 15g fat &middot; ~$2.10 per serving.</strong></p>
+
+<p>Chicken Marbella made its name in the early eighties as the dinner party dish that could be made entirely ahead, and forty years later that is exactly why it belongs in a meal prep rotation. Chicken marinates overnight in red wine vinegar, oregano, garlic, olives, and dried fruit, then roasts in the same pan with brown sugar on top. It is salty, sweet, and sour at once, and it gets better every day it sits. Each serving lands at 566 calories and <strong>41 grams of protein</strong> for about <strong>$2.10 a serving</strong>.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Boneless Skinless Chicken Breast (Member's Mark):</strong> 5 lb (2217 g)</li>
+<li><strong>Garlic:</strong> 11 tbsp (93 g)</li>
+<li><strong>Golden Raisins (generic):</strong> 1.25 cups (169 g)</li>
+<li><strong>Olives (generic):</strong> 1.25 cups (158 g)</li>
+<li><strong>Capers (generic (USDA)):</strong> 0.5 cups (75 g)</li>
+<li><strong>Red Wine Vinegar (generic):</strong> 0.5 cups (140 g)</li>
+<li><strong>Olive Oil:</strong> 0.5 cups (126 g)</li>
+<li><strong>Chicken Broth (Swanson):</strong> 1.25 cups (280 g)</li>
+<li><strong>Brown Sugar (generic):</strong> 0.5 cups (124 g)</li>
+<li><strong>Rice (Member's Mark):</strong> 4.25 cups dry (772 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Boneless Skinless Chicken Breast, 5 lb: ~$15.98. <strong>Buy 5 lbs: $16.35.</strong></li>
+<li>Garlic, 11 tbsp: ~$1.34. <strong>Buy 3 heads: $1.73.</strong></li>
+<li>Golden Raisins, 1.25 cups: ~$1.42. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Olives, 1.25 cups: ~$1.74. <strong>Buy 1 6oz can: $1.87.</strong></li>
+<li>Capers, 0.5 cups: ~$2.60. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Red Wine Vinegar, 0.5 cups: ~$0.84. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Olive Oil, 0.5 cups: ~$1.77. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Chicken Broth, 1.25 cups: ~$0.38. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Brown Sugar, 0.5 cups: ~$0.70. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Rice, 4.25 cups dry: ~$0.95. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Pantry seasonings (bay leaves, dried oregano, salt, black pepper): ~$1.69. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $29.41 across 14 servings, so roughly $2.10 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $30.30 across 14 servings, roughly $2.16 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $22.91 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.21. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$2.10 a serving</strong> for the dish that used to signal you had money. The capers and olives are the only unusual line items, and both are jars that last through several batches.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>Chicken breast is the biggest line here, so buy it in the family pack and portion it down yourself. The per pound difference between the family pack and the small tray is one of the most reliable savings in the store.</li>
+<li>Capers and olives feel like luxury items but they are shelf stable, cheap by the jar, and used in modest amounts. One jar of each covers multiple batches and they do not go bad in the meantime.</li>
+<li>Golden raisins are a fraction of the price of prunes and do the same job of sweet chewy contrast against the vinegar.</li>
+<li>Red wine vinegar and dried oregano are the flavor of this dish and both are pantry items you already have. That is the whole reason a fancy sounding recipe lands where it does on price.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Make the marinade by combining the red wine vinegar, olive oil, garlic, oregano, bay leaves, olives, capers with a little of their brine, golden raisins, salt, and pepper.</li>
+<li>Cut the chicken breast into large pieces, put them in the marinade, and refrigerate overnight. Marbella genuinely does not work with a thirty minute marinade, so plan this one a day ahead.</li>
+<li>Heat the oven to 350F. Spread the chicken and all the marinade into a large baking dish in a single layer so everything roasts rather than steams.</li>
+<li>Sprinkle the brown sugar over the top and pour the chicken broth around the edges, not over the sugar.</li>
+<li>Roast 45 to 50 minutes, basting with the pan juices two or three times along the way. The basting is what builds the glaze, so it is worth opening the oven for.</li>
+<li>Cook the rice while the chicken roasts.</li>
+<li>Let the pan rest 10 minutes, then pull the bay leaves and slice the chicken. The juices in the bottom of the pan are the sauce, so do not leave any of them behind.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Weigh the rice into each container, then weigh the chicken on top and spoon the pan juices, olives, and raisins over everything. Set the pan on the scale, subtract its empty weight, and divide by 14 if you want to be exact about it. Every portion lands at <strong>566 calories</strong>, and this is one of the few dishes that genuinely peaks on day three.</p>
+
+<p><em>Recipe adapted from <a href="https://www.themediterraneandish.com/chicken-marbella/" target="_blank" rel="noopener">themediterraneandish.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>The classic make-ahead dinner party chicken for about <strong>$2.10 a serving</strong>. Members get the entire Meal Prep library plus every money lesson and calculator on the site for $1 a month.</em></p>

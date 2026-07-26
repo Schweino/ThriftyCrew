@@ -1,0 +1,26 @@
+{
+  "readme": "R300 browser-capture worklist: branded packaged items with NO trustworthy fetchable label (FDC missing or self-contradictory; walmart.com blocks WebFetch). Capture the actual per-serving nutrition panel in Brad's Chrome (product page label image / nutrition section), record BOTH household measure and grams, then add to food-macros-db.json via the meal-macro conventions. Do NOT substitute a different product silently - capture the product the board will actually price.",
+  "items": [
+    {
+      "item": "Sweet Soy Sauce",
+      "walmart_search": "ABC sweet soy sauce kecap manis",
+      "target_product": "ABC Kecap Manis Sweet Soy Sauce, 600 mL bottle (no Great Value equivalent exists)",
+      "why_capture": "FDC has no kecap manis label (only an unrelated sambal variant). Thick sweet soy is its own product per canon - do not use soy sauce or teriyaki labels.",
+      "capture_notes": "Record serving in tbsp AND grams (label typically 1 tbsp ~ 20 g, syrup density ~1.3 g/mL - confirms the gpu=38/floz basis). Also note net contents for pack-size sanity. Fallback if ABC absent in-store: Kikkoman Sweet Soy Glaze - but flag the swap, do not silently substitute."
+    },
+    {
+      "item": "Doubanjiang",
+      "walmart_search": "Lee Kum Kee chili bean sauce toban djan",
+      "target_product": "Lee Kum Kee Chili Bean Sauce (Toban Djan), 13 oz jar",
+      "why_capture": "FDC branded entries for this exact product are internally contradictory (one claims 1 Tbsp = 6 g; the real jar label is ~18 g per Tbsp). Refused to transcribe conflicting data.",
+      "capture_notes": "Capture the jar label per-serving panel (household measure + grams + all four macro fields). Hy-Vee Asian aisle is the likely in-store source if Walmart is online-only."
+    },
+    {
+      "item": "Aji Amarillo Paste",
+      "walmart_search": "Goya aji amarillo paste",
+      "target_product": "Goya Prime Aji Amarillo Hot Pepper Paste, 8 oz jar",
+      "why_capture": "Goya's label is not in FDC; the third-party FDC entries disagree with each other on macros for the same 14 g serving. Refused.",
+      "capture_notes": "Hispanic aisle. Record serving (typically 1 tsp or 1 tbsp) with grams and all macro fields; values are near-zero but must be label-real."
+    }
+  ]
+}

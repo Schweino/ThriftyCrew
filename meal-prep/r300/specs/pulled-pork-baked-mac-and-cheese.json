@@ -1,0 +1,356 @@
+﻿{
+    "name":  "Pulled Pork Baked Mac and Cheese",
+    "slug":  "pulled-pork-baked-mac-and-cheese",
+    "cuisine":  "American (BBQ)",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.butterandbaggage.com/mac-and-cheese-with-pulled-pork/",
+    "source_site":  "butterandbaggage.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified at 547 cal / 28g protein per serving over 12 servings straight from the source - already sitting in our target window. Baked in a 9x13, divides by weight. Distinct from the live BBQ Pulled Pork Rice Bowl (pasta bake with cheese sauce, not a rice bowl), though the dedup stage should confirm the pulled-pork base does not read as a repeat. | HARVEST: Pork is slow-cooked first, then the assembled mac is baked/broiled. Checkbox glyphs from the recipe card stripped.",
+                         "SOURCE YIELD: 12 servings, rebuilt to 14.",
+                         "OVERRIDE Pasta Shells: WAVE-4: \u00271 pound macaroni COOKED in salted water\u0027 means 1 lb dry then cooked - the cooked-\u003edry factor halved it; house 50 g dry/serving"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  862,
+                 "protein":  33,
+                 "carbs":  51,
+                 "fat":  58,
+                 "cost_ps":  "1.91"
+             },
+    "intro_html":  "Barbecue joints figured this out a long time ago. A scoop of pulled pork on top of mac and cheese is better than either one by itself. This version braises pork shoulder with orange juice, jalapeno and garlic until it shreds, builds a real three cheese sauce from a butter and flour roux, and bakes the whole thing until the top browns. It is rich, it is filling, and it costs less per serving than the side order at the barbecue place.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Shoulder (generic (USDA)):\u003c/strong\u003e 3 lb (1323 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1.25 tbsp (16 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 (128 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 3.75 tbsp (33 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.75 tbsp (23 g)",
+                                "\u003cstrong\u003eOrange Juice:\u003c/strong\u003e 2.4 (218 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 3.5 tbsp (49 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 4.5 tbsp (36 g)",
+                                "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 5.25 cups (1230 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 11.75 oz (330 g)",
+                                "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 4.75 oz (132 g)",
+                                "\u003cstrong\u003eMexican Cheese Blend (Great Value):\u003c/strong\u003e 4.75 oz (132 g)",
+                                "\u003cstrong\u003ePasta Shells (Great Value):\u003c/strong\u003e 24.75 oz dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Shoulder, 3 lb: ~$10.41. \u003cstrong\u003eBuy 3 lbs: $10.71.\u003c/strong\u003e",
+                       "Olive Oil, 1.25 tbsp: ~$0.23. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 1: ~$0.32. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Jalapeno, 3.75 tbsp: ~$0.13. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Garlic, 2.75 tbsp: ~$0.33. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Orange Juice, 2.4: ~$0.47. \u003cstrong\u003eBuy 1 52floz carton: $3.36.\u003c/strong\u003e",
+                       "Butter, 3.5 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "All-Purpose Flour, 4.5 tbsp: ~$0.03. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Heavy Cream, 5.25 cups: ~$7.64. \u003cstrong\u003eBuy 3 pints: $8.81.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 11.75 oz: ~$2.51. \u003cstrong\u003eBuy 2 8oz bags: $3.45.\u003c/strong\u003e",
+                       "Reduced Fat Mozzarella, 4.75 oz: ~$1.00. \u003cstrong\u003eBuy 1 8oz bag: $1.73.\u003c/strong\u003e",
+                       "Mexican Cheese Blend, 4.75 oz: ~$1.00. \u003cstrong\u003eBuy 1 8oz bag: $1.73.\u003c/strong\u003e",
+                       "Pasta Shells, 24.75 oz dry: ~$1.50. \u003cstrong\u003eBuy 3 12oz boxes: $2.18.\u003c/strong\u003e",
+                       "Pantry seasonings (dried oregano, ground cumin, salt, black pepper, dried thyme, dijon mustard): ~$0.79. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.68 across 14 servings, so roughly $1.91 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $39.48 across 14 servings, roughly $2.82 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $21.52 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.00. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.91 a bowl\u003c/strong\u003e for pulled pork and a three cheese sauce baked together. Very few dishes deliver this much comfort for that number.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy blocks of cheese and shred them yourself.\u003c/strong\u003e Bagged shredded cheese costs more per ounce and is coated in starch that keeps it from melting smooth. This sauce deserves better.",
+                       "\u003cstrong\u003eBraise the pork the day before.\u003c/strong\u003e The pork can sit in the fridge overnight and the assembly the next day takes 20 minutes. That is a free schedule upgrade.",
+                       "\u003cstrong\u003eA butter and flour roux is a fraction of the cost of a cheese sauce jar.\u003c/strong\u003e Pennies of flour and a few tablespoons of butter do the same job better, and you control the salt.",
+                       "\u003cstrong\u003eJalapeno and orange juice are the cheap flavor moves.\u003c/strong\u003e One pepper and a splash of juice cut through all that dairy for almost nothing, which is why the dish does not feel heavy."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Season the pork shoulder with salt, black pepper, ground cumin, dried oregano and dried thyme, sear it in the olive oil, then slow cook it with the diced onion, minced jalapeno, garlic and orange juice until it shreds.",
+                    "Boil the pasta shells in salted water until just under al dente. They will finish in the oven, so pulling them early is the difference between good and mushy.",
+                    "Melt the butter in a large pot, whisk in the flour, and cook it two minutes until it smells nutty but has not colored.",
+                    "Pour in the heavy cream slowly while whisking, bring it to a bare simmer, then add the Dijon mustard and take it off the heat.",
+                    "Stir in the shredded cheddar, mozzarella and Mexican cheese blend a handful at a time until the sauce is smooth, then fold in the drained pasta.",
+                    "Spread half the mac in a large baking dish, layer the pulled pork across it, top with the rest of the mac, and bake at 375F for 25 minutes, then broil briefly for a browned top."
+                ],
+    "portion_html":  "Weigh the finished dish, subtract the pan weight, divide by 14, and cut to that exact weight so every container gets the same ratio of pork to pasta. Every serving lands near 862 calories with 33 grams of protein. Reheat covered with a splash of milk so the sauce loosens back up.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.butterandbaggage.com/mac-and-cheese-with-pulled-pork/\" target=\"_blank\" rel=\"noopener\"\u003ebutterandbaggage.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cem\u003eBarbecue joint mac and cheese for about $1.91 a serving. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "cost_batch":  26.68,
+    "cost_batch_true":  39.48,
+    "cost_per_serving":  1.91,
+    "cost_per_serving_true":  2.82,
+    "cost_pantry_add":  21.52,
+    "cost_first_run":  61,
+    "scaler":  {
+                   "cost":  "39.48",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Shoulder",
+                                   "canon":  "Pork Shoulder",
+                                   "grams":  1323,
+                                   "buy":  "3 lb",
+                                   "bid":  "pork-shoulder",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  4,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  5,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  16,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  128,
+                                   "buy":  "1",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  33,
+                                   "buy":  "3.75 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  24,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  23,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Orange Juice",
+                                   "canon":  "Orange Juice",
+                                   "grams":  218,
+                                   "buy":  "2.4",
+                                   "bid":  "orange-juice",
+                                   "gpu":  "31.000"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  49,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  36,
+                                   "buy":  "4.5 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Heavy Cream",
+                                   "canon":  "Heavy Cream",
+                                   "grams":  1230,
+                                   "buy":  "5.25 cups",
+                                   "bid":  "heavy-cream",
+                                   "gpu":  "29.800"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "canon":  "Cheddar Cheese, Shredded",
+                                   "grams":  330,
+                                   "buy":  "11.75 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Reduced Fat Mozzarella",
+                                   "canon":  "Reduced Fat Mozzarella",
+                                   "grams":  132,
+                                   "buy":  "4.75 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Mexican Cheese Blend",
+                                   "canon":  "Mexican Cheese Blend",
+                                   "grams":  132,
+                                   "buy":  "4.75 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Pasta Shells",
+                                   "canon":  "Pasta Shells",
+                                   "grams":  700,
+                                   "buy":  "24.75 oz dry",
+                                   "bid":  "pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  4,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dijon Mustard",
+                                   "canon":  "Dijon Mustard",
+                                   "grams":  6,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "dijon-mustard",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Slow cooked pulled pork layered into a baked three cheese mac made from a real roux. A 14 serving barbecue comfort bake built for budget meal prep.",
+                 "keywords":  "pulled pork mac and cheese, baked mac and cheese, bbq pork pasta, three cheese sauce, budget meal prep, cheap dinner ideas",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT4H",
+                 "totalTime":  "PT4H30M",
+                 "costPerServing":  1.91,
+                 "recipeIngredient":  [
+                                          "Pork Shoulder",
+                                          "Olive Oil",
+                                          "Yellow Onion",
+                                          "Jalapeno",
+                                          "Garlic",
+                                          "Orange Juice",
+                                          "Butter",
+                                          "All-Purpose Flour",
+                                          "Heavy Cream",
+                                          "Cheddar Cheese, Shredded",
+                                          "Reduced Fat Mozzarella",
+                                          "Mexican Cheese Blend",
+                                          "Pasta Shells"
+                                      ],
+                 "steps":  [
+                               "Sear and slow cook the seasoned pork shoulder with onion, jalapeno, garlic and orange juice until it shreds.",
+                               "Boil the pasta shells just under al dente and drain.",
+                               "Make a roux with butter and flour, whisk in the heavy cream, and add Dijon mustard.",
+                               "Melt in the three cheeses off the heat and fold in the pasta.",
+                               "Layer mac, pulled pork and more mac in a pan and bake at 375F for 25 minutes, then broil."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Pork Shoulder",
+                                  "grams":  1323
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  16
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  128
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  33
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  24
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  23
+                              },
+                              {
+                                  "item":  "Orange Juice",
+                                  "grams":  218
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  49
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  36
+                              },
+                              {
+                                  "item":  "Heavy Cream",
+                                  "grams":  1230
+                              },
+                              {
+                                  "item":  "Cheddar Cheese, Shredded",
+                                  "grams":  330
+                              },
+                              {
+                                  "item":  "Reduced Fat Mozzarella",
+                                  "grams":  132
+                              },
+                              {
+                                  "item":  "Mexican Cheese Blend",
+                                  "grams":  132
+                              },
+                              {
+                                  "item":  "Pasta Shells",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Dijon Mustard",
+                                  "grams":  6
+                              }
+                          ]
+}

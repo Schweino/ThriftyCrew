@@ -1,0 +1,344 @@
+﻿{
+    "name":  "Steak Fajita Rice Bowls",
+    "slug":  "steak-fajita-rice-bowls",
+    "cuisine":  "Tex-Mex",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.isabeleats.com/easy-steak-fajitas/",
+    "source_site":  "isabeleats.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 400g (src scale)",
+                   "base +25% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Catalog has Fajita Chicken Rice Bowl and Ground Turkey Fajita Rice Bowls but no beef fajita bowl, which is the version most people actually order. Sirloin sliced thin and seared in batches scales fine to 14 servings. Everything is on the board. Confidence: medium. | HARVEST: Last line is the source\u0027s single \u0027optional toppings\u0027 line. Rice is not in the source ingredient list.",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 400g (src scale)",
+                         "TUNING: base +25% (Rice)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  568,
+                 "protein":  32,
+                 "carbs":  59,
+                 "fat":  22,
+                 "cost_ps":  "3.07"
+             },
+    "intro_html":  "Fajitas are a restaurant order that translates perfectly to containers, as long as you cook the steak and the peppers separately so neither one steams the other. An orange and lime marinade tenderizes the sirloin, poblanos add smoke that bell peppers alone cannot, and it all lands on rice. Each bowl carries \u003cstrong\u003e32 grams of protein\u003c/strong\u003e and 568 calories for about \u003cstrong\u003e$3.07\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 7 tbsp (94 g)",
+                                "\u003cstrong\u003eOrange Juice:\u003c/strong\u003e 1 (109 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 3.5 tbsp (52 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 tbsp (26 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 7 tbsp (7 g)",
+                                "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 4.25 tbsp (61 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)",
+                                "\u003cstrong\u003ePoblano Peppers (generic):\u003c/strong\u003e 2 (149 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 5 (630 g)",
+                                "\u003cstrong\u003eLight Sour Cream (generic):\u003c/strong\u003e 1.25 cups (300 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.75 cups dry (893 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 7 tbsp: ~$1.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Orange Juice, 1: ~$0.23. \u003cstrong\u003eBuy 1 52floz carton: $3.36.\u003c/strong\u003e",
+                       "Lime Juice, 3.5 tbsp: ~$0.43. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 3 tbsp: ~$0.37. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Fresh Cilantro, 7 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Beef Flank/Sirloin Steak, 3.5 lb: ~$30.88. \u003cstrong\u003eBuy 4 lbs: $35.28.\u003c/strong\u003e",
+                       "Vegetable Oil, 4.25 tbsp: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Poblano Peppers, 2: ~$1.07. \u003cstrong\u003eBuy 1 lb: $3.26.\u003c/strong\u003e",
+                       "Green Bell Peppers, 5: ~$4.51. \u003cstrong\u003eBuy 6 each: $5.16.\u003c/strong\u003e",
+                       "Light Sour Cream, 1.25 cups: ~$1.08. \u003cstrong\u003eBuy 1 16oz tub: $1.64.\u003c/strong\u003e",
+                       "Rice, 4.75 cups dry: ~$1.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, chili powder, dried oregano, smoked paprika, black pepper, salt): ~$0.69. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $43.02 across 14 servings, so roughly $3.07 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $55.89 across 14 servings, roughly $3.99 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $27.85 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $83.74. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.07 a bowl\u003c/strong\u003e, which is a fraction of what the same plate costs on a sizzling skillet at any Tex-Mex place. You are paying for the beef and the peppers, not the theater.",
+    "shop_smart":  [
+                       "Green bell peppers cost noticeably less than red, yellow, or orange. Fajitas char the peppers anyway, so the color difference disappears on the plate.",
+                       "Poblanos are usually sold loose and cheap. They are the difference between fajitas that taste homemade and fajitas that taste like a restaurant, so do not skip them.",
+                       "Bottled lime juice is fine in a marinade where it is doing chemistry rather than garnish work, and it costs far less than a bag of limes you will not finish.",
+                       "Buy sirloin whole and slice it yourself. Pre sliced fajita meat carries a markup and is usually cut with the grain, which is the wrong direction."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Whisk the olive oil, orange juice, lime juice, minced garlic, chopped cilantro, cumin, chili powder, oregano, smoked paprika, salt, and pepper into a marinade.",
+                    "Slice the sirloin thin against the grain, toss it in the marinade, and let it sit at least 30 minutes while you cut the vegetables.",
+                    "Slice the onions, poblanos, and bell peppers into strips of roughly the same thickness so they cook at the same rate.",
+                    "Get a wide pan very hot with the vegetable oil and sear the beef in batches, about 90 seconds a side. Pull it out and set it aside.",
+                    "In the same pan, cook the peppers and onions over high heat until they are charred at the edges but still have some bite.",
+                    "Return the beef and any juices to the pan, toss everything together for 30 seconds, and kill the heat.",
+                    "Cook the rice separately and keep the sour cream cold to spoon on at serving."
+                ],
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of steak and peppers over the same weight of rice in each of 14 containers, and keep the sour cream in a separate small container so it does not go watery. Each bowl lands at \u003cstrong\u003e568 calories with 32 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.isabeleats.com/easy-steak-fajitas/\" target=\"_blank\" rel=\"noopener\"\u003eisabeleats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Steak fajita bowls for about $3.07 a serving. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  43.02,
+    "cost_batch_true":  55.89,
+    "cost_per_serving":  3.07,
+    "cost_per_serving_true":  3.99,
+    "cost_pantry_add":  27.85,
+    "cost_first_run":  83.74,
+    "scaler":  {
+                   "cost":  "55.89",
+                   "ing":  [
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  94,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Orange Juice",
+                                   "canon":  "Orange Juice",
+                                   "grams":  109,
+                                   "buy":  "1",
+                                   "bid":  "orange-juice",
+                                   "gpu":  "31.000"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "canon":  "Lime Juice",
+                                   "grams":  52,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  26,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "canon":  "Chili Powder",
+                                   "grams":  9,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  2,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Smoked Paprika",
+                                   "canon":  "Smoked Paprika",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  7,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Beef Flank/Sirloin Steak",
+                                   "canon":  "Beef Flank/Sirloin Steak",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "sirloin-steak",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  61,
+                                   "buy":  "4.25 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  385,
+                                   "buy":  "3.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Poblano Peppers",
+                                   "canon":  "Poblano Peppers",
+                                   "grams":  149,
+                                   "buy":  "2",
+                                   "bid":  "poblano-peppers",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  630,
+                                   "buy":  "5",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  1,
+                                   "buy":  "0.06 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Light Sour Cream",
+                                   "canon":  "Light Sour Cream",
+                                   "grams":  300,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "sour-cream",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  893,
+                                   "buy":  "4.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Steak fajita rice bowls meal prep: citrus marinated sirloin seared hot with charred poblanos, bell peppers, and onions over rice. 568 calories, 32g protein, about $3.07 per serving.",
+                 "keywords":  "steak fajita bowls, beef fajitas, fajita rice bowls, citrus marinated steak, budget meal prep, tex mex recipes",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT25M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  3.07,
+                 "recipeIngredient":  [
+                                          "3.5 lb beef flank or sirloin steak",
+                                          "7 tbsp olive oil",
+                                          "1 orange worth of orange juice",
+                                          "3.5 tbsp lime juice",
+                                          "3 tbsp garlic",
+                                          "7 tbsp fresh cilantro",
+                                          "4.25 tbsp vegetable oil",
+                                          "3.5 yellow onions",
+                                          "2 poblano peppers",
+                                          "5 green bell peppers",
+                                          "1.25 cups light sour cream",
+                                          "4.75 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Whisk a marinade of olive oil, orange and lime juice, garlic, cilantro, and spices.",
+                               "Slice the sirloin thin against the grain and marinate it at least 30 minutes.",
+                               "Sear the beef in batches in a very hot pan, then set it aside.",
+                               "Char the peppers and onions in the same pan over high heat.",
+                               "Toss the beef back in, cook the rice, and portion into 14 containers with sour cream on the side."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  94
+                              },
+                              {
+                                  "item":  "Orange Juice",
+                                  "grams":  109
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  26
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Chili Powder",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Smoked Paprika",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Beef Flank/Sirloin Steak",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  61
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Poblano Peppers",
+                                  "grams":  149
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  630
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Light Sour Cream",
+                                  "grams":  300
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  893
+                              }
+                          ]
+}

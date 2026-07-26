@@ -1,0 +1,157 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"turkey-mac-and-cheese-bake","base":14,"cost":34.59,"ing":[{"item":"Pasta Shells","grams":472,"buy":"16.75 oz dry","bid":"pasta","gpu":28.350},{"item":"Butter","grams":49,"buy":"3.5 tbsp","bid":"butter","gpu":453.592},{"item":"All-Purpose Flour","grams":28,"buy":"3.5 tbsp","bid":"flour","gpu":453.592},{"item":"Milk","grams":1501,"buy":"6.25 cups","bid":"milk","gpu":3785.000},{"item":"Salt","grams":10,"buy":"0.5 tbsp","bid":"salt","gpu":28.350},{"item":"Black Pepper","grams":1,"buy":"0.25 tbsp","bid":"black-pepper","gpu":28.350},{"item":"Ground Nutmeg","grams":1,"buy":"0.04 oz","bid":"ground-nutmeg","gpu":28.350},{"item":"Cheddar Cheese, Shredded","grams":593,"buy":"21 oz","bid":"shredded-cheese","gpu":28.350},{"item":"Mexican Cheese Blend","grams":593,"buy":"21 oz","bid":"shredded-cheese","gpu":28.350},{"item":"Turkey Breast","grams":735,"buy":"1.5 lb","bid":"turkey-breast","gpu":453.592},{"item":"Italian Seasoning","grams":7,"buy":"1.75 tbsp","bid":"italian-seasoning","gpu":28.350},{"item":"Stuffing Mix","grams":289,"buy":"5.25 cups","bid":"stuffing-mix","gpu":28.350}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~663 cal &middot; 44g protein &middot; 48g carbs &middot; 31g fat &middot; ~$1.53 per serving.</strong></p>
+
+<p>Mac and cheese from a box costs about a dollar and gives you almost no protein. This costs a little more and gives you 44 grams of it. Shells in a real bechamel with two and a half pounds of cheese, turkey folded through, a crunchy stuffing-crumb top for texture. Each serving runs 663 calories with <strong>44 grams of protein</strong> for about <strong>$1.53</strong>, the cheapest serving in this entire group.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Pasta Shells (Great Value):</strong> 16.75 oz dry (472 g)</li>
+<li><strong>Butter (generic):</strong> 3.5 tbsp (49 g)</li>
+<li><strong>All-Purpose Flour (Great Value):</strong> 3.5 tbsp (28 g)</li>
+<li><strong>Milk (Fairlife):</strong> 6.25 cups (1501 g)</li>
+<li><strong>Cheddar Cheese, Shredded (Great Value):</strong> 21 oz (593 g)</li>
+<li><strong>Mexican Cheese Blend (Great Value):</strong> 21 oz (593 g)</li>
+<li><strong>Turkey Breast (generic (USDA)):</strong> 1.5 lb (735 g)</li>
+<li><strong>Stuffing Mix (Kraft Stove Top (USDA SR)):</strong> 5.25 cups (289 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Pasta Shells, 16.75 oz dry: ~$1.01. <strong>Buy 2 12oz boxes: $1.45.</strong></li>
+<li>Butter, 3.5 tbsp: ~$0.32. <strong>Buy 1 lb box: $2.98.</strong></li>
+<li>All-Purpose Flour, 3.5 tbsp: ~$0.03. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Milk, 6.25 cups: ~$1.20. <strong>Buy 1 gallon: $3.02.</strong></li>
+<li>Cheddar Cheese, Shredded, 21 oz: ~$4.51. <strong>Buy 3 8oz bags: $5.18.</strong></li>
+<li>Mexican Cheese Blend, 21 oz: ~$4.51. <strong>Buy 3 8oz bags: $5.18.</strong></li>
+<li>Turkey Breast, 1.5 lb: ~$7.80. <strong>Buy 1 3lb frozen roast: $14.44.</strong></li>
+<li>Stuffing Mix, 5.25 cups: ~$1.65. <strong>Buy 2 6oz boxes: $1.94.</strong></li>
+<li>Pantry seasonings (salt, black pepper, ground nutmeg, italian seasoning): ~$0.37. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $21.40 across 14 servings, so roughly $1.53 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $34.59 across 14 servings, roughly $2.47 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $11.32 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.91. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$1.53 a serving</strong> for baked mac and cheese with real meat in it. The pasta and the milk cost almost nothing; the cheese is the whole budget, and that is a trade worth making.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>Cheese is the entire cost of this dish. Compare the 8 oz shredded bags against blocks priced per pound, because a block plus five minutes with a box grater is often the cheaper route.</li>
+<li>Pasta shells and elbows are the cheapest shapes on the shelf. Buy whichever store-brand box is lower per ounce, since a bake does not care about the shape.</li>
+<li>Milk is a loss leader at most stores. If you are buying a gallon anyway, this recipe uses over six cups of it and the marginal cost is tiny.</li>
+<li>Stuffing mix makes a better crunchy topping than bread crumbs and costs about the same. Crush it with your hands, no processor needed.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Boil the pasta shells in heavily salted water two minutes short of the box time, then drain. They finish in the oven and mushy mac is unforgivable.</li>
+<li>Melt the butter in a large pot over medium heat, whisk in the flour, and cook two minutes until it smells toasted rather than raw.</li>
+<li>Add the milk in stages, whisking constantly, and cook 5 to 7 minutes until the sauce is thick enough that a spoon drawn through it leaves a track.</li>
+<li>Season with salt, black pepper, Italian seasoning, and a small pinch of nutmeg, which is the trick that makes cheese sauce taste like cheese sauce.</li>
+<li>Pull the pot off the heat and melt in the shredded cheddar and the Mexican cheese blend a handful at a time. Direct heat will break a cheese sauce every time.</li>
+<li>Fold in the diced turkey breast and the drained shells, then spread everything into a greased 9x13 pan.</li>
+<li>Crush the stuffing mix over the top and bake at 350F for 25 to 30 minutes until the crust is golden and the sides bubble, then rest 10 minutes before portioning.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Weigh the whole pan, subtract the empty pan weight, and divide by 14. Baked mac holds a clean edge once rested, so cut to the scale instead of eyeballing squares. Every serving delivers <strong>663 calories</strong> and 44 grams of protein.</p>
+
+<p><em>Recipe adapted from <a href="https://foodnessgracious.com/mac-n-cheese-turkey-leftovers/" target="_blank" rel="noopener">foodnessgracious.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>Baked mac and cheese with real protein for about $1.53 a serving, and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.</em></p>

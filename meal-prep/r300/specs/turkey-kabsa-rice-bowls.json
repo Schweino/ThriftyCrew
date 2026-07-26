@@ -1,0 +1,438 @@
+﻿{
+    "name":  "Turkey Kabsa Rice Bowls",
+    "slug":  "turkey-kabsa-rice-bowls",
+    "cuisine":  "saudi",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.thedeliciouscrescent.com/chicken-kabsa/",
+    "source_site":  "thedeliciouscrescent.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Rice)",
+                   "portion factor 1.25"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Arabian spiced one-pot rice; distinct spice signature from every live rice bowl. Verified source: full recipe, 12 servings, 364 cal / 16g protein. Confidence note: source is bone-in chicken and rice-heavy, so protein per serving is below our bar as published - our turkey build has to be meat-forward to qualify. | HARVEST: Source is bone-in chicken; adapt to turkey. Yield stated as 12 portions.",
+                         "SOURCE YIELD: 12 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Rice)",
+                         "TUNING: portion factor 1.25",
+                         "OVERRIDE Garam Masala: \u0027Kabsa Spice Mix\u0027 header + 1.5 tbsp mix + 0.5 tsp cardamom = ~10 g total (header line would read 0)",
+                         "OVERRIDE Boneless Skinless Chicken Thigh: TITLE-PROTEIN SWAP: titled turkey; bone-in chicken pieces -\u003e turkey breast (only whole-muscle turkey item), grams kept"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  564,
+                 "protein":  42,
+                 "carbs":  72,
+                 "fat":  11,
+                 "cost_ps":  "2.42"
+             },
+    "intro_html":  "Kabsa is the national rice dish of Saudi Arabia, and it is built the smart way: the meat cooks first, then the rice cooks in that same spiced broth so nothing gets wasted. Cinnamon, cardamom, cloves, and coriander do the work, and toasted almonds and golden raisins go on top at the end. Our turkey version runs \u003cstrong\u003e564 calories and 42 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.42\u003c/strong\u003e a bowl.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eAlmonds (generic (USDA)):\u003c/strong\u003e 0.25 cups (52 g)",
+                                "\u003cstrong\u003eGolden Raisins (generic):\u003c/strong\u003e 11.75 tbsp (106 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 5.75 tbsp (79 g)",
+                                "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 4.5 lb (1985 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 4 (438 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4.25 tbsp (36 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 0.5 tbsp (3 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 1.7 cans (700 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 3 tbsp (47 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 4.4 (267 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 9 tbsp (82 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.5 cartons (1400 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 5.75 tbsp (88 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.25 cups dry (969 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1.5 tbsp (20 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Almonds, 0.25 cups: ~$0.78. \u003cstrong\u003eBuy 1 14oz bag: $5.96.\u003c/strong\u003e",
+                       "Golden Raisins, 11.75 tbsp: ~$0.89. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 5.75 tbsp: ~$1.11. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Turkey Breast, 4.5 lb: ~$21.06. \u003cstrong\u003eBuy 2 3lb frozen roasts: $28.88.\u003c/strong\u003e",
+                       "Yellow Onion, 4: ~$1.10. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 4.25 tbsp: ~$0.52. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Ginger, 0.5 tbsp: ~$0.03. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Diced Tomatoes, 1.7 cans: ~$1.63. \u003cstrong\u003eBuy 2 cans: $1.92.\u003c/strong\u003e",
+                       "Tomato Paste, 3 tbsp: ~$0.24. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "Carrots, 4.4: ~$0.56. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Jalapeno, 9 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Chicken Broth, 1.5 cartons: ~$1.88. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Lime Juice, 5.75 tbsp: ~$0.73. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 5.25 cups dry: ~$1.20. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Butter, 1.5 tbsp: ~$0.13. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Pantry seasonings (garam masala, ground cinnamon, black pepper, ground allspice, ground coriander, ground cumin, paprika, ground cloves, salt, bay leaves): ~$1.64. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $33.82 across 14 servings, so roughly $2.42 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $53.36 across 14 servings, roughly $3.81 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $36.28 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $89.64. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.42\u003c/strong\u003e a bowl for a spice-loaded Arabian rice dinner. The almonds and raisins on top feel like a splurge and together they cost less than a candy bar.",
+    "shop_smart":  [
+                       "The turkey breast is roughly two thirds of this batch cost. Frozen turkey roasts are the cheapest form of it, and they go on deep markdown right after the holidays. Buy then, cook later.",
+                       "Almonds look expensive on the bag, but this recipe uses only a quarter cup of them. That is the whole lesson on specialty ingredients: judge them by what the recipe uses, not by the sticker.",
+                       "Skip the pre-made kabsa mix if your store carries one at a premium. Cinnamon, cumin, coriander, allspice, cloves, and paprika are jars you already own, and mixing them yourself costs nothing extra.",
+                       "Rice and broth are the base and both are pantry buys. A big bag of rice and a carton of broth stretch across this batch and several more after it."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Toast the almonds dry in a skillet until they smell nutty, about 4 minutes, then set them aside with the golden raisins. This is your topping and it should not go in the pot.",
+                    "Cut the turkey breast into large chunks. Heat the olive oil in a wide heavy pot and brown the turkey on all sides, then set it aside.",
+                    "Cook the diced onion in the same pot for 6 minutes, then add the garlic, ginger, and the whole spice mix of cinnamon, cumin, coriander, allspice, paprika, cloves, and bay leaves, stirring one minute.",
+                    "Stir in the tomato paste, then the diced tomatoes, grated carrot, and chopped jalapeno. Add the chicken broth, return the turkey, and simmer covered for 30 minutes until the turkey reaches 165F and the broth tastes like the dish.",
+                    "Pull the turkey out and shred or chop it. Rinse the rice, then stir it into the simmering broth, cover, and cook on low 18 to 20 minutes until the liquid is gone and the grains are tender.",
+                    "Fold the turkey back in with the butter and the lime juice, then let the pot rest covered for 10 minutes so the rice finishes steaming.",
+                    "Move everything into your weighed pot and fluff it with a fork before you portion."
+                ],
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is your per-container gram target. Scoop it out, then scatter the toasted almonds and golden raisins across all 14 containers so the topping stays crisp instead of going soft in the rice. Each bowl lands at \u003cstrong\u003e564 calories and 42 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.thedeliciouscrescent.com/chicken-kabsa/\" target=\"_blank\" rel=\"noopener\"\u003ethedeliciouscrescent.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Saudi kabsa for about \u003cstrong\u003e$2.42\u003c/strong\u003e a bowl. This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  33.82,
+    "cost_batch_true":  53.36,
+    "cost_per_serving":  2.42,
+    "cost_per_serving_true":  3.81,
+    "cost_pantry_add":  36.28,
+    "cost_first_run":  89.64,
+    "scaler":  {
+                   "cost":  "53.36",
+                   "ing":  [
+                               {
+                                   "item":  "Garam Masala",
+                                   "canon":  "Garam Masala",
+                                   "grams":  15,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "garam-masala",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cinnamon",
+                                   "canon":  "Ground Cinnamon",
+                                   "grams":  9,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "ground-cinnamon",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Allspice",
+                                   "canon":  "Ground Allspice",
+                                   "grams":  1,
+                                   "buy":  "0.04 oz",
+                                   "bid":  "ground-allspice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Coriander",
+                                   "canon":  "Ground Coriander",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "ground-coriander",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cloves",
+                                   "canon":  "Ground Cloves",
+                                   "grams":  1,
+                                   "buy":  "0.04 oz",
+                                   "bid":  "ground-cloves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Almonds",
+                                   "canon":  "Almonds",
+                                   "grams":  52,
+                                   "buy":  "0.25 cups",
+                                   "bid":  "almonds",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Golden Raisins",
+                                   "canon":  "Golden Raisins",
+                                   "grams":  106,
+                                   "buy":  "11.75 tbsp",
+                                   "bid":  "raisins",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  79,
+                                   "buy":  "5.75 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Turkey Breast",
+                                   "canon":  "Turkey Breast",
+                                   "grams":  1985,
+                                   "buy":  "4.5 lb",
+                                   "bid":  "turkey-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  11,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  438,
+                                   "buy":  "4",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  36,
+                                   "buy":  "4.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  2,
+                                   "buy":  "0.07 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  700,
+                                   "buy":  "1.7 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  47,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  267,
+                                   "buy":  "4.4",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  82,
+                                   "buy":  "9 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  1400,
+                                   "buy":  "1.5 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "canon":  "Lime Juice",
+                                   "grams":  88,
+                                   "buy":  "5.75 tbsp",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  969,
+                                   "buy":  "5.25 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  20,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Saudi turkey kabsa meal prep bowls: spiced rice cooked in turkey broth with tomato, carrot, almonds, and raisins. 564 calories, 42g protein, about $2.42 a bowl.",
+                 "keywords":  "kabsa, saudi rice, arabian rice, turkey meal prep, budget meal prep, spiced rice bowl",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT1H",
+                 "totalTime":  "PT1H25M",
+                 "costPerServing":  2.42,
+                 "recipeIngredient":  [
+                                          "Turkey breast, cut into chunks",
+                                          "5.25 cups dry rice",
+                                          "3 lb chicken broth",
+                                          "4 yellow onions",
+                                          "4.25 tbsp garlic",
+                                          "0.5 tbsp ginger",
+                                          "1.7 cans diced tomatoes",
+                                          "3 tbsp tomato paste",
+                                          "4.4 carrots",
+                                          "9 tbsp jalapeno",
+                                          "5.75 tbsp lime juice",
+                                          "0.25 cups almonds",
+                                          "11.75 tbsp golden raisins"
+                                      ],
+                 "steps":  [
+                               "Toast the almonds and set aside with the raisins for topping.",
+                               "Brown the turkey chunks in olive oil, then set aside.",
+                               "Cook the onion, then add garlic, ginger, and the kabsa spices, followed by tomato paste, diced tomatoes, carrot, and jalapeno.",
+                               "Add chicken broth, return the turkey, and simmer covered 30 minutes until it reaches 165F.",
+                               "Remove and chop the turkey, cook the rinsed rice in the broth 18 to 20 minutes, then fold the turkey back in with butter and lime juice.",
+                               "Portion by weight into 14 containers and top with almonds and raisins."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Garam Masala",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Ground Cinnamon",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Ground Allspice",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Ground Coriander",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Ground Cloves",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Almonds",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Golden Raisins",
+                                  "grams":  106
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  79
+                              },
+                              {
+                                  "item":  "Turkey Breast",
+                                  "grams":  1985
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  438
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  36
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  267
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  82
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  1400
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  88
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  969
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  20
+                              }
+                          ]
+}

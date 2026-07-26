@@ -1,0 +1,317 @@
+﻿{
+    "name":  "Turkey Stuffed Pepper Soup",
+    "slug":  "turkey-stuffed-pepper-soup",
+    "cuisine":  "american",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://tasteandsee.com/stuffed-pepper-soup-with-ground-turkey/",
+    "source_site":  "tasteandsee.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Rice)",
+                   "portion factor 1.25"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Every ingredient maps to a board id; nothing to flag. Verified 10-serving page with no macros, so est_cal 520 is my estimate at a rice-heavy bowl. NEAR-DUPE WATCH: Unstuffed Pepper Skillet Bowls is live but that is beef and a skillet. Confidence: page high, calories medium. | HARVEST: No nutrition panel published.",
+                         "SOURCE YIELD: 10 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Rice)",
+                         "TUNING: portion factor 1.25",
+                         "OVERRIDE Rice: [BUMP x3.0 vs 114 g] source \u00272 cups cooked rice\u0027 for 10 servings; house = 34 g dry/serving to carry the 550 gate"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  581,
+                 "protein":  34,
+                 "carbs":  73,
+                 "fat":  14,
+                 "cost_ps":  "2.03"
+             },
+    "intro_html":  "Stuffed peppers taste great and take forever. You hollow, you par-cook, you stuff, you bake, and then you do it 14 more times. This soup skips every one of those steps and keeps the flavor. Ground turkey, bell peppers, tomato, rice and a savory beef broth base, finished with parmesan. Same dinner, a third of the work.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)",
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.4 (262 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5.25 tbsp (44 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 2 (210 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 8 cups (1890 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 3.5 cans (1439 g)",
+                                "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 1.8 cans (744 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 3.5 tbsp (60 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.75 cups dry (1069 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 5.25 oz (150 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 3.5 tbsp: ~$0.66. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 3.5 lb: ~$13.38. \u003cstrong\u003eBuy 4 lbs: $15.29.\u003c/strong\u003e",
+                       "Yellow Onion, 2.4: ~$0.66. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 5.25 tbsp: ~$0.63. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Green Bell Peppers, 2: ~$1.50. \u003cstrong\u003eBuy 2 each: $1.72.\u003c/strong\u003e",
+                       "Beef Broth, 8 cups: ~$2.54. \u003cstrong\u003ePantry staple; this batch alone uses about 3 32oz cartons.\u003c/strong\u003e",
+                       "Diced Tomatoes, 3.5 cans: ~$3.36. \u003cstrong\u003eBuy 4 cans: $3.84.\u003c/strong\u003e",
+                       "Tomato Sauce, 1.8 cans: ~$1.68. \u003cstrong\u003eBuy 2 15oz cans: $1.92.\u003c/strong\u003e",
+                       "Worcestershire Sauce, 3.5 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 5.75 cups dry: ~$1.32. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Parmesan Cheese, 5.25 oz: ~$1.83. \u003cstrong\u003eBuy 1 8oz tub: $2.78.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, bay leaves, dried oregano, dried thyme): ~$0.64. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $28.40 across 14 servings, so roughly $2.03 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $33.20 across 14 servings, roughly $2.37 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $19.71 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.91. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.03 a bowl\u003c/strong\u003e. Canned tomatoes and rice keep the base almost free, so nearly every dollar in this pot went to the turkey where it belongs.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eGreen bell peppers are the cheap ones.\u003c/strong\u003e Red, yellow and orange peppers are the same vegetable further along and they cost two or three times as much. Green is the right call here.",
+                       "\u003cstrong\u003eCanned diced tomatoes and tomato sauce are the base.\u003c/strong\u003e Buy them by the case when they hit a sale price. They keep for years and they show up in half the recipes on this site.",
+                       "\u003cstrong\u003eRice from the warehouse bag costs almost nothing per serving.\u003c/strong\u003e That is why it is the carb in so many of these builds. One bag covers this batch and a dozen more.",
+                       "\u003cstrong\u003eWorcestershire is the secret in this pot.\u003c/strong\u003e One bottle lasts a very long time and it is what makes a tomato and turkey soup taste like it simmered all day."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice separately per the package and set it aside. Cooking it in the soup turns the whole pot to mush by day three.",
+                    "Brown the ground turkey in the olive oil in your big pot over medium-high heat, breaking it up as it goes, until no pink is left.",
+                    "Add the diced onion and the chopped green bell peppers and cook until they soften, then stir in the garlic for the last minute.",
+                    "Pour in the beef broth, the diced tomatoes with their juice, the tomato sauce and the Worcestershire sauce.",
+                    "Add the bay leaves, dried oregano and dried thyme, bring it to a simmer, and let it go for 25 to 30 minutes so the peppers go tender and the flavors settle.",
+                    "Fish out the bay leaves, season with salt and black pepper, and stir the grated parmesan in off the heat."
+                ],
+    "portion_html":  "Scoop the cooked rice into your 14 containers first, then set the full soup pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and ladle that exact weight over the rice. Every serving lands near 581 calories with 34 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://tasteandsee.com/stuffed-pepper-soup-with-ground-turkey/\" target=\"_blank\" rel=\"noopener\"\u003etasteandsee.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cem\u003eAll the stuffed pepper flavor, none of the stuffing, for about $2.03 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "cost_batch":  28.4,
+    "cost_batch_true":  33.2,
+    "cost_per_serving":  2.03,
+    "cost_per_serving_true":  2.37,
+    "cost_pantry_add":  19.71,
+    "cost_first_run":  52.91,
+    "scaler":  {
+                   "cost":  "33.20",
+                   "ing":  [
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  47,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  16,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  262,
+                                   "buy":  "2.4",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  44,
+                                   "buy":  "5.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  2,
+                                   "buy":  "0.07 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  2,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  2,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  210,
+                                   "buy":  "2",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  1890,
+                                   "buy":  "8 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  1439,
+                                   "buy":  "3.5 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Sauce",
+                                   "canon":  "Tomato Sauce",
+                                   "grams":  744,
+                                   "buy":  "1.8 cans",
+                                   "bid":  "tomato-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "canon":  "Worcestershire Sauce",
+                                   "grams":  60,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "worcestershire",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1069,
+                                   "buy":  "5.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "canon":  "Parmesan Cheese",
+                                   "grams":  150,
+                                   "buy":  "5.25 oz",
+                                   "bid":  "parmesan",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Ground turkey, green bell peppers, tomato and rice in a savory broth with parmesan. A 14 serving stuffed pepper soup built for cheap meal prep.",
+                 "keywords":  "stuffed pepper soup, ground turkey soup, budget meal prep, tomato rice soup, cheap dinner ideas, turkey recipes",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT40M",
+                 "totalTime":  "PT1H",
+                 "costPerServing":  2.03,
+                 "recipeIngredient":  [
+                                          "93/7 Ground Turkey",
+                                          "Olive Oil",
+                                          "Yellow Onion",
+                                          "Green Bell Peppers",
+                                          "Garlic",
+                                          "Beef Broth",
+                                          "Diced Tomatoes",
+                                          "Tomato Sauce",
+                                          "Worcestershire Sauce",
+                                          "Rice",
+                                          "Parmesan Cheese"
+                                      ],
+                 "steps":  [
+                               "Cook the rice separately and set it aside.",
+                               "Brown the ground turkey in olive oil in a large pot.",
+                               "Add the onion, bell peppers and garlic and cook until softened.",
+                               "Pour in the beef broth, diced tomatoes, tomato sauce, Worcestershire and herbs, then simmer 25 to 30 minutes.",
+                               "Season, stir in the parmesan off the heat, and serve over the rice."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  16
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  262
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  44
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  1890
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  1439
+                              },
+                              {
+                                  "item":  "Tomato Sauce",
+                                  "grams":  744
+                              },
+                              {
+                                  "item":  "Worcestershire Sauce",
+                                  "grams":  60
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1069
+                              },
+                              {
+                                  "item":  "Parmesan Cheese",
+                                  "grams":  150
+                              }
+                          ]
+}

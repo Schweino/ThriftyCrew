@@ -1,0 +1,311 @@
+﻿{
+    "name":  "Chicken Maqluba (Palestinian Upside-Down Rice)",
+    "slug":  "chicken-maqluba",
+    "cuisine":  "Middle Eastern / Palestinian",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.themediterraneandish.com/maqluba-recipe/",
+    "source_site":  "themediterraneandish.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Rice)",
+                   "portion factor 1.1"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Page verified: full recipe, 12 servings, 429 cal / 27g protein - one of the few sources already written at near-batch scale, and it clears the protein bar. We serve it scooped rather than flipped, which removes the only fussy step. Eggplant has NO board commodity (cauliflower, which the recipe also uses, is tracked) - flagged, and the build can lean on cauliflower. Confidence: high. | HARVEST: ",
+                         "SOURCE YIELD: 12 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Rice)",
+                         "TUNING: portion factor 1.1"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  574,
+                 "protein":  33,
+                 "carbs":  57,
+                 "fat":  22,
+                 "cost_ps":  "1.37"
+             },
+    "intro_html":  "Maqluba means upside down in Arabic, and the traditional finish is a piece of theater: the whole pot gets flipped onto a platter at the table and everyone holds their breath. For meal prep we skip the drama and scoop it out, which changes nothing about the taste. What matters is the layering, chicken on the bottom, then vegetables, then rice, all cooking in one pot with allspice and cinnamon running through it. Each bowl comes in at \u003cstrong\u003e574 calories and 33 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$1.37\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.5 cups dry (853 g)",
+                                "\u003cstrong\u003eEggplant:\u003c/strong\u003e 1.3 (578 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 cups (191 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 13.5 oz (385 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 3.75 lb (1746 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.3 (141 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.25 tbsp (19 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2 cans (791 g)",
+                                "\u003cstrong\u003eAlmonds (generic (USDA)):\u003c/strong\u003e 0.75 cups (92 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Rice, 4.5 cups dry: ~$1.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Eggplant, 1.3: ~$1.92. \u003cstrong\u003eBuy 2 each: $3.64.\u003c/strong\u003e",
+                       "Olive Oil, 1 cups: ~$2.69. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Broccoli Florets, 13.5 oz: ~$1.80. \u003cstrong\u003eBuy 2 12oz bags: $3.18.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Thigh, 3.75 lb: ~$6.81. \u003cstrong\u003eBuy 4 lbs: $7.08.\u003c/strong\u003e",
+                       "Yellow Onion, 1.3: ~$0.35. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 2.25 tbsp: ~$0.27. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Diced Tomatoes, 2 cans: ~$1.85. \u003cstrong\u003eBuy 2 cans: $1.92.\u003c/strong\u003e",
+                       "Almonds, 0.75 cups: ~$1.38. \u003cstrong\u003eBuy 1 14oz bag: $5.96.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, ground allspice, ground cinnamon, bay leaves, garam masala, ground turmeric): ~$1.00. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $19.12 across 14 servings, so roughly $1.37 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $28.24 across 14 servings, roughly $2.02 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $20.69 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.93. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.37 a bowl\u003c/strong\u003e for a Palestinian one-pot dinner. Chicken thighs and olive oil are the top two lines, and the rice that makes up most of the volume is one of the smallest numbers on the whole list.",
+    "shop_smart":  [
+                       "Eggplant is the priciest vegetable in this recipe and it swings hard with the season. If it is expensive the week you shop, lean harder on the broccoli florets, which are tracked cheap and roast the same way.",
+                       "Frozen broccoli florets are cheaper than fresh, need no trimming, and roast perfectly well straight from the bag. This is one of the places where frozen genuinely beats fresh on both price and convenience.",
+                       "Almonds go on top for crunch. Buy the big bag rather than a small pouch, toast them yourself in a dry pan, and the rest of the bag will feed a month of snacks.",
+                       "Allspice and cinnamon are the signature of Palestinian rice dishes, and both are far cheaper in the bagged section of an international grocer than in a branded jar on the spice aisle."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Rinse the rice until the water runs clear and leave it to soak while you cook everything else.",
+                    "Cube the eggplant, toss it with some of the olive oil and salt, and roast it at 425F for 20 to 25 minutes with the broccoli florets on a second pan until both are browned at the edges. Roasting instead of frying saves you a lot of oil.",
+                    "Meanwhile, brown the chicken thighs in the rest of the olive oil in your largest heavy pot over medium-high, seasoned with the ground allspice, ground cinnamon, garam masala, ground turmeric, salt and black pepper.",
+                    "Add the diced onion and garlic to the pot for 4 minutes, then the diced tomatoes and bay leaves. Cook 5 minutes until the tomato darkens.",
+                    "Layer it properly: chicken and sauce on the bottom of the pot, then the roasted eggplant and broccoli, then the drained rice spread evenly across the top. Do not stir it. The layers are the recipe.",
+                    "Pour hot water or broth gently over the back of a spoon until the liquid sits about an inch above the rice. Cover tightly and cook on the lowest heat 30 to 35 minutes, then rest it covered another 15 minutes off the heat.",
+                    "Scoop it out in sections rather than flipping it, toasting the almonds in a dry pan while you work, and scatter them over the top."
+                ],
+    "portion_html":  "Set the pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. Fourteen containers, no arguments. Each one carries \u003cstrong\u003e574 calories\u003c/strong\u003e, and hold the toasted almonds in a separate bag so they stay crunchy through the week.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themediterraneandish.com/maqluba-recipe/\" target=\"_blank\" rel=\"noopener\"\u003ethemediterraneandish.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Palestinian chicken maqluba for about $1.37 a bowl, made in one pot. This is one of a few hundred recipes here. Members get the whole Meal Prep section plus every money lesson, calculator, and tool on the site for $1 a month.",
+    "cost_batch":  19.12,
+    "cost_batch_true":  28.24,
+    "cost_per_serving":  1.37,
+    "cost_per_serving_true":  2.02,
+    "cost_pantry_add":  20.69,
+    "cost_first_run":  48.93,
+    "scaler":  {
+                   "cost":  "28.24",
+                   "ing":  [
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  853,
+                                   "buy":  "4.5 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  26,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  5,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Eggplant",
+                                   "canon":  "Eggplant",
+                                   "grams":  578,
+                                   "buy":  "1.3",
+                                   "bid":  "eggplant",
+                                   "gpu":  "548.000"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  191,
+                                   "buy":  "1 cups",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "canon":  "Broccoli Florets",
+                                   "grams":  385,
+                                   "buy":  "13.5 oz",
+                                   "bid":  "broccoli",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  1746,
+                                   "buy":  "3.75 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ground Allspice",
+                                   "canon":  "Ground Allspice",
+                                   "grams":  5,
+                                   "buy":  "0.25 oz",
+                                   "bid":  "ground-allspice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cinnamon",
+                                   "canon":  "Ground Cinnamon",
+                                   "grams":  5,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "ground-cinnamon",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  141,
+                                   "buy":  "1.3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  19,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  2,
+                                   "buy":  "0.07 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garam Masala",
+                                   "canon":  "Garam Masala",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "garam-masala",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  791,
+                                   "buy":  "2 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Turmeric",
+                                   "canon":  "Ground Turmeric",
+                                   "grams":  1,
+                                   "buy":  "0.11 tbsp",
+                                   "bid":  "ground-turmeric",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Almonds",
+                                   "canon":  "Almonds",
+                                   "grams":  92,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "almonds",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Chicken maqluba, the Palestinian upside-down rice pot with roasted eggplant, broccoli and allspice. Built as 14 meal prep bowls at 574 calories, 33g protein, about $1.37.",
+                 "keywords":  "maqluba, palestinian rice, upside down rice, middle eastern chicken rice, eggplant rice pot, budget one pot dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT1H",
+                 "totalTime":  "PT1H30M",
+                 "costPerServing":  1.37,
+                 "recipeIngredient":  [
+                                          "3.75 lb boneless skinless chicken thighs",
+                                          "4.5 cups dry rice",
+                                          "1.3 eggplants",
+                                          "4.5 cups broccoli florets",
+                                          "2 cans diced tomatoes",
+                                          "1 cup olive oil",
+                                          "1.3 yellow onions",
+                                          "2.25 tbsp garlic",
+                                          "0.75 cups almonds"
+                                      ],
+                 "steps":  [
+                               "Rinse and soak the rice, and roast the cubed eggplant and broccoli at 425F for 20 to 25 minutes.",
+                               "Brown the chicken thighs with allspice, cinnamon, garam masala and turmeric, then add onion, garlic, tomatoes and bay leaves.",
+                               "Layer chicken and sauce, then the roasted vegetables, then the drained rice, without stirring.",
+                               "Add hot liquid an inch above the rice, cover, and cook on the lowest heat 30 to 35 minutes, then rest 15 minutes.",
+                               "Scoop out in sections, top with toasted almonds, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Rice",
+                                  "grams":  853
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  26
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Eggplant",
+                                  "grams":  578
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  191
+                              },
+                              {
+                                  "item":  "Broccoli Florets",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  1746
+                              },
+                              {
+                                  "item":  "Ground Allspice",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Ground Cinnamon",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  141
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  19
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Garam Masala",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  791
+                              },
+                              {
+                                  "item":  "Ground Turmeric",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Almonds",
+                                  "grams":  92
+                              }
+                          ]
+}

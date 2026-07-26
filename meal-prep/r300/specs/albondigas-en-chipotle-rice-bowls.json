@@ -1,0 +1,298 @@
+﻿{
+    "name":  "Albondigas en Chipotle (Mexican Meatballs in Chipotle Sauce)",
+    "slug":  "albondigas-en-chipotle-rice-bowls",
+    "cuisine":  "Mexican",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.mexicoinmykitchen.com/chipotle-sauce-meatballs-albondigas/",
+    "source_site":  "mexicoinmykitchen.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Rice)",
+                   "portion factor 1.05"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Meatballs simmer in one pot of sauce and go over rice; scales linearly. chipotle-adobo is already tracked. Catalog has no albondigas of any kind. Confidence: page verified; calories estimated. | HARVEST: Recovered via browser after WebFetch 403. Nutrition per serving, excludes rice (rice is serve-with only). Sub-heading FOR THE SALSA preserved. Source yields 16 meatballs across 6 servings.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Rice)",
+                         "TUNING: portion factor 1.05",
+                         "OVERRIDE +Rice: ADD rice base: meatballs-in-sauce plate over house rice (55 g dry/serving x 6); bread-crumb slice was wrongly acting as the \u0027base\u0027"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  584,
+                 "protein":  28,
+                 "carbs":  90,
+                 "fat":  10,
+                 "cost_ps":  "1.80"
+             },
+    "intro_html":  "Mexican albondigas are not Italian meatballs with different seasoning. They are softer, bound with bread soaked in milk, and they finish by simmering directly in the sauce rather than getting browned to a crust first. That means they drink up the chipotle sauce from the inside out. The sauce itself is blended tomatoes and chipotles in adobo, smoky and just hot enough to notice. Everything goes over rice, and the whole thing cooks in one pot after the meatballs are rolled.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eSandwich Bread (generic white (USDA)):\u003c/strong\u003e 2.25 oz (64 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 5 tbsp (74 g)",
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 2.5 lb (1111 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 2 large eggs (123 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4.25 tbsp (37 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 3.75 tbsp (51 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 0.6 (71 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 3.3 cans (1338 g)",
+                                "\u003cstrong\u003eChipotle in Adobo (La Costena):\u003c/strong\u003e 4 tbsp (66 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.25 cups (294 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 26 tbsp (26 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 7.75 cups dry (1452 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Sandwich Bread, 2.25 oz: ~$0.17. \u003cstrong\u003eBuy 1 20oz loaf: $1.48.\u003c/strong\u003e",
+                       "Milk, 5 tbsp: ~$0.06. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
+                       "93/7 Ground Beef, 2.5 lb: ~$16.25. \u003cstrong\u003eBuy 3 lbs: $19.90.\u003c/strong\u003e",
+                       "Eggs, 2 large eggs: ~$0.29. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
+                       "Garlic, 4.25 tbsp: ~$0.53. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Vegetable Oil, 3.75 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 0.6: ~$0.18. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Diced Tomatoes, 3.3 cans: ~$3.12. \u003cstrong\u003eBuy 4 cans: $3.84.\u003c/strong\u003e",
+                       "Chipotle in Adobo, 4 tbsp: ~$0.55. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 1.25 cups: ~$0.39. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fresh Cilantro, 26 tbsp: ~$0.81. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Rice, 7.75 cups dry: ~$1.79. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, salt): ~$0.90. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $25.16 across 14 servings, so roughly $1.80 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $36.92 across 14 servings, roughly $2.64 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.24 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.16. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.80 a bowl\u003c/strong\u003e for meatballs in a smoky chipotle sauce, which is what a single order costs on the appetizer menu.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBread and milk stretch the beef, and that is on purpose.\u003c/strong\u003e The soaked bread panade is traditional, it keeps the meatballs tender, and it means less beef per serving without anyone noticing.",
+                       "\u003cstrong\u003eOne can of chipotles in adobo lasts a long time.\u003c/strong\u003e Freeze the leftovers in a covered ice cube tray and pull out one cube at a time for future batches.",
+                       "\u003cstrong\u003eCanned diced tomatoes beat fresh here.\u003c/strong\u003e They are cheaper year round, they are already peeled, and this sauce gets blended anyway so texture does not matter.",
+                       "\u003cstrong\u003eCilantro goes in at the end.\u003c/strong\u003e It loses everything if it simmers, so save the whole bunch for the finish where you actually taste it."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Tear the sandwich bread into pieces, soak it in the milk until soft, then mash it into a paste.",
+                    "Mix the ground beef with the bread paste, eggs, some of the garlic, salt, and black pepper, and roll it into evenly sized meatballs.",
+                    "Blend the diced tomatoes with the chipotles in adobo, the yellow onion, and the rest of the garlic into a smooth sauce.",
+                    "Heat the vegetable oil in a large pot and pour in the blended sauce carefully, since it will spit. Cook it down for several minutes until it darkens and thickens.",
+                    "Add the chicken broth, bring the sauce to a gentle simmer, and lower the raw meatballs in one by one.",
+                    "Cover and simmer gently, without stirring for the first fifteen minutes so the meatballs set, until they are cooked through.",
+                    "Cook the rice according to the package, then finish the pot with the chopped cilantro and adjust the salt."
+                ],
+    "portion_html":  "Weigh the rice pot and the meatball pot separately, subtracting the empty-pot weight from Step 1, and divide each by 14. Count the meatballs out evenly first, then even the containers up with sauce by weight. Every bowl lands near \u003cstrong\u003e584 calories with 28 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.mexicoinmykitchen.com/chipotle-sauce-meatballs-albondigas/\" target=\"_blank\" rel=\"noopener\"\u003emexicoinmykitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Smoky, saucy dinners for about $1.80 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  25.16,
+    "cost_batch_true":  36.92,
+    "cost_per_serving":  1.8,
+    "cost_per_serving_true":  2.64,
+    "cost_pantry_add":  10.24,
+    "cost_first_run":  47.16,
+    "scaler":  {
+                   "cost":  "36.92",
+                   "ing":  [
+                               {
+                                   "item":  "Sandwich Bread",
+                                   "canon":  "Sandwich Bread",
+                                   "grams":  64,
+                                   "buy":  "2.25 oz",
+                                   "bid":  "bread",
+                                   "gpu":  "567.000"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  74,
+                                   "buy":  "5 tbsp",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "canon":  "93/7 Ground Beef",
+                                   "grams":  1111,
+                                   "buy":  "2.5 lb",
+                                   "bid":  "ground-beef-8020",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  123,
+                                   "buy":  "2 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  37,
+                                   "buy":  "4.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  20,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  51,
+                                   "buy":  "3.75 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  71,
+                                   "buy":  "0.6",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  1338,
+                                   "buy":  "3.3 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chipotle in Adobo",
+                                   "canon":  "Chipotle in Adobo",
+                                   "grams":  66,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "chipotle-adobo",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  294,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  26,
+                                   "buy":  "26 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1452,
+                                   "buy":  "7.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  21,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Albondigas en chipotle rebuilt for 14-serving meal prep: tender Mexican meatballs simmered in smoky chipotle tomato sauce over rice. 584 calories, 28g protein, about $1.80 per serving.",
+                 "keywords":  "albondigas en chipotle, mexican meatballs, chipotle tomato sauce, mexican meal prep, budget beef dinner, meatball rice bowls",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT40M",
+                 "totalTime":  "PT70M",
+                 "costPerServing":  1.8,
+                 "recipeIngredient":  [
+                                          "2.5 lb 93/7 ground beef",
+                                          "2.25 oz sandwich bread",
+                                          "5 tbsp milk",
+                                          "2 large eggs",
+                                          "3.3 cans diced tomatoes",
+                                          "4 tbsp chipotle in adobo",
+                                          "0.75 lb chicken broth",
+                                          "0.6 yellow onion",
+                                          "4.25 tbsp garlic",
+                                          "26 tbsp fresh cilantro",
+                                          "7.75 cups dry rice",
+                                          "3.75 tbsp vegetable oil"
+                                      ],
+                 "steps":  [
+                               "Soak the bread in milk and mash it into a paste.",
+                               "Mix the beef with the bread paste, eggs, garlic, and seasoning and roll into meatballs.",
+                               "Blend the diced tomatoes, chipotles in adobo, onion, and garlic into a sauce.",
+                               "Fry the blended sauce in oil until it darkens, then add broth.",
+                               "Lower the raw meatballs into the simmering sauce and cook covered until done.",
+                               "Cook the rice, finish with cilantro, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Sandwich Bread",
+                                  "grams":  64
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  74
+                              },
+                              {
+                                  "item":  "93/7 Ground Beef",
+                                  "grams":  1111
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  123
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  37
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  51
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  71
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  1338
+                              },
+                              {
+                                  "item":  "Chipotle in Adobo",
+                                  "grams":  66
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  294
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  26
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1452
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  21
+                              }
+                          ]
+}

@@ -1,0 +1,312 @@
+﻿{
+    "name":  "Peri Peri Chicken and Rice",
+    "slug":  "peri-peri-chicken-and-rice",
+    "cuisine":  "Mozambican / Portuguese-African",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.thedinnerbite.com/peri-peri-chicken-and-rice/",
+    "source_site":  "thedinnerbite.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +40% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Page verified: full recipe, 5 servings, 486 cal / 33g protein per serving including rice. Classic one-pot bake, ideal for weigh-and-divide. Peri peri sauce has no board id; buildable from hot-sauce + paprika + cayenne + garlic + lemon-juice, all tracked, so the flag is a substitution note not a blocker. No piri piri dish live. Confidence: high. | HARVEST: ",
+                         "SOURCE YIELD: 5 servings, rebuilt to 14.",
+                         "TUNING: base +40% (Rice)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  565,
+                 "protein":  34,
+                 "carbs":  72,
+                 "fat":  13,
+                 "cost_ps":  "1.83"
+             },
+    "intro_html":  "Peri peri traveled from Mozambique to Portugal and back again, picking up garlic and lemon on the way, and it has been making cheap chicken taste expensive ever since. This version does the whole thing in one pot: chicken thighs, seasoned rice, bell pepper and a hot sauce base that stains everything a deep orange. Each bowl comes in at \u003cstrong\u003e565 calories and 34 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$1.83\u003c/strong\u003e. One pot, one lid, fourteen dinners.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 4 lb (1820 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 6.25 cups dry (1148 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2 cartons (2016 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 5.6 (672 g)",
+                                "\u003cstrong\u003eHot Sauce (Frank\u0027s RedHot):\u003c/strong\u003e 1.5 cups (336 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 8.25 tbsp (113 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 (308 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6.5 tbsp (56 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 14 tbsp (84 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 28 tbsp (28 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Thigh, 4 lb: ~$7.10. \u003cstrong\u003eBuy 4 lbs: $7.10.\u003c/strong\u003e",
+                       "Rice, 6.25 cups dry: ~$1.42. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Chicken Broth, 2 cartons: ~$2.71. \u003cstrong\u003ePantry staple; this batch alone uses about 3 32oz cartons.\u003c/strong\u003e",
+                       "Green Bell Peppers, 5.6: ~$4.82. \u003cstrong\u003eBuy 6 each: $5.16.\u003c/strong\u003e",
+                       "Hot Sauce, 1.5 cups: ~$3.45. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 8.25 tbsp: ~$1.59. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 3: ~$0.77. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 6.5 tbsp: ~$0.81. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Green Onions, 14 tbsp: ~$1.00. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
+                       "Fresh Cilantro, 28 tbsp: ~$0.87. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Pantry seasonings (cajun seasoning, ground coriander, ground turmeric, dried oregano, salt, black pepper): ~$1.11. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $25.65 across 14 servings, so roughly $1.83 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $27.68 across 14 servings, roughly $1.98 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $21.57 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $49.25. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.83 a bowl\u003c/strong\u003e for a one-pot rice bake with real heat in it. Chicken and bell pepper are the two biggest lines, and the rice underneath is one of the cheapest things in the pot.",
+    "shop_smart":  [
+                       "Bell peppers are the second biggest line after the chicken and the price swings hard by color and season. Green is almost always the cheapest of the three, and green is what this recipe uses, so do not upgrade to red out of habit.",
+                       "The hot sauce is your peri peri base and a cup and a half sounds like a lot until you see the per-ounce price on the big bottle. Buy the family size, not the little one, because the big bottle is usually half the cost per ounce.",
+                       "Buy rice in the biggest bag your cabinet will hold. It is the cheapest ingredient in this recipe by a wide margin and it never goes bad, so the twenty pound bag pays you back over a dozen batches.",
+                       "Green onions and cilantro are the finishing herbs and they are both under a dollar fifty a bunch. Buy them the same day you cook, since neither one survives a week in the crisper drawer."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Build the peri peri base: stir the hot sauce together with the cajun seasoning, ground coriander, ground turmeric, dried oregano, minced garlic, salt and black pepper. Toss the chicken thighs in about two thirds of it and let them sit while the oven heats to 375F.",
+                    "Heat the olive oil in a large oven-safe pot or deep roasting pan over medium-high and sear the marinated thighs in batches until they are browned on both sides. They will not be cooked through yet. Set them aside.",
+                    "Cook the diced onion and green bell pepper in the same pot for 5 minutes, scraping up the fond as they release their water.",
+                    "Stir in the dry rice and the remaining peri peri base and toast for two minutes so every grain picks up color.",
+                    "Pour in the chicken broth, bring it to a boil, then lay the chicken back on top with any juices from the plate.",
+                    "Cover tightly and bake 35 to 40 minutes, until the rice is tender and the chicken reads 165F. Let it sit covered off the heat for 10 minutes before you touch it.",
+                    "Chop the chicken, fold everything together in your mixing pot, and finish with the sliced green onions and chopped cilantro."
+                ],
+    "portion_html":  "Set the loaded pot on the scale, subtract the empty-pot weight, and divide by 14. That number goes in every container. Each bowl lands at \u003cstrong\u003e565 calories\u003c/strong\u003e, and because the rice cooked in the chicken drippings it stays moist through a week of reheats.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.thedinnerbite.com/peri-peri-chicken-and-rice/\" target=\"_blank\" rel=\"noopener\"\u003ethedinnerbite.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Peri peri chicken and rice for about $1.83 a bowl, made in one pot. This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "cost_batch":  25.65,
+    "cost_batch_true":  27.68,
+    "cost_per_serving":  1.83,
+    "cost_per_serving_true":  1.98,
+    "cost_pantry_add":  21.57,
+    "cost_first_run":  49.25,
+    "scaler":  {
+                   "cost":  "27.68",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  1820,
+                                   "buy":  "4 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1148,
+                                   "buy":  "6.25 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  2016,
+                                   "buy":  "2 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  672,
+                                   "buy":  "5.6",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Hot Sauce",
+                                   "canon":  "Hot Sauce",
+                                   "grams":  336,
+                                   "buy":  "1.5 cups",
+                                   "bid":  "hot-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Cajun Seasoning",
+                                   "canon":  "Cajun Seasoning",
+                                   "grams":  38,
+                                   "buy":  "4.25 tbsp",
+                                   "bid":  "cajun-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Coriander",
+                                   "canon":  "Ground Coriander",
+                                   "grams":  5,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-coriander",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Turmeric",
+                                   "canon":  "Ground Turmeric",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "ground-turmeric",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  3,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  113,
+                                   "buy":  "8.25 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  308,
+                                   "buy":  "3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  56,
+                                   "buy":  "6.5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  84,
+                                   "buy":  "14 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  28,
+                                   "buy":  "28 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "One pot peri peri chicken and rice with green bell pepper and a hot sauce base, built as 14 meal prep bowls. 565 calories, 34g protein, about $1.83 each.",
+                 "keywords":  "peri peri chicken, piri piri chicken and rice, one pot chicken rice, african chicken meal prep, spicy chicken bowls, budget meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT50M",
+                 "totalTime":  "PT1H10M",
+                 "costPerServing":  1.83,
+                 "recipeIngredient":  [
+                                          "4 lb boneless skinless chicken thighs",
+                                          "6.25 cups dry rice",
+                                          "4.5 lb chicken broth",
+                                          "1.5 cups hot sauce",
+                                          "5.6 green bell peppers",
+                                          "3 yellow onions",
+                                          "6.5 tbsp garlic",
+                                          "8.25 tbsp olive oil",
+                                          "14 tbsp green onions",
+                                          "28 tbsp fresh cilantro"
+                                      ],
+                 "steps":  [
+                               "Mix the hot sauce with cajun seasoning, coriander, turmeric, oregano and garlic, and marinate the chicken in two thirds of it.",
+                               "Sear the thighs in olive oil in batches, then set aside.",
+                               "Soften the onion and bell pepper, toast the rice with the remaining peri peri base.",
+                               "Add broth, top with the chicken, cover, and bake at 375F for 35 to 40 minutes.",
+                               "Rest 10 minutes, chop the chicken, fold in green onion and cilantro, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  1820
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1148
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  2016
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  672
+                              },
+                              {
+                                  "item":  "Hot Sauce",
+                                  "grams":  336
+                              },
+                              {
+                                  "item":  "Cajun Seasoning",
+                                  "grams":  38
+                              },
+                              {
+                                  "item":  "Ground Coriander",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Ground Turmeric",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  113
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  308
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

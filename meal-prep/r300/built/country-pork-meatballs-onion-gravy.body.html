@@ -1,0 +1,165 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"country-pork-meatballs-onion-gravy","base":14,"cost":31.11,"ing":[{"item":"Olive Oil","grams":71,"buy":"5.25 tbsp","bid":"olive-oil","gpu":28.000},{"item":"Ground Pork","grams":1750,"buy":"3.75 lb","bid":"ground-pork","gpu":453.592},{"item":"Bread Crumbs","grams":378,"buy":"3.5 cups","bid":"bread-crumbs","gpu":28.350},{"item":"Eggs","grams":175,"buy":"4 large eggs","bid":"eggs","gpu":600.000},{"item":"Green Onions","grams":105,"buy":"17.5 tbsp","bid":"green-onions","gpu":90.000},{"item":"Garlic","grams":52,"buy":"6 tbsp","bid":"garlic","gpu":50.000},{"item":"Italian Seasoning","grams":5,"buy":"1.25 tbsp","bid":"italian-seasoning","gpu":28.350},{"item":"Onion Powder","grams":8,"buy":"1 tbsp","bid":"onion-powder","gpu":28.350},{"item":"Paprika","grams":4,"buy":"0.5 tbsp","bid":"paprika","gpu":28.350},{"item":"Dried Thyme","grams":1,"buy":"0.25 tbsp","bid":"dried-thyme","gpu":28.350},{"item":"Salt","grams":21,"buy":"1.25 tbsp","bid":"salt","gpu":28.350},{"item":"Black Pepper","grams":6,"buy":"0.75 tbsp","bid":"black-pepper","gpu":28.350},{"item":"Butter","grams":105,"buy":"7.5 tbsp","bid":"butter","gpu":453.592},{"item":"Yellow Onion","grams":490,"buy":"4.5","bid":"onions","gpu":453.592},{"item":"All-Purpose Flour","grams":84,"buy":"10.5 tbsp","bid":"flour","gpu":453.592},{"item":"Beef Broth","grams":1680,"buy":"7 cups","bid":"beef-broth","gpu":29.570},{"item":"Worcestershire Sauce","grams":20,"buy":"1.25 tbsp","bid":"worcestershire","gpu":29.570},{"item":"Soy Sauce","grams":7,"buy":"0.5 tbsp","bid":"soy-sauce","gpu":29.570},{"item":"Potato","grams":1400,"buy":"6.6","bid":"russet-potatoes","gpu":453.592}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~663 cal &middot; 32g protein &middot; 48g carbs &middot; 38g fat &middot; ~$1.75 per serving.</strong></p>
+
+<p>This is the dinner that smells like somebody's grandmother is still in the kitchen. Seasoned pork meatballs baked on sheet pans, a slow-cooked onion gravy built in one pot, and a pile of real mashed potatoes underneath. Ground pork is one of the cheapest proteins we track on the board, so a plate that eats like a diner special lands at 32 grams of protein for about $1.75.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Olive Oil:</strong> 5.25 tbsp (71 g)</li>
+<li><strong>Ground Pork:</strong> 3.75 lb (1750 g)</li>
+<li><strong>Bread Crumbs (generic):</strong> 3.5 cups (378 g)</li>
+<li><strong>Eggs (Great Value):</strong> 4 large eggs (175 g)</li>
+<li><strong>Green Onions:</strong> 17.5 tbsp (105 g)</li>
+<li><strong>Garlic:</strong> 6 tbsp (52 g)</li>
+<li><strong>Butter (generic):</strong> 7.5 tbsp (105 g)</li>
+<li><strong>Yellow Onion:</strong> 4.5 (490 g)</li>
+<li><strong>All-Purpose Flour (Great Value):</strong> 10.5 tbsp (84 g)</li>
+<li><strong>Beef Broth (Great Value):</strong> 7 cups (1680 g)</li>
+<li><strong>Worcestershire Sauce (Lea & Perrins):</strong> 1.25 tbsp (20 g)</li>
+<li><strong>Potato (generic):</strong> 6.6 (1400 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Olive Oil, 5.25 tbsp: ~$1.00. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Ground Pork, 3.75 lb: ~$13.16. <strong>Buy 4 lbs: $13.64.</strong></li>
+<li>Bread Crumbs, 3.5 cups: ~$1.08. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Eggs, 4 large eggs: ~$0.42. <strong>Buy 1 dozen: $1.43.</strong></li>
+<li>Green Onions, 17.5 tbsp: ~$1.25. <strong>Buy 2 bunches: $2.14.</strong></li>
+<li>Garlic, 6 tbsp: ~$0.75. <strong>Buy 2 heads: $1.15.</strong></li>
+<li>Butter, 7.5 tbsp: ~$0.69. <strong>Buy 1 lb box: $2.98.</strong></li>
+<li>Yellow Onion, 4.5: ~$1.23. <strong>Buy 2 lbs: $2.28.</strong></li>
+<li>All-Purpose Flour, 10.5 tbsp: ~$0.08. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Beef Broth, 7 cups: ~$2.26. <strong>Pantry staple; this batch alone uses about 2 32oz cartons.</strong></li>
+<li>Worcestershire Sauce, 1.25 tbsp: ~$0.07. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Potato, 6.6: ~$1.75. <strong>Buy 4 lbs: $2.27.</strong></li>
+<li>Pantry seasonings (italian seasoning, onion powder, paprika, dried thyme, salt, black pepper, soy sauce): ~$0.73. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $24.47 across 14 servings, so roughly $1.75 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $31.11 across 14 servings, roughly $2.22 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $22.42 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.53. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$1.75 a bowl</strong> for meatballs, gravy and mashed potatoes. Order that same plate at a diner and you will not see change back.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li><strong>Buy the four pound pack of ground pork.</strong> The cost line already assumes it. Pork is usually the cheapest ground meat in the case, and what you do not use freezes flat in a bag.</li>
+<li><strong>Bread crumbs and flour are pennies here.</strong> Both are pantry items that carry a dozen batches. If you have heels of bread going stale, dry them in the oven and pulse them yourself for free.</li>
+<li><strong>Beef broth is the whole gravy.</strong> Store brand does the job. Buy the big carton rather than the little cans and the per batch cost drops to almost nothing.</li>
+<li><strong>Grab onions by the bag, not by the each.</strong> Two pounds of yellow onions costs barely more than a couple of loose ones, and onions keep on the counter for weeks.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Heat the oven to 400F and line two sheet pans. Put a pot of salted water on for the potatoes.</li>
+<li>In a big bowl combine the ground pork, bread crumbs, eggs, green onions, garlic, italian seasoning, onion powder, paprika, dried thyme, salt and black pepper. Mix with your hands only until it comes together, because overworking it makes the meatballs tough.</li>
+<li>Roll even meatballs, space them out on the sheet pans, and bake until browned and cooked through.</li>
+<li>Peel and chunk the potatoes, boil until a fork slides in easy, then drain and mash with a little of the butter, salt and pepper.</li>
+<li>Melt the rest of the butter in a wide pot and cook the sliced yellow onion low and slow until it turns deep golden and sweet. That patience is the whole flavor of the gravy.</li>
+<li>Sprinkle the flour over the onions and stir for a minute, then pour in the beef broth along with the worcestershire and soy sauce. Whisk until it thickens into a glossy gravy.</li>
+<li>Slide the baked meatballs into the gravy and let them simmer a few minutes so they drink some of it up.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container, mashed potatoes first, then meatballs and gravy over the top. Every bowl lands near 663 calories and 32 grams of protein.</p>
+
+<p><em>Recipe adapted from <a href="https://www.recipetineats.com/country-pork-meatballs-with-onion-gravy/" target="_blank" rel="noopener">recipetineats.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>Comfort food dinners for about $1.75 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.</em></p>

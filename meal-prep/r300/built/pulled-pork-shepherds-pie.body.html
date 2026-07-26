@@ -1,0 +1,170 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"pulled-pork-shepherds-pie","base":14,"cost":38.22,"ing":[{"item":"Pork Shoulder","grams":2450,"buy":"5.5 lb","bid":"pork-shoulder","gpu":453.592},{"item":"Italian Seasoning","grams":12,"buy":"2.75 tbsp","bid":"italian-seasoning","gpu":28.350},{"item":"Black Pepper","grams":7,"buy":"1 tbsp","bid":"black-pepper","gpu":28.350},{"item":"Diced Tomatoes","grams":744,"buy":"1.8 cans","bid":"diced-tomatoes","gpu":28.350},{"item":"Beef Broth","grams":315,"buy":"1.25 cups","bid":"beef-broth","gpu":29.570},{"item":"Balsamic Vinegar","grams":28,"buy":"1.75 tbsp","bid":"balsamic-vinegar","gpu":29.570},{"item":"Garlic","grams":18,"buy":"2 tbsp","bid":"garlic","gpu":50.000},{"item":"Potato","grams":1929,"buy":"9","bid":"russet-potatoes","gpu":453.592},{"item":"Heavy Cream","grams":104,"buy":"7 tbsp","bid":"heavy-cream","gpu":29.800},{"item":"Butter","grams":49,"buy":"3.5 tbsp","bid":"butter","gpu":453.592},{"item":"Salt","grams":35,"buy":"2 tbsp","bid":"salt","gpu":28.350},{"item":"Olive Oil","grams":24,"buy":"1.75 tbsp","bid":"olive-oil","gpu":28.000},{"item":"Yellow Onion","grams":192,"buy":"1.7","bid":"onions","gpu":453.592},{"item":"Carrots","grams":214,"buy":"3.5","bid":"carrots","gpu":453.592},{"item":"All-Purpose Flour","grams":28,"buy":"3.5 tbsp","bid":"flour","gpu":453.592},{"item":"Worcestershire Sauce","grams":30,"buy":"1.75 tbsp","bid":"worcestershire","gpu":29.570},{"item":"Frozen Green Peas","grams":234,"buy":"8.25 oz","bid":"frozen-peas","gpu":28.350},{"item":"Sweet Whole Kernel Corn","grams":289,"buy":"10.25 oz","bid":"canned-corn","gpu":28.350}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~564 cal &middot; 36g protein &middot; 38g carbs &middot; 29g fat &middot; ~$2.04 per serving.</strong></p>
+
+<p>A shepherd's pie is a filling under a mashed potato roof, and once you understand that, the filling is up for negotiation. This one uses slow cooked pulled pork in a tomato and balsamic gravy with carrots, peas and corn, all of it under a layer of mashed potatoes with cream and butter worked in. It bakes until the top browns in ridges. Of everything in this section, this is the dish that reheats closest to the way it came out of the oven.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Pork Shoulder (generic (USDA)):</strong> 5.5 lb (2450 g)</li>
+<li><strong>Diced Tomatoes (Great Value):</strong> 1.8 cans (744 g)</li>
+<li><strong>Beef Broth (Great Value):</strong> 1.25 cups (315 g)</li>
+<li><strong>Balsamic Vinegar (generic):</strong> 1.75 tbsp (28 g)</li>
+<li><strong>Garlic:</strong> 2 tbsp (18 g)</li>
+<li><strong>Potato (generic):</strong> 9 (1929 g)</li>
+<li><strong>Heavy Cream (Great Value):</strong> 7 tbsp (104 g)</li>
+<li><strong>Butter (generic):</strong> 3.5 tbsp (49 g)</li>
+<li><strong>Olive Oil:</strong> 1.75 tbsp (24 g)</li>
+<li><strong>Yellow Onion:</strong> 1.7 (192 g)</li>
+<li><strong>Carrots (generic):</strong> 3.5 (214 g)</li>
+<li><strong>All-Purpose Flour (Great Value):</strong> 3.5 tbsp (28 g)</li>
+<li><strong>Worcestershire Sauce (Lea & Perrins):</strong> 1.75 tbsp (30 g)</li>
+<li><strong>Frozen Green Peas (generic):</strong> 8.25 oz (234 g)</li>
+<li><strong>Sweet Whole Kernel Corn (Great Value):</strong> 10.25 oz (289 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Pork Shoulder, 5.5 lb: ~$19.28. <strong>Buy 6 lbs: $21.42.</strong></li>
+<li>Diced Tomatoes, 1.8 cans: ~$1.74. <strong>Buy 2 cans: $1.92.</strong></li>
+<li>Beef Broth, 1.25 cups: ~$0.42. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Balsamic Vinegar, 1.75 tbsp: ~$0.23. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Garlic, 2 tbsp: ~$0.26. <strong>Buy 1 head: $0.58.</strong></li>
+<li>Potato, 9: ~$2.42. <strong>Buy 5 lbs: $2.84.</strong></li>
+<li>Heavy Cream, 7 tbsp: ~$0.65. <strong>Buy 1 pint: $2.94.</strong></li>
+<li>Butter, 3.5 tbsp: ~$0.32. <strong>Buy 1 lb box: $2.98.</strong></li>
+<li>Olive Oil, 1.75 tbsp: ~$0.34. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Yellow Onion, 1.7: ~$0.48. <strong>Buy 1 lb: $1.14.</strong></li>
+<li>Carrots, 3.5: ~$0.45. <strong>Buy 1 lb: $0.95.</strong></li>
+<li>All-Purpose Flour, 3.5 tbsp: ~$0.03. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Worcestershire Sauce, 1.75 tbsp: ~$0.10. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Frozen Green Peas, 8.25 oz: ~$0.51. <strong>Buy 1 12oz bag: $0.73.</strong></li>
+<li>Sweet Whole Kernel Corn, 10.25 oz: ~$0.53. <strong>Buy 1 can: $0.79.</strong></li>
+<li>Pantry seasonings (italian seasoning, black pepper, salt): ~$0.81. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $28.57 across 14 servings, so roughly $2.04 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $38.22 across 14 servings, roughly $2.73 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $22.66 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $60.88. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$2.04 a bowl</strong> for a full casserole with pulled pork underneath and real mashed potatoes on top. Potatoes and frozen vegetables are the cheap part, and they are most of the volume.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li><strong>Russet potatoes in the big bag make the best mash.</strong> They are starchy, they whip up fluffy, and they are the least expensive potato in the store by a wide margin.</li>
+<li><strong>Frozen peas and canned corn are pennies a serving.</strong> They add color, sweetness and bulk to the filling so a smaller amount of pork goes further.</li>
+<li><strong>Balsamic vinegar and Worcestershire are the depth.</strong> Between them, two cheap bottles give this gravy the savory backbone that usually requires wine or hours of reduction.</li>
+<li><strong>Run a fork across the top before it bakes.</strong> Those ridges are what brown, and browning is flavor you get for free.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Season the pork shoulder with salt, black pepper and Italian seasoning, sear it in the olive oil, then slow cook it until it shreds and pull it apart.</li>
+<li>Boil the peeled and quartered potatoes in salted water until they fall off a knife, then drain them well and let the steam escape for a minute.</li>
+<li>Mash the potatoes with the butter and heavy cream, season with salt and black pepper, and stop as soon as they are smooth. Overworked potatoes turn gluey.</li>
+<li>Cook the diced onion and sliced carrots in a skillet until soft, add the minced garlic, then sprinkle the flour over and stir for two minutes.</li>
+<li>Add the diced tomatoes, the beef broth, the balsamic vinegar and the Worcestershire sauce and simmer until it thickens into a gravy, then fold in the pulled pork, the frozen peas and the corn.</li>
+<li>Spread the filling in a large baking dish, spoon the mashed potatoes over the top and rake ridges into them with a fork, then bake at 400F for 30 minutes until browned and bubbling.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Weigh the finished pie in its dish, subtract the dish weight, divide by 14, and cut portions to that exact weight so nobody gets all potato and no filling. Every serving lands near 564 calories with 36 grams of protein.</p>
+
+<p><em>Recipe adapted from <a href="https://www.theendlessmeal.com/pulled-pork-shepherds-pie/" target="_blank" rel="noopener">theendlessmeal.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em><em>Shepherd's pie with pulled pork for about $2.04 a serving. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.</em></em></p>

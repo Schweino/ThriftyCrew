@@ -1,0 +1,286 @@
+﻿{
+    "name":  "Turkey Cordon Bleu Casserole",
+    "slug":  "turkey-cordon-bleu-casserole",
+    "cuisine":  "American",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.fivehearthome.com/chicken-turkey-cordon-bleu-casserole/",
+    "source_site":  "fivehearthome.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 400g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Two board proteins in one pan (turkey + deli ham) and a Swiss/bechamel angle nothing in the catalog touches. Source verified at 8 servings, 504 cal / 36g protein, already clears the bar. | HARVEST: Source recipe is written for chicken OR turkey.",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 400g (src scale)",
+                         "OVERRIDE Boneless Skinless Chicken Breast: TITLE-PROTEIN SWAP: turkey cordon bleu; ham stays (dish identity), chicken -\u003e turkey breast, grams kept"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  638,
+                 "protein":  42,
+                 "carbs":  62,
+                 "fat":  23,
+                 "cost_ps":  "1.65"
+             },
+    "intro_html":  "Cordon bleu means blue ribbon, and the original dish involves pounding meat flat, rolling it around ham and cheese, breading it, and praying it does not leak in the pan. Nobody is doing that fourteen times. This takes all the same parts, turkey, ham, Swiss, mustard, a buttery crumb top, and lays them into a casserole. Each serving carries \u003cstrong\u003e42 grams of protein\u003c/strong\u003e and 638 calories for about \u003cstrong\u003e$1.65\u003c/strong\u003e. Two proteins in one pan for that price is arithmetic worth paying attention to.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 2.25 lb (980 g)",
+                                "\u003cstrong\u003eDiced Ham (John Morrell (Smithfield)):\u003c/strong\u003e 1 lb (490 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 0.75 cups (196 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 tbsp (18 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 9 tbsp (73 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 4 cups (965 g)",
+                                "\u003cstrong\u003eSwiss Cheese (generic (USDA)):\u003c/strong\u003e 14 oz (397 g)",
+                                "\u003cstrong\u003eBread Crumbs (generic):\u003c/strong\u003e 2.75 cups (284 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Turkey Breast, 2.25 lb: ~$10.40. \u003cstrong\u003eBuy 1 3lb frozen roast: $14.44.\u003c/strong\u003e",
+                       "Diced Ham, 1 lb: ~$5.36. \u003cstrong\u003eBuy 2 16oz packs: $9.93.\u003c/strong\u003e",
+                       "Butter, 0.75 cups: ~$1.29. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Garlic, 2 tbsp: ~$0.26. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "All-Purpose Flour, 9 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Milk, 4 cups: ~$0.77. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
+                       "Swiss Cheese, 14 oz: ~$2.93. \u003cstrong\u003eBuy 2 8ozes: $3.35.\u003c/strong\u003e",
+                       "Bread Crumbs, 2.75 cups: ~$0.81. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, garlic powder, dijon mustard, ground nutmeg, black pepper): ~$0.38. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $23.13 across 14 servings, so roughly $1.65 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $36.42 across 14 servings, roughly $2.60 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.96 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.38. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.65 a serving\u003c/strong\u003e, and it has both turkey and ham in it. Diced ham is one of the most underrated cheap proteins in the store, and a little of it flavors an entire pan.",
+    "shop_smart":  [
+                       "Diced ham in the 16 oz packs costs far less per pound than deli ham sliced at the counter, and it is already cut for exactly this job.",
+                       "Swiss cheese is the priciest cheese in this recipe, but you only need enough for the flavor to register. Buy it in whatever pack size gives you the lowest price per ounce and shred it yourself.",
+                       "Bread crumbs for the topping are cheap by the canister and last for many batches. Stale bread run through a processor with a little melted butter is even cheaper.",
+                       "A frozen turkey breast roast is the cheapest cooked turkey available most of the year. Roast, dice, and you are set."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice and spread it across the bottom of a greased 9x13 pan as the base layer.",
+                    "Melt most of the butter in a large pot over medium heat, add the garlic for one minute, then whisk in the flour and cook two minutes until it stops smelling raw.",
+                    "Pour in the milk slowly while whisking and cook until the sauce thickens, then season with the Dijon mustard, garlic powder, salt, black pepper, and a small pinch of nutmeg.",
+                    "Take the pot off the heat and melt in the shredded Swiss cheese, stirring until the sauce is smooth. Swiss will turn stringy over direct heat, so patience here pays.",
+                    "Fold the diced turkey breast and the diced ham into the sauce, then pour it over the rice and spread it level.",
+                    "Toss the bread crumbs with the remaining melted butter until they look like wet sand, then scatter them across the top in an even layer.",
+                    "Bake at 350F for 30 to 35 minutes until the crumbs are golden and the edges bubble, then rest 10 minutes before portioning."
+                ],
+    "portion_html":  "Weigh the whole pan, subtract the empty pan weight, and divide by 14. Cut to the scale so the rice layer and the crumb top ride together into every container. Each serving comes to \u003cstrong\u003e638 calories\u003c/strong\u003e and 42 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.fivehearthome.com/chicken-turkey-cordon-bleu-casserole/\" target=\"_blank\" rel=\"noopener\"\u003efivehearthome.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Turkey, ham, and Swiss in one pan for about $1.65 a serving. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "cost_batch":  23.13,
+    "cost_batch_true":  36.42,
+    "cost_per_serving":  1.65,
+    "cost_per_serving_true":  2.6,
+    "cost_pantry_add":  13.96,
+    "cost_first_run":  50.38,
+    "scaler":  {
+                   "cost":  "36.42",
+                   "ing":  [
+                               {
+                                   "item":  "Turkey Breast",
+                                   "canon":  "Turkey Breast",
+                                   "grams":  980,
+                                   "buy":  "2.25 lb",
+                                   "bid":  "turkey-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Ham",
+                                   "canon":  "Diced Ham",
+                                   "grams":  490,
+                                   "buy":  "1 lb",
+                                   "bid":  "diced-ham",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  196,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  18,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  73,
+                                   "buy":  "9 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  965,
+                                   "buy":  "4 cups",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  4,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  1,
+                                   "buy":  "0.11 tbsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dijon Mustard",
+                                   "canon":  "Dijon Mustard",
+                                   "grams":  1,
+                                   "buy":  "0.07 tbsp",
+                                   "bid":  "dijon-mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Nutmeg",
+                                   "canon":  "Ground Nutmeg",
+                                   "grams":  1,
+                                   "buy":  "0.04 oz",
+                                   "bid":  "ground-nutmeg",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Swiss Cheese",
+                                   "canon":  "Swiss Cheese",
+                                   "grams":  397,
+                                   "buy":  "14 oz",
+                                   "bid":  "swiss-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bread Crumbs",
+                                   "canon":  "Bread Crumbs",
+                                   "grams":  284,
+                                   "buy":  "2.75 cups",
+                                   "bid":  "bread-crumbs",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey cordon bleu casserole meal prep: turkey and ham in a Dijon Swiss cream sauce over rice with a buttery crumb top. 638 calories, 42g protein, about $1.65 a serving.",
+                 "keywords":  "turkey cordon bleu casserole, ham and swiss bake, leftover turkey recipes, high protein casserole, budget meal prep, dijon cream sauce",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT40M",
+                 "totalTime":  "PT1H",
+                 "costPerServing":  1.65,
+                 "recipeIngredient":  [
+                                          "7 cups diced cooked turkey breast",
+                                          "3.5 cups diced ham",
+                                          "14 oz Swiss cheese",
+                                          "4 cups milk",
+                                          "3.75 cups dry rice",
+                                          "2.75 cups bread crumbs",
+                                          "0.75 cups butter",
+                                          "9 tbsp all-purpose flour",
+                                          "2 tbsp garlic"
+                                      ],
+                 "steps":  [
+                               "Cook the rice and spread it into a greased 9x13 pan.",
+                               "Cook the garlic in butter, whisk in the flour for two minutes, then add the milk and cook until thick.",
+                               "Season with Dijon, garlic powder, salt, pepper, and nutmeg, then melt in the Swiss off the heat.",
+                               "Fold in the diced turkey and ham, pour over the rice, and level it out.",
+                               "Top with buttered bread crumbs, bake at 350F for 30 to 35 minutes, rest 10 minutes, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Turkey Breast",
+                                  "grams":  980
+                              },
+                              {
+                                  "item":  "Diced Ham",
+                                  "grams":  490
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  18
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  73
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  965
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Dijon Mustard",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Ground Nutmeg",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Swiss Cheese",
+                                  "grams":  397
+                              },
+                              {
+                                  "item":  "Bread Crumbs",
+                                  "grams":  284
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

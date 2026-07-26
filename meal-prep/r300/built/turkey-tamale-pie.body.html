@@ -1,0 +1,169 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"turkey-tamale-pie","base":14,"cost":37.78,"ing":[{"item":"Grits","grams":467,"buy":"3 cups","bid":"grits","gpu":28.350},{"item":"All-Purpose Flour","grams":219,"buy":"1.75 cups","bid":"flour","gpu":453.592},{"item":"Baking Powder","grams":28,"buy":"1 oz","bid":"baking-powder","gpu":28.350},{"item":"Sugar","grams":22,"buy":"1.75 tbsp","bid":"sugar","gpu":453.592},{"item":"Salt","grams":16,"buy":"1 tbsp","bid":"salt","gpu":28.350},{"item":"Milk","grams":322,"buy":"1.25 cups","bid":"milk","gpu":3785.000},{"item":"Butter","grams":198,"buy":"0.75 cups","bid":"butter","gpu":453.592},{"item":"Eggs","grams":88,"buy":"2 large eggs","bid":"eggs","gpu":600.000},{"item":"Sweet Whole Kernel Corn","grams":289,"buy":"10.25 oz","bid":"canned-corn","gpu":28.350},{"item":"Mexican Cheese Blend","grams":396,"buy":"14 oz","bid":"shredded-cheese","gpu":28.350},{"item":"Enchilada Sauce","grams":495,"buy":"1.7 cans","bid":"enchilada-sauce","gpu":28.350},{"item":"Brown Gravy Mix","grams":52,"buy":"1.75 oz","bid":"brown-gravy-mix","gpu":28.350},{"item":"Turkey Breast","grams":980,"buy":"2.25 lb","bid":"turkey-breast","gpu":453.592},{"item":"Diced Green Chiles","grams":198,"buy":"1.8 cans","bid":"canned-green-chilies","gpu":28.350},{"item":"Chili Powder","grams":14,"buy":"1.75 tbsp","bid":"chili-powder","gpu":28.350},{"item":"Ground Cumin","grams":7,"buy":"1 tbsp","bid":"ground-cumin","gpu":28.350},{"item":"Paprika","grams":4,"buy":"0.5 tbsp","bid":"paprika","gpu":28.350},{"item":"Garlic Powder","grams":5,"buy":"0.5 tbsp","bid":"garlic-powder","gpu":28.350},{"item":"Seasoned Black Beans","grams":301,"buy":"1.2 cans","bid":"canned-black-beans","gpu":28.350},{"item":"Green Onions","grams":60,"buy":"10 tbsp","bid":"green-onions","gpu":90.000},{"item":"Black Pepper","grams":4,"buy":"0.5 tbsp","bid":"black-pepper","gpu":28.350}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~561 cal &middot; 31g protein &middot; 54g carbs &middot; 22g fat &middot; ~$1.86 per serving.</strong></p>
+
+<p>Real tamales mean masa, corn husks, a steamer, and an afternoon with people you like. Tamale pie is the Tex-Mex shortcut somebody invented when they wanted the flavor on a Wednesday. Chile-spiced turkey, black beans and green chiles under a scratch cornbread top studded with corn and cheese. Each serving carries <strong>31 grams of protein</strong> and 561 calories for about <strong>$1.86</strong>.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Grits (Quaker):</strong> 3 cups (467 g)</li>
+<li><strong>All-Purpose Flour (Great Value):</strong> 1.75 cups (219 g)</li>
+<li><strong>Sugar (Great Value):</strong> 1.75 tbsp (22 g)</li>
+<li><strong>Milk (Fairlife):</strong> 1.25 cups (322 g)</li>
+<li><strong>Butter (generic):</strong> 0.75 cups (198 g)</li>
+<li><strong>Eggs (Great Value):</strong> 2 large eggs (88 g)</li>
+<li><strong>Sweet Whole Kernel Corn (Great Value):</strong> 10.25 oz (289 g)</li>
+<li><strong>Mexican Cheese Blend (Great Value):</strong> 14 oz (396 g)</li>
+<li><strong>Enchilada Sauce (Old El Paso):</strong> 1.7 cans (495 g)</li>
+<li><strong>Brown Gravy Mix (generic dry (USDA)):</strong> 1.75 oz (52 g)</li>
+<li><strong>Turkey Breast (generic (USDA)):</strong> 2.25 lb (980 g)</li>
+<li><strong>Diced Green Chiles (Old El Paso):</strong> 1.8 cans (198 g)</li>
+<li><strong>Seasoned Black Beans (Great Value):</strong> 1.2 cans (301 g)</li>
+<li><strong>Green Onions:</strong> 10 tbsp (60 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Grits, 3 cups: ~$2.18. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>All-Purpose Flour, 1.75 cups: ~$0.21. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Sugar, 1.75 tbsp: ~$0.04. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Milk, 1.25 cups: ~$0.26. <strong>Buy 1 gallon: $3.02.</strong></li>
+<li>Butter, 0.75 cups: ~$1.30. <strong>Buy 1 lb box: $2.98.</strong></li>
+<li>Eggs, 2 large eggs: ~$0.21. <strong>Buy 1 dozen: $1.43.</strong></li>
+<li>Sweet Whole Kernel Corn, 10.25 oz: ~$0.53. <strong>Buy 1 can: $0.79.</strong></li>
+<li>Mexican Cheese Blend, 14 oz: ~$3.01. <strong>Buy 2 8oz bags: $3.45.</strong></li>
+<li>Enchilada Sauce, 1.7 cans: ~$1.75. <strong>Buy 2 10oz cans: $2.00.</strong></li>
+<li>Brown Gravy Mix, 1.75 oz: ~$0.98. <strong>Pantry staple; this batch alone uses about 3 0.87oz packets.</strong></li>
+<li>Turkey Breast, 2.25 lb: ~$10.40. <strong>Buy 1 3lb frozen roast: $14.44.</strong></li>
+<li>Diced Green Chiles, 1.8 cans: ~$2.56. <strong>Pantry staple; this batch alone uses about 2 4oz cans.</strong></li>
+<li>Seasoned Black Beans, 1.2 cans: ~$1.01. <strong>Buy 2 cans: $1.72.</strong></li>
+<li>Green Onions, 10 tbsp: ~$0.71. <strong>Buy 1 bunch: $1.07.</strong></li>
+<li>Pantry seasonings (baking powder, salt, chili powder, ground cumin, paprika, garlic powder, black pepper): ~$0.91. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $26.06 across 14 servings, so roughly $1.86 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $37.78 across 14 servings, roughly $2.70 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $18.09 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.87. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$1.86 a serving</strong>. Building the cornbread from grits, flour, and a couple of eggs costs less than a boxed mix and gives you a coarser, more tamale-like crumb.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>Grits and cornmeal are close cousins, and a canister of either is one of the cheapest things in the store. Coarser grind gives the topping a better texture than fine cornmeal does.</li>
+<li>Canned enchilada sauce goes on sale constantly and keeps for a year. Two cans covers this pan, and store brand is fine under a cornbread lid.</li>
+<li>Canned black beans and diced green chiles are pantry staples worth stocking deep. Both are cheap, both keep forever, and both end up in half the Tex-Mex recipes here.</li>
+<li>One frozen turkey breast roast covers the filling. Cook it, chop it, and you are done with the most expensive part of the recipe.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Warm the chopped turkey breast in a large skillet with the enchilada sauce, the drained green chiles, the drained black beans, and the chili powder, cumin, paprika, and garlic powder.</li>
+<li>Whisk the dry gravy mix into a splash of water and stir it into the filling, then simmer 5 minutes until it thickens enough that a spoon leaves a clean line through it.</li>
+<li>Spread the filling into a greased 9x13 pan and press it level, then scatter about half the Mexican cheese blend over it.</li>
+<li>In a bowl, whisk the grits, flour, baking powder, sugar, and salt together, then stir in the milk, melted butter, and eggs just until the batter comes together.</li>
+<li>Fold the drained corn and the rest of the cheese into the batter. Lumps are welcome here; overmixed cornbread bakes tight and dry.</li>
+<li>Spoon the batter over the filling and spread it to the edges so it seals the pan completely, then bake at 400F for 30 to 35 minutes until the top is golden and set.</li>
+<li>Rest 15 minutes, then scatter the sliced green onions over the top before portioning.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Weigh the pan, subtract the empty pan weight, and divide by 14. Cut to that number so every container gets cornbread and filling in the right ratio. Each serving comes to <strong>561 calories</strong> and 31 grams of protein.</p>
+
+<p><em>Recipe adapted from <a href="https://www.chiselandfork.com/turkey-tamale-pie/" target="_blank" rel="noopener">chiselandfork.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>Tamale flavor without the afternoon of work, about $1.86 a serving. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.</em></p>

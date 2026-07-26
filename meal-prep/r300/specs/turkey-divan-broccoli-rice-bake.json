@@ -1,0 +1,317 @@
+﻿{
+    "name":  "Turkey Divan Broccoli Rice Bake",
+    "slug":  "turkey-divan-broccoli-rice-bake",
+    "cuisine":  "american",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.melissassouthernstylekitchen.com/turkey-broccoli-rice-divan/",
+    "source_site":  "melissassouthernstylekitchen.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 8 servings, 543 cal, 34g protein. Curry-scented cream casserole; the live Ground Turkey Broccoli Cheddar Rice Skillet is a stovetop skillet with a different sauce, so this is a bake not a repeat. Cheap build: canned soup, rice, frozen-or-fresh broccoli all sit on the board. | HARVEST: ",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "OVERRIDE Turkey Breast: [BUMP x1.4] source \u00273-4 cups\u0027 (490 g) for 8; house = 700 g for protein floor",
+                         "OVERRIDE Broccoli Florets: WAVE-4: title ingredient - a divan with 21 g broccoli/serving is not a divan; 1.3 lb at src scale (~75 g/serving)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  705,
+                 "protein":  35,
+                 "carbs":  42,
+                 "fat":  43,
+                 "cost_ps":  "2.27"
+             },
+    "intro_html":  "Turkey divan is a church potluck legend, and the thing that makes it a legend is the curry powder. Just a little, stirred into a cream sauce, and suddenly the whole casserole tastes like somebody knew what they were doing. Turkey, broccoli, and rice under a buttered crumb crust, baked until the top crackles. Each serving comes to \u003cstrong\u003e705 calories and 35 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.27\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1.5 cups dry (299 g)",
+                                "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 2.75 lb (1225 g)",
+                                "\u003cstrong\u003eCream of Chicken Soup (generic condensed (USDA)):\u003c/strong\u003e 3.5 cans (1043 g)",
+                                "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 2.5 cups (595 g)",
+                                "\u003cstrong\u003eMayonnaise (Great Value):\u003c/strong\u003e 1 cups (182 g)",
+                                "\u003cstrong\u003eOlives (generic):\u003c/strong\u003e 11.75 tbsp (99 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 17.5 tbsp (105 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 14 oz (396 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 2.25 lb (1050 g)",
+                                "\u003cstrong\u003eBread Crumbs (generic):\u003c/strong\u003e 1.75 cups (189 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 3.5 tbsp (49 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Rice, 1.5 cups dry: ~$0.37. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Turkey Breast, 2.75 lb: ~$13.00. \u003cstrong\u003eBuy 1 3lb frozen roast: $14.44.\u003c/strong\u003e",
+                       "Cream of Chicken Soup, 3.5 cans: ~$2.59. \u003cstrong\u003eBuy 4 10.5oz cans: $2.96.\u003c/strong\u003e",
+                       "Heavy Cream, 2.5 cups: ~$3.69. \u003cstrong\u003eBuy 2 pints: $5.87.\u003c/strong\u003e",
+                       "Mayonnaise, 1 cups: ~$0.64. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olives, 11.75 tbsp: ~$1.09. \u003cstrong\u003eBuy 1 6oz can: $1.87.\u003c/strong\u003e",
+                       "Green Onions, 17.5 tbsp: ~$1.25. \u003cstrong\u003eBuy 2 bunches: $2.14.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 14 oz: ~$3.01. \u003cstrong\u003eBuy 2 8oz bags: $3.45.\u003c/strong\u003e",
+                       "Broccoli Florets, 2.25 lb: ~$4.91. \u003cstrong\u003eBuy 4 12oz bags: $6.36.\u003c/strong\u003e",
+                       "Bread Crumbs, 1.75 cups: ~$0.54. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Butter, 3.5 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Pantry seasonings (garlic powder, onion powder, curry powder, salt, black pepper): ~$0.38. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $31.79 across 14 servings, so roughly $2.27 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $42.00 across 14 servings, roughly $3.00 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.15 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.15. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.27\u003c/strong\u003e a container for a cream casserole with real turkey in it. Divan has been feeding families cheaply since the 1950s and it has not gotten worse at the job.",
+    "shop_smart":  [
+                       "Turkey breast is the biggest line here. A single 3 pound frozen roast covers this whole recipe, and frozen roasts run far under any fresh cut in the meat case.",
+                       "Condensed cream of chicken soup is one of the cheapest cans in the store and it is the sauce base. Building the same thing from scratch takes a roux, broth, cream, and twenty minutes for pennies in savings.",
+                       "Frozen broccoli florets cost almost nothing for this batch and go straight from bag to pan. Fresh crowns cost more per usable cup once you cut off the stalks.",
+                       "Bread crumbs and butter make the crumb topping for pennies. That crunchy top is what separates a casserole people go back for from a pan of hot cream."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice and let it cool slightly. It goes into the pan already cooked, since it will not soften properly in a thick cream sauce.",
+                    "Cut the turkey breast into bite-size pieces, season with salt and black pepper, and cook them through in a skillet to 165F, or use turkey you already roasted.",
+                    "Whisk the cream of chicken soup, heavy cream, mayonnaise, curry powder, garlic powder, onion powder, and black pepper together into a smooth sauce.",
+                    "Steam or thaw the broccoli florets just until bright green and still firm. Overcooked broccoli in a casserole goes gray and sulfurous, and there is no coming back from that.",
+                    "Fold the rice, turkey, broccoli, sliced olives, most of the green onions, and about two thirds of the cheddar into the sauce, then spread it in your baking pans.",
+                    "Toss the bread crumbs with the melted butter and the rest of the cheddar, and scatter that over the top.",
+                    "Bake at 350F for 30 minutes until the edges bubble and the crumbs turn deep golden, then rest 10 minutes before you touch it."
+                ],
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is your per-container gram target. Cut down through the crumb topping so each container gets its share of the crunchy part, then finish with the remaining green onions. Each serving lands at \u003cstrong\u003e705 calories and 35 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.melissassouthernstylekitchen.com/turkey-broccoli-rice-divan/\" target=\"_blank\" rel=\"noopener\"\u003emelissassouthernstylekitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A classic cream casserole for about \u003cstrong\u003e$2.27\u003c/strong\u003e a container. This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  31.79,
+    "cost_batch_true":  42,
+    "cost_per_serving":  2.27,
+    "cost_per_serving_true":  3,
+    "cost_pantry_add":  13.15,
+    "cost_first_run":  55.15,
+    "scaler":  {
+                   "cost":  "42.00",
+                   "ing":  [
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  299,
+                                   "buy":  "1.5 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Turkey Breast",
+                                   "canon":  "Turkey Breast",
+                                   "grams":  1225,
+                                   "buy":  "2.75 lb",
+                                   "bid":  "turkey-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cream of Chicken Soup",
+                                   "canon":  "Cream of Chicken Soup",
+                                   "grams":  1043,
+                                   "buy":  "3.5 cans",
+                                   "bid":  "cream-of-chicken-soup",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Heavy Cream",
+                                   "canon":  "Heavy Cream",
+                                   "grams":  595,
+                                   "buy":  "2.5 cups",
+                                   "bid":  "heavy-cream",
+                                   "gpu":  "29.800"
+                               },
+                               {
+                                   "item":  "Mayonnaise",
+                                   "canon":  "Mayonnaise",
+                                   "grams":  182,
+                                   "buy":  "1 cups",
+                                   "bid":  "mayonnaise",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olives",
+                                   "canon":  "Olives",
+                                   "grams":  99,
+                                   "buy":  "11.75 tbsp",
+                                   "bid":  "green-olives",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  105,
+                                   "buy":  "17.5 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  5,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Onion Powder",
+                                   "canon":  "Onion Powder",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "onion-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Curry Powder",
+                                   "canon":  "Curry Powder",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "curry-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "canon":  "Cheddar Cheese, Shredded",
+                                   "grams":  396,
+                                   "buy":  "14 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "canon":  "Broccoli Florets",
+                                   "grams":  1050,
+                                   "buy":  "2.25 lb",
+                                   "bid":  "broccoli",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Bread Crumbs",
+                                   "canon":  "Bread Crumbs",
+                                   "grams":  189,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "bread-crumbs",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  49,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey divan broccoli rice bake: curry scented cream casserole with turkey, broccoli, cheddar, and a buttered crumb top. 705 calories, 35g protein, about $2.27.",
+                 "keywords":  "turkey divan, broccoli rice casserole, cream of chicken bake, turkey meal prep, budget meal prep, potluck casserole",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT40M",
+                 "totalTime":  "PT1H",
+                 "costPerServing":  2.27,
+                 "recipeIngredient":  [
+                                          "Turkey breast, cut into pieces",
+                                          "1.5 cups dry rice",
+                                          "2.25 lb condensed cream of chicken soup",
+                                          "2.5 cups heavy cream",
+                                          "1 cup mayonnaise",
+                                          "14 oz shredded cheddar cheese",
+                                          "3.5 cups broccoli florets",
+                                          "11.75 tbsp olives",
+                                          "17.5 tbsp green onions",
+                                          "1.75 cups bread crumbs",
+                                          "3.5 tbsp butter"
+                                      ],
+                 "steps":  [
+                               "Cook the rice and cook the cubed turkey breast through to 165F.",
+                               "Whisk cream of chicken soup, heavy cream, mayonnaise, curry powder, garlic powder, and onion powder into a sauce.",
+                               "Steam the broccoli just until bright green.",
+                               "Fold rice, turkey, broccoli, olives, green onions, and most of the cheddar into the sauce and spread in pans.",
+                               "Top with bread crumbs tossed in melted butter and the rest of the cheddar, then bake at 350F for 30 minutes.",
+                               "Rest 10 minutes and portion by weight into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Rice",
+                                  "grams":  299
+                              },
+                              {
+                                  "item":  "Turkey Breast",
+                                  "grams":  1225
+                              },
+                              {
+                                  "item":  "Cream of Chicken Soup",
+                                  "grams":  1043
+                              },
+                              {
+                                  "item":  "Heavy Cream",
+                                  "grams":  595
+                              },
+                              {
+                                  "item":  "Mayonnaise",
+                                  "grams":  182
+                              },
+                              {
+                                  "item":  "Olives",
+                                  "grams":  99
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  105
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Onion Powder",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Curry Powder",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Cheddar Cheese, Shredded",
+                                  "grams":  396
+                              },
+                              {
+                                  "item":  "Broccoli Florets",
+                                  "grams":  1050
+                              },
+                              {
+                                  "item":  "Bread Crumbs",
+                                  "grams":  189
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  49
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

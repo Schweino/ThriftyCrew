@@ -1,0 +1,363 @@
+﻿{
+    "name":  "South African Bobotie (Curried Beef Custard Bake)",
+    "slug":  "south-african-bobotie-beef-bake",
+    "cuisine":  "South African",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.curiouscuisiniere.com/bobotie/",
+    "source_site":  "curiouscuisiniere.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Sandwich Bread)",
+                   "portion factor 1.4"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Explicit hunting-ground target. A single baked casserole with an egg custard top, ideal at 14 servings. Source verifies 293 cal for the bake alone at 6 servings; served over the traditional turmeric rice it lands near 560 cal with roughly 30g protein. Chutney is the only off-board item and swaps cleanly. | HARVEST: Yield published as 4-6 servings; midpoint 5 recorded. The 293 cal figure is stated on a 6-serving basis. Protein not published. Source splits into beef mixture (first 13 lines) and custard topping (last 7).",
+                         "SOURCE YIELD: 5 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Sandwich Bread)",
+                         "TUNING: portion factor 1.4",
+                         "OVERRIDE Golden Raisins: source states \u00271/4 c (50g) raisins\u0027; the bare \u00271/4\u0027 was unparseable"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  564,
+                 "protein":  44,
+                 "carbs":  45,
+                 "fat":  24,
+                 "cost_ps":  "3.58"
+             },
+    "intro_html":  "Bobotie is South Africa\u0027s national dish and it is stranger and better than it sounds. Curried ground beef gets sweetened with raisins and honey, sharpened with vinegar, bound with milk-soaked bread, and then a savory egg custard is poured over the top and baked until it sets like a golden lid. Sweet, sour, spiced, and creamy all at once. It has been made in the Cape for centuries, and it happens to be perfectly suited to a big dish and fourteen containers.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 7.75 tbsp (110 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 8 (862 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 14 tbsp (118 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 1.25 tbsp (8 g)",
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5.25 lb (2352 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 0.5 cups (165 g)",
+                                "\u003cstrong\u003eGolden Raisins (generic):\u003c/strong\u003e 1.25 cups (196 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 4 cups (941 g)",
+                                "\u003cstrong\u003eWhite Vinegar (generic):\u003c/strong\u003e 4 tbsp (59 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 4 tbsp (67 g)",
+                                "\u003cstrong\u003eSandwich Bread (generic white (USDA)):\u003c/strong\u003e 13 oz (366 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 4 large eggs (196 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 2 cups (490 g)",
+                                "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 7.75 tbsp (118 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Butter, 7.75 tbsp: ~$0.72. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Yellow Onion, 8: ~$2.17. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Garlic, 14 tbsp: ~$1.70. \u003cstrong\u003eBuy 3 heads: $1.73.\u003c/strong\u003e",
+                       "Ginger, 1.25 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "93/7 Ground Beef, 5.25 lb: ~$34.39. \u003cstrong\u003eBuy 6 lbs: $39.80.\u003c/strong\u003e",
+                       "Honey, 0.5 cups: ~$3.14. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Golden Raisins, 1.25 cups: ~$1.65. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Beef Broth, 4 cups: ~$1.26. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "White Vinegar, 4 tbsp: ~$0.11. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Worcestershire Sauce, 4 tbsp: ~$0.23. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sandwich Bread, 13 oz: ~$0.96. \u003cstrong\u003eBuy 1 20oz loaf: $1.48.\u003c/strong\u003e",
+                       "Eggs, 4 large eggs: ~$0.47. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
+                       "Milk, 2 cups: ~$0.39. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
+                       "Heavy Cream, 7.75 tbsp: ~$0.73. \u003cstrong\u003eBuy 1 pint: $2.94.\u003c/strong\u003e",
+                       "Pantry seasonings (curry powder, ground turmeric, black pepper, bay leaves, salt): ~$2.12. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $50.11 across 14 servings, so roughly $3.58 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $65.05 across 14 servings, roughly $4.65 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.15 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $82.20. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.58 a bowl\u003c/strong\u003e for a South African classic that most people in this country have never gotten to try.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eThe ground beef is the line that matters.\u003c/strong\u003e Everything else in this bake is bread, milk, eggs, and pantry spices. Buy beef on markdown and freeze it, because that is where the savings are.",
+                       "\u003cstrong\u003eStale bread is the correct bread.\u003c/strong\u003e Bobotie traditionally uses bread that has gone dry, so the heels and end slices you were about to throw out are exactly right.",
+                       "\u003cstrong\u003eCurry powder and turmeric are cheap and they are the dish.\u003c/strong\u003e A couple of jars season this bake many times over, so the spice cost per bowl rounds to nothing.",
+                       "\u003cstrong\u003eRaisins and honey are what make it bobotie.\u003c/strong\u003e Skip them and you have a curried meatloaf. They are the sweet counterweight the whole thing balances on."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Tear the sandwich bread into pieces and soak it in most of the milk until it goes soft, then squeeze it out and set the milk aside.",
+                    "Melt the butter in a large pot and cook the diced yellow onions until deeply softened and golden.",
+                    "Add the garlic, ginger, curry powder, ground turmeric, and black pepper and cook for a minute so the spices bloom in the fat.",
+                    "Add the ground beef, break it up, and cook until browned with no pink remaining.",
+                    "Stir in the honey, golden raisins, white vinegar, worcestershire sauce, beef broth, the soaked bread, and salt, then simmer until the mixture is thick and no longer soupy.",
+                    "Spread the beef into a large greased baking dish, press it flat, and tuck the bay leaves into the surface.",
+                    "Whisk the eggs with the reserved milk and the heavy cream, pour that custard over the beef, and bake at 350 degrees until the top is set and golden."
+                ],
+    "portion_html":  "Weigh the whole dish, subtract the empty dish weight, and divide by 14. Cut to that weight so every container gets its share of the custard top and not just the meat underneath. Every serving comes in at \u003cstrong\u003e564 calories with 44 grams of protein\u003c/strong\u003e. Let it rest at least twenty minutes so the custard finishes setting before you cut it.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.curiouscuisiniere.com/bobotie/\" target=\"_blank\" rel=\"noopener\"\u003ecuriouscuisiniere.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Globe-spanning dinners for about $3.58 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  50.11,
+    "cost_batch_true":  65.05,
+    "cost_per_serving":  3.58,
+    "cost_per_serving_true":  4.65,
+    "cost_pantry_add":  17.15,
+    "cost_first_run":  82.2,
+    "scaler":  {
+                   "cost":  "65.05",
+                   "ing":  [
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  110,
+                                   "buy":  "7.75 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  862,
+                                   "buy":  "8",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  118,
+                                   "buy":  "14 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  8,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Curry Powder",
+                                   "canon":  "Curry Powder",
+                                   "grams":  8,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "curry-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "canon":  "93/7 Ground Beef",
+                                   "grams":  2352,
+                                   "buy":  "5.25 lb",
+                                   "bid":  "ground-beef-8020",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "canon":  "Honey",
+                                   "grams":  165,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Golden Raisins",
+                                   "canon":  "Golden Raisins",
+                                   "grams":  196,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "raisins",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  941,
+                                   "buy":  "4 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "White Vinegar",
+                                   "canon":  "White Vinegar",
+                                   "grams":  59,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "white-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "canon":  "Worcestershire Sauce",
+                                   "grams":  67,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "worcestershire",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sandwich Bread",
+                                   "canon":  "Sandwich Bread",
+                                   "grams":  366,
+                                   "buy":  "13 oz",
+                                   "bid":  "bread",
+                                   "gpu":  "567.000"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  196,
+                                   "buy":  "4 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  490,
+                                   "buy":  "2 cups",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "Heavy Cream",
+                                   "canon":  "Heavy Cream",
+                                   "grams":  118,
+                                   "buy":  "7.75 tbsp",
+                                   "bid":  "heavy-cream",
+                                   "gpu":  "29.800"
+                               },
+                               {
+                                   "item":  "Ground Turmeric",
+                                   "canon":  "Ground Turmeric",
+                                   "grams":  3,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "ground-turmeric",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  16,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  7,
+                                   "buy":  "0.25 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  28,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "South African bobotie rebuilt for 14-serving meal prep: curried ground beef with raisins under a baked egg custard top. 564 calories, 44g protein, about $3.58 per serving.",
+                 "keywords":  "bobotie, south african beef bake, curried ground beef casserole, egg custard bake, global meal prep, high protein casserole",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT55M",
+                 "totalTime":  "PT80M",
+                 "costPerServing":  3.58,
+                 "recipeIngredient":  [
+                                          "5.25 lb 93/7 ground beef",
+                                          "13 oz sandwich bread",
+                                          "2 cups milk",
+                                          "4 large eggs",
+                                          "7.75 tbsp heavy cream",
+                                          "8 yellow onions",
+                                          "1.25 cups golden raisins",
+                                          "0.5 cups honey",
+                                          "2 lb beef broth",
+                                          "4 tbsp white vinegar",
+                                          "4 tbsp worcestershire sauce",
+                                          "14 tbsp garlic",
+                                          "7.75 tbsp butter"
+                                      ],
+                 "steps":  [
+                               "Soak torn bread in most of the milk, then squeeze it out and reserve the milk.",
+                               "Cook onions in butter until golden, then bloom the curry powder and turmeric.",
+                               "Brown the ground beef until no pink remains.",
+                               "Stir in honey, raisins, vinegar, worcestershire, broth, and the soaked bread and simmer thick.",
+                               "Spread into a baking dish and tuck in the bay leaves.",
+                               "Pour over an egg, milk, and cream custard, bake at 350F until set, then portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Butter",
+                                  "grams":  110
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  862
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  118
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Curry Powder",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "93/7 Ground Beef",
+                                  "grams":  2352
+                              },
+                              {
+                                  "item":  "Honey",
+                                  "grams":  165
+                              },
+                              {
+                                  "item":  "Golden Raisins",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  941
+                              },
+                              {
+                                  "item":  "White Vinegar",
+                                  "grams":  59
+                              },
+                              {
+                                  "item":  "Worcestershire Sauce",
+                                  "grams":  67
+                              },
+                              {
+                                  "item":  "Sandwich Bread",
+                                  "grams":  366
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  490
+                              },
+                              {
+                                  "item":  "Heavy Cream",
+                                  "grams":  118
+                              },
+                              {
+                                  "item":  "Ground Turmeric",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  16
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  28
+                              }
+                          ]
+}

@@ -1,0 +1,409 @@
+﻿{
+    "readme":  "Proposed ingredient-map.json additions for R300 (r100-board-map.json format: item -\u003e bid/unit/gpu, plus board and status fields for the publish stage). status=existing means the bid is live on the board today; status=needs-registration means the bid is proposed in decisions.json and MUST be registered (and pass the match-soundness gate) before this map row goes live - do not merge a needs-registration row into ingredient-map.json until its commodity exists. board field: none of these ids appear in grocery/recipe-commodities.json, so all rows are board=weekly per the membership rule. gpu unit basis is stated in decisions.json for every non-mechanical value (each-unit rows calibrated against live board prices 2026-07-25: kale $1.48/bunch, bread $0.75/loaf, tortillas $0.106/tortilla - per-piece, not per-pack). Covers (a) the 47 board-relevant NEW items (Swiss Cheese, Capers, Jerk Seasoning are already in ingredient-map.json - no extension needed) and (b) the 15 existing-DB items used by r300 that were missing from ingredient-map.json (11 mapped + 4 adjudicated null). Authored 2026-07-25.",
+    "map":  {
+                "Pork Shoulder":  {
+                                      "bid":  "pork-shoulder",
+                                      "unit":  "lb",
+                                      "gpu":  453.592,
+                                      "board":  "weekly",
+                                      "status":  "existing"
+                                  },
+                "Kale":  {
+                             "bid":  "kale",
+                             "unit":  "each",
+                             "gpu":  250,
+                             "board":  "weekly",
+                             "status":  "existing"
+                         },
+                "Cream of Chicken Soup":  {
+                                              "bid":  "cream-of-chicken-soup",
+                                              "unit":  "oz",
+                                              "gpu":  28.3495,
+                                              "board":  "weekly",
+                                              "status":  "existing"
+                                          },
+                "Cream of Mushroom Soup":  {
+                                               "bid":  "cream-of-mushroom-soup",
+                                               "unit":  "oz",
+                                               "gpu":  28.3495,
+                                               "board":  "weekly",
+                                               "status":  "existing"
+                                           },
+                "Sauerkraut":  {
+                                   "bid":  "sauerkraut",
+                                   "unit":  "oz",
+                                   "gpu":  28.3495,
+                                   "board":  "weekly",
+                                   "status":  "existing"
+                               },
+                "Apple Juice":  {
+                                    "bid":  "apple-juice",
+                                    "unit":  "floz",
+                                    "gpu":  29.57,
+                                    "board":  "weekly",
+                                    "status":  "existing"
+                                },
+                "Sandwich Bread":  {
+                                       "bid":  "bread",
+                                       "unit":  "each",
+                                       "gpu":  567,
+                                       "board":  "weekly",
+                                       "status":  "existing"
+                                   },
+                "Baking Soda":  {
+                                    "bid":  "baking-soda",
+                                    "unit":  "oz",
+                                    "gpu":  28.3495,
+                                    "board":  "weekly",
+                                    "status":  "existing"
+                                },
+                "Almonds":  {
+                                "bid":  "almonds",
+                                "unit":  "oz",
+                                "gpu":  28.3495,
+                                "board":  "weekly",
+                                "status":  "existing"
+                            },
+                "Baking Powder":  {
+                                      "bid":  "baking-powder",
+                                      "unit":  "oz",
+                                      "gpu":  28.3495,
+                                      "board":  "weekly",
+                                      "status":  "existing"
+                                  },
+                "Bratwurst":  {
+                                  "bid":  "bratwurst",
+                                  "unit":  "lb",
+                                  "gpu":  453.592,
+                                  "board":  "weekly",
+                                  "status":  "existing"
+                              },
+                "Cocoa Powder":  {
+                                     "bid":  "cocoa-powder",
+                                     "unit":  "oz",
+                                     "gpu":  28.3495,
+                                     "board":  "weekly",
+                                     "status":  "existing"
+                                 },
+                "Stuffing Mix":  {
+                                     "bid":  "stuffing-mix",
+                                     "unit":  "oz",
+                                     "gpu":  28.3495,
+                                     "board":  "weekly",
+                                     "status":  "existing"
+                                 },
+                "Brussels Sprouts":  {
+                                         "bid":  "brussels-sprouts",
+                                         "unit":  "lb",
+                                         "gpu":  453.592,
+                                         "board":  "weekly",
+                                         "status":  "existing"
+                                     },
+                "Basil Pesto":  {
+                                    "bid":  "pesto",
+                                    "unit":  "oz",
+                                    "gpu":  28.3495,
+                                    "board":  "weekly",
+                                    "status":  "existing"
+                                },
+                "Artichoke Hearts":  {
+                                         "bid":  "artichoke-hearts",
+                                         "unit":  "oz",
+                                         "gpu":  28.3495,
+                                         "board":  "weekly",
+                                         "status":  "existing"
+                                     },
+                "Onion Soup Mix":  {
+                                       "bid":  "onion-soup-mix",
+                                       "unit":  "oz",
+                                       "gpu":  28.3495,
+                                       "board":  "weekly",
+                                       "status":  "existing"
+                                   },
+                "Baked Beans":  {
+                                    "bid":  "baked-beans",
+                                    "unit":  "oz",
+                                    "gpu":  28.3495,
+                                    "board":  "weekly",
+                                    "status":  "existing"
+                                },
+                "Blackberries":  {
+                                     "bid":  "blackberries",
+                                     "unit":  "oz",
+                                     "gpu":  28.3495,
+                                     "board":  "weekly",
+                                     "status":  "existing"
+                                 },
+                "Pumpkin Puree":  {
+                                      "bid":  "canned-pumpkin",
+                                      "unit":  "oz",
+                                      "gpu":  28.3495,
+                                      "board":  "weekly",
+                                      "status":  "existing"
+                                  },
+                "Gingersnap Cookies":  {
+                                           "bid":  "cookies",
+                                           "unit":  "oz",
+                                           "gpu":  28.3495,
+                                           "board":  "weekly",
+                                           "status":  "existing"
+                                       },
+                "Tater Tots":  {
+                                   "bid":  "tater-tots",
+                                   "unit":  "oz",
+                                   "gpu":  28.3495,
+                                   "board":  "weekly",
+                                   "status":  "existing"
+                               },
+                "Turkey Breast":  {
+                                      "bid":  "turkey-breast",
+                                      "unit":  "lb",
+                                      "gpu":  453.592,
+                                      "board":  "weekly",
+                                      "status":  "needs-registration"
+                                  },
+                "Dried Arbol Chiles":  {
+                                           "bid":  "dried-arbol-chiles",
+                                           "unit":  "oz",
+                                           "gpu":  28.3495,
+                                           "board":  "weekly",
+                                           "status":  "needs-registration"
+                                       },
+                "Dried Guajillo Chiles":  {
+                                              "bid":  "dried-guajillo-chiles",
+                                              "unit":  "oz",
+                                              "gpu":  28.3495,
+                                              "board":  "weekly",
+                                              "status":  "needs-registration"
+                                          },
+                "Dried Ancho Chiles":  {
+                                           "bid":  "dried-ancho-chiles",
+                                           "unit":  "oz",
+                                           "gpu":  28.3495,
+                                           "board":  "weekly",
+                                           "status":  "needs-registration"
+                                       },
+                "Diced Ham":  {
+                                  "bid":  "diced-ham",
+                                  "unit":  "oz",
+                                  "gpu":  28.3495,
+                                  "board":  "weekly",
+                                  "status":  "needs-registration"
+                              },
+                "Sazon Seasoning":  {
+                                        "bid":  "sazon-seasoning",
+                                        "unit":  "oz",
+                                        "gpu":  28.3495,
+                                        "board":  "weekly",
+                                        "status":  "needs-registration"
+                                    },
+                "Eggplant":  {
+                                 "bid":  "eggplant",
+                                 "unit":  "each",
+                                 "gpu":  548,
+                                 "board":  "weekly",
+                                 "status":  "needs-registration"
+                             },
+                "Brown Gravy Mix":  {
+                                        "bid":  "brown-gravy-mix",
+                                        "unit":  "oz",
+                                        "gpu":  28.3495,
+                                        "board":  "weekly",
+                                        "status":  "needs-registration"
+                                    },
+                "Chicken Livers":  {
+                                       "bid":  "chicken-livers",
+                                       "unit":  "lb",
+                                       "gpu":  453.592,
+                                       "board":  "weekly",
+                                       "status":  "needs-registration"
+                                   },
+                "Sweet Soy Sauce":  {
+                                        "bid":  "sweet-soy-sauce",
+                                        "unit":  "floz",
+                                        "gpu":  38,
+                                        "board":  "weekly",
+                                        "status":  "needs-registration"
+                                    },
+                "Caraway Seeds":  {
+                                      "bid":  "caraway-seeds",
+                                      "unit":  "oz",
+                                      "gpu":  28.3495,
+                                      "board":  "weekly",
+                                      "status":  "needs-registration"
+                                  },
+                "Poultry Seasoning":  {
+                                          "bid":  "poultry-seasoning",
+                                          "unit":  "oz",
+                                          "gpu":  28.3495,
+                                          "board":  "weekly",
+                                          "status":  "needs-registration"
+                                      },
+                "Wild Rice":  {
+                                  "bid":  "wild-rice",
+                                  "unit":  "oz",
+                                  "gpu":  28.3495,
+                                  "board":  "weekly",
+                                  "status":  "needs-registration"
+                              },
+                "Doubanjiang":  {
+                                    "bid":  "doubanjiang",
+                                    "unit":  "oz",
+                                    "gpu":  28.3495,
+                                    "board":  "weekly",
+                                    "status":  "needs-registration"
+                                },
+                "Ground Fennel":  {
+                                      "bid":  "ground-fennel",
+                                      "unit":  "oz",
+                                      "gpu":  28.3495,
+                                      "board":  "weekly",
+                                      "status":  "needs-registration"
+                                  },
+                "Snow Peas":  {
+                                  "bid":  "snow-peas",
+                                  "unit":  "oz",
+                                  "gpu":  28.3495,
+                                  "board":  "weekly",
+                                  "status":  "needs-registration"
+                              },
+                "Horseradish Sauce":  {
+                                          "bid":  "horseradish-sauce",
+                                          "unit":  "oz",
+                                          "gpu":  28.3495,
+                                          "board":  "weekly",
+                                          "status":  "needs-registration"
+                                      },
+                "Corned Beef Brisket":  {
+                                            "bid":  "corned-beef-brisket",
+                                            "unit":  "lb",
+                                            "gpu":  453.592,
+                                            "board":  "weekly",
+                                            "status":  "needs-registration"
+                                        },
+                "Pigeon Peas":  {
+                                    "bid":  "pigeon-peas",
+                                    "unit":  "oz",
+                                    "gpu":  28.3495,
+                                    "board":  "weekly",
+                                    "status":  "needs-registration"
+                                },
+                "Aji Amarillo Paste":  {
+                                           "bid":  "aji-amarillo-paste",
+                                           "unit":  "oz",
+                                           "gpu":  28.3495,
+                                           "board":  "weekly",
+                                           "status":  "needs-registration"
+                                       },
+                "Rye Bread":  {
+                                  "bid":  "rye-bread",
+                                  "unit":  "oz",
+                                  "gpu":  28.3495,
+                                  "board":  "weekly",
+                                  "status":  "needs-registration",
+                                  "unit_note":  "flipped each-\u003eoz 2026-07-25 with commodity unit (31 oz-sized loaves exist across stores; each blocked every row); gpu recalibrated to oz basis per r100 unit-reconciliation rule"
+                              },
+                "Achiote Paste":  {
+                                      "bid":  "achiote-paste",
+                                      "unit":  "oz",
+                                      "gpu":  28.3495,
+                                      "board":  "weekly",
+                                      "status":  "existing"
+                                  },
+                "Alfredo Sauce":  {
+                                      "bid":  "alfredo-sauce",
+                                      "unit":  "oz",
+                                      "gpu":  28.3495,
+                                      "board":  "weekly",
+                                      "status":  "existing"
+                                  },
+                "Beef Flank/Sirloin Steak":  {
+                                                 "bid":  "sirloin-steak",
+                                                 "unit":  "lb",
+                                                 "gpu":  453.592,
+                                                 "board":  "weekly",
+                                                 "status":  "existing"
+                                             },
+                "Corn Chips":  {
+                                   "bid":  "potato-chips",
+                                   "unit":  "oz",
+                                   "gpu":  28.3495,
+                                   "board":  "weekly",
+                                   "status":  "existing"
+                               },
+                "Corn Muffin Mix":  {
+                                        "bid":  "corn-muffin-mix",
+                                        "unit":  "oz",
+                                        "gpu":  28.3495,
+                                        "board":  "weekly",
+                                        "status":  "existing"
+                                    },
+                "Diced Tomatoes \u0026 Green Chilies":  {
+                                                            "bid":  "tomatoes-green-chilies",
+                                                            "unit":  "oz",
+                                                            "gpu":  28.3495,
+                                                            "board":  "weekly",
+                                                            "status":  "existing"
+                                                        },
+                "Mayonnaise":  {
+                                   "bid":  "mayonnaise",
+                                   "unit":  "oz",
+                                   "gpu":  28.3495,
+                                   "board":  "weekly",
+                                   "status":  "existing"
+                               },
+                "Potato Gnocchi":  {
+                                       "bid":  "potato-gnocchi",
+                                       "unit":  "oz",
+                                       "gpu":  28.3495,
+                                       "board":  "weekly",
+                                       "status":  "existing"
+                                   },
+                "Ricotta Cheese":  {
+                                       "bid":  "cottage-cheese",
+                                       "unit":  "oz",
+                                       "gpu":  28.3495,
+                                       "board":  "weekly",
+                                       "status":  "existing"
+                                   },
+                "Smoked Turkey Sausage":  {
+                                              "bid":  "kielbasa",
+                                              "unit":  "lb",
+                                              "gpu":  453.592,
+                                              "board":  "weekly",
+                                              "status":  "existing"
+                                          },
+                "Tortilla":  {
+                                 "bid":  "tortillas",
+                                 "unit":  "each",
+                                 "gpu":  45,
+                                 "board":  "weekly",
+                                 "status":  "existing"
+                             }
+            },
+    "map_notes":  {
+                      "Corn Chips":  "r100 widget-map precedent (Corn Chips -\u003e potato-chips): same-class salty-bag fold at the same price class. The corn-chips -\u003e tortilla-chips rejection stands; this is a different, already-verified fold.",
+                      "Ricotta Cheese":  "Follows the verified r100 widget-map precedent (Ricotta -\u003e cottage-cheese, same price class ~$0.12-0.16/oz). Concept stretch flagged for the match-soundness gate - happy to null it if the gate disagrees.",
+                      "Gingersnap Cookies":  "cookies commodity = packaged cookies at the same price class (Butter Crackers -\u003e crackers precedent).",
+                      "Tortilla":  "Board \u0027tortillas\u0027 price is PER TORTILLA ($0.106 each), gpu 45 g = one 8-inch flour tortilla. This is the r100 16x-lesson case done right.",
+                      "Sandwich Bread":  "bread each = one loaf; gpu 567 g = 20 oz cheapest-mainline white loaf class.",
+                      "Kale":  "kale each = one bunch; gpu 250 g is a bounded estimate (200-300 g range) - flagged in decisions.json.",
+                      "Sweet Soy Sauce":  "gpu 38 g/floz = 29.57 x 1.3 density (kecap manis is a syrup, NOT water-like).",
+                      "Apple Juice":  "water-like convention 29.57 (true 30.8); matches Apple Cider/Pineapple Juice precedent in ingredient-map (Orange Juice\u0027s 31 is the outlier)."
+                  },
+    "null_items":  {
+                       "PROTEIN-SWAP-LAMB":  "Sentinel, resolve per-recipe before publish (Xinjiang Cumin Turkey Stir-Fry; Lebanese Baked Kafta).",
+                       "Sumac":  "Specialty spice, no mainline Omaha coverage; pantry-static (DB entry exists).",
+                       "Korean Rice Cakes":  "rice-cakes board row is puffed snack cakes - concept mismatch; tteok not mainline; pantry-static (DB entry exists).",
+                       "Bulgur Wheat":  "Semi-specialty grain, 1 use, uneven stocking; pantry-static (DB entry exists).",
+                       "Cherry Tomatoes":  "Standing rejection binds: cherry tomatoes are not tomatoes (variety pricing). Not mapped despite the r100 widget-map having mapped it - the rejection postdates and supersedes.",
+                       "Red Onion":  "Standing rejection binds: red onion is not onions (variety pricing). Same r100-widget-map supersession as Cherry Tomatoes.",
+                       "Keto Bun":  "hamburger-buns row is 2-3x cheaper price class than specialty low-carb buns; fold would misprice. Pantry-static.",
+                       "Pasta Shells - jumbo":  "Jumbo shells run ~2x the commodity dry-pasta price class (same reason lasagna-noodles has its own row). No row exists; pantry-static. Could register jumbo-pasta-shells if Brad wants it tracked."
+                   },
+    "already_mapped_new_items":  {
+                                     "Swiss Cheese":  "ingredient-map.json already has swiss-cheese (oz, 28.3495) - only the food-DB entry was missing (now in db-entries.json).",
+                                     "Capers":  "ingredient-map.json already has capers (floz, 29.57) - only the food-DB entry was missing.",
+                                     "Jerk Seasoning":  "ingredient-map.json already has jerk-seasoning (oz, 28.3495) - only the food-DB entry was missing."
+                                 }
+}

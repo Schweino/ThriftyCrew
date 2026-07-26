@@ -1,0 +1,455 @@
+{
+  "readme": "R300 mapper decision table for the 50 NEW canonical items. board_decision.type: existing = live board commodity id (evidence-gated); register = needs-registration on the Omaha board (proposed id/unit; relax_global flags the GLOBAL_EXCLUDE \\bmix\\b-class trap); null = intentionally not price-tracked (pantry-static), reason given. db_path.type: usda = transcribed from USDA FoodData Central via the FDC portal search API (SR Legacy generic or Branded label data; fdc_id recorded); browser-capture = no trustworthy fetchable label, emit to capture-worklist.json. gpu = grams per board pricing unit, unit_basis states the unit it was calibrated to (r100 16x lesson). Authored 2026-07-25 by the recipe-ingredient-mapper (Fable). Board membership check: none of the new/proposed ids are in grocery/recipe-commodities.json, so every new map entry gets board=weekly.",
+  "decisions": [
+    {
+      "item": "Pork Shoulder",
+      "uses": 28,
+      "board_decision": { "type": "existing", "id": "pork-shoulder", "unit": "lb", "relax_global": false, "reason": "Board row 'Pork Shoulder / Butt' is the exact concept; live at $1.88/lb, n=7 stores." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Pork, fresh, shoulder, (Boston butt), blade (steaks), separable lean and fat, raw", "fdc_id": 167849 },
+      "gpu": { "value": 453.592, "unit_basis": "lb" },
+      "confidence": "high",
+      "notes": "Raw basis. r300 policy shadow of the r100 shoulder->loin fold is honored: shoulder is its own item and its own board row."
+    },
+    {
+      "item": "Turkey Breast",
+      "uses": 19,
+      "board_decision": { "type": "register", "id": "turkey-breast", "unit": "lb", "relax_global": false, "reason": "No board row. turkey-lunchmeat is deli sliced (different concept and price class) - rejected. Propose raw turkey breast (bone-in or boneless); exclude deli/ground/lunchmeat/jerky in match rules." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Turkey, whole, breast, meat only, raw", "fdc_id": 171098 },
+      "gpu": { "value": 453.592, "unit_basis": "lb" },
+      "confidence": "high",
+      "notes": "Whole-muscle and leftover-turkey dishes."
+    },
+    {
+      "item": "Dried Arbol Chiles",
+      "uses": 12,
+      "board_decision": { "type": "register", "id": "dried-arbol-chiles", "unit": "oz", "relax_global": false, "reason": "No board row; real mainline product (El Guapo/Badia cello bags, Hispanic aisle at Walmart/Baker's/Family Fare)." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Peppers, hot chile, sun-dried (generic dried red chile; covers arbol class)", "fdc_id": 168570 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "high",
+      "notes": "USDA energy 324/100g uses specific factors; Atwater-general overshoots because fiber is 28.7 g/100g - expected, not an error."
+    },
+    {
+      "item": "Kale",
+      "uses": 10,
+      "board_decision": { "type": "existing", "id": "kale", "unit": "each", "relax_global": false, "reason": "Board row 'Kale' live at $1.48 each (Walmart, n=4). Unit each = one bunch." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Kale, raw", "fdc_id": 168421 },
+      "gpu": { "value": 250, "unit_basis": "each = 1 bunch, estimated 250 g" },
+      "confidence": "medium",
+      "notes": "GPU flag: grocery kale bunches run roughly 200-300 g and USDA has no bunch portion; 250 g is a bounded estimate (not a 16x-class risk, worst case ~1.5x on a cheap item). Verify bunch weight at next store capture if kale recipes look mispriced."
+    },
+    {
+      "item": "Dried Guajillo Chiles",
+      "uses": 10,
+      "board_decision": { "type": "register", "id": "dried-guajillo-chiles", "unit": "oz", "relax_global": false, "reason": "No board row; real mainline product (El Guapo/Badia bags)." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Peppers, hot chile, sun-dried (generic dried red chile; guajillo has no dedicated USDA entry)", "fdc_id": 168570 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "high",
+      "notes": "Shares the USDA generic dried-chile entry with arbol; ancho got its dedicated USDA entry. Same-tier composition, disclosed here rather than invented per-variety."
+    },
+    {
+      "item": "Cream of Chicken Soup",
+      "uses": 7,
+      "board_decision": { "type": "existing", "id": "cream-of-chicken-soup", "unit": "oz", "relax_global": false, "reason": "Dedicated board row live at $0.0667/oz (n=6)." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Soup, cream of chicken, canned, condensed", "fdc_id": 171146 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "high",
+      "notes": "CONDENSED, undiluted basis - recipe math must use can weight (10.5 oz = 298 g), not prepared soup. Atwater exact (90.1 vs 90)."
+    },
+    {
+      "item": "Dried Ancho Chiles",
+      "uses": 7,
+      "board_decision": { "type": "register", "id": "dried-ancho-chiles", "unit": "oz", "relax_global": false, "reason": "No board row; real mainline product (El Guapo/Badia bags)." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Peppers, ancho, dried", "fdc_id": 169396 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "high",
+      "notes": "Dedicated USDA ancho entry. Atwater-general overshoot explained by 21.6 g fiber."
+    },
+    {
+      "item": "Cream of Mushroom Soup",
+      "uses": 6,
+      "board_decision": { "type": "existing", "id": "cream-of-mushroom-soup", "unit": "oz", "relax_global": false, "reason": "Dedicated board row live at $0.0667/oz (n=6). Fixes the r100 latent bug that sent these cans to White Mushrooms." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: CAMPBELL'S, Cream of Mushroom Soup, condensed", "fdc_id": 172901 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "high",
+      "notes": "CONDENSED, undiluted basis. Atwater exact (81 vs 81)."
+    },
+    {
+      "item": "Diced Ham",
+      "uses": 6,
+      "board_decision": { "type": "register", "id": "diced-ham", "unit": "oz", "relax_global": false, "reason": "deli-ham row is sliced deli meat - different product form; rejected. Diced/cubed packaged ham (John Morrell / GV 8 oz tubs) is its own mainline product." },
+      "db_path": { "type": "usda", "source": "USDA FDC Branded: JOHN MORRELL, WATER ADDED DICED HAM (Smithfield), label serving 2 oz (56 g)", "fdc_id": 2622828 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "high",
+      "notes": "Includes ham steak / ham bone folds per canon."
+    },
+    {
+      "item": "Sazon Seasoning",
+      "uses": 5,
+      "board_decision": { "type": "register", "id": "sazon-seasoning", "unit": "oz", "relax_global": false, "reason": "No board row; Goya Sazon boxes are mainline Hispanic-aisle items in all Omaha board stores. 'seasoning' does not trip GLOBAL_EXCLUDE ('seasoned' does not substring-match 'seasoning')." },
+      "db_path": { "type": "usda", "source": "USDA FDC Branded: SAZON GOYA (CORIANDER & ANNATTO), label serving 0.25 tsp (1 g), zero-macro", "fdc_id": 1869030 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "high",
+      "notes": "Goya adobo folded in per canon (one Latin-seasoning buy)."
+    },
+    {
+      "item": "Sauerkraut",
+      "uses": 5,
+      "board_decision": { "type": "existing", "id": "sauerkraut", "unit": "oz", "relax_global": false, "reason": "Board row 'Sauerkraut (canned/jarred)' live at $0.0716/oz (n=4)." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Sauerkraut, canned, solids and liquids", "fdc_id": 169279 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "high",
+      "notes": "USDA generic used instead of a browser capture - it is the standard for canned kraut and the quantities are macro-trivial."
+    },
+    {
+      "item": "Apple Juice",
+      "uses": 5,
+      "board_decision": { "type": "existing", "id": "apple-juice", "unit": "floz", "relax_global": false, "reason": "Board row live at $0.0311/floz (n=7)." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Apple juice, canned or bottled, unsweetened, with added ascorbic acid", "fdc_id": 167771 },
+      "gpu": { "value": 29.57, "unit_basis": "floz, water-like convention (true density 1.04 - within convention tolerance; matches Apple Cider / Pineapple Juice precedent in ingredient-map)" },
+      "confidence": "high",
+      "notes": "Apple cider (drink) folded in per canon."
+    },
+    {
+      "item": "Swiss Cheese",
+      "uses": 5,
+      "board_decision": { "type": "existing", "id": "swiss-cheese", "unit": "oz", "relax_global": false, "reason": "ALREADY IN ingredient-map.json (board_id swiss-cheese, recipe board row is live). No map extension needed - only the food-DB entry was missing (r100 carryover)." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Cheese, swiss", "fdc_id": 171251 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz (existing map entry)" },
+      "confidence": "high",
+      "notes": "Atwater exact (393 vs 393)."
+    },
+    {
+      "item": "Eggplant",
+      "uses": 5,
+      "board_decision": { "type": "register", "id": "eggplant", "unit": "each", "relax_global": false, "reason": "No board row; fresh eggplant is priced per-each at Walmart/Aldi/Hy-Vee/Baker's." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Eggplant, raw", "fdc_id": 169228 },
+      "gpu": { "value": 548, "unit_basis": "each = 1 eggplant; USDA SR portion '1 eggplant, unpeeled (approx 1-1/4 lb)' = 548 g" },
+      "confidence": "high",
+      "notes": "Also fixes the r100 'egg' substring bug that sent eggplant lines to Eggs."
+    },
+    {
+      "item": "Brown Gravy Mix",
+      "uses": 4,
+      "board_decision": { "type": "register", "id": "brown-gravy-mix", "unit": "oz", "relax_global": true, "reason": "jarred-gravy row is ready-to-serve jars - different product; rejected. Dry packets (McCormick/GV 0.87 oz) are their own mainline product. relax_global REQUIRED: \\bmix\\b is in GLOBAL_EXCLUDE and would drop every 'gravy mix' product name." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Gravy, brown, dry", "fdc_id": 171565 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz (dry mix)" },
+      "confidence": "high",
+      "notes": "Atwater exact (367 vs 367)."
+    },
+    {
+      "item": "Sandwich Bread",
+      "uses": 4,
+      "board_decision": { "type": "existing", "id": "bread", "unit": "each", "relax_global": false, "reason": "Board row 'Bread (loaf)' live at $0.7488 each (n=6) - each = one loaf, and the cheapest rows are 20 oz white sandwich loaves, the same concept as these bread/panade lines." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Bread, white, commercially prepared (includes soft bread crumbs)", "fdc_id": 174924 },
+      "gpu": { "value": 567, "unit_basis": "each = 1 loaf, 20 oz (567 g) cheapest-mainline white sandwich loaf" },
+      "confidence": "medium",
+      "notes": "GPU flag: loaves range 16-24 oz; 567 g matches the price class the row actually tracks. Slice ~25-28 g for per-slice recipe lines."
+    },
+    {
+      "item": "Chicken Livers",
+      "uses": 4,
+      "board_decision": { "type": "register", "id": "chicken-livers", "unit": "lb", "relax_global": false, "reason": "No board row; Tyson/store-brand tubs are mainline meat-case items." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Chicken, liver, all classes, raw", "fdc_id": 171060 },
+      "gpu": { "value": 453.592, "unit_basis": "lb" },
+      "confidence": "high",
+      "notes": "Dirty-rice identity; beef liver (menudo), duck giblets, liver spread folded in per canon."
+    },
+    {
+      "item": "Baking Soda",
+      "uses": 4,
+      "board_decision": { "type": "existing", "id": "baking-soda", "unit": "oz", "relax_global": false, "reason": "Board row live at $0.0411/oz (n=6)." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Leavening agents, baking soda", "fdc_id": 175040 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "high",
+      "notes": "Zero-macro."
+    },
+    {
+      "item": "Almonds",
+      "uses": 4,
+      "board_decision": { "type": "existing", "id": "almonds", "unit": "oz", "relax_global": false, "reason": "Board row live at $0.2871/oz (n=7)." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Nuts, almonds", "fdc_id": 170567 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "high",
+      "notes": "Covers blanched/slivered/sliced lines (same commodity, same price class)."
+    },
+    {
+      "item": "Sweet Soy Sauce",
+      "uses": 4,
+      "board_decision": { "type": "register", "id": "sweet-soy-sauce", "unit": "floz", "relax_global": false, "reason": "Kecap manis is NOT soy sauce (canon ruling; thick sweet syrup, different product and price). ABC Sweet Soy Sauce is stocked in Walmart/Hy-Vee Asian aisles. COVERAGE FLAG: new walled-store item, may start with thin board coverage." },
+      "db_path": { "type": "browser-capture", "source": "FDC has no kecap manis label (only a sambal variant) - refuse to stretch", "fdc_id": null },
+      "gpu": { "value": 38, "unit_basis": "floz, NON-water-like: kecap manis density ~1.3 g/mL -> 29.57 x 1.3 = 38 g/floz" },
+      "confidence": "medium",
+      "notes": "Capture ABC Kecap Manis label at Walmart (see capture-worklist)."
+    },
+    {
+      "item": "Caraway Seeds",
+      "uses": 4,
+      "board_decision": { "type": "register", "id": "caraway-seeds", "unit": "oz", "relax_global": false, "reason": "No board row; McCormick/Badia caraway is a standard spice-aisle jar." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Spices, caraway seed", "fdc_id": 170918 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "high",
+      "notes": "Goulash/kraut identity. Atwater-general overshoot explained by 38 g fiber."
+    },
+    {
+      "item": "Baking Powder",
+      "uses": 4,
+      "board_decision": { "type": "existing", "id": "baking-powder", "unit": "oz", "relax_global": false, "reason": "Board row live at $0.2407/oz (n=5)." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Leavening agents, baking powder, double-acting, sodium aluminum sulfate", "fdc_id": 172803 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "high",
+      "notes": "Near-zero macros at recipe quantities."
+    },
+    {
+      "item": "Poultry Seasoning",
+      "uses": 4,
+      "board_decision": { "type": "register", "id": "poultry-seasoning", "unit": "oz", "relax_global": false, "reason": "No board row; McCormick/GV poultry seasoning is a standard spice-aisle jar. 'seasoning' does not trip GLOBAL_EXCLUDE." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Spices, poultry seasoning", "fdc_id": 171331 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "high",
+      "notes": "'chicken spice' folded in per canon."
+    },
+    {
+      "item": "Wild Rice",
+      "uses": 3,
+      "board_decision": { "type": "register", "id": "wild-rice", "unit": "oz", "relax_global": false, "reason": "rice row is white rice (variety pricing precedent bars the fold - wild rice is 4-8x the price). Sold in 8 oz boxes/blends; oz is the honest unit, unlike the lb-based rice row." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Wild rice, raw", "fdc_id": 169726 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz (dry)" },
+      "confidence": "high",
+      "notes": "Match rules should accept 100% wild rice and wild-rice-forward blends; exclude seasoned/flavored rice kits (GLOBAL_EXCLUDE already drops 'flavored' and \\bmix\\b)."
+    },
+    {
+      "item": "Doubanjiang",
+      "uses": 3,
+      "board_decision": { "type": "register", "id": "doubanjiang", "unit": "oz", "relax_global": false, "reason": "Gochujang row is a different product (Korean, sweet-fermented; canon keeps them separate). Lee Kum Kee Chili Bean Sauce (Toban Djan) is stocked at Hy-Vee/Walmart Asian aisles. COVERAGE FLAG: may start thin." },
+      "db_path": { "type": "browser-capture", "source": "FDC branded entries for LKK Chili Bean Sauce are internally contradictory (claims 1 Tbsp = 6 g; real label is ~18 g) - refused rather than transcribe bad data", "fdc_id": null },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "medium",
+      "notes": "Mapo/twice-cooked identity. Capture the LKK Toban Djan jar label."
+    },
+    {
+      "item": "Ground Fennel",
+      "uses": 3,
+      "board_decision": { "type": "register", "id": "ground-fennel", "unit": "oz", "relax_global": false, "reason": "No board row. Badia Fennel Seed Ground is carried at Walmart; Kroger (Baker's headless API) lists fennel seed. COVERAGE FLAG: ground form is thinner on shelves than whole seed; match rules may accept 'fennel seed' jars (same spice, grind at home is not a price flip)." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Spices, fennel seed (ground form = same spice milled; composition unchanged)", "fdc_id": 171323 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "medium",
+      "notes": "Kerala beef fry / rogan josh identity - deliberately NOT the r100 fennel->Italian-Seasoning fold (Indian context)."
+    },
+    {
+      "item": "Bratwurst",
+      "uses": 3,
+      "board_decision": { "type": "existing", "id": "bratwurst", "unit": "lb", "relax_global": false, "reason": "Board row live at $2.4842/lb (n=5)." },
+      "db_path": { "type": "usda", "source": "USDA FDC Branded: JOHNSONVILLE BRATS ORIGINAL BRATWURST, label serving 1 grilled link (82 g)", "fdc_id": 1909061 },
+      "gpu": { "value": 453.592, "unit_basis": "lb" },
+      "confidence": "high",
+      "notes": "Label basis is a GRILLED link (that is what the Johnsonville package label states) - noted in DB entry so cooked-basis is not mistaken for raw."
+    },
+    {
+      "item": "Cocoa Powder",
+      "uses": 3,
+      "board_decision": { "type": "existing", "id": "cocoa-powder", "unit": "oz", "relax_global": false, "reason": "Board row 'Cocoa Powder (baking)' live at $0.5209/oz (n=5)." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Cocoa, dry powder, unsweetened", "fdc_id": 169593 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "high",
+      "notes": "Atwater-general gives ~433 vs USDA 228 kcal/100g - this is the well-known cocoa case (37 g fiber, poorly digestible carbs, USDA specific factors). USDA value transcribed as-is. Mexican chocolate folded in per canon."
+    },
+    {
+      "item": "Stuffing Mix",
+      "uses": 2,
+      "board_decision": { "type": "existing", "id": "stuffing-mix", "unit": "oz", "relax_global": false, "reason": "Board row live at $0.1583/oz (n=7); registration already handled its own relax_global." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Kraft, Stove Top Stuffing Mix Chicken Flavor", "fdc_id": 175079 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz (dry mix)" },
+      "confidence": "high",
+      "notes": "Dry-mix basis (28 g dry serving = ~107 kcal, matches the box label)."
+    },
+    {
+      "item": "Snow Peas",
+      "uses": 2,
+      "board_decision": { "type": "register", "id": "snow-peas", "unit": "oz", "relax_global": false, "reason": "No board row (frozen-peas is shelled green peas - different product). Fresh snow/sugar-snap peas sold in 8 oz bags at all board stores." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Peas, edible-podded, raw", "fdc_id": 170010 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "high",
+      "notes": ""
+    },
+    {
+      "item": "PROTEIN-SWAP-LAMB",
+      "uses": 2,
+      "board_decision": { "type": "null", "id": null, "unit": null, "relax_global": false, "reason": "Sentinel, not an ingredient. Resolve per-recipe downstream: Xinjiang Cumin Turkey Stir-Fry (lamb leg -> turkey target protein) and Lebanese Baked Kafta (ground lamb or beef)." },
+      "db_path": { "type": "none", "source": "sentinel - no food-DB entry", "fdc_id": null },
+      "gpu": { "value": null, "unit_basis": null },
+      "confidence": "high",
+      "notes": "Must be resolved before publish; flagging loudly so it cannot silently reach a recipe page."
+    },
+    {
+      "item": "Capers",
+      "uses": 2,
+      "board_decision": { "type": "existing", "id": "capers", "unit": "floz", "relax_global": false, "reason": "ALREADY IN ingredient-map.json (capers, floz, 29.57) with a live recipe-board row. No map extension needed - only the food-DB entry was missing." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Capers, canned", "fdc_id": 172238 },
+      "gpu": { "value": 29.57, "unit_basis": "floz (existing map entry)" },
+      "confidence": "high",
+      "notes": "Atwater-general 37 vs USDA 23 kcal/100g (organic acids/fiber in brine) - macro-trivial at caper quantities."
+    },
+    {
+      "item": "Brussels Sprouts",
+      "uses": 2,
+      "board_decision": { "type": "existing", "id": "brussels-sprouts", "unit": "lb", "relax_global": false, "reason": "Board row live at $2.2629/lb (n=6)." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Brussels sprouts, raw", "fdc_id": 170383 },
+      "gpu": { "value": 453.592, "unit_basis": "lb" },
+      "confidence": "high",
+      "notes": ""
+    },
+    {
+      "item": "Basil Pesto",
+      "uses": 2,
+      "board_decision": { "type": "existing", "id": "pesto", "unit": "oz", "relax_global": false, "reason": "Board row 'Pesto (jarred)' live at $0.39/oz (n=3) - same product concept." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Sauce, pesto, CLASSICO, basil pesto, ready-to-serve", "fdc_id": 171582 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "high",
+      "notes": "Atwater exact (372 vs 372)."
+    },
+    {
+      "item": "Artichoke Hearts",
+      "uses": 2,
+      "board_decision": { "type": "existing", "id": "artichoke-hearts", "unit": "oz", "relax_global": false, "reason": "Board row 'Artichoke Hearts (canned/jarred)' live at $0.1609/oz (n=5)." },
+      "db_path": { "type": "usda", "source": "USDA FDC Branded: ARTICHOKE HEARTS QUARTERED (Hannaford), label serving 1/2 cup (130 g) with liquid", "fdc_id": 2433248 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "medium",
+      "notes": "GV artichoke label not in FDC; Hannaford store-brand label used (complete, Atwater-consistent). Fine to swap for a GV label if one is captured later."
+    },
+    {
+      "item": "Sumac",
+      "uses": 2,
+      "board_decision": { "type": "null", "id": null, "unit": null, "relax_global": false, "reason": "Specialty spice with no reliable mainline stocking across the Omaha board stores (mostly marketplace/online listings). Pantry-static pricing is honest; registering would create a permanently empty row." },
+      "db_path": { "type": "usda", "source": "USDA FDC Branded: GROUND SUMAC (Frontier Cooperative), label serving 1/4 tsp (0.6 g), zero-macro", "fdc_id": 2630657 },
+      "gpu": { "value": null, "unit_basis": null },
+      "confidence": "high",
+      "notes": "Musakhan identity item per spec - kept as canon item, just not price-tracked."
+    },
+    {
+      "item": "Onion Soup Mix",
+      "uses": 2,
+      "board_decision": { "type": "existing", "id": "onion-soup-mix", "unit": "oz", "relax_global": false, "reason": "Board row 'Onion Soup Mix (dry packets)' exists (n=1, Hy-Vee $0.9045/oz)." },
+      "db_path": { "type": "usda", "source": "USDA FDC Branded: ONION RECIPE SOUP & DIP MIX (Wal-Mart / Great Value), label serving 1 Tbsp dry (7 g)", "fdc_id": 2524752 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz (dry packet contents)" },
+      "confidence": "high",
+      "notes": "Lipton pot-roast/meatloaf packet class; GV equivalent label used per cheapest-mainline precedent."
+    },
+    {
+      "item": "Jerk Seasoning",
+      "uses": 1,
+      "board_decision": { "type": "existing", "id": "jerk-seasoning", "unit": "oz", "relax_global": false, "reason": "ALREADY IN ingredient-map.json (jerk-seasoning, oz) with a live recipe-board row. Only the food-DB entry was missing." },
+      "db_path": { "type": "usda", "source": "USDA FDC Branded: McCORMICK CARIBBEAN JERK SEASONING, label serving 1/4 tsp (0.7 g), zero-macro", "fdc_id": 2034560 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz (existing map entry)" },
+      "confidence": "high",
+      "notes": ""
+    },
+    {
+      "item": "Horseradish Sauce",
+      "uses": 1,
+      "board_decision": { "type": "register", "id": "horseradish-sauce", "unit": "oz", "relax_global": false, "reason": "horseradish row is prepared horseradish (grated root in vinegar) - different product than creamy horseradish sauce; form-flip class rejection. GV Horseradish Sauce squeeze bottle is mainline." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Sauce, horseradish (creamy)", "fdc_id": 171833 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "medium",
+      "notes": "Single-use registration - if Brad prefers less board noise, null-with-pantry-static is the fallback; the mapping itself is clean. Atwater exact (502 vs 503)."
+    },
+    {
+      "item": "Corned Beef Brisket",
+      "uses": 1,
+      "board_decision": { "type": "register", "id": "corned-beef-brisket", "unit": "lb", "relax_global": false, "reason": "No board row (corned-beef-hash is canned hash - different product; rejected). Real meat-case product. SEASONALITY FLAG: shelf presence peaks around March; row may be empty much of the year." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Beef, cured, corned beef, brisket, raw", "fdc_id": 170199 },
+      "gpu": { "value": 453.592, "unit_basis": "lb" },
+      "confidence": "medium",
+      "notes": "Reuben identity, spec-mandated canon item."
+    },
+    {
+      "item": "Baked Beans",
+      "uses": 1,
+      "board_decision": { "type": "existing", "id": "baked-beans", "unit": "oz", "relax_global": false, "reason": "Board row live at $0.0556/oz (n=7)." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Beans, baked, canned, with pork (the GV pork-and-beans cheapest-mainline class)", "fdc_id": 175185 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "high",
+      "notes": "Calico-beans identity."
+    },
+    {
+      "item": "Blackberries",
+      "uses": 1,
+      "board_decision": { "type": "existing", "id": "blackberries", "unit": "oz", "relax_global": false, "reason": "Board row live at $0.3583/oz (n=6)." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Blackberries, raw", "fdc_id": 173946 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "high",
+      "notes": "Colombian blackberry-sauce pork identity."
+    },
+    {
+      "item": "Korean Rice Cakes",
+      "uses": 1,
+      "board_decision": { "type": "null", "id": null, "unit": null, "relax_global": false, "reason": "Board rice-cakes row is puffed snack cakes (Quaker class) - hard concept mismatch, rejected. Tteok is not reliably stocked at the Omaha board stores (Asian-market item). Pantry-static." },
+      "db_path": { "type": "usda", "source": "USDA FDC Branded: KOREAN RICE CAKE (Walong Marketing), label serving 3.5 oz (100 g)", "fdc_id": 2167323 },
+      "gpu": { "value": null, "unit_basis": null },
+      "confidence": "high",
+      "notes": "Tteokbokki-class identity. Atwater exact (237 vs 237)."
+    },
+    {
+      "item": "Pumpkin Puree",
+      "uses": 1,
+      "board_decision": { "type": "existing", "id": "canned-pumpkin", "unit": "oz", "relax_global": false, "reason": "Board row 'Canned Pumpkin (100% puree)' live at $0.0871/oz (n=4) - exact concept." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Pumpkin, canned, without salt", "fdc_id": 168450 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "high",
+      "notes": ""
+    },
+    {
+      "item": "Gingersnap Cookies",
+      "uses": 1,
+      "board_decision": { "type": "existing", "id": "cookies", "unit": "oz", "relax_global": false, "reason": "'Cookies (packaged)' commodity covers gingersnaps at the same price class - same-class generic fold per the Butter Crackers -> crackers and Corn Chips -> potato-chips precedents (NOT a cross-concept flip like corn chips -> tortilla-chips, which stays rejected)." },
+      "db_path": { "type": "usda", "source": "USDA FDC Branded: GINGER SNAP COOKIES (Winco Foods), label serving 3 cookies (26 g)", "fdc_id": 2448755 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "medium",
+      "notes": "Sauerbraten gravy identity. GV/Nabisco gingersnap labels not in FDC; Winco store-brand label used (Atwater-consistent)."
+    },
+    {
+      "item": "Tater Tots",
+      "uses": 1,
+      "board_decision": { "type": "existing", "id": "tater-tots", "unit": "oz", "relax_global": false, "reason": "Dedicated board row live at $0.0903/oz (n=4)." },
+      "db_path": { "type": "usda", "source": "USDA FDC Branded: GOLDEN TATER TOTS SEASONED SHREDDED POTATOES (Ore-Ida / Kraft Heinz), label serving 9 pieces (86 g)", "fdc_id": 1727638 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz (frozen)" },
+      "confidence": "high",
+      "notes": "r100 target finally landing in the DB."
+    },
+    {
+      "item": "Pigeon Peas",
+      "uses": 1,
+      "board_decision": { "type": "register", "id": "pigeon-peas", "unit": "oz", "relax_global": false, "reason": "No board row; Goya/La Preferida canned green pigeon peas (gandules) are Hispanic-aisle mainline at Walmart and Baker's. 'canned' is NOT in GLOBAL_EXCLUDE - no relax needed." },
+      "db_path": { "type": "usda", "source": "USDA FDC Branded: GREEN PIGEON PEAS (La Preferida), label serving 3/4 cup (130 g)", "fdc_id": 2503338 },
+      "gpu": { "value": 28.3495, "unit_basis": "oz (canned, with liquid)" },
+      "confidence": "medium",
+      "notes": "Arroz con gandules identity. Label Atwater 140 vs 120 kcal - fiber-adjusted label math, transcribed as printed."
+    },
+    {
+      "item": "Aji Amarillo Paste",
+      "uses": 1,
+      "board_decision": { "type": "register", "id": "aji-amarillo-paste", "unit": "oz", "relax_global": false, "reason": "No board row; Goya Aji Amarillo Paste jars are Hispanic-aisle items at Walmart. COVERAGE FLAG: thinner than the Goya staples; may start with 1-store coverage like achiote-paste (n=1) did." },
+      "db_path": { "type": "browser-capture", "source": "Goya aji amarillo label not in FDC; the third-party FDC entries contradict each other (same product, same 14 g serving, different macros) - refused", "fdc_id": null },
+      "gpu": { "value": 28.3495, "unit_basis": "oz" },
+      "confidence": "medium",
+      "notes": "Aji de gallina identity. Capture the Goya jar label."
+    },
+    {
+      "item": "Rye Bread",
+      "uses": 1,
+      "board_decision": { "type": "register", "id": "rye-bread", "unit": "each", "relax_global": false, "reason": "Generic bread row tracks cheap white sandwich loaves; rye is a distinct variety at 2-3x the loaf price - variety-pricing precedent (red onion rule) bars the fold. Rye loaves are bakery-aisle mainline at all board stores." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Bread, rye", "fdc_id": 172684 },
+      "gpu": { "value": 454, "unit_basis": "each = 1 loaf, 16 oz (454 g) typical rye loaf" },
+      "confidence": "medium",
+      "notes": "Reuben identity, spec-mandated. Slice ~32 g."
+    },
+    {
+      "item": "Bulgur Wheat",
+      "uses": 1,
+      "board_decision": { "type": "null", "id": null, "unit": null, "relax_global": false, "reason": "Semi-specialty grain (Bob's Red Mill class) with uneven in-store stocking across board stores, single use. Pantry-static; register later if kibbeh/tabbouleh recipes expand." },
+      "db_path": { "type": "usda", "source": "USDA SR Legacy: Bulgur, dry", "fdc_id": 170688 },
+      "gpu": { "value": null, "unit_basis": null },
+      "confidence": "high",
+      "notes": "Kibbeh identity."
+    }
+  ]
+}

@@ -1,0 +1,353 @@
+﻿{
+    "name":  "Beef Bulgogi Rice Bowls",
+    "slug":  "beef-bulgogi-rice-bowls",
+    "cuisine":  "Korean",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.recipetineats.com/korean-beef-bulgogi-rice-bowls-the-easy-way/",
+    "source_site":  "recipetineats.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +45% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Sliced marinated beef, grated pear in the marinade, seared in batches. Confidence: NEAR-DUPE RISK flagged for the selector against the live Korean Ground Beef Rice Bowls, which uses the same soy-brown-sugar-sesame base with crumbled beef. Bulgogi\u0027s pear marinade and sliced texture are the differentiators. Selector\u0027s call. | HARVEST: Source states 4-5 servings; recorded 5 because the published nutrition assumes 5 servings. Ingredient groups (beef+marinade / bowl sauce / bowl components) transcribed in published order.",
+                         "SOURCE YIELD: 5 servings, rebuilt to 14.",
+                         "TUNING: base +45% (Rice)",
+                         "OVERRIDE 93/7 Ground Beef: WAVE-4: sliced-texture differentiator vs the live Korean ground-beef bowls (selector identity rule); grams kept at source 500 g"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  564,
+                 "protein":  30,
+                 "carbs":  72,
+                 "fat":  16,
+                 "cost_ps":  "2.46"
+             },
+    "intro_html":  "Bulgogi is defined by its marinade, not its cut. Soy sauce, sesame oil, garlic, and grated fruit, which is the part most people skip and the part that actually matters, because the enzymes in the apple tenderize the beef while the sugars help it caramelize in the pan. This build uses ground beef to keep the price honest, so you get all of that flavor without paying steak money. Each bowl lands at 564 calories and \u003cstrong\u003e30 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.46 a serving\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 3 lb (1400 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 2.75 tbsp (39 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 0.5 cups (45 g)",
+                                "\u003cstrong\u003eApple (generic):\u003c/strong\u003e 0.7 (134 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5 tbsp (42 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 1 tbsp (6 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.75 cups (202 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 5.5 tbsp (76 g)",
+                                "\u003cstrong\u003eMirin (Mizkan):\u003c/strong\u003e 2.75 tbsp (50 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 4.75 tbsp (63 g)",
+                                "\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 1.75 tbsp (28 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.75 cups dry (1086 g)",
+                                "\u003cstrong\u003eFrozen Chopped Spinach (generic):\u003c/strong\u003e 1 oz (28 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3.3 (202 g)",
+                                "\u003cstrong\u003eToasted Sesame Seeds (generic):\u003c/strong\u003e 1 tbsp (8 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 7 tbsp (42 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Flank/Sirloin Steak, 3 lb: ~$27.22. \u003cstrong\u003eBuy 4 lbs: $35.28.\u003c/strong\u003e",
+                       "Vegetable Oil, 2.75 tbsp: ~$0.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 0.5 cups: ~$0.11. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Apple, 0.7: ~$0.30. \u003cstrong\u003eBuy 1 each: $0.39.\u003c/strong\u003e",
+                       "Garlic, 5 tbsp: ~$0.60. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Ginger, 1 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Soy Sauce, 0.75 cups: ~$0.77. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sesame Oil, 5.5 tbsp: ~$1.60. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Mirin, 2.75 tbsp: ~$0.44. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Brown Sugar, 4.75 tbsp: ~$0.36. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice Vinegar, 1.75 tbsp: ~$0.23. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 5.75 cups dry: ~$1.34. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Frozen Chopped Spinach, 1 oz: ~$0.20. \u003cstrong\u003eBuy 1 10oz box: $2.00.\u003c/strong\u003e",
+                       "Carrots, 3.3: ~$0.42. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Toasted Sesame Seeds, 1 tbsp: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Onions, 7 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, salt): ~$0.10. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $34.48 across 14 servings, so roughly $2.46 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $47.94 across 14 servings, roughly $3.42 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $23.24 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $71.18. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.46 a bowl\u003c/strong\u003e for Korean beef, rice, and vegetables. That is less than the drink at the counter where they would sell you the same thing, and yours has more beef in it.",
+    "shop_smart":  [
+                       "Ground beef is the whole budget line here, and it is also why this dish costs a third of what a sliced bulgogi would. If you want to splurge, thin sliced sirloin works in the same marinade, but the ground version is the reason the number is what it is.",
+                       "One apple in the marinade is doing real chemical work. Grate it, do not chop it, so the juice gets into the meat instead of sitting in chunks on top.",
+                       "Sesame oil, mirin, rice vinegar, and soy sauce are all one-bottle purchases that carry across dozens of Asian recipes. Buy them once and the marginal cost of every Korean dinner after that drops sharply.",
+                       "Frozen spinach and a couple of carrots are the cheapest vegetables you can put in a rice bowl. Buy the box of frozen spinach, use what you need, and keep the rest in the freezer indefinitely."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Grate the apple and the onion into a bowl and whisk in the soy sauce, sesame oil, mirin, brown sugar, rice vinegar, garlic, ginger, and black pepper. That is your bulgogi marinade and it should smell sweet, salty, and toasty all at once.",
+                    "Mix about two thirds of the marinade into the ground beef and let it sit at least 30 minutes in the fridge. Hold the rest back for finishing.",
+                    "Start the rice so it is ready when the beef is.",
+                    "Heat the vegetable oil in a large skillet over medium-high and cook the beef in two batches, breaking it up as it goes. Let each batch sit undisturbed for a minute at a time so it browns instead of steaming. Browning is where the caramel notes come from.",
+                    "Pour the reserved marinade into the skillet with all the beef and let it bubble down for 2 to 3 minutes until it glazes the meat.",
+                    "Warm the frozen spinach and the shredded carrots briefly in a separate pan so they keep their color, then season lightly with salt.",
+                    "Sprinkle the toasted sesame seeds and sliced green onions over everything just before packing."
+                ],
+    "portion_html":  "Weigh the rice into the containers first, then set the beef skillet on the scale, subtract the empty weight, and divide by 14. Add the spinach and carrots to the side of each container so they do not soak up the sauce all week. Every bowl comes out at \u003cstrong\u003e564 calories\u003c/strong\u003e with an even share of the beef.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.recipetineats.com/korean-beef-bulgogi-rice-bowls-the-easy-way/\" target=\"_blank\" rel=\"noopener\"\u003erecipetineats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Korean beef bowls for about \u003cstrong\u003e$2.46 a serving\u003c/strong\u003e. Members get the full Meal Prep library, every money lesson, and all the calculators and tools on the site for $1 a month.",
+    "cost_batch":  34.48,
+    "cost_batch_true":  47.94,
+    "cost_per_serving":  2.46,
+    "cost_per_serving_true":  3.42,
+    "cost_pantry_add":  23.24,
+    "cost_first_run":  71.18,
+    "scaler":  {
+                   "cost":  "47.94",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Flank/Sirloin Steak",
+                                   "canon":  "Beef Flank/Sirloin Steak",
+                                   "grams":  1400,
+                                   "buy":  "3 lb",
+                                   "bid":  "sirloin-steak",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  39,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  45,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Apple",
+                                   "canon":  "Apple",
+                                   "grams":  134,
+                                   "buy":  "0.7",
+                                   "bid":  "apple",
+                                   "gpu":  "175.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  42,
+                                   "buy":  "5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  6,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  202,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "canon":  "Sesame Oil",
+                                   "grams":  76,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Mirin",
+                                   "canon":  "Mirin",
+                                   "grams":  50,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "mirin",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "canon":  "Brown Sugar",
+                                   "grams":  63,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice Vinegar",
+                                   "canon":  "Rice Vinegar",
+                                   "grams":  28,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "rice-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1086,
+                                   "buy":  "5.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Frozen Chopped Spinach",
+                                   "canon":  "Frozen Chopped Spinach",
+                                   "grams":  28,
+                                   "buy":  "1 oz",
+                                   "bid":  "spinach",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  202,
+                                   "buy":  "3.3",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Toasted Sesame Seeds",
+                                   "canon":  "Toasted Sesame Seeds",
+                                   "grams":  8,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "toasted-sesame-seeds",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  42,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Beef bulgogi rice bowls with a soy, sesame, and grated apple marinade plus spinach and carrots, built for 14 meal prep servings at about $2.46 a bowl.",
+                 "keywords":  "beef bulgogi, korean beef rice bowl, bulgogi marinade, korean meal prep, budget beef bowls, high protein meal prep, ground beef recipe",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT55M",
+                 "costPerServing":  2.46,
+                 "recipeIngredient":  [
+                                          "3 lb 93/7 ground beef",
+                                          "0.7 apples, grated",
+                                          "0.5 cups yellow onion",
+                                          "0.75 cups soy sauce",
+                                          "5.5 tbsp sesame oil",
+                                          "2.75 tbsp mirin",
+                                          "4.75 tbsp brown sugar",
+                                          "1.75 tbsp rice vinegar and 5 tbsp minced garlic",
+                                          "1 tbsp grated ginger",
+                                          "6.25 cups dry rice",
+                                          "3.3 carrots",
+                                          "0.25 cups frozen chopped spinach",
+                                          "1 tbsp toasted sesame seeds"
+                                      ],
+                 "steps":  [
+                               "Whisk grated apple and onion with soy sauce, sesame oil, mirin, brown sugar, vinegar, garlic, and ginger.",
+                               "Marinate the ground beef in most of the mixture for at least 30 minutes.",
+                               "Cook the rice.",
+                               "Brown the beef in batches in a hot skillet, then add the reserved marinade and reduce to a glaze.",
+                               "Warm the spinach and carrots separately, then top everything with sesame seeds and green onion.",
+                               "Weigh rice and beef into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Flank/Sirloin Steak",
+                                  "grams":  1400
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  39
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  45
+                              },
+                              {
+                                  "item":  "Apple",
+                                  "grams":  134
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  202
+                              },
+                              {
+                                  "item":  "Sesame Oil",
+                                  "grams":  76
+                              },
+                              {
+                                  "item":  "Mirin",
+                                  "grams":  50
+                              },
+                              {
+                                  "item":  "Brown Sugar",
+                                  "grams":  63
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Rice Vinegar",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1086
+                              },
+                              {
+                                  "item":  "Frozen Chopped Spinach",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  202
+                              },
+                              {
+                                  "item":  "Toasted Sesame Seeds",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              }
+                          ]
+}

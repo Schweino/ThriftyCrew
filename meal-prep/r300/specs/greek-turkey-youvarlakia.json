@@ -1,0 +1,240 @@
+﻿{
+    "name":  "Greek Turkey Youvarlakia (Egg-Lemon Meatball and Rice)",
+    "slug":  "greek-turkey-youvarlakia",
+    "cuisine":  "greek",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.mygreekdish.com/recipe/creamy-meatball-soup-egg-lemon-sauce-youvarlakia-avgolemono/",
+    "source_site":  "mygreekdish.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Rice)",
+                   "portion factor 1.4"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Rice-stuffed turkey meatballs in a silky egg-lemon broth; genuinely different from every live Greek turkey dish. Verified source: full traditional recipe. Confidence note: no per-serving numbers captured from the source and the classic version is a thin soup - ours would need to be a thick stew over rice to clear 500 cal, so treat est_cal as a target rather than a measurement. | HARVEST: Source uses minced beef; adapt to turkey.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Rice)",
+                         "TUNING: portion factor 1.4",
+                         "OVERRIDE Rice: splitter split \u00271/4 of a cup long-grain rice\u0027 -\u003e 46 g dry",
+                         "OVERRIDE Olive Oil: splitter split \u00272 tbsps olive oil\u0027",
+                         "OVERRIDE Dried Dill: splitter split \u00273 tbsps fresh dill\u0027 -\u003e dried equivalent",
+                         "OVERRIDE Fresh Cilantro: WAVE-4: \u0027a pinch of coriander\u0027 in avgolemono is a mis-mapped trace - dropped (dill already carries the herb)",
+                         "OVERRIDE 93/7 Ground Beef: TITLE-PROTEIN SWAP: titled turkey; ground-\u003eground, grams kept"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  566,
+                 "protein":  42,
+                 "carbs":  32,
+                 "fat":  28,
+                 "cost_ps":  "2.19"
+             },
+    "intro_html":  "Youvarlakia are Greek meatballs with rice mixed into them, poached in broth and finished with avgolemono, the egg and lemon sauce that turns thin liquid into something silky without a drop of cream. It is one of the great tricks in Mediterranean cooking and it costs about a dozen eggs and some lemon juice. Ours is built thick, as a stew rather than a soup, at \u003cstrong\u003e566 calories and 42 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.19\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 5.5 lb (2450 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 2.25 cups dry (404 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 5 (539 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 15 large eggs (735 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 0.75 cups (137 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 2.4 (149 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 10 (461 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 5.5 lb: ~$20.64. \u003cstrong\u003eBuy 6 lbs: $22.93.\u003c/strong\u003e",
+                       "Rice, 2.25 cups dry: ~$0.50. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 5: ~$1.36. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Eggs, 15 large eggs: ~$1.75. \u003cstrong\u003eBuy 2 dozens: $2.85.\u003c/strong\u003e",
+                       "Olive Oil, 0.75 cups: ~$1.93. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Carrots, 2.4: ~$0.31. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Lemon Juice, 10: ~$1.74. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (dried dill, salt, black pepper): ~$2.47. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $30.70 across 14 servings, so roughly $2.19 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.65 across 14 servings, roughly $2.55 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.72 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.37. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.19\u003c/strong\u003e a container. The sauce that makes this dish special is eggs and lemon juice, which together cost almost nothing for the entire batch.",
+    "shop_smart":  [
+                       "Ground turkey is two thirds of the cost here, and the 6 pound buy is the cheapest per pound. Split it, freeze half, and the next batch of anything gets easier.",
+                       "Bottled lemon juice is the right call for this one. This batch uses the equivalent of ten lemons, and squeezing ten lemons by hand for a dish that also asks you to temper eggs is more adventure than a Sunday needs.",
+                       "Eggs are the sauce, not a garnish. Fifteen of them cost very little here and they replace every drop of cream this dish would otherwise want.",
+                       "Dried dill is the whole seasoning bill and one jar runs a couple of dollars. Fresh dill costs more per batch and wilts in three days, so the jar wins for meal prep."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Mix the ground turkey with the uncooked rice, grated onion, the dried dill, salt, and black pepper. The rice goes in raw and cooks inside the meatball, which is the whole idea.",
+                    "Roll the mixture into meatballs and set them aside. Do not pack them tight, since the rice needs room to swell.",
+                    "Heat the olive oil in a wide pot, soften the remaining diced onion and the grated carrot for 6 minutes, then add water to make a light broth and bring it to a simmer.",
+                    "Lower the meatballs in gently, cover, and simmer 40 minutes until the rice inside is tender and the meat is cooked through to 165F. Do not stir hard, just shake the pot.",
+                    "Make the avgolemono: whisk the eggs until frothy, whisk in the lemon juice, then ladle in hot broth one spoon at a time while whisking constantly. This tempering step is the only part that can go wrong, so go slow.",
+                    "Pour the sauce back into the pot off the heat and swirl the pot to combine. Never let it boil again, because boiling scrambles the eggs and there is no undo.",
+                    "Scatter the chopped fresh herb over the top, then move everything into your weighed pot."
+                ],
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is your per-container gram target. Divide the meatballs by count first, then pour the lemon sauce over them so every container gets the same amount of both. Each one lands at \u003cstrong\u003e566 calories and 42 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.mygreekdish.com/recipe/creamy-meatball-soup-egg-lemon-sauce-youvarlakia-avgolemono/\" target=\"_blank\" rel=\"noopener\"\u003emygreekdish.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Greek egg-lemon meatballs for about \u003cstrong\u003e$2.19\u003c/strong\u003e a container. This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  30.7,
+    "cost_batch_true":  35.65,
+    "cost_per_serving":  2.19,
+    "cost_per_serving_true":  2.55,
+    "cost_pantry_add":  15.72,
+    "cost_first_run":  51.37,
+    "scaler":  {
+                   "cost":  "35.65",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  2450,
+                                   "buy":  "5.5 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  404,
+                                   "buy":  "2.25 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  539,
+                                   "buy":  "5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  735,
+                                   "buy":  "15 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  137,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  149,
+                                   "buy":  "2.4",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Dried Dill",
+                                   "canon":  "Dried Dill",
+                                   "grams":  29,
+                                   "buy":  "9.75 tbsp",
+                                   "bid":  "dried-dill",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  29,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  20,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lemon Juice",
+                                   "canon":  "Lemon Juice",
+                                   "grams":  461,
+                                   "buy":  "10",
+                                   "bid":  "lemon-juice",
+                                   "gpu":  "29.570"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Greek turkey youvarlakia meal prep: rice-filled turkey meatballs in a silky egg and lemon avgolemono sauce. 566 calories, 42g protein, about $2.19 a serving.",
+                 "keywords":  "youvarlakia, avgolemono, greek meatballs, egg lemon sauce, turkey meal prep, budget meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT50M",
+                 "totalTime":  "PT1H15M",
+                 "costPerServing":  2.19,
+                 "recipeIngredient":  [
+                                          "5.5 lb 93/7 ground turkey",
+                                          "2.25 cups dry rice",
+                                          "5 yellow onions",
+                                          "15 large eggs",
+                                          "10 lemons worth of lemon juice",
+                                          "0.75 cups olive oil",
+                                          "2.4 carrots",
+                                          "2 tbsp fresh herbs"
+                                      ],
+                 "steps":  [
+                               "Mix ground turkey with uncooked rice, grated onion, dried dill, salt, and pepper, then roll into meatballs.",
+                               "Soften the remaining onion and grated carrot in olive oil and add water to make a light broth.",
+                               "Simmer the meatballs covered 40 minutes until the rice is tender and the meat reaches 165F.",
+                               "Whisk eggs with lemon juice, then temper with hot broth one ladle at a time.",
+                               "Stir the sauce back into the pot off the heat without letting it boil.",
+                               "Portion by weight into 14 containers, dividing meatballs by count."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  2450
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  404
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  539
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  735
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  137
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  149
+                              },
+                              {
+                                  "item":  "Dried Dill",
+                                  "grams":  29
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  29
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Lemon Juice",
+                                  "grams":  461
+                              }
+                          ]
+}

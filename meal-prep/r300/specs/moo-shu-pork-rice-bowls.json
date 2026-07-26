@@ -1,0 +1,340 @@
+﻿{
+    "name":  "Moo Shu Pork Rice Bowls",
+    "slug":  "moo-shu-pork-rice-bowls",
+    "cuisine":  "Chinese-American",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://thewoksoflife.com/moo-shu-pork-recipe/",
+    "source_site":  "thewoksoflife.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +20% (Rice)",
+                   "protein +20% (Pork Shoulder)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Classic take-out dish that is genuinely just a big cabbage-and-pork stir fry, so it scales to a 14-serving pan. Skip the pancakes and serve over rice, which is how it survives batch portioning. Cabbage and carrots are two of the cheapest tracked commodities. Source publishes 252 cal / 17g protein for filling only (no rice), so calories land in range once rice is added; protein needs a pork bump. | HARVEST: Published nutrition excludes the moo shu pancakes (a separate linked recipe) and any rice.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +20% (Rice)",
+                         "TUNING: protein +20% (Pork Shoulder)",
+                         "OVERRIDE +Rice: ADD rice base: titled \u0027Rice Bowls\u0027, source is pancake-wrapped; 55 g dry/serving x 6",
+                         "OVERRIDE Pork Shoulder: [BUMP x1.3] source 12 oz pork for 6; house 1 lb for the 25 g floor",
+                         "OVERRIDE Tortilla: WAVE-4: \u00271 recipe moo shu pancakes\u0027 trace - the bowl format plates over the rice base, pancakes dropped"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  593,
+                 "protein":  25,
+                 "carbs":  66,
+                 "fat":  24,
+                 "cost_ps":  "1.39"
+             },
+    "intro_html":  "Strip away the pancakes and moo shu pork is just an excellent cabbage and pork stir fry, which is exactly why it works as meal prep. Sliced pork, scrambled egg, cabbage, carrots and mushrooms in a hoisin and oyster sauce glaze, served over rice instead of wrapped. Cabbage and carrots are two of the cheapest things we track, so this lands at 25 grams of protein for about $1.39 a bowl.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Shoulder (generic (USDA)):\u003c/strong\u003e 2.75 lb (1276 g)",
+                                "\u003cstrong\u003eOyster Sauce (Lee Kum Kee):\u003c/strong\u003e 4.75 tbsp (84 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.75 cups (141 g)",
+                                "\u003cstrong\u003eHoisin Sauce (generic):\u003c/strong\u003e 0.5 cups (149 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 5.75 tbsp (93 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1 tbsp (13 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 5 large eggs (233 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.75 tbsp (23 g)",
+                                "\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 1 lb (490 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 6.3 (385 g)",
+                                "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 6.75 oz (188 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 0.25 cups (37 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 11.75 tbsp (70 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5 cups dry (936 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Shoulder, 2.75 lb: ~$10.04. \u003cstrong\u003eBuy 3 lbs: $10.71.\u003c/strong\u003e",
+                       "Oyster Sauce, 4.75 tbsp: ~$0.73. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Vegetable Oil, 0.75 cups: ~$0.34. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Hoisin Sauce, 0.5 cups: ~$1.37. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 5.75 tbsp: ~$0.35. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sesame Oil, 1 tbsp: ~$0.27. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Eggs, 5 large eggs: ~$0.55. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
+                       "Garlic, 2.75 tbsp: ~$0.33. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Green Cabbage, 1 lb: ~$0.92. \u003cstrong\u003eBuy 1 head: $1.69.\u003c/strong\u003e",
+                       "Carrots, 6.3: ~$0.81. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "White Mushrooms, 6.75 oz: ~$1.57. \u003cstrong\u003eBuy 1 8oz pack: $1.89.\u003c/strong\u003e",
+                       "Chicken Broth, 0.25 cups: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Onions, 11.75 tbsp: ~$0.83. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
+                       "Rice, 5 cups dry: ~$1.16. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (cornstarch, black pepper, salt): ~$0.14. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $19.46 across 14 servings, so roughly $1.39 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $22.73 across 14 servings, roughly $1.62 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $20.52 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.25. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.39 a bowl\u003c/strong\u003e for a takeout classic. One order of moo shu at a restaurant costs more than this entire batch of fourteen containers.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eCabbage is the reason this is cheap.\u003c/strong\u003e One head fills the pan and costs less than almost anything else in produce. It also keeps for weeks, unlike the bagged slaw mixes.",
+                       "\u003cstrong\u003eHoisin and oyster sauce are one time buys.\u003c/strong\u003e Both bottles last for many batches and both live in the fridge for months. They are what make this taste like the restaurant version.",
+                       "\u003cstrong\u003eBuy a whole pork shoulder and slice it yourself.\u003c/strong\u003e Pre sliced stir fry pork carries a real markup for knife work you can do in ten minutes. Freeze it for twenty minutes first and it slices thin easily.",
+                       "\u003cstrong\u003eSesame oil goes in off the heat.\u003c/strong\u003e It burns fast and it is one of the pricier bottles in the pantry. A small amount at the end flavors the whole batch."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Slice the pork shoulder thin against the grain and toss it with some of the soy sauce, the cornstarch and the black pepper. Let it sit while you prep everything else.",
+                    "Shred the cabbage, cut the carrots into matchsticks, slice the mushrooms, mince the garlic, and separate the green onion whites from the tops.",
+                    "Beat the eggs and scramble them in a little of the vegetable oil until just set, then take them out and chop them roughly.",
+                    "Get your largest pan very hot, add more oil, and stir fry the marinated pork in batches until it is browned and cooked through. Crowding the pan will steam the pork instead of searing it.",
+                    "Add the garlic and the green onion whites, then the mushrooms, carrots and cabbage, and stir fry until the cabbage wilts but still has some bite left in it.",
+                    "Return the pork, add the hoisin sauce, oyster sauce, the rest of the soy sauce and the chicken broth, and toss until everything is glazed.",
+                    "Kill the heat, fold in the scrambled egg and the green onion tops, finish with the sesame oil, and serve over rice with warm tortilla strips standing in for the pancakes."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount over rice in each container, tossing between scoops so the pork does not settle. Every bowl lands near 593 calories and 25 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://thewoksoflife.com/moo-shu-pork-recipe/\" target=\"_blank\" rel=\"noopener\"\u003ethewoksoflife.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Takeout favorites for about $1.39 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  19.46,
+    "cost_batch_true":  22.73,
+    "cost_per_serving":  1.39,
+    "cost_per_serving_true":  1.62,
+    "cost_pantry_add":  20.52,
+    "cost_first_run":  43.25,
+    "scaler":  {
+                   "cost":  "22.73",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Shoulder",
+                                   "canon":  "Pork Shoulder",
+                                   "grams":  1276,
+                                   "buy":  "2.75 lb",
+                                   "bid":  "pork-shoulder",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Oyster Sauce",
+                                   "canon":  "Oyster Sauce",
+                                   "grams":  84,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "oyster-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Cornstarch",
+                                   "canon":  "Cornstarch",
+                                   "grams":  10,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  141,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Hoisin Sauce",
+                                   "canon":  "Hoisin Sauce",
+                                   "grams":  149,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "hoisin-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  93,
+                                   "buy":  "5.75 tbsp",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "canon":  "Sesame Oil",
+                                   "grams":  13,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  233,
+                                   "buy":  "5 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  23,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Green Cabbage",
+                                   "canon":  "Green Cabbage",
+                                   "grams":  490,
+                                   "buy":  "1 lb",
+                                   "bid":  "cabbage",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  385,
+                                   "buy":  "6.3",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "White Mushrooms",
+                                   "canon":  "White Mushrooms",
+                                   "grams":  188,
+                                   "buy":  "6.75 oz",
+                                   "bid":  "mushrooms",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  37,
+                                   "buy":  "0.25 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  70,
+                                   "buy":  "11.75 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  936,
+                                   "buy":  "5 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Moo shu pork stir fry with cabbage, carrots, mushrooms and egg in a hoisin glaze, served over rice. 14 servings, 593 calories, 25g protein, about $1.39 each.",
+                 "keywords":  "moo shu pork, pork rice bowls, cabbage stir fry, hoisin pork, takeout at home, budget meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT20M",
+                 "totalTime":  "PT45M",
+                 "costPerServing":  1.39,
+                 "recipeIngredient":  [
+                                          "2.75 lb pork shoulder",
+                                          "5 cups dry rice",
+                                          "7 cups green cabbage",
+                                          "6.3 carrots",
+                                          "2.75 cups white mushrooms",
+                                          "5 large eggs",
+                                          "0.5 cups hoisin sauce",
+                                          "4.75 tbsp oyster sauce",
+                                          "5.75 tbsp soy sauce",
+                                          "1 tbsp sesame oil",
+                                          "11.75 tbsp green onions",
+                                          "2.75 tbsp garlic",
+                                          "0.75 cups vegetable oil"
+                                      ],
+                 "steps":  [
+                               "Slice the pork shoulder thin and marinate it in soy sauce, cornstarch and black pepper.",
+                               "Scramble the beaten eggs in oil, then remove and chop them.",
+                               "Stir fry the marinated pork in batches in a very hot pan until browned.",
+                               "Add the garlic, green onion whites, mushrooms, carrots and cabbage and stir fry until the cabbage wilts.",
+                               "Return the pork, glaze with hoisin, oyster sauce, soy sauce and broth, then fold in the egg and finish with sesame oil."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Pork Shoulder",
+                                  "grams":  1276
+                              },
+                              {
+                                  "item":  "Oyster Sauce",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Cornstarch",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  141
+                              },
+                              {
+                                  "item":  "Hoisin Sauce",
+                                  "grams":  149
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  93
+                              },
+                              {
+                                  "item":  "Sesame Oil",
+                                  "grams":  13
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  233
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  23
+                              },
+                              {
+                                  "item":  "Green Cabbage",
+                                  "grams":  490
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "White Mushrooms",
+                                  "grams":  188
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  37
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  936
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              }
+                          ]
+}

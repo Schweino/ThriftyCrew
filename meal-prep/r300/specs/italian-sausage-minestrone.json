@@ -1,0 +1,323 @@
+﻿{
+    "name":  "Italian Sausage Minestrone",
+    "slug":  "italian-sausage-minestrone",
+    "cuisine":  "italian",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.themediterraneandish.com/italian-sausage-minestrone-recipe/",
+    "source_site":  "themediterraneandish.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Pasta Shells)",
+                   "portion factor 1.3"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 428 cal / 22.9g protein at the source; our portion size takes it over 500 cal and a sausage bump clears 25g. Every ingredient including artichoke-hearts and chickpeas is board-tracked, which is unusual for a vegetable-heavy soup. Distinct from the two other Italian soups in the pool: no cream, no potatoes, pasta-and-bean base. | HARVEST: Olive oil is listed without a quantity in the source.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Pasta Shells)",
+                         "TUNING: portion factor 1.3"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  571,
+                 "protein":  33,
+                 "carbs":  49,
+                 "fat":  27,
+                 "cost_ps":  "2.69"
+             },
+    "intro_html":  "Minestrone was never a recipe so much as a strategy: whatever vegetables you have, plus beans, plus a little pasta, in a good broth. This version leans on hot Italian sausage for depth, chickpeas and artichoke hearts for body, and green beans and tomatoes for the rest. It carries 33 grams of protein for about $2.69 a bowl.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHot Italian Sausage (Johnsonville):\u003c/strong\u003e 3 lb (1376 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 4 tbsp (55 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 6 (334 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 (334 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 9 tbsp (76 g)",
+                                "\u003cstrong\u003eGreen Beans (generic):\u003c/strong\u003e 1.5 lb (688 g)",
+                                "\u003cstrong\u003eArtichoke Hearts (Hannaford):\u003c/strong\u003e 36.5 oz (1032 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 6 cans (2493 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 18.25 cups (4368 g)",
+                                "\u003cstrong\u003ePasta Shells (Great Value):\u003c/strong\u003e 8.75 oz dry (245 g)",
+                                "\u003cstrong\u003eChickpeas (generic):\u003c/strong\u003e 3 cans (774 g)",
+                                "\u003cstrong\u003eFresh Basil:\u003c/strong\u003e 10.75 tbsp (16 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 2.5 oz (68 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Hot Italian Sausage, 3 lb: ~$7.59. \u003cstrong\u003eBuy 4 lbs: $10.00.\u003c/strong\u003e",
+                       "Olive Oil, 4 tbsp: ~$0.77. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Celery, 6: ~$1.76. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Yellow Onion, 3: ~$0.84. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 9 tbsp: ~$1.09. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Green Beans, 1.5 lb: ~$1.48. \u003cstrong\u003eBuy 3 12oz bags: $2.19.\u003c/strong\u003e",
+                       "Artichoke Hearts, 36.5 oz: ~$5.86. \u003cstrong\u003eBuy 3 13.8oz cans: $6.66.\u003c/strong\u003e",
+                       "Diced Tomatoes, 6 cans: ~$5.82. \u003cstrong\u003eBuy 7 cans: $6.72.\u003c/strong\u003e",
+                       "Beef Broth, 18.25 cups: ~$5.86. \u003cstrong\u003ePantry staple; this batch alone uses about 5 32oz cartons.\u003c/strong\u003e",
+                       "Pasta Shells, 8.75 oz dry: ~$0.52. \u003cstrong\u003eBuy 1 12oz box: $0.73.\u003c/strong\u003e",
+                       "Chickpeas, 3 cans: ~$2.49. \u003cstrong\u003eBuy 4 cans: $3.29.\u003c/strong\u003e",
+                       "Fresh Basil, 10.75 tbsp: ~$2.01. \u003cstrong\u003eBuy 2 0.5oz packs: $3.52.\u003c/strong\u003e",
+                       "Parmesan Cheese, 2.5 oz: ~$0.83. \u003cstrong\u003eBuy 1 8oz tub: $2.78.\u003c/strong\u003e",
+                       "Pantry seasonings (dried oregano, black pepper, salt): ~$0.71. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $37.63 across 14 servings, so roughly $2.69 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $47.89 across 14 servings, roughly $3.42 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.10 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $62.99. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.69 a bowl\u003c/strong\u003e for a vegetable heavy soup that still hits real protein numbers. The artichoke hearts and canned tomatoes are the two lines carrying the cost here.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eArtichoke hearts are the surprise expense.\u003c/strong\u003e Canned in water is cheaper than marinated in oil and works better in a soup, since you are not paying for oil you drain away.",
+                       "\u003cstrong\u003eCanned diced tomatoes go on sale constantly.\u003c/strong\u003e This recipe uses a lot of them. Buy a case when the price drops and you will use every can within a month.",
+                       "\u003cstrong\u003eFresh basil is the smallest quantity for the biggest price.\u003c/strong\u003e Dried oregano is already carrying the herb weight. Treat the basil as optional if the board shows it high.",
+                       "\u003cstrong\u003eChickpeas and green beans are the cheapest volume in the pot.\u003c/strong\u003e That is exactly how minestrone was designed to work, and it is why this feeds fourteen."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Dice the celery and onion, mince the garlic, drain and quarter the artichoke hearts, and drain and rinse the chickpeas.",
+                    "Heat the olive oil in a large pot and brown the hot Italian sausage in crumbles until it takes on color.",
+                    "Add the celery and onion and cook until they soften, then add the garlic and the dried oregano for a minute.",
+                    "Pour in the diced tomatoes and the beef broth, season with salt and black pepper, and bring it up to a simmer.",
+                    "Add the green beans, the artichoke hearts and the chickpeas and simmer until the vegetables are tender.",
+                    "Stir in the pasta shells and cook only until they are just tender. Overcooked pasta turns to paste after a night in the fridge, and this soup is meant to be reheated.",
+                    "Fold in the chopped fresh basil off the heat and stir the parmesan through right before you portion."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and ladle the exact amount into each container, stirring the pot so the sausage and beans stay evenly spread. Every bowl lands near 571 calories and 33 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themediterraneandish.com/italian-sausage-minestrone-recipe/\" target=\"_blank\" rel=\"noopener\"\u003ethemediterraneandish.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Vegetable heavy soups with real protein for about $2.69 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  37.63,
+    "cost_batch_true":  47.89,
+    "cost_per_serving":  2.69,
+    "cost_per_serving_true":  3.42,
+    "cost_pantry_add":  15.1,
+    "cost_first_run":  62.99,
+    "scaler":  {
+                   "cost":  "47.89",
+                   "ing":  [
+                               {
+                                   "item":  "Hot Italian Sausage",
+                                   "canon":  "Hot Italian Sausage",
+                                   "grams":  1376,
+                                   "buy":  "3 lb",
+                                   "bid":  "italian-sausage",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  55,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "canon":  "Celery",
+                                   "grams":  334,
+                                   "buy":  "6",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  334,
+                                   "buy":  "3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  76,
+                                   "buy":  "9 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Green Beans",
+                                   "canon":  "Green Beans",
+                                   "grams":  688,
+                                   "buy":  "1.5 lb",
+                                   "bid":  "frozen-green-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Artichoke Hearts",
+                                   "canon":  "Artichoke Hearts",
+                                   "grams":  1032,
+                                   "buy":  "36.5 oz",
+                                   "bid":  "artichoke-hearts",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  2493,
+                                   "buy":  "6 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  3,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  12,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  4368,
+                                   "buy":  "18.25 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Pasta Shells",
+                                   "canon":  "Pasta Shells",
+                                   "grams":  245,
+                                   "buy":  "8.75 oz dry",
+                                   "bid":  "pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chickpeas",
+                                   "canon":  "Chickpeas",
+                                   "grams":  774,
+                                   "buy":  "3 cans",
+                                   "bid":  "chickpeas",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Basil",
+                                   "canon":  "Fresh Basil",
+                                   "grams":  16,
+                                   "buy":  "10.75 tbsp",
+                                   "bid":  "fresh-basil",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "canon":  "Parmesan Cheese",
+                                   "grams":  68,
+                                   "buy":  "2.5 oz",
+                                   "bid":  "parmesan",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  26,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Italian sausage minestrone with chickpeas, artichoke hearts, green beans, tomatoes and pasta. 14 servings, 571 calories, 33g protein, about $2.69 each.",
+                 "keywords":  "italian sausage minestrone, minestrone soup, chickpea vegetable soup, hearty italian soup, budget meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H10M",
+                 "costPerServing":  2.69,
+                 "recipeIngredient":  [
+                                          "3 lb hot Italian sausage",
+                                          "6 cans diced tomatoes",
+                                          "9.75 lb beef broth",
+                                          "3 cans chickpeas",
+                                          "36.5 oz artichoke hearts",
+                                          "6.25 cups green beans",
+                                          "8.75 oz dry pasta shells",
+                                          "6 celery stalks",
+                                          "3 yellow onions",
+                                          "9 tbsp garlic",
+                                          "10.75 tbsp fresh basil",
+                                          "2.5 oz parmesan cheese",
+                                          "4 tbsp olive oil"
+                                      ],
+                 "steps":  [
+                               "Brown the hot Italian sausage in crumbles in olive oil.",
+                               "Add the celery and onion, cook until soft, then add the garlic and dried oregano.",
+                               "Pour in the diced tomatoes and beef broth and bring to a simmer.",
+                               "Add the green beans, artichoke hearts and chickpeas and simmer until tender.",
+                               "Cook the pasta shells in the soup just until tender, then finish with fresh basil and parmesan."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Hot Italian Sausage",
+                                  "grams":  1376
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  55
+                              },
+                              {
+                                  "item":  "Celery",
+                                  "grams":  334
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  334
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  76
+                              },
+                              {
+                                  "item":  "Green Beans",
+                                  "grams":  688
+                              },
+                              {
+                                  "item":  "Artichoke Hearts",
+                                  "grams":  1032
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  2493
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  4368
+                              },
+                              {
+                                  "item":  "Pasta Shells",
+                                  "grams":  245
+                              },
+                              {
+                                  "item":  "Chickpeas",
+                                  "grams":  774
+                              },
+                              {
+                                  "item":  "Fresh Basil",
+                                  "grams":  16
+                              },
+                              {
+                                  "item":  "Parmesan Cheese",
+                                  "grams":  68
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  26
+                              }
+                          ]
+}

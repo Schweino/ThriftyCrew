@@ -25,7 +25,7 @@ $UNIT_G=@{ lb=453.592; oz=28.3495; floz=29.57; kg=1000.0; g=1.0 }
 # package sizes per item (whole-package pricing in the tool: "assume the user owns nothing"):
 # pantry staples from pantry-packages.json + fresh/boxed items parsed from cost-engine's $PKG table
 $pkg=@{}
-foreach($p in ((Get-Content (Join-Path $here 'r100\pantry-packages.json') -Raw | ConvertFrom-Json).packages).PSObject.Properties){
+foreach($p in ((Get-Content (Join-Path $here 'r300\pantry-packages.json') -Raw | ConvertFrom-Json).packages).PSObject.Properties){  # r300 file = r100 entries + r300 additions (superset since 2026-07-25)
   $pkg[$p.Name]=@{ g=[double]$p.Value.g; l=[string]$p.Value.label }
 }
 foreach($p in ((Get-Content (Join-Path $here 'planner-extra-packages.json') -Raw | ConvertFrom-Json).packages).PSObject.Properties){

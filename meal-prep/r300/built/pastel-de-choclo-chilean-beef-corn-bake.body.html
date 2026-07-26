@@ -1,0 +1,171 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"pastel-de-choclo-chilean-beef-corn-bake","base":14,"cost":64.28,"ing":[{"item":"Olive Oil","grams":66,"buy":"5 tbsp","bid":"olive-oil","gpu":28.000},{"item":"93/7 Ground Beef","grams":2450,"buy":"5.5 lb","bid":"ground-beef-8020","gpu":453.592},{"item":"Yellow Onion","grams":1102,"buy":"10","bid":"onions","gpu":453.592},{"item":"Garlic","grams":73,"buy":"8.5 tbsp","bid":"garlic","gpu":50.000},{"item":"All-Purpose Flour","grams":76,"buy":"9.5 tbsp","bid":"flour","gpu":453.592},{"item":"Chicken Broth","grams":882,"buy":"1 carton","bid":"chicken-broth","gpu":29.570},{"item":"Ground Cumin","grams":23,"buy":"3.75 tbsp","bid":"ground-cumin","gpu":28.350},{"item":"Paprika","grams":18,"buy":"2.5 tbsp","bid":"paprika","gpu":28.350},{"item":"Salt","grams":29,"buy":"1.5 tbsp","bid":"salt","gpu":28.350},{"item":"Black Pepper","grams":3,"buy":"0.5 tbsp","bid":"black-pepper","gpu":28.350},{"item":"Butter","grams":122,"buy":"0.5 cups","bid":"butter","gpu":453.592},{"item":"Sweet Whole Kernel Corn","grams":1323,"buy":"3 cans","bid":"canned-corn","gpu":28.350},{"item":"Milk","grams":300,"buy":"1.25 cups","bid":"milk","gpu":3785.000},{"item":"Fresh Basil","grams":25,"buy":"16.75 tbsp","bid":"fresh-basil","gpu":28.350},{"item":"Grits","grams":88,"buy":"8.75 tbsp","bid":"grits","gpu":28.350},{"item":"Olives","grams":83,"buy":"9.75 tbsp","bid":"green-olives","gpu":28.350},{"item":"Eggs","grams":245,"buy":"5 large eggs","bid":"eggs","gpu":600.000},{"item":"Golden Raisins","grams":44,"buy":"5 tbsp","bid":"raisins","gpu":28.350},{"item":"Sugar","grams":31,"buy":"2.5 tbsp","bid":"sugar","gpu":453.592}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~580 cal &middot; 44g protein &middot; 36g carbs &middot; 28g fat &middot; ~$3.69 per serving.</strong></p>
+
+<p>Pastel de choclo is Chile's answer to shepherd's pie, except the topping is sweet corn instead of mashed potato and it is scented with fresh basil. Underneath sits pino, the seasoned beef and onion filling studded with olives, raisins, and hard boiled egg. Chileans argue about the raisins the way Americans argue about beans in chili, so put them in and take a side. The corn layer bakes into something between a custard and a cornbread, and the whole tray cuts into squares.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Olive Oil:</strong> 5 tbsp (66 g)</li>
+<li><strong>93/7 Ground Beef (Member's Mark):</strong> 5.5 lb (2450 g)</li>
+<li><strong>Yellow Onion:</strong> 10 (1102 g)</li>
+<li><strong>Garlic:</strong> 8.5 tbsp (73 g)</li>
+<li><strong>All-Purpose Flour (Great Value):</strong> 9.5 tbsp (76 g)</li>
+<li><strong>Chicken Broth (Swanson):</strong> 1 carton (882 g)</li>
+<li><strong>Butter (generic):</strong> 0.5 cups (122 g)</li>
+<li><strong>Sweet Whole Kernel Corn (Great Value):</strong> 3 cans (1323 g)</li>
+<li><strong>Milk (Fairlife):</strong> 1.25 cups (300 g)</li>
+<li><strong>Fresh Basil:</strong> 16.75 tbsp (25 g)</li>
+<li><strong>Grits (Quaker):</strong> 8.75 tbsp (88 g)</li>
+<li><strong>Olives (generic):</strong> 9.75 tbsp (83 g)</li>
+<li><strong>Eggs (Great Value):</strong> 5 large eggs (245 g)</li>
+<li><strong>Golden Raisins (generic):</strong> 5 tbsp (44 g)</li>
+<li><strong>Sugar (Great Value):</strong> 2.5 tbsp (31 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Olive Oil, 5 tbsp: ~$0.93. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>93/7 Ground Beef, 5.5 lb: ~$35.82. <strong>Buy 6 lbs: $39.80.</strong></li>
+<li>Yellow Onion, 10: ~$2.77. <strong>Buy 3 lbs: $3.42.</strong></li>
+<li>Garlic, 8.5 tbsp: ~$1.05. <strong>Buy 2 heads: $1.15.</strong></li>
+<li>All-Purpose Flour, 9.5 tbsp: ~$0.07. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Chicken Broth, 1 carton: ~$1.18. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Butter, 0.5 cups: ~$0.80. <strong>Buy 1 lb box: $2.98.</strong></li>
+<li>Sweet Whole Kernel Corn, 3 cans: ~$2.42. <strong>Buy 4 cans: $3.16.</strong></li>
+<li>Milk, 1.25 cups: ~$0.24. <strong>Buy 1 gallon: $3.02.</strong></li>
+<li>Fresh Basil, 16.75 tbsp: ~$3.14. <strong>Buy 2 0.5oz packs: $3.52.</strong></li>
+<li>Grits, 8.75 tbsp: ~$0.41. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Olives, 9.75 tbsp: ~$0.91. <strong>Buy 1 6oz can: $1.87.</strong></li>
+<li>Eggs, 5 large eggs: ~$0.58. <strong>Buy 1 dozen: $1.43.</strong></li>
+<li>Golden Raisins, 5 tbsp: ~$0.37. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Sugar, 2.5 tbsp: ~$0.05. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Pantry seasonings (ground cumin, paprika, salt, black pepper): ~$0.92. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $51.66 across 14 servings, so roughly $3.69 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $64.28 across 14 servings, roughly $4.59 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $26.54 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $90.82. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$3.69 a bowl</strong> for a Chilean corn-topped beef bake that nobody at your table will have had before.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li><strong>The beef is where the money goes and where the savings are.</strong> This bake is otherwise corn, onions, and eggs. Buy ground beef on markdown, freeze it in batch portions, and this number comes down.</li>
+<li><strong>Canned corn is cheaper than fresh and it blends smoother.</strong> The traditional version grinds fresh kernels, but the corn layer gets pureed and baked either way, so the can wins on both price and effort.</li>
+<li><strong>Fresh basil in the corn is not a garnish, it is the signature.</strong> If you have a windowsill, one basil plant costs about what two clamshells do and keeps giving all summer.</li>
+<li><strong>Olives and raisins together sound wrong and are exactly right.</strong> Both come from small packages that cover this batch and then some, so the cost per bowl is tiny for how much they change the dish.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Heat the olive oil in a large pot and cook the diced yellow onions slowly until soft and sweet, which is the base of the pino.</li>
+<li>Add the garlic, ground cumin, paprika, salt, and black pepper and cook for a minute.</li>
+<li>Add the ground beef, break it up, and cook until browned, then sprinkle in the all-purpose flour and stir it through.</li>
+<li>Pour in the chicken broth and simmer until the filling is thick and saucy rather than wet, then fold in the olives and golden raisins.</li>
+<li>For the corn layer, blend the sweet corn with the milk and fresh basil until mostly smooth, then cook it in a pot with the butter and grits, stirring, until it thickens to a soft porridge.</li>
+<li>Spread the beef filling in a large baking dish, arrange the hard boiled eggs over it, and spread the corn mixture across the top.</li>
+<li>Sprinkle the sugar over the corn layer and bake at 400 degrees until the top is set and browned in patches.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Weigh the whole baking dish, subtract the empty dish weight, and divide by 14. Cut and lift to that weight so nobody ends up with all corn and no pino. Every serving comes in at <strong>580 calories with 44 grams of protein</strong>. Rest it a good twenty minutes before cutting or the corn layer will not hold its edge.</p>
+
+<p><em>Recipe adapted from <a href="https://www.recipetineats.com/pastel-de-choclo-chilean-corn-and-beef-casserole/" target="_blank" rel="noopener">recipetineats.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>South American comfort food for about $3.69 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.</em></p>

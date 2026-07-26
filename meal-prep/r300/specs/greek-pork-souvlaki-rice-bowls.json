@@ -1,0 +1,286 @@
+﻿{
+    "name":  "Greek Pork Souvlaki Rice Bowls",
+    "slug":  "greek-pork-souvlaki-rice-bowls",
+    "cuisine":  "Greek",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.themediterraneandish.com/pork-souvlaki/",
+    "source_site":  "themediterraneandish.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 200g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 391.7 cal / 36.2g protein per serving on the source page, so the protein ratio is excellent and the rice base carries calories over 500. Marinated pork cubes roast on a sheet pan in bulk (skip the skewers, which are the only non-scaling part). Note for the selector: the live catalog has Chicken Souvlaki Rice Bowls, so the marinade and bowl structure overlap even though the protein differs. | HARVEST: Published figures are 391.7 cal and 36.2 g protein. Rice not in source ingredient list.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 200g (src scale)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  593,
+                 "protein":  41,
+                 "carbs":  46,
+                 "fat":  26,
+                 "cost_ps":  "2.11"
+             },
+    "intro_html":  "Souvlaki means little skewers, and pork is what Greeks actually put on them. Not chicken, not lamb, pork. The magic is in the marinade: olive oil, vinegar, lemon, garlic, oregano, and mustard, given enough time to work its way into the meat. Here is the part that matters for meal prep. Skewers are the only piece of this dish that refuses to scale, so we skip them entirely and roast the marinated cubes on sheet pans. Same char, same flavor, and you are not threading meat onto sticks for forty minutes.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 5.25 lb (2381 g)",
+                                "\u003cstrong\u003eWhite Vinegar (generic):\u003c/strong\u003e 0.75 cups (158 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 cups (236 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 12.25 tbsp (105 g)",
+                                "\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 1.25 tbsp (18 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 3.5 (385 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 3 tbsp (42 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 3.5 (164 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Tenderloin, 5.25 lb: ~$20.84. \u003cstrong\u003eBuy 6 lbs: $23.82.\u003c/strong\u003e",
+                       "White Vinegar, 0.75 cups: ~$0.29. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 1 cups: ~$3.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 12.25 tbsp: ~$1.51. \u003cstrong\u003eBuy 3 heads: $1.73.\u003c/strong\u003e",
+                       "Dijon Mustard, 1.25 tbsp: ~$0.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Red Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Vegetable Oil, 3 tbsp: ~$0.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lemon Juice, 3.5: ~$0.62. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (dried oregano, italian seasoning, paprika, black pepper, salt): ~$1.01. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $29.61 across 14 servings, so roughly $2.11 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.98 across 14 servings, roughly $2.36 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $23.21 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $56.19. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.11 a bowl\u003c/strong\u003e for marinated pork souvlaki that a Greek place would charge you a lunch special price for, with less meat.",
+    "shop_smart":  [
+                       "\u003cstrong\u003ePork tenderloin is the tender cut that goes on sale constantly.\u003c/strong\u003e Watch for it, buy two, and freeze one. It thaws overnight and marinates while it does.",
+                       "\u003cstrong\u003eThe marinade is nearly free.\u003c/strong\u003e Vinegar, lemon juice, garlic, mustard, and dried oregano are all pantry items, and the olive oil is the only meaningful cost in it.",
+                       "\u003cstrong\u003eGive it time, not more ingredients.\u003c/strong\u003e Marinating overnight costs nothing and does more for the flavor than anything you could add to the bowl.",
+                       "\u003cstrong\u003eRed onion roasts right alongside the pork.\u003c/strong\u003e One sheet pan, two components, and the onion picks up the marinade drippings for free."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Whisk the olive oil, white vinegar, lemon juice, garlic, dijon mustard, dried oregano, italian seasoning, paprika, salt, and black pepper into a marinade.",
+                    "Cut the pork tenderloin into large cubes, toss them in the marinade, and refrigerate for at least four hours and ideally overnight.",
+                    "Heat the oven hot, around 425 degrees, and cut the red onions into thick wedges.",
+                    "Spread the marinated pork and the onion wedges on sheet pans in a single layer, drizzled with the vegetable oil. Crowding the pan steams the meat instead of browning it, so use two pans.",
+                    "Roast until the pork is cooked through and the edges are browned and caught in spots.",
+                    "Cook the rice according to the package while the pork roasts.",
+                    "Squeeze any remaining lemon juice over the hot pork straight off the pan and let it rest a few minutes before portioning."
+                ],
+    "portion_html":  "Weigh the rice pot and the roasted pork separately, subtracting the empty-pot weight from Step 1, and divide each by 14. Equal rice base, equal weight of pork and onion on top. Every bowl comes in at \u003cstrong\u003e593 calories with 41 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themediterraneandish.com/pork-souvlaki/\" target=\"_blank\" rel=\"noopener\"\u003ethemediterraneandish.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Bright Mediterranean dinners for about $2.11 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  29.61,
+    "cost_batch_true":  32.98,
+    "cost_per_serving":  2.11,
+    "cost_per_serving_true":  2.36,
+    "cost_pantry_add":  23.21,
+    "cost_first_run":  56.19,
+    "scaler":  {
+                   "cost":  "32.98",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Tenderloin",
+                                   "canon":  "Pork Tenderloin",
+                                   "grams":  2381,
+                                   "buy":  "5.25 lb",
+                                   "bid":  "pork-tenderloin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "White Vinegar",
+                                   "canon":  "White Vinegar",
+                                   "grams":  158,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "white-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  236,
+                                   "buy":  "1 cups",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  105,
+                                   "buy":  "12.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Dijon Mustard",
+                                   "canon":  "Dijon Mustard",
+                                   "grams":  18,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "dijon-mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  7,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "canon":  "Italian Seasoning",
+                                   "grams":  7,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  8,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  6,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  32,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Onion",
+                                   "canon":  "Red Onion",
+                                   "grams":  385,
+                                   "buy":  "3.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  42,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Lemon Juice",
+                                   "canon":  "Lemon Juice",
+                                   "grams":  164,
+                                   "buy":  "3.5",
+                                   "bid":  "lemon-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Greek pork souvlaki rice bowls rebuilt for 14-serving meal prep: lemon, garlic, and oregano marinated tenderloin roasted on sheet pans. 593 calories, 41g protein, about $2.11 per serving.",
+                 "keywords":  "pork souvlaki, greek pork bowls, souvlaki marinade, sheet pan pork, greek meal prep, high protein rice bowls",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  2.11,
+                 "recipeIngredient":  [
+                                          "5.25 lb pork tenderloin",
+                                          "1 cup olive oil",
+                                          "0.75 cups white vinegar",
+                                          "3.5 lemons worth of lemon juice",
+                                          "12.25 tbsp garlic",
+                                          "1.25 tbsp dijon mustard",
+                                          "3.5 red onions",
+                                          "3.75 cups dry rice",
+                                          "3 tbsp vegetable oil"
+                                      ],
+                 "steps":  [
+                               "Whisk olive oil, vinegar, lemon juice, garlic, mustard, and dried herbs into a marinade.",
+                               "Cube the pork tenderloin and marinate at least four hours, ideally overnight.",
+                               "Spread the pork and red onion wedges on sheet pans in a single layer.",
+                               "Roast hot until cooked through with browned edges.",
+                               "Cook the rice separately.",
+                               "Finish with lemon juice and portion over rice into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Pork Tenderloin",
+                                  "grams":  2381
+                              },
+                              {
+                                  "item":  "White Vinegar",
+                                  "grams":  158
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  236
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  105
+                              },
+                              {
+                                  "item":  "Dijon Mustard",
+                                  "grams":  18
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Italian Seasoning",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  32
+                              },
+                              {
+                                  "item":  "Red Onion",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Lemon Juice",
+                                  "grams":  164
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

@@ -1,0 +1,331 @@
+﻿{
+    "name":  "Chuletas Guisadas Stewed Pork Chops and Rice",
+    "slug":  "chuletas-guisadas-stewed-pork-chops-and-rice",
+    "cuisine":  "Puerto Rican",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.budgetbytes.com/chuletas-guisadas/",
+    "source_site":  "budgetbytes.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 200g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 516 cal / 52g protein per serving on the source page,  the best protein-per-calorie ratio in the whole slice,  and the source publishes a $3.84/serving cost, which confirms budget-buildable. Braised chops in a tomato-sofrito gravy, one pot, holds beautifully. Distinct from the live Southern smothered chops (cream/onion gravy, not tomato-adobo). Sofrito and sazon are buildable from tracked produce and spices. | HARVEST: Budget Bytes lines carry inline per-ingredient costs, retained verbatim. Rice not in source ingredient list.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 200g (src scale)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  679,
+                 "protein":  53,
+                 "carbs":  52,
+                 "fat":  28,
+                 "cost_ps":  "2.93"
+             },
+    "intro_html":  "Chuletas guisadas is what happens when a Puerto Rican kitchen decides that a pork chop should never, ever be dry again. You sear the chops, then let them stew in a tomato and sofrito gravy with olives and peppers until they surrender. It is a completely different animal from a Southern smothered chop, which leans on cream and onion. This one is bright, acidic, and salty from the olives. It also happens to carry one of the highest protein numbers in this whole batch, which is not something you often say about comfort food.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 0.75 cups (142 g)",
+                                "\u003cstrong\u003ePork Chops:\u003c/strong\u003e 7 lb (3175 g)",
+                                "\u003cstrong\u003eSalsa (Pace):\u003c/strong\u003e 1.25 cups (336 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3.5 tbsp (30 g)",
+                                "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 2 cans (794 g)",
+                                "\u003cstrong\u003eWhite Vinegar (generic):\u003c/strong\u003e 3.5 tbsp (52 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.8 cartons (1680 g)",
+                                "\u003cstrong\u003eOlives (generic):\u003c/strong\u003e 14 tbsp (118 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3.5 (420 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 14 tbsp (14 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 0.75 cups: ~$2.00. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pork Chops, 7 lb: ~$22.89. \u003cstrong\u003eBuy 7 lbs: $22.89.\u003c/strong\u003e",
+                       "Salsa, 1.25 cups: ~$1.46. \u003cstrong\u003eBuy 1 16oz jar: $1.97.\u003c/strong\u003e",
+                       "Garlic, 3.5 tbsp: ~$0.43. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Tomato Sauce, 2 cans: ~$1.79. \u003cstrong\u003eBuy 2 15oz cans: $1.92.\u003c/strong\u003e",
+                       "White Vinegar, 3.5 tbsp: ~$0.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 1.8 cartons: ~$2.26. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Olives, 14 tbsp: ~$1.30. \u003cstrong\u003eBuy 1 6oz can: $1.87.\u003c/strong\u003e",
+                       "Yellow Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Green Bell Peppers, 3.5: ~$3.01. \u003cstrong\u003eBuy 4 each: $3.44.\u003c/strong\u003e",
+                       "Fresh Cilantro, 14 tbsp: ~$0.44. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (sazon seasoning, dried oregano, bay leaves, salt, black pepper): ~$3.57. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $41.08 across 14 servings, so roughly $2.93 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $44.38 across 14 servings, roughly $3.17 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.11 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.49. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.93 a bowl\u003c/strong\u003e for stewed pork chops with the most protein per serving of anything in this batch.",
+    "shop_smart":  [
+                       "\u003cstrong\u003ePork chops are the entire cost of this dish.\u003c/strong\u003e Everything else on the list is pennies. Buy bone-in family packs when they hit a sale price and freeze them flat, and this number drops noticeably.",
+                       "\u003cstrong\u003eSofrito is cheaper to build than to buy.\u003c/strong\u003e Onion, bell pepper, garlic, and cilantro blended together is the base, and a jar of the pre-made stuff costs several times what the produce does.",
+                       "\u003cstrong\u003eOlives are worth the can.\u003c/strong\u003e They are the salty note that makes the gravy taste Puerto Rican instead of generic, and one small can covers the batch.",
+                       "\u003cstrong\u003eSazon and adobo blends stretch a long way.\u003c/strong\u003e One packet or shaker seasons many dinners, so the cost per bowl of the spice work is essentially nothing."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Season the pork chops all over with sazon, dried oregano, salt, and black pepper, and let them sit while you prep.",
+                    "Heat the olive oil in a large heavy pot and sear the chops in batches until browned on both sides, then set them aside.",
+                    "Add the diced yellow onion and green bell peppers to the pot and cook until soft, scraping up the browned bits.",
+                    "Stir in the garlic, salsa, and white vinegar and cook for a minute.",
+                    "Add the tomato sauce, chicken broth, olives, and bay leaves, then return the chops and any juices to the pot.",
+                    "Cover and simmer gently until the pork is tender enough to pull apart with a fork, then uncover and let the gravy thicken.",
+                    "Cook the rice according to the package, fish out the bay leaves, and finish the stew with the chopped cilantro."
+                ],
+    "portion_html":  "Weigh the rice pot and the stew pot separately, subtract the empty-pot weight from Step 1, and divide each by 14. Give every container the same rice base, then the same weight of pork and gravy. Every serving comes in at \u003cstrong\u003e679 calories with 53 grams of protein\u003c/strong\u003e, which puts it at the very top of the pork half of this batch.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.budgetbytes.com/chuletas-guisadas/\" target=\"_blank\" rel=\"noopener\"\u003ebudgetbytes.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Protein-packed dinners for about $2.93 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  41.08,
+    "cost_batch_true":  44.38,
+    "cost_per_serving":  2.93,
+    "cost_per_serving_true":  3.17,
+    "cost_pantry_add":  17.11,
+    "cost_first_run":  61.49,
+    "scaler":  {
+                   "cost":  "44.38",
+                   "ing":  [
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  142,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Pork Chops",
+                                   "canon":  "Pork Chops",
+                                   "grams":  3175,
+                                   "buy":  "7 lb",
+                                   "bid":  "pork-chops",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Sazon Seasoning",
+                                   "canon":  "Sazon Seasoning",
+                                   "grams":  65,
+                                   "buy":  "2.25 oz",
+                                   "bid":  "sazon-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salsa",
+                                   "canon":  "Salsa",
+                                   "grams":  336,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "salsa",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  30,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Tomato Sauce",
+                                   "canon":  "Tomato Sauce",
+                                   "grams":  794,
+                                   "buy":  "2 cans",
+                                   "bid":  "tomato-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "White Vinegar",
+                                   "canon":  "White Vinegar",
+                                   "grams":  52,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "white-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  1680,
+                                   "buy":  "1.8 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Olives",
+                                   "canon":  "Olives",
+                                   "grams":  118,
+                                   "buy":  "14 tbsp",
+                                   "bid":  "green-olives",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  7,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  2,
+                                   "buy":  "0.07 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  385,
+                                   "buy":  "3.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  420,
+                                   "buy":  "3.5",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  14,
+                                   "buy":  "14 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Puerto Rican chuletas guisadas rebuilt for 14-serving meal prep: pork chops stewed in tomato sofrito gravy with olives over rice. 679 calories, 53g protein, about $2.93 per serving.",
+                 "keywords":  "chuletas guisadas, stewed pork chops, puerto rican pork, sofrito gravy, high protein meal prep, budget latin dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT60M",
+                 "totalTime":  "PT80M",
+                 "costPerServing":  2.93,
+                 "recipeIngredient":  [
+                                          "7 lb pork chops",
+                                          "2 cans tomato sauce",
+                                          "1.25 cups salsa",
+                                          "3.75 lb chicken broth",
+                                          "14 tbsp olives",
+                                          "3.5 yellow onions",
+                                          "3.5 green bell peppers",
+                                          "3.5 tbsp garlic",
+                                          "3.5 tbsp white vinegar",
+                                          "14 tbsp fresh cilantro",
+                                          "3.75 cups dry rice",
+                                          "0.75 cups olive oil"
+                                      ],
+                 "steps":  [
+                               "Season the pork chops with sazon, oregano, salt, and pepper.",
+                               "Sear the chops in batches in olive oil, then set aside.",
+                               "Cook the onion and bell pepper, then add garlic, salsa, and vinegar.",
+                               "Add tomato sauce, broth, olives, and bay leaves and return the chops.",
+                               "Cover and simmer until the pork is fork tender, then reduce the gravy.",
+                               "Cook the rice, finish with cilantro, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  142
+                              },
+                              {
+                                  "item":  "Pork Chops",
+                                  "grams":  3175
+                              },
+                              {
+                                  "item":  "Sazon Seasoning",
+                                  "grams":  65
+                              },
+                              {
+                                  "item":  "Salsa",
+                                  "grams":  336
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  30
+                              },
+                              {
+                                  "item":  "Tomato Sauce",
+                                  "grams":  794
+                              },
+                              {
+                                  "item":  "White Vinegar",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  1680
+                              },
+                              {
+                                  "item":  "Olives",
+                                  "grams":  118
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

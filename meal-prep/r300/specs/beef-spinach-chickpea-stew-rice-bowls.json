@@ -1,0 +1,237 @@
+﻿{
+    "name":  "Middle Eastern Beef, Spinach and Chickpea Stew",
+    "slug":  "beef-spinach-chickpea-stew-rice-bowls",
+    "cuisine":  "Iraqi",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.hungrypaprikas.com/spinach-stew/",
+    "source_site":  "hungrypaprikas.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 300g (src scale)",
+                   "base +10% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified numbers: 292 cal and 26g protein for the stew alone, so over rice it lands near 560 cal with protein intact. Seven ingredients, all board-mapped, frozen spinach keeps it cheap. One of the strongest cost-per-serving candidates in this slice. | HARVEST: Rice not in source ingredient list.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 300g (src scale)",
+                         "TUNING: base +10% (Rice)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  560,
+                 "protein":  32,
+                 "carbs":  74,
+                 "fat":  15,
+                 "cost_ps":  "2.83"
+             },
+    "intro_html":  "This is Iraqi home cooking at its most economical. Eight ingredients, one pot, and a stew that gets its body from spinach and chickpeas rather than from a pile of meat. The beef is there for flavor and richness, but the chickpeas are quietly doing a lot of the protein work, which is why this bowl lands where it does on both cost and nutrition. It is the kind of dish that exists in one form or another across the whole region, because it is what you make when you want dinner to be filling and you do not want to spend much.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 7 tbsp (94 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (257 g)",
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 2.25 lb (1058 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1.8 cans (306 g)",
+                                "\u003cstrong\u003eFrozen Chopped Spinach (generic):\u003c/strong\u003e 4 lb (1867 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.8 cartons (1680 g)",
+                                "\u003cstrong\u003eChickpeas (generic):\u003c/strong\u003e 5 cans (1260 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.25 cups dry (772 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 7 tbsp: ~$1.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2.3: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "93/7 Ground Beef, 2.25 lb: ~$15.47. \u003cstrong\u003eBuy 3 lbs: $19.90.\u003c/strong\u003e",
+                       "Tomato Paste, 1.8 cans: ~$1.55. \u003cstrong\u003eBuy 2 6oz cans: $1.72.\u003c/strong\u003e",
+                       "Frozen Chopped Spinach, 4 lb: ~$13.17. \u003cstrong\u003eBuy 7 10oz boxes: $14.02.\u003c/strong\u003e",
+                       "Chicken Broth, 1.8 cartons: ~$2.26. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Chickpeas, 5 cans: ~$4.06. \u003cstrong\u003eBuy 5 cans: $4.11.\u003c/strong\u003e",
+                       "Rice, 4.25 cups dry: ~$0.95. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $39.66 across 14 servings, so roughly $2.83 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $45.65 across 14 servings, roughly $3.26 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.23 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.88. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.83 a bowl\u003c/strong\u003e for a stew that gets most of its substance from spinach and chickpeas rather than from expensive meat.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eFrozen spinach is the single biggest thing in this pot and one of the cheapest.\u003c/strong\u003e Fresh spinach cooks down to almost nothing, so buying frozen is not a compromise here, it is the correct choice by a wide margin.",
+                       "\u003cstrong\u003eCanned chickpeas add real protein for very little money.\u003c/strong\u003e If you want to push the price lower, dried chickpeas soaked overnight cost a fraction of the canned per serving.",
+                       "\u003cstrong\u003eBeef is a flavor ingredient in this recipe, not the bulk.\u003c/strong\u003e That is the whole design, and it is why the price per bowl stays reasonable.",
+                       "\u003cstrong\u003eTomato paste beats canned sauce for thickening.\u003c/strong\u003e A small can of paste gives you more concentrated tomato per dollar than a larger can of sauce and it does not water down the stew."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Heat the olive oil in a large pot and cook the diced yellow onion until softened and lightly golden.",
+                    "Add the ground beef, break it up, and cook until browned with no pink remaining.",
+                    "Stir in the tomato paste and cook it for a couple of minutes until it darkens and coats everything, which takes the tinny edge off.",
+                    "Thaw the frozen chopped spinach, squeeze out most of the water, and add it to the pot.",
+                    "Pour in the chicken broth, bring to a simmer, and cook uncovered until the spinach has melted into the sauce and the stew thickens.",
+                    "Drain and rinse the chickpeas, add them, and simmer another ten minutes so they take on the sauce.",
+                    "Season with salt and black pepper to taste, then cook the rice according to the package to serve underneath."
+                ],
+    "portion_html":  "Weigh the rice pot and the stew pot separately, subtracting the empty-pot weight from Step 1, and divide each by 14. Even rice base, even ladle of stew, and make sure the chickpeas get spread around rather than settling in the last few containers. Every bowl comes in at \u003cstrong\u003e560 calories with 32 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.hungrypaprikas.com/spinach-stew/\" target=\"_blank\" rel=\"noopener\"\u003ehungrypaprikas.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Hearty, plant-forward dinners for about $2.83 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  39.66,
+    "cost_batch_true":  45.65,
+    "cost_per_serving":  2.83,
+    "cost_per_serving_true":  3.26,
+    "cost_pantry_add":  14.23,
+    "cost_first_run":  59.88,
+    "scaler":  {
+                   "cost":  "45.65",
+                   "ing":  [
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  94,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  257,
+                                   "buy":  "2.3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  35,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "canon":  "93/7 Ground Beef",
+                                   "grams":  1058,
+                                   "buy":  "2.25 lb",
+                                   "bid":  "ground-beef-8020",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  306,
+                                   "buy":  "1.8 cans",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Frozen Chopped Spinach",
+                                   "canon":  "Frozen Chopped Spinach",
+                                   "grams":  1867,
+                                   "buy":  "4 lb",
+                                   "bid":  "spinach",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  1680,
+                                   "buy":  "1.8 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Chickpeas",
+                                   "canon":  "Chickpeas",
+                                   "grams":  1260,
+                                   "buy":  "5 cans",
+                                   "bid":  "chickpeas",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  772,
+                                   "buy":  "4.25 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Middle Eastern beef, spinach, and chickpea stew rebuilt for 14-serving meal prep over rice. 560 calories, 32g protein, about $2.83 per serving.",
+                 "keywords":  "iraqi spinach stew, beef and chickpea stew, spinach stew with rice, middle eastern meal prep, budget beef stew, high protein stew",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT60M",
+                 "costPerServing":  2.83,
+                 "recipeIngredient":  [
+                                          "2.25 lb 93/7 ground beef",
+                                          "22 cups frozen chopped spinach",
+                                          "5 cans chickpeas",
+                                          "1.8 cans tomato paste",
+                                          "3.75 lb chicken broth",
+                                          "4.25 cups dry rice",
+                                          "2.3 yellow onions",
+                                          "7 tbsp olive oil"
+                                      ],
+                 "steps":  [
+                               "Cook the diced onion in olive oil until softened and golden.",
+                               "Brown the ground beef until no pink remains.",
+                               "Stir in the tomato paste and cook until it darkens.",
+                               "Add the thawed and squeezed spinach and the broth and simmer until thick.",
+                               "Add the drained chickpeas and simmer ten more minutes.",
+                               "Season, cook the rice, and portion the stew over it into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  94
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  257
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "93/7 Ground Beef",
+                                  "grams":  1058
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  306
+                              },
+                              {
+                                  "item":  "Frozen Chopped Spinach",
+                                  "grams":  1867
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  1680
+                              },
+                              {
+                                  "item":  "Chickpeas",
+                                  "grams":  1260
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  772
+                              }
+                          ]
+}

@@ -1,0 +1,289 @@
+﻿{
+    "name":  "Senfbraten (German Mustard-Gravy Pork Roast)",
+    "slug":  "senfbraten-german-mustard-pork-roast",
+    "cuisine":  "german",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.daringgourmet.com/traditional-german-senfbraten-mustard-gravy-pork-roast/",
+    "source_site":  "daringgourmet.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 200g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 417 cal / 53g protein at the source, an outstanding protein ratio; adding the potato or noodle side our format requires puts it comfortably over 500 cal. The catalog has no German entry at all. Slow braise, slices and weighs out cleanly at 14. Source calls for a pork loin roast which has no dedicated board id, so pork-shoulder (tracked) is the budget swap; the white wine is optional and beef-broth carries the gravy. | HARVEST: German mustard and oil are listed without quantities in the source.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 200g (src scale)",
+                         "OVERRIDE Dijon Mustard: \u0027German mustard\u0027 no qty; senfbraten needs a real mustard crust, house 60 g"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  644,
+                 "protein":  53,
+                 "carbs":  48,
+                 "fat":  24,
+                 "cost_ps":  "1.72"
+             },
+    "intro_html":  "Senfbraten is a German Sunday roast: a pork loin slathered thick with mustard, seared, then braised low with onions and carrots until the pan liquid becomes a mustard gravy you will want to drink. It is the leanest, highest protein plate in this whole batch at 53 grams for about $1.72, which is a rare combination.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 7 lb (3175 g)",
+                                "\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 7.5 oz (210 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 6 tbsp (84 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 5 (525 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 7 tbsp (98 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 cups (210 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 7.75 cups (1848 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 7 (427 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Loin, 7 lb: ~$14.98. \u003cstrong\u003eBuy 7 lbs: $14.98.\u003c/strong\u003e",
+                       "Dijon Mustard, 7.5 oz: ~$1.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Vegetable Oil, 6 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 5: ~$1.32. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Butter, 7 tbsp: ~$0.64. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Chicken Broth, 1 cups: ~$0.28. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Beef Broth, 7.75 cups: ~$2.48. \u003cstrong\u003ePantry staple; this batch alone uses about 3 32oz cartons.\u003c/strong\u003e",
+                       "Carrots, 7: ~$0.90. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (bay leaves, dried thyme, salt, black pepper): ~$0.79. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $24.01 across 14 servings, so roughly $1.72 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $27.44 across 14 servings, roughly $1.96 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.76 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $40.20. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.72 a bowl\u003c/strong\u003e for a roast dinner with a proper pan gravy. Considering this is a whole pork loin roast, that number is hard to argue with.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eA whole pork loin is one of the best protein deals we track.\u003c/strong\u003e Buying the whole roast rather than cut chops drops the price per pound, and loin is lean enough that you are paying for meat, not trim.",
+                       "\u003cstrong\u003eMustard is the flavor and it is nearly free.\u003c/strong\u003e This uses a real amount of it and it still barely registers on the cost list, because a jar of dijon goes a long way.",
+                       "\u003cstrong\u003eBroth carries the gravy, so buy the big carton.\u003c/strong\u003e Beef broth does most of the work here and chicken broth rounds it out. Store brand is fine in a mustard gravy.",
+                       "\u003cstrong\u003eSkip the wine.\u003c/strong\u003e The traditional version adds white wine, but the broth and mustard carry this on their own, and that is one whole bottle you do not have to buy."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Pat the pork loin dry, season it with salt and black pepper, and coat the whole surface in a thick layer of the dijon mustard. Hold a couple of spoonfuls back for the gravy.",
+                    "Heat the vegetable oil in a heavy pot or roasting pan and sear the mustard coated loin on all sides until it browns.",
+                    "Take the roast out and cook the sliced onions, the garlic and the sliced carrots in the same pot until they soften and pick up the fond.",
+                    "Pour in the beef broth and chicken broth, add the bay leaves and dried thyme, and scrape the bottom of the pot clean.",
+                    "Set the roast back in, cover, and braise low until the center reaches 145F and the meat slices easy.",
+                    "Move the roast to a board to rest. Reduce the braising liquid on the stovetop, whisk in the butter and the reserved mustard, and taste it for salt.",
+                    "Slice the rested pork thin against the grain, cook the rice separately, and combine everything with the gravy in your big pot."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container, counting the pork slices so the protein lands even. Every bowl comes in near 644 calories with 53 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.daringgourmet.com/traditional-german-senfbraten-mustard-gravy-pork-roast/\" target=\"_blank\" rel=\"noopener\"\u003edaringgourmet.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Sunday roasts on a weekday budget, about $1.72 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  24.01,
+    "cost_batch_true":  27.44,
+    "cost_per_serving":  1.72,
+    "cost_per_serving_true":  1.96,
+    "cost_pantry_add":  12.76,
+    "cost_first_run":  40.2,
+    "scaler":  {
+                   "cost":  "27.44",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Loin",
+                                   "canon":  "Pork Loin",
+                                   "grams":  3175,
+                                   "buy":  "7 lb",
+                                   "bid":  "pork-loin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Dijon Mustard",
+                                   "canon":  "Dijon Mustard",
+                                   "grams":  210,
+                                   "buy":  "7.5 oz",
+                                   "bid":  "dijon-mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  84,
+                                   "buy":  "6 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  525,
+                                   "buy":  "5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  35,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  98,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  210,
+                                   "buy":  "1 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  2,
+                                   "buy":  "0.07 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  4,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  1848,
+                                   "buy":  "7.75 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  427,
+                                   "buy":  "7",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Senfbraten, the German mustard crusted pork roast braised into its own mustard gravy, built for 14 servings. 644 calories, 53g protein, about $1.72 per serving.",
+                 "keywords":  "senfbraten, german pork roast, mustard gravy pork, pork loin roast, high protein meal prep, german recipe",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT2H15M",
+                 "totalTime":  "PT2H35M",
+                 "costPerServing":  1.72,
+                 "recipeIngredient":  [
+                                          "7 lb pork loin",
+                                          "7.5 oz dijon mustard",
+                                          "5 yellow onions",
+                                          "7 carrots",
+                                          "4 tbsp garlic",
+                                          "4 lb beef broth",
+                                          "0.5 lb chicken broth",
+                                          "7 tbsp butter",
+                                          "6 tbsp vegetable oil",
+                                          "3.75 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Season the pork loin and coat it thickly in dijon mustard, holding some back for the gravy.",
+                               "Sear the roast on all sides in vegetable oil, then set it aside.",
+                               "Soften the onions, garlic and carrots in the pot, then add the beef and chicken broth with bay leaves and thyme.",
+                               "Return the roast, cover, and braise until the center reaches 145F.",
+                               "Rest the roast, reduce the liquid and whisk in butter and the reserved mustard, then slice and serve over rice."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Pork Loin",
+                                  "grams":  3175
+                              },
+                              {
+                                  "item":  "Dijon Mustard",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  525
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  1848
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  427
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

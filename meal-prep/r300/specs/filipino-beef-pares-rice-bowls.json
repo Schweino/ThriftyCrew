@@ -1,0 +1,277 @@
+﻿{
+    "name":  "Filipino Beef Pares Rice Bowls",
+    "slug":  "filipino-beef-pares-rice-bowls",
+    "cuisine":  "Filipino",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.kawalingpinoy.com/beef-pares/",
+    "source_site":  "kawalingpinoy.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base trimmed -14% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 719 cal and 54g protein per serving from the source panel, the highest-protein candidate in this slice. Source specifies brisket; chuck-roast is the tracked, cheaper cut and braises the same way. Slow-braise plus garlic rice, both batch formats. | HARVEST: Source groups ingredients into three sections: broth, beef asado, garlic fried rice. Section headers dropped; every line retained in order.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: base trimmed -14% (Rice)",
+                         "OVERRIDE Rice: \u00274 cups day-old cold rice\u0027 is COOKED rice (engine read 4 cups dry = 740 g); 4 x 57 g dry-equivalent"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  872,
+                 "protein":  52,
+                 "carbs":  65,
+                 "fat":  44,
+                 "cost_ps":  "4.94"
+             },
+    "intro_html":  "Beef pares is Manila street food at its most honest: chunks of beef braised until they surrender, a sweet and salty soy braise thickened into sauce, and garlic fried rice underneath catching all of it. This is a long, lazy cook, which is exactly what you want on a Sunday. Each bowl carries \u003cstrong\u003e52 grams of protein\u003c/strong\u003e and 872 calories for about \u003cstrong\u003e$4.94\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 7 lb (3175 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 7 (770 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1.5 cups (210 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 10 tbsp (60 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1 cups (240 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 8.75 tbsp (52 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (840 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.75 cups (223 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 0.75 cups (186 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (684 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Chuck Roast, 7 lb: ~$55.79. \u003cstrong\u003eBuy 7 lbs: $55.79.\u003c/strong\u003e",
+                       "Yellow Onion, 7: ~$1.94. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Garlic, 1.5 cups: ~$3.02. \u003cstrong\u003eBuy 6 heads: $3.46.\u003c/strong\u003e",
+                       "Green Onions, 10 tbsp: ~$0.71. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
+                       "Vegetable Oil, 1 cups: ~$0.58. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Ginger, 8.75 tbsp: ~$0.46. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Chicken Broth, 1 carton: ~$1.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 0.75 cups: ~$0.84. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Brown Sugar, 0.75 cups: ~$1.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.84. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, bay leaves, salt): ~$2.84. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $69.20 across 14 servings, so roughly $4.94 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $70.76 across 14 servings, roughly $5.05 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.60 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $82.36. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.94 a bowl\u003c/strong\u003e, and nearly all of that is the chuck roast. Everything else in this pot is broth, soy sauce, sugar, and aromatics, which is why a dish that eats this rich stays this reasonable.",
+    "shop_smart":  [
+                       "The source calls for brisket. Chuck roast braises the same way, shreds the same way, and costs meaningfully less per pound, so that is what we build on.",
+                       "Chuck goes on sale in cycles. When it drops, buy two roasts and freeze the second whole. It thaws fine and this recipe does not care about a freezer trip.",
+                       "Garlic is the whole personality of the fried rice. Buy heads, not the jarred stuff, and slice it thin so it crisps instead of burning.",
+                       "Day old rice makes better garlic fried rice than fresh. Cook the rice the night before, spread it on a sheet pan, and let it dry out in the fridge."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cut the chuck roast into large cubes. Sear them hard in a little oil, in batches, until they have real color on at least two sides.",
+                    "Add chopped onion, half the garlic, and the ginger to the pot and cook until the onion goes soft and translucent.",
+                    "Pour in the chicken broth, soy sauce, and brown sugar. Add bay leaves and black pepper, scraping the browned bits off the bottom.",
+                    "Cover and simmer low for 2 to 2.5 hours, until the beef pulls apart with a spoon. Add water if the pot gets too dry.",
+                    "Uncover for the last 20 minutes and let the sauce reduce until it coats the beef instead of pooling around it.",
+                    "For the garlic rice, fry the remaining sliced garlic in the rest of the oil until golden, then toss in the cooked cold rice and stir until every grain is coated and hot.",
+                    "Finish with sliced green onions over the beef."
+                ],
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. That is your beef portion for each container. Add the same weight of garlic rice to every one and you have fourteen identical bowls. Each comes in at \u003cstrong\u003e872 calories with 52 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.kawalingpinoy.com/beef-pares/\" target=\"_blank\" rel=\"noopener\"\u003ekawalingpinoy.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Braised beef bowls for about $4.94 a serving. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  69.2,
+    "cost_batch_true":  70.76,
+    "cost_per_serving":  4.94,
+    "cost_per_serving_true":  5.05,
+    "cost_pantry_add":  11.6,
+    "cost_first_run":  82.36,
+    "scaler":  {
+                   "cost":  "70.76",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Chuck Roast",
+                                   "canon":  "Beef Chuck Roast",
+                                   "grams":  3175,
+                                   "buy":  "7 lb",
+                                   "bid":  "beef-chuck-roast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  770,
+                                   "buy":  "7",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  210,
+                                   "buy":  "1.5 cups",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  50,
+                                   "buy":  "7.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  4,
+                                   "buy":  "0.25 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  63,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  60,
+                                   "buy":  "10 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  240,
+                                   "buy":  "1 cups",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  52,
+                                   "buy":  "8.75 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  840,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  223,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "canon":  "Brown Sugar",
+                                   "grams":  186,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  684,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Filipino beef pares meal prep: chuck roast slow braised in soy, ginger, and brown sugar over garlic fried rice. 872 calories, 52g protein, about $4.94 per serving.",
+                 "keywords":  "beef pares, filipino beef, garlic fried rice, braised beef bowls, budget meal prep, chuck roast recipes",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT2H30M",
+                 "totalTime":  "PT2H50M",
+                 "costPerServing":  4.94,
+                 "recipeIngredient":  [
+                                          "7 lb beef chuck roast",
+                                          "7 yellow onions",
+                                          "1.5 cups garlic",
+                                          "10 tbsp green onions",
+                                          "1 cup vegetable oil",
+                                          "8.75 tbsp ginger",
+                                          "1.75 lb chicken broth",
+                                          "0.75 cups soy sauce",
+                                          "0.75 cups brown sugar",
+                                          "3.75 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Sear cubed chuck roast in batches until well browned.",
+                               "Cook onion, garlic, and ginger in the same pot until soft.",
+                               "Add broth, soy sauce, and brown sugar and simmer covered 2 to 2.5 hours.",
+                               "Uncover and reduce the sauce until it coats the beef.",
+                               "Fry sliced garlic in oil, toss with cold cooked rice, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Chuck Roast",
+                                  "grams":  3175
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  770
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  50
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  63
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  60
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  240
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  840
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  223
+                              },
+                              {
+                                  "item":  "Brown Sugar",
+                                  "grams":  186
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  684
+                              }
+                          ]
+}

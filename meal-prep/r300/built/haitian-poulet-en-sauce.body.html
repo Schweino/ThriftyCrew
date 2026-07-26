@@ -1,0 +1,161 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"haitian-poulet-en-sauce","base":14,"cost":30.31,"ing":[{"item":"Boneless Skinless Chicken Thigh","grams":3500,"buy":"7.75 lb","bid":"chicken-thighs","gpu":453.592},{"item":"Salt","grams":21,"buy":"1.25 tbsp","bid":"salt","gpu":28.350},{"item":"Fresh Cilantro","grams":28,"buy":"28 tbsp","bid":"cilantro","gpu":57.000},{"item":"Peanuts","grams":126,"buy":"0.75 cups","bid":"peanuts","gpu":28.350},{"item":"Garlic","grams":70,"buy":"8.25 tbsp","bid":"garlic","gpu":50.000},{"item":"Lemon Juice","grams":329,"buy":"7","bid":"lemon-juice","gpu":29.570},{"item":"Tomato Paste","grams":336,"buy":"2 cans","bid":"tomato-paste","gpu":28.350},{"item":"Green Bell Peppers","grams":420,"buy":"3.5","bid":"bell-peppers","gpu":120.000},{"item":"Dried Thyme","grams":19,"buy":"6.25 tbsp","bid":"dried-thyme","gpu":28.350},{"item":"Apple Cider Vinegar","grams":105,"buy":"7 tbsp","bid":"apple-cider-vinegar","gpu":29.570},{"item":"Black Pepper","grams":14,"buy":"2 tbsp","bid":"black-pepper","gpu":28.350},{"item":"Yellow Onion","grams":385,"buy":"3.5","bid":"onions","gpu":453.592},{"item":"Rice","grams":700,"buy":"3.75 cups dry","bid":"rice","gpu":453.592}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~605 cal &middot; 57g protein &middot; 54g carbs &middot; 15g fat &middot; ~$1.88 per serving.</strong></p>
+
+<p>Every Haitian kitchen keeps a jar of epis in the fridge. It is a green marinade of cilantro, garlic, bell pepper, citrus and vinegar, and it goes into almost everything, starting with this. Chicken gets washed in citrus, marinated in epis overnight, browned, then braised down in a tomato sauce until the meat gives up. Over rice, each bowl runs <strong>605 calories and 57 grams of protein</strong> for about <strong>$1.88</strong>. That protein number is one of the highest in this whole batch.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Boneless Skinless Chicken Thigh (Member's Mark):</strong> 7.75 lb (3500 g)</li>
+<li><strong>Fresh Cilantro:</strong> 28 tbsp (28 g)</li>
+<li><strong>Peanuts (Great Value):</strong> 0.75 cups (126 g)</li>
+<li><strong>Garlic:</strong> 8.25 tbsp (70 g)</li>
+<li><strong>Lemon Juice (ReaLemon):</strong> 7 (329 g)</li>
+<li><strong>Tomato Paste (Great Value):</strong> 2 cans (336 g)</li>
+<li><strong>Green Bell Peppers:</strong> 3.5 (420 g)</li>
+<li><strong>Apple Cider Vinegar (Great Value):</strong> 7 tbsp (105 g)</li>
+<li><strong>Yellow Onion:</strong> 3.5 (385 g)</li>
+<li><strong>Rice (Member's Mark):</strong> 3.75 cups dry (700 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Boneless Skinless Chicken Thigh, 7.75 lb: ~$13.66. <strong>Buy 8 lbs: $14.16.</strong></li>
+<li>Fresh Cilantro, 28 tbsp: ~$0.87. <strong>Buy 1 bunch: $1.78.</strong></li>
+<li>Peanuts, 0.75 cups: ~$0.72. <strong>Buy 1 16oz jar: $2.58.</strong></li>
+<li>Garlic, 8.25 tbsp: ~$1.01. <strong>Buy 2 heads: $1.15.</strong></li>
+<li>Lemon Juice, 7: ~$1.24. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Tomato Paste, 2 cans: ~$1.70. <strong>Buy 2 6oz cans: $1.72.</strong></li>
+<li>Green Bell Peppers, 3.5: ~$3.01. <strong>Buy 4 each: $3.44.</strong></li>
+<li>Apple Cider Vinegar, 7 tbsp: ~$0.26. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Yellow Onion, 3.5: ~$0.97. <strong>Buy 1 lb: $1.14.</strong></li>
+<li>Rice, 3.75 cups dry: ~$0.86. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Pantry seasonings (salt, dried thyme, black pepper): ~$1.98. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $26.28 across 14 servings, so roughly $1.88 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $30.31 across 14 servings, roughly $2.16 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $10.40 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $40.71. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$1.88 a bowl</strong> for one of the most protein-dense dinners on this site. Chicken is the dominant line and the epis that flavors it is built from produce off the cheap end of the department.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>Make a double batch of epis while the blender is already dirty. Cilantro, garlic, bell pepper and citrus blended together freeze beautifully in an ice cube tray, and having it on hand turns a lot of plain weeknight chicken into something worth eating.</li>
+<li>Bottled lemon juice is the practical choice here. This recipe uses a real volume of it for both the citrus wash and the marinade, and buying that many fresh lemons would cost several times more.</li>
+<li>Green bell peppers are cheaper than red almost every week and they are the traditional pepper in epis, so there is nothing to give up by buying the cheap ones.</li>
+<li>Tomato paste in small cans beats the tube on price per ounce. This recipe uses two cans worth, so buy exactly what you need and nothing dries out in the fridge.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Wash the chicken thighs in a bowl of water with the lemon juice and apple cider vinegar, rubbing the pieces and then draining them well. This citrus wash is a real step in Haitian cooking, not a superstition, and it sets up the flavor.</li>
+<li>Make the epis: blend the fresh cilantro, garlic, green bell pepper, dried thyme, black pepper and salt with a splash of the lemon juice until it is a coarse green paste. Rub it into the chicken and refrigerate at least four hours or overnight.</li>
+<li>Scrape the marinade off the chicken and reserve it. Heat a large heavy pot over medium-high and brown the thighs in batches until they take color, then set them aside.</li>
+<li>Add the diced onion to the pot and cook 5 minutes, then stir in the tomato paste and the reserved epis and cook 3 minutes until the paste turns brick red.</li>
+<li>Add water or broth to loosen the sauce, scrape the bottom clean, and return the chicken with its juices. Cover and simmer 35 to 40 minutes until the chicken is tender and reads 165F.</li>
+<li>While it braises, cook the rice and let it steam covered off the heat for 10 minutes. Toast the peanuts in a dry skillet until they smell nutty, then chop them coarsely.</li>
+<li>Chop the chicken, fold the rice through the sauce, and scatter the toasted chopped peanuts over the top for crunch.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Put the pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. Same amount in all fourteen containers. Each one carries <strong>605 calories</strong>, and I would hold the peanuts back and add them at reheat time so they stay crunchy instead of going soft in the sauce.</p>
+
+<p><em>Recipe adapted from <a href="https://www.savorythoughts.com/poulet-en-sauce-recipe/" target="_blank" rel="noopener">savorythoughts.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>Haitian poulet en sauce with real epis for about $1.88 a bowl. This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.</em></p>

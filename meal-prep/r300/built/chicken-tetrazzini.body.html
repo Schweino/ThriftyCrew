@@ -1,0 +1,165 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"chicken-tetrazzini","base":14,"cost":32.39,"ing":[{"item":"Spaghetti","grams":613,"buy":"21.5 oz dry","bid":"pasta","gpu":28.350},{"item":"Boneless Skinless Chicken Breast","grams":871,"buy":"2 lb","bid":"chicken-breast","gpu":453.592},{"item":"Olive Oil","grams":42,"buy":"3 tbsp","bid":"olive-oil","gpu":28.000},{"item":"White Mushrooms","grams":706,"buy":"1.5 lb","bid":"mushrooms","gpu":28.350},{"item":"Yellow Onion","grams":171,"buy":"1.6","bid":"onions","gpu":453.592},{"item":"Garlic","grams":31,"buy":"3.75 tbsp","bid":"garlic","gpu":50.000},{"item":"Butter","grams":87,"buy":"6.25 tbsp","bid":"butter","gpu":453.592},{"item":"All-Purpose Flour","grams":65,"buy":"8 tbsp","bid":"flour","gpu":453.592},{"item":"Chicken Broth","grams":1120,"buy":"1.2 cartons","bid":"chicken-broth","gpu":29.570},{"item":"Lemon Juice","grams":23,"buy":"1.5 tbsp","bid":"lemon-juice","gpu":29.570},{"item":"Heavy Cream","grams":740,"buy":"3 cups","bid":"heavy-cream","gpu":29.800},{"item":"Salt","grams":14,"buy":"0.75 tbsp","bid":"salt","gpu":28.350},{"item":"Black Pepper","grams":1,"buy":"0.25 tbsp","bid":"black-pepper","gpu":28.350},{"item":"Reduced Fat Mozzarella","grams":264,"buy":"9.25 oz","bid":"shredded-cheese","gpu":28.350}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~562 cal &middot; 28g protein &middot; 45g carbs &middot; 31g fat &middot; ~$1.70 per serving.</strong></p>
+
+<p>Tetrazzini was named for an opera singer and built for leftovers, which is a combination you do not see every day. Spaghetti, chicken, and mushrooms get folded into a cream sauce, topped with mozzarella, and baked until the edges go brown and chewy. Those crispy edges are the reason people fight over the corner pieces. Each serving lands at 562 calories and <strong>28 grams of protein</strong> for about <strong>$1.70 a serving</strong>.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Spaghetti (Great Value):</strong> 21.5 oz dry (613 g)</li>
+<li><strong>Boneless Skinless Chicken Breast (Member's Mark):</strong> 2 lb (871 g)</li>
+<li><strong>Olive Oil:</strong> 3 tbsp (42 g)</li>
+<li><strong>White Mushrooms:</strong> 1.5 lb (706 g)</li>
+<li><strong>Yellow Onion:</strong> 1.6 (171 g)</li>
+<li><strong>Garlic:</strong> 3.75 tbsp (31 g)</li>
+<li><strong>Butter (generic):</strong> 6.25 tbsp (87 g)</li>
+<li><strong>All-Purpose Flour (Great Value):</strong> 8 tbsp (65 g)</li>
+<li><strong>Chicken Broth (Swanson):</strong> 1.2 cartons (1120 g)</li>
+<li><strong>Lemon Juice (ReaLemon):</strong> 1.5 tbsp (23 g)</li>
+<li><strong>Heavy Cream (Great Value):</strong> 3 cups (740 g)</li>
+<li><strong>Reduced Fat Mozzarella (Great Value):</strong> 9.25 oz (264 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Spaghetti, 21.5 oz dry: ~$1.31. <strong>Buy 2 16oz boxes: $1.94.</strong></li>
+<li>Boneless Skinless Chicken Breast, 2 lb: ~$6.28. <strong>Buy 2 lbs: $6.54.</strong></li>
+<li>Olive Oil, 3 tbsp: ~$0.59. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>White Mushrooms, 1.5 lb: ~$5.88. <strong>Buy 4 8oz packs: $7.57.</strong></li>
+<li>Yellow Onion, 1.6: ~$0.43. <strong>Buy 1 lb: $1.14.</strong></li>
+<li>Garlic, 3.75 tbsp: ~$0.45. <strong>Buy 1 head: $0.58.</strong></li>
+<li>Butter, 6.25 tbsp: ~$0.57. <strong>Buy 1 lb box: $2.98.</strong></li>
+<li>All-Purpose Flour, 8 tbsp: ~$0.06. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Chicken Broth, 1.2 cartons: ~$1.50. <strong>Pantry staple; this batch alone uses about 2 32oz cartons.</strong></li>
+<li>Lemon Juice, 1.5 tbsp: ~$0.09. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Heavy Cream, 3 cups: ~$4.59. <strong>Buy 2 pints: $5.87.</strong></li>
+<li>Reduced Fat Mozzarella, 9.25 oz: ~$2.01. <strong>Buy 2 8oz bags: $3.45.</strong></li>
+<li>Pantry seasonings (salt, black pepper): ~$0.08. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $23.84 across 14 servings, so roughly $1.70 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $32.39 across 14 servings, roughly $2.31 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $21.27 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.66. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$1.70 a serving</strong>. Mushrooms and cream are the two lines carrying the cost, and they are also exactly what makes tetrazzini taste like tetrazzini instead of baked spaghetti.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>Mushrooms are the biggest produce line and they are essential, not optional. Buy whole white mushrooms and slice them yourself, because pre-sliced costs more per pound and dries out on the shelf.</li>
+<li>Heavy cream is the second real expense. A pint goes a long way and keeps in the fridge for weeks, so there is no waste even if you only use part of it.</li>
+<li>Spaghetti is one of the cheapest foods in the entire store. Buy the boxes when they hit their sale price and keep several in the pantry, since dried pasta lasts essentially forever.</li>
+<li>This dish was designed for leftover chicken. If you have a rotisserie carcass or leftovers from another recipe, use them here and the cost drops further with no work at all.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Heat the oven to 375F. Boil the spaghetti two minutes short of the package time and drain it. It will finish cooking in the oven, and fully cooked pasta going into a bake comes out mushy.</li>
+<li>Cook the chicken breast in the olive oil, then cut or shred it into bite sized pieces.</li>
+<li>Brown the sliced mushrooms in a dry hot pan first, without crowding, until they release their water and it cooks off. Adding fat too early makes them steam, and steamed mushrooms make a watery casserole.</li>
+<li>Add the butter, onion, and garlic to the mushrooms and cook until soft, then sprinkle in the flour and cook it for 2 minutes.</li>
+<li>Whisk in the chicken broth slowly, then the heavy cream, and simmer until the sauce thickens enough to coat a spoon. Finish it with the lemon juice, salt, and pepper.</li>
+<li>Fold in the spaghetti and chicken, then spread everything into a large baking dish and scatter the mozzarella over the top.</li>
+<li>Bake 25 to 30 minutes until bubbling and browned on top, then rest 10 minutes before cutting.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Score the bake into 14 even squares and lift one into each container, then set the dish on the scale and subtract the empty weight to confirm your portions are honest. Every serving lands at <strong>562 calories</strong>. Reheat uncovered so the top browns again instead of going soft, and make sure somebody besides you gets a corner piece.</p>
+
+<p><em>Recipe adapted from <a href="https://natashaskitchen.com/chicken-tetrazzini/" target="_blank" rel="noopener">natashaskitchen.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>Baked chicken tetrazzini for about <strong>$1.70 a serving</strong>. Members get the entire Meal Prep library plus every money lesson, calculator, and tool on the site for $1 a month.</em></p>

@@ -1,0 +1,161 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"turkey-nasi-goreng","base":14,"cost":41.28,"ing":[{"item":"Turkey Breast","grams":1575,"buy":"3.5 lb","bid":"turkey-breast","gpu":453.592},{"item":"Vegetable Oil","grams":122,"buy":"0.5 cups","bid":"vegetable-oil","gpu":28.000},{"item":"Sweet Soy Sauce","grams":168,"buy":"6 oz","bid":"sweet-soy-sauce","gpu":38.000},{"item":"Rice","grams":884,"buy":"4.75 cups dry","bid":"rice","gpu":453.592},{"item":"Garlic","grams":35,"buy":"4 tbsp","bid":"garlic","gpu":50.000},{"item":"Jalapeno","grams":19,"buy":"2 tbsp","bid":"jalapenos","gpu":453.592},{"item":"Yellow Onion","grams":385,"buy":"3.5","bid":"onions","gpu":453.592},{"item":"Eggs","grams":700,"buy":"14 large eggs","bid":"eggs","gpu":600.000},{"item":"Green Onions","grams":52,"buy":"8.75 tbsp","bid":"green-onions","gpu":90.000},{"item":"Cucumber","grams":300,"buy":"1","bid":"cucumbers","gpu":300.000},{"item":"Salt","grams":20,"buy":"1 tbsp","bid":"salt","gpu":28.350},{"item":"Black Pepper","grams":4,"buy":"0.5 tbsp","bid":"black-pepper","gpu":28.350}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~560 cal &middot; 39g protein &middot; 64g carbs &middot; 16g fat &middot; ~$1.82 per serving.</strong></p>
+
+<p>Nasi goreng is Indonesian fried rice, and what sets it apart from every other fried rice is kecap manis, the thick sweet soy sauce that caramelizes on the hot pan and turns the whole thing dark and glossy. Fried egg on top, cool cucumber on the side. Each bowl lands at <strong>560 calories and 39 grams of protein</strong> for about <strong>$1.82</strong>.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Turkey Breast (generic (USDA)):</strong> 3.5 lb (1575 g)</li>
+<li><strong>Vegetable Oil (Great Value):</strong> 0.5 cups (122 g)</li>
+<li><strong>Sweet Soy Sauce (ABC (Kecap Manis)):</strong> 6 oz (168 g)</li>
+<li><strong>Rice (Member's Mark):</strong> 4.75 cups dry (884 g)</li>
+<li><strong>Garlic:</strong> 4 tbsp (35 g)</li>
+<li><strong>Jalapeno:</strong> 2 tbsp (19 g)</li>
+<li><strong>Yellow Onion:</strong> 3.5 (385 g)</li>
+<li><strong>Eggs (Great Value):</strong> 14 large eggs (700 g)</li>
+<li><strong>Green Onions:</strong> 8.75 tbsp (52 g)</li>
+<li><strong>Cucumber:</strong> 1 (300 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Turkey Breast, 3.5 lb: ~$16.71. <strong>Buy 2 3lb frozen roasts: $28.88.</strong></li>
+<li>Vegetable Oil, 0.5 cups: ~$0.30. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Sweet Soy Sauce, 6 oz: ~$2.62. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Rice, 4.75 cups dry: ~$1.09. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Garlic, 4 tbsp: ~$0.50. <strong>Buy 1 head: $0.58.</strong></li>
+<li>Jalapeno, 2 tbsp: ~$0.07. <strong>Buy 1 lb: $1.76.</strong></li>
+<li>Yellow Onion, 3.5: ~$0.97. <strong>Buy 1 lb: $1.14.</strong></li>
+<li>Eggs, 14 large eggs: ~$1.66. <strong>Buy 2 dozens: $2.85.</strong></li>
+<li>Green Onions, 8.75 tbsp: ~$0.62. <strong>Buy 1 bunch: $1.07.</strong></li>
+<li>Cucumber, 1: ~$0.76. <strong>Buy 1 each: $0.76.</strong></li>
+<li>Pantry seasonings (salt, black pepper): ~$0.23. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $25.53 across 14 servings, so roughly $1.82 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $41.28 across 14 servings, roughly $2.95 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $17.76 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.04. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$1.82</strong> a bowl. One bottle of sweet soy sauce is the difference between plain fried rice and this, and that bottle keeps paying you back long after this batch.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>Kecap manis is the one thing you cannot fake here, and it is worth the bottle. It keeps for a year in the pantry and this batch uses only a portion of it, so the real cost per bowl keeps falling.</li>
+<li>Turkey breast is two thirds of the batch. Frozen roasts are the cheap form, and the clearance shelf after the holidays is where you should be buying turkey for the whole year.</li>
+<li>Cook the rice the day before and refrigerate it. Cold day-old rice fries into separate grains instead of a sticky clump, and it costs you nothing but planning.</li>
+<li>Fourteen eggs cost very little and they add a fried egg to every single container. That is the cheapest way to make a bowl feel like a restaurant plate.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Cook the rice a day ahead if you can and chill it uncovered. Cold rice is the entire secret to fried rice that is not mush.</li>
+<li>Cut the turkey breast into small cubes and season them with salt and black pepper.</li>
+<li>Heat some of the vegetable oil in your largest skillet or wok over high heat and sear the turkey in batches until browned and cooked through to 165F. Set it aside.</li>
+<li>Add the rest of the oil, then the sliced onion, minced garlic, and chopped jalapeno, and stir-fry 3 minutes until fragrant and just softening.</li>
+<li>Add the cold rice and press it into the pan, letting it sit undisturbed for a minute at a time so it toasts, then tossing. Do this for about 5 minutes.</li>
+<li>Pour in the sweet soy sauce, return the turkey, and toss for 2 minutes until every grain is dark and coated. Taste for salt.</li>
+<li>Fry the eggs separately, one per container, and slice the cucumber into rounds while the rice cools enough to portion.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Set the pot of fried rice on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is your per-container gram target. Top each with a fried egg, a few cucumber rounds, and the sliced green onions. Every bowl lands at <strong>560 calories and 39 grams of protein</strong>.</p>
+
+<p><em>Recipe adapted from <a href="https://www.recipetineats.com/nasi-goreng-indonesian-fried-rice/" target="_blank" rel="noopener">recipetineats.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>Indonesian fried rice for about <strong>$1.82</strong> a bowl. This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.</em></p>

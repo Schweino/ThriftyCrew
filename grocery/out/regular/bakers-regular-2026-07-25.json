@@ -7,8 +7,8 @@
     "source":  "kroger-public-api",
     "location_id":  "61500319",
     "store_label":  "Baker\u0027s - Saddlecreek, Omaha 68106",
-    "pull_terms":  446,
-    "deal_count":  6552,
+    "pull_terms":  468,
+    "deal_count":  6679,
     "deals":  [
                   {
                       "store":  "Baker\u0027s",
@@ -206,7 +206,7 @@
                       "product_id":  "0025086250000",
                       "size_raw":  "1 lb",
                       "size_basis":  "soldby-weight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/smart-nae-boneless-skinless-chicken-breast/0025086250000",
                       "base_price":  7.49,
                       "marked_down":  true
@@ -831,7 +831,7 @@
                       "product_id":  "0001111069745",
                       "size_raw":  "3 ct / 1 lb",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-80-20-ground-beef-packs-3-lb-big-deal-/0001111069745"
                   },
                   {
@@ -1508,7 +1508,7 @@
                       "product_id":  "0029315750000",
                       "size_raw":  "1 lb",
                       "size_basis":  "soldby-weight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/bone-in-pork-loin-center-cut-thick-chops/0029315750000"
                   },
                   {
@@ -2126,7 +2126,7 @@
                       "product_id":  "0001111042902",
                       "size_raw":  "1 gal",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-organic-2-reduced-fat-milk-gallon/0001111042902",
                       "base_price":  7.49,
                       "marked_down":  true
@@ -2233,7 +2233,7 @@
                       "product_id":  "0009396651500",
                       "size_raw":  "1/2 gal",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/organic-valley-2-reduced-fat-milk-half-gallon/0009396651500",
                       "base_price":  5.79,
                       "marked_down":  true
@@ -2839,7 +2839,7 @@
                       "product_id":  "0001111044400",
                       "size_raw":  "24 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-4-milkfat-small-curd-cottage-cheese/0001111044400"
                   },
                   {
@@ -2903,7 +2903,7 @@
                       "product_id":  "0007342052440",
                       "size_raw":  "24 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/daisy-pure-and-natural-4-cottage-cheese/0007342052440"
                   },
                   {
@@ -3055,7 +3055,7 @@
                       "product_id":  "0001111044700",
                       "size_raw":  "16 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-4-milkfat-large-curd-cottage-cheese/0001111044700",
                       "base_price":  2.59,
                       "marked_down":  true
@@ -3753,7 +3753,7 @@
                       "product_id":  "0001111015326",
                       "size_raw":  "8 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kroger-chive-and-onion-cream-cheese-spread/0001111015326"
                   },
                   {
@@ -4481,7 +4481,7 @@
                       "product_id":  "0005215900001",
                       "size_raw":  "32 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/stonyfield-organic-plain-whole-milk-probiotic-yogurt-32-oz-container/0005215900001"
                   },
                   {
@@ -4571,7 +4571,7 @@
                       "product_id":  "0001111006417",
                       "size_raw":  "32 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-blended-vanilla-low-fat-yogurt/0001111006417"
                   },
                   {
@@ -5380,7 +5380,7 @@
                       "product_id":  "0002500013459",
                       "size_raw":  "52 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/minute-maid-zero-sugar-strawberry-lemonade/0002500013459"
                   },
                   {
@@ -6552,7 +6552,7 @@
                       "product_id":  "0001111008021",
                       "size_raw":  "16 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/private-selection-petite-gold-potatoes-with-herbes-de-provence-seasoning-blend/0001111008021"
                   },
                   {
@@ -8365,7 +8365,7 @@
                       "product_id":  "0000000094040",
                       "size_raw":  "1 lb",
                       "size_basis":  "soldby-weight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/organic-fresh-black-plum/0000000094040"
                   },
                   {
@@ -8645,7 +8645,7 @@
                       "product_id":  "0001111013238",
                       "size_raw":  "20 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/private-selection-white-bread-thick-cut/0001111013238",
                       "base_price":  3.29,
                       "marked_down":  true
@@ -9228,7 +9228,7 @@
                       "product_id":  "0002500013678",
                       "size_raw":  "46 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/simply-pulp-free-orange-juice-bottle/0002500013678"
                   },
                   {
@@ -9243,7 +9243,7 @@
                       "product_id":  "0002500013663",
                       "size_raw":  "76 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/simply-pulp-free-orange-juice-bottle/0002500013663"
                   },
                   {
@@ -9333,7 +9333,7 @@
                       "product_id":  "0001111048482",
                       "size_raw":  "1 gal",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-100-orange-juice-pulp-free/0001111048482"
                   },
                   {
@@ -9410,7 +9410,7 @@
                       "product_id":  "0002500013682",
                       "size_raw":  "46 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/simply-high-pulp-orange-juice-bottle/0002500013682"
                   },
                   {
@@ -10299,7 +10299,7 @@
                       "product_id":  "0005100001187",
                       "size_raw":  "10.5 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/campbell-s-condensed-beef-broth/0005100001187"
                   },
                   {
@@ -10344,7 +10344,7 @@
                       "product_id":  "0001111015292",
                       "size_raw":  "32 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-organic-beef-bone-broth/0001111015292"
                   },
                   {
@@ -10844,7 +10844,7 @@
                       "product_id":  "0004150078570",
                       "size_raw":  "23 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/frank-s-redhot-buffalo-wings-hot-sauce/0004150078570"
                   },
                   {
@@ -11542,7 +11542,7 @@
                       "product_id":  "0001111002374",
                       "size_raw":  "2.18 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/private-selection-six-chili-powder-shaker/0001111002374"
                   },
                   {
@@ -12358,7 +12358,7 @@
                       "product_id":  "0001111060162",
                       "size_raw":  "3 lb",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/private-selection-vidalia-sweet-onion-3-lb-bag/0001111060162"
                   },
                   {
@@ -14166,7 +14166,7 @@
                       "product_id":  "0001111062367",
                       "size_raw":  "1 lb",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-organic-fresh-limes-bag/0001111062367"
                   },
                   {
@@ -14196,7 +14196,7 @@
                       "product_id":  "0001111064200",
                       "size_raw":  "1 lb",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kroger-fresh-key-limes-bag/0001111064200"
                   },
                   {
@@ -14923,7 +14923,7 @@
                       "product_id":  "0001111063681",
                       "size_raw":  "8 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/private-selection-18-month-aged-parmesan-wedge-cheese/0001111063681"
                   },
                   {
@@ -15043,7 +15043,7 @@
                       "product_id":  "0004610040059",
                       "size_raw":  "5 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/5-oz-srg-otb-parm-shr/0004610040059",
                       "base_price":  3.5,
                       "marked_down":  true
@@ -15227,7 +15227,7 @@
                       "product_id":  "0001097820066",
                       "size_raw":  "16 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/rummo-penne-rigate-no-66-pasta/0001097820066"
                   },
                   {
@@ -15785,7 +15785,7 @@
                       "product_id":  "0002066200095",
                       "size_raw":  "16 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/newman-s-own-mild-salsa/0002066200095"
                   },
                   {
@@ -17061,7 +17061,7 @@
                       "product_id":  "0003320000426",
                       "size_raw":  "174 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/arm-hammer-clean-burst-scent-liquid-laundry-detergent/0003320000426"
                   },
                   {
@@ -17181,7 +17181,7 @@
                       "product_id":  "0003320097613",
                       "size_raw":  "45.5 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/arm-hammer-plus-fabric-softener-orchard-bloom-liquid-laundry-detergent/0003320097613"
                   },
                   {
@@ -17759,7 +17759,7 @@
                       "product_id":  "0001111097129",
                       "size_raw":  "8 ct / 12 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-traditional-pork-sausage-patties/0001111097129",
                       "base_price":  4.79,
                       "marked_down":  true
@@ -17776,7 +17776,7 @@
                       "product_id":  "0007790019631",
                       "size_raw":  "9.6 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/jimmy-dean-fully-cooked-breakfast-turkey-sausage-crumbles/0007790019631",
                       "base_price":  5.99,
                       "marked_down":  true
@@ -17853,7 +17853,7 @@
                       "product_id":  "0002265570186",
                       "size_raw":  "1 lb",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/butterball-all-natural-frozen-turkey-breakfast-sausage-16-oz-roll/0002265570186"
                   },
                   {
@@ -19539,7 +19539,7 @@
                       "product_id":  "0001111060430",
                       "size_raw":  "6 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-natural-bison-sirloin-steak/0001111060430"
                   },
                   {
@@ -20040,7 +20040,7 @@
                       "product_id":  "0000000094053",
                       "size_raw":  "1 each",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/fresh-organic-lemon-each/0000000094053"
                   },
                   {
@@ -20457,7 +20457,7 @@
                       "product_id":  "0001111080470",
                       "size_raw":  "1 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-organic-butter-lettuce/0001111080470"
                   },
                   {
@@ -20699,7 +20699,7 @@
                       "product_id":  "0001111062469",
                       "size_raw":  "4 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-shredded-green-leaf-lettuce/0001111062469"
                   },
                   {
@@ -20849,7 +20849,7 @@
                       "product_id":  "0001111018251",
                       "size_raw":  "3 lb",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-cut-and-peeled-baby-carrots-big-deal-/0001111018251"
                   },
                   {
@@ -20894,7 +20894,7 @@
                       "product_id":  "0001111091652",
                       "size_raw":  "1 lb",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-cut-and-peeled-carrot-chips/0001111091652"
                   },
                   {
@@ -21620,7 +21620,7 @@
                       "product_id":  "0068925900121",
                       "size_raw":  "20 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/nature-fresh-cucumbers/0068925900121"
                   },
                   {
@@ -22397,7 +22397,7 @@
                       "product_id":  "0001450001182",
                       "size_raw":  "10 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/birds-eye-steamfresh-diced-sweet-potatoes-frozen-side/0001450001182"
                   },
                   {
@@ -22996,7 +22996,7 @@
                       "product_id":  "0001111011471",
                       "size_raw":  "8 ct / 14 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-100-whole-wheat-hamburger-buns/0001111011471"
                   },
                   {
@@ -23787,7 +23787,7 @@
                       "product_id":  "0001097820003",
                       "size_raw":  "1 lb",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/rummo-lenta-lavorazione-spaghetti/0001097820003"
                   },
                   {
@@ -24437,7 +24437,7 @@
                       "product_id":  "0001111005342",
                       "size_raw":  "12 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/private-selection-decadent-gouda-with-aged-white-cheddar-macaroni-and-cheese/0001111005342"
                   },
                   {
@@ -24867,7 +24867,7 @@
                       "product_id":  "0007066206002",
                       "size_raw":  "6 ct / 3 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/top-ramen-beef-flavor-ramen-noodle-soup/0007066206002"
                   },
                   {
@@ -25310,7 +25310,7 @@
                       "product_id":  "0001111085403",
                       "size_raw":  "10 lb",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-bleached-all-purpose-enriched-flour/0001111085403"
                   },
                   {
@@ -25625,7 +25625,7 @@
                       "product_id":  "0005000065093",
                       "size_raw":  "32 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/natural-bliss-brown-sugar-flavored-oat-milk-creamer-non-dairy-coffee-creamer-plant-based/0005000065093"
                   },
                   {
@@ -26000,7 +26000,7 @@
                       "product_id":  "0019600525188",
                       "size_raw":  "20 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/crisco-all-vegetable-shortening-sticks/0019600525188"
                   },
                   {
@@ -26353,7 +26353,7 @@
                       "product_id":  "0088491235915",
                       "size_raw":  "12 ounces",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/post-honey-bunches-of-oats-honey-roasted-cereal-12-oz/0088491235915"
                   },
                   {
@@ -26528,7 +26528,7 @@
                       "product_id":  "0088491235948",
                       "size_raw":  "11 ounces",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/post-honey-bunches-of-oats-with-strawberries-cereal-11-oz/0088491235948"
                   },
                   {
@@ -27606,7 +27606,7 @@
                       "product_id":  "0001111012126",
                       "size_raw":  "4 ct / 15 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-organic-low-sodium-black-beans-big-deal-/0001111012126"
                   },
                   {
@@ -28235,7 +28235,7 @@
                       "product_id":  "0001300001581",
                       "size_raw":  "13.5 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/heinz-simply-tomato-ketchup-bottle/0001300001581"
                   },
                   {
@@ -28806,7 +28806,7 @@
                       "product_id":  "0004800120436",
                       "size_raw":  "30 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/hellmann-s-olive-oil-mayo/0004800120436"
                   },
                   {
@@ -28885,7 +28885,7 @@
                       "product_id":  "0007766112511",
                       "size_raw":  "20 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/litehouse-homestyle-ranch-dressing-dip-20-fl-oz/0007766112511"
                   },
                   {
@@ -30782,7 +30782,7 @@
                       "product_id":  "0007192197185",
                       "size_raw":  "19.3 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/tombstone-pepperoni-frozen-pizza/0007192197185",
                       "base_price":  4.99,
                       "marked_down":  true
@@ -31277,7 +31277,7 @@
                       "product_id":  "0001111011830",
                       "size_raw":  "24 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-vanilla-frozen-dairy-dessert-sandwiches/0001111011830"
                   },
                   {
@@ -31912,7 +31912,7 @@
                       "product_id":  "0001312000291",
                       "size_raw":  "5 lb",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/ore-ida-crispy-crinkles-crinkle-cut-frozen-french-fries-value-size/0001312000291",
                       "base_price":  8.99,
                       "marked_down":  true
@@ -32128,7 +32128,7 @@
                       "product_id":  "0004330100004",
                       "size_raw":  "24 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/checkers-seasoned-waffle-fries-frozen-potatoes/0004330100004"
                   },
                   {
@@ -32295,7 +32295,7 @@
                       "product_id":  "0085003616803",
                       "size_raw":  "20 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/real-good-foods-lightly-breaded-chicken-nuggets/0085003616803"
                   },
                   {
@@ -34021,7 +34021,7 @@
                       "product_id":  "0001111014880",
                       "size_raw":  "40 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-13-gallon-strong-flex-tall-drawstring-kitchen-bags-clean-linen-scent/0001111014880"
                   },
                   {
@@ -35706,7 +35706,7 @@
                       "product_id":  "0001111006399",
                       "size_raw":  "4 ct / 4 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-diced-mango-cups-in-100-juice/0001111006399"
                   },
                   {
@@ -36367,7 +36367,7 @@
                       "product_id":  "0002500013405",
                       "size_raw":  "52 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/simply-pineapple-juice-drink-bottle/0002500013405"
                   },
                   {
@@ -36487,7 +36487,7 @@
                       "product_id":  "0002500013821",
                       "size_raw":  "52 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/minute-maid-zero-sugar-orange-pineapple-juice-drink-bottle/0002500013821"
                   },
                   {
@@ -37300,7 +37300,7 @@
                       "product_id":  "0003120002999",
                       "size_raw":  "60 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/ocean-spray-no-sugar-added-100-grapefruit-juice/0003120002999"
                   },
                   {
@@ -37315,7 +37315,7 @@
                       "product_id":  "0007468210761",
                       "size_raw":  "32 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/r-w-knudsen-organic-grapefruit-100-juice-bottle/0007468210761"
                   },
                   {
@@ -37724,7 +37724,7 @@
                       "product_id":  "0081026402834",
                       "size_raw":  "1 ct / 24 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kevin-s-natural-foods-parmesan-basil-chicken-with-cauliflower-pasta-24-oz/0081026402834",
                       "base_price":  15,
                       "marked_down":  true
@@ -37758,7 +37758,7 @@
                       "product_id":  "0081026402835",
                       "size_raw":  "1 ct / 24 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kevin-s-natural-foods-southwest-chipotle-chicken-with-cauliflower-pasta/0081026402835",
                       "base_price":  15,
                       "marked_down":  true
@@ -37790,7 +37790,7 @@
                       "product_id":  "0000000094080",
                       "size_raw":  "1 lb",
                       "size_basis":  "soldby-weight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/organic-green-asparagus/0000000094080"
                   },
                   {
@@ -37957,7 +37957,7 @@
                       "product_id":  "0085007650303",
                       "size_raw":  "1 lb",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/brussels-sprouts-tray/0085007650303"
                   },
                   {
@@ -38083,7 +38083,7 @@
                       "product_id":  "0000000094068",
                       "size_raw":  "1 each",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/organic-green-onions/0000000094068"
                   },
                   {
@@ -38348,7 +38348,7 @@
                       "product_id":  "0001111012844",
                       "size_raw":  "8 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/private-selection-jalapeno-pepper-jack-thick-cut-shredded-cheese/0001111012844"
                   },
                   {
@@ -38579,7 +38579,7 @@
                       "product_id":  "0000000094889",
                       "size_raw":  "1 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/organic-cilantro/0000000094889"
                   },
                   {
@@ -38994,7 +38994,7 @@
                       "product_id":  "0085007650317",
                       "size_raw":  "1 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/organic-red-radishes-tray/0085007650317"
                   },
                   {
@@ -39054,7 +39054,7 @@
                       "product_id":  "0001111060338",
                       "size_raw":  "1 lb",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/private-selection-red-mini-petite-spudlings-gourmet-potatoes/0001111060338"
                   },
                   {
@@ -39195,7 +39195,7 @@
                       "product_id":  "0002970000138",
                       "size_raw":  "4.1 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/idahoan-baby-reds-brand-mashed-potatoes-4-1-oz/0002970000138",
                       "base_price":  1.5,
                       "marked_down":  true
@@ -39887,7 +39887,7 @@
                       "product_id":  "0001111061606",
                       "size_raw":  "4 ct / 12 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-italian-chicken-sausage-links-12-oz/0001111061606"
                   },
                   {
@@ -40161,7 +40161,7 @@
                       "product_id":  "0007778200488",
                       "size_raw":  "19 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/johnsonville-queso-sausage-links/0007778200488",
                       "base_price":  6.49,
                       "marked_down":  true
@@ -40503,7 +40503,7 @@
                       "product_id":  "0007111719008",
                       "size_raw":  "12 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/reser-s-rotisserie-chicken-salad/0007111719008"
                   },
                   {
@@ -41481,7 +41481,7 @@
                       "product_id":  "0001111063599",
                       "size_raw":  "16 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-oven-roasted-turkey-breast-and-uncured-honey-ham-variety-pack-deli-thin-sliced-big-deal-/0001111063599"
                   },
                   {
@@ -41663,7 +41663,7 @@
                       "product_id":  "0004470003128",
                       "size_raw":  "16 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/oscar-mayer-deli-fresh-oven-roasted-turkey-breast-thin-sliced-lunchmeat/0004470003128"
                   },
                   {
@@ -43525,7 +43525,7 @@
                       "product_id":  "0084037090211",
                       "size_raw":  "12 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kraft-string-cheese-mozzarella-cheese-snacks-with-2-milk/0084037090211"
                   },
                   {
@@ -43692,7 +43692,7 @@
                       "product_id":  "0007790100781",
                       "size_raw":  "6 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/president-feta-cheese-crumbles-6-oz/0007790100781",
                       "base_price":  5.49,
                       "marked_down":  true
@@ -44060,7 +44060,7 @@
                       "product_id":  "0001111088651",
                       "size_raw":  "8 ct / 16 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kroger-flaky-buttermilk-jumbo-biscuits/0001111088651"
                   },
                   {
@@ -44165,7 +44165,7 @@
                       "product_id":  "0007229001252",
                       "size_raw":  "29 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/odom-s-tennessee-pride-sausage-buttermilk-biscuits/0007229001252"
                   },
                   {
@@ -44439,7 +44439,7 @@
                       "product_id":  "0005000088610",
                       "size_raw":  "32 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/coffee-mate-peppermint-mocha-flavored-coffee-creamer-non-dairy-gluten-free-63-servings/0005000088610"
                   },
                   {
@@ -44544,7 +44544,7 @@
                       "product_id":  "0005000032852",
                       "size_raw":  "64 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/coffee-mate-the-original-coffee-creamer/0005000032852"
                   },
                   {
@@ -44912,7 +44912,7 @@
                       "product_id":  "0001111011536",
                       "size_raw":  "8 ct / 16 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-rich-n-honey-hot-dog-buns/0001111011536"
                   },
                   {
@@ -44944,7 +44944,7 @@
                       "product_id":  "0001111011690",
                       "size_raw":  "8 ct / 11 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/smart-way-hot-dog-buns/0001111011690"
                   },
                   {
@@ -45326,7 +45326,7 @@
                       "product_id":  "0001111088609",
                       "size_raw":  "8 ct / 8 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kroger-flaky-butter-flavored-crescent-dinner-rolls/0001111088609"
                   },
                   {
@@ -45748,7 +45748,7 @@
                       "product_id":  "0001111002520",
                       "size_raw":  "6 ct / 13 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-cinnamon-raisin-english-muffins/0001111002520"
                   },
                   {
@@ -46086,7 +46086,7 @@
                       "product_id":  "0004450000317",
                       "size_raw":  "2 ct",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/hillshire-farm-ham-cheese-stuffed-croissants/0004450000317",
                       "base_price":  6.99,
                       "marked_down":  true
@@ -46321,7 +46321,7 @@
                       "product_id":  "0001111015148",
                       "size_raw":  "20 ct / 1.65 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kroger-blueberry-mini-muffins-big-deal-/0001111015148",
                       "base_price":  9.99,
                       "marked_down":  true
@@ -47239,7 +47239,7 @@
                       "product_id":  "0084039230005",
                       "size_raw":  "7 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/pretzelized-snacks-pretzel-sea-salt-pita-chips/0084039230005"
                   },
                   {
@@ -47470,7 +47470,7 @@
                       "product_id":  "0002840078551",
                       "size_raw":  "7.33 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/stacy-s-rosemary-oiive-oil-pita-chips/0002840078551"
                   },
                   {
@@ -48957,7 +48957,7 @@
                       "product_id":  "0074759964015",
                       "size_raw":  "12 ounces",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/ghirardelli-premium-baking-semi-sweet-chocolate-chips/0074759964015",
                       "base_price":  8.99,
                       "marked_down":  true
@@ -49663,7 +49663,7 @@
                       "product_id":  "0001330055538",
                       "size_raw":  "18.4 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/pillsbury-chocolate-fudge-brownie-mix-18-4-oz-box/0001330055538",
                       "base_price":  2.19,
                       "marked_down":  true
@@ -50024,7 +50024,7 @@
                       "product_id":  "0001330076080",
                       "size_raw":  "16 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/pillsbury-creamy-supreme-vanilla-frosting-16-oz-tub/0001330076080"
                   },
                   {
@@ -51631,7 +51631,7 @@
                       "product_id":  "0002100005238",
                       "size_raw":  "18 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kraft-sweet-honey-slow-simmered-bbq-sauce/0002100005238"
                   },
                   {
@@ -51958,7 +51958,7 @@
                       "product_id":  "0001111011323",
                       "size_raw":  "16 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/smart-way-italian-dressing-and-marinade/0001111011323"
                   },
                   {
@@ -54443,7 +54443,7 @@
                       "product_id":  "0005100012938",
                       "size_raw":  "4 ct / 10.75 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/campbell-s-condensed-chicken-noodle-soup/0005100012938",
                       "base_price":  5.29,
                       "marked_down":  true
@@ -56211,7 +56211,7 @@
                       "product_id":  "0004300028543",
                       "size_raw":  "6 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/stove-top-savory-herbs-stuffing-mix-dressing/0004300028543"
                   },
                   {
@@ -59118,7 +59118,7 @@
                       "product_id":  "0089000000115",
                       "size_raw":  "12 pack / 3.2 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/gogo-squeez-no-sugar-added-apple-applesauce-and-fruit-puree/0089000000115",
                       "base_price":  8.99,
                       "marked_down":  true
@@ -59338,7 +59338,7 @@
                       "product_id":  "0084886004439",
                       "size_raw":  "20 ct / 3.2 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/gogo-squeez-no-sugar-added-apple-applesauce-fruit-puree-snack-pouches-/0084886004439"
                   },
                   {
@@ -59368,7 +59368,7 @@
                       "product_id":  "0084886000049",
                       "size_raw":  "12 ct / 3.2 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/gogo-squeez-toy-story-5-no-sugar-added-banana-strawberry-applesauce-variety-pouches-/0084886000049",
                       "base_price":  8.99,
                       "marked_down":  true
@@ -59385,7 +59385,7 @@
                       "product_id":  "0001111014934",
                       "size_raw":  "12 ct / 3.2 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-organic-no-sugar-added-applesauce-pouches-big-deal-/0001111014934"
                   },
                   {
@@ -61292,7 +61292,7 @@
                       "product_id":  "0002700052005",
                       "size_raw":  "19.74 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/orville-redenbacher-s-ultimate-butter-popcorn-microwave-popcorn/0002700052005",
                       "base_price":  5.29,
                       "marked_down":  true
@@ -62653,7 +62653,7 @@
                       "product_id":  "0072225216850",
                       "size_raw":  "6 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/clif-builders-chocolatey-peanut-butter-20g-protein-bars/0072225216850"
                   },
                   {
@@ -63660,7 +63660,7 @@
                       "product_id":  "0001111011169",
                       "size_raw":  "12 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-frosted-cookies-and-cr-me-toaster-treats/0001111011169"
                   },
                   {
@@ -65087,7 +65087,7 @@
                       "product_id":  "0003890003008",
                       "size_raw":  "4 ct / 4.3 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/dole-mix-fruit-in-black-cherry-gel/0003890003008",
                       "base_price":  3.79,
                       "marked_down":  true
@@ -65499,7 +65499,7 @@
                       "product_id":  "0004300004568",
                       "size_raw":  "4 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "",
                       "link_url":  "https://www.bakersplus.com/p/jell-o-strawberry-sugar-free-jello-cups-gelatin-snack/0004300004568"
                   },
                   {
@@ -65514,7 +65514,7 @@
                       "product_id":  "0004300004574",
                       "size_raw":  "4 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "",
                       "link_url":  "https://www.bakersplus.com/p/jell-o-original-strawberry-jello-cups-gelatin-snack/0004300004574"
                   },
                   {
@@ -65529,7 +65529,7 @@
                       "product_id":  "0001111015988",
                       "size_raw":  "8 ct / 3.25 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "",
                       "link_url":  "https://www.bakersplus.com/p/kroger-gelatin-cups/0001111015988"
                   },
                   {
@@ -65544,7 +65544,7 @@
                       "product_id":  "0004300004573",
                       "size_raw":  "4 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "",
                       "link_url":  "https://www.bakersplus.com/p/jell-o-original-orange-jello-cups-gelatin-snack/0004300004573"
                   },
                   {
@@ -65559,7 +65559,7 @@
                       "product_id":  "0004300004608",
                       "size_raw":  "4 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "",
                       "link_url":  "https://www.bakersplus.com/p/jell-o-lemon-lime-sugar-free-jello-cups-gelatin-snack/0004300004608"
                   },
                   {
@@ -65574,7 +65574,7 @@
                       "product_id":  "0001111015987",
                       "size_raw":  "8 ct / 3.25 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "",
                       "link_url":  "https://www.bakersplus.com/p/kroger-zero-sugar-gelatin-cups/0001111015987"
                   },
                   {
@@ -65589,7 +65589,7 @@
                       "product_id":  "0001111015989",
                       "size_raw":  "8 ct / 3.25 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "",
                       "link_url":  "https://www.bakersplus.com/p/kroger-zero-sugar-parfait-gelatin-cups/0001111015989"
                   },
                   {
@@ -65604,7 +65604,7 @@
                       "product_id":  "0004300004607",
                       "size_raw":  "4 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "",
                       "link_url":  "https://www.bakersplus.com/p/jell-o-black-cherry-sugar-free-jello-cups-gelatin-snack/0004300004607"
                   },
                   {
@@ -65619,7 +65619,7 @@
                       "product_id":  "0004300005755",
                       "size_raw":  "8 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "",
                       "link_url":  "https://www.bakersplus.com/p/jell-o-original-strawberry-jello-cups-gelatin-snack-value-pack/0004300005755"
                   },
                   {
@@ -65634,7 +65634,7 @@
                       "product_id":  "0004300005091",
                       "size_raw":  "8 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "",
                       "link_url":  "https://www.bakersplus.com/p/jell-o-strawberry-sugar-free-jello-cups-gelatin-snack-value-pack/0004300005091"
                   },
                   {
@@ -65649,7 +65649,7 @@
                       "product_id":  "0002700000987",
                       "size_raw":  "13 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "",
                       "link_url":  "https://www.bakersplus.com/p/snack-pack-splash-orange-flavored-juicy-gel-cups/0002700000987"
                   },
                   {
@@ -65664,7 +65664,7 @@
                       "product_id":  "0002700000989",
                       "size_raw":  "13 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "",
                       "link_url":  "https://www.bakersplus.com/p/snack-pack-splash-strawberry-flavored-juicy-gel-cups/0002700000989"
                   },
                   {
@@ -65850,7 +65850,7 @@
                       "product_id":  "0007468210301",
                       "size_raw":  "32 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/r-w-knudsen-organic-apple-100-juice-bottle/0007468210301"
                   },
                   {
@@ -65914,7 +65914,7 @@
                       "product_id":  "0007468200018",
                       "size_raw":  "84.5 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/r-w-knudsen-organic-apple-100-juice-glass-bottle/0007468200018"
                   },
                   {
@@ -66021,7 +66021,7 @@
                       "product_id":  "0004124464108",
                       "size_raw":  "4 ct / 10 fl oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/martinelli-s-gold-medal-apple-juice/0004124464108"
                   },
                   {
@@ -66051,7 +66051,7 @@
                       "product_id":  "0001111003972",
                       "size_raw":  "64 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kroger-100-grape-juice/0001111003972"
                   },
                   {
@@ -66248,7 +66248,7 @@
                       "product_id":  "0003120000058",
                       "size_raw":  "6 ct / 10 fl oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/ocean-spray-cran-grape-juice-drink/0003120000058"
                   },
                   {
@@ -66323,7 +66323,7 @@
                       "product_id":  "0003120003466",
                       "size_raw":  "64 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/ocean-spray-cranberry-concord-grape-juice/0003120003466"
                   },
                   {
@@ -66743,7 +66743,7 @@
                       "product_id":  "0002500012052",
                       "size_raw":  "52 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/minute-maid-zero-sugar-lemonade/0002500012052"
                   },
                   {
@@ -66788,7 +66788,7 @@
                       "product_id":  "0002500013671",
                       "size_raw":  "76 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/simply-lemonade-bottle/0002500013671"
                   },
                   {
@@ -67070,7 +67070,7 @@
                       "product_id":  "0004850020594",
                       "size_raw":  "46 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/tropicana-zero-sugar-fruit-punch-juice-drink/0004850020594"
                   },
                   {
@@ -68440,7 +68440,7 @@
                       "product_id":  "0009147540799",
                       "size_raw":  "1 gal",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/milo-s-famous-unsweetened-iced-tea/0009147540799"
                   },
                   {
@@ -68500,7 +68500,7 @@
                       "product_id":  "0009147504189",
                       "size_raw":  "1 gal",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/milo-s-famous-sweet-iced-tea/0009147504189"
                   },
                   {
@@ -71384,7 +71384,7 @@
                       "product_id":  "0007100714159",
                       "size_raw":  "8 ct / 36 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/el-monterey-signature-egg-applewood-smoked-bacon-and-cheese-frozen-breakfast-burritos/0007100714159",
                       "base_price":  10.99,
                       "marked_down":  true
@@ -72571,7 +72571,7 @@
                       "product_id":  "0001111001762",
                       "size_raw":  "16 ct / 42.07 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-classic-corn-dogs/0001111001762"
                   },
                   {
@@ -73035,7 +73035,7 @@
                       "product_id":  "0007045985118",
                       "size_raw":  "6 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/new-york-bakery-gluten-free-texas-toast-five-cheese/0007045985118"
                   },
                   {
@@ -73366,7 +73366,7 @@
                       "product_id":  "0007064000661",
                       "size_raw":  "21 fluid ounces",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/bomb-pop-original-sugar-free-ice-pops/0007064000661",
                       "base_price":  4.49,
                       "marked_down":  true
@@ -77529,7 +77529,7 @@
                       "product_id":  "0004126037330",
                       "size_raw":  "6.2 lb",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-instant-light-ridged-charcoal-briquets-original-6-2-lb/0004126037330",
                       "base_price":  6.99,
                       "marked_down":  true
@@ -77597,7 +77597,7 @@
                       "product_id":  "0004460032090",
                       "size_raw":  "12 lb",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kingsford-match-light-charcoal-briquettes-fast-lighting-no-lighter-fluid-needed/0004460032090",
                       "base_price":  13.99,
                       "marked_down":  true
@@ -78077,7 +78077,7 @@
                       "product_id":  "0082785401164",
                       "size_raw":  "4.5 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/tom-s-of-maine-fluoride-free-antiplaque-and-whitening-toothpaste-in-peppermint/0082785401164"
                   },
                   {
@@ -80681,6 +80681,366 @@
                   },
                   {
                       "store":  "Baker\u0027s",
+                      "item":  "Kroger Twin Blade Disposable Razors Soft Touch",
+                      "ad_price":  "$2.29",
+                      "size":  "10 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  2.29,
+                      "product_id":  "0004126000760",
+                      "size_raw":  "10 count",
+                      "size_basis":  "label",
+                      "stock_level":  "LOW",
+                      "link_url":  "https://www.bakersplus.com/p/kroger-twin-blade-disposable-razors-soft-touch/0004126000760"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Gillette Mach3 Men\u0027s Sensitive Green 3-Blade Disposable Razors",
+                      "ad_price":  "$7.99",
+                      "size":  "3 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  7.99,
+                      "product_id":  "0004740004474",
+                      "size_raw":  "3 count",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/gillette-mach3-men-s-sensitive-green-3-blade-disposable-razors/0004740004474"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Disposable Twin Blade Pivoting Razors for Men BIG DEAL!",
+                      "ad_price":  "$4.49",
+                      "size":  "20 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  4.49,
+                      "product_id":  "0004126001867",
+                      "size_raw":  "20 count",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/kroger-disposable-twin-blade-pivoting-razors-for-men-big-deal-/0004126001867"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Gillette Venus Women\u0027s Sensitive Skin 3-Blade Disposable Razors",
+                      "ad_price":  "$7.99",
+                      "size":  "3 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  7.99,
+                      "product_id":  "0004740031389",
+                      "size_raw":  "3 count",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/gillette-venus-women-s-sensitive-skin-3-blade-disposable-razors/0004740031389"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Gillette Venus Women\u0027s Simply3 Sensitive 3-Blade Disposable Razors",
+                      "ad_price":  "$7.49",
+                      "size":  "4 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  7.49,
+                      "product_id":  "0004740066356",
+                      "size_raw":  "4 count",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/gillette-venus-women-s-simply3-sensitive-3-blade-disposable-razors/0004740066356"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "BIC Soleil Smooth Scented Disposable 3-Blade Razors",
+                      "ad_price":  "$6.29",
+                      "size":  "4 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  6.29,
+                      "product_id":  "0007033071417",
+                      "size_raw":  "4 pk",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/bic-soleil-smooth-scented-disposable-3-blade-razors/0007033071417"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Disposable 5 Blade Razors Ultra Smooth",
+                      "ad_price":  "$5.99",
+                      "size":  "3 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  5.99,
+                      "product_id":  "0004126000756",
+                      "size_raw":  "3 count",
+                      "size_basis":  "label",
+                      "stock_level":  "LOW",
+                      "link_url":  "https://www.bakersplus.com/p/kroger-disposable-5-blade-razors-ultra-smooth/0004126000756"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "BIC Soleil Smooth Women\u0027s Disposable Razors",
+                      "ad_price":  "$6.29",
+                      "size":  "4 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  6.29,
+                      "product_id":  "0007033071300",
+                      "size_raw":  "4 pk",
+                      "size_basis":  "label",
+                      "stock_level":  "LOW",
+                      "link_url":  "https://www.bakersplus.com/p/bic-soleil-smooth-women-s-disposable-razors/0007033071300"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Gillette Venus Women\u0027s Tropical Scented 3-Blade Disposable Razors",
+                      "ad_price":  "$7.99",
+                      "size":  "3 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  7.99,
+                      "product_id":  "0004740031391",
+                      "size_raw":  "3 count",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/gillette-venus-women-s-tropical-scented-3-blade-disposable-razors/0004740031391"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger 5 Blade Disposable Razors Sensitive",
+                      "ad_price":  "$6.79",
+                      "size":  "3 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  6.79,
+                      "product_id":  "0004126011856",
+                      "size_raw":  "3 count",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/kroger-5-blade-disposable-razors-sensitive/0004126011856"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Gillette Sensor3 Men\u0027s Sensitive Skin 3-Blade Disposable Razors",
+                      "ad_price":  "$10.99",
+                      "size":  "7 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  10.99,
+                      "product_id":  "0004740067215",
+                      "size_raw":  "7 count",
+                      "size_basis":  "label",
+                      "stock_level":  "LOW",
+                      "link_url":  "https://www.bakersplus.com/p/gillette-sensor3-men-s-sensitive-skin-3-blade-disposable-razors/0004740067215"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Disposable Twin Blade Fixed Razors for Men BIG DEAL!",
+                      "ad_price":  "$4.49",
+                      "size":  "20 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  4.49,
+                      "product_id":  "0004126002006",
+                      "size_raw":  "20 ct",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/kroger-disposable-twin-blade-fixed-razors-for-men-big-deal-/0004126002006"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Gillette Sensor3 Men\u0027s Sensitive Skin 3-Blade Disposable Razors",
+                      "ad_price":  "$7.49",
+                      "size":  "3 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  7.49,
+                      "product_id":  "0004740067212",
+                      "size_raw":  "3 count",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/gillette-sensor3-men-s-sensitive-skin-3-blade-disposable-razors/0004740067212"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "BIC Silky Touch Women\u0027s Disposable Razors",
+                      "ad_price":  "$3.39",
+                      "size":  "10 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  3.39,
+                      "product_id":  "0007033091610",
+                      "size_raw":  "10 pk",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/bic-silky-touch-women-s-disposable-razors/0007033091610"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Disposable Dermaplane Touch Up Razor",
+                      "ad_price":  "$4.49",
+                      "size":  "3 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  4.49,
+                      "product_id":  "0004126001951",
+                      "size_raw":  "3 count",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/kroger-disposable-dermaplane-touch-up-razor/0004126001951"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger 3 Blade Disposable Razors Smooth Floral Scented",
+                      "ad_price":  "$4.39",
+                      "size":  "4 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  4.39,
+                      "product_id":  "0004126037227",
+                      "size_raw":  "4 count",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/kroger-3-blade-disposable-razors-smooth-floral-scented/0004126037227"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Gillette Daisy Women\u0027s Classic 2-Blade Disposable Razors + Venus Simply3 3-Blade Disposable Razor",
+                      "ad_price":  "$10.99",
+                      "size":  "12 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  10.99,
+                      "product_id":  "0004740030071",
+                      "size_raw":  "12 count",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/gillette-daisy-women-s-classic-2-blade-disposable-razors-venus-simply3-3-blade-disposable-razor/0004740030071"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "BIC Sensitive Single-Blade Disposable Razors",
+                      "ad_price":  "$3.79",
+                      "size":  "12 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  3.79,
+                      "product_id":  "0007033070841",
+                      "size_raw":  "12 pk",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/bic-sensitive-single-blade-disposable-razors/0007033070841"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger 3 Blade Disposable Razors Sensitive",
+                      "ad_price":  "$4.99",
+                      "size":  "4 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  4.99,
+                      "product_id":  "0004126001084",
+                      "size_raw":  "4 count",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/kroger-3-blade-disposable-razors-sensitive/0004126001084"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Gillette Sensor2 Men\u0027s Plus Pivoting Head 2-Blade Disposable Razors",
+                      "ad_price":  "$10.99",
+                      "size":  "10 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  10.99,
+                      "product_id":  "0004740066453",
+                      "size_raw":  "10 count",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/gillette-sensor2-men-s-plus-pivoting-head-2-blade-disposable-razors/0004740066453"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Gillette Mach3 Men\u0027s Smooth Blue Pivot 3-Blade Disposable Razors",
+                      "ad_price":  "$7.99",
+                      "size":  "3 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  7.99,
+                      "product_id":  "0004740004472",
+                      "size_raw":  "3 count",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/gillette-mach3-men-s-smooth-blue-pivot-3-blade-disposable-razors/0004740004472"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Schick Xtreme3 Disposable Razors for Men Sensitive Skin Protects Skin from Irritation",
+                      "ad_price":  "$10.29",
+                      "size":  "8 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  10.29,
+                      "product_id":  "0084105802014",
+                      "size_raw":  "8 count",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/schick-xtreme3-disposable-razors-for-men-sensitive-skin-protects-skin-from-irritation/0084105802014"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Gillette Venus Women\u0027s Sensitive Skin Pink Disposable Razors",
+                      "ad_price":  "$14.99",
+                      "size":  "6 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  14.99,
+                      "product_id":  "0004740031392",
+                      "size_raw":  "6 count",
+                      "size_basis":  "label",
+                      "stock_level":  "LOW",
+                      "link_url":  "https://www.bakersplus.com/p/gillette-venus-women-s-sensitive-skin-pink-disposable-razors/0004740031392"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Schick Xtreme2 Disposable Razors for Men Sensitive Skin Protects Skin from Irritation",
+                      "ad_price":  "$6.69",
+                      "size":  "12 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  6.69,
+                      "product_id":  "0084105804802",
+                      "size_raw":  "12 count",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/schick-xtreme2-disposable-razors-for-men-sensitive-skin-protects-skin-from-irritation/0084105804802"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
                       "item":  "Pure Silk Sensitive Skin Shaving Cream",
                       "ad_price":  "$2.29",
                       "size":  "7.25 oz",
@@ -81290,7 +81650,7 @@
                       "product_id":  "0001910010994",
                       "size_raw":  "21 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/jergens-original-scent-with-cherry-almond-body-lotion-dry-skin-moisturizer/0001910010994",
                       "base_price":  8.49,
                       "marked_down":  true
@@ -81737,7 +82097,7 @@
                       "product_id":  "0004589309824",
                       "size_raw":  "750 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/q-tips-cotton-swabs-cosmetics-750-ct/0004589309824"
                   },
                   {
@@ -82099,7 +82459,7 @@
                       "product_id":  "0003700089033",
                       "size_raw":  "33 count",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/always-maxi-pads-with-wings-overnight-absorbency-size-4-unscented/0003700089033"
                   },
                   {
@@ -82347,7 +82707,7 @@
                       "product_id":  "0003700089032",
                       "size_raw":  "42 count",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/always-maxi-pads-with-wings-long-super-absorbency-size-2-unscented/0003700089032"
                   },
                   {
@@ -82473,7 +82833,7 @@
                       "product_id":  "0007301063173",
                       "size_raw":  "30 count",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/l-organic-cotton-core-tampons-multipack-regular-super-absorbency/0007301063173"
                   },
                   {
@@ -84235,7 +84595,7 @@
                       "product_id":  "0001780015456",
                       "size_raw":  "7.4 lb",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/purina-one-true-instinct-high-protein-dry-dog-food-real-turkey-and-venison/0001780015456"
                   },
                   {
@@ -84415,7 +84775,7 @@
                       "product_id":  "0005000001547",
                       "size_raw":  "3.15 lb",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/purina-friskies-seafood-sensations-adult-dry-cat-food-seafood-flavors/0005000001547"
                   },
                   {
@@ -84625,7 +84985,7 @@
                       "product_id":  "0007023011720",
                       "size_raw":  "20 lb",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/purina-tidy-cats-clumping-cat-litter-instant-action/0007023011720"
                   },
                   {
@@ -84790,7 +85150,7 @@
                       "product_id":  "0004460031604",
                       "size_raw":  "38 lb",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/fresh-step-extreme-mountain-spring-clumping-litter-with-febreze-freshness/0004460031604"
                   },
                   {
@@ -84880,7 +85240,7 @@
                       "product_id":  "0003320002406",
                       "size_raw":  "40 lb",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/arm-hammer-clean-burst-multi-cat-clumping-cat-litter/0003320002406"
                   },
                   {
@@ -87058,7 +87418,7 @@
                       "product_id":  "0001111016399",
                       "size_raw":  "11 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-cinnamon-donut-medium-roast-ground-coffee/0001111016399",
                       "base_price":  6.99,
                       "marked_down":  true
@@ -88538,7 +88898,7 @@
                       "product_id":  "0004139000003",
                       "size_raw":  "20 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kikkoman-soy-sauce/0004139000003"
                   },
                   {
@@ -90324,7 +90684,7 @@
                       "product_id":  "0002400001409",
                       "size_raw":  "16 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/del-monte-sliced-pickled-beets/0002400001409"
                   },
                   {
@@ -90525,7 +90885,7 @@
                       "product_id":  "0004430005957",
                       "size_raw":  "16 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/aunt-nellie-s-sweet-sour-red-cabbage/0004430005957"
                   },
                   {
@@ -91458,7 +91818,7 @@
                       "product_id":  "0001111081808",
                       "size_raw":  "12 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/private-selection-artichoke-hearts/0001111081808"
                   },
                   {
@@ -91473,7 +91833,7 @@
                       "product_id":  "0001111090678",
                       "size_raw":  "14 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kroger-artichoke-hearts-brine-can/0001111090678"
                   },
                   {
@@ -91963,7 +92323,7 @@
                       "product_id":  "0007013200600",
                       "size_raw":  "110 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/juanita-s-foods-mexican-style-hominy-110-oz-can/0007013200600"
                   },
                   {
@@ -92113,7 +92473,7 @@
                       "product_id":  "0001111078353",
                       "size_raw":  "9 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/private-selection-french-recipe-dijon-mustard/0001111078353"
                   },
                   {
@@ -92173,7 +92533,7 @@
                       "product_id":  "0004150099292",
                       "size_raw":  "12 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/french-s-stone-ground-dijon-mustard/0004150099292"
                   },
                   {
@@ -92652,7 +93012,7 @@
                       "product_id":  "0007020050439",
                       "size_raw":  "13 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/marzetti-supreme-caesar-dressing-13-fl-oz/0007020050439"
                   },
                   {
@@ -93091,7 +93451,7 @@
                       "product_id":  "0007146402284",
                       "size_raw":  "12 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/bolthouse-farms-chunky-blue-cheese-yogurt-dressing/0007146402284"
                   },
                   {
@@ -93258,7 +93618,7 @@
                       "product_id":  "0004179060278",
                       "size_raw":  "16.9 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/bertolli-balsamic-vinegar-of-modena/0004179060278",
                       "base_price":  5.49,
                       "marked_down":  true
@@ -93322,7 +93682,7 @@
                       "product_id":  "0007040400434",
                       "size_raw":  "16 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/pompeian-organic-balsamic-vinegar/0007040400434"
                   },
                   {
@@ -93367,7 +93727,7 @@
                       "product_id":  "0060422653362",
                       "size_raw":  "6.8 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/bertolli-balsamic-glaze-vinegar/0060422653362",
                       "base_price":  4.99,
                       "marked_down":  true
@@ -94226,7 +94586,7 @@
                       "product_id":  "0007185100150",
                       "size_raw":  "10.5 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/bookbinder-s-seafood-cocktail-sauce/0007185100150"
                   },
                   {
@@ -94600,7 +94960,7 @@
                       "product_id":  "0001111013904",
                       "size_raw":  "28 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kroger-mild-red-enchilada-sauce/0001111013904"
                   },
                   {
@@ -94679,7 +95039,7 @@
                       "product_id":  "0003900001893",
                       "size_raw":  "16 ounce",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/ortega-original-thick-and-smooth-mild-taco-sauce-kosher-16-oz/0003900001893",
                       "base_price":  3.99,
                       "marked_down":  true
@@ -95365,7 +95725,7 @@
                       "product_id":  "0007680800890",
                       "size_raw":  "6.2 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/barilla-creamy-genovese-pesto-with-italian-basil-pasta-sauce-and-spread/0007680800890"
                   },
                   {
@@ -96555,7 +96915,7 @@
                       "product_id":  "0087520800067",
                       "size_raw":  "4 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/gourmet-garden-lemongrass-stir-in-paste/0087520800067"
                   },
                   {
@@ -97875,7 +98235,7 @@
                       "product_id":  "0007114600301",
                       "size_raw":  "3 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/calbee-harvest-snaps-tomato-basil-red-lentil-bean-crisps/0007114600301"
                   },
                   {
@@ -98605,7 +98965,7 @@
                       "product_id":  "0001111011228",
                       "size_raw":  "12 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/private-selection-poppy-seed-salad-dressing/0001111011228"
                   },
                   {
@@ -98793,7 +99153,7 @@
                       "product_id":  "0003022306382",
                       "size_raw":  "8.75 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/taylor-farms-blueberry-poppyseed-salad-kit-8-75oz-bag/0003022306382"
                   },
                   {
@@ -98913,7 +99273,7 @@
                       "product_id":  "0003000004170",
                       "size_raw":  "24 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/quaker-quick-5-minute-grits/0003000004170"
                   },
                   {
@@ -98943,7 +99303,7 @@
                       "product_id":  "0001111085327",
                       "size_raw":  "42 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-100-whole-grain-quick-1-minute-oats/0001111085327"
                   },
                   {
@@ -99365,7 +99725,7 @@
                       "product_id":  "0001111088636",
                       "size_raw":  "8 ct / 16 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-butter-flavored-jumbo-biscuits/0001111088636"
                   },
                   {
@@ -99575,7 +99935,7 @@
                       "product_id":  "0002484218311",
                       "size_raw":  "20 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/buitoni-5-cheese-tortellini/0002484218311",
                       "base_price":  9.49,
                       "marked_down":  true
@@ -99872,7 +100232,7 @@
                       "product_id":  "0085004459964",
                       "size_raw":  "9 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/tattooed-chef-creamy-pesto-gnocchi-frozen-bowl/0085004459964",
                       "base_price":  6.49,
                       "marked_down":  true
@@ -100274,7 +100634,7 @@
                       "product_id":  "0003534277008",
                       "size_raw":  "8.5 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/bella-sun-luci-sun-dried-julienne-cut-with-italian-herbs-tomatoes/0003534277008"
                   },
                   {
@@ -100428,7 +100788,7 @@
                       "product_id":  "0000000004801",
                       "size_raw":  "1 lb",
                       "size_basis":  "soldby-weight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/fresh-tomatillo/0000000004801"
                   },
                   {
@@ -100783,6 +101143,1583 @@
                       "size_basis":  "label",
                       "stock_level":  "HIGH",
                       "link_url":  "https://www.bakersplus.com/p/kroger-6-in-1-care-anticavity-mouthwash-fresh-mint-zero-alcohol/0004126002352"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Land O\u0027Frost Bistro Favorites 100% Natural Rotisserie Seasoned Turkey Breast 8oz",
+                      "ad_price":  "$3.99",
+                      "size":  "8 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  3.99,
+                      "product_id":  "0005190080747",
+                      "size_raw":  "8 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
+                      "link_url":  "https://www.bakersplus.com/p/land-o-frost-bistro-favorites-100-natural-rotisserie-seasoned-turkey-breast-8oz/0005190080747",
+                      "base_price":  4.99,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Wellshire Smoked Turkey Breast",
+                      "ad_price":  "$5.99",
+                      "size":  "7 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  5.99,
+                      "product_id":  "0005190040078",
+                      "size_raw":  "7 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/wellshire-smoked-turkey-breast/0005190040078"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Butterball All Natural Frozen Turkey Breast Roast, 3 lbs",
+                      "ad_price":  "$14.99",
+                      "size":  "3 lb",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  14.99,
+                      "product_id":  "0002265527487",
+                      "size_raw":  "3 lbs",
+                      "size_basis":  "label",
+                      "stock_level":  "",
+                      "link_url":  "https://www.bakersplus.com/p/butterball-all-natural-frozen-turkey-breast-roast-3-lbs/0002265527487"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Butterball All Natural Frozen Turkey Breast Roast, Savory Herb, 3 lbs",
+                      "ad_price":  "$14.99",
+                      "size":  "3 lb",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  14.99,
+                      "product_id":  "0002265500061",
+                      "size_raw":  "3 lbs",
+                      "size_basis":  "label",
+                      "stock_level":  "",
+                      "link_url":  "https://www.bakersplus.com/p/butterball-all-natural-frozen-turkey-breast-roast-savory-herb-3-lbs/0002265500061"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Jennie-O Turkey All Natural Turkey Breast Tenderloins",
+                      "ad_price":  "$11.99",
+                      "size":  "24 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  11.99,
+                      "product_id":  "0004222231900",
+                      "size_raw":  "net wt 24 oz (1.5 lbs)",
+                      "size_basis":  "label",
+                      "stock_level":  "",
+                      "link_url":  "https://www.bakersplus.com/p/jennie-o-turkey-all-natural-turkey-breast-tenderloins/0004222231900"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Home Chef Cold Bone-In Turkey Breast",
+                      "ad_price":  "$12.99",
+                      "size":  "1 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  12.99,
+                      "product_id":  "0084013430076",
+                      "size_raw":  "1 ct",
+                      "size_basis":  "label",
+                      "stock_level":  "",
+                      "link_url":  "https://www.bakersplus.com/p/home-chef-cold-bone-in-turkey-breast/0084013430076"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Jennie-O Turkey Applewood Smoke Flavor Turkey Breast Tenderloin",
+                      "ad_price":  "$11.99",
+                      "size":  "24 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  11.99,
+                      "product_id":  "0004222231810",
+                      "size_raw":  "net wt 24 oz (1.5 lbs)",
+                      "size_basis":  "label",
+                      "stock_level":  "",
+                      "link_url":  "https://www.bakersplus.com/p/jennie-o-turkey-applewood-smoke-flavor-turkey-breast-tenderloin/0004222231810"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Hillshire Farm Ultra Thin Sliced Oven Roasted Turkey Breast Sandwich Meat",
+                      "ad_price":  "$4.49",
+                      "size":  "9 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  4.49,
+                      "product_id":  "0004450097650",
+                      "size_raw":  "9 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/hillshire-farm-ultra-thin-sliced-oven-roasted-turkey-breast-sandwich-meat/0004450097650"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Boar\u0027s Head Ovengold Roasted Turkey Breast",
+                      "ad_price":  "$14.99",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  14.99,
+                      "product_id":  "0027555900000",
+                      "size_raw":  "1 lb",
+                      "size_basis":  "soldby-weight",
+                      "stock_level":  "",
+                      "link_url":  "https://www.bakersplus.com/p/boar-s-head-ovengold-roasted-turkey-breast/0027555900000"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Oscar Mayer Deli Fresh Mesquite Smoked Turkey Breast Thin Sliced Lunchmeat",
+                      "ad_price":  "$7.49",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  7.49,
+                      "product_id":  "0004470005862",
+                      "size_raw":  "16 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
+                      "link_url":  "https://www.bakersplus.com/p/oscar-mayer-deli-fresh-mesquite-smoked-turkey-breast-thin-sliced-lunchmeat/0004470005862"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Hillshire Farm Ultra Thin Sliced Honey Roasted Turkey Breast Sandwich Meat",
+                      "ad_price":  "$4.49",
+                      "size":  "9 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  4.49,
+                      "product_id":  "0004450097651",
+                      "size_raw":  "9 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/hillshire-farm-ultra-thin-sliced-honey-roasted-turkey-breast-sandwich-meat/0004450097651"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Hillshire Farm Ultra Thin Sliced Oven Roasted Turkey Breast Sandwich Meat",
+                      "ad_price":  "$7.49",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  7.49,
+                      "product_id":  "0004450096646",
+                      "size_raw":  "1 lb",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/hillshire-farm-ultra-thin-sliced-oven-roasted-turkey-breast-sandwich-meat/0004450096646"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Oscar Mayer Deli Fresh Oven Roasted Turkey Breast Thin Sliced Lunchmeat",
+                      "ad_price":  "$4.49",
+                      "size":  "8 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  4.49,
+                      "product_id":  "0004470009170",
+                      "size_raw":  "8 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/oscar-mayer-deli-fresh-oven-roasted-turkey-breast-thin-sliced-lunchmeat/0004470009170"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Hillshire Farm Ultra Thin Sliced Lower Sodium Oven Roasted Turkey Breast Sandwich Meat",
+                      "ad_price":  "$4.49",
+                      "size":  "8 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  4.49,
+                      "product_id":  "0004450097644",
+                      "size_raw":  "8 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/hillshire-farm-ultra-thin-sliced-lower-sodium-oven-roasted-turkey-breast-sandwich-meat/0004450097644"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Smithfield Anytime Favorites Diced Ham",
+                      "ad_price":  "$2.50",
+                      "size":  "8 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  2.5,
+                      "product_id":  "0007080003719",
+                      "size_raw":  "8 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/smithfield-anytime-favorites-diced-ham/0007080003719",
+                      "base_price":  4.49,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Diced Ham",
+                      "ad_price":  "$2.99",
+                      "size":  "8 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  2.99,
+                      "product_id":  "0001111097035",
+                      "size_raw":  "8 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "LOW",
+                      "link_url":  "https://www.bakersplus.com/p/kroger-diced-ham/0001111097035"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Pork Belly Diced Rubbed With BBQ Seasoning",
+                      "ad_price":  "$7.00",
+                      "size":  "20 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  7,
+                      "product_id":  "0001111063826",
+                      "size_raw":  "20 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "",
+                      "link_url":  "https://www.bakersplus.com/p/kroger-pork-belly-diced-rubbed-with-bbq-seasoning/0001111063826"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Sazon Goya Coriander and Annatto Seasoning",
+                      "ad_price":  "$1.69",
+                      "size":  "1.41 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  1.69,
+                      "product_id":  "0004133103782",
+                      "size_raw":  "1.41 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/sazon-goya-coriander-and-annatto-seasoning/0004133103782"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Sazon Goya with Cilantro \u0026 Tomato",
+                      "ad_price":  "$1.69",
+                      "size":  "1.41 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  1.69,
+                      "product_id":  "0004133103786",
+                      "size_raw":  "1.41 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/sazon-goya-with-cilantro-tomato/0004133103786"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Eggplant",
+                      "ad_price":  "$1.69",
+                      "size":  "1 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  1.69,
+                      "product_id":  "0000000004081",
+                      "size_raw":  "1 each",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/eggplant/0000000004081"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Michael Angelo\u0027S Eggplant Parmigiana Frozen",
+                      "ad_price":  "$3.99",
+                      "size":  "11 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  3.99,
+                      "product_id":  "0003736300912",
+                      "size_raw":  "11 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/michael-angelo-s-eggplant-parmigiana-frozen/0003736300912",
+                      "base_price":  4.99,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Simple Truth Organic Roma Tomatoes",
+                      "ad_price":  "$2.99",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  2.99,
+                      "product_id":  "0001111000219",
+                      "size_raw":  "16 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/simple-truth-organic-roma-tomatoes/0001111000219"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Michael Angelo\u0027S Eggplant Parmigiana Frozen",
+                      "ad_price":  "$8.99",
+                      "size":  "30 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  8.99,
+                      "product_id":  "0003736398378",
+                      "size_raw":  "30 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/michael-angelo-s-eggplant-parmigiana-frozen/0003736398378",
+                      "base_price":  10.49,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Legacy Farms Japanese Eggplant",
+                      "ad_price":  "$1.99",
+                      "size":  "12 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  1.99,
+                      "product_id":  "0081005361074",
+                      "size_raw":  "12 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/legacy-farms-japanese-eggplant/0081005361074"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Tasty Bite Sauteed Eggplant \u0026 Tomatoes 10oz Eggplant and Tomato Curry",
+                      "ad_price":  "$4.69",
+                      "size":  "10 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  4.69,
+                      "product_id":  "0078273300004",
+                      "size_raw":  "10 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "",
+                      "link_url":  "https://www.bakersplus.com/p/tasty-bite-sauteed-eggplant-tomatoes-10oz-eggplant-and-tomato-curry/0078273300004",
+                      "base_price":  4.99,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Simple Truth Organic Fresh Grape Snacking Tomatoes",
+                      "ad_price":  "$3.99",
+                      "size":  "10 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  3.99,
+                      "product_id":  "0001111091068",
+                      "size_raw":  "10 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/simple-truth-organic-fresh-grape-snacking-tomatoes/0001111091068"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Simple Truth Organic Tomato Medley Snacking Tomatoes",
+                      "ad_price":  "$3.99",
+                      "size":  "10 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  3.99,
+                      "product_id":  "0001111022297",
+                      "size_raw":  "10 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
+                      "link_url":  "https://www.bakersplus.com/p/simple-truth-organic-tomato-medley-snacking-tomatoes/0001111022297"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Nature Fresh Farms Heirloom Tomatoes",
+                      "ad_price":  "$2.99",
+                      "size":  "2 pk 6 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  2.99,
+                      "product_id":  "0068925900224",
+                      "size_raw":  "2 ct / 6 oz",
+                      "size_basis":  "netweight",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/nature-fresh-farms-heirloom-tomatoes/0068925900224"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Brown Gravy Mix",
+                      "ad_price":  "$0.50",
+                      "size":  "0.87 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  0.5,
+                      "product_id":  "0001111071972",
+                      "size_raw":  "0.87 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/kroger-brown-gravy-mix/0001111071972"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "McCormick Brown Gravy Mix, 0.87 oz",
+                      "ad_price":  "$1.19",
+                      "size":  "0.87 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  1.19,
+                      "product_id":  "0005210009860",
+                      "size_raw":  "0.87 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/mccormick-brown-gravy-mix-0-87-oz/0005210009860"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Brown Gravy Mix",
+                      "ad_price":  "$1.89",
+                      "size":  "4 pk 0.87 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  1.89,
+                      "product_id":  "0001111003232",
+                      "size_raw":  "4 ct / 0.87 oz",
+                      "size_basis":  "netweight",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
+                      "link_url":  "https://www.bakersplus.com/p/kroger-brown-gravy-mix/0001111003232"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "McCormick Brown Gravy Seasoning Mix",
+                      "ad_price":  "$7.99",
+                      "size":  "7.62 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  7.99,
+                      "product_id":  "0005210005097",
+                      "size_raw":  "7.62 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "LOW",
+                      "link_url":  "https://www.bakersplus.com/p/mccormick-brown-gravy-seasoning-mix/0005210005097"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Pioneer Brown Gravy Mix",
+                      "ad_price":  "$1.29",
+                      "size":  "1.61 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  1.29,
+                      "product_id":  "0004146039829",
+                      "size_raw":  "1.61 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/pioneer-brown-gravy-mix/0004146039829"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Reduced Sodium Brown Gravy Mix",
+                      "ad_price":  "$0.50",
+                      "size":  "0.87 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  0.5,
+                      "product_id":  "0001111071797",
+                      "size_raw":  "0.87 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
+                      "link_url":  "https://www.bakersplus.com/p/kroger-reduced-sodium-brown-gravy-mix/0001111071797"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "McCormick 30% Less Sodium Brown Gravy Seasoning Mix",
+                      "ad_price":  "$1.19",
+                      "size":  "0.87 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  1.19,
+                      "product_id":  "0005210076249",
+                      "size_raw":  "0.87 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/mccormick-30-less-sodium-brown-gravy-seasoning-mix/0005210076249"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Fire \u0026 Smoke Society Big Sunday Brown Gravy Mix",
+                      "ad_price":  "$2.09",
+                      "size":  "1 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  2.09,
+                      "product_id":  "0085003799274",
+                      "size_raw":  "1 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "",
+                      "link_url":  "https://www.bakersplus.com/p/fire-smoke-society-big-sunday-brown-gravy-mix/0085003799274",
+                      "base_price":  2.19,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Pioneer Brand Gluten Free Brown Gravy Mix",
+                      "ad_price":  "$2.49",
+                      "size":  "1.61 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  2.49,
+                      "product_id":  "0004146020100",
+                      "size_raw":  "1.61 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/pioneer-brand-gluten-free-brown-gravy-mix/0004146020100"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Pioneer Roasted Beef Gravy Mix",
+                      "ad_price":  "$1.69",
+                      "size":  "1.41 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  1.69,
+                      "product_id":  "0004146020279",
+                      "size_raw":  "1.41 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/pioneer-roasted-beef-gravy-mix/0004146020279"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kinder\u0027s Classic Beef Gravy Mix 0.9 oz",
+                      "ad_price":  "$2.29",
+                      "size":  "1oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  2.29,
+                      "product_id":  "0075579525282",
+                      "size_raw":  "1oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/kinder-s-classic-beef-gravy-mix-0-9-oz/0075579525282"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Heritage Farm Chicken Livers",
+                      "ad_price":  "$2.49",
+                      "size":  "20 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  2.49,
+                      "product_id":  "0001111063602",
+                      "size_raw":  "20 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/heritage-farm-chicken-livers/0001111063602"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Schaller \u0026 Webber All Natural Chicken Liver Pate",
+                      "ad_price":  "$9.99",
+                      "size":  "7 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  9.99,
+                      "product_id":  "0075363320060",
+                      "size_raw":  "7 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "",
+                      "link_url":  "https://www.bakersplus.com/p/schaller-webber-all-natural-chicken-liver-pate/0075363320060"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Purina Fancy Feast Gravy Lovers Wet Cat Food in Gravy Chicken Hearts \u0026 Liver Feast",
+                      "ad_price":  "$1.00",
+                      "size":  "3 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  1,
+                      "product_id":  "0005000029261",
+                      "size_raw":  "3 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/purina-fancy-feast-gravy-lovers-wet-cat-food-in-gravy-chicken-hearts-liver-feast/0005000029261"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Purina Fancy Feast Wet Cat Food Classic Pate Tender Chicken and Liver Feast",
+                      "ad_price":  "$1.00",
+                      "size":  "3 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  1,
+                      "product_id":  "0005000042904",
+                      "size_raw":  "3 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/purina-fancy-feast-wet-cat-food-classic-pate-tender-chicken-and-liver-feast/0005000042904"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Purina Friskies Wet Cat Food Pate Liver \u0026 Chicken Dinner",
+                      "ad_price":  "$0.90",
+                      "size":  "5.5 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  0.9,
+                      "product_id":  "0005000042044",
+                      "size_raw":  "5.5 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/purina-friskies-wet-cat-food-pate-liver-chicken-dinner/0005000042044"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Cesar Adult Soft Wet Dog Food Chicken \u0026 Liver Recipe Classic Loaf in Sauce",
+                      "ad_price":  "$1.25",
+                      "size":  "3.5 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  1.25,
+                      "product_id":  "0002310001405",
+                      "size_raw":  "3.5 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/cesar-adult-soft-wet-dog-food-chicken-liver-recipe-classic-loaf-in-sauce/0002310001405"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Purina Fancy Feast Sliced Wet Cat Food Chicken Hearts \u0026 Liver Feast",
+                      "ad_price":  "$1.00",
+                      "size":  "3 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  1,
+                      "product_id":  "0005000043464",
+                      "size_raw":  "3 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/purina-fancy-feast-sliced-wet-cat-food-chicken-hearts-liver-feast/0005000043464"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Pet Pride Tender Meaty Sticks Chicken and Liver Flavor Cat Treats",
+                      "ad_price":  "$1.79",
+                      "size":  "5 pk 0.18 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  1.79,
+                      "product_id":  "0001111014494",
+                      "size_raw":  "5 ct / 0.88 oz",
+                      "size_basis":  "netweight",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/pet-pride-tender-meaty-sticks-chicken-and-liver-flavor-cat-treats/0001111014494"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Temptations MixUps Crunchy and Soft Cat Treats Backyard Cookout Chicken Liver \u0026 Beef Flavor",
+                      "ad_price":  "$8.99",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  8.99,
+                      "product_id":  "0002310010926",
+                      "size_raw":  "16 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/temptations-mixups-crunchy-and-soft-cat-treats-backyard-cookout-chicken-liver-beef-flavor/0002310010926"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Purina Fancy Feast Grilled Wet Cat Food in Gravy Liver \u0026 Chicken Feast",
+                      "ad_price":  "$1.00",
+                      "size":  "3 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  1,
+                      "product_id":  "0005000010086",
+                      "size_raw":  "3 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/purina-fancy-feast-grilled-wet-cat-food-in-gravy-liver-chicken-feast/0005000010086"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Pedigree Chopped Ground Dinner Adult Canned Soft Wet Dog Food Chicken Liver Beef \u0026 Beef Bacon Cheese",
+                      "ad_price":  "$20.99",
+                      "size":  "12 pk 13.2 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  20.99,
+                      "product_id":  "0002310003320",
+                      "size_raw":  "12 ct / 13.2 oz",
+                      "size_basis":  "netweight",
+                      "stock_level":  "LOW",
+                      "link_url":  "https://www.bakersplus.com/p/pedigree-chopped-ground-dinner-adult-canned-soft-wet-dog-food-chicken-liver-beef-beef-bacon-cheese/0002310003320",
+                      "base_price":  21.99,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Temptations MixUps Crunchy and Soft Cat Treats Backyard Cookout Flavor Chicken Liver \u0026 Beef",
+                      "ad_price":  "$3.00",
+                      "size":  "3 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  3,
+                      "product_id":  "0002310000157",
+                      "size_raw":  "3 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/temptations-mixups-crunchy-and-soft-cat-treats-backyard-cookout-flavor-chicken-liver-beef/0002310000157"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Purina Friskies Party Pack\u0027d Adult Dry Cat Food Chicken Turkey and Liver",
+                      "ad_price":  "$5.79",
+                      "size":  "50.4 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  5.79,
+                      "product_id":  "0005000061895",
+                      "size_raw":  "50.4 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/purina-friskies-party-pack-d-adult-dry-cat-food-chicken-turkey-and-liver/0005000061895"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Poultry Seasoning Shaker",
+                      "ad_price":  "$3.29",
+                      "size":  "1.06 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  3.29,
+                      "product_id":  "0001111068336",
+                      "size_raw":  "1.06 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/kroger-poultry-seasoning-shaker/0001111068336"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Spice Islands Poultry Seasoning",
+                      "ad_price":  "$9.99",
+                      "size":  "1.4 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  9.99,
+                      "product_id":  "0001732400280",
+                      "size_raw":  "1.4 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/spice-islands-poultry-seasoning/0001732400280"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Private Selection Bold and Savory Poultry Seasoning Rub Shaker",
+                      "ad_price":  "$4.49",
+                      "size":  "5.1 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  4.49,
+                      "product_id":  "0001111004530",
+                      "size_raw":  "5.1 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/private-selection-bold-and-savory-poultry-seasoning-rub-shaker/0001111004530",
+                      "base_price":  4.99,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Gourmet Garden Poultry Herb Seasoning",
+                      "ad_price":  "$4.99",
+                      "size":  "0.42 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  4.99,
+                      "product_id":  "0087520800183",
+                      "size_raw":  "0.42 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/gourmet-garden-poultry-herb-seasoning/0087520800183"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Traeger Grills Pork and Poultry Rub with Apple \u0026 Honey",
+                      "ad_price":  "$5.99",
+                      "size":  "6.5 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  5.99,
+                      "product_id":  "0063486895118",
+                      "size_raw":  "6.5 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/traeger-grills-pork-and-poultry-rub-with-apple-honey/0063486895118",
+                      "base_price":  6.99,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Rice A Roni Original Long Grain \u0026 Wild Rice",
+                      "ad_price":  "$1.49",
+                      "size":  "4.3 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  1.49,
+                      "product_id":  "0001530043047",
+                      "size_raw":  "4.3 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/rice-a-roni-original-long-grain-wild-rice/0001530043047",
+                      "base_price":  1.67,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Ben\u0027s Original Original Recipe Long Grain Rice \u0026 Wild Flavored Rice, 6 oz Box",
+                      "ad_price":  "$3.29",
+                      "size":  "6 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  3.29,
+                      "product_id":  "0005480042364",
+                      "size_raw":  "6 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/ben-s-original-original-recipe-long-grain-rice-wild-flavored-rice-6-oz-box/0005480042364"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Lundberg Family Farms Sustainable Wild Blend Rice",
+                      "ad_price":  "$5.49",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  5.49,
+                      "product_id":  "0007341600430",
+                      "size_raw":  "16 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/lundberg-family-farms-sustainable-wild-blend-rice/0007341600430"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Ben\u0027s Original Ready Rice Long Grain and Wild Flavored Rice, Easy Dinner Side, 8.8 oz Pouch",
+                      "ad_price":  "$2.49",
+                      "size":  "8.8 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  2.49,
+                      "product_id":  "0005480042331",
+                      "size_raw":  "8.8 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/ben-s-original-ready-rice-long-grain-and-wild-flavored-rice-easy-dinner-side-8-8-oz-pouch/0005480042331"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger 90 Second Microwavable Long Grain \u0026 Wild Rice",
+                      "ad_price":  "$1.49",
+                      "size":  "8.8 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  1.49,
+                      "product_id":  "0001111010588",
+                      "size_raw":  "8.8 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/kroger-90-second-microwavable-long-grain-wild-rice/0001111010588"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Ben\u0027s Original Fast Cook Long Grain Rice and Wild Flavored Rice, 6.2 oz Box",
+                      "ad_price":  "$3.29",
+                      "size":  "6.2 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  3.29,
+                      "product_id":  "0005480042365",
+                      "size_raw":  "6.2 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/ben-s-original-fast-cook-long-grain-rice-and-wild-flavored-rice-6-2-oz-box/0005480042365"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Progresso Traditional Chicken and Wild Rice Soup",
+                      "ad_price":  "$2.99",
+                      "size":  "19 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  2.99,
+                      "product_id":  "0004119691036",
+                      "size_raw":  "19 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/progresso-traditional-chicken-and-wild-rice-soup/0004119691036"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Progresso Reduced Sodium Savory Chicken \u0026 Wild Rice Soup",
+                      "ad_price":  "$2.99",
+                      "size":  "18.5 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  2.99,
+                      "product_id":  "0004119674074",
+                      "size_raw":  "18.5 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/progresso-reduced-sodium-savory-chicken-wild-rice-soup/0004119674074"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Private Selection Wild Rice and Mushroom Soup",
+                      "ad_price":  "$4.99",
+                      "size":  "15 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  4.99,
+                      "product_id":  "0001111069516",
+                      "size_raw":  "15 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/private-selection-wild-rice-and-mushroom-soup/0001111069516"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Purina Beneful Freshly Prepared Blends Wet Dog Food With Chicken, Carrots, Peas and Wild Rice",
+                      "ad_price":  "$2.50",
+                      "size":  "10 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  2.5,
+                      "product_id":  "0001780015496",
+                      "size_raw":  "10 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/purina-beneful-freshly-prepared-blends-wet-dog-food-with-chicken-carrots-peas-and-wild-rice/0001780015496"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Pacific Foods Organic Chicken and Wild Rice Soup 16.3 oz Can",
+                      "ad_price":  "$4.49",
+                      "size":  "16.3 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  4.49,
+                      "product_id":  "0005260328367",
+                      "size_raw":  "16.3 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/pacific-foods-organic-chicken-and-wild-rice-soup-16-3-oz-can/0005260328367"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Purina Friskies Fully Load\u0027d Wet Cat Food Salmon Wild Rice Carrots Spinach in Sauce",
+                      "ad_price":  "$1.09",
+                      "size":  "5.5 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  1.09,
+                      "product_id":  "0005000024120",
+                      "size_raw":  "5.5 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/purina-friskies-fully-load-d-wet-cat-food-salmon-wild-rice-carrots-spinach-in-sauce/0005000024120"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Pacific Foods Organic Lightly Salted Chicken and Wild Rice Soup 16.3 oz Can",
+                      "ad_price":  "$4.49",
+                      "size":  "16.3 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  4.49,
+                      "product_id":  "0005260329011",
+                      "size_raw":  "16.3 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/pacific-foods-organic-lightly-salted-chicken-and-wild-rice-soup-16-3-oz-can/0005260329011"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Hot Dog Chili Sauce",
+                      "ad_price":  "$0.89",
+                      "size":  "10 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  0.89,
+                      "product_id":  "0001111087740",
+                      "size_raw":  "10 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/kroger-hot-dog-chili-sauce/0001111087740"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Simple Truth Organic Whole Fennel Seeds Shaker",
+                      "ad_price":  "$3.99",
+                      "size":  "1.48 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  3.99,
+                      "product_id":  "0001111006217",
+                      "size_raw":  "1.48 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/simple-truth-organic-whole-fennel-seeds-shaker/0001111006217"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Private Selection Fennel Seed Shaker",
+                      "ad_price":  "$4.99",
+                      "size":  "1.6 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  4.99,
+                      "product_id":  "0001111073711",
+                      "size_raw":  "1.6 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/private-selection-fennel-seed-shaker/0001111073711"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Sugar Snap Peas",
+                      "ad_price":  "$3.39",
+                      "size":  "8 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  3.39,
+                      "product_id":  "0001111002452",
+                      "size_raw":  "8 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/kroger-sugar-snap-peas/0001111002452"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Sugar Snap Peas",
+                      "ad_price":  "$6.49",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  6.49,
+                      "product_id":  "0001111079554",
+                      "size_raw":  "16 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/kroger-sugar-snap-peas/0001111079554"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Sugar Snap Pea Tray",
+                      "ad_price":  "$4.00",
+                      "size":  "12 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  4,
+                      "product_id":  "0085007650302",
+                      "size_raw":  "12 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
+                      "link_url":  "https://www.bakersplus.com/p/sugar-snap-pea-tray/0085007650302"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Horseradish Sauce",
+                      "ad_price":  "$2.69",
+                      "size":  "11.5 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  2.69,
+                      "product_id":  "0001111014999",
+                      "size_raw":  "11.5 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "LOW",
+                      "link_url":  "https://www.bakersplus.com/p/kroger-horseradish-sauce/0001111014999"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Private Selection Creamy Horseradish Sauce",
+                      "ad_price":  "$3.79",
+                      "size":  "9 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  3.79,
+                      "product_id":  "0001111005093",
+                      "size_raw":  "9 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/private-selection-creamy-horseradish-sauce/0001111005093"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Boar\u0027s Head Pub Style Horseradish Sauce",
+                      "ad_price":  "$5.49",
+                      "size":  "9.5 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  5.49,
+                      "product_id":  "0004242116003",
+                      "size_raw":  "9.5 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "",
+                      "link_url":  "https://www.bakersplus.com/p/boar-s-head-pub-style-horseradish-sauce/0004242116003"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "S\u0026B Wasabi Japanese Horseradish",
+                      "ad_price":  "$3.79",
+                      "size":  "1.52 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  3.79,
+                      "product_id":  "0007488002002",
+                      "size_raw":  "1.52 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/s-b-wasabi-japanese-horseradish/0007488002002"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Oriental Wok Chinese Spicy Mustard",
+                      "ad_price":  "$5.99",
+                      "size":  "9.6 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  5.99,
+                      "product_id":  "0085047100205",
+                      "size_raw":  "9.6 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "LOW",
+                      "link_url":  "https://www.bakersplus.com/p/oriental-wok-chinese-spicy-mustard/0085047100205"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Chick-fil-A Sauce",
+                      "ad_price":  "$4.49",
+                      "size":  "16 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  4.49,
+                      "product_id":  "0007020079005",
+                      "size_raw":  "16 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/chick-fil-a-sauce/0007020079005"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Chick-Fil-A Sauce",
+                      "ad_price":  "$6.49",
+                      "size":  "24 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  6.49,
+                      "product_id":  "0007020079014",
+                      "size_raw":  "24 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/chick-fil-a-sauce/0007020079014"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Select Boneless Flat Cut Corned Beef Brisket",
+                      "ad_price":  "$6.99",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  6.99,
+                      "product_id":  "0021174600000",
+                      "size_raw":  "1 lb",
+                      "size_basis":  "soldby-weight",
+                      "stock_level":  "",
+                      "link_url":  "https://www.bakersplus.com/p/select-boneless-flat-cut-corned-beef-brisket/0021174600000"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Private Selection Angus Top Round Deli Corned Beef Sliced",
+                      "ad_price":  "$6.00",
+                      "size":  "7 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  6,
+                      "product_id":  "0001111062874",
+                      "size_raw":  "7 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/private-selection-angus-top-round-deli-corned-beef-sliced/0001111062874",
+                      "base_price":  7.99,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Private Selection Corned Beef Angus Top Round Deli Sliced",
+                      "ad_price":  "$6.00",
+                      "size":  "7 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  6,
+                      "product_id":  "0001111021370",
+                      "size_raw":  "7 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/private-selection-corned-beef-angus-top-round-deli-sliced/0001111021370",
+                      "base_price":  7.99,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Buddig Corned Beef Lunch Meat 2oz",
+                      "ad_price":  "$0.99",
+                      "size":  "2 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  0.99,
+                      "product_id":  "0007740012743",
+                      "size_raw":  "2 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/buddig-corned-beef-lunch-meat-2oz/0007740012743"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Boar\u0027s Head Top Round Corned Beef",
+                      "ad_price":  "$17.99",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  17.99,
+                      "product_id":  "0027592100000",
+                      "size_raw":  "1 lb",
+                      "size_basis":  "soldby-weight",
+                      "stock_level":  "",
+                      "link_url":  "https://www.bakersplus.com/p/boar-s-head-top-round-corned-beef/0027592100000"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Private Selection Top Round Uncured Deli Corned Beef Sliced",
+                      "ad_price":  "$14.99",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  14.99,
+                      "product_id":  "0022572100000",
+                      "size_raw":  "1 lb",
+                      "size_basis":  "soldby-weight",
+                      "stock_level":  "",
+                      "link_url":  "https://www.bakersplus.com/p/private-selection-top-round-uncured-deli-corned-beef-sliced/0022572100000"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Canned Corned Beef Base",
+                      "ad_price":  "$3.79",
+                      "size":  "12 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  3.79,
+                      "product_id":  "0001111012517",
+                      "size_raw":  "12 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/kroger-canned-corned-beef-base/0001111012517"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Libby\u0027s Corned Beef Canned Meat",
+                      "ad_price":  "$7.49",
+                      "size":  "12 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  7.49,
+                      "product_id":  "0003900008104",
+                      "size_raw":  "12 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/libby-s-corned-beef-canned-meat/0003900008104"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Goya Green Pigeon Peas",
+                      "ad_price":  "$2.39",
+                      "size":  "15 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  2.39,
+                      "product_id":  "0004133112001",
+                      "size_raw":  "15 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
+                      "link_url":  "https://www.bakersplus.com/p/goya-green-pigeon-peas/0004133112001"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Pepperidge Farm Seedless Jewish Rye Bread",
+                      "ad_price":  "$3.99",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  3.99,
+                      "product_id":  "0001410007121",
+                      "size_raw":  "16 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "",
+                      "link_url":  "https://www.bakersplus.com/p/pepperidge-farm-seedless-jewish-rye-bread/0001410007121",
+                      "base_price":  4.99,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Private Selection Dark Rye Bread Wide Pan",
+                      "ad_price":  "$3.49",
+                      "size":  "24 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  3.49,
+                      "product_id":  "0001111008518",
+                      "size_raw":  "24 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
+                      "link_url":  "https://www.bakersplus.com/p/private-selection-dark-rye-bread-wide-pan/0001111008518"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Private Selection Light Rye Bread Wide Pan",
+                      "ad_price":  "$3.49",
+                      "size":  "24 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  3.49,
+                      "product_id":  "0001111008517",
+                      "size_raw":  "24 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
+                      "link_url":  "https://www.bakersplus.com/p/private-selection-light-rye-bread-wide-pan/0001111008517"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Pepperidge Farm Seeded Jewish Rye Bread",
+                      "ad_price":  "$3.99",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  3.99,
+                      "product_id":  "0001410007120",
+                      "size_raw":  "16 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "",
+                      "link_url":  "https://www.bakersplus.com/p/pepperidge-farm-seeded-jewish-rye-bread/0001410007120",
+                      "base_price":  4.99,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Pepperidge Farm Jewish Rye and Pumpernickel Swirl Bread",
+                      "ad_price":  "$3.99",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  3.99,
+                      "product_id":  "0001410007009",
+                      "size_raw":  "16 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "",
+                      "link_url":  "https://www.bakersplus.com/p/pepperidge-farm-jewish-rye-and-pumpernickel-swirl-bread/0001410007009",
+                      "base_price":  4.99,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Beefsteak No Seeds Rye Bread",
+                      "ad_price":  "$4.99",
+                      "size":  "18 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  4.99,
+                      "product_id":  "0007304000405",
+                      "size_raw":  "18 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "",
+                      "link_url":  "https://www.bakersplus.com/p/beefsteak-no-seeds-rye-bread/0007304000405"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Beefsteak Seeded Hearty Rye Bread",
+                      "ad_price":  "$4.99",
+                      "size":  "18 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  4.99,
+                      "product_id":  "0007304000404",
+                      "size_raw":  "18 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "",
+                      "link_url":  "https://www.bakersplus.com/p/beefsteak-seeded-hearty-rye-bread/0007304000404"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Pepperidge Farm Jewish Rye Pumpernickel Bread",
+                      "ad_price":  "$3.99",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  3.99,
+                      "product_id":  "0001410007119",
+                      "size_raw":  "16 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "",
+                      "link_url":  "https://www.bakersplus.com/p/pepperidge-farm-jewish-rye-pumpernickel-bread/0001410007119",
+                      "base_price":  4.99,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Backerhaus Veit Signature Marble Rye Loaf",
+                      "ad_price":  "$3.99",
+                      "size":  "17.6 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  3.99,
+                      "product_id":  "0077403451128",
+                      "size_raw":  "17.6 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "",
+                      "link_url":  "https://www.bakersplus.com/p/backerhaus-veit-signature-marble-rye-loaf/0077403451128"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Bakery Fresh Seeded Rye Bread",
+                      "ad_price":  "$3.99",
+                      "size":  "18 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  3.99,
+                      "product_id":  "0001111007002",
+                      "size_raw":  "18 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "",
+                      "link_url":  "https://www.bakersplus.com/p/bakery-fresh-seeded-rye-bread/0001111007002"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Bakery Fresh Pumpernickel Rye Bread",
+                      "ad_price":  "$3.99",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-25",
+                      "current_price":  3.99,
+                      "product_id":  "0001111005145",
+                      "size_raw":  "16 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "",
+                      "link_url":  "https://www.bakersplus.com/p/bakery-fresh-pumpernickel-rye-bread/0001111005145"
                   }
               ]
 }

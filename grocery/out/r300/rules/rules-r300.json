@@ -1,0 +1,191 @@
+[
+  {
+    "id": "turkey-breast",
+    "label": "Turkey Breast (raw)",
+    "unit": "lb",
+    "include": ["turkey\\s+breasts?\\b", "breast\\s+of\\s+turkey", "turkey\\s+london\\s+broil"],
+    "exclude": ["\\bdeli\\b", "sliced", "shaved", "lunch\\s*meat", "\\bground\\b", "\\bjerky\\b", "\\bpastrami\\b", "\\bsmoked\\b", "\\bcooked\\b", "\\bsausage\\b", "\\bbacon\\b", "\\bpatt(?:y|ies)\\b", "\\bnugget", "\\bsalad\\b", "\\bgravy\\b", "\\bstrips?\\b", "\\bpepperoni\\b", "\\bsalami\\b", "\\bbologna\\b", "\\bspread\\b", "\\bsandwich\\b"],
+    "search_term": "turkey breast",
+    "note": "Whole-muscle raw breast (bone-in, boneless roast, tenderloin, cutlet). Deli/lunchmeat names are owned by turkey-lunchmeat (index 141, earlier = wins) and ground by ground-turkey (index 3); the excludes here are belt-and-braces so a name those two miss can never land as a raw-breast price. 'smoked'/'cooked' fenced (heat-and-eat is a different price class). RELAX \\bfrozen\\b - most whole turkey breasts ship frozen and the global token would otherwise blank the row."
+  },
+  {
+    "id": "dried-arbol-chiles",
+    "label": "Dried Arbol Chiles",
+    "unit": "oz",
+    "include": ["rbol\\b"],
+    "exclude": ["powder", "\\bground\\b", "\\bcrushed\\b", "\\bflakes?\\b", "\\bpaste\\b", "\\bsalsa\\b", "\\bhot\\s+sauce\\b", "\\bfresh\\b", "\\bplant\\b", "\\bseeds?\\s+packet\\b"],
+    "search_term": "chile de arbol",
+    "note": "'rbol\\b' (not '\\barbol\\b') so both 'Chile de Arbol' and the accented 'Chile de Arbol' spelling match without putting a non-ASCII byte in the rules file. Nothing else in a grocery catalog ends in 'rbol'. Ground/powder forms fall to chili-powder (index 317, earlier); the powder exclude makes that a rule instead of a position."
+  },
+  {
+    "id": "dried-guajillo-chiles",
+    "label": "Dried Guajillo Chiles",
+    "unit": "oz",
+    "include": ["guajillo"],
+    "exclude": ["powder", "\\bground\\b", "\\bcrushed\\b", "\\bflakes?\\b", "\\bpaste\\b", "\\bsalsa\\b", "\\bhot\\s+sauce\\b", "\\bfresh\\b", "\\bplant\\b"],
+    "search_term": "guajillo chiles",
+    "note": "Unique word. Same powder/paste fencing as arbol."
+  },
+  {
+    "id": "dried-ancho-chiles",
+    "label": "Dried Ancho Chiles",
+    "unit": "oz",
+    "include": ["\\bancho\\b", "ancho\\s+chil"],
+    "exclude": ["powder", "\\bground\\b", "\\bcrushed\\b", "\\bflakes?\\b", "\\bpaste\\b", "\\bsalsa\\b", "\\bhot\\s+sauce\\b", "\\bfresh\\b", "\\bplant\\b", "anchovy", "anchovies"],
+    "search_term": "ancho chiles",
+    "note": "'\\bancho\\b' cannot match 'anchovy' (word char follows), but anchovy/anchovies are excluded anyway because that is exactly the class of near-miss that ships a fish price as a chile price. 'Ancho Chile Powder' is claimed by chili-powder first AND excluded here."
+  },
+  {
+    "id": "diced-ham",
+    "label": "Diced / Cubed Ham",
+    "unit": "oz",
+    "include": ["diced\\s+ham", "cubed\\s+ham", "ham\\s+(?:cubes|dices|pieces)", "chopped\\s+ham"],
+    "exclude": ["\\bdeli\\b", "lunch\\s*meat", "\\bsliced\\b", "\\bsteak\\b", "\\bspiral\\b", "\\bwhole\\b", "\\bhock\\b", "\\bsalad\\b", "\\bglaze\\b", "\\bbone-?in\\b", "\\bsoup\\b"],
+    "search_term": "diced ham",
+    "note": "Reciprocal exclude added to deli-ham (index 33: bare '\\bham\\b' was claiming 'Great Value Diced Ham'). RELAX \\bwater\\b - 'Water Added' is on nearly every ham label and the global water token (bottled water) was blanking real diced-ham rows."
+  },
+  {
+    "id": "sazon-seasoning",
+    "label": "Sazon Seasoning",
+    "unit": "oz",
+    "include": ["\\bsaz.n\\b"],
+    "exclude": ["\\bpaste\\b", "\\bmarinade\\b", "\\bsauce\\b", "\\brice\\b", "\\bbeans?\\b"],
+    "search_term": "sazon",
+    "note": "'saz.n' covers 'sazon' and the accented 'sazon' without non-ASCII bytes. Reciprocal exclude added to achiote-paste (index 389), which was claiming 'Sazon Goya con Culantro y Achiote' through its annatto/achiote include. Adobo deliberately NOT folded in: an 8 oz adobo shaker and a 1.41 oz sazon box are different price classes and folding them would corrupt the per-oz."
+  },
+  {
+    "id": "eggplant",
+    "label": "Eggplant (each)",
+    "unit": "each",
+    "include": ["\\beggplants?\\b", "\\baubergines?\\b"],
+    "exclude": ["parmigiana", "parmesan", "caponata", "\\bdip\\b", "\\bfries\\b", "\\bchips?\\b", "\\bjapanese\\b", "\\bchinese\\b", "\\bthai\\b", "\\bindian\\b", "graffiti", "fairy\\s+tale", "\\bwhite\\b", "\\bplant\\s+seeds?\\b", "\\bseeds?\\s+packet\\b", "\\bpickled\\b", "\\borganic\\b"],
+    "search_term": "eggplant",
+    "note": "Globe eggplant sold by each. Specialty varieties and organic are excluded on the variety-pricing precedent (the red-onion rule) so a $3 Japanese eggplant can never set the price of a $1.48 globe. The eggs commodity's '\\beggs?\\b' cannot reach 'eggplant' (word boundary fails), verified in the probe."
+  },
+  {
+    "id": "brown-gravy-mix",
+    "label": "Brown Gravy Mix (dry packet)",
+    "unit": "oz",
+    "include": ["brown\\s+gravy\\s+mix", "gravy\\s+mix,?\\s+brown", "brown\\s+gravy\\b.{0,15}\\b(?:packet|envelope|dry)"],
+    "exclude": ["\\bjar\\b", "ready\\s+to\\s+serve", "chicken\\s+gravy", "turkey\\s+gravy", "sausage\\s+gravy", "\\bbowl\\b", "jimmy\\s+dean", "\\bbiscuits?\\b", "\\bentree\\b", "\\bpoutine\\b"],
+    "search_term": "brown gravy mix",
+    "note": "RELAX '\\bmix\\b(?!\\s*(?:&|and)\\s*match)' (verbatim GLOBAL_EXCLUDE string) - without it every 'gravy mix' product name is globally dropped and the row is born permanently empty. jarred-gravy (index 354) already excludes mix/packet/envelope/dry/powder/granules, so the ready-to-serve jars stay put and the packets fall through to here: fenced in BOTH directions."
+  },
+  {
+    "id": "chicken-livers",
+    "label": "Chicken Livers",
+    "unit": "lb",
+    "include": ["chicken\\s+livers?\\b", "livers?\\b.{0,15}chicken"],
+    "exclude": ["\\bpate\\b", "\\bspread\\b", "\\bbeef\\b", "\\bpork\\b", "\\bcalf\\b", "freeze[\\s-]?dried", "\\btreats?\\b", "\\bdogs?\\b", "\\bcats?\\b", "\\bkibble\\b", "\\bchews?\\b", "\\bflavor(?:ed)?\\b", "\\bbroth\\b", "\\bcooked\\b", "\\bfried\\b"],
+    "search_term": "chicken livers",
+    "note": "Meat-case tubs. Pet treats are the live hazard here (freeze-dried chicken liver dog treats are per-oz expensive and would blow up the row) so pet tokens are excluded at the rule layer as well as by the category-exclude library."
+  },
+  {
+    "id": "sweet-soy-sauce",
+    "label": "Sweet Soy Sauce (Kecap Manis)",
+    "unit": "floz",
+    "include": ["sweet\\s+soy\\s+sauce", "ke[ct]jap\\s+manis", "kecap\\s+manis"],
+    "exclude": ["\\bteriyaki\\b", "\\bmarinade\\b", "\\bglaze\\b", "\\bwings?\\b", "\\bstir[\\s-]*fry\\b", "\\bnoodle\\b"],
+    "search_term": "sweet soy sauce",
+    "note": "RELAX \\bsauce\\b. Reciprocal exclude added to soy-sauce (index 325, which relaxes sauce and was claiming both 'ABC Sweet Soy Sauce Kecap Manis' and 'Kecap Manis'): soy-sauce += 'sweet\\s+soy', 'ke[ct]jap|kecap'. Fenced both ways - a plain Kikkoman still lands in soy-sauce (probe verified)."
+  },
+  {
+    "id": "caraway-seeds",
+    "label": "Caraway Seeds",
+    "unit": "oz",
+    "include": ["caraway"],
+    "exclude": ["\\bbread\\b", "\\bcheese\\b", "\\bcrackers?\\b", "\\brye\\b", "\\bsausage\\b", "\\bkraut\\b", "\\btea\\b", "\\bplant\\b", "\\bseeds?\\s+packet\\b"],
+    "search_term": "caraway seed",
+    "note": "Spice jar only; caraway is a NAMED INGREDIENT of rye bread, kraut and havarti, so those carriers are fenced (the blueberries-as-Bai-beverage class, applied preventively)."
+  },
+  {
+    "id": "poultry-seasoning",
+    "label": "Poultry Seasoning",
+    "unit": "oz",
+    "include": ["poultry\\s+seasoning", "poultry\\s+herb\\s+blend"],
+    "exclude": ["\\brub\\b", "\\bbrine\\b", "\\bmarinade\\b", "injectable", "\\bgravy\\b", "\\bstuffing\\b", "\\bbrining\\b"],
+    "search_term": "poultry seasoning",
+    "note": "Phrase-anchored ('seasoning' is not a GLOBAL_EXCLUDE token - only 'seasoned' is, and it does not substring-match). Rubs/brines are a different product and price class."
+  },
+  {
+    "id": "wild-rice",
+    "label": "Wild Rice",
+    "unit": "oz",
+    "include": ["wild\\s+rice"],
+    "exclude": ["\\bblend\\b", "long\\s+grain\\s+(?:&|and)\\s+wild", "\\ba\\s*-?\\s*roni\\b", "\\bpilaf\\b", "\\bsoup\\b", "\\bstuffing\\b", "\\bcup\\b", "ready\\s+to\\s+(?:heat|serve)", "\\bmicrowav", "\\bbowl\\b"],
+    "search_term": "wild rice",
+    "note": "100% wild rice only. The mapper's note allowed 'wild-rice-forward blends'; I tightened that to a hard blend exclude because a long-grain-and-wild box is mostly white rice at a fraction of the per-oz and would ALWAYS win the cheapest slot, publishing a wild-rice price that is not wild rice. rice (index 56) already excludes 'wild', so it is fenced both ways with no edit needed there (probe verified: 'Great Value Wild Rice' resolved to nobody, not to rice)."
+  },
+  {
+    "id": "doubanjiang",
+    "label": "Doubanjiang (Chili Bean Paste)",
+    "unit": "oz",
+    "include": ["doubanjiang", "dou\\s*ban\\s*jiang", "toban\\s*-?\\s*djan", "chili\\s+bean\\s+sauce", "broad\\s+bean\\s+(?:chili\\s+)?(?:paste|sauce)", "pixian"],
+    "exclude": ["gochujang", "black\\s+bean\\s+sauce", "\\bnoodle\\b", "\\bramen\\b", "\\bmayo\\b", "\\bcrisp\\b"],
+    "search_term": "chili bean sauce",
+    "note": "RELAX \\bsauce\\b (the LKK jar is literally named 'Chili Bean Sauce'). Reciprocal exclude added to chili-beans (index 333) for 'chili\\s+bean\\s+sauce'/'toban': today the global sauce token already blocks chili-beans from those jars, but that protection would evaporate the day anyone gives chili-beans a sauce relax, so the fence is written explicitly."
+  },
+  {
+    "id": "ground-fennel",
+    "label": "Fennel Seed / Ground Fennel",
+    "unit": "oz",
+    "include": ["fennel\\s+seeds?", "ground\\s+fennel", "fennel,?\\s+ground"],
+    "exclude": ["\\bbulb\\b", "fresh\\s+fennel", "\\bpollen\\b", "\\bsausage\\b", "\\bsalami\\b", "\\btea\\b", "\\bplant\\b", "\\bseeds?\\s+packet\\b", "\\bcracker"],
+    "search_term": "fennel seed",
+    "note": "Whole seed accepted as the same commodity (grinding at home is not a price flip - the mapper's call, and both forms sit in the same jar/price class). Bare 'fennel' deliberately NOT an include so fresh per-lb fennel bulb cannot land in an oz row."
+  },
+  {
+    "id": "snow-peas",
+    "label": "Snow / Sugar Snap Peas (fresh)",
+    "unit": "oz",
+    "include": ["snow\\s+peas", "sugar\\s+snap\\s+peas", "\\bsnap\\s+peas", "pea\\s+pods"],
+    "exclude": ["\\bstir[\\s-]*fry\\b", "harvest\\s+snaps", "\\bcrisps?\\b", "\\bcrunch\\b", "\\bwasabi\\b", "\\bdried\\b", "\\broasted\\b", "\\bseeds?\\s+packet\\b", "\\bplant\\b", "\\bshelled\\b", "\\bsalad\\s+kit\\b"],
+    "search_term": "snow peas",
+    "note": "Fresh edible-podded peas. frozen-peas (index 248) owns shelled green peas and relaxes \\bfrozen\\b; this row does NOT relax it, so a frozen snap-pea bag is dropped rather than mixed into a fresh per-oz. Reciprocal exclude added to sugar (index ~), which was claiming 'Sugar Snap Peas' through its bare '\\bsugar\\b' include - a pre-existing latent hijack the probe surfaced."
+  },
+  {
+    "id": "horseradish-sauce",
+    "label": "Horseradish Sauce (creamy)",
+    "unit": "oz",
+    "include": ["horseradish\\s+sauce", "creamy\\s+horseradish", "cream\\s+style\\s+horseradish", "horseradish\\s+cream"],
+    "exclude": ["\\bmustard\\b", "\\bcheddar\\b", "\\bcheese\\b", "\\bmayo", "\\bwasabi\\b", "\\bchips?\\b", "\\bpotato\\b", "\\bdressing\\b", "\\bpretzel\\b", "\\bprepared\\b", "\\broot\\b"],
+    "search_term": "horseradish sauce",
+    "note": "RELAX \\bsauce\\b. No reciprocal edit needed on horseradish (index 367): it has no sauce relax, so every '...Horseradish Sauce' name is globally blocked there and falls through to here - verified in the probe. Its live cells ('Inglehoffer Creamy Style PREPARED Horseradish', 'Thick-n-Creamy Horseradish') are prepared root and are protected here by the prepared/root excludes, so the existing row cannot be stolen."
+  },
+  {
+    "id": "corned-beef-brisket",
+    "label": "Corned Beef Brisket (raw)",
+    "unit": "lb",
+    "include": ["corned\\s+beef\\s+brisket", "corned\\s+beef\\b.{0,20}\\b(?:point|flat)\\s+cut", "brisket\\b.{0,20}corned\\s+beef"],
+    "exclude": ["\\bhash\\b", "\\bsliced\\b", "\\bdeli\\b", "lunch\\s*meat", "\\bpastrami\\b", "\\bsandwich\\b", "\\bround\\b", "\\bcooked\\b", "\\bhot\\s+dog"],
+    "search_term": "corned beef brisket",
+    "note": "SEASONAL: shelf presence peaks around March, so this row is expected to sit EMPTY most of the year. It is registered with empty cells rather than being fed a canned corned-beef-hash price. Reciprocal exclude added to frozen-corn, whose include 'cut\\s+(?:golden\\s+)?corn' (no trailing boundary) was matching 'Flat CUT CORNed Beef Brisket' - a genuine cross-aisle hijack the probe caught."
+  },
+  {
+    "id": "pigeon-peas",
+    "label": "Pigeon Peas / Gandules (canned)",
+    "unit": "oz",
+    "include": ["pigeon\\s+peas", "gandules"],
+    "exclude": ["\\bdried\\b", "\\bdry\\b", "\\brice\\b", "\\bsoup\\b", "\\bseasoning\\b"],
+    "search_term": "pigeon peas",
+    "note": "RELAX \\bcanned\\b - the mapper's decision note claimed 'canned' is not a GLOBAL_EXCLUDE token; it IS one ('\\bcanned\\b'), so without the relax any 'Canned Green Pigeon Peas' name is dropped. Dried gandules excluded (a dry bean per-oz against a canned-with-liquid per-oz is a false cheapest). frozen-peas' 'green\\s+peas\\b' cannot reach 'Green Pigeon Peas' (probe verified)."
+  },
+  {
+    "id": "aji-amarillo-paste",
+    "label": "Aji Amarillo Paste",
+    "unit": "oz",
+    "include": ["aj.\\s+amarillo", "amarillo\\s+(?:chili|chile|hot\\s+)?pepper\\s+paste"],
+    "exclude": ["\\bwhole\\b", "\\bjelly\\b", "\\bdried\\b", "\\brice\\b", "\\barroz\\b", "\\bsalsa\\b", "\\bplant\\b"],
+    "search_term": "aji amarillo paste",
+    "note": "'aj.\\s+amarillo' matches both 'aji' and the accented 'aji' spellings with no non-ASCII byte. Bare 'amarillo' is deliberately NOT an include: 'Arroz Amarillo' (yellow rice) would hijack the row - and arroz/rice are excluded for the same reason. No sauce relax: the commodity is the jarred paste."
+  },
+  {
+    "id": "rye-bread",
+    "label": "Rye Bread (loaf)",
+    "unit": "each",
+    "include": ["\\brye\\s+bread\\b", "jewish\\s+rye", "marble\\s+rye", "pumpernickel", "rye\\s+loaf", "bread,?\\s+rye"],
+    "exclude": ["\\bcrisp", "\\bwasa\\b", "\\bcrackers?\\b", "\\bbagels?\\b", "\\bchips?\\b", "\\bcroutons?\\b", "\\bstuffing\\b", "crumbs?\\b", "rye\\s+flour", "rye\\s+berries", "\\bwhiskey\\b", "\\bbuns?\\b", "\\brolls?\\b", "\\bthins?\\b"],
+    "search_term": "rye bread",
+    "note": "Reciprocal exclude added to bread (index 25): its bare '\\bbread\\b' was claiming 'Pepperidge Farm Jewish Rye Bread' and 'Marble Rye Bread Loaf'. Rye runs 2-3x a white sandwich loaf, so the variety-pricing precedent bars the fold in both directions. Checked against the live bread cells (all white/wheat sandwich loaves) - the reciprocal exclude drops none of them."
+  }
+]

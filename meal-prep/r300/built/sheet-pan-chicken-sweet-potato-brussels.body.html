@@ -1,0 +1,155 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"sheet-pan-chicken-sweet-potato-brussels","base":14,"cost":39.61,"ing":[{"item":"Boneless Skinless Chicken Thigh","grams":3360,"buy":"7.5 lb","bid":"chicken-thighs","gpu":453.592},{"item":"Olive Oil","grams":170,"buy":"0.75 cups","bid":"olive-oil","gpu":28.000},{"item":"Garlic","grams":84,"buy":"10 tbsp","bid":"garlic","gpu":50.000},{"item":"Italian Seasoning","grams":35,"buy":"8.25 tbsp","bid":"italian-seasoning","gpu":28.350},{"item":"Ground Cinnamon","grams":11,"buy":"1.5 tbsp","bid":"ground-cinnamon","gpu":28.350},{"item":"Salt","grams":25,"buy":"1.5 tbsp","bid":"salt","gpu":28.350},{"item":"Black Pepper","grams":5,"buy":"0.75 tbsp","bid":"black-pepper","gpu":28.350},{"item":"Brussels Sprouts","grams":1478,"buy":"3.25 lb","bid":"brussels-sprouts","gpu":453.592},{"item":"Sweet Potatoes","grams":980,"buy":"7.5","bid":"sweet-potatoes","gpu":453.592},{"item":"Red Onion","grams":462,"buy":"4","bid":"onions","gpu":453.592},{"item":"Apple","grams":756,"buy":"4","bid":"apple","gpu":175.000}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~568 cal &middot; 53g protein &middot; 38g carbs &middot; 22g fat &middot; ~$2.45 per serving.</strong></p>
+
+<p>People call sheet-pan dinners lazy. I call them efficient. Chicken, sweet potatoes, brussels sprouts, red onion and apple all roast on the same hot metal while you go do something more interesting, and the oven does the browning that a skillet would make you earn one batch at a time. Each container lands <strong>568 calories and 53 grams of protein</strong> for about <strong>$2.45</strong>. There is a good reason that number sits where it does, and I will tell you exactly what it is in a minute.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Boneless Skinless Chicken Thigh (Member's Mark):</strong> 7.5 lb (3360 g)</li>
+<li><strong>Olive Oil:</strong> 0.75 cups (170 g)</li>
+<li><strong>Garlic:</strong> 10 tbsp (84 g)</li>
+<li><strong>Brussels Sprouts:</strong> 3.25 lb (1478 g)</li>
+<li><strong>Sweet Potatoes:</strong> 7.5 (980 g)</li>
+<li><strong>Red Onion:</strong> 4 (462 g)</li>
+<li><strong>Apple (generic):</strong> 4 (756 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Boneless Skinless Chicken Thigh, 7.5 lb: ~$13.11. <strong>Buy 8 lbs: $14.16.</strong></li>
+<li>Olive Oil, 0.75 cups: ~$2.39. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Garlic, 10 tbsp: ~$1.21. <strong>Buy 3 heads: $1.73.</strong></li>
+<li>Brussels Sprouts, 3.25 lb: ~$9.84. <strong>Buy 4 lbs: $12.08.</strong></li>
+<li>Sweet Potatoes, 7.5: ~$3.20. <strong>Buy 3 lbs: $4.44.</strong></li>
+<li>Red Onion, 4: ~$1.16. <strong>Buy 1 lb: $1.16.</strong></li>
+<li>Apple, 4: ~$1.68. <strong>Buy 5 each: $1.95.</strong></li>
+<li>Pantry seasonings (italian seasoning, ground cinnamon, salt, black pepper): ~$1.70. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $34.29 across 14 servings, so roughly $2.45 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $39.61 across 14 servings, roughly $2.83 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
+<li><strong>Starting with an empty pantry? Add about $14.13 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.74. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$2.45 a bowl</strong>. That is our expensive end and I am not going to dress it up. Chicken breast and a small hill of brussels sprouts are the two lines doing the damage, and between them they account for most of what you spend. The upside is you can see both of them in every container.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>Brussels sprouts are the biggest produce line in this recipe by a wide margin. Buy them loose by the pound instead of trimmed in a bag, and buy them in fall and winter when they are in season and the per-pound price falls through the floor.</li>
+<li>Chicken breast is the other heavy line. The big club packs run cheaper per pound than the tray packs, and if you want this bowl a dollar cheaper without touching anything else, boneless thighs do the same job for a lot less money.</li>
+<li>Sweet potatoes and red onion are the cheap seats here. Buy them by the bag rather than by the each, since the bag price per pound is almost always better and both keep for weeks in a cool cabinet.</li>
+<li>Skip the fancy apples. You want a firm variety that holds its shape in a hot oven, and the loose bin apples do that just as well as the ones with a sticker and a story.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Heat the oven to 425F with racks in the upper and lower thirds, and pull out two large sheet pans.</li>
+<li>Peel and cube the sweet potatoes. Toss them with a third of the olive oil, some italian seasoning, the cinnamon, salt and pepper, spread them on one pan, and give them a 15 minute head start in the oven.</li>
+<li>While those roast, halve the brussels sprouts, cut the red onion into thick wedges, and core and chop the apples. Toss all three with another third of the oil, more italian seasoning, salt and pepper.</li>
+<li>Cut the chicken into large chunks and toss with the last of the oil, the minced garlic, the rest of the italian seasoning, salt and pepper.</li>
+<li>Pull the sweet potato pan, push the potatoes to one side, and add the sprouts, onion and apple. Spread the chicken in a single layer on the second pan so it roasts instead of steams.</li>
+<li>Roast both pans 18 to 22 minutes, swapping racks halfway, until the chicken reads 165F and the sprouts are dark and crispy at the leaf edges.</li>
+<li>Scrape everything into your big mixing pot, pan juices included, and fold it together so the cinnamon and the sweet potato starch coat the whole thing.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Set the loaded pot on the scale, subtract the empty-pot weight you wrote down, and divide what is left by 14. Scoop that same number into every container so no one gets the light one. Each bowl carries <strong>568 calories</strong> and a serious hit of protein, and it reheats better than most roasted vegetables have any right to.</p>
+
+<p><em>Recipe adapted from <a href="https://www.wellplated.com/sheet-pan-chicken-sweet-potatoes-apples-brussels-sprouts/" target="_blank" rel="noopener">wellplated.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>A full roasted dinner, protein and vegetables and all, for about $2.45 a bowl. This is one of a few hundred. Members get every recipe in the Meal Prep section plus the whole library of money lessons, calculators, and tools, all for $1 a month.</em></p>

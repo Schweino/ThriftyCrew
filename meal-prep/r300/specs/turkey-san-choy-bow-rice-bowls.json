@@ -1,0 +1,340 @@
+﻿{
+    "name":  "Turkey San Choy Bow Rice Bowls",
+    "slug":  "turkey-san-choy-bow-rice-bowls",
+    "cuisine":  "chinese",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.sugarsaltmagic.com/turkey-san-choy-bow/",
+    "source_site":  "sugarsaltmagic.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 200g (src scale)",
+                   "base +35% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified source: full recipe, 4 servings, 353 cal, written for turkey mince. Served over rice instead of in lettuce cups it clears 500 cal and portions by weight. Distinct from the live Thai Turkey Larb Bowls - Cantonese oyster-sauce profile vs Thai lime-and-fish-sauce, different vegetable base. | HARVEST: Source nutrition line publishes calories only (353kcal); no protein grams, verified on a second targeted fetch.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 200g (src scale)",
+                         "TUNING: base +35% (Rice)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  564,
+                 "protein":  32,
+                 "carbs":  70,
+                 "fat":  15,
+                 "cost_ps":  "1.94"
+             },
+    "intro_html":  "San choy bow is the Cantonese mince that usually gets scooped into lettuce cups at the start of a meal. Turned onto rice it becomes an actual dinner, and it keeps every good thing about the original: oyster sauce depth, crunchy celery and carrot, peanuts on top. Each bowl runs \u003cstrong\u003e564 calories and 32 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$1.94\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOyster Sauce (Lee Kum Kee):\u003c/strong\u003e 1 cups (252 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.5 cups (140 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 0.5 cups (112 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 2.25 tbsp (32 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1.75 tbsp (37 g)",
+                                "\u003cstrong\u003ePeanuts (Great Value):\u003c/strong\u003e 10.5 tbsp (94 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 3.25 cups (158 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 7 (385 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 3.5 tbsp (21 g)",
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.75 lb (1750 g)",
+                                "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 4.25 oz (122 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3.5 (214 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 5.5 tbsp (49 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.25 cups dry (985 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Oyster Sauce, 1 cups: ~$2.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 0.5 cups: ~$0.53. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 0.5 cups: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sesame Oil, 2.25 tbsp: ~$0.67. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Honey, 1.75 tbsp: ~$0.70. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Peanuts, 10.5 tbsp: ~$0.53. \u003cstrong\u003eBuy 1 16oz jar: $2.58.\u003c/strong\u003e",
+                       "Green Onions, 3.25 cups: ~$1.88. \u003cstrong\u003eBuy 2 bunches: $2.14.\u003c/strong\u003e",
+                       "Celery, 7: ~$2.03. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Ginger, 3.5 tbsp: ~$0.18. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 3.75 lb: ~$14.74. \u003cstrong\u003eBuy 4 lbs: $15.29.\u003c/strong\u003e",
+                       "White Mushrooms, 4.25 oz: ~$1.02. \u003cstrong\u003eBuy 1 8oz pack: $1.89.\u003c/strong\u003e",
+                       "Carrots, 3.5: ~$0.45. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Jalapeno, 5.5 tbsp: ~$0.19. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Rice, 5.25 cups dry: ~$1.22. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $27.22 across 14 servings, so roughly $1.94 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $34.14 across 14 servings, roughly $2.44 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.71 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.85. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.94\u003c/strong\u003e a bowl. Restaurants charge appetizer prices for four small lettuce cups of this. You are getting fourteen dinners for what two of those cost.",
+    "shop_smart":  [
+                       "Oyster sauce is the flavor engine here and one bottle covers this batch four times over. It is the single best value bottle in the Asian aisle, so buy it once and stop buying stir-fry sauce packets forever.",
+                       "Celery and carrot together cost very little and they add the crunch that keeps this from being just a bowl of meat. Cheap vegetables doing structural work is the whole budget cooking playbook.",
+                       "Buy peanuts by the 16 ounce jar. This batch uses a fraction of it, so your share is a fraction of the jar while it keeps feeding recipes and snacks for months.",
+                       "Mushrooms add savory depth for very little. If they are not on sale, skip them and add a little extra celery, since the texture matters more here than the specific vegetable."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Whisk the sauce together: oyster sauce, soy sauce, chicken broth, sesame oil, and honey. Having it premixed matters, because a stir-fry does not wait for you to measure.",
+                    "Dice the celery, carrot, and mushrooms small, about the size of the meat crumbles. Even dice is what makes this dish eat right instead of feeling like meat with vegetables thrown at it.",
+                    "Heat a wide skillet or wok over high, add the ground turkey, and brown it hard, breaking it into fine crumbles, until it is cooked through to 165F.",
+                    "Push the meat aside, add the minced garlic, grated ginger, and chopped jalapeno, and cook 30 seconds until they smell sharp and sweet.",
+                    "Add the celery, carrot, and mushrooms and stir-fry 4 minutes over high heat. You want them cooked but still snapping.",
+                    "Pour in the sauce and toss for 2 minutes until it reduces and coats everything, then stir in most of the sliced green onions.",
+                    "Cook the rice, move it into your weighed pot, and roughly chop the peanuts for the top."
+                ],
+    "portion_html":  "Set the pot of rice on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the rice bed for each container. Divide the mince evenly across all 14, then scatter the chopped peanuts and remaining green onion on top so they stay crunchy instead of going soft in the sauce. Each bowl lands at \u003cstrong\u003e564 calories and 32 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.sugarsaltmagic.com/turkey-san-choy-bow/\" target=\"_blank\" rel=\"noopener\"\u003esugarsaltmagic.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Cantonese san choy bow for about \u003cstrong\u003e$1.94\u003c/strong\u003e a bowl. This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  27.22,
+    "cost_batch_true":  34.14,
+    "cost_per_serving":  1.94,
+    "cost_per_serving_true":  2.44,
+    "cost_pantry_add":  16.71,
+    "cost_first_run":  50.85,
+    "scaler":  {
+                   "cost":  "34.14",
+                   "ing":  [
+                               {
+                                   "item":  "Oyster Sauce",
+                                   "canon":  "Oyster Sauce",
+                                   "grams":  252,
+                                   "buy":  "1 cups",
+                                   "bid":  "oyster-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  140,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  112,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "canon":  "Sesame Oil",
+                                   "grams":  32,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "canon":  "Honey",
+                                   "grams":  37,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Peanuts",
+                                   "canon":  "Peanuts",
+                                   "grams":  94,
+                                   "buy":  "10.5 tbsp",
+                                   "bid":  "peanuts",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  158,
+                                   "buy":  "3.25 cups",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "canon":  "Celery",
+                                   "grams":  385,
+                                   "buy":  "7",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  35,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  21,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1750,
+                                   "buy":  "3.75 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "White Mushrooms",
+                                   "canon":  "White Mushrooms",
+                                   "grams":  122,
+                                   "buy":  "4.25 oz",
+                                   "bid":  "mushrooms",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  214,
+                                   "buy":  "3.5",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  49,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  985,
+                                   "buy":  "5.25 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey san choy bow rice bowls: Cantonese oyster sauce turkey mince with celery, carrot, and peanuts over rice. 564 calories, 32g protein, about $1.94 a bowl.",
+                 "keywords":  "san choy bow, cantonese mince, turkey meal prep, budget meal prep, oyster sauce turkey, asian rice bowl",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT25M",
+                 "totalTime":  "PT45M",
+                 "costPerServing":  1.94,
+                 "recipeIngredient":  [
+                                          "3.75 lb 93/7 ground turkey",
+                                          "1 cup oyster sauce",
+                                          "0.5 cups soy sauce",
+                                          "2.25 tbsp sesame oil",
+                                          "1.75 tbsp honey",
+                                          "7 celery stalks",
+                                          "3.5 carrots",
+                                          "1.75 cups white mushrooms",
+                                          "4 tbsp garlic",
+                                          "3.5 tbsp ginger",
+                                          "10.5 tbsp peanuts",
+                                          "3.25 cups green onions",
+                                          "5.25 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Whisk oyster sauce, soy sauce, broth, sesame oil, and honey into a sauce.",
+                               "Dice the celery, carrot, and mushrooms small.",
+                               "Brown the ground turkey over high heat to 165F, then add garlic, ginger, and jalapeno.",
+                               "Stir-fry the celery, carrot, and mushrooms 4 minutes.",
+                               "Add the sauce and toss 2 minutes until it coats, then stir in green onions.",
+                               "Cook the rice, portion by weight into 14 containers, and top with the mince and chopped peanuts."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Oyster Sauce",
+                                  "grams":  252
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  112
+                              },
+                              {
+                                  "item":  "Sesame Oil",
+                                  "grams":  32
+                              },
+                              {
+                                  "item":  "Honey",
+                                  "grams":  37
+                              },
+                              {
+                                  "item":  "Peanuts",
+                                  "grams":  94
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  158
+                              },
+                              {
+                                  "item":  "Celery",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1750
+                              },
+                              {
+                                  "item":  "White Mushrooms",
+                                  "grams":  122
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  214
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  49
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  985
+                              }
+                          ]
+}

@@ -1,0 +1,265 @@
+﻿{
+    "name":  "Chicken Provencal",
+    "slug":  "chicken-provencal",
+    "cuisine":  "French",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.jocooks.com/recipes/chicken-provencal/",
+    "source_site":  "jocooks.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 200g (src scale)",
+                   "base +5% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Source lists 420 cal / 46g protein using 8 bone-in thighs - the highest protein figure in the European set; est 600 once plated with potatoes or rice, confidence medium on calories only. Tomato-olive braise. NEAR-DUPE WATCH vs the live Slow Cooker Chicken Cacciatore Pasta: cacciatore is peppers-and-pasta, this is olive-lemon-and-broth over starch. | HARVEST: ",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 200g (src scale)",
+                         "TUNING: base +5% (Rice)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  568,
+                 "protein":  46,
+                 "carbs":  51,
+                 "fat":  18,
+                 "cost_ps":  "2.04"
+             },
+    "intro_html":  "Provencal cooking is the sunny end of French food: tomatoes, olives, capers, garlic, and herbs, without a drop of cream anywhere. Chicken thighs braise with burst cherry tomatoes until the sauce is bright and briny rather than heavy, which makes this one of the few French dishes that does not feel like a weight on the plate. Each bowl runs 568 calories and \u003cstrong\u003e46 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.04 a serving\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 6.25 lb (2800 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 7 tbsp (94 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 5 (525 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (840 g)",
+                                "\u003cstrong\u003eCherry Tomatoes:\u003c/strong\u003e 7 cups (1043 g)",
+                                "\u003cstrong\u003eOlives (generic):\u003c/strong\u003e 1.75 cups (236 g)",
+                                "\u003cstrong\u003eCapers (generic (USDA)):\u003c/strong\u003e 1 cups (112 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4 cups dry (735 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Thigh, 6.25 lb: ~$10.93. \u003cstrong\u003eBuy 7 lbs: $12.39.\u003c/strong\u003e",
+                       "Olive Oil, 7 tbsp: ~$1.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 5: ~$1.32. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Garlic, 8.25 tbsp: ~$1.01. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Chicken Broth, 1 carton: ~$1.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Cherry Tomatoes, 7 cups: ~$4.53. \u003cstrong\u003eBuy 4 10oz clamshells: $4.91.\u003c/strong\u003e",
+                       "Olives, 1.75 cups: ~$2.60. \u003cstrong\u003eBuy 2 6oz cans: $3.74.\u003c/strong\u003e",
+                       "Capers, 1 cups: ~$3.88. \u003cstrong\u003ePantry staple; this batch alone uses about 2 3.5floz jars.\u003c/strong\u003e",
+                       "Rice, 4 cups dry: ~$0.91. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, italian seasoning, salt): ~$1.00. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $28.63 across 14 servings, so roughly $2.04 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.71 across 14 servings, roughly $2.34 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.47 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.18. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.04 a bowl\u003c/strong\u003e. Cherry tomatoes and olives are the notable lines, and both are the reason this tastes like the south of France instead of like generic braised chicken.",
+    "shop_smart":  [
+                       "Cherry tomatoes cost more per pound than canned, but here they are structural. They burst and make the sauce while staying whole enough to bite. This is the rare case where fresh is worth the difference.",
+                       "Capers and olives are shelf stable jars used in small amounts, so the cost per batch is modest and neither one spoils while you get around to the next recipe.",
+                       "Boneless thighs are the cheapest good chicken in the store and they do not dry out in a braise. That is why they show up in nearly every recipe in this batch.",
+                       "Italian seasoning is a blend you can approximate from oregano, basil, and thyme jars you already own. Buying the blend is convenient, not required."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Season the chicken thighs with salt, pepper, and italian seasoning and brown them in the olive oil in batches. Set them aside.",
+                    "Cook the sliced onions in the same pan until soft and lightly browned, then add the garlic for a minute.",
+                    "Add the cherry tomatoes whole and cook over medium-high heat until they blister and start to burst, about 6 minutes. Press a few with the back of a spoon to get things moving.",
+                    "Pour in the chicken broth and scrape the bottom of the pan, then return the chicken with any juices.",
+                    "Simmer uncovered 25 to 30 minutes, until the chicken is tender and the sauce has reduced enough to cling instead of run.",
+                    "Add the olives and capers in the last 5 minutes. Adding them early makes the whole pot too salty, and once that happens there is no way back.",
+                    "Cook the rice, then taste the sauce and adjust the salt, keeping in mind the olives brought their own."
+                ],
+    "portion_html":  "Weigh the rice into each container, then set the pan on the scale, subtract the empty weight you wrote down, and divide by 14. Spoon tomatoes and olives into every container rather than letting them all land in the first three. Each portion lands at \u003cstrong\u003e568 calories\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.jocooks.com/recipes/chicken-provencal/\" target=\"_blank\" rel=\"noopener\"\u003ejocooks.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Chicken Provencal for about \u003cstrong\u003e$2.04 a bowl\u003c/strong\u003e. Members get every recipe in the Meal Prep section plus the full library of money lessons, calculators, and tools for $1 a month.",
+    "cost_batch":  28.63,
+    "cost_batch_true":  32.71,
+    "cost_per_serving":  2.04,
+    "cost_per_serving_true":  2.34,
+    "cost_pantry_add":  17.47,
+    "cost_first_run":  50.18,
+    "scaler":  {
+                   "cost":  "32.71",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  2800,
+                                   "buy":  "6.25 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  14,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "canon":  "Italian Seasoning",
+                                   "grams":  10,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  94,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  525,
+                                   "buy":  "5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  70,
+                                   "buy":  "8.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  840,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Cherry Tomatoes",
+                                   "canon":  "Cherry Tomatoes",
+                                   "grams":  1043,
+                                   "buy":  "7 cups",
+                                   "bid":  "tomatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olives",
+                                   "canon":  "Olives",
+                                   "grams":  236,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "green-olives",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Capers",
+                                   "canon":  "Capers",
+                                   "grams":  112,
+                                   "buy":  "1 cups",
+                                   "bid":  "capers",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  735,
+                                   "buy":  "4 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Chicken Provencal, French braised chicken thighs with burst cherry tomatoes, olives, and capers over rice, at about $2.04 per meal prep serving.",
+                 "keywords":  "chicken provencal, french braised chicken, tomato olive chicken, mediterranean meal prep, budget chicken recipe, high protein meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT50M",
+                 "totalTime":  "PT1H10M",
+                 "costPerServing":  2.04,
+                 "recipeIngredient":  [
+                                          "6.25 lb boneless skinless chicken thighs",
+                                          "7 cups cherry tomatoes",
+                                          "1.75 cups olives",
+                                          "1 cup capers",
+                                          "5 yellow onions",
+                                          "8.25 tbsp minced garlic",
+                                          "7 tbsp olive oil",
+                                          "1.75 lb chicken broth",
+                                          "4 cups dry rice",
+                                          "Pantry: italian seasoning, salt, black pepper"
+                                      ],
+                 "steps":  [
+                               "Season and brown the chicken thighs in olive oil, then set aside.",
+                               "Soften the onions and add the garlic.",
+                               "Blister the cherry tomatoes until they burst.",
+                               "Add the broth, return the chicken, and simmer uncovered 25 to 30 minutes.",
+                               "Stir in the olives and capers for the last 5 minutes.",
+                               "Cook the rice and weigh both into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  2800
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Italian Seasoning",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  94
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  525
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  840
+                              },
+                              {
+                                  "item":  "Cherry Tomatoes",
+                                  "grams":  1043
+                              },
+                              {
+                                  "item":  "Olives",
+                                  "grams":  236
+                              },
+                              {
+                                  "item":  "Capers",
+                                  "grams":  112
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  735
+                              }
+                          ]
+}

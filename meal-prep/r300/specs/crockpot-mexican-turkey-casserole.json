@@ -1,0 +1,317 @@
+﻿{
+    "name":  "Crockpot Mexican Turkey Casserole",
+    "slug":  "crockpot-mexican-turkey-casserole",
+    "cuisine":  "Tex-Mex",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.wellplated.com/crock-pot-mexican-casserole/",
+    "source_site":  "wellplated.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Rice)",
+                   "portion factor 1.4"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Slow-cooker dump casserole, the easiest possible 14-serving build. Source verified at 8 servings, 325 cal / 26g protein on a quinoa base; quinoa has no board id so we would build it on rice, landing ~510 cal / 34g. Confidence: est_cal is our rice-based build. | HARVEST: ",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Rice)",
+                         "TUNING: portion factor 1.4"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  565,
+                 "protein":  29,
+                 "carbs":  72,
+                 "fat":  15,
+                 "cost_ps":  "2.08"
+             },
+    "intro_html":  "There is a kind of cooking where you brown one thing, dump everything else in a pot, put the lid on, and walk away for four hours. That is this. Turkey, rice, enchilada sauce, beans, corn and peppers all cook together in the slow cooker, and cheese goes on at the very end. Each serving lands at 565 calories with \u003cstrong\u003e29 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.08\u003c/strong\u003e. It is the easiest fourteen-serving batch in this entire collection.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2.5 tbsp (33 g)",
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 2.5 lb (1111 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.4 (269 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.5 cups dry (814 g)",
+                                "\u003cstrong\u003eEnchilada Sauce (Old El Paso):\u003c/strong\u003e 5 cans (1387 g)",
+                                "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 2.5 cans (625 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2.5 cans (1007 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 1 can (404 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2.4 (294 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 2.4 (294 g)",
+                                "\u003cstrong\u003eMexican Cheese Blend (Great Value):\u003c/strong\u003e 9.75 oz (277 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 2.5 tbsp: ~$0.46. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 2.5 lb: ~$9.36. \u003cstrong\u003eBuy 3 lbs: $11.46.\u003c/strong\u003e",
+                       "Yellow Onion, 2.4: ~$0.68. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Rice, 4.5 cups dry: ~$1.00. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Enchilada Sauce, 5 cans: ~$4.89. \u003cstrong\u003eBuy 5 10oz cans: $4.99.\u003c/strong\u003e",
+                       "Seasoned Black Beans, 2.5 cans: ~$2.11. \u003cstrong\u003eBuy 3 cans: $2.58.\u003c/strong\u003e",
+                       "Diced Tomatoes, 2.5 cans: ~$2.35. \u003cstrong\u003eBuy 3 cans: $2.88.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 1 can: ~$0.74. \u003cstrong\u003eBuy 1 can: $0.79.\u003c/strong\u003e",
+                       "Red Bell Pepper, 2.4: ~$2.11. \u003cstrong\u003eBuy 3 each: $2.58.\u003c/strong\u003e",
+                       "Green Bell Peppers, 2.4: ~$2.11. \u003cstrong\u003eBuy 3 each: $2.58.\u003c/strong\u003e",
+                       "Mexican Cheese Blend, 9.75 oz: ~$2.11. \u003cstrong\u003eBuy 2 8oz bags: $3.45.\u003c/strong\u003e",
+                       "Pantry seasonings (chili powder, ground cumin, garlic powder, salt, black pepper): ~$1.21. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $29.13 across 14 servings, so roughly $2.08 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.12 across 14 servings, roughly $2.51 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.18 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.30. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.08 a serving\u003c/strong\u003e. Rice, canned beans, canned corn, and canned tomatoes make up most of the volume, and canned enchilada sauce does all the seasoning work for pennies.",
+    "shop_smart":  [
+                       "Canned enchilada sauce is the flavor engine here and this recipe uses five cans. It goes on sale constantly and keeps for a year, so buy it deep when the price drops.",
+                       "Rice from the big bag is the cheapest thing in the pot. Use plain long grain, not instant, because instant rice turns to mush over a long slow cook.",
+                       "Buy the peppers loose and use both red and green. Green costs less and the mix gives you the color without paying red bell pepper prices across the board.",
+                       "Brown the turkey before it goes in the crock. It costs you one skillet and ten minutes, and it is the difference between a dish with depth and a dish that tastes boiled."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Heat the olive oil in a skillet and brown the ground turkey hard, breaking it into crumbles. This is the only stovetop step and it is worth every minute.",
+                    "Add the diced onion to the turkey and cook 5 minutes, then stir in the chili powder, ground cumin, garlic powder, salt, and black pepper and cook one minute more.",
+                    "Scrape the turkey mixture into the slow cooker and add the dry rice, the enchilada sauce, the drained black beans, the diced tomatoes with their juice, and the drained corn.",
+                    "Stir in the diced red and green bell peppers and mix everything thoroughly so the rice is fully submerged. Rice sitting above the liquid line will stay hard.",
+                    "Cover and cook on low for 4 to 5 hours or on high for 2 to 3, until the rice is tender and has absorbed nearly all the liquid.",
+                    "Resist lifting the lid while it cooks. Every peek costs you fifteen to twenty minutes of cooking time in a slow cooker.",
+                    "Scatter the Mexican cheese blend over the top, replace the lid, and let it melt for 10 minutes off the heat before portioning."
+                ],
+    "portion_html":  "Weigh the crock insert, subtract the empty insert weight, and divide by 14. Stir from the bottom before each scoop, because the rice settles heavy and the peppers float. Each serving comes to \u003cstrong\u003e565 calories\u003c/strong\u003e and 29 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.wellplated.com/crock-pot-mexican-casserole/\" target=\"_blank\" rel=\"noopener\"\u003ewellplated.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A dump-and-walk-away dinner for about $2.08 a serving, and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "cost_batch":  29.13,
+    "cost_batch_true":  35.12,
+    "cost_per_serving":  2.08,
+    "cost_per_serving_true":  2.51,
+    "cost_pantry_add":  17.18,
+    "cost_first_run":  52.3,
+    "scaler":  {
+                   "cost":  "35.12",
+                   "ing":  [
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  33,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1111,
+                                   "buy":  "2.5 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  269,
+                                   "buy":  "2.4",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  814,
+                                   "buy":  "4.5 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Enchilada Sauce",
+                                   "canon":  "Enchilada Sauce",
+                                   "grams":  1387,
+                                   "buy":  "5 cans",
+                                   "bid":  "enchilada-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Seasoned Black Beans",
+                                   "canon":  "Seasoned Black Beans",
+                                   "grams":  625,
+                                   "buy":  "2.5 cans",
+                                   "bid":  "canned-black-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  1007,
+                                   "buy":  "2.5 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sweet Whole Kernel Corn",
+                                   "canon":  "Sweet Whole Kernel Corn",
+                                   "grams":  404,
+                                   "buy":  "1 can",
+                                   "bid":  "canned-corn",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "canon":  "Red Bell Pepper",
+                                   "grams":  294,
+                                   "buy":  "2.4",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  294,
+                                   "buy":  "2.4",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "canon":  "Chili Powder",
+                                   "grams":  39,
+                                   "buy":  "5 tbsp",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  15,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  8,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Mexican Cheese Blend",
+                                   "canon":  "Mexican Cheese Blend",
+                                   "grams":  277,
+                                   "buy":  "9.75 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  28,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  6,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Crockpot Mexican turkey casserole meal prep: ground turkey, rice, enchilada sauce, beans, corn, and peppers cooked in the slow cooker. 565 calories, 29g protein, about $2.08 a serving.",
+                 "keywords":  "crockpot mexican casserole, slow cooker turkey rice, enchilada rice casserole, dump and go crockpot, budget meal prep, high protein slow cooker",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT5H",
+                 "totalTime":  "PT5H20M",
+                 "costPerServing":  2.08,
+                 "recipeIngredient":  [
+                                          "2.5 lb 93/7 ground turkey",
+                                          "4.5 cups dry rice",
+                                          "5 cans enchilada sauce",
+                                          "2.5 cans seasoned black beans",
+                                          "2.5 cans diced tomatoes",
+                                          "1 can sweet whole kernel corn",
+                                          "2.4 red bell peppers",
+                                          "2.4 green bell peppers",
+                                          "9.75 oz Mexican cheese blend",
+                                          "2.4 yellow onions",
+                                          "2.5 tbsp olive oil"
+                                      ],
+                 "steps":  [
+                               "Brown the ground turkey in olive oil, add the onion, then the chili powder, cumin, garlic powder, salt, and pepper.",
+                               "Transfer to the slow cooker with the dry rice, enchilada sauce, drained black beans, diced tomatoes, and drained corn.",
+                               "Stir in the diced bell peppers and make sure the rice is fully submerged.",
+                               "Cover and cook on low 4 to 5 hours or high 2 to 3, without lifting the lid.",
+                               "Top with cheese, let it melt 10 minutes off the heat, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  33
+                              },
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1111
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  269
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  814
+                              },
+                              {
+                                  "item":  "Enchilada Sauce",
+                                  "grams":  1387
+                              },
+                              {
+                                  "item":  "Seasoned Black Beans",
+                                  "grams":  625
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  1007
+                              },
+                              {
+                                  "item":  "Sweet Whole Kernel Corn",
+                                  "grams":  404
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  294
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  294
+                              },
+                              {
+                                  "item":  "Chili Powder",
+                                  "grams":  39
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Mexican Cheese Blend",
+                                  "grams":  277
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  6
+                              }
+                          ]
+}

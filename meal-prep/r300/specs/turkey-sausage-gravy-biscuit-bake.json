@@ -1,0 +1,223 @@
+﻿{
+    "name":  "Turkey Sausage Gravy Biscuit Bake",
+    "slug":  "turkey-sausage-gravy-biscuit-bake",
+    "cuisine":  "Southern",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.plainchicken.com/sausage-gravy-breakfast-bake/",
+    "source_site":  "plainchicken.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Sandwich Bread)",
+                   "portion factor 1.3"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Biscuits-and-gravy as a sliceable 9x13; nothing like it in the catalog. Source verified at 8 servings but is built on pork sausage and a packet gravy mix, so our version seasons ground turkey and makes a scratch milk gravy. Confidence: source prints no nutrition and uses a different protein; est_cal is our build. | HARVEST: Source uses generic pork sausage and cubed bread slices, not turkey sausage or biscuits.",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Sandwich Bread)",
+                         "TUNING: portion factor 1.3",
+                         "OVERRIDE Italian Seasoning: CANON-MAPPER FIX: \u00272 (2.75-oz) packages sausage GRAVY MIX\u0027 is gravy mix, not Italian seasoning; 156 g dry mix",
+                         "OVERRIDE Bratwurst: TITLE-PROTEIN SWAP: turkey sausage gravy; ground breakfast sausage -\u003e ground turkey (seasoned as breakfast sausage in prose), grams kept"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  579,
+                 "protein":  35,
+                 "carbs":  40,
+                 "fat":  30,
+                 "cost_ps":  "1.68"
+             },
+    "intro_html":  "Biscuits and gravy is a Southern breakfast that has never once apologized for itself. The problem is that it does not travel; biscuits go soggy and gravy separates. So this version builds the whole thing as a strata instead. Cubed bread soaks up an egg custard, seasoned turkey sausage and cheddar go through it, and peppered gravy pours over the top. Each serving carries \u003cstrong\u003e35 grams of protein\u003c/strong\u003e and 579 calories for about \u003cstrong\u003e$1.68\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 2.25 lb (1031 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 18.25 oz (514 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 14 large eggs (682 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 1.25 cups (279 g)",
+                                "\u003cstrong\u003eBrown Gravy Mix (generic dry (USDA)):\u003c/strong\u003e 12.5 oz (355 g)",
+                                "\u003cstrong\u003eSandwich Bread (generic white (USDA)):\u003c/strong\u003e 22.5 oz (637 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 4.5 tbsp (64 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 2.25 lb: ~$8.69. \u003cstrong\u003eBuy 3 lbs: $11.46.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 18.25 oz: ~$3.91. \u003cstrong\u003eBuy 3 8oz bags: $5.18.\u003c/strong\u003e",
+                       "Eggs, 14 large eggs: ~$1.62. \u003cstrong\u003eBuy 2 dozens: $2.85.\u003c/strong\u003e",
+                       "Milk, 1.25 cups: ~$0.22. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
+                       "Brown Gravy Mix, 12.5 oz: ~$6.68. \u003cstrong\u003ePantry staple; this batch alone uses about 15 0.87oz packets.\u003c/strong\u003e",
+                       "Sandwich Bread, 22.5 oz: ~$1.66. \u003cstrong\u003eBuy 2 20oz loafs: $2.96.\u003c/strong\u003e",
+                       "Butter, 4.5 tbsp: ~$0.42. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.29. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $23.49 across 14 servings, so roughly $1.68 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.42 across 14 servings, roughly $2.53 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.80 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $41.22. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.68 a serving\u003c/strong\u003e. Bread, eggs, and milk are three of the cheapest items in the store, and seasoning your own ground turkey instead of buying breakfast sausage saves real money on the meat line.",
+    "shop_smart":  [
+                       "Season plain ground turkey with sage, black pepper, and a pinch of red pepper instead of buying packaged breakfast sausage. You get the same flavor at the price of plain ground meat.",
+                       "Day-old sandwich bread is ideal here and often marked down. Stale bread soaks up custard better than fresh does, so the discount rack is actually the better product.",
+                       "Gravy mix is one of the cheapest shelf-stable items in the store and a container makes many batches. Store brand and name brand taste the same under cheese.",
+                       "Eggs are the cheapest protein per gram in this recipe. Buy two dozen at whatever store has them as a loss leader that week."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Brown the ground turkey in a large skillet over medium-high, breaking it into small crumbles and seasoning it heavily with salt and black pepper so it reads like breakfast sausage.",
+                    "Cube the sandwich bread into roughly one inch pieces and spread them across a greased and buttered 9x13 pan.",
+                    "Scatter the browned turkey and about two thirds of the shredded cheddar over the bread cubes and toss lightly so it is not all sitting on top.",
+                    "Whisk the eggs with about half the milk, a good pinch of salt, and plenty of black pepper, then pour the custard over the pan and press the bread down so every cube gets wet.",
+                    "Whisk the gravy mix into the remaining milk in a saucepan and cook over medium heat until it thickens, then stir in the melted butter and a heavy hand of black pepper.",
+                    "Pour the gravy evenly over the top of the pan. Let the whole thing sit 20 minutes so the bread finishes absorbing, or refrigerate it overnight and bake it in the morning.",
+                    "Bake at 350F for 45 to 50 minutes until the center is set, adding the rest of the cheddar for the last 10 minutes, then rest 15 minutes before portioning."
+                ],
+    "portion_html":  "Weigh the whole pan, subtract the empty pan weight, and divide by 14. Strata puffs unevenly, so cut to the scale rather than to the eye. Each serving comes to \u003cstrong\u003e579 calories\u003c/strong\u003e and 35 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.plainchicken.com/sausage-gravy-breakfast-bake/\" target=\"_blank\" rel=\"noopener\"\u003eplainchicken.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Biscuits-and-gravy flavor that actually survives the week, about $1.68 a serving. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "cost_batch":  23.49,
+    "cost_batch_true":  35.42,
+    "cost_per_serving":  1.68,
+    "cost_per_serving_true":  2.53,
+    "cost_pantry_add":  5.8,
+    "cost_first_run":  41.22,
+    "scaler":  {
+                   "cost":  "35.42",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1031,
+                                   "buy":  "2.25 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "canon":  "Cheddar Cheese, Shredded",
+                                   "grams":  514,
+                                   "buy":  "18.25 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  682,
+                                   "buy":  "14 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  279,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "Brown Gravy Mix",
+                                   "canon":  "Brown Gravy Mix",
+                                   "grams":  355,
+                                   "buy":  "12.5 oz",
+                                   "bid":  "brown-gravy-mix",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sandwich Bread",
+                                   "canon":  "Sandwich Bread",
+                                   "grams":  637,
+                                   "buy":  "22.5 oz",
+                                   "bid":  "bread",
+                                   "gpu":  "567.000"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  64,
+                                   "buy":  "4.5 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  26,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  5,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey sausage gravy breakfast bake meal prep: bread strata with seasoned turkey sausage, cheddar, egg custard, and peppered gravy. 579 calories, 35g protein, about $1.68 a serving.",
+                 "keywords":  "sausage gravy breakfast bake, turkey sausage strata, biscuits and gravy casserole, breakfast for dinner, budget meal prep, high protein breakfast",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT50M",
+                 "totalTime":  "PT1H30M",
+                 "costPerServing":  1.68,
+                 "recipeIngredient":  [
+                                          "2.25 lb 93/7 ground turkey",
+                                          "22.5 oz sandwich bread",
+                                          "14 large eggs",
+                                          "18.25 oz shredded cheddar cheese",
+                                          "12.5 oz dry gravy mix",
+                                          "1.25 cups milk",
+                                          "4.5 tbsp butter"
+                                      ],
+                 "steps":  [
+                               "Brown the ground turkey and season it heavily with salt and black pepper.",
+                               "Cube the bread into a greased 9x13 pan and toss with the turkey and most of the cheddar.",
+                               "Whisk the eggs with half the milk, salt, and pepper, pour over the pan, and press the bread down.",
+                               "Cook the gravy mix with the remaining milk until thick, stir in butter and black pepper, and pour it over the top.",
+                               "Rest 20 minutes, bake at 350F for 45 to 50 minutes adding the last cheddar near the end, rest 15 minutes, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1031
+                              },
+                              {
+                                  "item":  "Cheddar Cheese, Shredded",
+                                  "grams":  514
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  682
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  279
+                              },
+                              {
+                                  "item":  "Brown Gravy Mix",
+                                  "grams":  355
+                              },
+                              {
+                                  "item":  "Sandwich Bread",
+                                  "grams":  637
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  64
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  26
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  5
+                              }
+                          ]
+}

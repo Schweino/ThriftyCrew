@@ -1,0 +1,275 @@
+﻿{
+    "name":  "Turkey Noodle Casserole",
+    "slug":  "turkey-noodle-casserole",
+    "cuisine":  "American",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.simplejoy.com/turkey-noodle-casserole/",
+    "source_site":  "simplejoy.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Egg Noodles)",
+                   "portion factor 1.35"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: The seafood-free answer to tuna noodle casserole, which we can never publish under the no-seafood rule. Source verified at 6 servings, 531 cal / 32g protein, already over the 500-cal bar as written. | HARVEST: ",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Egg Noodles)",
+                         "TUNING: portion factor 1.35"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  578,
+                 "protein":  37,
+                 "carbs":  45,
+                 "fat":  28,
+                 "cost_ps":  "1.56"
+             },
+    "intro_html":  "Every family had a version of this. Egg noodles, a cheesy cream sauce, whatever protein was in the fridge, peas and corn because those were always in the freezer. It is the most forgiving casserole shape there is and it costs almost nothing to build. Each serving comes to 578 calories with \u003cstrong\u003e37 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$1.56\u003c/strong\u003e, which makes it one of the cheapest full dinners in the collection.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eEgg Noodles (Great Value wide):\u003c/strong\u003e 20 oz dry (564 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 0.5 cups (132 g)",
+                                "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 15 oz (422 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 1.2 cans (520 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3.75 tbsp (32 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 6.25 tbsp (50 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 3.25 cups (772 g)",
+                                "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 2 lb (882 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 25 oz (712 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Egg Noodles, 20 oz dry: ~$2.16. \u003cstrong\u003eBuy 2 12oz bags: $2.61.\u003c/strong\u003e",
+                       "Butter, 0.5 cups: ~$0.87. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Frozen Green Peas, 15 oz: ~$0.91. \u003cstrong\u003eBuy 2 12oz bags: $1.47.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 1.2 cans: ~$0.95. \u003cstrong\u003eBuy 2 cans: $1.58.\u003c/strong\u003e",
+                       "Garlic, 3.75 tbsp: ~$0.46. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "All-Purpose Flour, 6.25 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Milk, 3.25 cups: ~$0.62. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
+                       "Turkey Breast, 2 lb: ~$9.36. \u003cstrong\u003eBuy 1 3lb frozen roast: $14.44.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 25 oz: ~$5.41. \u003cstrong\u003eBuy 4 8oz bags: $6.90.\u003c/strong\u003e",
+                       "Pantry seasonings (dried thyme, italian seasoning, black pepper, salt): ~$0.98. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $21.77 across 14 servings, so roughly $1.56 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $34.61 across 14 servings, roughly $2.47 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.55 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.16. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.56 a serving\u003c/strong\u003e. Egg noodles, frozen peas, and canned corn are three of the least expensive items in the store, and a pound and a half of cheddar makes them taste like a special occasion.",
+    "shop_smart":  [
+                       "Egg noodles are usually cheaper per ounce in the 12 oz bags than in the boxes, but check both. Wide noodles hold sauce better than fine ones in a bake.",
+                       "Shredded cheddar is the biggest line item here at a pound and a half. Compare the 8 oz bags against a block you shred yourself, because the block often wins on price per ounce.",
+                       "One frozen turkey breast roast covers this batch with meat left over. Roast it, dice it, and freeze the extra for the next casserole.",
+                       "Frozen peas and canned corn are the cheapest vegetables you can put in a casserole, and they hold their texture through baking better than fresh does."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Boil the egg noodles in salted water two minutes short of the package time and drain them. They will keep cooking in the sauce, and overcooked noodles turn to paste in a bake.",
+                    "Melt the butter in a large pot over medium heat, add the garlic for one minute, then whisk in the flour and cook it for two minutes.",
+                    "Pour in the milk slowly while whisking, then cook 4 to 5 minutes until the sauce thickens enough to coat a spoon.",
+                    "Season with the dried thyme, Italian seasoning, salt, and black pepper, then melt in about three quarters of the shredded cheddar off the heat so it does not go grainy.",
+                    "Fold in the diced turkey breast, the frozen peas, the drained corn, and the cooked noodles until everything is coated.",
+                    "Spread it into a greased 9x13 pan, scatter the rest of the cheddar over the top, and bake at 350F for 25 to 30 minutes until bubbling and browned in spots.",
+                    "Rest 10 minutes before portioning so the sauce sets around the noodles instead of running out of them."
+                ],
+    "portion_html":  "Weigh the finished pan, subtract the empty pan weight, and divide by 14. Noodle bakes cut cleanly once rested, so slice to the scale rather than guessing at squares. Each serving delivers \u003cstrong\u003e578 calories\u003c/strong\u003e and 37 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.simplejoy.com/turkey-noodle-casserole/\" target=\"_blank\" rel=\"noopener\"\u003esimplejoy.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A full cheesy casserole for about $1.56 a serving, and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "cost_batch":  21.77,
+    "cost_batch_true":  34.61,
+    "cost_per_serving":  1.56,
+    "cost_per_serving_true":  2.47,
+    "cost_pantry_add":  8.55,
+    "cost_first_run":  43.16,
+    "scaler":  {
+                   "cost":  "34.61",
+                   "ing":  [
+                               {
+                                   "item":  "Egg Noodles",
+                                   "canon":  "Egg Noodles",
+                                   "grams":  564,
+                                   "buy":  "20 oz dry",
+                                   "bid":  "egg-noodles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  132,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Frozen Green Peas",
+                                   "canon":  "Frozen Green Peas",
+                                   "grams":  422,
+                                   "buy":  "15 oz",
+                                   "bid":  "frozen-peas",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sweet Whole Kernel Corn",
+                                   "canon":  "Sweet Whole Kernel Corn",
+                                   "grams":  520,
+                                   "buy":  "1.2 cans",
+                                   "bid":  "canned-corn",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  32,
+                                   "buy":  "3.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  50,
+                                   "buy":  "6.25 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  772,
+                                   "buy":  "3.25 cups",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  3,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "canon":  "Italian Seasoning",
+                                   "grams":  4,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  13,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Turkey Breast",
+                                   "canon":  "Turkey Breast",
+                                   "grams":  882,
+                                   "buy":  "2 lb",
+                                   "bid":  "turkey-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "canon":  "Cheddar Cheese, Shredded",
+                                   "grams":  712,
+                                   "buy":  "25 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  27,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey noodle casserole meal prep: egg noodles, turkey breast, peas, and corn in a cheddar cream sauce. 578 calories, 37g protein, about $1.56 a serving.",
+                 "keywords":  "turkey noodle casserole, egg noodle bake, leftover turkey recipes, cheesy casserole, budget meal prep, high protein casserole",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  1.56,
+                 "recipeIngredient":  [
+                                          "6.25 cups diced cooked turkey breast",
+                                          "20 oz dry egg noodles",
+                                          "25 oz shredded cheddar cheese",
+                                          "3.25 cups milk",
+                                          "3.25 cups frozen green peas",
+                                          "1.2 cans sweet whole kernel corn",
+                                          "0.5 cups butter",
+                                          "6.25 tbsp all-purpose flour",
+                                          "3.75 tbsp garlic"
+                                      ],
+                 "steps":  [
+                               "Boil the egg noodles two minutes short of the package time and drain.",
+                               "Cook the garlic in melted butter, whisk in the flour for two minutes, then add the milk and cook until thickened.",
+                               "Season with thyme, Italian seasoning, salt, and pepper and melt in most of the cheddar off the heat.",
+                               "Fold in the turkey, peas, drained corn, and noodles, then spread into a greased 9x13 pan.",
+                               "Top with the remaining cheddar, bake at 350F for 25 to 30 minutes, rest 10 minutes, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Egg Noodles",
+                                  "grams":  564
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  132
+                              },
+                              {
+                                  "item":  "Frozen Green Peas",
+                                  "grams":  422
+                              },
+                              {
+                                  "item":  "Sweet Whole Kernel Corn",
+                                  "grams":  520
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  32
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  50
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  772
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Italian Seasoning",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  13
+                              },
+                              {
+                                  "item":  "Turkey Breast",
+                                  "grams":  882
+                              },
+                              {
+                                  "item":  "Cheddar Cheese, Shredded",
+                                  "grams":  712
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  27
+                              }
+                          ]
+}

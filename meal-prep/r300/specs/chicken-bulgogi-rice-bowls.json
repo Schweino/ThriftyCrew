@@ -1,0 +1,253 @@
+﻿{
+    "name":  "Chicken Bulgogi Rice Bowls",
+    "slug":  "chicken-bulgogi-rice-bowls",
+    "cuisine":  "Korean",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://mykoreankitchen.com/chicken-bulgogi/",
+    "source_site":  "mykoreankitchen.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 200g (src scale)",
+                   "base +60% (Rice)",
+                   "portion factor 1.15"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Page verified: full recipe, 3-4 servings, 294 cal / 20g protein for chicken alone; our build at 6 oz per portion over rice lands ~560 cal / 38g. Marinate-and-sheet-pan, the most batch-friendly Korean format, and every ingredient is board-mapped with zero flags. Confidence: high on source, est_cal is our build. | HARVEST: Source is the bulgogi chicken only; rice and bowl toppings are not in the source ingredient list.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 200g (src scale)",
+                         "TUNING: base +60% (Rice)",
+                         "TUNING: portion factor 1.15"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  580,
+                 "protein":  35,
+                 "carbs":  88,
+                 "fat":  7,
+                 "cost_ps":  "0.84"
+             },
+    "intro_html":  "This is the cheapest bowl in the whole batch, and it is not close. Chicken bulgogi is soy, brown sugar, garlic, ginger and sesame oil, with a splash of soda in the marinade doing what Korean cooks traditionally use grated pear for: tenderizing the meat and adding sweetness at the same time. Marinate it, spread it on sheet pans, serve over rice. Each container lands \u003cstrong\u003e580 calories and 35 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$0.84.84\u003c/strong\u003e. Eighty four cents.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 4 lb (1811 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.75 cups (193 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 6 tbsp (81 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 0.25 cups (64 g)",
+                                "\u003cstrong\u003eZero-Sugar Soda (generic):\u003c/strong\u003e 1 cups (246 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 tbsp (17 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 1.25 tbsp (8 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1.25 tbsp (18 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 7.75 cups dry (1446 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Thigh, 4 lb: ~$7.07. \u003cstrong\u003eBuy 4 lbs: $7.08.\u003c/strong\u003e",
+                       "Soy Sauce, 0.75 cups: ~$0.73. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Brown Sugar, 6 tbsp: ~$0.46. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 0.25 cups: ~$0.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Zero-Sugar Soda, 1 cups: ~$0.12. \u003cstrong\u003eBuy 1 2L bottle: $1.01.\u003c/strong\u003e",
+                       "Garlic, 2 tbsp: ~$0.24. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Ginger, 1.25 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Sesame Oil, 1.25 tbsp: ~$0.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 7.75 cups dry: ~$1.79. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, salt): ~$0.74. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $11.69 across 14 servings, so roughly $0.84 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $13.74 across 14 servings, roughly $0.98 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.65 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $28.39. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$0.84.84 a bowl\u003c/strong\u003e. That is the lowest price on this page and probably one of the lowest anywhere on this site. Nine ingredients, no specialty produce, and the chicken is the only line that costs you anything real.",
+    "shop_smart":  [
+                       "Nine ingredients and eight of them are pantry staples. This is the recipe to make when the fridge is empty and payday is Friday, because the only thing you actually have to go buy is the chicken.",
+                       "Soy sauce, brown sugar and sesame oil are all one-time buys that last months. Sesame oil is the one to not cheap out on, because a little goes a long way and the toasted version is what makes this smell like Korean food.",
+                       "The soda in the marinade is a real technique, not a gimmick. The acid and the carbonation tenderize the meat, and a two liter bottle is one of the cheapest things in the store and covers many batches.",
+                       "Boneless thighs are cheaper than breast and they stay juicy under a broiler, which is exactly what this method needs. The four pound club pack is the best per-pound price in the case."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Whisk the soy sauce, brown sugar, zero-sugar soda, chicken broth, minced garlic, grated ginger, sesame oil, salt and black pepper into a marinade until the sugar dissolves.",
+                    "Slice the chicken thighs thin, about a quarter inch, and turn them in the marinade until every piece is coated. Refrigerate at least 4 hours and preferably overnight.",
+                    "Cook the rice and let it steam covered off the heat for 10 minutes while the oven heats to 450F.",
+                    "Lift the chicken out of the marinade, letting the excess drip off, and spread it in a single layer across two sheet pans. Crowding it will steam the meat and you will lose the caramelized edges you came for.",
+                    "Roast 15 to 18 minutes, then run the broiler for 2 to 3 minutes until the edges char and the sugar in the marinade turns dark and sticky. Watch it closely; sugar goes from beautiful to ruined fast.",
+                    "Pour the leftover marinade into a small pot, bring it to a hard boil for a full 2 minutes, and reduce it into a glaze. Boiling is not optional, since raw chicken sat in it.",
+                    "Chop the roasted chicken, toss it in the reduced glaze in your mixing pot, and fold the cooked rice through."
+                ],
+    "portion_html":  "Set the pot on the scale, subtract the empty-pot weight, and divide by 14. Same scoop, all fourteen. Each one carries \u003cstrong\u003e580 calories\u003c/strong\u003e, and this is a good candidate for adding a handful of raw vegetables to each container at reheat time if you want more on the plate.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://mykoreankitchen.com/chicken-bulgogi/\" target=\"_blank\" rel=\"noopener\"\u003emykoreankitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Chicken bulgogi rice bowls for about $0.84.84 a bowl. That is the kind of math that pays for a membership in one batch. Members get every recipe in the Meal Prep section plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  11.69,
+    "cost_batch_true":  13.74,
+    "cost_per_serving":  0.84,
+    "cost_per_serving_true":  0.98,
+    "cost_pantry_add":  14.65,
+    "cost_first_run":  28.39,
+    "scaler":  {
+                   "cost":  "13.74",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  1811,
+                                   "buy":  "4 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  193,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "canon":  "Brown Sugar",
+                                   "grams":  81,
+                                   "buy":  "6 tbsp",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  64,
+                                   "buy":  "0.25 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Zero-Sugar Soda",
+                                   "canon":  "Zero-Sugar Soda",
+                                   "grams":  246,
+                                   "buy":  "1 cups",
+                                   "bid":  "zero-sugar-soda-2l",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  17,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  8,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "canon":  "Sesame Oil",
+                                   "grams":  18,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  16,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  23,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1446,
+                                   "buy":  "7.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Chicken bulgogi rice bowls: soy, brown sugar and sesame marinated thighs roasted on sheet pans over rice. 14 meal prep bowls at 580 calories, 35g protein, about $0.84.84.",
+                 "keywords":  "chicken bulgogi, korean chicken meal prep, bulgogi rice bowls, cheap meal prep, budget korean recipe, sheet pan chicken",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT25M",
+                 "totalTime":  "PT45M",
+                 "costPerServing":  0.84,
+                 "recipeIngredient":  [
+                                          "4 lb boneless skinless chicken thighs",
+                                          "0.75 cups soy sauce",
+                                          "6 tbsp brown sugar",
+                                          "1 cup zero-sugar soda",
+                                          "7.75 cups dry rice",
+                                          "2 tbsp garlic",
+                                          "1.25 tbsp ginger",
+                                          "1.25 tbsp sesame oil",
+                                          "0.25 lb chicken broth"
+                                      ],
+                 "steps":  [
+                               "Whisk soy sauce, brown sugar, soda, broth, garlic, ginger and sesame oil into a marinade.",
+                               "Marinate thin-sliced chicken thighs at least 4 hours or overnight.",
+                               "Cook the rice, then roast the drained chicken in a single layer at 450F for 15 to 18 minutes and broil 2 to 3 minutes.",
+                               "Boil the leftover marinade hard for 2 minutes and reduce it to a glaze.",
+                               "Toss the chopped chicken in the glaze, fold in the rice, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  1811
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  193
+                              },
+                              {
+                                  "item":  "Brown Sugar",
+                                  "grams":  81
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  64
+                              },
+                              {
+                                  "item":  "Zero-Sugar Soda",
+                                  "grams":  246
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  17
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Sesame Oil",
+                                  "grams":  18
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  16
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  23
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1446
+                              }
+                          ]
+}
