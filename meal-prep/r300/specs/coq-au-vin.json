@@ -1,4 +1,4 @@
-﻿{
+{
     "name":  "Coq au Vin",
     "slug":  "coq-au-vin",
     "cuisine":  "French",
@@ -25,7 +25,7 @@
                  "protein":  51,
                  "carbs":  59,
                  "fat":  22,
-                 "cost_ps":  "2.19"
+                 "cost_ps":  "3.27"
              },
     "intro_html":  "Coq au vin is the French farmhouse braise that Julia Child taught America to make: chicken cooked slowly with bacon, mushrooms, onions, and carrots until the sauce turns dark and glossy and the meat gives up without a fight. This build braises in beef and chicken broth so it stays cheap and stays on the grocery board. If you happen to have red wine open, swap a cup of it in for some of the broth and you are back to the original. Each bowl runs 659 calories and \u003cstrong\u003e51 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.19 a serving\u003c/strong\u003e.",
     "ingredients_display":  [
@@ -212,7 +212,7 @@
                  "prepTime":  "PT30M",
                  "cookTime":  "PT1H15M",
                  "totalTime":  "PT1H45M",
-                 "costPerServing":  2.19,
+                 "costPerServing":  3.27,
                  "recipeIngredient":  [
                                           "6.25 lb boneless skinless chicken thighs",
                                           "0.25 lb hickory smoked bacon",
