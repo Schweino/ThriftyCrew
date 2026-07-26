@@ -28,16 +28,8 @@ $adminKey = $env:GHOST_ADMIN_KEY
 if (-not $adminKey) { $kf = Join-Path (Split-Path $root -Parent) 'meal-prep\.ghostkey'; if (Test-Path $kf) { $adminKey = (Get-Content $kf -Raw).Trim() } }
 if (-not $adminKey) { Write-Output 'notify-item-added: SKIP (no GHOST_ADMIN_KEY)'; exit 0 }
 $apiUrl = 'https://map-to-success.ghost.io'
-function New-GhostJWT {
-  $p=$adminKey -split ':'; $id=$p[0]; $secretHex=$p[1]
-  $sb=New-Object byte[] ($secretHex.Length/2)
-  for($i=0;$i -lt $sb.Length;$i++){ $sb[$i]=[Convert]::ToByte($secretHex.Substring($i*2,2),16) }
-  $now=[DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
-  $h='{"alg":"HS256","typ":"JWT","kid":"'+$id+'"}'; $pl='{"iat":'+$now+',"exp":'+($now+300)+',"aud":"/admin/"}'
-  $b64={param($b)[Convert]::ToBase64String($b).TrimEnd('=').Replace('+','-').Replace('/','_')}
-  $si=(& $b64 ([Text.Encoding]::UTF8.GetBytes($h)))+'.'+(& $b64 ([Text.Encoding]::UTF8.GetBytes($pl)))
-  $hm=New-Object System.Security.Cryptography.HMACSHA256 (,$sb); return $si+'.'+(& $b64 ($hm.ComputeHash([Text.Encoding]::UTF8.GetBytes($si))))
-}
+. (Join-Path $PSScriptRoot '..\lib\ghost-lib.ps1')   # 2026-07-26: single Ghost helper (was one of 50+ inline copies)
+function New-GhostJWT { Get-GhostJWT -Key $adminKey }
 # /notify auth = SHA-256 hex of the admin key (the Worker computes the same; key never travels)
 $sha = [Security.Cryptography.SHA256]::Create()
 $notifyAuth = -join ($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($adminKey)) | ForEach-Object { $_.ToString('x2') })

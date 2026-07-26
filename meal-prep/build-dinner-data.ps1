@@ -5,6 +5,9 @@
 $ErrorActionPreference = 'Stop'
 $dir = 'C:\Codex\income\meal-prep'
 $db  = Get-Content "$dir\recipes-db.json" -Raw | ConvertFrom-Json
+# v2 manifest: current-cheapest whole-package per serving per slug (2026-07-26 basis switch)
+$script:cheapPs=@{}
+try { (Get-Content (Join-Path $dir 'pipeline\v2-perserving.json') -Raw | ConvertFrom-Json) | ForEach-Object { $script:cheapPs[[string]$_.slug]=[math]::Round([double]$_.cheapest_ps,2) } } catch { Write-Warning 'v2-perserving.json unreadable - legacy cost fallback in effect' }
 $map = Get-Content "$dir\ingredient-map.json" -Raw | ConvertFrom-Json
 $raw = (Invoke-WebRequest -Uri "https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json" -UseBasicParsing -TimeoutSec 30).Content.TrimStart([char]0xFEFF)
 $feed = $raw | ConvertFrom-Json
@@ -61,7 +64,10 @@ foreach($n in $names){
 # ---- recipes ----
 $recs = @()
 foreach($r in $db.recipes){
-  $cost = if($r.cost_per_serving_true){ $r.cost_per_serving_true } else { $r.cost_per_serving }
+  # 2026-07-26: fallback cost = current-cheapest whole-package per serving (v2 manifest), the same
+  # basis as the recipe pages/hub/top5. Legacy recipes-db figure only if the manifest lacks the slug.
+  $cost = if($script:cheapPs -and $script:cheapPs.ContainsKey([string]$r.slug)){ $script:cheapPs[[string]$r.slug] }
+          elseif($r.cost_per_serving_true){ $r.cost_per_serving_true } else { $r.cost_per_serving }
   $recs += ,@{ n=$r.name; s=$r.slug; sv=$r.servings; cal=$r.per_serving.calories; p=$r.per_serving.protein_g;
                c=[math]::Round($cost,2); i=@($r.ingredients | ForEach-Object { $idxOf[$_.item] }) }
 }

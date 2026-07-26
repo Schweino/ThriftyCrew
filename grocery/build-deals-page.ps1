@@ -1,4 +1,4 @@
-﻿<#
+<#
   build-deals-page.ps1 - Renders the weekly Omaha cross-store price board into a self-contained,
   filterable HTML page (embeddable in a Ghost page). Data-driven: re-run it whenever the board
   refreshes. Groups commodities by food category (categories.json), one ROW per commodity, and
@@ -160,38 +160,11 @@ function MissingCells([string]$id, $pricedStores) {
   return $out
 }
 # per-unit of a stored link, in the board's $unit, from {price,size} - used to SUPPRESS a clearly-wrong link.
-function LinkPU([string]$size, [string]$unit, [double]$price, [string]$name = '') {
-  $s = ([string]$size).ToLower().Trim()
-  $up = [regex]::Match($s, '\$?\s*([0-9]+(?:\.[0-9]+)?)\s*/\s*(fl\s*oz|floz|oz|lb|ea|each|ct|count)')
-  if ($up.Success) { $v=[double]$up.Groups[1].Value; $un=($up.Groups[2].Value -replace '\s','') -replace 'fl',''; switch ($unit) { 'lb'{if($un -eq 'lb'){return $v}; if($un -eq 'oz'){return $v*16}} 'oz'{if($un -eq 'oz'){return $v}; if($un -eq 'lb'){return $v/16}} 'floz'{if($un -match 'oz'){return $v}; if($un -eq 'lb'){return $v/16}} 'each'{if($un -match '^(ea|each|ct|count)$'){return $v}; return $price} 'dozen'{if($un -match '^(ea|each|ct|count)$'){return $v*12}; return $price} } }
-  if ($price -le 0) { return $null }
-  $q = [regex]::Match($s, '([0-9]+(?:\.[0-9]+)?)\s*(fl\s*oz|floz|oz|lbs?|ct|count|ea|pk|gal|dozen|doz)')
-  $n = if ($q.Success) { [double]$q.Groups[1].Value } else { $null }
-  $un = if ($q.Success) { ($q.Groups[2].Value -replace '\s','') -replace 'fl','' } else { '' }
-  # bare-unit size ("lb","per lb","gallon","dozen","each") = one of that unit -> per-unit is the price itself
-  if (-not $q.Success) { $bu=[regex]::Match($s,'\b(lbs?|gal|gallon|dozen|doz|each|ea)\b'); if ($bu.Success) { $n=1; $un=$bu.Groups[1].Value -replace '^gallon$','gal' -replace '^doz$','dozen' } }   # anchored: unanchored 'doz'->'dozen' corrupts 'dozen'
-  $pk = [regex]::Match($s, '([0-9]+)\s*(pk|pack)\b'); if ($pk.Success -and $n -and ($un -match '^(oz|lbs?|gal)$')) { $n = $n * [double]$pk.Groups[1].Value }
-  # MULTIPACK IN THE NAME: a link whose size is just "each" but whose NAME says "24 Pack" is 24 items,
-  # not 1. Without this the whole pack price is published as the per-item price (Fareway bottled water
-  # went out at $3.87 EACH). Only for 'each' commodities, and only when the size carries no count.
-  if ($unit -eq 'each' -and $name -and (($null -eq $n) -or ($n -eq 1))) {
-    $pn = [regex]::Match(([string]$name).ToLower(), '([0-9]+)\s*(?:pk\b|pack\b|ct\b|count\b)')
-    if ($pn.Success) {
-      $cnt = [double]$pn.Groups[1].Value
-      if ($cnt -gt 1) { return $price / $cnt }
-    }
-  }
-  switch ($unit) {
-    'lb'    { if ($un -match '^lbs?$' -and $n) { return $price/$n }; if ($un -eq 'oz' -and $n) { return $price/($n/16) }; return $null }
-    'oz'    { if ($un -eq 'oz' -and $n) { return $price/$n }; if ($un -match '^lbs?$' -and $n) { return $price/(16*$n) }; if ($un -eq 'gal' -and $n) { return $price/(128*$n) }; return $null }
-    'floz'  { if ($un -match 'oz' -and $n) { return $price/$n }; if ($un -eq 'gal' -and $n) { return $price/(128*$n) }; return $null }
-    'each'  { if ($un -match '^(ct|count|ea|pk)$' -and $n) { return $price/$n }; if ($un -match '^(dozen|doz)$') { return $price/12 }; if ($n -eq 1) { return $price }; return $null }
-    'dozen' { if ($un -match '^(dozen|doz)$') { return $price }; if ($un -match '^(ct|count|ea)$' -and $n) { return $price/($n/12) }; if ($n -eq 1) { return $price }; return $null }
-    'gallon'{ if ($un -eq 'gal' -and $n) { return $price/$n }; if ($n -eq 1) { return $price }; return $null }
-    default { return $null }
-  }
-  return $null
-}
+. (Join-Path $PSScriptRoot 'pu-lib.ps1')
+# 2026-07-26 consolidation: LinkPU now DELEGATES to pu-lib's Get-LinkPerUnit (the single per-unit
+# implementation; identical params; test-pu-lib.ps1 proves it matches everywhere and resolves more).
+# The former local copy - one of three drifting duplicates - is gone. Keep using LinkPU at call sites.
+function LinkPU([string]$size, [string]$unit, [double]$price, [string]$name = '') { Get-LinkPerUnit -size $size -unit $unit -price $price -name $name }
 # Respect the audits: suppress a link the name/form-drift audit flags as a clearly WRONG product (a
 # fresh commodity linked to a frozen/canned item), which the price gate alone can miss when the per-unit
 # happens to be close. Run audit-name-drift.ps1 before build so this file is current.
@@ -1341,7 +1314,7 @@ if ($histDoc) {
     var d = TCB[id]; if (!d) return; close();
     var sts = d.stores || [];
     var h = '<div class="pg-hx" style="max-width:660px"><div class="pg-hx-top"><h3>Brands: ' + esc(d.label) + '</h3><button type="button" class="pg-hx-x" aria-label="Close">&times;</button></div>';
-    h += '<p class="pg-hx-sub">Price per ' + esc(d.unit) + ', cheapest brand first. The <b>store brand</b> is gold; the cheapest store for each brand is green. A dash means that storeâ€™s search did not surface that brand.</p>';
+    h += '<p class="pg-hx-sub">Price per ' + esc(d.unit) + ', cheapest brand first. The <b>store brand</b> is gold; the cheapest store for each brand is green. A dash means that store&rsquo;s search did not surface that brand.</p>';
     h += '<div class="pg-bt-wrap"><table class="pg-bt"><thead><tr><th>Brand</th>';
     for (var s = 0; s < sts.length; s++){ h += '<th>' + esc(sts[s]) + '</th>'; }
     h += '</tr></thead><tbody>';
@@ -1354,7 +1327,7 @@ if ($histDoc) {
       h += '</tr>';
     }
     h += '</tbody></table></div>';
-    h += '<p class="pg-hx-note" style="margin-top:11px">Real Omaha shelf prices captured this week. Samâ€™s Club needs a membership. Aldi and Fareway are not shown here, since neither posts everyday brand prices online.</p></div>';
+    h += '<p class="pg-hx-note" style="margin-top:11px">Real Omaha shelf prices captured this week. Sam&rsquo;s Club needs a membership. Aldi and Fareway are not shown here, since neither posts everyday brand prices online.</p></div>';
     ov = document.createElement('div'); ov.className = 'pg-hx-ov'; ov.innerHTML = h;
     document.body.appendChild(ov);
     ov.addEventListener('click', function(e){ if (e.target === ov || e.target.closest('.pg-hx-x')) close(); });

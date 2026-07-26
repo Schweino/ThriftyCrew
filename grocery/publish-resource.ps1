@@ -1,4 +1,4 @@
-﻿<#
+<#
   publish-resource.ps1 (repo-local copy) - Publishes ONE item to the Resources section (tag: resources).
   Uses a lexical HTML card (not source=html) so styled classes like mts-btn survive. Paid-gated by default
   (paywall JSON-LD added), matching the lesson pattern.
@@ -23,17 +23,8 @@ $adminKey = if ($env:GHOST_ADMIN_KEY) { $env:GHOST_ADMIN_KEY }
   elseif (Test-Path (Join-Path (Split-Path $here -Parent) 'meal-prep\.ghostkey')) { (Get-Content (Join-Path (Split-Path $here -Parent) 'meal-prep\.ghostkey') -Raw).Trim() }
   else { throw 'Ghost admin key missing: set $env:GHOST_ADMIN_KEY or create meal-prep\.ghostkey' }
 $apiUrl = 'https://map-to-success.ghost.io'
-
-function New-GhostJWT { param($key)
-  $p=$key -split ':'; $id=$p[0]; $secretHex=$p[1]
-  $sb=New-Object byte[] ($secretHex.Length/2)
-  for($i=0;$i -lt $sb.Length;$i++){ $sb[$i]=[Convert]::ToByte($secretHex.Substring($i*2,2),16) }
-  $now=[DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
-  $h='{"alg":"HS256","typ":"JWT","kid":"'+$id+'"}'; $pl='{"iat":'+$now+',"exp":'+($now+300)+',"aud":"/admin/"}'
-  $b64={param($b)[Convert]::ToBase64String($b).TrimEnd('=').Replace('+','-').Replace('/','_')}
-  $si=(& $b64 ([Text.Encoding]::UTF8.GetBytes($h)))+'.'+(& $b64 ([Text.Encoding]::UTF8.GetBytes($pl)))
-  $hm=New-Object System.Security.Cryptography.HMACSHA256 (,$sb); return $si+'.'+(& $b64 ($hm.ComputeHash([Text.Encoding]::UTF8.GetBytes($si))))
-}
+. (Join-Path $PSScriptRoot '..\lib\ghost-lib.ps1')   # 2026-07-26: single Ghost helper (was one of 50+ inline copies)
+function New-GhostJWT { Get-GhostJWT -Key $adminKey }
 
 if (-not (Test-Path $HtmlFile)) { throw "HtmlFile not found: $HtmlFile" }
 $html = [IO.File]::ReadAllText($HtmlFile, [Text.Encoding]::UTF8)

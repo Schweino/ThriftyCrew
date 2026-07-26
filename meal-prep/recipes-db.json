@@ -1,4 +1,4 @@
-﻿{
+{
     "readme":  "Recipe database for Thrifty Crew meal prep. Every recipe published to the Meal Prep section is logged here. \u0027ingredients\u0027 lists each component by its exact food-macros-db.json item name plus grams (used to recompute macros via recipe-macros.ps1) and a \u0027buy\u0027 note (how much to purchase). EVERY ingredient item MUST exist in food-macros-db.json first. \u0027grocery_list\u0027 is the human shopping list. \u0027per_serving\u0027 and \u0027batch\u0027 macros are computed from the food DB. Costs are conservative current Walmart/Sam\u0027s estimates (labels-accurate macros, price-estimate costs; see meal-prep-macros-db memory). To add a recipe: ensure all ingredients are in food-macros-db.json, compute with recipe-macros.ps1, append a record here, then publish with publish-recipe.ps1.",
     "recipes":  [
                     {
@@ -16799,7 +16799,7 @@
                         "source_url":  "https://fedandfit.com/paleo-chorizo-potato-breakfast-bowl/",
                         "source_site":  "Fed \u0026 Fit",
                         "notes":  "R100 build 2026-07-19; adapted from Fed \u0026 Fit; macros computed from food-macros-db",
-                        "protein":  "other"
+                        "protein":  "pork"
                     },
                     {
                         "name":  "Country-Fried Pork Chops with Bacon Gravy",
@@ -25357,7 +25357,7 @@
                         "source_url":  "https://loveoffood.net/turkey-sausage-crumble-w-grits-and-eggs/",
                         "source_site":  "Love of Food Network",
                         "notes":  "R100 build 2026-07-19; adapted from Love of Food Network; macros computed from food-macros-db",
-                        "protein":  "other"
+                        "protein":  "turkey"
                     },
                     {
                         "name":  "Vietnamese Caramelized Ground Beef Rice Bowls",

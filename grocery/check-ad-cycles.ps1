@@ -333,6 +333,14 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # basis. Feed path = the local smp-feed (regenerated later in this same sequence; one-day lag on
       # feed-only movements, same as the retired per-run flow). Non-fatal.
       try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\engine\cost-recipes.ps1') | Out-Null; Log 'engine cost-recipes refreshed db\costed' } catch { Log ('engine cost-recipes threw: ' + $_.Exception.Message) }
+      # drift guard: recipes-db index vs db\recipes specs vs db\ingredients (2026-07-26). Non-fatal; alerts.
+      try {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\engine\audit-db-agreement.ps1') | Out-Null
+        if ($LASTEXITCODE -ne 0) {
+          Log 'db-agreement guard found DRIFT (see its output)'
+          try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Recipe db drift (index vs specs)" -Body "meal-prep\engine\audit-db-agreement.ps1 found drift between recipes-db.json and db\recipes specs (or missing db\ingredients items). Run it for the list; fix the lagging side." | Out-Null } catch {}
+        } else { Log 'db-agreement guard: clean' }
+      } catch { Log ('db-agreement guard threw: ' + $_.Exception.Message) }
       try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\compute-v2-perserving.ps1') -FeedPath (Join-Path $OutDir 'smp-feed.json') | Out-Null; Log 'v2 per-serving manifest recomputed' } catch { Log ('compute-v2-perserving threw: ' + $_.Exception.Message) }
       # re-cost the recipes from today's board + refresh the hub's Top 5 (only publishes on change). Non-fatal.
       # Brad's final call 2026-07-25: the ORIGINAL SMP-TOP5 hub section stays (he preferred it over the

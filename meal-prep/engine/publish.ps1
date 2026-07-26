@@ -7,17 +7,8 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $apiUrl = 'https://map-to-success.ghost.io'
 $pubBase = 'https://www.thriftycrew.com'
 $adminKey = (Get-Content (Join-Path $here '..\.ghostkey') -Raw).Trim()
-
-function New-GhostJWT { param($key)
-  $p=$key -split ':'; $id=$p[0]; $secretHex=$p[1]
-  $sb=New-Object byte[] ($secretHex.Length/2)
-  for($i=0;$i -lt $sb.Length;$i++){ $sb[$i]=[Convert]::ToByte($secretHex.Substring($i*2,2),16) }
-  $now=[DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
-  $h='{"alg":"HS256","typ":"JWT","kid":"'+$id+'"}'; $pl='{"iat":'+$now+',"exp":'+($now+300)+',"aud":"/admin/"}'
-  $b64={param($b)[Convert]::ToBase64String($b).TrimEnd('=').Replace('+','-').Replace('/','_')}
-  $si=(& $b64 ([Text.Encoding]::UTF8.GetBytes($h)))+'.'+(& $b64 ([Text.Encoding]::UTF8.GetBytes($pl)))
-  $hm=New-Object System.Security.Cryptography.HMACSHA256 (,$sb); return $si+'.'+(& $b64 ($hm.ComputeHash([Text.Encoding]::UTF8.GetBytes($si))))
-}
+. (Join-Path $PSScriptRoot '..\..\lib\ghost-lib.ps1')   # 2026-07-26: single Ghost helper (was one of 50+ inline copies)
+function New-GhostJWT { Get-GhostJWT -Key $adminKey }
 
 if($All){ $Slugs = (Get-ChildItem (Join-Path (Split-Path $here -Parent) 'db\built\*.body.html')).BaseName -replace '\.body$','' }
 if(-not $Slugs){ throw 'no slugs' }
@@ -64,8 +55,10 @@ foreach($slug in $Slugs){
     if(-not $titleOk){ $titleOk = $html -match [regex]::Escape(($spec.name -split ' ')[0]) }
     # paid content must NOT leak publicly. v2 anchor: the cost-tab section heading only exists in the
     # PAID body ('True shopping cost' was v1 copy - 0/513 v2 cards contain it, making the old check
-    # vacuous). A public (free-rotation) card legitimately shows it, so only enforce for paid posts.
-    $paywalled = if([string]$spec.visibility -eq 'public'){ $true } else { ($html -notmatch 'What This Batch Costs') }
+    # vacuous). Exemption uses the LIVE post's visibility (the rotation flips free cards weekly; the
+    # spec's visibility field is only the first-publish default and goes stale by design).
+    $liveVis = if($existing -and $existing.visibility){ [string]$existing.visibility } else { [string]$spec.visibility }
+    $paywalled = if($liveVis -eq 'public'){ $true } else { ($html -notmatch 'What This Batch Costs') }
     $schemaOk = ($html -match 'application/ld\+json')
     if($titleOk -and $paywalled -and $schemaOk){ $ok++; Write-Output ("OK  $slug") }
     else { $failed += $slug; Write-Output ("VERIFY FAIL  $slug  (title=$titleOk paywalled=$paywalled schema=$schemaOk)") }

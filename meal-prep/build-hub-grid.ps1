@@ -12,18 +12,8 @@ New-Item -ItemType Directory -Force $scratch | Out-Null
 $apiUrl='https://map-to-success.ghost.io'
 $doc=Get-Content (Join-Path $root 'recipes-db.json') -Raw | ConvertFrom-Json
 $recipes=$doc.recipes
-
-function New-GhostJWT {
-  $key=(Get-Content (Join-Path $root '.ghostkey') -Raw).Trim()
-  $p=$key -split ':'; $sb=New-Object byte[] ($p[1].Length/2)
-  for($i=0;$i -lt $sb.Length;$i++){ $sb[$i]=[Convert]::ToByte($p[1].Substring($i*2,2),16) }
-  $now=[DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
-  $h='{"alg":"HS256","typ":"JWT","kid":"'+$p[0]+'"}'; $pl='{"iat":'+$now+',"exp":'+($now+300)+',"aud":"/admin/"}'
-  $b64={param($b)[Convert]::ToBase64String($b).TrimEnd('=').Replace('+','-').Replace('/','_')}
-  $si=(& $b64 ([Text.Encoding]::UTF8.GetBytes($h)))+'.'+(& $b64 ([Text.Encoding]::UTF8.GetBytes($pl)))
-  $hm=New-Object System.Security.Cryptography.HMACSHA256 (,$sb)
-  return $si+'.'+(& $b64 ($hm.ComputeHash([Text.Encoding]::UTF8.GetBytes($si))))
-}
+. (Join-Path $PSScriptRoot '..\lib\ghost-lib.ps1')   # 2026-07-26: single Ghost helper (was one of 50+ inline copies)
+function New-GhostJWT { Get-GhostJWT -Key (Get-GhostKey) }
 
 # --- protein deriver (heaviest real-meat ingredient; broths/stocks never count) ---
 function Get-ProteinCat($rec){

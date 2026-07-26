@@ -19,15 +19,8 @@ $gout = Join-Path (Split-Path $PSScriptRoot -Parent) 'grocery\out'   # repo-rela
 # Ghost admin key: env var (GitHub Actions secret) first, then a gitignored local .ghostkey file, never source.
 $adminKey = if ($env:GHOST_ADMIN_KEY) { $env:GHOST_ADMIN_KEY } elseif (Test-Path (Join-Path $PSScriptRoot '.ghostkey')) { (Get-Content (Join-Path $PSScriptRoot '.ghostkey') -Raw).Trim() } else { throw 'Ghost admin key missing: set $env:GHOST_ADMIN_KEY or create meal-prep\.ghostkey' }
 $apiUrl   = "https://map-to-success.ghost.io"
-function New-GhostJWT {
-  $id,$secret = $adminKey -split ':'
-  $now = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
-  $b64 = { param($b) [Convert]::ToBase64String($b).TrimEnd('=').Replace('+','-').Replace('/','_') }
-  $h='{"alg":"HS256","typ":"JWT","kid":"'+$id+'"}'; $pl='{"iat":'+$now+',"exp":'+($now+300)+',"aud":"/admin/"}'
-  $si=(& $b64 ([Text.Encoding]::UTF8.GetBytes($h)))+'.'+(& $b64 ([Text.Encoding]::UTF8.GetBytes($pl)))
-  $sb=New-Object byte[] ($secret.Length/2); for($i=0;$i -lt $sb.Length;$i++){$sb[$i]=[Convert]::ToByte($secret.Substring($i*2,2),16)}
-  $hm=New-Object System.Security.Cryptography.HMACSHA256 (,$sb); return $si+'.'+(& $b64 ($hm.ComputeHash([Text.Encoding]::UTF8.GetBytes($si))))
-}
+. (Join-Path $PSScriptRoot '..\lib\ghost-lib.ps1')   # 2026-07-26: single Ghost helper (was one of 50+ inline copies)
+function New-GhostJWT { Get-GhostJWT -Key $adminKey }
 
 $mapDoc = Get-Content (Join-Path $root 'ingredient-map.json') -Raw | ConvertFrom-Json
 $db     = (Get-Content (Join-Path $root 'recipes-db.json') -Raw | ConvertFrom-Json).recipes

@@ -1,0 +1,117 @@
+<div id="tcpl">
+<style>
+#tcpl{--navy:#16263f;--gold:#e2a43c;--gold-d:#8a6d1f;--ink:#3a4658;--line:#e2e8f0;--green:#1f7a4d;--red:#b23b2e;--soft:#fbfcfe;
+  max-width:760px;margin:0 auto;font-size:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);}
+#tcpl *{box-sizing:border-box;}
+#tcpl .tb-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.6em 1.4em;margin:0 0 1.5em;box-shadow:0 6px 24px rgba(22,38,63,.06);}
+#tcpl h2{font-size:1.3em;color:var(--navy);margin:0 0 .3em;}
+#tcpl .tb-sub{font-size:.95em;margin:.2em 0 1.1em;line-height:1.5;}
+#tcpl .tb-privacy{display:flex;gap:.7em;align-items:flex-start;background:#fdf8ec;border:1px solid #eee3c8;border-radius:12px;padding:.9em 1.1em;font-size:.92em;line-height:1.5;margin:0 0 1.6em;}
+#tcpl .tb-privacy b{color:var(--navy);}
+#tcpl .tb-lock{flex:0 0 auto;width:1.6em;height:1.6em;border-radius:50%;background:var(--gold);color:var(--navy);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.95em;}
+#tcpl table{width:100%;border-collapse:collapse;}
+#tcpl th{font-size:.75em;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--gold-d);text-align:left;padding:.4em .5em;border-bottom:2px solid var(--line);}
+#tcpl th.pl-num,#tcpl td.pl-num{text-align:right;}
+#tcpl td{padding:.75em .5em;border-bottom:1px solid var(--line);vertical-align:top;}
+#tcpl tr:last-child td{border-bottom:none;}
+#tcpl .pl-rank{color:#8a94a6;font-weight:800;width:2em;}
+#tcpl .pl-food{font-weight:800;color:var(--navy);line-height:1.3;}
+#tcpl .pl-raw{display:inline-block;background:var(--soft);border:1px solid var(--line);color:#68748a;font-size:.68em;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:.1em .5em;border-radius:999px;margin-left:.4em;vertical-align:middle;}
+#tcpl .pl-price{white-space:nowrap;font-weight:700;color:var(--navy);}
+#tcpl .pl-store{display:block;font-size:.8em;color:#68748a;font-weight:400;margin-top:.15em;}
+#tcpl .pl-cost{font-size:1.15em;font-weight:800;color:var(--green);white-space:nowrap;}
+#tcpl .pl-bar{width:7.5em;max-width:100%;height:.55em;background:#e8ecf2;border-radius:99px;overflow:hidden;position:relative;margin:.35em 0 0 auto;}
+#tcpl .pl-bar em{position:absolute;left:0;top:0;bottom:0;background:var(--gold);border-radius:99px;display:block;}
+#tcpl tr.pl-top .pl-bar em{background:var(--green);}
+#tcpl .pl-note{font-size:.85em;color:#68748a;line-height:1.5;margin:1.1em 0 0;}
+#tcpl .pl-fresh{text-align:center;font-size:.82em;color:#8a94a6;margin:.8em 0 0;}
+#tcpl .pl-foot{text-align:center;font-size:.95em;margin:0 0 .5em;}
+#tcpl .pl-foot a{color:var(--navy);font-weight:800;text-decoration:none;border-bottom:2px solid var(--gold);}
+#tcpl .pl-foot a:hover{color:var(--gold-d);}
+@media (max-width:560px){
+  #tcpl .tb-card{padding:1.2em .8em;}
+  #tcpl td,#tcpl th{padding-left:.35em;padding-right:.35em;}
+  #tcpl .pl-bar{width:5em;}
+  #tcpl .pl-cost{font-size:1.05em;}
+  #tcpl .pl-price{white-space:normal;}
+}
+</style>
+
+<p style="font-size:1.05em;line-height:1.6;margin:0 0 1.2em;">Protein is the expensive part of the grocery run, so this is the number that matters: what does <b>30 grams of protein</b> actually cost you this week? We take the cheapest price for each food across the Omaha stores we track, do the label math, and rank them. Cheapest protein wins the top spot.</p>
+
+<div class="tb-privacy"><span class="tb-lock">&#8645;</span><span><b>Live numbers, honest math.</b> Prices refresh from our weekly Omaha price board, and the protein numbers come straight from the nutrition labels in our recipe database. No estimates pulled out of thin air.</span></div>
+
+<div class="tb-card">
+  <h2>This week's protein leaderboard</h2>
+  <p class="tb-sub">Ranked by cost per 30 grams of protein, about what you want in a solid meal. The bar shows how each one stacks up against the leader.</p>
+  <table>
+    <thead><tr><th class="pl-rank">#</th><th>Food</th><th class="pl-num">Cheapest this week</th><th class="pl-num">Per 30g protein</th></tr></thead>
+    <tbody id="pl-body"></tbody>
+  </table>
+  <p class="pl-note">Meat prices are for raw weight. Cooking shrinks the package because water cooks off, but the protein all stays put, so the ranking holds. Beans and dairy are as sold.</p>
+  <p class="pl-fresh" id="pl-fresh"></p>
+</div>
+
+<p class="pl-foot">Want dinners built from the cheap ones? <a href="/meal-prep-recipes/?ref=protein-tool">Browse the meal prep recipes</a>.</p>
+
+<script>
+var PL={week:"2026-07-26",rows:[{"n":"Peanut butter","b":"peanut-butter","gpu":28.3495,"pg":25,"sg":100,"f":0.0919,"fs":"Walmart","u":"oz","r":false},{"n":"Chicken breast","b":"chicken-breast","gpu":453.592,"pg":25,"sg":112,"f":1.99,"fs":"Baker's","u":"lb","r":true},{"n":"Pork loin","b":"pork-loin","gpu":453.592,"pg":23,"sg":112,"f":1.98,"fs":"Sam's Club","u":"lb","r":true},{"n":"Canned kidney beans","b":"kidney-beans","gpu":28.3495,"pg":8.7,"sg":100,"f":0.0548,"fs":"Aldi","u":"oz","r":false},{"n":"Chicken thighs","b":"boneless-skinless-chicken-thigh","gpu":453.592,"pg":22,"sg":112,"f":1.99,"fs":"Hy-Vee","u":"lb","r":true},{"n":"Milk (fat free)","b":"milk","gpu":3785,"pg":8,"sg":240,"f":2.99,"fs":"Aldi","u":"gallon","r":false},{"n":"Canned cannellini beans","b":"cannellini-beans","gpu":28.3495,"pg":7.8,"sg":100,"f":0.055,"fs":"Walmart","u":"oz","r":false},{"n":"Shredded cheddar","b":"cheddar-cheese-shredded","gpu":28.3495,"pg":6,"sg":28,"f":0.1716,"fs":"Baker's","u":"oz","r":false},{"n":"Greek yogurt","b":"greek-yogurt","gpu":28.3495,"pg":17,"sg":170,"f":0.0872,"fs":"Aldi","u":"oz","r":false},{"n":"Cottage cheese","b":"cottage-cheese","gpu":28.3495,"pg":13,"sg":113,"f":0.1138,"fs":"Walmart","u":"oz","r":false},{"n":"Pork tenderloin","b":"pork-tenderloin","gpu":453.592,"pg":23.5,"sg":112,"f":3.59,"fs":"Aldi","u":"lb","r":true},{"n":"93/7 ground turkey","b":"93-7-ground-turkey","gpu":453.592,"pg":21,"sg":112,"f":4.33,"fs":"Sam's Club","u":"lb","r":true},{"n":"Canned black beans","b":"seasoned-black-beans","gpu":28.3495,"pg":8,"sg":130,"f":0.0993,"fs":"Hy-Vee","u":"oz","r":false},{"n":"93/7 ground beef","b":"93-7-ground-beef","gpu":453.592,"pg":24,"sg":113,"f":6.17,"fs":"Sam's Club","u":"lb","r":true},{"n":"Beef chuck roast","b":"beef-chuck-roast","gpu":453.592,"pg":22,"sg":112,"f":7.47,"fs":"Sam's Club","u":"lb","r":true}]};
+(function(){
+  var root = document.getElementById('tcpl');
+  if (!root || typeof PL === 'undefined' || !PL.rows || !PL.rows.length) return;
+  var FEED_URL = 'https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json';
+  var liveIng = null;
+
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function money2(x){ return '$' + (Math.round(x*100)/100).toFixed(2); }
+  function priceStr(x){ return x < 1 ? '$' + x.toFixed(3).replace(/0$/,'') : money2(x); }
+
+  function pick(row){
+    if (liveIng && liveIng[row.b] && typeof liveIng[row.b].cheapest === 'number' && liveIng[row.b].cheapest > 0 && liveIng[row.b].unit === row.u){
+      return { p: liveIng[row.b].cheapest, s: liveIng[row.b].store || row.fs };
+    }
+    return { p: row.f, s: row.fs };
+  }
+
+  function per30(row, price){
+    return (price / row.gpu) / (row.pg / row.sg) * 30;
+  }
+
+  function render(){
+    var list = [];
+    for (var i = 0; i < PL.rows.length; i++){
+      var row = PL.rows[i];
+      var pr = pick(row);
+      list.push({ row: row, price: pr.p, store: pr.s, cost: per30(row, pr.p) });
+    }
+    list.sort(function(a,b){ return a.cost - b.cost; });
+    var best = list[0].cost;
+    var h = '';
+    for (i = 0; i < list.length; i++){
+      var e = list[i];
+      var pct = Math.max(4, Math.round(best / e.cost * 100));
+      h += '<tr' + (i === 0 ? ' class="pl-top"' : '') + '>';
+      h += '<td class="pl-rank">' + (i+1) + '</td>';
+      h += '<td class="pl-food">' + esc(e.row.n) + (e.row.r ? '<span class="pl-raw">raw</span>' : '') + '</td>';
+      h += '<td class="pl-num"><span class="pl-price">' + priceStr(e.price) + '/' + esc(e.row.u) + '</span><span class="pl-store">at ' + esc(e.store) + '</span></td>';
+      h += '<td class="pl-num"><span class="pl-cost">' + money2(e.cost) + '</span><span class="pl-bar"><em style="width:' + pct + '%"></em></span></td>';
+      h += '</tr>';
+    }
+    document.getElementById('pl-body').innerHTML = h;
+  }
+
+  render();
+  document.getElementById('pl-fresh').textContent = 'Prices checked across Omaha stores for the week of ' + PL.week + '.';
+
+  try {
+    fetch(FEED_URL).then(function(r){ return r.json(); }).then(function(f){
+      if (f && f.ingredients){
+        liveIng = f.ingredients;
+        render();
+        if (f.week_of){ document.getElementById('pl-fresh').textContent = 'Prices checked across Omaha stores for the week of ' + f.week_of + '.'; }
+      }
+    }).catch(function(){});
+  } catch(e){}
+})();
+</script>
+</div>

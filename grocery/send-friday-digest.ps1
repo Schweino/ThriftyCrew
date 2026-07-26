@@ -30,16 +30,8 @@ $apiUrl = 'https://map-to-success.ghost.io'
 $adminKey = $env:GHOST_ADMIN_KEY
 if (-not $adminKey) { $kf = Join-Path $root '..\.ghostkey'; if (Test-Path $kf) { $adminKey = (Get-Content $kf -Raw).Trim() } }
 if (-not $adminKey) { Write-Output 'digest REFUSED: no Ghost admin key'; exit 1 }
-function New-GhostJWT([string]$key) {
-  $id, $secret = $key.Split(':')
-  $b64 = { param($b) [Convert]::ToBase64String($b).TrimEnd('=').Replace('+','-').Replace('/','_') }
-  $hdr = & $b64 ([Text.Encoding]::UTF8.GetBytes('{"alg":"HS256","typ":"JWT","kid":"' + $id + '"}'))
-  $now = [int][double]::Parse((Get-Date -UFormat %s))
-  $pay = & $b64 ([Text.Encoding]::UTF8.GetBytes('{"iat":' + $now + ',"exp":' + ($now + 300) + ',"aud":"/admin/"}'))
-  $sb = for ($i = 0; $i -lt $secret.Length; $i += 2) { [Convert]::ToByte($secret.Substring($i, 2), 16) }
-  $hm = New-Object System.Security.Cryptography.HMACSHA256 (,[byte[]]$sb)
-  return $hdr + '.' + $pay + '.' + (& $b64 ($hm.ComputeHash([Text.Encoding]::UTF8.GetBytes($hdr + '.' + $pay))))
-}
+. (Join-Path $PSScriptRoot '..\lib\ghost-lib.ps1')   # 2026-07-26: single Ghost helper (was one of 50+ inline copies)
+function New-GhostJWT { Get-GhostJWT -Key $adminKey }
 
 $dateS = Get-Date -Format 'yyyy-MM-dd'
 $slug = 'friday-board-' + $dateS

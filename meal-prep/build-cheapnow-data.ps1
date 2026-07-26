@@ -8,11 +8,16 @@ $ErrorActionPreference = 'Stop'
 $dir  = 'C:\Codex\income\meal-prep'
 $tool = 'C:\Codex\income\cheap-dinners-tool.html'
 $db = (Get-Content "$dir\recipes-db.json" -Raw).TrimStart([char]0xFEFF) | ConvertFrom-Json
+# v2 manifest: current-cheapest whole-package per serving per slug (2026-07-26 basis switch)
+$script:cheapPs=@{}
+try { (Get-Content (Join-Path $dir 'pipeline\v2-perserving.json') -Raw | ConvertFrom-Json) | ForEach-Object { $script:cheapPs[[string]$_.slug]=[math]::Round([double]$_.cheapest_ps,2) } } catch { Write-Warning 'v2-perserving.json unreadable - legacy cost fallback in effect' }
 
 # ---- recipes: compact constants (fallback costs baked in; live feed overrides at runtime) ----
 $recs = @()
 foreach($r in $db.recipes){
-  $cost = if($r.cost_per_serving_true){ $r.cost_per_serving_true } else { $r.cost_per_serving }
+  # 2026-07-26: fallback cost = current-cheapest whole-package per serving (v2 manifest); legacy only if absent
+  $cost = if($script:cheapPs -and $script:cheapPs.ContainsKey([string]$r.slug)){ $script:cheapPs[[string]$r.slug] }
+          elseif($r.cost_per_serving_true){ $r.cost_per_serving_true } else { $r.cost_per_serving }
   $recs += ,@{ n=$r.name; s=$r.slug; sv=$r.servings; cal=$r.per_serving.calories; p=$r.per_serving.protein_g; c=[math]::Round($cost,2) }
 }
 

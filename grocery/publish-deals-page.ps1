@@ -113,15 +113,8 @@ if ($LASTEXITCODE -eq 2 -and -not $Force) { Write-Output 'HELD: commodity matchi
 if ($LASTEXITCODE -eq 2 -and -not $Force) { Write-Output 'HELD: a commodity is not in exactly one category (see out\category-coverage-report.json) - it would render in no filter. Add it to a category in categories.json (or -Force to override).'; exit 2 }
 
 # ---- preserve the live post's current visibility (so a weekly refresh never reverts a manual paid-gate) ----
-function New-GhostJWT { param($key)
-  $p=$key -split ':'; $id=$p[0]; $secretHex=$p[1]
-  $sb=New-Object byte[] ($secretHex.Length/2); for($i=0;$i -lt $sb.Length;$i++){ $sb[$i]=[Convert]::ToByte($secretHex.Substring($i*2,2),16) }
-  $now=[DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
-  $h='{"alg":"HS256","typ":"JWT","kid":"'+$id+'"}'; $pl='{"iat":'+$now+',"exp":'+($now+300)+',"aud":"/admin/"}'
-  $b64={param($b)[Convert]::ToBase64String($b).TrimEnd('=').Replace('+','-').Replace('/','_')}
-  $si=(& $b64 ([Text.Encoding]::UTF8.GetBytes($h)))+'.'+(& $b64 ([Text.Encoding]::UTF8.GetBytes($pl)))
-  $hm=New-Object System.Security.Cryptography.HMACSHA256 (,$sb); return $si+'.'+(& $b64 ($hm.ComputeHash([Text.Encoding]::UTF8.GetBytes($si))))
-}
+. (Join-Path $PSScriptRoot '..\lib\ghost-lib.ps1')   # 2026-07-26: single Ghost helper (was one of 50+ inline copies)
+function New-GhostJWT { Get-GhostJWT -Key $adminKey }
 # Preserve the live visibility robustly: cache the last-known value; on a READ FAILURE reuse the cache
 # rather than defaulting to 'public' (which would silently un-gate + strip the paywall schema of a page
 # Brad set to paid). Only fall back to 'public' when there is genuinely no prior value (first publish).

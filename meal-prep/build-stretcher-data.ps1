@@ -6,6 +6,9 @@
 $ErrorActionPreference = 'Stop'
 $dir = 'C:\Codex\income\meal-prep'
 $db  = Get-Content "$dir\recipes-db.json" -Raw | ConvertFrom-Json
+# v2 manifest: current-cheapest whole-package per serving per slug (2026-07-26 basis switch)
+$script:cheapPs=@{}
+try { (Get-Content (Join-Path $dir 'pipeline\v2-perserving.json') -Raw | ConvertFrom-Json) | ForEach-Object { $script:cheapPs[[string]$_.slug]=[math]::Round([double]$_.cheapest_ps,2) } } catch { Write-Warning 'v2-perserving.json unreadable - legacy cost fallback in effect' }
 
 # live feed check (BOM gotcha: TrimStart the FEFF before ConvertFrom-Json)
 $feedRec = @{}
@@ -37,7 +40,9 @@ function Get-Protein([object]$r){
 # ---- collect recipes ----
 $recs = @()
 foreach($r in $db.recipes){
-  $cps = if($r.PSObject.Properties['cost_per_serving_true'] -and $r.cost_per_serving_true){ $r.cost_per_serving_true } else { $r.cost_per_serving }
+  # 2026-07-26: current-cheapest whole-package per serving (v2 manifest) first; legacy only if absent
+  $cps = if($script:cheapPs -and $script:cheapPs.ContainsKey([string]$r.slug)){ $script:cheapPs[[string]$r.slug] }
+         elseif($r.PSObject.Properties['cost_per_serving_true'] -and $r.cost_per_serving_true){ $r.cost_per_serving_true } else { $r.cost_per_serving }
   $cb  = if($r.PSObject.Properties['cost_batch_true'] -and $r.cost_batch_true){ $r.cost_batch_true }
          elseif($r.PSObject.Properties['cost_batch'] -and $r.cost_batch){ $r.cost_batch }
          else { [math]::Round($cps * $r.servings, 2) }

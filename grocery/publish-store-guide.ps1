@@ -46,6 +46,15 @@ Remove-Item $embed -ErrorAction SilentlyContinue
 if ($LASTEXITCODE -ne 0) { Write-Output ("ERROR: store-guide build FAILED (rc=$LASTEXITCODE) - not publishing"); exit 1 }
 if (-not (Test-Path $embed) -or ((Get-Item $embed).Length -lt 2000)) { Write-Output 'ERROR: store-guide build produced no/short file'; exit 1 }
 
+# ---- CHANGE GATE (2026-07-26): skip the Ghost upsert when the built guide is byte-identical to the
+# last published one (this ran unconditionally on every board publish - a pointless daily PUT).
+$sigFile = Join-Path $OutDir 'store-guide.sig'
+$sig = (Get-FileHash $embed -Algorithm MD5).Hash
+if ((Test-Path $sigFile) -and (([string](Get-Content $sigFile -Raw)).Trim() -eq $sig)) {
+  Write-Output ("CURRENT shop-smart-at-your-store (guide unchanged - upsert skipped)")
+  exit 0
+}
+
 # ---- upsert (publish-resource.ps1 upserts by slug; public = no paywall schema) ----
 $pubArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'publish-resource.ps1'),
   '-Title','Shop Smart at Your Store',
@@ -62,5 +71,6 @@ if ($prc -ne 0) {
   Write-Output ("ERROR: Ghost upsert FAILED (rc=$prc) - live page NOT updated (change not published)")
   exit 1
 }
+$sig | Set-Content $sigFile -Encoding ASCII
 Write-Output ("PUBLISHED shop-smart-at-your-store  (public, $commCount weekly commodities, week " + [string]$doc.week_of + ")")
 exit 0

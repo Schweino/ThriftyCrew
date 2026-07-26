@@ -1,4 +1,4 @@
-﻿<#
+<#
   generate-board-overrides.ps1 - DERIVES board-price-overrides.json instead of hand-maintaining it.
 
   The bug Brad caught: a board price and its "See item" link can describe different products/prices. The strict
@@ -26,37 +26,11 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 
 # EXACT LinkPU from build-deals-page.ps1 / audit-board-consistency.ps1 - keep these three in lockstep.
-function LinkPU([string]$size, [string]$unit, [double]$price, [string]$name = '') {
-  $s = ([string]$size).ToLower().Trim()
-  $up = [regex]::Match($s, '\$?\s*([0-9]+(?:\.[0-9]+)?)\s*/\s*(fl\s*oz|floz|oz|lb|ea|each|ct|count)')
-  if ($up.Success) { $v=[double]$up.Groups[1].Value; $un=($up.Groups[2].Value -replace '\s','') -replace 'fl',''; switch ($unit) { 'lb'{if($un -eq 'lb'){return $v}; if($un -eq 'oz'){return $v*16}} 'oz'{if($un -eq 'oz'){return $v}; if($un -eq 'lb'){return $v/16}} 'floz'{if($un -match 'oz'){return $v}; if($un -eq 'lb'){return $v/16}} 'each'{if($un -match '^(ea|each|ct|count)$'){return $v}; return $price} 'dozen'{if($un -match '^(ea|each|ct|count)$'){return $v*12}; return $price} } }
-  if ($price -le 0) { return $null }
-  $q = [regex]::Match($s, '([0-9]+(?:\.[0-9]+)?)\s*(fl\s*oz|floz|oz|lbs?|ct|count|ea|pk|gal|dozen|doz)')
-  $n = if ($q.Success) { [double]$q.Groups[1].Value } else { $null }
-  $un = if ($q.Success) { ($q.Groups[2].Value -replace '\s','') -replace 'fl','' } else { '' }
-  if (-not $q.Success) { $bu=[regex]::Match($s,'\b(lbs?|gal|gallon|dozen|doz|each|ea)\b'); if ($bu.Success) { $n=1; $un=$bu.Groups[1].Value -replace '^gallon$','gal' -replace '^doz$','dozen' } }
-  $pk = [regex]::Match($s, '([0-9]+)\s*(pk|pack)\b'); if ($pk.Success -and $n -and ($un -match '^(oz|lbs?|gal)$')) { $n = $n * [double]$pk.Groups[1].Value }
-  # MULTIPACK IN THE NAME: a link whose size is just "each" but whose NAME says "24 Pack" is 24 items,
-  # not 1. Without this the whole pack price is published as the per-item price (Fareway bottled water
-  # went out at $3.87 EACH). Only for 'each' commodities, and only when the size carries no count.
-  if ($unit -eq 'each' -and $name -and (($null -eq $n) -or ($n -eq 1))) {
-    $pn = [regex]::Match(([string]$name).ToLower(), '([0-9]+)\s*(?:pk\b|pack\b|ct\b|count\b)')
-    if ($pn.Success) {
-      $cnt = [double]$pn.Groups[1].Value
-      if ($cnt -gt 1) { return $price / $cnt }
-    }
-  }
-  switch ($unit) {
-    'lb'    { if ($un -match '^lbs?$' -and $n) { return $price/$n }; if ($un -eq 'oz' -and $n) { return $price/($n/16) }; return $null }
-    'oz'    { if ($un -eq 'oz' -and $n) { return $price/$n }; if ($un -match '^lbs?$' -and $n) { return $price/(16*$n) }; if ($un -eq 'gal' -and $n) { return $price/(128*$n) }; return $null }
-    'floz'  { if ($un -match 'oz' -and $n) { return $price/$n }; if ($un -eq 'gal' -and $n) { return $price/(128*$n) }; return $null }
-    'each'  { if ($un -match '^(ct|count|ea|pk)$' -and $n) { return $price/$n }; if ($un -match '^(dozen|doz)$') { return $price/12 }; if ($n -eq 1) { return $price }; return $null }
-    'dozen' { if ($un -match '^(dozen|doz)$') { return $price }; if ($un -match '^(ct|count|ea)$' -and $n) { return $price/($n/12) }; if ($n -eq 1) { return $price }; return $null }
-    'gallon'{ if ($un -eq 'gal' -and $n) { return $price/$n }; if ($n -eq 1) { return $price }; return $null }
-    default { return $null }
-  }
-  return $null
-}
+. (Join-Path $PSScriptRoot 'pu-lib.ps1')
+# 2026-07-26 consolidation: LinkPU now DELEGATES to pu-lib's Get-LinkPerUnit (the single per-unit
+# implementation; identical params; test-pu-lib.ps1 proves it matches everywhere and resolves more).
+# The former local copy - one of three drifting duplicates - is gone. Keep using LinkPU at call sites.
+function LinkPU([string]$size, [string]$unit, [double]$price, [string]$name = '') { Get-LinkPerUnit -size $size -unit $unit -price $price -name $name }
 
 # boards
 $cmpF = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName
