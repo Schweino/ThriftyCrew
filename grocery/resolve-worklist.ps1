@@ -112,7 +112,10 @@ function AddChip($id, $commodity, $unit, $store, $curPU, $boardItem, $srcBoard) 
     # (the eggs bug: board is the budget-brand price, link points at a pricier brand of the same commodity).
     # Compared per-occurrence so a link that matches an equivalent unit elsewhere is not falsely flagged.
     if (-not $reason -and $curPU -gt 0) {
-      $lpu = LinkPerUnit ([string]$st.size) $unit ([double]$st.price)
+      # sanitize: some resolver snapshots stored display text ("$6.17"); a bare [double] cast errored
+      # and silently SKIPPED the mismatch check for those rows (surfaced 2026-07-26)
+      $stPrice = 0.0; [void][double]::TryParse((([string]$st.price) -replace '[^0-9.]',''), [ref]$stPrice)
+      $lpu = LinkPerUnit ([string]$st.size) $unit $stPrice
       if ($lpu -ne $null) {
         $md = [math]::Abs($lpu - $curPU) / $curPU
         if ($md -gt $Tolerance) { $reason = 'mismatch(' + [math]::Round($md*100) + '%)' }
