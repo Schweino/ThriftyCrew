@@ -26,3 +26,11 @@
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=1800
   Content-Type: application/json; charset=utf-8
+
+# Per-recipe data for the Meal Plan Builder tool (gen-planner-data.ps1). Served here instead of embedded in
+# the members post: it was ~815 KB at 513 recipes and heading past Ghost's ~1.6 MB lexical-upsert 503 ceiling
+# at ~1000 recipes (same failure class as board.json/price-history above). The tool fetches it at load time.
+/planner-data.json
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=1800
+  Content-Type: application/json; charset=utf-8
