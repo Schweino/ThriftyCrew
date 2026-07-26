@@ -68,6 +68,68 @@ What we'd do differently BEFORE dispatching the next big run:
 6. AGENT REGISTRY: verify the custom agent list loaded (one cheap dispatch) BEFORE composing the wave;
    if missing, fix the registry rather than inlining instructions, so agent defs and prompts cannot drift.
 
+### Stage 3-8 lessons (r300, 2026-07-25) - the second half of the pipeline
+
+QUALITY / PROCESS
+1. WRITER WAVES ARE FREE DATA QA - budget a repair pass for their flags. The 8 prose writers, reading
+   each recipe closely to write about it, surfaced ~60 real data bugs the engines had passed clean:
+   fresh-vs-can scaling blowups (6 plum tomatoes -> 6 cans -> 8.6kg), choose-one source lines taken
+   twice (japchea 2 of 3 alt beef cuts -> $6.48/serv), missing title starches (a la king with no
+   noodle line), herb mis-folds (mint->basil in kibbeh), 5th instance of the sausage canon trap.
+   Plan the sequence: waves land -> compile ALL flags -> ONE tuner data-repair pass -> ONE build/display
+   pass -> THEN the auditor. Do not send the auditor a batch the writers already flagged.
+2. THE AUDITOR EARNS ITS KEEP ON THINGS GUARDS CANNOT SEE. r300's NO-GO caught a board salsa cell
+   hijacked by a guacamole product (2.2x real salsa, 8 recipes overpriced) via cost-PLAUSIBILITY, not
+   any invariant; and 12 protein-field mislabels (turkey-sausage dishes tagged pork). Gates check
+   internal consistency; the auditor checks external reality. Keep it adversarial, keep it FABLE.
+3. guard-accepts.json: a VERIFY-class guard failure can carry a one-line human-reviewed accept
+   (suya true==batch is arithmetic truth at exactly 7.0 lb of thigh). Only the VERIFY guard consults
+   it; every hard guard stays hard. This is how you clear a false-positive without weakening a gate.
+4. specs-ready.txt is armed ONLY by spec-guards -WriteReady, AFTER the auditor GO. Validation runs
+   write specs-full-ok.txt instead, so no passing run can jump the gate. Keep this two-file split.
+5. TIMESTAMP + HASH the ready-list: build-all stamps head.image back into specs, so specs-full-ok.txt
+   must be the newest file AND the aggregate spec hash must match before/after the final guard pass
+   (proves cards were rendered from the bytes that passed). Re-run guards once after build-all.
+
+ENGINE / PRICING BUGS FIXED (all live in r300\ scripts now)
+6. DRAINED-vs-NET can basis (real money bug): parse-compute weighs canned beans DRAINED (255g) but the
+   board prices the NET can (425g) and $PKG carried net - so utils under-priced every can 1.67x AND the
+   "Buy N cans" line under-counted ("uses 5.6, Buy 4"). Fix derives a drained table and prices/rounds
+   on the same basis both sides. Any future canned item needs this or it double-wrongs.
+7. Buy-line basis guard: spec-guards now re-derives Buy-N from the printed amount when amount and
+   package share a unit (cans/heads/bunches) - a shopper following the card must not come up short.
+8. Auto-numeric-sync must cover ALL FOUR prose fields (intro/portion/cost_closing/upsell), not r100's
+   two: writers put macros in the closing line ("a sub with 51g protein"), and a spec regenerated after
+   a re-cost must not ship a stale macro. Then RE-VERIFY nothing stale survived.
+9. Display units: render meat + leafy/bulk produce weight-first (lb/oz), never "Turkey Breast 14.25
+   cups" / "Kale 75.5 cups". Watch the inherited r100 bug where the meat regex also matched "Chicken
+   Broth" and printed broth as "4.25 lb".
+10. Pantry-line guard: a folded "Pantry seasonings" line > $5, or one that names a broth/stock/milk,
+    hard-fails - it means a real ingredient got mis-bucketed (gumbo's $22 line was a sausage->Italian
+    Seasoning canon victim hiding in the pantry fold).
+
+ITEM-ID / DB (correction to the old bottom-of-file note)
+11. DO NOT run normalize-recipe-ids.ps1 over r300-era rows. It reads ingredient-map.json ONLY and would
+    NULL every r100/r300-only item_id. The r300 update-recipes-db.ps1 writes protein + item_id directly,
+    stamping the ingredient-map.json id where it exists (live-213 convention) and the scaler bid only as
+    fallback. normalize-recipe-ids is safe ONLY for the pre-r100 rows it was written for.
+12. PROXY item_ids are a known debt: ~12 items price off a near-neighbor commodity (ricotta->cottage-
+    cheese, red onion->onions, smoked turkey sausage->kielbasa, cherry tomatoes->tomatoes...). Correct
+    for pricing, but a grocery-merge fuses them. Durable fix = register each as its own commodity. The
+    live 213 carry null for those items, so nothing fuses TODAY - but check on the first planner rebuild.
+
+TOOLING GOTCHAS (cost real time on r300)
+13. PS 5.1 ConvertTo-Json wraps a bare array as {value,Count} unpredictably, even with -InputObject -
+    it corrupted commodities.json TWICE. For big engine JSON, use targeted text edits + [IO.File]::
+    WriteAllText, or the registration scripts - never round-trip through ConvertTo-Json.
+14. Browser tool JS strings: use regex LITERALS (/\bancho\b/i), not string patterns ("\\bancho\\b") -
+    the string escapes turn \b into a backspace and the reducer silently matches nothing.
+15. Walmart search prices live at priceInfo.priceDetails.priceLines[].values[] (key PRICE / UNIT_PRICE),
+    NOT priceInfo.linePrice (empty on marketplace items). Same finding as the grocery refresh skill.
+16. Publishing is a ~1 post/sec continuous run; 4x75 batches with a live-verify each is fine, but the
+    post-publish reviewer for an early batch may still be running when later batches land - tell it which
+    slugs are its scope and that later publishes landing mid-review are the pipeline, not corruption.
+
 ## How to start a run
 
 Tell the session: "start a recipe run for N recipes" (optionally: theme/constraints). The session follows
@@ -76,5 +138,9 @@ engine gotchas: $Matches clobber, rule order), and dispatches stages 3/5/6 to th
 Stage 6's NO-GO blocks publish, full stop. Stage 8 runs UNCONDITIONALLY after every publish of the run
 (and is reusable after any other site publish, not just recipes).
 
-After ANY batch lands in recipes-db: run meal-prep\normalize-recipe-ids.ps1 (stamps item_id + protein;
-the free-dinner rotation and the hub Top 5 read the protein field and must stay set-identical).
+After a batch lands in recipes-db: the r300+ update-recipes-db.ps1 ALREADY writes item_id + protein
+directly (ingredient-map id where it exists, scaler bid as fallback). DO NOT then run
+normalize-recipe-ids.ps1 over those rows - it reads ingredient-map.json only and nulls every
+r100/r300-only id (see stage 3-8 lesson #11). normalize-recipe-ids remains correct only for the
+original pre-r100 rows. The free-dinner rotation and hub Top 5 read the protein field and must stay
+set-identical - verify that at post-publish, do not re-stamp to "fix" it.
