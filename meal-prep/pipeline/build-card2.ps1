@@ -85,7 +85,8 @@ $scalerBlock = $prefix + $scalerData + $suffix
 # ---------- prose (v2 order) ----------
 $L = New-Object System.Collections.Generic.List[string]
 if($spec.PSObject.Properties.Name -contains 'credit_html' -and $spec.credit_html){
-  $L.Add('<p><em>' + $spec.credit_html + '</em></p>')
+  # Styled source callout (not buried, not hidden): gold-accent box, spaced off the print button below.
+  $L.Add('<p class="smp-credit"><span class="smp-credit-eyebrow">Source</span> ' + $spec.credit_html + '</p>')
   $L.Add('')
 }
 $L.Add($scalerBlock)
