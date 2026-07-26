@@ -135,10 +135,16 @@
 //__DATA__
 (function(){
 if(window.__mpp)return; window.__mpp=1;
+// SCALE (2026-07-26): the per-recipe planner data is fetched from the Worker at load time, NOT embedded
+// in the post. Embedding it grew the Ghost post ~1.5 KB/recipe (815 KB at 513, ~2.35 MB at 1500) and
+// Ghost Pro 503s processing a lexical card near ~1.6 MB. Now the post stays template-size and the data
+// rides the same Worker+edge-cache path as the price feed. See gen-planner-data.ps1 (writes public/planner-data.json).
+var MPP=[];
+var PDATA='https://smp-feed.ancient-snow-93df.workers.dev/planner-data.json?v=2';
 var FEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json?s=2';   // ?s=2: new cache key since the feed gained per-store prices
 var $=function(id){return document.getElementById(id);};
 var sd=$('mpp-sd'),ed=$('mpp-ed'),hh=$('mpp-hh'),rc=$('mpp-rc'),q=$('mpp-q');
-var byslug={}; MPP.forEach(function(r){byslug[r.s]=r;});
+var byslug={};   // populated in boot() once MPP is fetched
 var picks=[];          // [{s, sv}]
 var curP='all';
 var feedData=null;
@@ -538,14 +544,23 @@ $('mpp-removed').addEventListener('click',function(e){
   renderGrocery(); save();
 });
 
-// ---- init ----
-if(!restore()){
-  var t=new Date(); var e=new Date(t.getTime()+6*86400000);
-  function iso(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
-  sd.value=iso(t); ed.value=iso(e);
+// ---- init ----  (boot: fetch the planner data from the Worker, THEN build the index + render)
+function boot(){
+  MPP.forEach(function(r){byslug[r.s]=r;});
+  if(!restore()){
+    var t=new Date(); var e=new Date(t.getTime()+6*86400000);
+    function iso(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+    sd.value=iso(t); ed.value=iso(e);
+  }
+  renderTarget(); renderPicks(); renderList();
+  fetch(FEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}).then(function(f){ feedData=f; if(picks.length)renderPlan(); });
 }
-renderTarget(); renderPicks(); renderList();
-fetch(FEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}).then(function(f){ feedData=f; if(picks.length)renderPlan(); });
+if(rc){ rc.textContent='Loading recipes...'; }
+fetch(PDATA).then(function(r){return r.ok?r.json():[];}).catch(function(){return [];}).then(function(d){
+  MPP=d||[];
+  if(!MPP.length){ if(rc){ rc.textContent='Could not load recipes. Refresh to try again.'; } return; }
+  boot();
+});
 })();
 </script>
 </div>

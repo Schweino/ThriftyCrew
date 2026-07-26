@@ -97,6 +97,14 @@ $js='var MPP=['+($rows -join ",`n")+'];'
 $check=$js.Substring(8,$js.Length-9)
 $null=$check | ConvertFrom-Json   # throws if malformed
 [IO.File]::WriteAllText((Join-Path $here 'planner-data.js'),$js,(New-Object System.Text.UTF8Encoding($false)))
+# SCALE (2026-07-26): also emit the pure-JSON array to public\planner-data.json - the Worker serves it
+# statically (like smp-feed) and the tool fetches it at load time instead of embedding it in the Ghost
+# post, so the post stays template-size no matter how big the catalog grows. Compact (no whitespace).
+$jsonArr='['+($rows -join ',')+']'
+$null=$jsonArr | ConvertFrom-Json   # validate the served copy too
+$pubPlanner=Join-Path (Split-Path $here -Parent) 'public\planner-data.json'
+[IO.File]::WriteAllText($pubPlanner,$jsonArr,(New-Object System.Text.UTF8Encoding($false)))
+Write-Output ("public\planner-data.json: " + [Math]::Round((Get-Item $pubPlanner).Length/1024,0) + " KB (Worker-served)")
 $kb=[Math]::Round((Get-Item (Join-Path $here 'planner-data.js')).Length/1024,0)
 $noPkg=@{}
 foreach($r in $db){ foreach($ing in $r.ingredients){ if($ing.grams -gt 0 -and -not $pkg.ContainsKey($ing.item)){ $noPkg[$ing.item]=1 } } }
