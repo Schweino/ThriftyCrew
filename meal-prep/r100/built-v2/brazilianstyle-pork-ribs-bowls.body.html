@@ -121,6 +121,18 @@ function init(box){
         else if(/^servings$/i.test(l)){ b.textContent=String(nn); }
       });
     }catch(e){}
+    // The bold "Makes N servings ... per serving (at everyday cost)" line and the Portion It
+    // "divide by N" instruction follow the scaler too (idempotent regex rewrites of the numbers).
+    try{
+      var nn2=nServ(), tev=0;
+      data.ing.forEach(function(it){ tev+=price(it,nn2,'everyday').cost; });
+      var stat=document.querySelector('.smp-stat');
+      if(stat){ stat.innerHTML=stat.innerHTML
+        .replace(/Makes \d+ servings/,'Makes '+nn2+' servings')
+        .replace(/~\$\d+(?:\.\d+)? per serving/,'~$'+(tev/nn2).toFixed(2)+' per serving'); }
+      var por=document.querySelector('.smp-portion');
+      if(por){ por.innerHTML=por.innerHTML.replace(/divide by \d+/,'divide by '+nn2); }
+    }catch(e){}
   }
   function renderAll(){ renderIngredients(); renderTabs(); updateStats(); }
   box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); renderAll(); }); });
@@ -134,7 +146,7 @@ if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded
 })();
 </script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">Enter the # of servings and the recipe adapts.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-note">The ingredient list and every cost below update as you change it. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"brazilianstyle-pork-ribs-bowls","base":14,"ing":[{"item":"Pork Loin","disp":"Pork Loin","grams":2540,"buy":"5.5 lb","bid":"pork-loin","gpu":453.592,"pkg_g":453.592,"pkg_p":2.14,"pkg_l":"lb"},{"item":"Garlic","disp":"Garlic","grams":56,"buy":"6.5 tbsp","bid":"garlic","gpu":50.000,"pkg_g":50,"pkg_p":0.575,"pkg_l":"head"},{"item":"Yellow Onion","disp":"Yellow Onion","grams":98,"buy":"1","bid":"onions","gpu":453.592,"pkg_g":453.592,"pkg_p":1.14,"pkg_l":"lb"},{"item":"Salt","disp":"Salt (Morton)","grams":34,"buy":"2 tbsp","bid":"salt","gpu":28.350,"pkg_g":737.09,"pkg_p":0.94,"pkg_l":"26oz canister"},{"item":"Black Pepper","disp":"Black Pepper (Great Value)","grams":3,"buy":"0.5 tbsp","bid":"black-pepper","gpu":28.350,"pkg_g":85.05,"pkg_p":3.57,"pkg_l":"3oz shaker"},{"item":"Dijon Mustard","disp":"Dijon Mustard (generic)","grams":21,"buy":"1.5 tbsp","bid":"dijon-mustard","gpu":28.350,"pkg_g":340.19,"pkg_p":1.72,"pkg_l":"12oz bottle"},{"item":"Worcestershire Sauce","disp":"Worcestershire Sauce (Lea & Perrins)","grams":24,"buy":"1.5 tbsp","bid":"worcestershire","gpu":29.570,"pkg_g":295.74,"pkg_p":1,"pkg_l":"10floz bottle"},{"item":"Dried Oregano","disp":"Dried Oregano (Great Value)","grams":1,"buy":"0.25 tbsp","bid":"dried-oregano","gpu":28.350,"pkg_g":21.26,"pkg_p":0.92,"pkg_l":"0.75oz jar"},{"item":"Ground Cumin","disp":"Ground Cumin","grams":1,"buy":"0.25 tbsp","bid":"ground-cumin","gpu":28.350,"pkg_g":70.87,"pkg_p":1.37,"pkg_l":"2.5oz jar"},{"item":"Cayenne Pepper","disp":"Cayenne Pepper (Great Value)","grams":3,"buy":"0.5 tbsp","bid":"cayenne-pepper","gpu":28.350,"pkg_g":63.79,"pkg_p":1.89,"pkg_l":"2.25oz jar"},{"item":"Apple Cider Vinegar","disp":"Apple Cider Vinegar (Great Value)","grams":112,"buy":"7.5 tbsp","bid":"apple-cider-vinegar","gpu":29.570,"pkg_g":946.35,"pkg_p":2.37,"pkg_l":"32floz bottle"},{"item":"Honey","disp":"Honey (Great Value)","grams":40,"buy":"2 tbsp","bid":"honey","gpu":28.350,"pkg_g":340.19,"pkg_p":2.98,"pkg_l":"12oz bottle"},{"item":"Rice","disp":"Rice (Member's Mark)","grams":1140,"buy":"6.25 cups dry","bid":"rice","gpu":453.592,"pkg_g":907.18,"pkg_p":1.345,"pkg_l":"2lb bag"}]}</script></div><!--/SMP-SCALER2-->
 
-<p><strong>Makes 14 servings &middot; ~565 cal &middot; 44g protein &middot; 68g carbs &middot; 10g fat &middot; ~$2.47 per serving (at everyday cost).</strong></p>
+<p class="smp-stat"><strong>Makes 14 servings &middot; ~565 cal &middot; 44g protein &middot; 68g carbs &middot; 10g fat &middot; ~$2.47 per serving (at everyday cost).</strong></p>
 
 <p>Brazilian churrasco flavor on a Nebraska budget: pork marinated in garlic, mustard, Worcestershire, vinegar, and honey, roasted until the edges caramelize, then served over rice. Each bowl brings <strong>44 grams of protein</strong> and 565 calories for about <strong>$2.47</strong> a bowl (at everyday cost) with every package bought fresh, and it only gets cheaper once your pantry is stocked.</p>
 
@@ -183,7 +195,7 @@ if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded
 </ol>
 
 <h2>Portion It</h2>
-<p>Put the full pot on the scale, subtract the empty-pot number, and divide by 14. Scoop each portion into a container, making sure the pan juices get shared out evenly. Every bowl carries <strong>565 calories and 44 grams of protein</strong>.</p>
+<p class="smp-portion">Put the full pot on the scale, subtract the empty-pot number, and divide by 14. Scoop each portion into a container, making sure the pan juices get shared out evenly. Every bowl carries <strong>565 calories and 44 grams of protein</strong>.</p>
 
 <hr>
 <p><em>Hearty dinners for about $2.47 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.</em></p>

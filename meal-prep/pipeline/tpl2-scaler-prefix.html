@@ -119,6 +119,18 @@ function init(box){
         else if(/^servings$/i.test(l)){ b.textContent=String(nn); }
       });
     }catch(e){}
+    // The bold "Makes N servings ... per serving (at everyday cost)" line and the Portion It
+    // "divide by N" instruction follow the scaler too (idempotent regex rewrites of the numbers).
+    try{
+      var nn2=nServ(), tev=0;
+      data.ing.forEach(function(it){ tev+=price(it,nn2,'everyday').cost; });
+      var stat=document.querySelector('.smp-stat');
+      if(stat){ stat.innerHTML=stat.innerHTML
+        .replace(/Makes \d+ servings/,'Makes '+nn2+' servings')
+        .replace(/~\$\d+(?:\.\d+)? per serving/,'~$'+(tev/nn2).toFixed(2)+' per serving'); }
+      var por=document.querySelector('.smp-portion');
+      if(por){ por.innerHTML=por.innerHTML.replace(/divide by \d+/,'divide by '+nn2); }
+    }catch(e){}
   }
   function renderAll(){ renderIngredients(); renderTabs(); updateStats(); }
   box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); renderAll(); }); });

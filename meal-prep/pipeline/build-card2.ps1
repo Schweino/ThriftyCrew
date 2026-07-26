@@ -90,7 +90,7 @@ if($spec.PSObject.Properties.Name -contains 'credit_html' -and $spec.credit_html
 }
 $L.Add($scalerBlock)
 $st = $spec.stat
-$L.Add(('<p><strong>Makes 14 servings &middot; ~{0} cal &middot; {1}g protein &middot; {2}g carbs &middot; {3}g fat &middot; ~${4} per serving (at everyday cost).</strong></p>' -f $st.cal,$st.protein,$st.carbs,$st.fat,$st.cost_ps))
+$L.Add(('<p class="smp-stat"><strong>Makes 14 servings &middot; ~{0} cal &middot; {1}g protein &middot; {2}g carbs &middot; {3}g fat &middot; ~${4} per serving (at everyday cost).</strong></p>' -f $st.cal,$st.protein,$st.carbs,$st.fat,$st.cost_ps))
 $L.Add('')
 $L.Add('<p>' + $spec.intro_html + '</p>')
 $L.Add('')
@@ -119,7 +119,7 @@ foreach($li in $spec.make_it){ $L.Add('<li>' + $li + '</li>') }
 $L.Add('</ol>')
 $L.Add('')
 $L.Add('<h2>Portion It</h2>')
-$L.Add('<p>' + $spec.portion_html + '</p>')
+$L.Add('<p class="smp-portion">' + $spec.portion_html + '</p>')
 $L.Add('')
 $L.Add('<hr>')
 $L.Add('<p><em>' + $spec.upsell_html + '</em></p>')
