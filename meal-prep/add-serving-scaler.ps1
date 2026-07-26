@@ -151,7 +151,7 @@ $done = 0; $skipped = 0; $failed = 0
 foreach ($r in $targets) {
   try {
     if ($done % 20 -eq 0) { $jwt = New-GhostJWT; $hdr = @{ Authorization = "Ghost $jwt" } }   # tokens live 5 min
-    $g = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$($r.slug)/?formats=html" -Headers $hdr
+    $g = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$($r.slug)/?formats=html" -Headers $hdr -TimeoutSec 30
     $post = $g.posts[0]
     $html = [string]$post.html
     # per-recipe data JSON (item/grams/buy + base + true cost)
@@ -184,7 +184,7 @@ foreach ($r in $targets) {
     $lexObj = @{root=[ordered]@{children=@([ordered]@{type='html';version=1;html=$html});direction=$null;format='';indent=0;type='root';version=1}}
     $lex = ConvertTo-Json $lexObj -Depth 12 -Compress
     $body = [Text.Encoding]::UTF8.GetBytes((ConvertTo-Json @{posts=@(@{lexical=$lex;updated_at=$post.updated_at})} -Depth 6))
-    $u = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/$($post.id)/" -Method Put -Headers $hdr -ContentType 'application/json' -Body $body
+    $u = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/$($post.id)/" -Method Put -Headers $hdr -ContentType 'application/json' -Body $body -TimeoutSec 60
     $done++
     Write-Output ("OK  " + $r.slug)
   } catch { $failed++; Write-Output ("FAIL " + $r.slug + " : " + $_.Exception.Message) }

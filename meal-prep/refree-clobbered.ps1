@@ -18,7 +18,7 @@ foreach($f in $fr.free){
     $p=(Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?fields=id,visibility,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -TimeoutSec 30).posts[0]
     if([string]$p.visibility -eq 'public'){ $already+=$slug; continue }
     $body=@{ posts=@(@{ visibility='public'; updated_at=[string]$p.updated_at }) } | ConvertTo-Json -Depth 4
-    [void](Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/$($p.id)/" -Method Put -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -ContentType 'application/json' -Body $body)
+    [void](Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/$($p.id)/" -Method Put -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -ContentType 'application/json' -Body $body -TimeoutSec 60)
     $flipped+=$slug
     Write-Output ("  freed: {0}  (was {1})" -f $slug, $p.visibility)
   } catch { $failed+=$slug; Write-Output ("  FAIL: {0} :: {1}" -f $slug, $_.Exception.Message) }

@@ -29,7 +29,7 @@ function Get-AllGhost([string]$resource) {
   while ($true) {
     $jwt = New-GhostJWT $adminKey   # fresh token per page; 5-min expiry never bites a long export
     $r = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/$resource/?formats=lexical,html&limit=50&page=$page&include=tags" `
-      -Headers @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' }
+      -Headers @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' } -TimeoutSec 45
     foreach ($item in $r.$resource) { $all.Add($item) }
     $pg = $r.meta.pagination
     if (-not $pg -or -not $pg.next) { break }

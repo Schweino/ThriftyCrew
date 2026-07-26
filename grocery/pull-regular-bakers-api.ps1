@@ -101,7 +101,7 @@ function Get-KrogerJson([string]$url) {
   # corrupt product names - and names are what the include/exclude matcher reads. Pull raw bytes and decode
   # UTF-8 explicitly instead of trusting the pipeline's guess.
   $h = @{ Authorization = 'Bearer ' + (Get-KrogerToken); Accept = 'application/json' }
-  $resp = Invoke-WebRequest -Uri $url -Headers $h -UseBasicParsing
+  $resp = Invoke-WebRequest -Uri $url -Headers $h -UseBasicParsing -TimeoutSec 30
   $bytes = $resp.RawContentStream.ToArray()
   return ([Text.Encoding]::UTF8.GetString($bytes) | ConvertFrom-Json)
 }
