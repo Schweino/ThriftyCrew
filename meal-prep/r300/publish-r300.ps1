@@ -54,9 +54,13 @@ foreach($slug in $Slugs){
     $jwt = New-GhostJWT $adminKey
     $hdr = @{ Authorization="Ghost $jwt"; 'Accept-Version'='v5.0'; 'Content-Type'='application/json' }
     $existing = $null
-    try { $existing = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?fields=id,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -TimeoutSec 30).posts[0] } catch {}
+    try { $existing = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?fields=id,updated_at,visibility" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -TimeoutSec 30).posts[0] } catch {}
+    # PRESERVE visibility on update: visibility is owned by the free-dinner rotation (rotate-free-dinners.ps1),
+    # NOT the content publisher. Forcing 'paid' here clobbered this week's free cards back to paid (2026-07-26).
+    # Existing post -> keep whatever it is now; only a brand-new post defaults to paid.
+    $vis = if($existing -and $existing.visibility){ [string]$existing.visibility } else { 'paid' }
     $postObj = [ordered]@{
-      title=$spec.name; slug=$slug; lexical=$lex; status='published'; visibility='paid'
+      title=$spec.name; slug=$slug; lexical=$lex; status='published'; visibility=$vis
       tags=@(@{name='Meal Prep'})
       custom_excerpt=([string]$spec.head.description)
       codeinjection_head=$head
