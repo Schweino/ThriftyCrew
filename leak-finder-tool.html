@@ -1,0 +1,234 @@
+<div id="tclf">
+<style>
+#tclf{--navy:#16263f;--gold:#e2a43c;--gold-d:#8a6d1f;--ink:#3a4658;--line:#e2e8f0;--green:#1f7a4d;--red:#b23b2e;--soft:#fbfcfe;
+  max-width:760px;margin:0 auto;font-size:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);}
+#tclf *{box-sizing:border-box;}
+#tclf .tb-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.6em 1.4em;margin:0 0 1.5em;box-shadow:0 6px 24px rgba(22,38,63,.06);}
+#tclf h2{font-size:1.3em;color:var(--navy);margin:0 0 .3em;}
+#tclf .lf-prog{display:flex;justify-content:space-between;align-items:center;font-size:.78em;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-d);margin:0 0 .5em;}
+#tclf .lf-bar{height:.45em;background:#eef1f6;border-radius:99px;overflow:hidden;margin:0 0 1.3em;}
+#tclf .lf-bar i{display:block;height:100%;background:var(--gold);border-radius:99px;transition:width .25s;}
+#tclf .lf-q{font-size:1.25em;color:var(--navy);font-weight:800;line-height:1.35;margin:0 0 1em;}
+#tclf .lf-opt{display:block;width:100%;text-align:left;padding:.95em 1.1em;margin:0 0 .6em;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font-family:inherit;font-size:1em;line-height:1.45;cursor:pointer;}
+#tclf .lf-opt:hover{border-color:var(--gold);box-shadow:0 0 0 3px rgba(226,164,60,.15);}
+#tclf .lf-picked{background:#fdf8ec;border-color:var(--gold);color:var(--navy);font-weight:700;}
+#tclf .lf-back{margin:.6em 0 0;padding:.55em 1.2em;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:#68748a;font-weight:700;font-size:.9em;cursor:pointer;font-family:inherit;}
+#tclf .lf-back:hover{border-color:var(--gold);color:var(--gold-d);}
+#tclf .lf-r-label{text-align:center;font-size:.85em;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-d);margin:0 0 .2em;}
+#tclf .lf-r-big{text-align:center;font-size:1.7em;font-weight:800;color:var(--navy);letter-spacing:-.02em;line-height:1.2;margin:0 0 .4em;}
+#tclf .lf-r-sub{text-align:center;font-size:1em;margin:0 auto 1.4em;max-width:32em;line-height:1.55;}
+#tclf .lf-leak{background:#fff;border:1px solid var(--line);border-radius:12px;padding:1.1em 1.15em;margin:0 0 .9em;}
+#tclf .lf-leak-h{display:flex;align-items:center;gap:.6em;margin:0 0 .45em;}
+#tclf .lf-rank{flex:0 0 auto;width:1.7em;height:1.7em;border-radius:50%;background:var(--gold);color:var(--navy);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.95em;}
+#tclf .lf-leak h3{font-size:1.08em;color:var(--navy);margin:0;}
+#tclf .lf-blurb{font-size:.95em;line-height:1.55;margin:0 0 .55em;}
+#tclf .lf-range{font-size:.95em;color:var(--navy);margin:0 0 .8em;}
+#tclf .lf-range b{font-size:1.05em;}
+#tclf .lf-links{display:flex;gap:.6em;flex-wrap:wrap;}
+#tclf .lf-go{display:inline-block;padding:.6em 1.1em;border-radius:10px;background:var(--gold);color:var(--navy);font-weight:800;font-size:.92em;text-decoration:none;line-height:1.3;}
+#tclf .lf-go:hover{background:#eab355;}
+#tclf .lf-go span{font-weight:600;font-size:.85em;opacity:.75;}
+#tclf .lf-total{background:#eaf6ef;border:1px solid #bfe3cd;border-radius:12px;padding:1em 1.1em;margin:1.2em 0 0;text-align:center;font-size:1em;line-height:1.55;color:var(--ink);}
+#tclf .lf-total b{color:var(--green);font-size:1.1em;}
+#tclf .lf-cta{text-align:center;font-size:1em;line-height:1.55;margin:1.2em auto .4em;max-width:30em;}
+#tclf .lf-cta a{color:var(--gold-d);font-weight:800;}
+#tclf .lf-again{display:block;margin:1.2em auto 0;padding:.7em 1.5em;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:#68748a;font-weight:700;font-size:.92em;cursor:pointer;font-family:inherit;}
+#tclf .lf-again:hover{border-color:var(--gold);color:var(--gold-d);}
+@media (max-width:560px){
+  #tclf .tb-card{padding:1.2em 1em;}
+  #tclf .lf-q{font-size:1.12em;}
+  #tclf .lf-opt{padding:.85em .9em;font-size:.95em;}
+  #tclf .lf-links{flex-direction:column;}
+  #tclf .lf-go{text-align:center;}
+}
+</style>
+
+<p style="font-size:1.05em;line-height:1.6;margin:0 0 1.2em;">Every budget leaks somewhere. Not because you are bad with money, but because leaks are quiet and life is loud. Eight quick questions, no wrong answers, and at the end you get your three biggest leaks, what each one is probably costing you, and the exact tool on this site that plugs it.</p>
+
+<div class="tb-card" id="lf-stage"></div>
+
+<script>
+(function(){
+  function init(){
+    var root = document.getElementById('tclf');
+    if (!root) return;
+    var stage = document.getElementById('lf-stage');
+    if (!stage) return;
+
+    var LEAKS = [
+      {sev:2, name:'Subscriptions and forgotten charges', lo:20, hi:45,
+        range:'<b>$20 to $45 a month</b>, quietly',
+        blurb:'Small charges that renew forever whether you use them or not. Nobody watches them, which is exactly how they like it.',
+        links:[{u:'/subscription-tracker/', t:'Subscription tracker', tag:'member'}]},
+      {sev:3, name:'Takeout and food delivery', lo:40, hi:120,
+        range:'<b>$40 to $120 a month</b> versus cooking the same meals',
+        blurb:'No shame, takeout is great. It just costs three to five times what the same dinner costs from your own stove.',
+        links:[{u:'/meal-prep-recipes/', t:'Hundreds of costed dinner recipes', tag:'free'},{u:'/whats-for-dinner-tonight/', t:'What\'s for dinner tonight', tag:'free'}]},
+      {sev:4, name:'Grocery autopilot', lo:30, hi:80,
+        range:'<b>$30 to $80 a month</b>',
+        blurb:'No list, one store, the same brands every week. The store has a plan for your money, and right now it is the only plan in the room.',
+        links:[{u:'/omaha-grocery-prices/', t:'Omaha grocery price board', tag:'free'},{u:'/shop-smart-at-your-store/', t:'Shop smart at your store', tag:'free'}]},
+      {sev:5, name:'Food waste', lo:50, hi:90,
+        range:'<b>$50 to $90 a month</b> for a typical family',
+        blurb:'You already paid for that produce. When it dies in the fridge, you bought garbage at grocery store prices.',
+        links:[{u:'/whats-for-dinner-tonight/', t:'What\'s for dinner tonight', tag:'free'}]},
+      {sev:6, name:'Impulse buys', lo:40, hi:100,
+        range:'<b>$40 to $100 a month</b>',
+        blurb:'A sale only saves money on things you were going to buy anyway. Everything else is just spending with a sticker on it.',
+        links:[{u:'/true-cost-calculator/', t:'True cost calculator', tag:'free'},{u:'/can-i-afford-this/', t:'Can I afford this?', tag:'free'}]},
+      {sev:1, name:'Interest and minimum payments', lo:50, hi:200,
+        range:'often <b>$50 to $200 a month</b>, and it varies with the balance',
+        blurb:'The meanest leak on the list. Interest is paying rent on money you already spent, month after month.',
+        links:[{u:'/debt-payoff-date-calculator/', t:'Debt payoff date calculator', tag:'member'}]},
+      {sev:7, name:'No plan for the gap', lo:0, hi:0,
+        range:'hard to pin to one number, because it is <b>the multiplier on every other leak</b>',
+        blurb:'Money in and money out have never been measured side by side. You cannot plug a leak you have never looked at.',
+        links:[{u:'/budget-tracker/', t:'Budget tracker', tag:'member'}]},
+      {sev:8, name:'Small daily habits', lo:20, hi:60,
+        range:'<b>$20 to $60 a month</b>',
+        blurb:'Five dollars here, seven there. Small enough to ignore, frequent enough to add up to real money.',
+        links:[{u:'/true-cost-calculator/', t:'True cost calculator', tag:'free'}]}
+    ];
+
+    var QS = [
+      {leak:0, q:'When did you last read a card or bank statement line by line?', opts:[
+        ['This week. I know every charge on it.',0],
+        ['Within the last couple of months.',1],
+        ['Sometime last year, probably.',2],
+        ['Statements are a myth. I look at the total and wince.',3]]},
+      {leak:1, q:'How many nights a week does dinner come from a restaurant, a drive-thru, or an app?', opts:[
+        ['Almost never. The kitchen does the work.',0],
+        ['One or two. Everybody needs a night off.',1],
+        ['Three or four. The week gets away from me.',2],
+        ['The delivery driver knows my dog by name.',3]]},
+      {leak:2, q:'What does a normal grocery run look like?', opts:[
+        ['List in hand, prices checked, in and out.',0],
+        ['Rough list, one store, the usual brands.',1],
+        ['No list. I walk the aisles and figure it out.',2],
+        ['Whatever the cart wants, the cart gets.',3]]},
+      {leak:3, q:'Be honest. What happens to the produce you buy?', opts:[
+        ['We eat just about all of it.',0],
+        ['A bag of spinach goes down now and then.',1],
+        ['The crisper drawer is where vegetables go to be forgotten.',2],
+        ['I buy a week of groceries, then order food anyway.',3]]},
+      {leak:4, q:'How often is "it was on sale" the whole reason you bought something?', opts:[
+        ['Rarely. If I did not need it, the sale does not count.',0],
+        ['Once in a while, and it is small stuff.',1],
+        ['Pretty often. Finding deals feels like winning.',2],
+        ['My house is full of bargains I have never used.',3]]},
+      {leak:5, q:'What happens with your credit card balance most months?', opts:[
+        ['Paid in full, every single month.',0],
+        ['Paid in full most months, carried once in a while.',1],
+        ['I pay a good chunk and carry the rest.',2],
+        ['Minimum payment, and I try not to look at the rest.',3]]},
+      {leak:6, q:'Could you say what came in and what went out last month, in actual dollars?', opts:[
+        ['Yes. I could tell you both numbers right now.',0],
+        ['Roughly. I would be within a hundred or two.',1],
+        ['I know payday, and I know when things get tight.',2],
+        ['Money arrives, money leaves. We do not discuss it.',3]]},
+      {leak:7, q:'Coffee runs, gas station snacks, quick drive-thru stops. How often?', opts:[
+        ['Rarely. That stuff is a treat, not a routine.',0],
+        ['A couple of times a week.',1],
+        ['Most days. It is part of the commute.',2],
+        ['It is not a habit, it is a lifestyle.',3]]}
+    ];
+
+    var ans = [null,null,null,null,null,null,null,null];
+    var cur = 0;
+
+    function money(x){ return '$' + x.toLocaleString('en-US'); }
+
+    function renderQ(){
+      var q = QS[cur];
+      var h = '<div class="lf-prog"><span>Question ' + (cur+1) + ' of 8</span><span>Money Leak Finder</span></div>' +
+        '<div class="lf-bar"><i style="width:' + Math.round(cur/8*100) + '%"></i></div>' +
+        '<p class="lf-q">' + q.q + '</p>';
+      for (var j = 0; j < q.opts.length; j++){
+        h += '<button type="button" class="lf-opt' + (ans[cur]===j ? ' lf-picked' : '') + '" data-opt="' + j + '">' + q.opts[j][0] + '</button>';
+      }
+      if (cur > 0) h += '<button type="button" class="lf-back" data-back="1">&larr; Back</button>';
+      stage.innerHTML = h;
+    }
+
+    function renderResult(){
+      var scores = [0,0,0,0,0,0,0,0];
+      for (var i = 0; i < QS.length; i++){
+        if (ans[i] !== null) scores[QS[i].leak] += QS[i].opts[ans[i]][1];
+      }
+      var ranked = [];
+      for (i = 0; i < LEAKS.length; i++){
+        if (scores[i] > 0) ranked.push({ L: LEAKS[i], s: scores[i] });
+      }
+      ranked.sort(function(a,b){ return b.s - a.s || a.L.sev - b.L.sev; });
+      var top = ranked.slice(0, 3);
+
+      var h = '<div class="lf-prog"><span>Your results</span><span>Money Leak Finder</span></div>' +
+        '<div class="lf-bar"><i style="width:100%"></i></div>';
+
+      if (!top.length){
+        h += '<p class="lf-r-label">Well now</p>' +
+          '<p class="lf-r-big">We could not find a single leak.</p>' +
+          '<p class="lf-r-sub">Statements read, dinners cooked, cards paid, plan in place. You are either already one of us or you are being modest. Either way, the tools below will make a tight ship tighter.</p>' +
+          '<p class="lf-cta">The whole toolkit, every calculator and all <span class="tc-rc">500+</span> costed recipes, is <a href="/#/portal/signup">$1 a month</a>.</p>' +
+          '<button type="button" class="lf-again" data-again="1">Start over</button>';
+        stage.innerHTML = h;
+        return;
+      }
+
+      h += '<p class="lf-r-label">Your top ' + (top.length === 1 ? 'leak' : (top.length === 2 ? 'two leaks' : 'three leaks')) + '</p>' +
+        '<p class="lf-r-big">Everyone leaks somewhere.<br>You now know where.</p>' +
+        '<p class="lf-r-sub">No shame in any of this. A leak is just money moving without a decision. Here is where yours are, and the exact tool that plugs each one.</p>';
+
+      var lo = 0, hi = 0, hasPlan = false, numCount = 0;
+      for (i = 0; i < top.length; i++){
+        var L = top[i].L;
+        if (L.hi > 0){ lo += L.lo; hi += L.hi; numCount++; } else hasPlan = true;
+        var links = '';
+        for (var k = 0; k < L.links.length; k++){
+          var lk = L.links[k];
+          links += '<a class="lf-go" href="' + lk.u + '">' + lk.t + ' <span>(' + lk.tag + ')</span></a>';
+        }
+        h += '<div class="lf-leak"><div class="lf-leak-h"><span class="lf-rank">' + (i+1) + '</span><h3>' + L.name + '</h3></div>' +
+          '<p class="lf-blurb">' + L.blurb + '</p>' +
+          '<p class="lf-range">Likely cost: ' + L.range + '.</p>' +
+          '<div class="lf-links">' + links + '</div></div>';
+      }
+
+      if (numCount > 0){
+        var what = hasPlan ? (numCount === 1 ? 'the dollar leak above' : 'the dollar leaks above') :
+          (top.length === 3 ? 'your top three' : (top.length === 2 ? 'both of these' : 'this one leak'));
+        h += '<div class="lf-total">Plugging ' + what + ' is worth roughly <b>' + money(lo) + ' to ' + money(hi) + ' a month</b>.' +
+          (hasPlan ? ' And the no-plan leak? Fixing that one is what keeps the others fixed.' : '') + '</div>';
+      } else {
+        h += '<div class="lf-total">Your leak is not a line item, it is the missing plan. Measure the gap once and every other number starts behaving.</div>';
+      }
+
+      h += '<p class="lf-cta">Every tool above, plus the full toolkit and <span class="tc-rc">500+</span> costed dinner recipes, is <a href="/#/portal/signup">$1 a month</a>. Less than the leak. A lot less.</p>' +
+        '<button type="button" class="lf-again" data-again="1">Start over</button>';
+      stage.innerHTML = h;
+    }
+
+    stage.addEventListener('click', function(e){
+      var t = e.target;
+      while (t && t !== stage && !t.getAttribute('data-opt') && !t.getAttribute('data-back') && !t.getAttribute('data-again')) t = t.parentNode;
+      if (!t || t === stage) return;
+      if (t.getAttribute('data-opt') !== null && t.getAttribute('data-opt') !== undefined && t.className.indexOf('lf-opt') !== -1){
+        ans[cur] = Number(t.getAttribute('data-opt'));
+        cur++;
+        if (cur >= QS.length) renderResult(); else renderQ();
+        return;
+      }
+      if (t.getAttribute('data-back')){ if (cur > 0){ cur--; renderQ(); } return; }
+      if (t.getAttribute('data-again')){
+        for (var i = 0; i < ans.length; i++) ans[i] = null;
+        cur = 0; renderQ();
+      }
+    });
+
+    renderQ();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+</div>
