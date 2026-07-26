@@ -3,11 +3,16 @@
 # head.description) via a JSON-string-aware regex + MatchEvaluator, so shop_smart per-line dollars and
 # any coincidental same-value elsewhere are never touched. Compares the current manifest to the pre-fix
 # backup; only recipes whose everyday_ps changed by >= $0.005 are edited. Parse-verifies each.
+# -Baseline: the PRIOR manifest snapshot to diff against (copy v2-perserving.json aside BEFORE a
+# recompute that changes numbers, then pass that copy here). Refuses to run without one.
+param([string]$Baseline = '')
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp = Split-Path -Parent $here
+if(-not $Baseline){ $Baseline = Join-Path $here 'v2-perserving.bak-prespicefix.json' }
+if(-not (Test-Path $Baseline)){ throw "baseline manifest not found: $Baseline (snapshot the manifest before recomputing, then pass -Baseline)" }
 $new = Get-Content (Join-Path $here 'v2-perserving.json') -Raw | ConvertFrom-Json
-$old = Get-Content (Join-Path $here 'v2-perserving.bak-prespicefix.json') -Raw | ConvertFrom-Json
+$old = Get-Content $Baseline -Raw | ConvertFrom-Json
 $om=@{}; foreach($r in $old){ $om[$r.slug]=$r }
 $fields = 'intro_html','cost_closing_html','upsell_html','description'
 $edited=0

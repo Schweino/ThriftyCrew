@@ -6,7 +6,9 @@
 param([switch]$Validate,[switch]$Publish)
 $ErrorActionPreference='Stop'
 $root='C:\Codex\income\meal-prep'
-$scratch='C:\Users\Owner\AppData\Local\Temp\claude\C--Codex\f3644374-5e4d-4c5e-a7e6-7ac3b89873f9\scratchpad'
+# stable local work dir (was hardcoded to a long-gone session scratchpad - ratchet-class bug)
+$scratch=Join-Path $env:TEMP 'tc-hub-work'
+New-Item -ItemType Directory -Force $scratch | Out-Null
 $apiUrl='https://map-to-success.ghost.io'
 $doc=Get-Content (Join-Path $root 'recipes-db.json') -Raw | ConvertFrom-Json
 $recipes=$doc.recipes

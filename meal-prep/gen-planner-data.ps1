@@ -14,37 +14,27 @@ $feed=(Get-Content (Join-Path $here '..\grocery\out\smp-feed.json') -Raw | Conve
 $feedUnit=@{}
 foreach($p in $feed.PSObject.Properties){ $feedUnit[$p.Name]=[string]$p.Value.unit }
 
-# item -> bid+gpu+unit (r100 map first: calibrated this week; then the r300 map; then the 90-run map)
-$mapNew=(Get-Content (Join-Path $here 'r100\r100-board-map.json') -Raw | ConvertFrom-Json).map
-$mapR300=(Get-Content (Join-Path $here 'r300\r300-board-map.json') -Raw | ConvertFrom-Json).map   # 2026-07-25 close-out: r300 names (Turkey Breast, Pork Shoulder, ...) were feed-unpriced without it
-$mapOld=(Get-Content (Join-Path $here 'ingredient-map.json') -Raw | ConvertFrom-Json).mappings
-# PRECEDENCE (flipped 2026-07-25 close-out): r300 map FIRST - it is derived from the CURRENT audited
-# recipes-db item_ids (incl. the proxy-debt re-points: Red Onion->red-onion, Ricotta->ricotta, ...).
-# r100's era map second, the 90-run map last.
+# 2026-07-26 engine consolidation: mapping + package sizes come from THE canonical store
+# db\ingredients.json (which merged r100/r300 board maps, ingredient-map, pantry-packages and the
+# engines' $PKG tables with the same precedence this script used to reimplement). The old per-run
+# reads broke when the run folders were archived. planner-extra-packages.json remains the planner's
+# own supplemental package list (fold-in candidate).
 $item=@{}
-foreach($p in $mapR300.PSObject.Properties){ $item[$p.Name]=@{bid=$p.Value.bid;gpu=[double]$p.Value.gpu;unit=[string]$p.Value.unit} }
-foreach($p in $mapNew.PSObject.Properties){ if(-not $item.ContainsKey($p.Name)){ $item[$p.Name]=@{bid=$p.Value.bid;gpu=[double]$p.Value.gpu;unit=[string]$p.Value.unit} } }
-foreach($m in $mapOld){ if(-not $item.ContainsKey($m.item)){ $item[$m.item]=@{bid=$m.board_id;gpu=[double]$m.grams_per_unit;unit=[string]$m.unit} } }
-$UNIT_G=@{ lb=453.592; oz=28.3495; floz=29.57; kg=1000.0; g=1.0 }
-
-# package sizes per item (whole-package pricing in the tool: "assume the user owns nothing"):
-# pantry staples from pantry-packages.json + fresh/boxed items parsed from cost-engine's $PKG table
 $pkg=@{}
-foreach($p in ((Get-Content (Join-Path $here 'r300\pantry-packages.json') -Raw | ConvertFrom-Json).packages).PSObject.Properties){  # r300 file = r100 entries + r300 additions (superset since 2026-07-25)
-  $pkg[$p.Name]=@{ g=[double]$p.Value.g; l=[string]$p.Value.label }
+foreach($row in (Get-Content (Join-Path $here 'db\ingredients.json') -Raw | ConvertFrom-Json)){
+  $nm=[string]$row.item
+  if($row.PSObject.Properties.Name -contains 'bid' -and $row.bid){
+    $item[$nm]=@{bid=[string]$row.bid;gpu=[double]$row.gpu;unit=[string]$row.unit}
+  }
+  # whole-package size: pantry container first (staple jars), else the buy package
+  $pg=$null;$pl=$null
+  if($row.PSObject.Properties.Name -contains 'pantry_pkg_g' -and $row.pantry_pkg_g){ $pg=[double]$row.pantry_pkg_g; $pl=[string]$row.pantry_pkg_label }
+  elseif($row.PSObject.Properties.Name -contains 'buy_pkg_g' -and $row.buy_pkg_g){ $pg=[double]$row.buy_pkg_g; $pl=[string]$row.buy_pkg_label }
+  if($pg){ $pkg[$nm]=@{ g=$pg; l=$pl } }
 }
+$UNIT_G=@{ lb=453.592; oz=28.3495; floz=29.57; kg=1000.0; g=1.0 }
 foreach($p in ((Get-Content (Join-Path $here 'planner-extra-packages.json') -Raw | ConvertFrom-Json).packages).PSObject.Properties){
   if(-not $pkg.ContainsKey($p.Name)){ $pkg[$p.Name]=@{ g=[double]$p.Value.g; l=[string]$p.Value.label } }
-}
-$engineSrc=Get-Content (Join-Path $here 'r100\cost-engine.ps1') -Raw
-$pkgBlock=[regex]::Match($engineSrc,'\$PKG\s*=\s*@\{(?s)(.*?)\r?\n\}').Groups[1].Value
-$pkgRe = '''([^'']+)''\s*=\s*@\{g=([\d.]+|\$LB|\$OZ);label=''([^'']*)''\}'
-foreach($m in [regex]::Matches($pkgBlock,$pkgRe)){
-  $nm=$m.Groups[1].Value.Trim()
-  if($pkg.ContainsKey($nm)){ continue }   # pantry file wins
-  $gv=$m.Groups[2].Value
-  $g = if($gv -match 'LB'){453.592} elseif($gv -match 'OZ'){28.3495} else {[double]$gv}
-  $pkg[$nm]=@{ g=$g; l=$m.Groups[3].Value }
 }
 function Feed-Gpu($it){
   if(-not $item.ContainsKey($it)){ return $null }

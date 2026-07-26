@@ -20,9 +20,10 @@ Push-Location $mp
 $allowed = @('intro_html','cost_closing_html','upsell_html','shop_smart')  # + head.description + stat.cost_ps + head.costPerServing handled specially
 $proseFields = @('intro_html','cost_closing_html','upsell_html')
 $fails=@(); $ok=0
-foreach($run in 'r100','r300'){
-  foreach($sf in (Get-ChildItem (Join-Path $mp "$run\specs\*.json") | Where-Object Name -ne '_index.json')){
-    $slug=$sf.BaseName; $rel="meal-prep/$run/specs/$slug.json"
+# 2026-07-26 consolidation: specs live in db\recipes (runs archived); count is derived, never hardcoded
+foreach($run in @('db')){
+  foreach($sf in (Get-ChildItem (Join-Path $mp "db\recipes\*.json"))){
+    $slug=$sf.BaseName; $rel="meal-prep/db/recipes/$slug.json"
     $e=$bySlug[$slug]
     try { $cur = Get-Content $sf.FullName -Raw | ConvertFrom-Json } catch { $fails += "$slug :: CURRENT does not parse as JSON"; continue }
     $headRaw = (git show "HEAD:$rel" 2>$null) -join "`n"
@@ -55,6 +56,6 @@ foreach($run in 'r100','r300'){
   }
 }
 Pop-Location
-Write-Output ("PASS: {0} / 400    FAILURES: {1}" -f $ok, $fails.Count)
+Write-Output ("PASS: {0} / {1}    FAILURES: {2}" -f $ok, ($ok + @($fails | ForEach-Object { ($_ -split ' ')[0] } | Sort-Object -Unique).Count), $fails.Count)
 $fails | ForEach-Object { Write-Output ("  X " + $_) }
 if($fails.Count -eq 0){ Write-Output "GATE OPEN - safe to rebuild + publish" }

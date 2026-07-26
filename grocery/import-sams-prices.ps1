@@ -1,5 +1,5 @@
 <#
-  import-walmart-prices.ps1 - fold Walmart's CURRENT prices into walmart-regular-<date>.json.
+  import-sams-prices.ps1 - SUPERSEDED by build-sams-deals.ps1 (2026-07-15 sams-ingest lesson: Sam's is a UNIT-PRICE feed; this script mispriced it). Kept for history only. (Header previously said import-walmart-prices - copy-paste error, fixed 2026-07-26.)
 
   *** THE TRAP THIS SCRIPT EXISTS TO AVOID ***
   `priceInfo.currentPrice.price` is the price of the WHOLE PACK. For a weighted item that is the price of the

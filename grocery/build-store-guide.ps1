@@ -28,8 +28,14 @@ if (-not $Out) { $Out = Join-Path $OutDir 'store-guide.html' }
 $doc  = Get-Content $CompareFile -Raw | ConvertFrom-Json
 $week = [string]$doc.week_of
 
-$storeOrder = @('Hy-Vee','Aldi','Family Fare',"Baker's","Sam's Club",'Walmart')
-$shortName  = @{ 'Hy-Vee'='Hy-Vee'; 'Aldi'='Aldi'; 'Family Fare'='Family Fare'; "Baker's"="Baker's"; "Sam's Club"="Sam's Club"; 'Walmart'='Walmart' }
+# 2026-07-26 fix: Fareway was MISSING here since 2026-07-12 (the guide silently excluded a whole store).
+# Order is display preference; any store present on the board but absent here gets appended so a new
+# store can never be silently dropped again.
+$storeOrder = @('Hy-Vee','Aldi','Family Fare',"Baker's",'Fareway',"Sam's Club",'Walmart')
+$boardStores = @($doc.comparison | ForEach-Object { $_.stores } | ForEach-Object { [string]$_.store } | Sort-Object -Unique)
+foreach($bs in $boardStores){ if($storeOrder -notcontains $bs){ $storeOrder += $bs; Write-Warning ("store guide: appending unlisted board store '" + $bs + "'") } }
+$shortName  = @{}
+foreach($s in $storeOrder){ $shortName[$s] = $s }
 
 # NOTE: must escape single quotes too - several attributes are single-quoted and store/brand
 # names routinely contain apostrophes (Baker's, Sam's Club, Member's Mark).

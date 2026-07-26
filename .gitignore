@@ -16,7 +16,7 @@
 #     the local browser agents commit their raw store data without derived-file rebase conflicts vs the
 #     cloud, and keeps the repo to source-of-truth inputs + durable state only. ---
 /grocery/out/comparison-*.json
-/grocery/out/candidates-*.json
+/grocery/out/*candidates*.json
 /grocery/out/records-*.json
 /grocery/out/flagged-*.json
 /grocery/out/guards-*.json

@@ -19,7 +19,7 @@ function New-GhostJWT { param($key)
   $hm=New-Object System.Security.Cryptography.HMACSHA256 (,$sb); return $si+'.'+(& $b64 ($hm.ComputeHash([Text.Encoding]::UTF8.GetBytes($si))))
 }
 
-if($All){ $Slugs = Get-Content (Join-Path $here 'specs-ready.txt') | Where-Object { $_ } }
+if($All){ $Slugs = (Get-ChildItem (Join-Path (Split-Path $here -Parent) 'db\built\*.body.html')).BaseName -replace '\.body$','' }
 if(-not $Slugs){ throw 'no slugs' }
 
 $ok=0; $failed=@()
@@ -62,7 +62,10 @@ foreach($slug in $Slugs){
     $html = $pub.Content
     $titleOk = $html -match [regex]::Escape([System.Net.WebUtility]::HtmlEncode($spec.name).Replace('&#39;',''))
     if(-not $titleOk){ $titleOk = $html -match [regex]::Escape(($spec.name -split ' ')[0]) }
-    $paywalled = ($html -notmatch 'True shopping cost')   # paid content must NOT leak publicly
+    # paid content must NOT leak publicly. v2 anchor: the cost-tab section heading only exists in the
+    # PAID body ('True shopping cost' was v1 copy - 0/513 v2 cards contain it, making the old check
+    # vacuous). A public (free-rotation) card legitimately shows it, so only enforce for paid posts.
+    $paywalled = if([string]$spec.visibility -eq 'public'){ $true } else { ($html -notmatch 'What This Batch Costs') }
     $schemaOk = ($html -match 'application/ld\+json')
     if($titleOk -and $paywalled -and $schemaOk){ $ok++; Write-Output ("OK  $slug") }
     else { $failed += $slug; Write-Output ("VERIFY FAIL  $slug  (title=$titleOk paywalled=$paywalled schema=$schemaOk)") }

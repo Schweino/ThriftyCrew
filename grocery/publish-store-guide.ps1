@@ -51,9 +51,9 @@ $pubArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'publish-resou
   '-Title','Shop Smart at Your Store',
   '-Slug',$slug,
   '-HtmlFile',$embed,
-  '-Excerpt','Pick your store and see what to buy there, what is fair, and what to skip this week. Six Omaha stores, verified prices.',
+  '-Excerpt','Pick your store and see what to buy there, what is fair, and what to skip this week. Seven Omaha stores, verified prices.',
   '-MetaTitle','Shop Smart at Your Store | Thrifty Crew',
-  '-MetaDesc','Most of us shop at one store. Pick yours and see what it prices well this week, what is close enough, and what costs way more than it should. Six Omaha stores, checked against their own ads.',
+  '-MetaDesc','Most of us shop at one store. Pick yours and see what it prices well this week, what is close enough, and what costs way more than it should. Seven Omaha stores, checked against their own ads.',
   '-Visibility','public')
 if ($Draft) { $pubArgs += '-Draft' }
 & powershell @pubArgs

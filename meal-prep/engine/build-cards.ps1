@@ -8,6 +8,7 @@ $mp = Split-Path -Parent $here
 $specFiles = Get-ChildItem (Join-Path $mp 'db\recipes\*.json')
 if($Slugs){ $specFiles = @($specFiles | Where-Object { $Slugs -contains $_.BaseName }); if(-not $specFiles.Count){ throw 'no specs match -Slugs' } }
 New-Item -ItemType Directory -Force (Join-Path $mp 'db\built') | Out-Null
+$global:__tcCostedCache=@{}   # fresh cache per run (build-card2 fills it on first parse)
 $ok=0; $err=@()
 foreach($sf in $specFiles){
   try{ & (Join-Path $mp 'pipeline\build-card2.ps1') -SpecFile $sf.FullName -CostedFile (Join-Path $mp 'db\costed.json') -OutDir (Join-Path $mp 'db\built') *>$null; $ok++ }

@@ -177,11 +177,26 @@ try {
   else { Write-Output ("store guide HELD/skipped (rc=$LASTEXITCODE) - board publish unaffected") }
 } catch { Write-Output ("store guide publish threw: " + $_.Exception.Message + " - board publish unaffected") }
 
-# ---- trend pages: self-gated weekly (stamp check makes daily calls a no-op until a new week lands) ----
+# ---- trend pages: WEEKLY. 2026-07-26 efficiency fix: only the PUBLISHER was stamp-gated, so the two
+# builders regenerated 425 tracked HTML files on EVERY price-change day for a publish that then no-oped.
+# Check the stamp HERE and skip the builds too until a new board week lands.
 try {
-  & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-trend-pages.ps1') | Out-Null
-  & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-trend-index.ps1') | Out-Null
-  & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-trend-pages.ps1') | Out-Null
-  Write-Output "trend pages checked (weekly stamp gate applies)"
+  $tpStamp = Join-Path $root 'out\trend-pages.stamp'
+  $curWk = ''
+  try {
+    # EXACT same week derivation as publish-trend-pages' stamp logic (newest week_of across histories)
+    $phd = Get-Content (Join-Path $root 'out\price-history.json') -Raw | ConvertFrom-Json
+    $wks=@(); foreach($c in $phd.commodities){ foreach($e in $c.history){ $wks += [string]$e.week_of } }
+    if($wks.Count){ $curWk = (@($wks | Sort-Object))[-1] }
+  } catch {}
+  $stampWk = if(Test-Path $tpStamp){ ([string](Get-Content $tpStamp -Raw)).Trim() } else { '' }
+  if($curWk -and $stampWk -eq $curWk){
+    Write-Output "trend pages up to date for week $curWk - builds skipped"
+  } else {
+    & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-trend-pages.ps1') | Out-Null
+    & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-trend-index.ps1') | Out-Null
+    & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-trend-pages.ps1') | Out-Null
+    Write-Output "trend pages built + publish attempted (weekly stamp gate applies)"
+  }
 } catch { Write-Output ("trend pages step threw: " + $_.Exception.Message + " - board publish unaffected") }
 exit 0

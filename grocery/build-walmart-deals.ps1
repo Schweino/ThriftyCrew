@@ -1,5 +1,5 @@
 <#
-  build-sams-deals.ps1 - turn a RAW Sam's browser capture into out\sams\sams-deals-<date>.json.
+  build-walmart-deals.ps1 - turn a RAW Walmart capture into out\walmart-regular-<date>.json. (Header previously said build-sams-deals - copy-paste error, fixed 2026-07-26.)
 
   Input CSV (pipe-delimited, from the in-page pull): q|n|lp|up|id
      q  = the search term        n  = product name

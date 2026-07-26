@@ -27,7 +27,11 @@ $spec = Get-Content $SpecFile -Raw | ConvertFrom-Json
 $utf8 = New-Object Text.UTF8Encoding($false)
 
 # ---------- package model from the costed lines ----------
-$costed = Get-Content $CostedFile -Raw | ConvertFrom-Json
+# cache the parsed costed file across same-process invocations (engine\build-cards.ps1 calls this
+# script 513x with the same 5MB file; parsing once cuts the full-catalog build time dramatically)
+if(-not $global:__tcCostedCache){ $global:__tcCostedCache=@{} }
+if($global:__tcCostedCache.ContainsKey($CostedFile)){ $costed = $global:__tcCostedCache[$CostedFile] }
+else { $costed = Get-Content $CostedFile -Raw | ConvertFrom-Json; $global:__tcCostedCache[$CostedFile] = $costed }
 function Slugify([string]$s){ (($s.ToLower() -replace "[^a-z0-9]+","-").Trim('-')) }
 $cr = $costed | Where-Object { ($_.PSObject.Properties.Name -contains 'slug' -and $_.slug -eq $spec.slug) -or $_.proposed_name -eq $spec.name }
 # Fallback: display title can drift from the pipeline name (e.g. "...Bowls" vs "...Rice Bowl"); the slug

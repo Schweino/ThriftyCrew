@@ -9,10 +9,16 @@
 #   label prices ......... r100 labels-P*.json (agent-captured package prices for untracked items)
 # Merge precedence (later wins): r100 -> r300 -> orig, EXCEPT conflicts are REPORTED loudly - nothing
 # resolves silently. Run with -Audit to only print the conflict report without writing.
-param([switch]$Audit)
+param([switch]$Audit,[switch]$Force)
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp = Split-Path -Parent $here
+# MIGRATION SCRIPT (2026-07-26, one-time). db\ingredients.json + db\label-prices.json are HAND-MAINTAINED
+# after the migration; rerunning this would silently ERASE every post-migration edit by regenerating from
+# the archived per-run sources. Refuses unless -Force (or -Audit, which writes nothing).
+if(-not $Audit -and -not $Force -and (Test-Path (Join-Path $mp 'db\ingredients.json'))){
+  throw 'db\ingredients.json already exists - this migration script would clobber post-migration hand edits. Use -Audit to inspect, or -Force if you truly intend to regenerate from the archive.'
+}
 $LB=453.592; $OZ=28.3495
 
 $rows=@{}   # name -> ordered hash (the eventual row)
