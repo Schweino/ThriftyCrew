@@ -1,0 +1,176 @@
+{
+    "name":  "Slow Cooker Chicken Saag Rice Bowls",
+    "slug":  "slow-cooker-chicken-saag-rice-bowls",
+    "cuisine":  "Indian",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  565,
+                 "protein":  59,
+                 "carbs":  58,
+                 "fat":  9,
+                 "cost_ps":  "3.65"
+             },
+    "intro_html":  "Saag is that deep green, garlicky spinach curry that tastes far more involved than it is. Frozen spinach makes it dead simple, and the bowl stays high protein and cheap per serving. One batch makes 14 servings.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3200 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (950 g)",
+                                "\u003cstrong\u003eFrozen Chopped Spinach (generic):\u003c/strong\u003e 3 boxs (900 g)",
+                                "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 1 can (425 g)",
+                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 1 can (240 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (18 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 3 inches (75 g)",
+                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 1 tbsp (18 g)",
+                                "\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 1 tbsp (15 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (18 g)",
+                                "\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e 1/8 tsp (1 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.5 tsp (23 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.65 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eFrozen chopped spinach\u003c/strong\u003e is cheaper than fresh, lasts forever, and melts right into the sauce.",
+                       "Buy the \u003cstrong\u003echicken breast in a value pack\u003c/strong\u003e to keep the per serving cost down.",
+                       "One \u003cstrong\u003ecan of coconut milk\u003c/strong\u003e is all you need for a creamy base, so no need for cream."
+                   ],
+    "make_it":  [
+                    "Add the chicken breast and minced garlic to the crock.",
+                    "Pour in the tomato sauce and coconut milk.",
+                    "Cover and cook on low for 6 to 8 hours until the chicken is tender.",
+                    "Shred the chicken and stir in the thawed chopped spinach.",
+                    "Let everything heat through for another 20 minutes.",
+                    "Serve the saag over rice."
+                ],
+    "portion_html":  "Each of the 14 servings lands around 59g protein for about 565 calories, at roughly $2.33 a bowl.",
+    "credit_html":  "",
+    "upsell_html":  "Deep, savory, and simple, this saag makes healthy eating feel effortless all week long. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  33.28,
+    "cost_batch_true":  38.37,
+    "cost_per_serving":  2.38,
+    "cost_per_serving_true":  2.74,
+    "cost_pantry_add":  10.65,
+    "cost_first_run":  49.02,
+    "scaler":  {
+                   "cost":  "38.37",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3200,
+                                   "buy":  "8 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  950,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Frozen Chopped Spinach",
+                                   "grams":  900,
+                                   "buy":  "3 boxs",
+                                   "bid":  "frozen-chopped-spinach",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Sauce",
+                                   "grams":  425,
+                                   "buy":  "1 can",
+                                   "bid":  "tomato-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Coconut Milk",
+                                   "grams":  240,
+                                   "buy":  "1 can",
+                                   "bid":  "coconut-milk",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  18,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "grams":  75,
+                                   "buy":  "3 inches",
+                                   "bid":  "ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garam Masala",
+                                   "grams":  18,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "garam-masala",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Coriander",
+                                   "grams":  15,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-coriander",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  18,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cayenne Pepper",
+                                   "grams":  1,
+                                   "buy":  "1/8 tsp",
+                                   "bid":  "cayenne-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  23,
+                                   "buy":  "1.5 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Indian meal prep. Fourteen servings at about 565 calories and 59 grams of protein for roughly $3.65 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker chicken saag rice bowls, budget dinner",
+                 "costPerServing":  3.65,
+                 "recipeIngredient":  [
+                                          "8 lb Boneless Skinless Chicken Breast",
+                                          "1 lb Rice",
+                                          "3 boxs Frozen Chopped Spinach",
+                                          "1 can Tomato Sauce",
+                                          "1 can Coconut Milk",
+                                          "1 bulb Garlic"
+                                      ],
+                 "steps":  [
+                               "Add the chicken breast and minced garlic to the crock.",
+                               "Pour in the tomato sauce and coconut milk.",
+                               "Cover and cook on low for 6 to 8 hours until the chicken is tender.",
+                               "Shred the chicken and stir in the thawed chopped spinach.",
+                               "Let everything heat through for another 20 minutes.",
+                               "Serve the saag over rice."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

@@ -1,0 +1,224 @@
+{
+    "name":  "Slow Cooker Pork Green Chili Bowls",
+    "slug":  "slow-cooker-pork-green-chili-bowls",
+    "cuisine":  "New Mexican",
+    "protein":  "pork",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  558,
+                 "protein":  55,
+                 "carbs":  46,
+                 "fat":  13,
+                 "cost_ps":  "4.16"
+             },
+    "intro_html":  "New Mexican green chili is all about that tangy, roasted pepper kick, and the slow cooker makes it effortless. Served over rice with 55 grams of protein a bowl, it comes in at about $4.16 a serving (at everyday cost). Fourteen servings means a big pot of chili ready to spoon out all week long.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 8 lb (3500 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (700 g)",
+                                "\u003cstrong\u003eDiced Green Chiles (Old El Paso):\u003c/strong\u003e 7 cans (760 g)",
+                                "\u003cstrong\u003eSalsa Verde (Herdez):\u003c/strong\u003e 1 jar (450 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (120 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2 cups (840 g)",
+                                "\u003cstrong\u003eGreen Chile Sauce:\u003c/strong\u003e 16 oz jar (680 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 1-2 (45 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 cloves (40 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 Tbsp (15 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (8 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (3 g)",
+                                "\u003cstrong\u003eSmoked Paprika (Great Value):\u003c/strong\u003e 1/2 tsp (3 g)",
+                                "\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (2 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 2 Tbsp (50 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 1/4 cup (60 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1 lime (45 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.16 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eCanned diced green chiles\u003c/strong\u003e give you all the roasted pepper flavor without any roasting or peeling. Stock up when they go on sale.",
+                       "A jar of salsa verde rounds out the sauce so you do not need extra spices. One \u003cstrong\u003ejar covers the whole batch\u003c/strong\u003e.",
+                       "Pork loin keeps this cheap. At \u003cstrong\u003eabout $2 a pound\u003c/strong\u003e it is the reason this bowl stays easy on the budget."
+                   ],
+    "make_it":  [
+                    "Set the pork loin in the slow cooker with the chopped onion.",
+                    "Pour in the diced green chiles and salsa verde.",
+                    "Cover and cook on low for 7 to 8 hours until the pork shreds easily.",
+                    "Shred the pork right in the pot and stir it through the green chili sauce.",
+                    "Let it simmer uncovered for a few minutes if you want the sauce a little thicker.",
+                    "Serve over cooked white rice and divide into containers."
+                ],
+    "portion_html":  "Every serving comes in around 558 calories with 55 grams of protein.",
+    "credit_html":  "",
+    "upsell_html":  "Tangy, warming, and easy on the wallet. Ladle it over rice and you are set. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  34.55,
+    "cost_batch_true":  41.7,
+    "cost_per_serving":  2.47,
+    "cost_per_serving_true":  2.98,
+    "cost_pantry_add":  14.93,
+    "cost_first_run":  56.63,
+    "scaler":  {
+                   "cost":  "41.70",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Loin",
+                                   "grams":  3500,
+                                   "buy":  "8 lb",
+                                   "bid":  "pork-loin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Green Chiles",
+                                   "grams":  760,
+                                   "buy":  "7 cans",
+                                   "bid":  "diced-green-chiles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salsa Verde",
+                                   "grams":  450,
+                                   "buy":  "1 jar",
+                                   "bid":  "salsa-verde",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  120,
+                                   "buy":  "2 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  840,
+                                   "buy":  "2 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Green Chile Sauce",
+                                   "grams":  680,
+                                   "buy":  "16 oz jar",
+                                   "bid":  "salsa-verde",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "grams":  45,
+                                   "buy":  "1-2",
+                                   "bid":  "jalapeno",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  40,
+                                   "buy":  "4 cloves",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  15,
+                                   "buy":  "1 Tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  8,
+                                   "buy":  "1 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Smoked Paprika",
+                                   "grams":  3,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "smoked-paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cayenne Pepper",
+                                   "grams":  2,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "cayenne-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "grams":  2,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "grams":  50,
+                                   "buy":  "2 Tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "grams":  60,
+                                   "buy":  "1/4 cup",
+                                   "bid":  "all-purpose-flour",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "grams":  45,
+                                   "buy":  "1 lime",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein New Mexican meal prep. Fourteen servings at about 558 calories and 55 grams of protein for roughly $4.16 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker pork green chili bowls, budget dinner",
+                 "costPerServing":  4.16,
+                 "recipeIngredient":  [
+                                          "8 lb Pork Loin",
+                                          "1 lb Rice",
+                                          "7 cans Diced Green Chiles",
+                                          "1 jar Salsa Verde",
+                                          "2 onions Yellow Onion",
+                                          "2 cups Chicken Broth"
+                                      ],
+                 "steps":  [
+                               "Set the pork loin in the slow cooker with the chopped onion.",
+                               "Pour in the diced green chiles and salsa verde.",
+                               "Cover and cook on low for 7 to 8 hours until the pork shreds easily.",
+                               "Shred the pork right in the pot and stir it through the green chili sauce.",
+                               "Let it simmer uncovered for a few minutes if you want the sauce a little thicker.",
+                               "Serve over cooked white rice and divide into containers."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

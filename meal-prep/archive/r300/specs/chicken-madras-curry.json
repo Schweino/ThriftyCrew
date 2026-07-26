@@ -1,0 +1,365 @@
+{
+    "name":  "Chicken Madras Curry",
+    "slug":  "chicken-madras-curry",
+    "cuisine":  "Indian / South Indian",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.indianhealthyrecipes.com/chicken-madras-curry/",
+    "source_site":  "indianhealthyrecipes.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 200g (src scale)",
+                   "base +30% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Page verified: full recipe, 4 servings, 335 cal / 28g protein before rice, so ~555 cal / 33g as a bowl. Hot-and-tangy madras profile with the vegetables carrying volume. Uses curry-powder, a tracked commodity, and nothing unmapped. Confidence: high, nutrition read from the recipe card. | HARVEST: Ingredients split into \u0027To marinate\u0027 (first 8 lines) and \u0027To make the sauce\u0027 (rest).",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 200g (src scale)",
+                         "TUNING: base +30% (Rice)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  571,
+                 "protein":  36,
+                 "carbs":  66,
+                 "fat":  18,
+                 "cost_ps":  "3.61"
+             },
+    "intro_html":  "Madras is the hot one. It came out of South India by way of British curry houses, and what defines it is the combination of real heat with real acid, chili powder up front and lemon and lime at the back. This build marinates the chicken first, then simmers it with tomatoes, carrots and bell pepper and rounds the edge off with a single can of coconut milk. Each bowl runs \u003cstrong\u003e571 calories and 36 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.61\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.75 lb (1750 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6.5 tbsp (56 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 7 tbsp (7 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 1.7 (79 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1.75 tbsp (14 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (16 g)",
+                                "\u003cstrong\u003eCurry Powder (generic):\u003c/strong\u003e 7 tbsp (44 g)",
+                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 1.25 tbsp (7 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 0.75 cups (147 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 (350 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 4.25 tbsp (26 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 1.7 cans (700 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 2.4 (149 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 1 (149 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 3.5 tbsp (52 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 2.75 tbsp (33 g)",
+                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 1 can (396 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5 cups dry (938 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 3.75 lb: ~$12.62. \u003cstrong\u003eBuy 4 lbs: $13.08.\u003c/strong\u003e",
+                       "Garlic, 6.5 tbsp: ~$0.81. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Fresh Cilantro, 7 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Lemon Juice, 1.7: ~$0.30. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Butter, 0.75 cups: ~$0.96. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Yellow Onion, 3: ~$0.88. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Ginger, 4.25 tbsp: ~$0.23. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Diced Tomatoes, 1.7 cans: ~$1.63. \u003cstrong\u003eBuy 2 cans: $1.92.\u003c/strong\u003e",
+                       "Carrots, 2.4: ~$0.31. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Red Bell Pepper, 1: ~$1.07. \u003cstrong\u003eBuy 2 each: $1.72.\u003c/strong\u003e",
+                       "Lime Juice, 3.5 tbsp: ~$0.43. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sugar, 2.75 tbsp: ~$0.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Coconut Milk, 1 can: ~$1.96. \u003cstrong\u003eBuy 1 13.5oz can: $1.98.\u003c/strong\u003e",
+                       "Rice, 5 cups dry: ~$1.16. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (chili powder, salt, curry powder, garam masala, black pepper): ~$2.42. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $25.06 across 14 servings, so roughly $1.79 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $31.95 across 14 servings, roughly $2.28 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $24.52 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $56.47. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.61 a bowl\u003c/strong\u003e (at everyday cost). Chicken breast is the dominant line here, which means the entire spice cabinet, the coconut milk and every vegetable in the pot together cost less than the meat does.",
+    "shop_smart":  [
+                       "Chicken breast is the biggest line by a mile. Boneless thighs would cost noticeably less per pound and hold up better to a simmer, so make that swap if the budget is the priority.",
+                       "One can of coconut milk is all this recipe needs, which is unusual for a curry. Buy the store brand full fat can and skip the light version, which is mostly water at nearly the same price.",
+                       "Curry powder and garam masala are the two blends doing the heavy lifting. Buy both in bags from an international grocer instead of branded jars and you will pay a fraction of the price for a fresher product.",
+                       "Carrots and bell pepper are the volume vegetables. Buy carrots in the bag, and buy the bell pepper in whatever color is cheapest that week, since it is going into a red sauce anyway."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cut the chicken into chunks and marinate it with the lemon juice, chili powder, salt and half the minced garlic for at least 30 minutes while you prep everything else.",
+                    "Melt the butter in your largest pot over medium and cook the diced onion for 8 minutes until soft and browning at the edges, then add the rest of the garlic and the grated ginger and cook one minute.",
+                    "Add the curry powder and garam masala and stir them in the hot butter for 45 seconds until they bloom and stop smelling raw.",
+                    "Add the diced tomatoes and cook down for 8 to 10 minutes, until the sauce darkens and thickens and the fat starts to come to the surface.",
+                    "Stir in the marinated chicken along with the sliced carrots and diced red bell pepper. Cover and simmer 20 to 25 minutes until the chicken reads 165F and the carrots are tender.",
+                    "Stir in the coconut milk, the sugar, the lime juice and the black pepper, and let it come back to a bare simmer for 5 minutes. Taste it: madras should be hot first and sour second.",
+                    "Cook the rice, let it steam covered off the heat for 10 minutes, then fold it through the curry with the chopped cilantro."
+                ],
+    "portion_html":  "Put the pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. Fourteen containers, one number. Each one lands at \u003cstrong\u003e571 calories\u003c/strong\u003e, and this curry gets hotter as it sits, so day five bites harder than day one.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.indianhealthyrecipes.com/chicken-madras-curry/\" target=\"_blank\" rel=\"noopener\"\u003eindianhealthyrecipes.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Chicken madras with real heat and real acid for about $3.61 a bowl (at everyday cost). This is one of a few hundred recipes here. Members get the whole Meal Prep section plus every money lesson, calculator, and tool on the site for $1 a month.",
+    "cost_batch":  25.06,
+    "cost_batch_true":  31.95,
+    "cost_per_serving":  1.79,
+    "cost_per_serving_true":  2.28,
+    "cost_pantry_add":  24.52,
+    "cost_first_run":  56.47,
+    "scaler":  {
+                   "cost":  "31.95",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  1750,
+                                   "buy":  "3.75 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  56,
+                                   "buy":  "6.5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  7,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Lemon Juice",
+                                   "canon":  "Lemon Juice",
+                                   "grams":  79,
+                                   "buy":  "1.7",
+                                   "bid":  "lemon-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "canon":  "Chili Powder",
+                                   "grams":  14,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  16,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Curry Powder",
+                                   "canon":  "Curry Powder",
+                                   "grams":  44,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "curry-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garam Masala",
+                                   "canon":  "Garam Masala",
+                                   "grams":  7,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "garam-masala",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  147,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  350,
+                                   "buy":  "3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  26,
+                                   "buy":  "4.25 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  700,
+                                   "buy":  "1.7 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  149,
+                                   "buy":  "2.4",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "canon":  "Red Bell Pepper",
+                                   "grams":  149,
+                                   "buy":  "1",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "canon":  "Lime Juice",
+                                   "grams":  52,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  33,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Coconut Milk",
+                                   "canon":  "Coconut Milk",
+                                   "grams":  396,
+                                   "buy":  "1 can",
+                                   "bid":  "coconut-milk-canned",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  938,
+                                   "buy":  "5 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Chicken madras curry: a hot and tangy South Indian tomato curry with carrots, bell pepper and coconut milk over rice. 14 bowls at 571 calories, 36g protein, about $3.61 (at everyday cost).",
+                 "keywords":  "chicken madras, madras curry, indian chicken curry, hot curry recipe, curry meal prep, budget indian food",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT50M",
+                 "totalTime":  "PT1H15M",
+                 "costPerServing":  3.61,
+                 "recipeIngredient":  [
+                                          "3.75 lb boneless skinless chicken breast",
+                                          "1.7 cans diced tomatoes",
+                                          "1 can coconut milk",
+                                          "3 yellow onions",
+                                          "2.4 carrots",
+                                          "1 red bell pepper",
+                                          "6.5 tbsp garlic",
+                                          "4.25 tbsp ginger",
+                                          "0.75 cups butter",
+                                          "5 cups dry rice",
+                                          "1.7 lemons worth of lemon juice",
+                                          "3.5 tbsp lime juice"
+                                      ],
+                 "steps":  [
+                               "Marinate the chunked chicken in lemon juice, chili powder, salt and garlic for 30 minutes.",
+                               "Cook onion in butter until browned, add garlic and ginger, then bloom the curry powder and garam masala.",
+                               "Cook down the diced tomatoes 8 to 10 minutes until the fat surfaces.",
+                               "Add the chicken, carrots and bell pepper, cover, and simmer 20 to 25 minutes.",
+                               "Finish with coconut milk, sugar and lime juice, fold in the rice and cilantro, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  1750
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Lemon Juice",
+                                  "grams":  79
+                              },
+                              {
+                                  "item":  "Chili Powder",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  16
+                              },
+                              {
+                                  "item":  "Curry Powder",
+                                  "grams":  44
+                              },
+                              {
+                                  "item":  "Garam Masala",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  147
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  350
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  26
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  149
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  149
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  33
+                              },
+                              {
+                                  "item":  "Coconut Milk",
+                                  "grams":  396
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  938
+                              }
+                          ]
+}

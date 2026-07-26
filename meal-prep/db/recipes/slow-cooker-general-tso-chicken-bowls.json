@@ -1,0 +1,174 @@
+{
+    "name":  "Slow Cooker General Tso\u0027s Chicken Bowls",
+    "slug":  "slow-cooker-general-tso-chicken-bowls",
+    "cuisine":  "Chinese",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  567,
+                 "protein":  57,
+                 "carbs":  67,
+                 "fat":  6,
+                 "cost_ps":  "3.75"
+             },
+    "intro_html":  "That takeout craving hits, and the app is right there in your pocket ready to charge you fifteen bucks. This slow cooker General Tso\u0027s beats it on every front, packing 57 grams of protein into a bowl that costs about $3.75 (at everyday cost). One batch makes 14 servings, so you get a week and a half of dinners for less than a single delivery order.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3100 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (900 g)",
+                                "\u003cstrong\u003eHoisin Sauce (generic):\u003c/strong\u003e 1 jar (120 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 bottle (120 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1 bag (90 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 1 boxs (60 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (8 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 2 bags (550 g)",
+                                "\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 2 tbsp (70 g)",
+                                "\u003cstrong\u003eGround Ginger (Great Value):\u003c/strong\u003e 1/2 tsp (4 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.75 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Chicken breast is the whole game here, so \u003cstrong\u003ebuy the big family pack\u003c/strong\u003e when it dips near $2.88 a pound and freeze what you don\u0027t cook this week.",
+                       "Hoisin and cornstarch last months in the pantry, so \u003cstrong\u003ebuy them once and forget them\u003c/strong\u003e. You\u0027ll use a splash across a dozen recipes.",
+                       "Frozen broccoli florets are cheaper than fresh and never go bad on you, so \u003cstrong\u003ekeep two bags in the freezer\u003c/strong\u003e and skip the wilted-crown guilt."
+                   ],
+    "make_it":  [
+                    "Add the chicken breast, hoisin, soy sauce, brown sugar, and minced garlic to the slow cooker and give it a stir.",
+                    "Cover and cook on low for 6 to 7 hours, until the chicken shreds easily with a fork.",
+                    "Stir the cornstarch into a few tablespoons of cold water, then mix it in and let the sauce thicken for about 20 minutes.",
+                    "Toss the broccoli florets in during the last 30 minutes so they stay bright and tender-crisp.",
+                    "Shred or chunk the chicken right in the sauce, then serve it over cooked white rice."
+                ],
+    "portion_html":  "Each serving lands at 57 grams of protein and 567 calories, which is a lot of muscle-fueling food for the money.",
+    "credit_html":  "",
+    "upsell_html":  "Make it once and you\u0027ll wonder why you ever paid the delivery fee. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  30.35,
+    "cost_batch_true":  31.8,
+    "cost_per_serving":  2.17,
+    "cost_per_serving_true":  2.27,
+    "cost_pantry_add":  21.18,
+    "cost_first_run":  52.98,
+    "scaler":  {
+                   "cost":  "31.80",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3100,
+                                   "buy":  "7 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  900,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Hoisin Sauce",
+                                   "grams":  120,
+                                   "buy":  "1 jar",
+                                   "bid":  "hoisin-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "grams":  120,
+                                   "buy":  "1 bottle",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "grams":  90,
+                                   "buy":  "1 bag",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cornstarch",
+                                   "grams":  60,
+                                   "buy":  "1 boxs",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  8,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  550,
+                                   "buy":  "2 bags",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice Vinegar",
+                                   "grams":  70,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "rice-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Ground Ginger",
+                                   "grams":  4,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "ground-ginger",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Pepper Flakes",
+                                   "grams":  2,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "red-pepper-flakes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Chinese meal prep. Fourteen servings at about 567 calories and 57 grams of protein for roughly $3.75 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker general tso\u0027s chicken bowls, budget dinner",
+                 "costPerServing":  3.75,
+                 "recipeIngredient":  [
+                                          "7 lb Boneless Skinless Chicken Breast",
+                                          "1 lb Rice",
+                                          "1 jar Hoisin Sauce",
+                                          "1 bottle Soy Sauce",
+                                          "1 bag Brown Sugar",
+                                          "1 boxs Cornstarch"
+                                      ],
+                 "steps":  [
+                               "Add the chicken breast, hoisin, soy sauce, brown sugar, and minced garlic to the slow cooker and give it a stir.",
+                               "Cover and cook on low for 6 to 7 hours, until the chicken shreds easily with a fork.",
+                               "Stir the cornstarch into a few tablespoons of cold water, then mix it in and let the sauce thicken for about 20 minutes.",
+                               "Toss the broccoli florets in during the last 30 minutes so they stay bright and tender-crisp.",
+                               "Shred or chunk the chicken right in the sauce, then serve it over cooked white rice."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

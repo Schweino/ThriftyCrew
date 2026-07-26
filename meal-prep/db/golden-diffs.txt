@@ -1,0 +1,1258 @@
+[r100] chili-cornbread-casserole .cost_batch: old 39.38 new 40.41
+[r100] chili-cornbread-casserole .cost_batch_true: old 53.08 new 54.73
+[r100] chili-cornbread-casserole .cost_first_run: old 80.15 new 81.8
+[r100] mediterranean-beef-hummus-bowls .cost_batch: old 33.13 new 33.36
+[r100] mediterranean-beef-hummus-bowls .cost_batch_true: old 41.2 new 42.3
+[r100] mediterranean-beef-hummus-bowls .cost_first_run: old 50.5 new 51.6
+[r100] greek-beef-and-chickpea-bowls .cost_batch: old 41.77 new 45.4
+[r100] greek-beef-and-chickpea-bowls .cost_batch_true: old 53.44 new 57.08
+[r100] greek-beef-and-chickpea-bowls .cost_first_run: old 70.43 new 74.07
+[r100] vietnamese-caramelized-ground-beef-rice-bowls .cost_batch: old 51.07 new 52.76
+[r100] vietnamese-caramelized-ground-beef-rice-bowls .cost_batch_true: old 54.76 new 56.76
+[r100] vietnamese-caramelized-ground-beef-rice-bowls .cost_first_run: old 80.23 new 82.23
+[r100] frito-pie-walking-taco-casserole .cost_batch: old 32.42 new 35.24
+[r100] frito-pie-walking-taco-casserole .cost_batch_true: old 40.95 new 43.74
+[r100] frito-pie-walking-taco-casserole .cost_first_run: old 55.72 new 58.51
+[r100] middle-eastern-beef-kofta-bowls-with-tzatziki .cost_batch: old 49.98 new 53.44
+[r100] middle-eastern-beef-kofta-bowls-with-tzatziki .cost_batch_true: old 56.75 new 60.57
+[r100] middle-eastern-beef-kofta-bowls-with-tzatziki .cost_pantry_add: old 21.03 new 23.71
+[r100] middle-eastern-beef-kofta-bowls-with-tzatziki .cost_first_run: old 77.78 new 84.28
+[r100] baked-ziti-with-ground-beef .cost_batch: old 31.81 new 34.23
+[r100] baked-ziti-with-ground-beef .cost_batch_true: old 43.33 new 46.44
+[r100] baked-ziti-with-ground-beef .cost_first_run: old 60.52 new 63.63
+[r100] pastitsio .cost_batch: old 46.44 new 46.61
+[r100] pastitsio .cost_batch_true: old 58.22 new 58.42
+[r100] pastitsio .cost_first_run: old 84.64 new 84.84
+[r100] ground-beef-baked-gnocchi .cost_batch: old 45.32 new 45.85
+[r100] ground-beef-baked-gnocchi .cost_batch_true: old 51.84 new 52.87
+[r100] ground-beef-baked-gnocchi .cost_first_run: old 57.92 new 58.95
+[r100] million-dollar-baked-spaghetti .cost_batch: old 25.29 new 26.06
+[r100] million-dollar-baked-spaghetti .cost_batch_true: old 35.1 new 36.13
+[r100] million-dollar-baked-spaghetti .cost_first_run: old 41.11 new 42.14
+[r100] beef-stuffed-shells .cost_batch: old 25.72 new 28.14
+[r100] beef-stuffed-shells .cost_batch_true: old 38.21 new 41.32
+[r100] beef-stuffed-shells .cost_first_run: old 48.62 new 51.73
+[r100] grilled-pork-tenderloin-burrito-bowl .cost_batch: old 31.32 new 31.41
+[r100] grilled-pork-tenderloin-burrito-bowl .cost_batch_true: old 35.59 new 35.79
+[r100] grilled-pork-tenderloin-burrito-bowl .cost_first_run: old 43.63 new 43.83
+[r100] pork-tenderloin-stroganoff-over-egg-noodles .cost_pantry_add: old 11.54 new 14.22
+[r100] pork-tenderloin-stroganoff-over-egg-noodles .cost_first_run: old 60.97 new 63.65
+[r100] al-pastor-pork-taco-bowl-with-cilantro-lime-rice .cost_batch: old 26.69 new 27.49
+[r100] al-pastor-pork-taco-bowl-with-cilantro-lime-rice .cost_batch_true: old 34.47 new 35.33
+[r100] al-pastor-pork-taco-bowl-with-cilantro-lime-rice .cost_first_run: old 58.93 new 59.79
+[r100] chicken-scampi .cost_batch: old 36.46 new 36.55
+[r100] chicken-scampi .cost_batch_true: old 44 new 44.2
+[r100] chicken-scampi .cost_pantry_add: old 12.43 new 15.11
+[r100] chicken-scampi .cost_first_run: old 56.43 new 59.31
+[r100] chicken-biryani-rice-bowls .cost_pantry_add: old 15.65 new 18.33
+[r100] chicken-biryani-rice-bowls .cost_first_run: old 48.57 new 51.25
+[r100] hungarian-chicken-paprikash .cost_pantry_add: old 13.49 new 16.17
+[r100] hungarian-chicken-paprikash .cost_first_run: old 47.08 new 49.76
+[r100] chicken-souvlaki-rice-bowls .cost_batch: old 31.78 new 32.94
+[r100] chicken-souvlaki-rice-bowls .cost_batch_true: old 39.59 new 41.59
+[r100] chicken-souvlaki-rice-bowls .cost_pantry_add: old 13.78 new 16.46
+[r100] chicken-souvlaki-rice-bowls .cost_first_run: old 53.37 new 58.05
+[r100] ethiopian-doro-wat-chicken-bowls .cost_batch: old 24.92 new 25.25
+[r100] ethiopian-doro-wat-chicken-bowls .cost_batch_true: old 29.58 new 29.98
+[r100] ethiopian-doro-wat-chicken-bowls .cost_pantry_add: old 10.57 new 13.25
+[r100] ethiopian-doro-wat-chicken-bowls .cost_first_run: old 40.15 new 43.23
+[r100] harissa-chicken-rice-bowls .cost_batch: old 33.34 new 33.53
+[r100] harissa-chicken-rice-bowls .cost_batch_true: old 39.8 new 40
+[r100] harissa-chicken-rice-bowls .cost_first_run: old 53.06 new 53.26
+[r100] cajun-chicken-and-sausage-jambalaya .cost_batch: old 20.79 new 22.34
+[r100] cajun-chicken-and-sausage-jambalaya .cost_batch_true: old 23.57 new 25.2
+[r100] cajun-chicken-and-sausage-jambalaya .cost_first_run: old 43.03 new 44.66
+[r100] creamy-ground-turkey-and-chorizo-pasta .cost_batch: old 31.14 new 33.37
+[r100] creamy-ground-turkey-and-chorizo-pasta .cost_batch_true: old 41.25 new 43.96
+[r100] creamy-ground-turkey-and-chorizo-pasta .cost_pantry_add: old 12.57 new 15.25
+[r100] creamy-ground-turkey-and-chorizo-pasta .cost_first_run: old 53.82 new 59.21
+[r100] greek-ground-turkey-lemon-rice-bowls .cost_pantry_add: old 17.42 new 19.2
+[r100] greek-ground-turkey-lemon-rice-bowls .cost_first_run: old 50.57 new 52.35
+[r100] turkey-sausage-and-cheesy-grits-bowl .cost_batch: old 19.55 new 21.42
+[r100] turkey-sausage-and-cheesy-grits-bowl .cost_batch_true: old 25.4 new 27.56
+[r100] turkey-sausage-and-cheesy-grits-bowl .cost_first_run: old 45.86 new 48.02
+[r100] green-chile-ground-turkey-skillet .cost_batch: old 38.4 new 39.86
+[r100] green-chile-ground-turkey-skillet .cost_batch_true: old 45.42 new 46.68
+[r100] green-chile-ground-turkey-skillet .cost_first_run: old 65.3 new 66.56
+[r100] turkey-kofta-rice-bowl-with-tahini-sauce .cost_pantry_add: old 14.81 new 17.49
+[r100] turkey-kofta-rice-bowl-with-tahini-sauce .cost_first_run: old 51.29 new 53.97
+[r100] ground-turkey-burrito-bowl .cost_batch: old 30.36 new 31.38
+[r100] ground-turkey-burrito-bowl .cost_batch_true: old 35 new 36.06
+[r100] ground-turkey-burrito-bowl .cost_first_run: old 50.1 new 51.16
+[r100] turkey-keema-curry-with-peas .cost_pantry_add: old 13.87 new 16.55
+[r100] turkey-keema-curry-with-peas .cost_first_run: old 45.03 new 47.71
+[r100] greek-turkey-meatballs-with-lemon-orzo .cost_batch: old 36.41 new 36.63
+[r100] greek-turkey-meatballs-with-lemon-orzo .cost_batch_true: old 50.77 new 51.17
+[r100] greek-turkey-meatballs-with-lemon-orzo .cost_pantry_add: old 16.55 new 19.23
+[r100] greek-turkey-meatballs-with-lemon-orzo .cost_first_run: old 67.32 new 70.4
+[r100] highprotein-turkey-burger-bowl .cost_batch: old 28.91 new 30.66
+[r100] highprotein-turkey-burger-bowl .cost_batch_true: old 33.67 new 35.47
+[r100] highprotein-turkey-burger-bowl .cost_first_run: old 58.42 new 60.22
+[r100] baked-ziti-with-ground-turkey-and-ricotta .cost_batch: old 24.39 new 25.8
+[r100] baked-ziti-with-ground-turkey-and-ricotta .cost_batch_true: old 34.8 new 36.88
+[r100] baked-ziti-with-ground-turkey-and-ricotta .cost_first_run: old 49.68 new 51.76
+[orig] fajita-chicken-rice-bowl .cost_batch: old 37.71 new 33.63
+[orig] fajita-chicken-rice-bowl .cost_batch_true: old 40.49 new 36.06
+[orig] fajita-chicken-rice-bowl .cost_pantry_add: old 8.85 new 8.68
+[orig] fajita-chicken-rice-bowl .cost_first_run: old 49.34 new 44.74
+[orig] beef-burrito-bowls .cost_batch: old 37.98 new 31.25
+[orig] beef-burrito-bowls .cost_batch_true: old 43.1 new 35.81
+[orig] beef-burrito-bowls .cost_pantry_add: old 0.69 new 0.38
+[orig] beef-burrito-bowls .cost_first_run: old 43.79 new 36.19
+[orig] bbq-chicken-rice-bowls .cost_batch: old 21.3 new 18.64
+[orig] bbq-chicken-rice-bowls .cost_batch_true: old 23.34 new 20.64
+[orig] bbq-chicken-rice-bowls .cost_pantry_add: old 16.26 new 15.95
+[orig] bbq-chicken-rice-bowls .cost_first_run: old 39.6 new 36.59
+[orig] cheeseburger-pasta .cost_batch: old 30.82 new 29.47
+[orig] cheeseburger-pasta .cost_batch_true: old 36.92 new 35.45
+[orig] cheeseburger-pasta .cost_first_run: old 36.92 new 35.45
+[orig] italian-sausage-penne .cost_batch: old 18.35 new 14.27
+[orig] italian-sausage-penne .cost_batch_true: old 24.14 new 19.11
+[orig] italian-sausage-penne .cost_first_run: old 33.15 new 28.12
+[orig] turkey-taco-rice-skillet .cost_batch: old 36.74 new 28.66
+[orig] turkey-taco-rice-skillet .cost_batch_true: old 40.39 new 31.56
+[orig] turkey-taco-rice-skillet .cost_pantry_add: old 10.66 new 10.35
+[orig] turkey-taco-rice-skillet .cost_first_run: old 51.05 new 41.91
+[orig] cheesy-beef-broccoli-bowls .cost_batch: old 31.32 new 29.81
+[orig] cheesy-beef-broccoli-bowls .cost_batch_true: old 35.41 new 33.84
+[orig] cheesy-beef-broccoli-bowls .cost_pantry_add: old 8.45 new 8.14
+[orig] cheesy-beef-broccoli-bowls .cost_first_run: old 43.86 new 41.98
+[orig] pizza-pasta-bowls .cost_batch: old 14.11 new 14.47
+[orig] pizza-pasta-bowls .cost_batch_true: old 16.74 new 17.16
+[orig] pizza-pasta-bowls .cost_first_run: old 16.74 new 17.16
+[orig] hot-honey-chicken-bowls .cost_batch: old 20.03 new 19.7
+[orig] hot-honey-chicken-bowls .cost_batch_true: old 22.04 new 21.82
+[orig] hot-honey-chicken-bowls .cost_pantry_add: old 18.51 new 18.2
+[orig] hot-honey-chicken-bowls .cost_first_run: old 40.55 new 40.02
+[orig] beef-chili-rice-bowls .cost_batch: old 38.55 new 32.64
+[orig] beef-chili-rice-bowls .cost_batch_true: old 43.69 new 37.24
+[orig] beef-chili-rice-bowls .cost_pantry_add: old 1.35 new 1.04
+[orig] beef-chili-rice-bowls .cost_first_run: old 45.04 new 38.28
+[orig] chicken-parmesan-pasta .cost_batch: old 22.07 new 21.91
+[orig] chicken-parmesan-pasta .cost_batch_true: old 30.56 new 30.47
+[orig] chicken-parmesan-pasta .cost_first_run: old 46.23 new 46.14
+[orig] turkey-bolognese-penne .cost_batch: old 25.7 new 22.15
+[orig] turkey-bolognese-penne .cost_batch_true: old 35.05 new 29.93
+[orig] turkey-bolognese-penne .cost_first_run: old 49.71 new 44.59
+[orig] chicken-enchilada-rice-bowls .cost_batch: old 24.32 new 19.59
+[orig] chicken-enchilada-rice-bowls .cost_batch_true: old 27.55 new 22.45
+[orig] chicken-enchilada-rice-bowls .cost_pantry_add: old 2.69 new 2.38
+[orig] chicken-enchilada-rice-bowls .cost_first_run: old 30.24 new 24.83
+[orig] slow-cooker-buffalo-chicken-bowl .cost_batch: old 28.96 new 29
+[orig] slow-cooker-buffalo-chicken-bowl .cost_batch_true: old 32.99 new 33.14
+[orig] slow-cooker-buffalo-chicken-bowl .cost_pantry_add: old 14.35 new 13.46
+[orig] slow-cooker-buffalo-chicken-bowl .cost_first_run: old 47.34 new 46.6
+[orig] slow-cooker-salsa-verde-chicken-bowl .cost_batch: old 38.86 new 32.66
+[orig] slow-cooker-salsa-verde-chicken-bowl .cost_batch_true: old 41.96 new 35.38
+[orig] slow-cooker-salsa-verde-chicken-bowl .cost_pantry_add: old 9.75 new 9.58
+[orig] slow-cooker-salsa-verde-chicken-bowl .cost_first_run: old 51.71 new 44.96
+[orig] slow-cooker-italian-chicken-penne .cost_batch: old 25.79 new 25.24
+[orig] slow-cooker-italian-chicken-penne .cost_batch_true: old 29.8 new 29.26
+[orig] slow-cooker-italian-chicken-penne .cost_first_run: old 42.65 new 42.11
+[orig] slow-cooker-salsa-chicken-bowl .cost_batch: old 36.25 new 32.75
+[orig] slow-cooker-salsa-chicken-bowl .cost_batch_true: old 38.91 new 35.06
+[orig] slow-cooker-salsa-chicken-bowl .cost_pantry_add: old 0.3 new 0.13
+[orig] slow-cooker-salsa-chicken-bowl .cost_first_run: old 39.21 new 35.19
+[orig] slow-cooker-pulled-pork-bowl .cost_batch: old 29.46 new 26.26
+[orig] slow-cooker-pulled-pork-bowl .cost_batch_true: old 29.55 new 26.31
+[orig] slow-cooker-pulled-pork-bowl .cost_pantry_add: old 11.62 new 10.14
+[orig] slow-cooker-pulled-pork-bowl .cost_first_run: old 41.17 new 36.45
+[orig] slow-cooker-pork-carnitas-bowl .cost_batch: old 24.55 new 19.68
+[orig] slow-cooker-pork-carnitas-bowl .cost_batch_true: old 29 new 23.76
+[orig] slow-cooker-pork-carnitas-bowl .cost_pantry_add: old 11.8 new 11.63
+[orig] slow-cooker-pork-carnitas-bowl .cost_first_run: old 40.8 new 35.39
+[orig] slow-cooker-barbacoa-bowl .cost_batch: old 46 new 42.01
+[orig] slow-cooker-barbacoa-bowl .cost_batch_true: old 47.9 new 43.56
+[orig] slow-cooker-barbacoa-bowl .cost_pantry_add: old 13.01 new 12.92
+[orig] slow-cooker-barbacoa-bowl .cost_first_run: old 60.91 new 56.48
+[orig] slow-cooker-italian-beef-bowl .cost_batch: old 44.51 new 42.06
+[orig] slow-cooker-italian-beef-bowl .cost_batch_true: old 46.31 new 43.69
+[orig] slow-cooker-italian-beef-bowl .cost_pantry_add: old 4.31 new 3.92
+[orig] slow-cooker-italian-beef-bowl .cost_first_run: old 50.62 new 47.61
+[orig] teriyaki-chicken-bowl .cost_batch: old 29.74 new 29.11
+[orig] teriyaki-chicken-bowl .cost_batch_true: old 32.23 new 31.71
+[orig] teriyaki-chicken-bowl .cost_pantry_add: old 10.78 new 10.77
+[orig] teriyaki-chicken-bowl .cost_first_run: old 43.01 new 42.48
+[orig] cheesy-zucchini-beef-rice-skillet .cost_batch: old 42.25 new 39.38
+[orig] cheesy-zucchini-beef-rice-skillet .cost_batch_true: old 44.76 new 41.89
+[orig] cheesy-zucchini-beef-rice-skillet .cost_pantry_add: old 11.52 new 10.29
+[orig] cheesy-zucchini-beef-rice-skillet .cost_first_run: old 56.28 new 52.18
+[orig] slow-cooker-chicken-tacos-rice-bowls .cost_batch: old 33.14 new 32.26
+[orig] slow-cooker-chicken-tacos-rice-bowls .cost_batch_true: old 36.24 new 35.7
+[orig] slow-cooker-chicken-tacos-rice-bowls .cost_pantry_add: old 11.52 new 11.51
+[orig] slow-cooker-chicken-tacos-rice-bowls .cost_first_run: old 47.76 new 47.21
+[orig] slow-cooker-chicken-tinga-bowls .cost_batch: old 30.26 new 29.39
+[orig] slow-cooker-chicken-tinga-bowls .cost_batch_true: old 34.08 new 33.55
+[orig] slow-cooker-chicken-tinga-bowls .cost_pantry_add: old 9.63 new 8.41
+[orig] slow-cooker-chicken-tinga-bowls .cost_first_run: old 43.71 new 41.96
+[orig] slow-cooker-chicken-chile-verde-bowls .cost_batch: old 38.1 new 28.44
+[orig] slow-cooker-chicken-chile-verde-bowls .cost_batch_true: old 48.64 new 38.27
+[orig] slow-cooker-chicken-chile-verde-bowls .cost_pantry_add: old 10.08 new 10.21
+[orig] slow-cooker-chicken-chile-verde-bowls .cost_first_run: old 58.72 new 48.48
+[orig] slow-cooker-chicken-tortilla-soup-bowls .cost_batch: old 39.14 new 36.86
+[orig] slow-cooker-chicken-tortilla-soup-bowls .cost_batch_true: old 42.58 new 40.21
+[orig] slow-cooker-chicken-tortilla-soup-bowls .cost_pantry_add: old 10.62 new 10.93
+[orig] slow-cooker-chicken-tortilla-soup-bowls .cost_first_run: old 53.2 new 51.14
+[orig] slow-cooker-cilantro-lime-chicken-bowls .cost_batch: old 33.76 new 34.86
+[orig] slow-cooker-cilantro-lime-chicken-bowls .cost_batch_true: old 38.86 new 41.07
+[orig] slow-cooker-cilantro-lime-chicken-bowls .cost_pantry_add: old 17.17 new 16.98
+[orig] slow-cooker-cilantro-lime-chicken-bowls .cost_first_run: old 56.03 new 58.05
+[orig] slow-cooker-white-chicken-chili-bowls .cost_batch: old 39.84 new 40.23
+[orig] slow-cooker-white-chicken-chili-bowls .cost_batch_true: old 44.76 new 45.46
+[orig] slow-cooker-white-chicken-chili-bowls .cost_first_run: old 55.18 new 55.88
+[orig] slow-cooker-king-ranch-chicken-bowls .cost_batch: old 34.81 new 33.98
+[orig] slow-cooker-king-ranch-chicken-bowls .cost_batch_true: old 41.97 new 41.35
+[orig] slow-cooker-king-ranch-chicken-bowls .cost_pantry_add: old 10.68 new 10.58
+[orig] slow-cooker-king-ranch-chicken-bowls .cost_first_run: old 52.65 new 51.93
+[orig] slow-cooker-chicken-tikka-masala-rice-bowls .cost_batch: old 34.17 new 33.42
+[orig] slow-cooker-chicken-tikka-masala-rice-bowls .cost_batch_true: old 43.43 new 43.02
+[orig] slow-cooker-chicken-tikka-masala-rice-bowls .cost_pantry_add: old 13.46 new 13.33
+[orig] slow-cooker-chicken-tikka-masala-rice-bowls .cost_first_run: old 56.89 new 56.35
+[orig] slow-cooker-butter-chicken-rice-bowls .cost_batch: old 31.09 new 29.31
+[orig] slow-cooker-butter-chicken-rice-bowls .cost_batch_true: old 43.07 new 40.28
+[orig] slow-cooker-butter-chicken-rice-bowls .cost_pantry_add: old 27.86 new 26.6
+[orig] slow-cooker-butter-chicken-rice-bowls .cost_first_run: old 70.93 new 66.88
+[orig] slow-cooker-chicken-curry-rice-bowls .cost_batch: old 31.96 new 28.28
+[orig] slow-cooker-chicken-curry-rice-bowls .cost_batch_true: old 36.47 new 31.48
+[orig] slow-cooker-chicken-curry-rice-bowls .cost_pantry_add: old 11.11 new 9.91
+[orig] slow-cooker-chicken-curry-rice-bowls .cost_first_run: old 47.58 new 41.39
+[orig] slow-cooker-chicken-korma-rice-bowls .cost_batch: old 31.79 new 30.4
+[orig] slow-cooker-chicken-korma-rice-bowls .cost_batch_true: old 37.72 new 36.32
+[orig] slow-cooker-chicken-korma-rice-bowls .cost_first_run: old 53.3 new 51.9
+[orig] slow-cooker-chicken-saag-rice-bowls .cost_batch: old 33.28 new 35.68
+[orig] slow-cooker-chicken-saag-rice-bowls .cost_batch_true: old 38.37 new 41.76
+[orig] slow-cooker-chicken-saag-rice-bowls .cost_pantry_add: old 10.65 new 9.34
+[orig] slow-cooker-chicken-saag-rice-bowls .cost_first_run: old 49.02 new 51.1
+[orig] slow-cooker-orange-chicken-rice-bowls .cost_batch: old 30.75 new 29.89
+[orig] slow-cooker-orange-chicken-rice-bowls .cost_batch_true: old 35.47 new 34.83
+[orig] slow-cooker-orange-chicken-rice-bowls .cost_pantry_add: old 23.13 new 21.87
+[orig] slow-cooker-orange-chicken-rice-bowls .cost_first_run: old 58.6 new 56.7
+[orig] slow-cooker-honey-sesame-chicken-bowls .cost_batch: old 29.3 new 28.41
+[orig] slow-cooker-honey-sesame-chicken-bowls .cost_batch_true: old 30.91 new 30.24
+[orig] slow-cooker-honey-sesame-chicken-bowls .cost_pantry_add: old 17.34 new 16.11
+[orig] slow-cooker-honey-sesame-chicken-bowls .cost_first_run: old 48.25 new 46.35
+[orig] slow-cooker-general-tso-chicken-bowls .cost_batch: old 30.35 new 29.67
+[orig] slow-cooker-general-tso-chicken-bowls .cost_batch_true: old 31.8 new 31.28
+[orig] slow-cooker-general-tso-chicken-bowls .cost_pantry_add: old 21.18 new 21.17
+[orig] slow-cooker-general-tso-chicken-bowls .cost_first_run: old 52.98 new 52.45
+[orig] slow-cooker-kung-pao-chicken-bowls .cost_batch: old 32.02 new 30.53
+[orig] slow-cooker-kung-pao-chicken-bowls .cost_batch_true: old 37.26 new 35.77
+[orig] slow-cooker-kung-pao-chicken-bowls .cost_pantry_add: old 29.65 new 28.39
+[orig] slow-cooker-kung-pao-chicken-bowls .cost_first_run: old 66.91 new 64.16
+[orig] slow-cooker-mongolian-chicken-bowls .cost_batch: old 34.31 new 34.68
+[orig] slow-cooker-mongolian-chicken-bowls .cost_batch_true: old 37.55 new 38.13
+[orig] slow-cooker-mongolian-chicken-bowls .cost_pantry_add: old 19.09 new 20.3
+[orig] slow-cooker-mongolian-chicken-bowls .cost_first_run: old 56.64 new 58.43
+[orig] slow-cooker-thai-peanut-chicken-bowls .cost_batch: old 34.59 new 32.78
+[orig] slow-cooker-thai-peanut-chicken-bowls .cost_batch_true: old 37.75 new 35.93
+[orig] slow-cooker-thai-peanut-chicken-bowls .cost_pantry_add: old 12.16 new 11.99
+[orig] slow-cooker-thai-peanut-chicken-bowls .cost_first_run: old 49.91 new 47.92
+[orig] slow-cooker-chicken-adobo-rice-bowls .cost_batch: old 32.77 new 32.66
+[orig] slow-cooker-chicken-adobo-rice-bowls .cost_batch_true: old 35.29 new 35.2
+[orig] slow-cooker-chicken-adobo-rice-bowls .cost_pantry_add: old 11.56 new 11.55
+[orig] slow-cooker-chicken-adobo-rice-bowls .cost_first_run: old 46.85 new 46.75
+[orig] slow-cooker-greek-chicken-bowls .cost_batch: old 34.87 new 31.84
+[orig] slow-cooker-greek-chicken-bowls .cost_batch_true: old 36.87 new 33.75
+[orig] slow-cooker-greek-chicken-bowls .cost_first_run: old 56.93 new 53.81
+[orig] slow-cooker-chicken-shawarma-bowls .cost_batch: old 34.71 new 34.3
+[orig] slow-cooker-chicken-shawarma-bowls .cost_batch_true: old 39.29 new 37.94
+[orig] slow-cooker-chicken-shawarma-bowls .cost_pantry_add: old 30.52 new 30.47
+[orig] slow-cooker-chicken-shawarma-bowls .cost_first_run: old 69.81 new 68.41
+[orig] slow-cooker-chicken-gyro-bowls .cost_batch: old 34.23 new 33.73
+[orig] slow-cooker-chicken-gyro-bowls .cost_batch_true: old 39.48 new 38.13
+[orig] slow-cooker-chicken-gyro-bowls .cost_pantry_add: old 17.89 new 17.84
+[orig] slow-cooker-chicken-gyro-bowls .cost_first_run: old 57.37 new 55.97
+[orig] slow-cooker-mediterranean-chicken-bowls .cost_batch: old 32.72 new 31.79
+[orig] slow-cooker-mediterranean-chicken-bowls .cost_batch_true: old 36.54 new 35.72
+[orig] slow-cooker-mediterranean-chicken-bowls .cost_pantry_add: old 22.02 new 20.7
+[orig] slow-cooker-mediterranean-chicken-bowls .cost_first_run: old 58.56 new 56.42
+[orig] slow-cooker-chicken-tagine-bowls .cost_batch: old 33.03 new 31.46
+[orig] slow-cooker-chicken-tagine-bowls .cost_batch_true: old 38.66 new 36.16
+[orig] slow-cooker-chicken-tagine-bowls .cost_pantry_add: old 27.65 new 27.48
+[orig] slow-cooker-chicken-tagine-bowls .cost_first_run: old 66.31 new 63.64
+[orig] slow-cooker-crack-chicken-bowls .cost_batch: old 35.74 new 33.09
+[orig] slow-cooker-crack-chicken-bowls .cost_batch_true: old 41.86 new 38.99
+[orig] slow-cooker-crack-chicken-bowls .cost_first_run: old 42.95 new 40.08
+[orig] slow-cooker-french-onion-chicken-bowls .cost_batch: old 37.23 new 35.51
+[orig] slow-cooker-french-onion-chicken-bowls .cost_batch_true: old 42.4 new 39.88
+[orig] slow-cooker-french-onion-chicken-bowls .cost_pantry_add: old 8.13 new 8
+[orig] slow-cooker-french-onion-chicken-bowls .cost_first_run: old 50.53 new 47.88
+[orig] slow-cooker-creamy-chicken-mushroom-bowls .cost_batch: old 38.09 new 35.98
+[orig] slow-cooker-creamy-chicken-mushroom-bowls .cost_batch_true: old 43.47 new 40.46
+[orig] slow-cooker-creamy-chicken-mushroom-bowls .cost_pantry_add: old 8.48 new 8.47
+[orig] slow-cooker-creamy-chicken-mushroom-bowls .cost_first_run: old 51.95 new 48.93
+[orig] slow-cooker-chicken-cacciatore-pasta .cost_batch: old 36 new 35.39
+[orig] slow-cooker-chicken-cacciatore-pasta .cost_batch_true: old 41.82 new 40.98
+[orig] slow-cooker-chicken-cacciatore-pasta .cost_first_run: old 60.85 new 60.01
+[orig] slow-cooker-tuscan-chicken-pasta .cost_batch: old 34.31 new 33.81
+[orig] slow-cooker-tuscan-chicken-pasta .cost_batch_true: old 40.14 new 39.6
+[orig] slow-cooker-tuscan-chicken-pasta .cost_first_run: old 59.47 new 58.93
+[orig] slow-cooker-bbq-pulled-chicken-bowls .cost_batch: old 32.77 new 29.91
+[orig] slow-cooker-bbq-pulled-chicken-bowls .cost_batch_true: old 35.56 new 32.49
+[orig] slow-cooker-bbq-pulled-chicken-bowls .cost_pantry_add: old 9.76 new 8.45
+[orig] slow-cooker-bbq-pulled-chicken-bowls .cost_first_run: old 45.32 new 40.94
+[orig] slow-cooker-salsa-verde-pork-bowls .cost_batch: old 39.87 new 36.97
+[orig] slow-cooker-salsa-verde-pork-bowls .cost_batch_true: old 43.6 new 40.49
+[orig] slow-cooker-salsa-verde-pork-bowls .cost_pantry_add: old 11.81 new 11.05
+[orig] slow-cooker-salsa-verde-pork-bowls .cost_first_run: old 55.41 new 51.54
+[orig] slow-cooker-cuban-mojo-pork-bowls .cost_batch: old 43.96 new 39.72
+[orig] slow-cooker-cuban-mojo-pork-bowls .cost_batch_true: old 49.76 new 45.62
+[orig] slow-cooker-cuban-mojo-pork-bowls .cost_pantry_add: old 11.37 new 10.96
+[orig] slow-cooker-cuban-mojo-pork-bowls .cost_first_run: old 61.13 new 56.58
+[orig] slow-cooker-korean-gochujang-pork-bowls .cost_batch: old 25.49 new 25.65
+[orig] slow-cooker-korean-gochujang-pork-bowls .cost_batch_true: old 27.45 new 27.76
+[orig] slow-cooker-korean-gochujang-pork-bowls .cost_pantry_add: old 9.62 new 9.21
+[orig] slow-cooker-korean-gochujang-pork-bowls .cost_first_run: old 37.07 new 36.97
+[orig] slow-cooker-char-siu-pork-bowls .cost_batch: old 25.83 new 25.99
+[orig] slow-cooker-char-siu-pork-bowls .cost_batch_true: old 28.9 new 29.21
+[orig] slow-cooker-char-siu-pork-bowls .cost_pantry_add: old 21.69 new 21.28
+[orig] slow-cooker-char-siu-pork-bowls .cost_first_run: old 50.59 new 50.49
+[orig] slow-cooker-teriyaki-pork-bowls .cost_batch: old 39.81 new 39.65
+[orig] slow-cooker-teriyaki-pork-bowls .cost_batch_true: old 46.3 new 46.29
+[orig] slow-cooker-teriyaki-pork-bowls .cost_pantry_add: old 11.62 new 11.53
+[orig] slow-cooker-teriyaki-pork-bowls .cost_first_run: old 57.92 new 57.82
+[orig] slow-cooker-mississippi-pork-bowls .cost_batch: old 44.86 new 42.38
+[orig] slow-cooker-mississippi-pork-bowls .cost_batch_true: old 50 new 47.5
+[orig] slow-cooker-mississippi-pork-bowls .cost_first_run: old 53.22 new 50.72
+[orig] slow-cooker-brown-sugar-sesame-pork-bowls .cost_batch: old 25.39 new 25.76
+[orig] slow-cooker-brown-sugar-sesame-pork-bowls .cost_batch_true: old 29.01 new 29.59
+[orig] slow-cooker-brown-sugar-sesame-pork-bowls .cost_pantry_add: old 24.88 new 24.63
+[orig] slow-cooker-brown-sugar-sesame-pork-bowls .cost_first_run: old 53.89 new 54.22
+[orig] slow-cooker-balsamic-pork-bowls .cost_batch: old 41.05 new 38.71
+[orig] slow-cooker-balsamic-pork-bowls .cost_batch_true: old 43.75 new 41.25
+[orig] slow-cooker-balsamic-pork-bowls .cost_first_run: old 71.81 new 69.31
+[orig] slow-cooker-ranch-pork-potato-bowls .cost_batch: old 28.95 new 27.13
+[orig] slow-cooker-ranch-pork-potato-bowls .cost_batch_true: old 34.13 new 32.26
+[orig] slow-cooker-ranch-pork-potato-bowls .cost_first_run: old 49.01 new 47.14
+[orig] slow-cooker-dr-pepper-pulled-pork-bowls .cost_batch: old 26.11 new 23.56
+[orig] slow-cooker-dr-pepper-pulled-pork-bowls .cost_batch_true: old 28.57 new 25.76
+[orig] slow-cooker-dr-pepper-pulled-pork-bowls .cost_first_run: old 36.06 new 33.25
+[orig] slow-cooker-kalua-pork-bowls .cost_batch: old 21.11 new 19.9
+[orig] slow-cooker-kalua-pork-bowls .cost_batch_true: old 22.94 new 21.73
+[orig] slow-cooker-kalua-pork-bowls .cost_pantry_add: old 3.67 new 3.5
+[orig] slow-cooker-kalua-pork-bowls .cost_first_run: old 26.61 new 25.23
+[orig] slow-cooker-pork-green-chili-bowls .cost_batch: old 34.55 new 36.71
+[orig] slow-cooker-pork-green-chili-bowls .cost_batch_true: old 41.7 new 43.74
+[orig] slow-cooker-pork-green-chili-bowls .cost_pantry_add: old 14.93 new 14.45
+[orig] slow-cooker-pork-green-chili-bowls .cost_first_run: old 56.63 new 58.19
+[orig] slow-cooker-italian-pork-loin-bowls .cost_batch: old 28.63 new 28.48
+[orig] slow-cooker-italian-pork-loin-bowls .cost_batch_true: old 32.82 new 32.56
+[orig] slow-cooker-italian-pork-loin-bowls .cost_first_run: old 44.73 new 44.47
+[orig] slow-cooker-apple-cider-pork-bowls .cost_batch: old 27.11 new 25.25
+[orig] slow-cooker-apple-cider-pork-bowls .cost_batch_true: old 33.15 new 31.29
+[orig] slow-cooker-apple-cider-pork-bowls .cost_first_run: old 42.78 new 40.92
+[orig] slow-cooker-honey-garlic-pork-bowls .cost_batch: old 26.04 new 26.29
+[orig] slow-cooker-honey-garlic-pork-bowls .cost_batch_true: old 27.46 new 27.92
+[orig] slow-cooker-honey-garlic-pork-bowls .cost_pantry_add: old 13.61 new 13.48
+[orig] slow-cooker-honey-garlic-pork-bowls .cost_first_run: old 41.07 new 41.4
+[orig] slow-cooker-jerk-pork-bowls .cost_batch: old 23.34 new 23.4
+[orig] slow-cooker-jerk-pork-bowls .cost_batch_true: old 26.54 new 26.81
+[orig] slow-cooker-jerk-pork-bowls .cost_pantry_add: old 7.54 new 6.23
+[orig] slow-cooker-jerk-pork-bowls .cost_first_run: old 34.08 new 33.04
+[orig] slow-cooker-pork-tinga-bowls .cost_batch: old 22.23 new 20.93
+[orig] slow-cooker-pork-tinga-bowls .cost_batch_true: old 23.71 new 22.41
+[orig] slow-cooker-pork-tinga-bowls .cost_pantry_add: old 10.65 new 10.74
+[orig] slow-cooker-pork-tinga-bowls .cost_first_run: old 34.36 new 33.15
+[orig] slow-cooker-sweet-and-sour-pork-bowls .cost_batch: old 42.42 new 40.68
+[orig] slow-cooker-sweet-and-sour-pork-bowls .cost_batch_true: old 50.97 new 49.17
+[orig] slow-cooker-sweet-and-sour-pork-bowls .cost_pantry_add: old 18.81 new 17.5
+[orig] slow-cooker-sweet-and-sour-pork-bowls .cost_first_run: old 69.78 new 66.67
+[orig] slow-cooker-root-beer-pulled-pork-bowls .cost_batch: old 42.85 new 39.74
+[orig] slow-cooker-root-beer-pulled-pork-bowls .cost_batch_true: old 47.67 new 44.4
+[orig] slow-cooker-root-beer-pulled-pork-bowls .cost_pantry_add: old 10.52 new 10.33
+[orig] slow-cooker-root-beer-pulled-pork-bowls .cost_first_run: old 58.19 new 54.73
+[orig] slow-cooker-maple-dijon-pork-bowls .cost_batch: old 40.94 new 37.78
+[orig] slow-cooker-maple-dijon-pork-bowls .cost_batch_true: old 43.19 new 40
+[orig] slow-cooker-maple-dijon-pork-bowls .cost_pantry_add: old 8.71 new 8.56
+[orig] slow-cooker-maple-dijon-pork-bowls .cost_first_run: old 51.9 new 48.56
+[orig] slow-cooker-korean-shredded-pork-bowls .cost_batch: old 36.42 new 34.96
+[orig] slow-cooker-korean-shredded-pork-bowls .cost_batch_true: old 43.88 new 42.3
+[orig] slow-cooker-korean-shredded-pork-bowls .cost_pantry_add: old 10.95 new 9.64
+[orig] slow-cooker-korean-shredded-pork-bowls .cost_first_run: old 54.83 new 51.94
+[orig] slow-cooker-filipino-pork-adobo-bowls .cost_batch: old 21.11 new 19.74
+[orig] slow-cooker-filipino-pork-adobo-bowls .cost_batch_true: old 24.23 new 22.86
+[orig] slow-cooker-filipino-pork-adobo-bowls .cost_pantry_add: old 6.43 new 6.42
+[orig] slow-cooker-filipino-pork-adobo-bowls .cost_first_run: old 30.66 new 29.28
+[orig] mongolian-ground-beef-bowls .cost_batch: old 47.84 new 45.19
+[orig] mongolian-ground-beef-bowls .cost_batch_true: old 57.66 new 55.1
+[orig] mongolian-ground-beef-bowls .cost_pantry_add: old 33.05 new 31.87
+[orig] mongolian-ground-beef-bowls .cost_first_run: old 90.71 new 86.97
+[orig] korean-ground-beef-rice-bowls .cost_batch: old 52.98 new 50.94
+[orig] korean-ground-beef-rice-bowls .cost_batch_true: old 54.09 new 52.04
+[orig] korean-ground-beef-rice-bowls .cost_pantry_add: old 11.51 new 11.44
+[orig] korean-ground-beef-rice-bowls .cost_first_run: old 65.6 new 63.48
+[orig] beef-picadillo-rice-bowls .cost_batch: old 47.5 new 44.66
+[orig] beef-picadillo-rice-bowls .cost_batch_true: old 54.89 new 51.94
+[orig] beef-picadillo-rice-bowls .cost_pantry_add: old 15.05 new 13.52
+[orig] beef-picadillo-rice-bowls .cost_first_run: old 69.94 new 65.46
+[orig] salisbury-steak-potato-bowls .cost_batch: old 48.78 new 44.03
+[orig] salisbury-steak-potato-bowls .cost_batch_true: old 52.22 new 47.1
+[orig] salisbury-steak-potato-bowls .cost_first_run: old 64.12 new 59
+[orig] loaded-beef-taco-skillet-bowls .cost_batch: old 61.09 new 50.09
+[orig] loaded-beef-taco-skillet-bowls .cost_batch_true: old 67.9 new 55.49
+[orig] loaded-beef-taco-skillet-bowls .cost_pantry_add: old 15.32 new 14.58
+[orig] loaded-beef-taco-skillet-bowls .cost_first_run: old 83.22 new 70.07
+[orig] beef-ragu-pasta .cost_batch: old 48.04 new 44.62
+[orig] beef-ragu-pasta .cost_batch_true: old 58.08 new 53.11
+[orig] beef-ragu-pasta .cost_first_run: old 71.04 new 66.07
+[orig] philly-cheesesteak-skillet-bowls .cost_batch: old 42.23 new 38.98
+[orig] philly-cheesesteak-skillet-bowls .cost_batch_true: old 49.16 new 45.67
+[orig] philly-cheesesteak-skillet-bowls .cost_pantry_add: old 17.08 new 16.13
+[orig] philly-cheesesteak-skillet-bowls .cost_first_run: old 66.24 new 61.8
+[orig] swedish-meatball-potato-bowls .cost_batch: old 52.84 new 48.32
+[orig] swedish-meatball-potato-bowls .cost_batch_true: old 61.77 new 57.04
+[orig] swedish-meatball-potato-bowls .cost_pantry_add: old 30.83 new 30.82
+[orig] swedish-meatball-potato-bowls .cost_first_run: old 92.6 new 87.86
+[orig] unstuffed-cabbage-roll-bowls .cost_batch: old 51.39 new 48.16
+[orig] unstuffed-cabbage-roll-bowls .cost_batch_true: old 54.01 new 50.77
+[orig] unstuffed-cabbage-roll-bowls .cost_pantry_add: old 16.67 new 16.51
+[orig] unstuffed-cabbage-roll-bowls .cost_first_run: old 70.68 new 67.28
+[orig] beef-enchilada-skillet-bowls .cost_batch: old 63.29 new 50.94
+[orig] beef-enchilada-skillet-bowls .cost_batch_true: old 75.18 new 61.05
+[orig] beef-enchilada-skillet-bowls .cost_first_run: old 92.67 new 78.54
+[orig] tex-mex-beef-rice-skillet-bowls .cost_batch: old 53.33 new 47.23
+[orig] tex-mex-beef-rice-skillet-bowls .cost_batch_true: old 56.36 new 49.38
+[orig] tex-mex-beef-rice-skillet-bowls .cost_pantry_add: old 10.12 new 9.64
+[orig] tex-mex-beef-rice-skillet-bowls .cost_first_run: old 66.48 new 59.02
+[orig] slow-cooker-turkey-chili-bowls .cost_batch: old 57.79 new 45.27
+[orig] slow-cooker-turkey-chili-bowls .cost_batch_true: old 62.57 new 49.47
+[orig] slow-cooker-turkey-chili-bowls .cost_pantry_add: old 11.19 new 11.31
+[orig] slow-cooker-turkey-chili-bowls .cost_first_run: old 73.76 new 60.78
+[orig] turkey-sloppy-joe-bowls .cost_batch: old 50.67 new 45.56
+[orig] turkey-sloppy-joe-bowls .cost_batch_true: old 56.42 new 51.3
+[orig] turkey-sloppy-joe-bowls .cost_pantry_add: old 25.68 new 25.37
+[orig] turkey-sloppy-joe-bowls .cost_first_run: old 82.1 new 76.67
+[orig] ground-turkey-stir-fry-bowls .cost_batch: old 48.3 new 41.74
+[orig] ground-turkey-stir-fry-bowls .cost_batch_true: old 54.18 new 47.09
+[orig] ground-turkey-stir-fry-bowls .cost_pantry_add: old 25.02 new 25.01
+[orig] ground-turkey-stir-fry-bowls .cost_first_run: old 79.2 new 72.1
+[orig] turkey-picadillo-rice-bowls .cost_batch: old 40.68 new 34.63
+[orig] turkey-picadillo-rice-bowls .cost_batch_true: old 42.64 new 36.47
+[orig] turkey-picadillo-rice-bowls .cost_pantry_add: old 4.37 new 4.06
+[orig] turkey-picadillo-rice-bowls .cost_first_run: old 47.01 new 40.53
+[orig] korean-ground-turkey-bowls .cost_batch: old 42.08 new 36.28
+[orig] korean-ground-turkey-bowls .cost_batch_true: old 46.66 new 40.74
+[orig] korean-ground-turkey-bowls .cost_pantry_add: old 24.38 new 24.37
+[orig] korean-ground-turkey-bowls .cost_first_run: old 71.04 new 65.11
+[orig] mediterranean-ground-turkey-bowls .cost_batch: old 43.77 new 36.75
+[orig] mediterranean-ground-turkey-bowls .cost_batch_true: old 48.46 new 40.99
+[orig] mediterranean-ground-turkey-bowls .cost_pantry_add: old 21.25 new 20.94
+[orig] mediterranean-ground-turkey-bowls .cost_first_run: old 69.71 new 61.93
+[orig] ground-turkey-enchilada-skillet-bowls .cost_batch: old 45.83 new 36.13
+[orig] ground-turkey-enchilada-skillet-bowls .cost_batch_true: old 51.78 new 40.73
+[orig] ground-turkey-enchilada-skillet-bowls .cost_pantry_add: old 8.46 new 8.33
+[orig] ground-turkey-enchilada-skillet-bowls .cost_first_run: old 60.24 new 49.06
+[orig] curry-ground-turkey-bowls .cost_batch: old 42.3 new 35.76
+[orig] curry-ground-turkey-bowls .cost_batch_true: old 46.67 new 39.76
+[orig] curry-ground-turkey-bowls .cost_pantry_add: old 15.55 new 15.24
+[orig] curry-ground-turkey-bowls .cost_first_run: old 62.22 new 55
+[orig] thai-turkey-larb-bowls .cost_batch: old 45.86 new 39.56
+[orig] thai-turkey-larb-bowls .cost_batch_true: old 52.55 new 45.99
+[orig] thai-turkey-larb-bowls .cost_pantry_add: old 18.98 new 17.67
+[orig] thai-turkey-larb-bowls .cost_first_run: old 71.53 new 63.66
+[orig] turkey-ragu-pasta .cost_batch: old 45.73 new 40.8
+[orig] turkey-ragu-pasta .cost_batch_true: old 52.85 new 47.89
+[orig] turkey-ragu-pasta .cost_first_run: old 68.19 new 63.23
+[orig] buffalo-turkey-potato-bowls .cost_batch: old 45.74 new 42.11
+[orig] buffalo-turkey-potato-bowls .cost_batch_true: old 50.53 new 46.88
+[orig] buffalo-turkey-potato-bowls .cost_pantry_add: old 4.79 new 5.23
+[orig] buffalo-turkey-potato-bowls .cost_first_run: old 55.32 new 52.11
+[orig] turkey-fajita-rice-bowls .cost_batch: old 40.03 new 34.12
+[orig] turkey-fajita-rice-bowls .cost_batch_true: old 48.49 new 41.18
+[orig] turkey-fajita-rice-bowls .cost_pantry_add: old 4.01 new 3.82
+[orig] turkey-fajita-rice-bowls .cost_first_run: old 52.5 new 45
+[orig] turkey-chili-mac .cost_batch: old 45.54 new 38.44
+[orig] turkey-chili-mac .cost_batch_true: old 51.65 new 43.58
+[orig] turkey-chili-mac .cost_first_run: old 69.87 new 61.8
+[orig] turkey-meatball-marinara-pasta .cost_batch: old 46.2 new 41.24
+[orig] turkey-meatball-marinara-pasta .cost_batch_true: old 54.29 new 49.36
+[orig] turkey-meatball-marinara-pasta .cost_first_run: old 70.54 new 65.61
+[orig] ground-beef-and-broccoli-bowls .cost_batch: old 45.87 new 44.59
+[orig] ground-beef-and-broccoli-bowls .cost_batch_true: old 48.42 new 47.37
+[orig] ground-beef-and-broccoli-bowls .cost_pantry_add: old 18.36 new 17.1
+[orig] ground-beef-and-broccoli-bowls .cost_first_run: old 66.78 new 64.47
+[orig] ground-beef-stroganoff-pasta .cost_batch: old 47.75 new 45.94
+[orig] ground-beef-stroganoff-pasta .cost_batch_true: old 54.39 new 52.51
+[orig] ground-beef-stroganoff-pasta .cost_pantry_add: old 10.13 new 10.12
+[orig] ground-beef-stroganoff-pasta .cost_first_run: old 64.52 new 62.63
+[orig] ground-beef-teriyaki-bowls .cost_batch: old 48.6 new 46.22
+[orig] ground-beef-teriyaki-bowls .cost_batch_true: old 50.79 new 48.33
+[orig] ground-beef-teriyaki-bowls .cost_pantry_add: old 32.97 new 31.79
+[orig] ground-beef-teriyaki-bowls .cost_first_run: old 83.76 new 80.12
+[orig] sloppy-joe-rice-bowls .cost_batch: old 47.59 new 44.17
+[orig] sloppy-joe-rice-bowls .cost_batch_true: old 53.64 new 50.03
+[orig] sloppy-joe-rice-bowls .cost_pantry_add: old 22.68 new 21.52
+[orig] sloppy-joe-rice-bowls .cost_first_run: old 76.32 new 71.55
+[orig] american-goulash-pasta .cost_batch: old 49.8 new 46.39
+[orig] american-goulash-pasta .cost_batch_true: old 61.56 new 56.59
+[orig] american-goulash-pasta .cost_first_run: old 80.95 new 75.98
+[orig] beef-chili-mac .cost_batch: old 45.43 new 43.16
+[orig] beef-chili-mac .cost_batch_true: old 49.68 new 47.13
+[orig] beef-chili-mac .cost_first_run: old 66.47 new 63.92
+[orig] unstuffed-pepper-skillet-bowls .cost_batch: old 51.26 new 47.93
+[orig] unstuffed-pepper-skillet-bowls .cost_batch_true: old 54.73 new 51.38
+[orig] unstuffed-pepper-skillet-bowls .cost_pantry_add: old 19.58 new 18.47
+[orig] unstuffed-pepper-skillet-bowls .cost_first_run: old 74.31 new 69.85
+[orig] ground-beef-gyro-bowls .cost_batch: old 48.67 new 44.7
+[orig] ground-beef-gyro-bowls .cost_batch_true: old 52.81 new 48.55
+[orig] ground-beef-gyro-bowls .cost_pantry_add: old 18.55 new 17.62
+[orig] ground-beef-gyro-bowls .cost_first_run: old 71.36 new 66.17
+[orig] ground-beef-fried-rice-bowls .cost_batch: old 47.66 new 42.63
+[orig] ground-beef-fried-rice-bowls .cost_batch_true: old 55.46 new 49.35
+[orig] ground-beef-fried-rice-bowls .cost_pantry_add: old 13.77 new 12.57
+[orig] ground-beef-fried-rice-bowls .cost_first_run: old 69.23 new 61.92
+[orig] ground-beef-shawarma-bowls .cost_batch: old 45.68 new 41.44
+[orig] ground-beef-shawarma-bowls .cost_batch_true: old 52.26 new 47.24
+[orig] ground-beef-shawarma-bowls .cost_pantry_add: old 5.87 new 4.82
+[orig] ground-beef-shawarma-bowls .cost_first_run: old 58.13 new 52.06
+[orig] cheeseburger-rice-bowls .cost_batch: old 46.1 new 42.74
+[orig] cheeseburger-rice-bowls .cost_batch_true: old 51.42 new 47.86
+[orig] cheeseburger-rice-bowls .cost_pantry_add: old 20.16 new 18.93
+[orig] cheeseburger-rice-bowls .cost_first_run: old 71.58 new 66.79
+---- lines ----
+[r100] chili-cornbread-casserole :: Kidney Beans .buy_n: old '2' new '4'
+[r100] chili-cornbread-casserole :: Kidney Beans .buy_cost: old '1.64' new '3.29'
+[r100] chili-cornbread-casserole :: Kidney Beans .pkg_g: old '425' new '255'
+[r100] chili-cornbread-casserole :: Kidney Beans .util_cost: old '1.53' new '2.56'
+[r100] mediterranean-beef-hummus-bowls :: Cherry Tomatoes .buy_cost: old '1.23' new '2.13'
+[r100] mediterranean-beef-hummus-bowls :: Cherry Tomatoes .util_cost: old '0.26' new '0.45'
+[r100] mediterranean-beef-hummus-bowls :: Red Onion .buy_cost: old '1.14' new '1.34'
+[r100] mediterranean-beef-hummus-bowls :: Red Onion .util_cost: old '0.24' new '0.28'
+[r100] greek-beef-and-chickpea-bowls :: Chickpeas .buy_n: old '4' new '6'
+[r100] greek-beef-and-chickpea-bowls :: Chickpeas .buy_cost: old '3.29' new '4.93'
+[r100] greek-beef-and-chickpea-bowls :: Chickpeas .pkg_g: old '425' new '255'
+[r100] greek-beef-and-chickpea-bowls :: Chickpeas .util_cost: old '2.88' new '4.79'
+[r100] greek-beef-and-chickpea-bowls :: Red Onion .buy_cost: old '1.14' new '1.34'
+[r100] greek-beef-and-chickpea-bowls :: Red Onion .util_cost: old '0.38' new '0.44'
+[r100] greek-beef-and-chickpea-bowls :: Cherry Tomatoes .buy_cost: old '2.46' new '4.26'
+[r100] greek-beef-and-chickpea-bowls :: Cherry Tomatoes .util_cost: old '2.27' new '3.93'
+[r100] vietnamese-caramelized-ground-beef-rice-bowls :: Red Onion .buy_cost: old '1.14' new '1.34'
+[r100] vietnamese-caramelized-ground-beef-rice-bowls :: Red Onion .util_cost: old '0.97' new '1.14'
+[r100] vietnamese-caramelized-ground-beef-rice-bowls :: Cherry Tomatoes .buy_cost: old '2.46' new '4.26'
+[r100] vietnamese-caramelized-ground-beef-rice-bowls :: Cherry Tomatoes .util_cost: old '2.07' new '3.59'
+[r100] frito-pie-walking-taco-casserole :: Kidney Beans .buy_n: old '5' new '8'
+[r100] frito-pie-walking-taco-casserole :: Kidney Beans .buy_cost: old '4.11' new '6.57'
+[r100] frito-pie-walking-taco-casserole :: Kidney Beans .pkg_g: old '425' new '255'
+[r100] frito-pie-walking-taco-casserole :: Kidney Beans .util_cost: old '3.84' new '6.4'
+[r100] frito-pie-walking-taco-casserole :: Corn Chips .buy_cost: old '5.33' new '5.66'
+[r100] frito-pie-walking-taco-casserole :: Corn Chips .util_cost: old '4.15' new '4.41'
+[r100] middle-eastern-beef-kofta-bowls-with-tzatziki :: Lemon Juice .starter_cost: old '0.89' new '3.57'
+[r100] middle-eastern-beef-kofta-bowls-with-tzatziki :: Lemon Juice .starter_pkg_g: old '237' new '946'
+[r100] middle-eastern-beef-kofta-bowls-with-tzatziki :: Red Onion .buy_cost: old '1.14' new '1.34'
+[r100] middle-eastern-beef-kofta-bowls-with-tzatziki :: Red Onion .util_cost: old '0.76' new '0.89'
+[r100] middle-eastern-beef-kofta-bowls-with-tzatziki :: Cherry Tomatoes .buy_cost: old '4.91' new '8.53'
+[r100] middle-eastern-beef-kofta-bowls-with-tzatziki :: Cherry Tomatoes .util_cost: old '4.53' new '7.86'
+[r100] baked-ziti-with-ground-beef :: Ricotta Cheese .buy_cost: old '5.12' new '8.23'
+[r100] baked-ziti-with-ground-beef :: Ricotta Cheese .util_cost: old '3.98' new '6.4'
+[r100] pastitsio :: Red Onion .buy_cost: old '1.14' new '1.34'
+[r100] pastitsio :: Red Onion .util_cost: old '0.97' new '1.14'
+[r100] ground-beef-baked-gnocchi :: Ricotta Cheese .buy_cost: old '1.71' new '2.74'
+[r100] ground-beef-baked-gnocchi :: Ricotta Cheese .util_cost: old '0.86' new '1.39'
+[r100] million-dollar-baked-spaghetti :: Ricotta Cheese .buy_cost: old '1.71' new '2.74'
+[r100] million-dollar-baked-spaghetti :: Ricotta Cheese .util_cost: old '1.28' new '2.05'
+[r100] beef-stuffed-shells :: Ricotta Cheese .buy_cost: old '5.12' new '8.23'
+[r100] beef-stuffed-shells :: Ricotta Cheese .util_cost: old '3.98' new '6.4'
+[r100] grilled-pork-tenderloin-burrito-bowl :: Red Onion .buy_cost: old '1.14' new '1.34'
+[r100] grilled-pork-tenderloin-burrito-bowl :: Red Onion .util_cost: old '0.56' new '0.65'
+[r100] pork-tenderloin-stroganoff-over-egg-noodles :: Lemon Juice .starter_cost: old '0.89' new '3.57'
+[r100] pork-tenderloin-stroganoff-over-egg-noodles :: Lemon Juice .starter_pkg_g: old '237' new '946'
+[r100] al-pastor-pork-taco-bowl-with-cilantro-lime-rice :: Seasoned Black Beans .buy_n: old '2' new '3'
+[r100] al-pastor-pork-taco-bowl-with-cilantro-lime-rice :: Seasoned Black Beans .buy_cost: old '1.72' new '2.58'
+[r100] al-pastor-pork-taco-bowl-with-cilantro-lime-rice :: Seasoned Black Beans .pkg_g: old '425' new '255'
+[r100] al-pastor-pork-taco-bowl-with-cilantro-lime-rice :: Seasoned Black Beans .util_cost: old '1.2' new '2'
+[r100] chicken-scampi :: Red Onion .buy_cost: old '1.14' new '1.34'
+[r100] chicken-scampi :: Red Onion .util_cost: old '0.48' new '0.57'
+[r100] chicken-scampi :: Lemon Juice .starter_cost: old '0.89' new '3.57'
+[r100] chicken-scampi :: Lemon Juice .starter_pkg_g: old '237' new '946'
+[r100] chicken-biryani-rice-bowls :: Lemon Juice .starter_cost: old '0.89' new '3.57'
+[r100] chicken-biryani-rice-bowls :: Lemon Juice .starter_pkg_g: old '237' new '946'
+[r100] hungarian-chicken-paprikash :: Lemon Juice .starter_cost: old '0.89' new '3.57'
+[r100] hungarian-chicken-paprikash :: Lemon Juice .starter_pkg_g: old '237' new '946'
+[r100] chicken-souvlaki-rice-bowls :: Cherry Tomatoes .buy_cost: old '2.46' new '4.26'
+[r100] chicken-souvlaki-rice-bowls :: Cherry Tomatoes .util_cost: old '1.3' new '2.26'
+[r100] chicken-souvlaki-rice-bowls :: Lemon Juice .starter_cost: old '0.89' new '3.57'
+[r100] chicken-souvlaki-rice-bowls :: Lemon Juice .starter_pkg_g: old '237' new '946'
+[r100] chicken-souvlaki-rice-bowls :: Red Onion .buy_cost: old '1.14' new '1.34'
+[r100] chicken-souvlaki-rice-bowls :: Red Onion .util_cost: old '1.11' new '1.31'
+[r100] ethiopian-doro-wat-chicken-bowls :: Lemon Juice .starter_cost: old '0.89' new '3.57'
+[r100] ethiopian-doro-wat-chicken-bowls :: Lemon Juice .starter_pkg_g: old '237' new '946'
+[r100] ethiopian-doro-wat-chicken-bowls :: Red Onion .buy_cost: old '2.28' new '2.68'
+[r100] ethiopian-doro-wat-chicken-bowls :: Red Onion .util_cost: old '1.94' new '2.27'
+[r100] harissa-chicken-rice-bowls :: Red Onion .buy_cost: old '1.14' new '1.34'
+[r100] harissa-chicken-rice-bowls :: Red Onion .util_cost: old '1.06' new '1.25'
+[r100] cajun-chicken-and-sausage-jambalaya :: Smoked Turkey Sausage .buy_cost: old '8.23' new '9.86'
+[r100] cajun-chicken-and-sausage-jambalaya :: Smoked Turkey Sausage .util_cost: old '7.89' new '9.44'
+[r100] creamy-ground-turkey-and-chorizo-pasta :: Cherry Tomatoes .buy_cost: old '3.69' new '6.4'
+[r100] creamy-ground-turkey-and-chorizo-pasta :: Cherry Tomatoes .util_cost: old '3.04' new '5.27'
+[r100] creamy-ground-turkey-and-chorizo-pasta :: Lemon Juice .starter_cost: old '0.89' new '3.57'
+[r100] creamy-ground-turkey-and-chorizo-pasta :: Lemon Juice .starter_pkg_g: old '237' new '946'
+[r100] greek-ground-turkey-lemon-rice-bowls :: Lemon Juice .starter_n: old '2' new '1'
+[r100] greek-ground-turkey-lemon-rice-bowls :: Lemon Juice .starter_cost: old '1.79' new '3.57'
+[r100] greek-ground-turkey-lemon-rice-bowls :: Lemon Juice .starter_pkg_g: old '237' new '946'
+[r100] turkey-sausage-and-cheesy-grits-bowl :: Smoked Turkey Sausage .buy_cost: old '10.98' new '13.14'
+[r100] turkey-sausage-and-cheesy-grits-bowl :: Smoked Turkey Sausage .util_cost: old '9.47' new '11.34'
+[r100] green-chile-ground-turkey-skillet :: Red Onion .buy_cost: old '2.28' new '2.68'
+[r100] green-chile-ground-turkey-skillet :: Red Onion .util_cost: old '1.52' new '1.78'
+[r100] green-chile-ground-turkey-skillet :: Seasoned Black Beans .buy_n: old '3' new '4'
+[r100] green-chile-ground-turkey-skillet :: Seasoned Black Beans .buy_cost: old '2.58' new '3.44'
+[r100] green-chile-ground-turkey-skillet :: Seasoned Black Beans .pkg_g: old '425' new '255'
+[r100] green-chile-ground-turkey-skillet :: Seasoned Black Beans .util_cost: old '1.8' new '3'
+[r100] turkey-kofta-rice-bowl-with-tahini-sauce :: Lemon Juice .starter_cost: old '0.89' new '3.57'
+[r100] turkey-kofta-rice-bowl-with-tahini-sauce :: Lemon Juice .starter_pkg_g: old '237' new '946'
+[r100] ground-turkey-burrito-bowl :: Red Onion .buy_cost: old '1.14' new '1.34'
+[r100] ground-turkey-burrito-bowl :: Red Onion .util_cost: old '1.02' new '1.19'
+[r100] ground-turkey-burrito-bowl :: Seasoned Black Beans .buy_n: old '2' new '3'
+[r100] ground-turkey-burrito-bowl :: Seasoned Black Beans .buy_cost: old '1.72' new '2.58'
+[r100] ground-turkey-burrito-bowl :: Seasoned Black Beans .pkg_g: old '425' new '255'
+[r100] ground-turkey-burrito-bowl :: Seasoned Black Beans .util_cost: old '1.28' new '2.13'
+[r100] turkey-keema-curry-with-peas :: Lemon Juice .starter_cost: old '0.89' new '3.57'
+[r100] turkey-keema-curry-with-peas :: Lemon Juice .starter_pkg_g: old '237' new '946'
+[r100] greek-turkey-meatballs-with-lemon-orzo :: Red Onion .buy_cost: old '2.28' new '2.68'
+[r100] greek-turkey-meatballs-with-lemon-orzo :: Red Onion .util_cost: old '1.22' new '1.44'
+[r100] greek-turkey-meatballs-with-lemon-orzo :: Lemon Juice .starter_cost: old '0.89' new '3.57'
+[r100] greek-turkey-meatballs-with-lemon-orzo :: Lemon Juice .starter_pkg_g: old '237' new '946'
+[r100] highprotein-turkey-burger-bowl :: Cherry Tomatoes .buy_cost: old '2.46' new '4.26'
+[r100] highprotein-turkey-burger-bowl :: Cherry Tomatoes .util_cost: old '2.38' new '4.13'
+[r100] baked-ziti-with-ground-turkey-and-ricotta :: Ricotta Cheese .buy_cost: old '3.41' new '5.49'
+[r100] baked-ziti-with-ground-turkey-and-ricotta :: Ricotta Cheese .util_cost: old '2.3' new '3.71'
+[orig] fajita-chicken-rice-bowl :: Seasoned Black Beans .buy_cost: old '6.66' new '3.44'
+[orig] fajita-chicken-rice-bowl :: Seasoned Black Beans .util_cost: old '5.94' new '3.07'
+[orig] fajita-chicken-rice-bowl :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] fajita-chicken-rice-bowl :: Rice .util_cost: old '2.2' new '0.99'
+[orig] beef-burrito-bowls :: 93/7 Ground Beef .buy_cost: old '27.88' new '26.53'
+[orig] beef-burrito-bowls :: 93/7 Ground Beef .util_cost: old '24.39' new '23.21'
+[orig] beef-burrito-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] beef-burrito-bowls :: Rice .util_cost: old '1.93' new '0.86'
+[orig] beef-burrito-bowls :: Seasoned Black Beans .buy_cost: old '6.66' new '3.44'
+[orig] beef-burrito-bowls :: Seasoned Black Beans .util_cost: old '5.94' new '3.07'
+[orig] beef-burrito-bowls :: Sweet Whole Kernel Corn .buy_cost: old '3.21' new '1.58'
+[orig] beef-burrito-bowls :: Sweet Whole Kernel Corn .util_cost: old '3.12' new '1.53'
+[orig] beef-burrito-bowls :: Reduced Fat Mozzarella .buy_cost: old '1.75' new '1.73'
+[orig] beef-burrito-bowls :: Reduced Fat Mozzarella .util_cost: old '1.51' new '1.49'
+[orig] bbq-chicken-rice-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] bbq-chicken-rice-bowls :: Rice .util_cost: old '1.93' new '0.86'
+[orig] bbq-chicken-rice-bowls :: Sweet Whole Kernel Corn .buy_cost: old '3.21' new '1.58'
+[orig] bbq-chicken-rice-bowls :: Sweet Whole Kernel Corn .util_cost: old '3.12' new '1.53'
+[orig] cheeseburger-pasta :: 93/7 Ground Beef .buy_cost: old '27.88' new '26.53'
+[orig] cheeseburger-pasta :: 93/7 Ground Beef .util_cost: old '24.39' new '23.21'
+[orig] cheeseburger-pasta :: Penne Pasta .buy_cost: old '2.5' new '1.94'
+[orig] cheeseburger-pasta :: Penne Pasta .util_cost: old '1.98' new '1.54'
+[orig] cheeseburger-pasta :: Marinara Sauce .buy_cost: old '3.65' new '4.11'
+[orig] cheeseburger-pasta :: Marinara Sauce .util_cost: old '2.31' new '2.6'
+[orig] cheeseburger-pasta :: Reduced Fat Mozzarella .buy_cost: old '1.75' new '1.73'
+[orig] cheeseburger-pasta :: Reduced Fat Mozzarella .util_cost: old '1.51' new '1.49'
+[orig] italian-sausage-penne :: Hot Italian Sausage .buy_cost: old '9.96' new '5'
+[orig] italian-sausage-penne :: Hot Italian Sausage .util_cost: old '8.07' new '4.05'
+[orig] italian-sausage-penne :: Penne Pasta .buy_cost: old '2.5' new '1.94'
+[orig] italian-sausage-penne :: Penne Pasta .util_cost: old '1.98' new '1.54'
+[orig] italian-sausage-penne :: Marinara Sauce .buy_cost: old '3.65' new '4.11'
+[orig] italian-sausage-penne :: Marinara Sauce .util_cost: old '2.88' new '3.25'
+[orig] italian-sausage-penne :: Parmesan Cheese .buy_cost: old '2.75' new '2.78'
+[orig] italian-sausage-penne :: Parmesan Cheese .util_cost: old '1.19' new '1.2'
+[orig] turkey-taco-rice-skillet :: 93/7 Ground Turkey .buy_cost: old '18.2' new '15.29'
+[orig] turkey-taco-rice-skillet :: 93/7 Ground Turkey .util_cost: old '15.92' new '13.37'
+[orig] turkey-taco-rice-skillet :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] turkey-taco-rice-skillet :: Rice .util_cost: old '1.93' new '0.86'
+[orig] turkey-taco-rice-skillet :: Seasoned Black Beans .buy_cost: old '6.66' new '3.44'
+[orig] turkey-taco-rice-skillet :: Seasoned Black Beans .util_cost: old '5.94' new '3.07'
+[orig] turkey-taco-rice-skillet :: Sweet Whole Kernel Corn .buy_cost: old '3.21' new '1.58'
+[orig] turkey-taco-rice-skillet :: Sweet Whole Kernel Corn .util_cost: old '3.12' new '1.53'
+[orig] cheesy-beef-broccoli-bowls :: 93/7 Ground Beef .buy_cost: old '27.88' new '26.53'
+[orig] cheesy-beef-broccoli-bowls :: 93/7 Ground Beef .util_cost: old '24.39' new '23.21'
+[orig] cheesy-beef-broccoli-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] cheesy-beef-broccoli-bowls :: Rice .util_cost: old '1.93' new '0.86'
+[orig] cheesy-beef-broccoli-bowls :: Broccoli Florets .buy_cost: old '2.33' new '3.18'
+[orig] cheesy-beef-broccoli-bowls :: Broccoli Florets .util_cost: old '2.04' new '2.78'
+[orig] pizza-pasta-bowls :: Marinara Sauce .buy_cost: old '3.65' new '4.11'
+[orig] pizza-pasta-bowls :: Marinara Sauce .util_cost: old '3.08' new '3.47'
+[orig] pizza-pasta-bowls :: Reduced Fat Mozzarella .buy_cost: old '3.49' new '3.45'
+[orig] pizza-pasta-bowls :: Reduced Fat Mozzarella .util_cost: old '3.01' new '2.98'
+[orig] hot-honey-chicken-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] hot-honey-chicken-bowls :: Rice .util_cost: old '1.93' new '0.86'
+[orig] hot-honey-chicken-bowls :: Broccoli Florets .buy_cost: old '2.33' new '3.18'
+[orig] hot-honey-chicken-bowls :: Broccoli Florets .util_cost: old '2.04' new '2.78'
+[orig] beef-chili-rice-bowls :: 93/7 Ground Beef .buy_cost: old '27.88' new '26.53'
+[orig] beef-chili-rice-bowls :: 93/7 Ground Beef .util_cost: old '24.39' new '23.21'
+[orig] beef-chili-rice-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] beef-chili-rice-bowls :: Rice .util_cost: old '1.93' new '0.86'
+[orig] beef-chili-rice-bowls :: Seasoned Black Beans .buy_cost: old '6.66' new '3.44'
+[orig] beef-chili-rice-bowls :: Seasoned Black Beans .util_cost: old '5.94' new '3.07'
+[orig] beef-chili-rice-bowls :: Sweet Whole Kernel Corn .buy_cost: old '1.6' new '0.79'
+[orig] beef-chili-rice-bowls :: Sweet Whole Kernel Corn .util_cost: old '1.56' new '0.77'
+[orig] chicken-parmesan-pasta :: Penne Pasta .buy_cost: old '2.5' new '1.94'
+[orig] chicken-parmesan-pasta :: Penne Pasta .util_cost: old '1.98' new '1.54'
+[orig] chicken-parmesan-pasta :: Marinara Sauce .buy_cost: old '3.65' new '4.11'
+[orig] chicken-parmesan-pasta :: Marinara Sauce .util_cost: old '2.31' new '2.6'
+[orig] chicken-parmesan-pasta :: Parmesan Cheese .buy_cost: old '2.75' new '2.78'
+[orig] chicken-parmesan-pasta :: Parmesan Cheese .util_cost: old '1.19' new '1.2'
+[orig] chicken-parmesan-pasta :: Reduced Fat Mozzarella .buy_cost: old '1.75' new '1.73'
+[orig] chicken-parmesan-pasta :: Reduced Fat Mozzarella .util_cost: old '1.51' new '1.49'
+[orig] turkey-bolognese-penne :: 93/7 Ground Turkey .buy_cost: old '18.2' new '15.29'
+[orig] turkey-bolognese-penne :: 93/7 Ground Turkey .util_cost: old '15.92' new '13.37'
+[orig] turkey-bolognese-penne :: Penne Pasta .buy_cost: old '2.5' new '1.94'
+[orig] turkey-bolognese-penne :: Penne Pasta .util_cost: old '1.98' new '1.54'
+[orig] turkey-bolognese-penne :: Marinara Sauce .buy_cost: old '3.65' new '4.11'
+[orig] turkey-bolognese-penne :: Marinara Sauce .util_cost: old '2.88' new '3.25'
+[orig] turkey-bolognese-penne :: Parmesan Cheese .buy_cost: old '2.75' new '2.78'
+[orig] turkey-bolognese-penne :: Parmesan Cheese .util_cost: old '1.19' new '1.2'
+[orig] turkey-bolognese-penne :: Carrots .buy_cost: old '3.09' new '0.95'
+[orig] turkey-bolognese-penne :: Carrots .util_cost: old '1.36' new '0.42'
+[orig] chicken-enchilada-rice-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] chicken-enchilada-rice-bowls :: Rice .util_cost: old '1.93' new '0.86'
+[orig] chicken-enchilada-rice-bowls :: Seasoned Black Beans .buy_cost: old '6.66' new '3.44'
+[orig] chicken-enchilada-rice-bowls :: Seasoned Black Beans .util_cost: old '5.94' new '3.07'
+[orig] chicken-enchilada-rice-bowls :: Sweet Whole Kernel Corn .buy_cost: old '1.6' new '0.79'
+[orig] chicken-enchilada-rice-bowls :: Sweet Whole Kernel Corn .util_cost: old '1.56' new '0.77'
+[orig] slow-cooker-buffalo-chicken-bowl :: Buffalo Wing Sauce .starter_cost: old '2.33' new '3.49'
+[orig] slow-cooker-buffalo-chicken-bowl :: Buffalo Wing Sauce .util_cost: old '1.65' new '2.47'
+[orig] slow-cooker-buffalo-chicken-bowl :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] slow-cooker-buffalo-chicken-bowl :: Rice .util_cost: old '2.75' new '1.23'
+[orig] slow-cooker-buffalo-chicken-bowl :: Broccoli Florets .buy_cost: old '2.33' new '3.18'
+[orig] slow-cooker-buffalo-chicken-bowl :: Broccoli Florets .util_cost: old '2.04' new '2.78'
+[orig] slow-cooker-salsa-verde-chicken-bowl :: Salsa Verde .buy_cost: old '5.28' new '3.94'
+[orig] slow-cooker-salsa-verde-chicken-bowl :: Salsa Verde .util_cost: old '5.24' new '3.91'
+[orig] slow-cooker-salsa-verde-chicken-bowl :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-salsa-verde-chicken-bowl :: Rice .util_cost: old '2.2' new '0.99'
+[orig] slow-cooker-salsa-verde-chicken-bowl :: Seasoned Black Beans .buy_cost: old '6.66' new '3.44'
+[orig] slow-cooker-salsa-verde-chicken-bowl :: Seasoned Black Beans .util_cost: old '5.94' new '3.07'
+[orig] slow-cooker-salsa-verde-chicken-bowl :: Sweet Whole Kernel Corn .buy_cost: old '1.6' new '0.79'
+[orig] slow-cooker-salsa-verde-chicken-bowl :: Sweet Whole Kernel Corn .util_cost: old '1.56' new '0.77'
+[orig] slow-cooker-italian-chicken-penne :: Coconut Milk .buy_cost: old '1.99' new '1.98'
+[orig] slow-cooker-italian-chicken-penne :: Penne Pasta .buy_cost: old '2.5' new '1.94'
+[orig] slow-cooker-italian-chicken-penne :: Penne Pasta .util_cost: old '2.48' new '1.92'
+[orig] slow-cooker-italian-chicken-penne :: Parmesan Cheese .buy_cost: old '2.75' new '2.78'
+[orig] slow-cooker-italian-chicken-penne :: Parmesan Cheese .util_cost: old '1.19' new '1.2'
+[orig] slow-cooker-salsa-chicken-bowl :: Diced Green Chiles .starter_cost: old '0.88' new '1.46'
+[orig] slow-cooker-salsa-chicken-bowl :: Diced Green Chiles .util_cost: old '0.88' new '1.46'
+[orig] slow-cooker-salsa-chicken-bowl :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-salsa-chicken-bowl :: Rice .util_cost: old '2.2' new '0.99'
+[orig] slow-cooker-salsa-chicken-bowl :: Seasoned Black Beans .buy_cost: old '6.66' new '3.44'
+[orig] slow-cooker-salsa-chicken-bowl :: Seasoned Black Beans .util_cost: old '5.94' new '3.07'
+[orig] slow-cooker-pulled-pork-bowl :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] slow-cooker-pulled-pork-bowl :: Rice .util_cost: old '2.75' new '1.23'
+[orig] slow-cooker-pulled-pork-bowl :: Sweet Whole Kernel Corn .buy_cost: old '3.21' new '1.58'
+[orig] slow-cooker-pulled-pork-bowl :: Sweet Whole Kernel Corn .util_cost: old '3.12' new '1.53'
+[orig] slow-cooker-pulled-pork-bowl :: Smoked Paprika .starter_cost: old '1.09' new '0.75'
+[orig] slow-cooker-pulled-pork-bowl :: Smoked Paprika .util_cost: old '0.27' new '0.18'
+[orig] slow-cooker-pork-carnitas-bowl :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-pork-carnitas-bowl :: Rice .util_cost: old '2.2' new '0.99'
+[orig] slow-cooker-pork-carnitas-bowl :: Seasoned Black Beans .buy_cost: old '6.66' new '3.44'
+[orig] slow-cooker-pork-carnitas-bowl :: Seasoned Black Beans .util_cost: old '5.94' new '3.07'
+[orig] slow-cooker-pork-carnitas-bowl :: Sweet Whole Kernel Corn .buy_cost: old '1.6' new '0.79'
+[orig] slow-cooker-pork-carnitas-bowl :: Sweet Whole Kernel Corn .util_cost: old '1.56' new '0.77'
+[orig] slow-cooker-barbacoa-bowl :: Chipotle in Adobo .starter_cost: old '1.47' new '1.64'
+[orig] slow-cooker-barbacoa-bowl :: Chipotle in Adobo .util_cost: old '0.78' new '0.87'
+[orig] slow-cooker-barbacoa-bowl :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-barbacoa-bowl :: Rice .util_cost: old '2.2' new '0.99'
+[orig] slow-cooker-barbacoa-bowl :: Seasoned Black Beans .buy_cost: old '6.66' new '3.44'
+[orig] slow-cooker-barbacoa-bowl :: Seasoned Black Beans .util_cost: old '5.94' new '3.07'
+[orig] slow-cooker-italian-beef-bowl :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-italian-beef-bowl :: Rice .util_cost: old '1.79' new '0.8'
+[orig] slow-cooker-italian-beef-bowl :: Seasoned Black Beans .buy_cost: old '3.33' new '1.72'
+[orig] slow-cooker-italian-beef-bowl :: Seasoned Black Beans .util_cost: old '2.97' new '1.53'
+[orig] slow-cooker-italian-beef-bowl :: Reduced Fat Mozzarella .buy_cost: old '1.75' new '1.73'
+[orig] slow-cooker-italian-beef-bowl :: Reduced Fat Mozzarella .util_cost: old '1.51' new '1.49'
+[orig] teriyaki-chicken-bowl :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] teriyaki-chicken-bowl :: Rice .util_cost: old '2.48' new '1.11'
+[orig] teriyaki-chicken-bowl :: Broccoli Florets .buy_cost: old '2.33' new '3.18'
+[orig] teriyaki-chicken-bowl :: Broccoli Florets .util_cost: old '2.04' new '2.78'
+[orig] cheesy-zucchini-beef-rice-skillet :: 93/7 Ground Beef .buy_cost: old '27.88' new '26.53'
+[orig] cheesy-zucchini-beef-rice-skillet :: 93/7 Ground Beef .util_cost: old '27.87' new '26.52'
+[orig] cheesy-zucchini-beef-rice-skillet :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] cheesy-zucchini-beef-rice-skillet :: Rice .util_cost: old '2.75' new '1.23'
+[orig] slow-cooker-chicken-tacos-rice-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-chicken-tacos-rice-bowls :: Rice .util_cost: old '2.48' new '1.11'
+[orig] slow-cooker-chicken-tacos-rice-bowls :: Broccoli Florets .buy_cost: old '2.33' new '3.18'
+[orig] slow-cooker-chicken-tacos-rice-bowls :: Broccoli Florets .util_cost: old '1.37' new '1.87'
+[orig] slow-cooker-chicken-tacos-rice-bowls :: Cheddar Cheese, Shredded .buy_cost: old '1.75' new '1.73'
+[orig] slow-cooker-chicken-tacos-rice-bowls :: Cheddar Cheese, Shredded .util_cost: old '0.86' new '0.85'
+[orig] slow-cooker-chicken-tinga-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] slow-cooker-chicken-tinga-bowls :: Rice .util_cost: old '2.59' new '1.16'
+[orig] slow-cooker-chicken-tinga-bowls :: Broccoli Florets .buy_cost: old '2.33' new '3.18'
+[orig] slow-cooker-chicken-tinga-bowls :: Broccoli Florets .util_cost: old '1.37' new '1.87'
+[orig] slow-cooker-chicken-tinga-bowls :: Chipotle in Adobo .starter_cost: old '1.47' new '1.64'
+[orig] slow-cooker-chicken-tinga-bowls :: Chipotle in Adobo .util_cost: old '0.67' new '0.74'
+[orig] slow-cooker-chicken-tinga-bowls :: Cheddar Cheese, Shredded .buy_cost: old '1.75' new '1.73'
+[orig] slow-cooker-chicken-tinga-bowls :: Cheddar Cheese, Shredded .util_cost: old '0.86' new '0.85'
+[orig] slow-cooker-chicken-chile-verde-bowls :: Boneless Skinless Chicken Thigh .buy_cost: old '25.76' new '14.16'
+[orig] slow-cooker-chicken-chile-verde-bowls :: Boneless Skinless Chicken Thigh .util_cost: old '22.72' new '12.49'
+[orig] slow-cooker-chicken-chile-verde-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-chicken-chile-verde-bowls :: Rice .util_cost: old '2.48' new '1.11'
+[orig] slow-cooker-chicken-chile-verde-bowls :: Diced Green Chiles .starter_cost: old '1.75' new '2.93'
+[orig] slow-cooker-chicken-chile-verde-bowls :: Diced Green Chiles .util_cost: old '1.55' new '2.59'
+[orig] slow-cooker-chicken-chile-verde-bowls :: Broccoli Florets .buy_cost: old '2.33' new '3.18'
+[orig] slow-cooker-chicken-chile-verde-bowls :: Broccoli Florets .util_cost: old '1.37' new '1.87'
+[orig] slow-cooker-chicken-chile-verde-bowls :: Jalapeno .buy_cost: old '1.9' new '1.76'
+[orig] slow-cooker-chicken-chile-verde-bowls :: Jalapeno .util_cost: old '0.13' new '0.12'
+[orig] slow-cooker-chicken-chile-verde-bowls :: Fresh Cilantro .buy_cost: old '0.93' new '1.78'
+[orig] slow-cooker-chicken-chile-verde-bowls :: Fresh Cilantro .util_cost: old '0.46' new '0.87'
+[orig] slow-cooker-chicken-tortilla-soup-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-chicken-tortilla-soup-bowls :: Rice .util_cost: old '2.26' new '1.01'
+[orig] slow-cooker-chicken-tortilla-soup-bowls :: Seasoned Black Beans .buy_cost: old '3.33' new '1.72'
+[orig] slow-cooker-chicken-tortilla-soup-bowls :: Seasoned Black Beans .util_cost: old '3.26' new '1.68'
+[orig] slow-cooker-chicken-tortilla-soup-bowls :: Sweet Whole Kernel Corn .buy_cost: old '1.6' new '0.79'
+[orig] slow-cooker-chicken-tortilla-soup-bowls :: Sweet Whole Kernel Corn .util_cost: old '1.49' new '0.73'
+[orig] slow-cooker-chicken-tortilla-soup-bowls :: Cheddar Cheese, Shredded .buy_cost: old '1.75' new '1.73'
+[orig] slow-cooker-chicken-tortilla-soup-bowls :: Cheddar Cheese, Shredded .util_cost: old '0.86' new '0.85'
+[orig] slow-cooker-chicken-tortilla-soup-bowls :: Diced Green Chiles .starter_cost: old '2.63' new '4.39'
+[orig] slow-cooker-chicken-tortilla-soup-bowls :: Diced Green Chiles .util_cost: old '1.98' new '3.3'
+[orig] slow-cooker-cilantro-lime-chicken-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-cilantro-lime-chicken-bowls :: Rice .util_cost: old '2.15' new '0.96'
+[orig] slow-cooker-cilantro-lime-chicken-bowls :: Broccoli Florets .buy_cost: old '2.33' new '3.18'
+[orig] slow-cooker-cilantro-lime-chicken-bowls :: Broccoli Florets .util_cost: old '1.37' new '1.87'
+[orig] slow-cooker-cilantro-lime-chicken-bowls :: Fresh Cilantro .buy_cost: old '2.79' new '5.34'
+[orig] slow-cooker-cilantro-lime-chicken-bowls :: Fresh Cilantro .util_cost: old '1.96' new '3.75'
+[orig] slow-cooker-white-chicken-chili-bowls :: Coconut Milk .buy_cost: old '3.98' new '3.97'
+[orig] slow-cooker-white-chicken-chili-bowls :: Coconut Milk .util_cost: old '3.73' new '3.72'
+[orig] slow-cooker-white-chicken-chili-bowls :: Jalapeno .buy_cost: old '1.9' new '1.76'
+[orig] slow-cooker-white-chicken-chili-bowls :: Jalapeno .util_cost: old '0.13' new '0.12'
+[orig] slow-cooker-white-chicken-chili-bowls :: Fresh Cilantro .buy_cost: old '0.93' new '1.78'
+[orig] slow-cooker-white-chicken-chili-bowls :: Fresh Cilantro .util_cost: old '0.46' new '0.87'
+[orig] slow-cooker-king-ranch-chicken-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-king-ranch-chicken-bowls :: Rice .util_cost: old '2.34' new '1.05'
+[orig] slow-cooker-king-ranch-chicken-bowls :: Cheddar Cheese, Shredded .buy_cost: old '3.49' new '3.45'
+[orig] slow-cooker-king-ranch-chicken-bowls :: Cheddar Cheese, Shredded .util_cost: old '2.15' new '2.13'
+[orig] slow-cooker-king-ranch-chicken-bowls :: Broccoli Florets .buy_cost: old '2.33' new '3.18'
+[orig] slow-cooker-king-ranch-chicken-bowls :: Broccoli Florets .util_cost: old '1.37' new '1.87'
+[orig] slow-cooker-king-ranch-chicken-bowls :: All-Purpose Flour .starter_cost: old '2.16' new '2.15'
+[orig] slow-cooker-king-ranch-chicken-bowls :: Jalapeno .buy_cost: old '1.9' new '1.76'
+[orig] slow-cooker-king-ranch-chicken-bowls :: Jalapeno .util_cost: old '0.19' new '0.17'
+[orig] slow-cooker-chicken-tikka-masala-rice-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-chicken-tikka-masala-rice-bowls :: Rice .util_cost: old '2.26' new '1.01'
+[orig] slow-cooker-chicken-tikka-masala-rice-bowls :: Coconut Milk .buy_cost: old '3.98' new '3.97'
+[orig] slow-cooker-chicken-tikka-masala-rice-bowls :: Broccoli Florets .buy_cost: old '2.33' new '3.18'
+[orig] slow-cooker-chicken-tikka-masala-rice-bowls :: Broccoli Florets .util_cost: old '1.37' new '1.87'
+[orig] slow-cooker-butter-chicken-rice-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] slow-cooker-butter-chicken-rice-bowls :: Rice .util_cost: old '2.7' new '1.21'
+[orig] slow-cooker-butter-chicken-rice-bowls :: Greek Yogurt .buy_cost: old '3.94' new '2.64'
+[orig] slow-cooker-butter-chicken-rice-bowls :: Greek Yogurt .util_cost: old '0.87' new '0.58'
+[orig] slow-cooker-chicken-curry-rice-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] slow-cooker-chicken-curry-rice-bowls :: Rice .util_cost: old '2.81' new '1.26'
+[orig] slow-cooker-chicken-curry-rice-bowls :: Carrots .buy_cost: old '3.09' new '0.95'
+[orig] slow-cooker-chicken-curry-rice-bowls :: Carrots .util_cost: old '2.38' new '0.74'
+[orig] slow-cooker-chicken-curry-rice-bowls :: Greek Yogurt .buy_cost: old '3.94' new '2.64'
+[orig] slow-cooker-chicken-curry-rice-bowls :: Greek Yogurt .util_cost: old '1.48' new '0.99'
+[orig] slow-cooker-chicken-korma-rice-bowls :: Rice .starter_cost: old '2.53' new '1.14'
+[orig] slow-cooker-chicken-korma-rice-bowls :: Rice .util_cost: old '2.53' new '1.14'
+[orig] slow-cooker-chicken-korma-rice-bowls :: Coconut Milk .buy_cost: old '1.99' new '1.98'
+[orig] slow-cooker-chicken-saag-rice-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] slow-cooker-chicken-saag-rice-bowls :: Rice .util_cost: old '2.61' new '1.17'
+[orig] slow-cooker-chicken-saag-rice-bowls :: Frozen Chopped Spinach .buy_cost: old '3.17' new '8.01'
+[orig] slow-cooker-chicken-saag-rice-bowls :: Frozen Chopped Spinach .util_cost: old '2.51' new '6.35'
+[orig] slow-cooker-chicken-saag-rice-bowls :: Coconut Milk .buy_cost: old '1.99' new '1.98'
+[orig] slow-cooker-orange-chicken-rice-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] slow-cooker-orange-chicken-rice-bowls :: Rice .util_cost: old '2.7' new '1.21'
+[orig] slow-cooker-orange-chicken-rice-bowls :: Broccoli Florets .buy_cost: old '2.33' new '3.18'
+[orig] slow-cooker-orange-chicken-rice-bowls :: Broccoli Florets .util_cost: old '1.71' new '2.34'
+[orig] slow-cooker-honey-sesame-chicken-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] slow-cooker-honey-sesame-chicken-bowls :: Rice .util_cost: old '2.75' new '1.23'
+[orig] slow-cooker-honey-sesame-chicken-bowls :: Broccoli Florets .buy_cost: old '2.33' new '3.18'
+[orig] slow-cooker-honey-sesame-chicken-bowls :: Broccoli Florets .util_cost: old '1.71' new '2.34'
+[orig] slow-cooker-general-tso-chicken-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-general-tso-chicken-bowls :: Rice .util_cost: old '2.48' new '1.11'
+[orig] slow-cooker-general-tso-chicken-bowls :: Broccoli Florets .buy_cost: old '2.33' new '3.18'
+[orig] slow-cooker-general-tso-chicken-bowls :: Broccoli Florets .util_cost: old '1.88' new '2.57'
+[orig] slow-cooker-kung-pao-chicken-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] slow-cooker-kung-pao-chicken-bowls :: Rice .util_cost: old '2.7' new '1.21'
+[orig] slow-cooker-mongolian-chicken-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-mongolian-chicken-bowls :: Rice .util_cost: old '2.2' new '0.99'
+[orig] slow-cooker-mongolian-chicken-bowls :: Broccoli Florets .buy_cost: old '4.65' new '6.36'
+[orig] slow-cooker-mongolian-chicken-bowls :: Broccoli Florets .util_cost: old '4.11' new '5.61'
+[orig] slow-cooker-mongolian-chicken-bowls :: Sriracha .starter_cost: old '3.48' new '4.94'
+[orig] slow-cooker-mongolian-chicken-bowls :: Sriracha .util_cost: old '0.18' new '0.26'
+[orig] slow-cooker-thai-peanut-chicken-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-thai-peanut-chicken-bowls :: Rice .util_cost: old '2.2' new '0.99'
+[orig] slow-cooker-thai-peanut-chicken-bowls :: Red Bell Pepper .buy_cost: old '4.9' new '4.3'
+[orig] slow-cooker-thai-peanut-chicken-bowls :: Red Bell Pepper .util_cost: old '4.9' new '4.3'
+[orig] slow-cooker-thai-peanut-chicken-bowls :: Coconut Milk .buy_cost: old '1.99' new '1.98'
+[orig] slow-cooker-chicken-adobo-rice-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-chicken-adobo-rice-bowls :: Rice .util_cost: old '2.48' new '1.11'
+[orig] slow-cooker-chicken-adobo-rice-bowls :: Broccoli Florets .buy_cost: old '3.49' new '4.77'
+[orig] slow-cooker-chicken-adobo-rice-bowls :: Broccoli Florets .util_cost: old '3.42' new '4.68'
+[orig] slow-cooker-greek-chicken-bowls :: Potato .buy_cost: old '8.8' new '5.68'
+[orig] slow-cooker-greek-chicken-bowls :: Potato .util_cost: old '8.54' new '5.51'
+[orig] slow-cooker-chicken-shawarma-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-chicken-shawarma-bowls :: Rice .util_cost: old '2.42' new '1.09'
+[orig] slow-cooker-chicken-shawarma-bowls :: Broccoli Florets .buy_cost: old '3.49' new '4.77'
+[orig] slow-cooker-chicken-shawarma-bowls :: Broccoli Florets .util_cost: old '3.42' new '4.68'
+[orig] slow-cooker-chicken-shawarma-bowls :: Greek Yogurt .buy_cost: old '3.94' new '2.64'
+[orig] slow-cooker-chicken-shawarma-bowls :: Greek Yogurt .util_cost: old '1.04' new '0.7'
+[orig] slow-cooker-chicken-gyro-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-chicken-gyro-bowls :: Rice .util_cost: old '2.42' new '1.09'
+[orig] slow-cooker-chicken-gyro-bowls :: Broccoli Florets .buy_cost: old '3.49' new '4.77'
+[orig] slow-cooker-chicken-gyro-bowls :: Broccoli Florets .util_cost: old '3.42' new '4.68'
+[orig] slow-cooker-chicken-gyro-bowls :: Greek Yogurt .buy_cost: old '3.94' new '2.64'
+[orig] slow-cooker-chicken-gyro-bowls :: Greek Yogurt .util_cost: old '1.3' new '0.87'
+[orig] slow-cooker-mediterranean-chicken-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] slow-cooker-mediterranean-chicken-bowls :: Rice .util_cost: old '2.59' new '1.16'
+[orig] slow-cooker-mediterranean-chicken-bowls :: Olives .buy_cost: old '1.26' new '1.87'
+[orig] slow-cooker-mediterranean-chicken-bowls :: Olives .util_cost: old '1.04' new '1.54'
+[orig] slow-cooker-chicken-tagine-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-chicken-tagine-bowls :: Rice .util_cost: old '2.2' new '0.99'
+[orig] slow-cooker-chicken-tagine-bowls :: Carrots .buy_cost: old '3.09' new '0.95'
+[orig] slow-cooker-chicken-tagine-bowls :: Carrots .util_cost: old '0.82' new '0.25'
+[orig] slow-cooker-chicken-tagine-bowls :: Fresh Cilantro .buy_cost: old '0.93' new '1.78'
+[orig] slow-cooker-chicken-tagine-bowls :: Fresh Cilantro .util_cost: old '0.23' new '0.44'
+[orig] slow-cooker-crack-chicken-bowls :: Potato .buy_cost: old '7.04' new '4.54'
+[orig] slow-cooker-crack-chicken-bowls :: Potato .util_cost: old '6.79' new '4.38'
+[orig] slow-cooker-crack-chicken-bowls :: 1/3 Fat Cream Cheese .buy_cost: old '1.84' new '1.49'
+[orig] slow-cooker-crack-chicken-bowls :: 1/3 Fat Cream Cheese .util_cost: old '1.14' new '0.92'
+[orig] slow-cooker-crack-chicken-bowls :: Cheddar Cheese, Shredded .buy_cost: old '1.75' new '1.73'
+[orig] slow-cooker-crack-chicken-bowls :: Cheddar Cheese, Shredded .util_cost: old '1.31' new '1.29'
+[orig] slow-cooker-french-onion-chicken-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-french-onion-chicken-bowls :: Rice .util_cost: old '2.26' new '1.01'
+[orig] slow-cooker-french-onion-chicken-bowls :: Greek Yogurt .buy_cost: old '3.94' new '2.64'
+[orig] slow-cooker-french-onion-chicken-bowls :: Greek Yogurt .util_cost: old '1.48' new '0.99'
+[orig] slow-cooker-french-onion-chicken-bowls :: Parmesan Cheese .buy_cost: old '2.75' new '2.78'
+[orig] slow-cooker-french-onion-chicken-bowls :: Parmesan Cheese .util_cost: old '1.69' new '1.71'
+[orig] slow-cooker-creamy-chicken-mushroom-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-creamy-chicken-mushroom-bowls :: Rice .util_cost: old '2.48' new '1.11'
+[orig] slow-cooker-creamy-chicken-mushroom-bowls :: White Mushrooms .buy_cost: old '7.56' new '7.57'
+[orig] slow-cooker-creamy-chicken-mushroom-bowls :: White Mushrooms .util_cost: old '7.49' new '7.5'
+[orig] slow-cooker-creamy-chicken-mushroom-bowls :: 1/3 Fat Cream Cheese .buy_cost: old '1.84' new '1.49'
+[orig] slow-cooker-creamy-chicken-mushroom-bowls :: 1/3 Fat Cream Cheese .util_cost: old '1.36' new '1.1'
+[orig] slow-cooker-creamy-chicken-mushroom-bowls :: Greek Yogurt .buy_cost: old '3.94' new '2.64'
+[orig] slow-cooker-creamy-chicken-mushroom-bowls :: Greek Yogurt .util_cost: old '1.48' new '0.99'
+[orig] slow-cooker-chicken-cacciatore-pasta :: Penne Pasta .buy_cost: old '3.75' new '2.91'
+[orig] slow-cooker-chicken-cacciatore-pasta :: Penne Pasta .util_cost: old '2.7' new '2.09'
+[orig] slow-cooker-tuscan-chicken-pasta :: Penne Pasta .buy_cost: old '2.5' new '1.94'
+[orig] slow-cooker-tuscan-chicken-pasta :: Penne Pasta .util_cost: old '2.31' new '1.8'
+[orig] slow-cooker-tuscan-chicken-pasta :: Coconut Milk .buy_cost: old '1.99' new '1.98'
+[orig] slow-cooker-tuscan-chicken-pasta :: Parmesan Cheese .buy_cost: old '2.75' new '2.78'
+[orig] slow-cooker-tuscan-chicken-pasta :: Parmesan Cheese .util_cost: old '1.02' new '1.03'
+[orig] slow-cooker-bbq-pulled-chicken-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] slow-cooker-bbq-pulled-chicken-bowls :: Rice .util_cost: old '2.61' new '1.17'
+[orig] slow-cooker-bbq-pulled-chicken-bowls :: Sweet Whole Kernel Corn .buy_cost: old '3.21' new '1.58'
+[orig] slow-cooker-bbq-pulled-chicken-bowls :: Sweet Whole Kernel Corn .util_cost: old '2.79' new '1.37'
+[orig] slow-cooker-salsa-verde-pork-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] slow-cooker-salsa-verde-pork-bowls :: Rice .util_cost: old '2.59' new '1.16'
+[orig] slow-cooker-salsa-verde-pork-bowls :: Salsa Verde .buy_cost: old '2.64' new '1.97'
+[orig] slow-cooker-salsa-verde-pork-bowls :: Salsa Verde .util_cost: old '2.62' new '1.95'
+[orig] slow-cooker-salsa-verde-pork-bowls :: Diced Green Chiles .starter_cost: old '1.75' new '2.93'
+[orig] slow-cooker-salsa-verde-pork-bowls :: Diced Green Chiles .util_cost: old '0.93' new '1.55'
+[orig] slow-cooker-salsa-verde-pork-bowls :: Sweet Whole Kernel Corn .buy_cost: old '3.21' new '1.58'
+[orig] slow-cooker-salsa-verde-pork-bowls :: Sweet Whole Kernel Corn .util_cost: old '2.79' new '1.37'
+[orig] slow-cooker-cuban-mojo-pork-bowls :: Seasoned Black Beans .buy_cost: old '8.32' new '4.3'
+[orig] slow-cooker-cuban-mojo-pork-bowls :: Seasoned Black Beans .util_cost: old '7.83' new '4.04'
+[orig] slow-cooker-cuban-mojo-pork-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-cuban-mojo-pork-bowls :: Rice .util_cost: old '1.76' new '0.79'
+[orig] slow-cooker-cuban-mojo-pork-bowls :: Fresh Cilantro .buy_cost: old '0.93' new '1.78'
+[orig] slow-cooker-cuban-mojo-pork-bowls :: Fresh Cilantro .util_cost: old '0.57' new '1.09'
+[orig] slow-cooker-korean-gochujang-pork-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-korean-gochujang-pork-bowls :: Rice .util_cost: old '1.76' new '0.79'
+[orig] slow-cooker-korean-gochujang-pork-bowls :: Broccoli Florets .buy_cost: old '3.49' new '4.77'
+[orig] slow-cooker-korean-gochujang-pork-bowls :: Broccoli Florets .util_cost: old '3.08' new '4.21'
+[orig] slow-cooker-char-siu-pork-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-char-siu-pork-bowls :: Rice .util_cost: old '1.76' new '0.79'
+[orig] slow-cooker-char-siu-pork-bowls :: Broccoli Florets .buy_cost: old '3.49' new '4.77'
+[orig] slow-cooker-char-siu-pork-bowls :: Broccoli Florets .util_cost: old '3.08' new '4.21'
+[orig] slow-cooker-teriyaki-pork-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-teriyaki-pork-bowls :: Rice .util_cost: old '2.34' new '1.05'
+[orig] slow-cooker-teriyaki-pork-bowls :: Broccoli Florets .buy_cost: old '3.49' new '4.77'
+[orig] slow-cooker-teriyaki-pork-bowls :: Broccoli Florets .util_cost: old '3.08' new '4.21'
+[orig] slow-cooker-mississippi-pork-bowls :: Potato .buy_cost: old '7.04' new '4.54'
+[orig] slow-cooker-mississippi-pork-bowls :: Potato .util_cost: old '7' new '4.52'
+[orig] slow-cooker-brown-sugar-sesame-pork-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-brown-sugar-sesame-pork-bowls :: Rice .util_cost: old '2.06' new '0.93'
+[orig] slow-cooker-brown-sugar-sesame-pork-bowls :: Broccoli Florets .buy_cost: old '4.65' new '6.36'
+[orig] slow-cooker-brown-sugar-sesame-pork-bowls :: Broccoli Florets .util_cost: old '4.11' new '5.61'
+[orig] slow-cooker-balsamic-pork-bowls :: Potato .buy_cost: old '7.04' new '4.54'
+[orig] slow-cooker-balsamic-pork-bowls :: Potato .util_cost: old '6.6' new '4.26'
+[orig] slow-cooker-ranch-pork-potato-bowls :: Potato .buy_cost: old '5.28' new '3.41'
+[orig] slow-cooker-ranch-pork-potato-bowls :: Potato .util_cost: old '5.14' new '3.32'
+[orig] slow-cooker-dr-pepper-pulled-pork-bowls :: Potato .buy_cost: old '7.92' new '5.11'
+[orig] slow-cooker-dr-pepper-pulled-pork-bowls :: Potato .util_cost: old '7.18' new '4.63'
+[orig] slow-cooker-kalua-pork-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-kalua-pork-bowls :: Rice .util_cost: old '2.2' new '0.99'
+[orig] slow-cooker-pork-green-chili-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-pork-green-chili-bowls :: Rice .util_cost: old '1.93' new '0.86'
+[orig] slow-cooker-pork-green-chili-bowls :: Diced Green Chiles .starter_cost: old '6.14' new '10.24'
+[orig] slow-cooker-pork-green-chili-bowls :: Diced Green Chiles .util_cost: old '5.9' new '9.84'
+[orig] slow-cooker-pork-green-chili-bowls :: Salsa Verde .buy_cost: old '2.64' new '1.97'
+[orig] slow-cooker-pork-green-chili-bowls :: Salsa Verde .util_cost: old '2.62' new '1.95'
+[orig] slow-cooker-pork-green-chili-bowls :: Jalapeno .buy_cost: old '1.9' new '1.76'
+[orig] slow-cooker-pork-green-chili-bowls :: Jalapeno .util_cost: old '0.19' new '0.17'
+[orig] slow-cooker-pork-green-chili-bowls :: Smoked Paprika .starter_cost: old '1.09' new '0.75'
+[orig] slow-cooker-pork-green-chili-bowls :: Smoked Paprika .util_cost: old '0.07' new '0.05'
+[orig] slow-cooker-pork-green-chili-bowls :: All-Purpose Flour .starter_cost: old '2.16' new '2.15'
+[orig] slow-cooker-italian-pork-loin-bowls :: Red Bell Pepper .buy_cost: old '1.96' new '1.72'
+[orig] slow-cooker-italian-pork-loin-bowls :: Red Bell Pepper .util_cost: old '1.22' new '1.08'
+[orig] slow-cooker-italian-pork-loin-bowls :: Reduced Fat Mozzarella .buy_cost: old '1.75' new '1.73'
+[orig] slow-cooker-italian-pork-loin-bowls :: Reduced Fat Mozzarella .util_cost: old '1.15' new '1.14'
+[orig] slow-cooker-apple-cider-pork-bowls :: Potato .buy_cost: old '5.28' new '3.41'
+[orig] slow-cooker-apple-cider-pork-bowls :: Potato .util_cost: old '5.24' new '3.38'
+[orig] slow-cooker-apple-cider-pork-bowls :: Honey Dijon Mustard .buy_cost: old '1.71' new '1.72'
+[orig] slow-cooker-honey-garlic-pork-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-honey-garlic-pork-bowls :: Rice .util_cost: old '2.26' new '1.01'
+[orig] slow-cooker-honey-garlic-pork-bowls :: Broccoli Florets .buy_cost: old '4.65' new '6.36'
+[orig] slow-cooker-honey-garlic-pork-bowls :: Broccoli Florets .util_cost: old '4.11' new '5.61'
+[orig] slow-cooker-jerk-pork-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] slow-cooker-jerk-pork-bowls :: Rice .util_cost: old '2.61' new '1.17'
+[orig] slow-cooker-jerk-pork-bowls :: Broccoli Florets .buy_cost: old '4.65' new '6.36'
+[orig] slow-cooker-jerk-pork-bowls :: Broccoli Florets .util_cost: old '4.11' new '5.61'
+[orig] slow-cooker-pork-tinga-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-pork-tinga-bowls :: Rice .util_cost: old '2.48' new '1.11'
+[orig] slow-cooker-pork-tinga-bowls :: Chipotle in Adobo .starter_cost: old '1.47' new '1.64'
+[orig] slow-cooker-pork-tinga-bowls :: Chipotle in Adobo .util_cost: old '0.67' new '0.74'
+[orig] slow-cooker-sweet-and-sour-pork-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] slow-cooker-sweet-and-sour-pork-bowls :: Rice .util_cost: old '2.61' new '1.17'
+[orig] slow-cooker-sweet-and-sour-pork-bowls :: Red Bell Pepper .buy_cost: old '2.94' new '2.58'
+[orig] slow-cooker-sweet-and-sour-pork-bowls :: Red Bell Pepper .util_cost: old '2.45' new '2.15'
+[orig] slow-cooker-root-beer-pulled-pork-bowls :: Potato .buy_cost: old '8.8' new '5.68'
+[orig] slow-cooker-root-beer-pulled-pork-bowls :: Potato .util_cost: old '8.34' new '5.38'
+[orig] slow-cooker-root-beer-pulled-pork-bowls :: Smoked Paprika .starter_cost: old '1.09' new '0.75'
+[orig] slow-cooker-root-beer-pulled-pork-bowls :: Smoked Paprika .util_cost: old '0.45' new '0.3'
+[orig] slow-cooker-maple-dijon-pork-bowls :: Potato .buy_cost: old '8.8' new '5.68'
+[orig] slow-cooker-maple-dijon-pork-bowls :: Potato .util_cost: old '8.73' new '5.64'
+[orig] slow-cooker-maple-dijon-pork-bowls :: Sugar-Free Maple Syrup .starter_cost: old '1.4' new '1.18'
+[orig] slow-cooker-maple-dijon-pork-bowls :: Sugar-Free Maple Syrup .util_cost: old '0.47' new '0.4'
+[orig] slow-cooker-korean-shredded-pork-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] slow-cooker-korean-shredded-pork-bowls :: Rice .util_cost: old '2.61' new '1.17'
+[orig] slow-cooker-korean-shredded-pork-bowls :: Jalapeno .buy_cost: old '1.9' new '1.76'
+[orig] slow-cooker-korean-shredded-pork-bowls :: Jalapeno .util_cost: old '0.19' new '0.17'
+[orig] slow-cooker-filipino-pork-adobo-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] slow-cooker-filipino-pork-adobo-bowls :: Rice .util_cost: old '2.48' new '1.11'
+[orig] mongolian-ground-beef-bowls :: 93/7 Ground Beef .buy_cost: old '41.82' new '39.8'
+[orig] mongolian-ground-beef-bowls :: 93/7 Ground Beef .util_cost: old '35.04' new '33.34'
+[orig] mongolian-ground-beef-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] mongolian-ground-beef-bowls :: Rice .util_cost: old '2.84' new '1.27'
+[orig] mongolian-ground-beef-bowls :: Broccoli Florets .buy_cost: old '3.49' new '4.77'
+[orig] mongolian-ground-beef-bowls :: Broccoli Florets .util_cost: old '2.4' new '3.27'
+[orig] mongolian-ground-beef-bowls :: Red Bell Pepper .buy_cost: old '2.94' new '2.58'
+[orig] mongolian-ground-beef-bowls :: Red Bell Pepper .util_cost: old '2.45' new '2.15'
+[orig] mongolian-ground-beef-bowls :: Green Onions .buy_cost: old '0.96' new '1.07'
+[orig] mongolian-ground-beef-bowls :: Green Onions .util_cost: old '0.43' new '0.48'
+[orig] korean-ground-beef-rice-bowls :: 93/7 Ground Beef .buy_cost: old '41.82' new '39.8'
+[orig] korean-ground-beef-rice-bowls :: 93/7 Ground Beef .util_cost: old '41.18' new '39.19'
+[orig] korean-ground-beef-rice-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] korean-ground-beef-rice-bowls :: Rice .util_cost: old '2.37' new '1.06'
+[orig] korean-ground-beef-rice-bowls :: Broccoli Florets .buy_cost: old '3.49' new '4.77'
+[orig] korean-ground-beef-rice-bowls :: Broccoli Florets .util_cost: old '3.42' new '4.68'
+[orig] beef-picadillo-rice-bowls :: 93/7 Ground Beef .buy_cost: old '41.82' new '39.8'
+[orig] beef-picadillo-rice-bowls :: 93/7 Ground Beef .util_cost: old '35.8' new '34.07'
+[orig] beef-picadillo-rice-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] beef-picadillo-rice-bowls :: Rice .util_cost: old '2.6' new '1.17'
+[orig] beef-picadillo-rice-bowls :: Olives .buy_cost: old '1.26' new '1.87'
+[orig] beef-picadillo-rice-bowls :: Olives .util_cost: old '0.89' new '1.32'
+[orig] beef-picadillo-rice-bowls :: Golden Raisins .starter_cost: old '3.18' new '2.86'
+[orig] beef-picadillo-rice-bowls :: Golden Raisins .util_cost: old '1.12' new '1.01'
+[orig] salisbury-steak-potato-bowls :: 93/7 Ground Beef .buy_cost: old '34.85' new '33.16'
+[orig] salisbury-steak-potato-bowls :: 93/7 Ground Beef .util_cost: old '33.34' new '31.73'
+[orig] salisbury-steak-potato-bowls :: Potato .buy_cost: old '9.68' new '6.25'
+[orig] salisbury-steak-potato-bowls :: Potato .util_cost: old '8.85' new '5.71'
+[orig] loaded-beef-taco-skillet-bowls :: 93/7 Ground Beef .buy_cost: old '34.85' new '33.16'
+[orig] loaded-beef-taco-skillet-bowls :: 93/7 Ground Beef .util_cost: old '34.27' new '32.61'
+[orig] loaded-beef-taco-skillet-bowls :: Seasoned Black Beans .buy_cost: old '16.64' new '8.59'
+[orig] loaded-beef-taco-skillet-bowls :: Seasoned Black Beans .util_cost: old '15.44' new '7.97'
+[orig] loaded-beef-taco-skillet-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] loaded-beef-taco-skillet-bowls :: Rice .util_cost: old '1.16' new '0.52'
+[orig] loaded-beef-taco-skillet-bowls :: Sweet Whole Kernel Corn .buy_cost: old '3.21' new '1.58'
+[orig] loaded-beef-taco-skillet-bowls :: Sweet Whole Kernel Corn .util_cost: old '1.86' new '0.91'
+[orig] loaded-beef-taco-skillet-bowls :: Cheddar Cheese, Shredded .buy_cost: old '3.49' new '3.45'
+[orig] loaded-beef-taco-skillet-bowls :: Cheddar Cheese, Shredded .util_cost: old '2.15' new '2.13'
+[orig] loaded-beef-taco-skillet-bowls :: Red Bell Pepper .buy_cost: old '2.94' new '2.58'
+[orig] loaded-beef-taco-skillet-bowls :: Red Bell Pepper .util_cost: old '2.12' new '1.86'
+[orig] beef-ragu-pasta :: 93/7 Ground Beef .buy_cost: old '41.82' new '39.8'
+[orig] beef-ragu-pasta :: 93/7 Ground Beef .util_cost: old '37.65' new '35.82'
+[orig] beef-ragu-pasta :: Penne Pasta .buy_cost: old '3.75' new '2.91'
+[orig] beef-ragu-pasta :: Penne Pasta .util_cost: old '2.97' new '2.31'
+[orig] beef-ragu-pasta :: Carrots .buy_cost: old '3.09' new '0.95'
+[orig] beef-ragu-pasta :: Carrots .util_cost: old '1.36' new '0.42'
+[orig] beef-ragu-pasta :: Parmesan Cheese .buy_cost: old '2.75' new '2.78'
+[orig] beef-ragu-pasta :: Parmesan Cheese .util_cost: old '0.97' new '0.98'
+[orig] philly-cheesesteak-skillet-bowls :: 93/7 Ground Beef .buy_cost: old '34.85' new '33.16'
+[orig] philly-cheesesteak-skillet-bowls :: 93/7 Ground Beef .util_cost: old '30.12' new '28.66'
+[orig] philly-cheesesteak-skillet-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] philly-cheesesteak-skillet-bowls :: Rice .util_cost: old '3.27' new '1.47'
+[orig] philly-cheesesteak-skillet-bowls :: White Mushrooms .util_cost: old '3.06' new '3.07'
+[orig] swedish-meatball-potato-bowls :: 93/7 Ground Beef .buy_cost: old '41.95' new '39.92'
+[orig] swedish-meatball-potato-bowls :: 93/7 Ground Beef .util_cost: old '41.95' new '39.92'
+[orig] swedish-meatball-potato-bowls :: Potato .buy_cost: old '7.04' new '4.54'
+[orig] swedish-meatball-potato-bowls :: Potato .util_cost: old '6.8' new '4.39'
+[orig] swedish-meatball-potato-bowls :: Light Sour Cream .buy_cost: old '1.84' new '1.64'
+[orig] swedish-meatball-potato-bowls :: Light Sour Cream .util_cost: old '0.73' new '0.65'
+[orig] swedish-meatball-potato-bowls :: All-Purpose Flour .starter_cost: old '2.16' new '2.15'
+[orig] unstuffed-cabbage-roll-bowls :: 93/7 Ground Beef .buy_cost: old '41.82' new '39.8'
+[orig] unstuffed-cabbage-roll-bowls :: 93/7 Ground Beef .util_cost: old '41.64' new '39.63'
+[orig] unstuffed-cabbage-roll-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] unstuffed-cabbage-roll-bowls :: Rice .util_cost: old '2.22' new '1'
+[orig] beef-enchilada-skillet-bowls :: 93/7 Ground Beef .buy_cost: old '41.82' new '39.8'
+[orig] beef-enchilada-skillet-bowls :: 93/7 Ground Beef .util_cost: old '35.04' new '33.34'
+[orig] beef-enchilada-skillet-bowls :: Seasoned Black Beans .buy_cost: old '21.63' new '11.17'
+[orig] beef-enchilada-skillet-bowls :: Seasoned Black Beans .util_cost: old '20.01' new '10.33'
+[orig] beef-enchilada-skillet-bowls :: Sweet Whole Kernel Corn .buy_cost: old '3.21' new '1.58'
+[orig] beef-enchilada-skillet-bowls :: Sweet Whole Kernel Corn .util_cost: old '1.86' new '0.91'
+[orig] beef-enchilada-skillet-bowls :: Cheddar Cheese, Shredded .buy_cost: old '1.75' new '1.73'
+[orig] beef-enchilada-skillet-bowls :: Cheddar Cheese, Shredded .util_cost: old '1.72' new '1.7'
+[orig] tex-mex-beef-rice-skillet-bowls :: 93/7 Ground Beef .buy_cost: old '41.95' new '39.92'
+[orig] tex-mex-beef-rice-skillet-bowls :: 93/7 Ground Beef .util_cost: old '41.95' new '39.92'
+[orig] tex-mex-beef-rice-skillet-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] tex-mex-beef-rice-skillet-bowls :: Rice .util_cost: old '1.62' new '0.72'
+[orig] tex-mex-beef-rice-skillet-bowls :: Seasoned Black Beans .buy_cost: old '6.66' new '3.44'
+[orig] tex-mex-beef-rice-skillet-bowls :: Seasoned Black Beans .util_cost: old '5.09' new '2.63'
+[orig] tex-mex-beef-rice-skillet-bowls :: Sweet Whole Kernel Corn .buy_cost: old '1.6' new '0.79'
+[orig] tex-mex-beef-rice-skillet-bowls :: Sweet Whole Kernel Corn .util_cost: old '1.39' new '0.69'
+[orig] tex-mex-beef-rice-skillet-bowls :: Cheddar Cheese, Shredded .buy_cost: old '1.75' new '1.73'
+[orig] tex-mex-beef-rice-skillet-bowls :: Cheddar Cheese, Shredded .util_cost: old '1.29' new '1.28'
+[orig] slow-cooker-turkey-chili-bowls :: 93/7 Ground Turkey .buy_cost: old '31.85' new '26.75'
+[orig] slow-cooker-turkey-chili-bowls :: 93/7 Ground Turkey .util_cost: old '31.3' new '26.28'
+[orig] slow-cooker-turkey-chili-bowls :: Seasoned Black Beans .buy_cost: old '16.64' new '8.59'
+[orig] slow-cooker-turkey-chili-bowls :: Seasoned Black Beans .util_cost: old '15.6' new '8.05'
+[orig] slow-cooker-turkey-chili-bowls :: Chipotle in Adobo .starter_cost: old '1.47' new '1.64'
+[orig] slow-cooker-turkey-chili-bowls :: Chipotle in Adobo .util_cost: old '0.45' new '0.5'
+[orig] turkey-sloppy-joe-bowls :: 93/7 Ground Turkey .buy_cost: old '31.85' new '26.75'
+[orig] turkey-sloppy-joe-bowls :: 93/7 Ground Turkey .util_cost: old '31.7' new '26.62'
+[orig] turkey-sloppy-joe-bowls :: Honey Dijon Mustard .buy_cost: old '1.71' new '1.72'
+[orig] turkey-sloppy-joe-bowls :: Smoked Paprika .starter_cost: old '1.09' new '0.75'
+[orig] turkey-sloppy-joe-bowls :: Smoked Paprika .util_cost: old '0.09' new '0.06'
+[orig] ground-turkey-stir-fry-bowls :: 93/7 Ground Turkey .buy_cost: old '36.4' new '30.57'
+[orig] ground-turkey-stir-fry-bowls :: 93/7 Ground Turkey .util_cost: old '33.1' new '27.8'
+[orig] ground-turkey-stir-fry-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] ground-turkey-stir-fry-bowls :: Rice .util_cost: old '2.48' new '1.11'
+[orig] ground-turkey-stir-fry-bowls :: Green Onions .buy_cost: old '0.96' new '1.07'
+[orig] ground-turkey-stir-fry-bowls :: Green Onions .util_cost: old '0.96' new '1.07'
+[orig] turkey-picadillo-rice-bowls :: 93/7 Ground Turkey .buy_cost: old '31.85' new '26.75'
+[orig] turkey-picadillo-rice-bowls :: 93/7 Ground Turkey .util_cost: old '31.1' new '26.12'
+[orig] turkey-picadillo-rice-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] turkey-picadillo-rice-bowls :: Rice .util_cost: old '1.93' new '0.86'
+[orig] korean-ground-turkey-bowls :: 93/7 Ground Turkey .buy_cost: old '36.4' new '30.57'
+[orig] korean-ground-turkey-bowls :: 93/7 Ground Turkey .util_cost: old '33.1' new '27.8'
+[orig] korean-ground-turkey-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] korean-ground-turkey-bowls :: Rice .util_cost: old '2.48' new '1.11'
+[orig] korean-ground-turkey-bowls :: Broccoli Florets .buy_cost: old '3.49' new '4.77'
+[orig] korean-ground-turkey-bowls :: Broccoli Florets .util_cost: old '2.4' new '3.27'
+[orig] mediterranean-ground-turkey-bowls :: 93/7 Ground Turkey .buy_cost: old '31.85' new '26.75'
+[orig] mediterranean-ground-turkey-bowls :: 93/7 Ground Turkey .util_cost: old '31.1' new '26.12'
+[orig] mediterranean-ground-turkey-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] mediterranean-ground-turkey-bowls :: Rice .util_cost: old '1.93' new '0.86'
+[orig] mediterranean-ground-turkey-bowls :: Greek Yogurt .buy_cost: old '3.94' new '2.64'
+[orig] mediterranean-ground-turkey-bowls :: Greek Yogurt .util_cost: old '2.95' new '1.98'
+[orig] ground-turkey-enchilada-skillet-bowls :: 93/7 Ground Turkey .buy_cost: old '31.85' new '26.75'
+[orig] ground-turkey-enchilada-skillet-bowls :: 93/7 Ground Turkey .util_cost: old '30.09' new '25.27'
+[orig] ground-turkey-enchilada-skillet-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] ground-turkey-enchilada-skillet-bowls :: Rice .util_cost: old '2.06' new '0.93'
+[orig] ground-turkey-enchilada-skillet-bowls :: Seasoned Black Beans .buy_cost: old '6.66' new '3.44'
+[orig] ground-turkey-enchilada-skillet-bowls :: Seasoned Black Beans .util_cost: old '5.87' new '3.03'
+[orig] ground-turkey-enchilada-skillet-bowls :: Sweet Whole Kernel Corn .buy_cost: old '3.21' new '1.58'
+[orig] ground-turkey-enchilada-skillet-bowls :: Sweet Whole Kernel Corn .util_cost: old '1.86' new '0.91'
+[orig] ground-turkey-enchilada-skillet-bowls :: Chipotle in Adobo .starter_cost: old '1.47' new '1.64'
+[orig] ground-turkey-enchilada-skillet-bowls :: Chipotle in Adobo .util_cost: old '0.45' new '0.5'
+[orig] ground-turkey-enchilada-skillet-bowls :: Cheddar Cheese, Shredded .buy_cost: old '1.75' new '1.73'
+[orig] ground-turkey-enchilada-skillet-bowls :: Cheddar Cheese, Shredded .util_cost: old '1.29' new '1.28'
+[orig] curry-ground-turkey-bowls :: 93/7 Ground Turkey .buy_cost: old '36.4' new '30.57'
+[orig] curry-ground-turkey-bowls :: 93/7 Ground Turkey .util_cost: old '34.11' new '28.64'
+[orig] curry-ground-turkey-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] curry-ground-turkey-bowls :: Rice .util_cost: old '1.93' new '0.86'
+[orig] curry-ground-turkey-bowls :: Coconut Milk .buy_cost: old '1.99' new '1.98'
+[orig] thai-turkey-larb-bowls :: 93/7 Ground Turkey .buy_cost: old '36.4' new '30.57'
+[orig] thai-turkey-larb-bowls :: 93/7 Ground Turkey .util_cost: old '33.1' new '27.8'
+[orig] thai-turkey-larb-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] thai-turkey-larb-bowls :: Rice .util_cost: old '2.61' new '1.17'
+[orig] thai-turkey-larb-bowls :: Jalapeno .buy_cost: old '1.9' new '1.76'
+[orig] thai-turkey-larb-bowls :: Jalapeno .util_cost: old '0.15' new '0.14'
+[orig] thai-turkey-larb-bowls :: Fresh Cilantro .buy_cost: old '0.93' new '1.78'
+[orig] thai-turkey-larb-bowls :: Fresh Cilantro .util_cost: old '0.49' new '0.94'
+[orig] turkey-ragu-pasta :: 93/7 Ground Turkey .buy_cost: old '31.85' new '26.75'
+[orig] turkey-ragu-pasta :: 93/7 Ground Turkey .util_cost: old '31.1' new '26.12'
+[orig] turkey-ragu-pasta :: Penne Pasta .buy_cost: old '2.5' new '1.94'
+[orig] turkey-ragu-pasta :: Penne Pasta .util_cost: old '1.93' new '1.5'
+[orig] turkey-ragu-pasta :: Marinara Sauce .buy_cost: old '5.47' new '6.17'
+[orig] turkey-ragu-pasta :: Marinara Sauce .util_cost: old '3.75' new '4.23'
+[orig] buffalo-turkey-potato-bowls :: 93/7 Ground Turkey .buy_cost: old '27.3' new '22.93'
+[orig] buffalo-turkey-potato-bowls :: 93/7 Ground Turkey .util_cost: old '27.18' new '22.83'
+[orig] buffalo-turkey-potato-bowls :: Buffalo Wing Sauce .starter_cost: old '2.33' new '3.49'
+[orig] buffalo-turkey-potato-bowls :: Buffalo Wing Sauce .util_cost: old '1.44' new '2.16'
+[orig] turkey-fajita-rice-bowls :: 93/7 Ground Turkey .buy_cost: old '31.85' new '26.75'
+[orig] turkey-fajita-rice-bowls :: 93/7 Ground Turkey .util_cost: old '27.59' new '23.17'
+[orig] turkey-fajita-rice-bowls :: Rice .starter_cost: old '2.5' new '1.12'
+[orig] turkey-fajita-rice-bowls :: Rice .util_cost: old '2.16' new '0.97'
+[orig] turkey-fajita-rice-bowls :: Salsa Verde .buy_cost: old '2.64' new '1.97'
+[orig] turkey-fajita-rice-bowls :: Salsa Verde .util_cost: old '0.76' new '0.56'
+[orig] turkey-fajita-rice-bowls :: 1/3 Fat Cream Cheese .buy_cost: old '1.84' new '1.49'
+[orig] turkey-fajita-rice-bowls :: 1/3 Fat Cream Cheese .util_cost: old '0.53' new '0.43'
+[orig] turkey-chili-mac :: 93/7 Ground Turkey .buy_cost: old '31.85' new '26.75'
+[orig] turkey-chili-mac :: 93/7 Ground Turkey .util_cost: old '30.09' new '25.27'
+[orig] turkey-chili-mac :: Penne Pasta .buy_cost: old '2.5' new '1.94'
+[orig] turkey-chili-mac :: Penne Pasta .util_cost: old '1.71' new '1.33'
+[orig] turkey-chili-mac :: Seasoned Black Beans .buy_cost: old '4.99' new '2.58'
+[orig] turkey-chili-mac :: Seasoned Black Beans .util_cost: old '3.92' new '2.02'
+[orig] turkey-meatball-marinara-pasta :: 93/7 Ground Turkey .buy_cost: old '31.85' new '26.75'
+[orig] turkey-meatball-marinara-pasta :: 93/7 Ground Turkey .util_cost: old '31.4' new '26.37'
+[orig] turkey-meatball-marinara-pasta :: Penne Pasta .buy_cost: old '2.5' new '1.94'
+[orig] turkey-meatball-marinara-pasta :: Penne Pasta .util_cost: old '2.06' new '1.6'
+[orig] turkey-meatball-marinara-pasta :: Marinara Sauce .buy_cost: old '5.47' new '6.17'
+[orig] turkey-meatball-marinara-pasta :: Marinara Sauce .util_cost: old '4.02' new '4.53'
+[orig] turkey-meatball-marinara-pasta :: Parmesan Cheese .buy_cost: old '2.75' new '2.78'
+[orig] turkey-meatball-marinara-pasta :: Parmesan Cheese .util_cost: old '1.69' new '1.71'
+[orig] ground-beef-and-broccoli-bowls :: 93/7 Ground Beef .buy_cost: old '34.85' new '33.16'
+[orig] ground-beef-and-broccoli-bowls :: 93/7 Ground Beef .util_cost: old '34.42' new '32.75'
+[orig] ground-beef-and-broccoli-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] ground-beef-and-broccoli-bowls :: Rice .util_cost: old '2.7' new '1.21'
+[orig] ground-beef-and-broccoli-bowls :: Broccoli Florets .buy_cost: old '5.82' new '7.95'
+[orig] ground-beef-and-broccoli-bowls :: Broccoli Florets .util_cost: old '5.13' new '7.01'
+[orig] ground-beef-stroganoff-pasta :: 93/7 Ground Beef .buy_cost: old '34.85' new '33.16'
+[orig] ground-beef-stroganoff-pasta :: 93/7 Ground Beef .util_cost: old '34.42' new '32.75'
+[orig] ground-beef-stroganoff-pasta :: White Mushrooms .buy_cost: old '7.56' new '7.57'
+[orig] ground-beef-stroganoff-pasta :: Light Sour Cream .buy_cost: old '1.84' new '1.64'
+[orig] ground-beef-stroganoff-pasta :: Light Sour Cream .util_cost: old '1.3' new '1.16'
+[orig] ground-beef-stroganoff-pasta :: All-Purpose Flour .starter_cost: old '2.16' new '2.15'
+[orig] ground-beef-teriyaki-bowls :: 93/7 Ground Beef .buy_cost: old '34.85' new '33.16'
+[orig] ground-beef-teriyaki-bowls :: 93/7 Ground Beef .util_cost: old '34.42' new '32.75'
+[orig] ground-beef-teriyaki-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] ground-beef-teriyaki-bowls :: Rice .util_cost: old '2.84' new '1.27'
+[orig] ground-beef-teriyaki-bowls :: Broccoli Florets .buy_cost: old '3.49' new '4.77'
+[orig] ground-beef-teriyaki-bowls :: Broccoli Florets .util_cost: old '3.42' new '4.68'
+[orig] ground-beef-teriyaki-bowls :: Red Bell Pepper .buy_cost: old '3.92' new '3.44'
+[orig] ground-beef-teriyaki-bowls :: Red Bell Pepper .util_cost: old '3.27' new '2.87'
+[orig] sloppy-joe-rice-bowls :: 93/7 Ground Beef .buy_cost: old '41.82' new '39.8'
+[orig] sloppy-joe-rice-bowls :: 93/7 Ground Beef .util_cost: old '37.65' new '35.82'
+[orig] sloppy-joe-rice-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] sloppy-joe-rice-bowls :: Rice .util_cost: old '2.89' new '1.3'
+[orig] american-goulash-pasta :: 93/7 Ground Beef .buy_cost: old '41.82' new '39.8'
+[orig] american-goulash-pasta :: 93/7 Ground Beef .util_cost: old '37.65' new '35.82'
+[orig] american-goulash-pasta :: Penne Pasta .buy_cost: old '3.75' new '2.91'
+[orig] american-goulash-pasta :: Penne Pasta .util_cost: old '2.89' new '2.24'
+[orig] american-goulash-pasta :: Carrots .buy_cost: old '3.09' new '0.95'
+[orig] american-goulash-pasta :: Carrots .util_cost: old '1.36' new '0.42'
+[orig] american-goulash-pasta :: Parmesan Cheese .buy_cost: old '2.75' new '2.78'
+[orig] american-goulash-pasta :: Parmesan Cheese .util_cost: old '0.97' new '0.98'
+[orig] beef-chili-mac :: 93/7 Ground Beef .buy_cost: old '34.85' new '33.16'
+[orig] beef-chili-mac :: 93/7 Ground Beef .util_cost: old '34.27' new '32.61'
+[orig] beef-chili-mac :: Penne Pasta .buy_cost: old '3.75' new '2.91'
+[orig] beef-chili-mac :: Penne Pasta .util_cost: old '2.67' new '2.07'
+[orig] beef-chili-mac :: Cheddar Cheese, Shredded .buy_cost: old '1.75' new '1.73'
+[orig] beef-chili-mac :: Cheddar Cheese, Shredded .util_cost: old '1.23' new '1.22'
+[orig] unstuffed-pepper-skillet-bowls :: 93/7 Ground Beef .buy_cost: old '34.85' new '33.16'
+[orig] unstuffed-pepper-skillet-bowls :: 93/7 Ground Beef .util_cost: old '34.42' new '32.75'
+[orig] unstuffed-pepper-skillet-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] unstuffed-pepper-skillet-bowls :: Rice .util_cost: old '2.97' new '1.33'
+[orig] unstuffed-pepper-skillet-bowls :: Reduced Fat Mozzarella .buy_cost: old '1.75' new '1.73'
+[orig] unstuffed-pepper-skillet-bowls :: Reduced Fat Mozzarella .util_cost: old '1.31' new '1.29'
+[orig] ground-beef-gyro-bowls :: 93/7 Ground Beef .buy_cost: old '34.85' new '33.16'
+[orig] ground-beef-gyro-bowls :: 93/7 Ground Beef .util_cost: old '34.42' new '32.75'
+[orig] ground-beef-gyro-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] ground-beef-gyro-bowls :: Rice .util_cost: old '3.3' new '1.48'
+[orig] ground-beef-gyro-bowls :: Greek Yogurt .buy_cost: old '3.94' new '2.64'
+[orig] ground-beef-gyro-bowls :: Greek Yogurt .util_cost: old '2.6' new '1.75'
+[orig] ground-beef-gyro-bowls :: Feta Cheese .buy_cost: old '3.38' new '3.93'
+[orig] ground-beef-gyro-bowls :: Feta Cheese .util_cost: old '2.24' new '2.61'
+[orig] ground-beef-fried-rice-bowls :: 93/7 Ground Beef .buy_cost: old '41.82' new '39.8'
+[orig] ground-beef-fried-rice-bowls :: 93/7 Ground Beef .util_cost: old '37.65' new '35.82'
+[orig] ground-beef-fried-rice-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] ground-beef-fried-rice-bowls :: Rice .util_cost: old '2.81' new '1.26'
+[orig] ground-beef-fried-rice-bowls :: Frozen Green Peas .buy_cost: old '1.87' new '1.47'
+[orig] ground-beef-fried-rice-bowls :: Frozen Green Peas .util_cost: old '1.1' new '0.86'
+[orig] ground-beef-fried-rice-bowls :: Carrots .buy_cost: old '3.09' new '0.95'
+[orig] ground-beef-fried-rice-bowls :: Carrots .util_cost: old '2.04' new '0.63'
+[orig] ground-beef-shawarma-bowls :: 93/7 Ground Beef .buy_cost: old '41.82' new '39.8'
+[orig] ground-beef-shawarma-bowls :: 93/7 Ground Beef .util_cost: old '37.65' new '35.82'
+[orig] ground-beef-shawarma-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] ground-beef-shawarma-bowls :: Rice .util_cost: old '3.08' new '1.38'
+[orig] ground-beef-shawarma-bowls :: Greek Yogurt .buy_cost: old '3.94' new '2.64'
+[orig] ground-beef-shawarma-bowls :: Greek Yogurt .util_cost: old '2.17' new '1.46'
+[orig] cheeseburger-rice-bowls :: 93/7 Ground Beef .buy_cost: old '41.82' new '39.8'
+[orig] cheeseburger-rice-bowls :: 93/7 Ground Beef .util_cost: old '37.65' new '35.82'
+[orig] cheeseburger-rice-bowls :: Rice .starter_cost: old '4.99' new '2.24'
+[orig] cheeseburger-rice-bowls :: Rice .util_cost: old '2.75' new '1.23'
+[orig] cheeseburger-rice-bowls :: Cheddar Cheese, Shredded .buy_cost: old '1.75' new '1.73'
+[orig] cheeseburger-rice-bowls :: Cheddar Cheese, Shredded .util_cost: old '1.38' new '1.37'

@@ -1,0 +1,250 @@
+{
+    "name":  "Cornbread-Topped Turkey Casserole",
+    "slug":  "cornbread-topped-turkey-casserole",
+    "cuisine":  "American",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.spendwithpennies.com/cornbread-leftover-turkey-casserole/",
+    "source_site":  "spendwithpennies.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Corn Muffin Mix)",
+                   "portion factor 1.25"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Savory (not chili) cornbread bake; the catalog\u0027s only cornbread dish is a beef chili cornbread casserole, which is a different filling entirely. Source verified at 8 servings, 266 cal / 17g on leftover-turkey quantities; our build triples the turkey to ~540 cal / 36g. Confidence: est_cal is our build. | HARVEST: ",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Corn Muffin Mix)",
+                         "TUNING: portion factor 1.25",
+                         "OVERRIDE Turkey Breast: [BUMP x3.2] source \u00272 cups\u0027 (280 g) for 8 under a full Jiffy topping; house = 2 lb leftover turkey"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  571,
+                 "protein":  44,
+                 "carbs":  57,
+                 "fat":  18,
+                 "cost_ps":  "3.59"
+             },
+    "intro_html":  "This is the savory cousin of a chili cornbread bake. Turkey and peas in a poultry-seasoned cream base, a full sheet of cornbread batter poured over the top, baked until the cornbread sets golden and the filling bubbles up around the edges. Each serving lands at 571 calories with \u003cstrong\u003e44 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.59\u003c/strong\u003e (at everyday cost). Corn muffin mix is one of the cheapest boxes in the baking aisle and it makes a casserole feel finished.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eCream of Mushroom Soup (Campbell\u0027s (USDA SR)):\u003c/strong\u003e 2.2 cans (651 g)",
+                                "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 4.25 lb (1969 g)",
+                                "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 13 oz (366 g)",
+                                "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 0.5 tbsp (3 g)",
+                                "\u003cstrong\u003ePoultry Seasoning (generic (USDA)):\u003c/strong\u003e 0.11 oz (3 g)",
+                                "\u003cstrong\u003eCorn Muffin Mix (JIFFY):\u003c/strong\u003e 7.25 cups (947 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 1.75 cups (402 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 2 large eggs (109 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 6.5 oz (186 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.5 tbsp (25 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tbsp (5 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Cream of Mushroom Soup, 2.2 cans: ~$1.62. \u003cstrong\u003eBuy 3 10.5oz cans: $2.22.\u003c/strong\u003e",
+                       "Turkey Breast, 4.25 lb: ~$20.89. \u003cstrong\u003eBuy 2 3lb frozen roasts: $28.88.\u003c/strong\u003e",
+                       "Frozen Green Peas, 13 oz: ~$0.79. \u003cstrong\u003eBuy 2 12oz bags: $1.47.\u003c/strong\u003e",
+                       "Corn Muffin Mix, 7.25 cups: ~$2.83. \u003cstrong\u003eBuy 4 boxes: $2.88.\u003c/strong\u003e",
+                       "Milk, 1.75 cups: ~$0.32. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
+                       "Eggs, 2 large eggs: ~$0.26. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 6.5 oz: ~$1.41. \u003cstrong\u003eBuy 1 8oz bag: $1.73.\u003c/strong\u003e",
+                       "Pantry seasonings (onion powder, poultry seasoning, salt, black pepper): ~$0.46. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $28.58 across 14 servings, so roughly $2.04 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $42.09 across 14 servings, roughly $3.01 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.18 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.27. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.59 a serving\u003c/strong\u003e (at everyday cost). The cornbread topping costs less than a dollar total across the whole pan, which is a remarkable return on a box of mix and a couple of eggs.",
+    "shop_smart":  [
+                       "Corn muffin mix is one of the cheapest items in the entire store and it keeps for a year in the box. Buy a stack when it goes on sale, since you need four boxes for this pan.",
+                       "Two frozen turkey breast roasts cover this batch. Roast both on one oven cycle, dice, and freeze what you do not use immediately.",
+                       "Cream of mushroom soup is the binder and store brand is indistinguishable once it is baked under cornbread. Three cans is all you need.",
+                       "Frozen peas beat canned on price and texture here, and they will not turn to mush during a 40 minute bake the way canned peas do."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Stir the condensed cream of mushroom soup together with the onion powder, poultry seasoning, salt, and black pepper in a large bowl until smooth.",
+                    "Fold in the diced turkey breast, the frozen peas, and the shredded cheddar. The filling should be thick, since the cornbread pulls moisture out of it as it bakes.",
+                    "Spread the filling into a greased 9x13 pan and press it into an even layer all the way to the corners.",
+                    "Whisk the corn muffin mix with the milk and eggs just until combined. Lumps are fine; overmixed cornbread bakes tough.",
+                    "Pour the batter over the filling and spread it gently to the edges with the back of a spoon so it seals the pan.",
+                    "Bake at 400F for 30 to 35 minutes, until the cornbread is golden and a toothpick pushed into the topping comes out clean.",
+                    "Rest 15 minutes before portioning. Cornbread finishes setting as it cools and will crumble if you cut it hot."
+                ],
+    "portion_html":  "Set the pan on the scale, subtract the empty pan weight, and divide by 14. Cut squares to that weight so every container gets both filling and topping. Each serving comes to \u003cstrong\u003e571 calories\u003c/strong\u003e and 44 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.spendwithpennies.com/cornbread-leftover-turkey-casserole/\" target=\"_blank\" rel=\"noopener\"\u003espendwithpennies.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Cornbread and turkey in one pan for about $3.59 a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "cost_batch":  28.58,
+    "cost_batch_true":  42.09,
+    "cost_per_serving":  2.04,
+    "cost_per_serving_true":  3.01,
+    "cost_pantry_add":  8.18,
+    "cost_first_run":  50.27,
+    "scaler":  {
+                   "cost":  "42.09",
+                   "ing":  [
+                               {
+                                   "item":  "Cream of Mushroom Soup",
+                                   "canon":  "Cream of Mushroom Soup",
+                                   "grams":  651,
+                                   "buy":  "2.2 cans",
+                                   "bid":  "cream-of-mushroom-soup",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Turkey Breast",
+                                   "canon":  "Turkey Breast",
+                                   "grams":  1969,
+                                   "buy":  "4.25 lb",
+                                   "bid":  "turkey-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Frozen Green Peas",
+                                   "canon":  "Frozen Green Peas",
+                                   "grams":  366,
+                                   "buy":  "13 oz",
+                                   "bid":  "frozen-peas",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Onion Powder",
+                                   "canon":  "Onion Powder",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "onion-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Poultry Seasoning",
+                                   "canon":  "Poultry Seasoning",
+                                   "grams":  3,
+                                   "buy":  "0.11 oz",
+                                   "bid":  "poultry-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Corn Muffin Mix",
+                                   "canon":  "Corn Muffin Mix",
+                                   "grams":  947,
+                                   "buy":  "7.25 cups",
+                                   "bid":  "corn-muffin-mix",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  402,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  109,
+                                   "buy":  "2 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "canon":  "Cheddar Cheese, Shredded",
+                                   "grams":  186,
+                                   "buy":  "6.5 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  25,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  5,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Cornbread topped turkey casserole meal prep: creamy turkey and peas under a golden cornbread crust. 571 calories, 44g protein, about $3.59 a serving (at everyday cost).",
+                 "keywords":  "cornbread turkey casserole, leftover turkey recipes, cornbread topped bake, jiffy casserole, high protein meal prep, budget casserole",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT35M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  3.59,
+                 "recipeIngredient":  [
+                                          "14 cups diced cooked turkey breast",
+                                          "7.25 cups corn muffin mix",
+                                          "2.2 cans cream of mushroom soup",
+                                          "2.75 cups frozen green peas",
+                                          "1.75 cups milk",
+                                          "2 large eggs",
+                                          "6.5 oz shredded cheddar cheese"
+                                      ],
+                 "steps":  [
+                               "Stir the cream of mushroom soup with onion powder, poultry seasoning, salt, and pepper.",
+                               "Fold in the diced turkey, frozen peas, and shredded cheddar.",
+                               "Spread the filling into a greased 9x13 pan in an even layer.",
+                               "Whisk the corn muffin mix with milk and eggs until just combined and spread it over the filling.",
+                               "Bake at 400F for 30 to 35 minutes until golden, rest 15 minutes, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Cream of Mushroom Soup",
+                                  "grams":  651
+                              },
+                              {
+                                  "item":  "Turkey Breast",
+                                  "grams":  1969
+                              },
+                              {
+                                  "item":  "Frozen Green Peas",
+                                  "grams":  366
+                              },
+                              {
+                                  "item":  "Onion Powder",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Poultry Seasoning",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Corn Muffin Mix",
+                                  "grams":  947
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  402
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  109
+                              },
+                              {
+                                  "item":  "Cheddar Cheese, Shredded",
+                                  "grams":  186
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  25
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  5
+                              }
+                          ]
+}

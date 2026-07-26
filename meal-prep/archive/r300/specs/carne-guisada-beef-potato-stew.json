@@ -1,0 +1,294 @@
+{
+    "name":  "Carne Guisada (Tex-Mex Beef and Potato Stew)",
+    "slug":  "carne-guisada-beef-potato-stew",
+    "cuisine":  "Tex-Mex",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.isabeleats.com/carne-guisada/",
+    "source_site":  "isabeleats.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Potato)",
+                   "portion factor 1.1"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Every ingredient maps to the board with nothing exotic, and the potatoes push it past 500 cal without a separate base. Fills the Tex-Mex braise gap: the catalog\u0027s Tex-Mex beef entries are all ground beef skillets. Thickens into its own gravy so it holds up in containers. Confidence: medium-high. | HARVEST: Source recipe contains no potatoes despite the target name.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Potato)",
+                         "TUNING: portion factor 1.1",
+                         "OVERRIDE Diced Tomatoes: WAVE-4: \u00272 Roma tomatoes\u0027 fresh, not 2 cans (same misfire class)",
+                         "OVERRIDE +Potato: WAVE-4: titled POTATO stew with no potato - 2.2 lb at src scale replaces the auto-Rice base"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  586,
+                 "protein":  45,
+                 "carbs":  63,
+                 "fat":  17,
+                 "cost_ps":  "6.33"
+             },
+    "intro_html":  "Carne guisada is the Tex-Mex stew that shows up in a bowl at lunch and in a tortilla at breakfast. Sirloin, tomatoes, jalapeno, and a spoonful of flour that turns the whole thing into its own gravy as it cooks. It thickens up in the fridge, which makes it one of the better containers to open on day four. Each bowl carries \u003cstrong\u003e45 grams of protein\u003c/strong\u003e and 586 calories for about \u003cstrong\u003e$6.33\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 5.25 lb (2328 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (23 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 0.75 tbsp (5 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 5.25 cups (1232 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 2.5 tbsp (21 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 5 tbsp (69 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.3 (141 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 4 tbsp (36 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4.5 tbsp (38 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2 cans (770 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.5 tbsp (7 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 21.6 (4609 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Flank/Sirloin Steak, 5.25 lb: ~$45.27. \u003cstrong\u003eBuy 6 lbs: $52.92.\u003c/strong\u003e",
+                       "Beef Broth, 5.25 cups: ~$1.65. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "All-Purpose Flour, 2.5 tbsp: ~$0.02. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 5 tbsp: ~$0.97. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 1.3: ~$0.35. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Jalapeno, 4 tbsp: ~$0.14. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Garlic, 4.5 tbsp: ~$0.55. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Diced Tomatoes, 2 cans: ~$1.80. \u003cstrong\u003eBuy 2 cans: $1.92.\u003c/strong\u003e",
+                       "Potato, 21.6: ~$5.77. \u003cstrong\u003eBuy 11 lbs: $6.25.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, ground cumin, dried oregano, black pepper, soy sauce): ~$0.37. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $56.89 across 14 servings, so roughly $4.06 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $67.58 across 14 servings, roughly $4.83 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $20.98 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $88.56. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$6.33 a bowl\u003c/strong\u003e (at everyday cost). Canned tomatoes stretch the beef, the flour thickens without anything expensive, and rice finishes the job.",
+    "shop_smart":  [
+                       "Canned diced tomatoes go in by the stack here. Compare the store brand to the name brand on the price per ounce tag, because in a stew they are the same tomatoes.",
+                       "Buy a whole sirloin and cube it yourself. Pre cut stew meat costs more per pound and gives you less say in the trim.",
+                       "Jalapenos are sold loose and cost very little. Buy a few extra and freeze them whole, since they chop fine straight out of the freezer for a stew.",
+                       "Two tablespoons of flour is the entire thickener. There is no reason to buy a roux, a gravy packet, or a cornstarch product for this one."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cut the sirloin into small cubes, pat them dry, and season with salt, black pepper, cumin, and oregano.",
+                    "Brown the beef in the olive oil in batches over high heat until it takes on real color.",
+                    "Add the chopped onion, minced garlic, and diced jalapeno and cook until soft, scraping the pot bottom clean.",
+                    "Sprinkle the flour over everything and stir for a minute so it toasts rather than tasting raw.",
+                    "Pour in the diced tomatoes with their juice and the beef broth, along with the splash of soy sauce from the pantry list.",
+                    "Cover and simmer low for 75 to 90 minutes, until the beef is tender and the liquid has reduced into a gravy that clings.",
+                    "Taste for salt and heat, then cook the rice separately."
+                ],
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of stew into each container, then add the same weight of rice to every one. Each bowl lands at \u003cstrong\u003e586 calories with 45 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.isabeleats.com/carne-guisada/\" target=\"_blank\" rel=\"noopener\"\u003eisabeleats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Carne guisada for about $6.33 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  56.89,
+    "cost_batch_true":  67.58,
+    "cost_per_serving":  4.06,
+    "cost_per_serving_true":  4.83,
+    "cost_pantry_add":  20.98,
+    "cost_first_run":  88.56,
+    "scaler":  {
+                   "cost":  "67.58",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Flank/Sirloin Steak",
+                                   "canon":  "Beef Flank/Sirloin Steak",
+                                   "grams":  2328,
+                                   "buy":  "5.25 lb",
+                                   "bid":  "sirloin-steak",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  23,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  5,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  1232,
+                                   "buy":  "5.25 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  21,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  69,
+                                   "buy":  "5 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  141,
+                                   "buy":  "1.3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  36,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  38,
+                                   "buy":  "4.5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  770,
+                                   "buy":  "2 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  7,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  4609,
+                                   "buy":  "21.6",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Tex-Mex carne guisada meal prep: cubed sirloin browned and stewed with tomatoes, jalapeno, and cumin into its own thick gravy over rice. 586 calories, 45g protein, about $6.33 per serving (at everyday cost).",
+                 "keywords":  "carne guisada, tex mex beef stew, mexican beef gravy, beef and rice bowls, budget meal prep, tex mex recipes",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT1H45M",
+                 "totalTime":  "PT2H5M",
+                 "costPerServing":  6.33,
+                 "recipeIngredient":  [
+                                          "4.75 lb beef flank or sirloin steak",
+                                          "2.5 lb beef broth",
+                                          "2.5 tbsp all-purpose flour",
+                                          "4.75 tbsp olive oil",
+                                          "1 yellow onion",
+                                          "3.75 tbsp jalapeno",
+                                          "4 tbsp garlic",
+                                          "4.7 cans diced tomatoes",
+                                          "5 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Cube and season the sirloin, then brown it in olive oil in batches.",
+                               "Soften onion, garlic, and jalapeno in the pot.",
+                               "Stir in the flour and cook a minute to toast it.",
+                               "Add diced tomatoes and beef broth and simmer 75 to 90 minutes until thick.",
+                               "Cook the rice and portion stew and rice into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Flank/Sirloin Steak",
+                                  "grams":  2328
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  23
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  1232
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  69
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  141
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  36
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  38
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  770
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  4609
+                              }
+                          ]
+}

@@ -1,0 +1,283 @@
+{
+    "name":  "Old-Fashioned Chicken and Dumplings",
+    "slug":  "chicken-and-dumplings",
+    "cuisine":  "American",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.spendwithpennies.com/old-fashioned-chicken-and-dumplings/",
+    "source_site":  "spendwithpennies.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Source lists 461 cal / 27g protein across 8 - protein clears, calories need a portion bump. Built on whole-chicken plus flour and milk, so cost per serving is near the floor of the whole catalog. NEAR-DUPE WATCH vs the live Creamy Chicken and Gnocchi Skillet (same creamy-chicken-plus-dough idea, different dough and sauce). Dumplings do soften on reheat - the write-up should say so. | HARVEST: Source groups under Broth / For the Dumplings.",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "OVERRIDE Boneless Skinless Chicken Thigh: \u00271 whole chicken 4 to 5 pounds\u0027 parsed as one 100 g thigh; 4.5 lb bird x ~55% meat yield",
+                         "OVERRIDE __no_auto_base: WAVE-4: dumplings ARE the starch - suppress the auto-Rice base",
+                         "OVERRIDE All-Purpose Flour: WAVE-4 [BUMP x2.0]: double dumpling batch replaces the removed rice calories - it is a dumpling dish",
+                         "OVERRIDE Butter: WAVE-4 [BUMP x2.0]: shortening scales with the doubled dumplings",
+                         "OVERRIDE Milk: WAVE-4 [BUMP x2.0]: dumpling milk scales with the doubled dumplings"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  564,
+                 "protein":  38,
+                 "carbs":  52,
+                 "fat":  20,
+                 "cost_ps":  "2.63"
+             },
+    "intro_html":  "Chicken and dumplings is the dish that got families through lean decades, and it earned its place honestly. Chicken, broth, a few vegetables, and dough made from flour, butter, and milk, dropped on top and steamed until it puffs. There are few cheaper ways to turn a small amount of meat into a filling dinner. Each bowl runs 564 calories and \u003cstrong\u003e38 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.63 a serving\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 4.5 lb (2012 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.7 (192 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 6 (378 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 5.3 (289 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (10 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.04 oz (1 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 3.6 cartons (3360 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 7 tbsp (56 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 6.25 cups (770 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1 cups (238 g)",
+                                "\u003cstrong\u003eBaking Powder (generic (USDA)):\u003c/strong\u003e 0.25 oz (5 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 2.5 cups (640 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Thigh, 4.5 lb: ~$7.85. \u003cstrong\u003eBuy 5 lbs: $8.85.\u003c/strong\u003e",
+                       "Yellow Onion, 1.7: ~$0.48. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 6: ~$0.80. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Celery, 5.3: ~$1.52. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Chicken Broth, 3.6 cartons: ~$4.51. \u003cstrong\u003ePantry staple; this batch alone uses about 4 32oz cartons.\u003c/strong\u003e",
+                       "Cornstarch, 7 tbsp: ~$0.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "All-Purpose Flour, 6.25 cups: ~$0.73. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Butter, 1 cups: ~$1.56. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Milk, 2.5 cups: ~$0.51. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, bay leaves, baking powder): ~$0.25. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $18.45 across 14 servings, so roughly $1.32 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $25.04 across 14 servings, roughly $1.79 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.80 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $36.84. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.63 a bowl\u003c/strong\u003e (at everyday cost). The dumplings are flour, butter, and milk, which cost almost nothing and do most of the work of filling the container. That is the entire economics of this dish and it has not changed in a hundred years.",
+    "shop_smart":  [
+                       "Flour, butter, and milk are the cheapest way to add real substance to a pot of soup. Buying a bag of flour and a box of butter covers this recipe many times over.",
+                       "Boneless thighs give you dark meat that stays tender through a long simmer for less than breast costs. In a broth dish especially, thighs are the better ingredient as well as the cheaper one.",
+                       "Celery and carrots are cheap and they build the broth. Buy the whole bunch of celery and use the leaves too, since they carry more flavor than the stalks do.",
+                       "Fair warning worth planning around: dumplings soften as they sit. They are still good on day four, but they will not be pillowy the way they are the first night. If that bothers you, keep some of the dough back and cook it fresh midweek."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cut the chicken thighs into large pieces and simmer them in the chicken broth with the onion, carrots, celery, bay leaves, salt, and pepper for about 30 minutes, until the chicken is tender and the broth tastes like something.",
+                    "Pull the chicken out, shred it, and return it to the pot. Fish out the bay leaves.",
+                    "Whisk the cornstarch with a little cold water and stir it into the simmering pot to thicken the broth slightly. Cold water first, always, or you get lumps you will never break up.",
+                    "Make the dumpling dough by cutting the cold butter into the flour with baking powder and salt until it looks like coarse crumbs, then stirring in the milk just until it comes together. Overworking the dough makes tough dumplings, so stop mixing while it still looks shaggy.",
+                    "Drop spoonfuls of dough onto the surface of the simmering pot, spacing them apart since they will swell.",
+                    "Cover tightly and steam 15 minutes without lifting the lid. Every peek releases the steam that is actually cooking them.",
+                    "Cook the rice separately and put a scoop in the bottom of each container to stretch the batch further."
+                ],
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. Count the dumplings and split them evenly by hand, since weighing alone will not stop one container from getting three and another getting one. Each portion lands at \u003cstrong\u003e564 calories\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.spendwithpennies.com/old-fashioned-chicken-and-dumplings/\" target=\"_blank\" rel=\"noopener\"\u003espendwithpennies.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Old fashioned chicken and dumplings for about \u003cstrong\u003e$2.63 a bowl\u003c/strong\u003e (at everyday cost). Members get the whole Meal Prep library along with every money lesson, calculator, and tool on the site for $1 a month.",
+    "cost_batch":  18.45,
+    "cost_batch_true":  25.04,
+    "cost_per_serving":  1.32,
+    "cost_per_serving_true":  1.79,
+    "cost_pantry_add":  11.8,
+    "cost_first_run":  36.84,
+    "scaler":  {
+                   "cost":  "25.04",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  2012,
+                                   "buy":  "4.5 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  192,
+                                   "buy":  "1.7",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  378,
+                                   "buy":  "6",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "canon":  "Celery",
+                                   "grams":  289,
+                                   "buy":  "5.3",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  10,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  1,
+                                   "buy":  "0.04 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  3360,
+                                   "buy":  "3.6 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Cornstarch",
+                                   "canon":  "Cornstarch",
+                                   "grams":  56,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  770,
+                                   "buy":  "6.25 cups",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  238,
+                                   "buy":  "1 cups",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Baking Powder",
+                                   "canon":  "Baking Powder",
+                                   "grams":  5,
+                                   "buy":  "0.25 oz",
+                                   "bid":  "baking-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  640,
+                                   "buy":  "2.5 cups",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Old-fashioned chicken and dumplings with shredded chicken, vegetables, and drop dumplings, rebuilt for 14 meal prep servings at about $2.63 a bowl (at everyday cost).",
+                 "keywords":  "chicken and dumplings, drop dumplings, southern comfort food, cheap chicken dinner, budget meal prep, one pot chicken, old fashioned recipe",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT50M",
+                 "totalTime":  "PT1H15M",
+                 "costPerServing":  2.63,
+                 "recipeIngredient":  [
+                                          "4.5 lb boneless skinless chicken thighs",
+                                          "7.5 lb chicken broth",
+                                          "1.7 yellow onions",
+                                          "6 carrots",
+                                          "5.3 celery stalks",
+                                          "7 tbsp cornstarch",
+                                          "3 cups all-purpose flour",
+                                          "0.5 cups butter",
+                                          "1.25 cups milk",
+                                          "3.75 cups dry rice",
+                                          "Pantry: baking powder, bay leaves, salt, black pepper"
+                                      ],
+                 "steps":  [
+                               "Simmer the chicken thighs in broth with onion, carrots, celery, and bay leaves for 30 minutes.",
+                               "Shred the chicken back into the pot and thicken the broth with a cornstarch slurry.",
+                               "Cut cold butter into flour with baking powder and salt, then stir in milk to make a shaggy dough.",
+                               "Drop spoonfuls of dough onto the simmering pot, cover tightly, and steam 15 minutes.",
+                               "Cook the rice and portion everything into 14 containers with dumplings divided evenly."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  2012
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  192
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  378
+                              },
+                              {
+                                  "item":  "Celery",
+                                  "grams":  289
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  3360
+                              },
+                              {
+                                  "item":  "Cornstarch",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  770
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  238
+                              },
+                              {
+                                  "item":  "Baking Powder",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  640
+                              }
+                          ]
+}

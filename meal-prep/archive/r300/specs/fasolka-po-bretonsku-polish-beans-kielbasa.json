@@ -1,0 +1,331 @@
+{
+    "name":  "Fasolka po Bretonsku (Polish Baked Beans with Kielbasa)",
+    "slug":  "fasolka-po-bretonsku-polish-beans-kielbasa",
+    "cuisine":  "polish",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.polonist.com/fasolka-po-bretonsku-polish-baked-beans/",
+    "source_site":  "polonist.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 300g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Slow-simmered bean-and-sausage stew, cheapest protein-per-dollar build in the slice, and the catalog has no pork-and-bean dinner at all. Source verifies 515 cal at 6 servings so calories are fine. Butter beans are not a board id but canned-white-beans is the direct substitute and carries the same math. CONFIDENCE: source protein is only 13g per serving, so our version must roughly double the kielbasa (and lean on the beans) to reach 25g+; protein figure is projected, not verified. | HARVEST: ",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 300g (src scale)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  590,
+                 "protein":  27,
+                 "carbs":  65,
+                 "fat":  23,
+                 "cost_ps":  "2.79"
+             },
+    "intro_html":  "Fasolka po bretonsku is what Polish baked beans actually taste like: smoky bacon and sausage, white beans, tomato, thyme and a lot of smoked paprika, simmered until the whole thing goes thick. It is a genuinely cheap protein per dollar build, landing 27 grams of protein for about $2.79 a bowl (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eCannellini Beans (generic):\u003c/strong\u003e 3.7 cans (933 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.11 oz (3 g)",
+                                "\u003cstrong\u003eHickory Smoked Bacon (Great Value):\u003c/strong\u003e 1 lb (467 g)",
+                                "\u003cstrong\u003eSmoked Turkey Sausage (Butterball):\u003c/strong\u003e 1.25 lb (583 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (257 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 2.25 tbsp (33 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 7 tbsp (112 g)",
+                                "\u003cstrong\u003eSmoked Paprika (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 0.5 tbsp (3 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1.25 cups (286 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2.3 cans (933 g)",
+                                "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 0.75 tbsp (2 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 4.75 tbsp (14 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.5 tbsp (47 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.25 tbsp (9 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Cannellini Beans, 3.7 cans: ~$3.02. \u003cstrong\u003eBuy 4 cans: $3.30.\u003c/strong\u003e",
+                       "Hickory Smoked Bacon, 1 lb: ~$4.08. \u003cstrong\u003eBuy 2 lbs: $7.92.\u003c/strong\u003e",
+                       "Smoked Turkey Sausage, 1.25 lb: ~$5.20. \u003cstrong\u003eBuy 2 13oz ropes: $6.57.\u003c/strong\u003e",
+                       "Yellow Onion, 2.3: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Vegetable Oil, 2.25 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Tomato Paste, 7 tbsp: ~$0.57. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "Beef Broth, 1.25 cups: ~$0.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Diced Tomatoes, 2.3 cans: ~$2.18. \u003cstrong\u003eBuy 3 cans: $2.88.\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (bay leaves, smoked paprika, paprika, dried thyme, dried oregano, salt, black pepper): ~$1.79. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $19.31 across 14 servings, so roughly $1.38 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $26.36 across 14 servings, roughly $1.88 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.70 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $39.06. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.79 a bowl\u003c/strong\u003e (at everyday cost). Beans do the heavy lifting, the bacon and sausage do the flavoring, and the result costs less than a soda at a gas station.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eCanned white beans are the whole trick.\u003c/strong\u003e A few cans cost less than any meat you could add and they carry most of the protein and all of the body in this dish. Dried beans are cheaper still if you plan a day ahead.",
+                       "\u003cstrong\u003eBacon and sausage are the two real cost lines.\u003c/strong\u003e Together they are most of the batch. Buy both on sale and freeze them, because both freeze without any loss.",
+                       "\u003cstrong\u003eTomato paste is the cheapest flavor concentrate in the store.\u003c/strong\u003e A single small can barely moves the total and it gives this stew the deep tomato backbone that thin sauce cannot.",
+                       "\u003cstrong\u003eSmoked paprika, thyme, oregano and bay carry the seasoning.\u003c/strong\u003e That whole list is jars you already own, which is why the shopping trip stays so short."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Chop the bacon, slice the smoked sausage into coins, dice the onion and mince the garlic. Drain and rinse the beans.",
+                    "Render the bacon in a heavy pot until the fat runs and the pieces crisp at the edges.",
+                    "Add the vegetable oil and brown the sausage coins in the bacon fat until they take on color.",
+                    "Cook the diced onion until soft, then add the garlic and the tomato paste and stir for a couple of minutes so the paste darkens and loses its raw edge.",
+                    "Stir in the smoked paprika, regular paprika, dried thyme, oregano and bay leaves, then pour in the diced tomatoes and the beef broth.",
+                    "Add the drained beans and simmer uncovered, stirring occasionally, until the sauce reduces and coats the beans instead of pooling around them.",
+                    "Pull out the bay leaves, season with salt and black pepper, and cook the rice separately to serve underneath."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and ladle the exact amount over rice in each container. Every bowl lands near 590 calories and 27 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.polonist.com/fasolka-po-bretonsku-polish-baked-beans/\" target=\"_blank\" rel=\"noopener\"\u003epolonist.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Genuinely cheap dinners like this one for about $2.79 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  19.31,
+    "cost_batch_true":  26.36,
+    "cost_per_serving":  1.38,
+    "cost_per_serving_true":  1.88,
+    "cost_pantry_add":  12.7,
+    "cost_first_run":  39.06,
+    "scaler":  {
+                   "cost":  "26.36",
+                   "ing":  [
+                               {
+                                   "item":  "Cannellini Beans",
+                                   "canon":  "Cannellini Beans",
+                                   "grams":  933,
+                                   "buy":  "3.7 cans",
+                                   "bid":  "cannellini-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  3,
+                                   "buy":  "0.11 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Hickory Smoked Bacon",
+                                   "canon":  "Hickory Smoked Bacon",
+                                   "grams":  467,
+                                   "buy":  "1 lb",
+                                   "bid":  "bacon",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Smoked Turkey Sausage",
+                                   "canon":  "Smoked Turkey Sausage",
+                                   "grams":  583,
+                                   "buy":  "1.25 lb",
+                                   "bid":  "smoked-turkey-sausage",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  257,
+                                   "buy":  "2.3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  35,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  33,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  112,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Smoked Paprika",
+                                   "canon":  "Smoked Paprika",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  286,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  933,
+                                   "buy":  "2.3 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  2,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  14,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  47,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  9,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Fasolka po bretonsku, Polish smoky baked beans with bacon and kielbasa, built for 14 servings. 590 calories, 27g protein, about $2.79 per serving (at everyday cost).",
+                 "keywords":  "fasolka po bretonsku, polish baked beans, kielbasa and beans, white bean stew, cheapest meal prep, budget dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT1H",
+                 "totalTime":  "PT1H15M",
+                 "costPerServing":  2.79,
+                 "recipeIngredient":  [
+                                          "3.7 cans cannellini beans",
+                                          "1 lb hickory smoked bacon",
+                                          "1.25 lb smoked sausage",
+                                          "2.3 yellow onions",
+                                          "4 tbsp garlic",
+                                          "7 tbsp tomato paste",
+                                          "2.3 cans diced tomatoes",
+                                          "0.75 lb beef broth",
+                                          "2.25 tbsp vegetable oil",
+                                          "3.75 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Render the chopped bacon until crisp, then brown the sliced sausage in the fat.",
+                               "Cook the onion until soft, then add garlic and tomato paste and stir until the paste darkens.",
+                               "Stir in the smoked paprika, paprika, thyme, oregano and bay leaves, then add the diced tomatoes and beef broth.",
+                               "Add the drained white beans and simmer uncovered until the sauce thickens around them.",
+                               "Remove the bay leaves, season, and serve over cooked rice."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Cannellini Beans",
+                                  "grams":  933
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Hickory Smoked Bacon",
+                                  "grams":  467
+                              },
+                              {
+                                  "item":  "Smoked Turkey Sausage",
+                                  "grams":  583
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  257
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  33
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  112
+                              },
+                              {
+                                  "item":  "Smoked Paprika",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  286
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  933
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

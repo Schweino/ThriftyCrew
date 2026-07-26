@@ -1,0 +1,321 @@
+{
+    "name":  "Turkey and Stuffing Casserole",
+    "slug":  "turkey-and-stuffing-casserole",
+    "cuisine":  "American",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://thefoodiephysician.com/turkey-and-stuffing-casserole/",
+    "source_site":  "thefoodiephysician.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Stuffing Mix)",
+                   "portion factor 1.6"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Thanksgiving-plate flavor as a weeknight bake; stuffing-mix is on the board and cheap. Source verified at 8 servings, 352 cal / 26g protein; our version doubles the turkey to hit 540 cal / 40g. | HARVEST: Stuffing is listed as an already-prepared ingredient (3 cups leftover or boxed).",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Stuffing Mix)",
+                         "TUNING: portion factor 1.6",
+                         "OVERRIDE Boneless Skinless Chicken Breast: TITLE-PROTEIN SWAP (wave 3, coordinator directive): titled turkey, source used chicken; same form (cooked/diced), grams kept"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  575,
+                 "protein":  39,
+                 "carbs":  64,
+                 "fat":  18,
+                 "cost_ps":  "4.21"
+             },
+    "intro_html":  "This is the good part of Thanksgiving without the four days of preparation or the relatives. Turkey and peas in a poultry-seasoned gravy, stuffing baked golden across the top, all of it in one pan on a random Tuesday. Each serving lands at 575 calories with \u003cstrong\u003e39 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.21\u003c/strong\u003e (at everyday cost). Boxed stuffing mix is one of the cheapest carbohydrates in the store, and it never once pretended otherwise.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 5.75 tbsp (76 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 5.5 tbsp (78 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 11 tbsp (87 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2.75 cups (672 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 1.5 cups (343 g)",
+                                "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 1.75 tbsp (13 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 tbsp (9 g)",
+                                "\u003cstrong\u003ePoultry Seasoning (generic (USDA)):\u003c/strong\u003e 0.5 oz (15 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (8 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)",
+                                "\u003cstrong\u003eHot Sauce (Frank\u0027s RedHot):\u003c/strong\u003e 1 tbsp (14 g)",
+                                "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1.5 cups (343 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 5.5 oz (158 g)",
+                                "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 2.5 lb (1176 g)",
+                                "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 2.5 lb (1126 g)",
+                                "\u003cstrong\u003eStuffing Mix (Kraft Stove Top (USDA SR)):\u003c/strong\u003e 15 cups (830 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 5.75 tbsp: ~$1.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Butter, 5.5 tbsp: ~$0.51. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "All-Purpose Flour, 11 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 2.75 cups: ~$0.90. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Milk, 1.5 cups: ~$0.27. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
+                       "Greek Yogurt, 1.5 cups: ~$1.00. \u003cstrong\u003eBuy 1 32oz tub: $2.64.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 5.5 oz: ~$1.20. \u003cstrong\u003eBuy 1 8oz bag: $1.73.\u003c/strong\u003e",
+                       "Turkey Breast, 2.5 lb: ~$12.48. \u003cstrong\u003eBuy 1 3lb frozen roast: $14.44.\u003c/strong\u003e",
+                       "Frozen Green Peas, 2.5 lb: ~$2.43. \u003cstrong\u003eBuy 4 12oz bags: $2.94.\u003c/strong\u003e",
+                       "Stuffing Mix, 15 cups: ~$4.73. \u003cstrong\u003eBuy 5 6oz boxes: $4.85.\u003c/strong\u003e",
+                       "Pantry seasonings (onion powder, garlic powder, poultry seasoning, salt, black pepper, hot sauce): ~$1.14. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $25.81 across 14 servings, so roughly $1.84 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.79 across 14 servings, roughly $2.56 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $23.21 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.00. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.21 a serving\u003c/strong\u003e (at everyday cost) for a plate that tastes like a holiday. The stuffing mix and the frozen peas are doing the budget work while the turkey does the protein work.",
+    "shop_smart":  [
+                       "Stuffing mix goes on deep discount every November and keeps in the box for a year or more. Buy a stack then and you are cooking this dish at a fraction of the price all spring.",
+                       "A frozen turkey breast roast is the cheapest way into this recipe outside the holidays. Roast one on a Sunday, dice it, and you have the protein for two batches.",
+                       "Greek yogurt is standing in for sour cream in the gravy and costs less per ounce in the 32 oz tub. It also drops the fat without hurting the texture.",
+                       "Frozen peas over canned, always. The store-brand 12 oz bags are the cheapest vegetable in this recipe and they hold their shape through the bake."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Melt the butter with the olive oil in a large pot over medium heat, sprinkle in the flour, and whisk for two minutes until it smells nutty instead of raw.",
+                    "Pour in the chicken broth and the milk slowly, whisking the whole time, and cook until the gravy thickens enough to coat the back of a spoon.",
+                    "Season the gravy with the onion powder, garlic powder, poultry seasoning, salt, black pepper, and a few dashes of hot sauce, then take it off the heat.",
+                    "Stir in the Greek yogurt and the shredded cheddar off the heat so the yogurt does not break, then fold in the diced turkey breast and the frozen peas.",
+                    "Spread the filling into a greased 9x13 pan and level it out.",
+                    "Prepare the stuffing mix per the box directions but hold back a little of the liquid, then spoon it over the filling in an even layer and press it down lightly.",
+                    "Bake at 375F for 30 to 35 minutes, uncovered, until the stuffing is browned on top and the gravy bubbles at the edges. Rest 10 minutes before portioning."
+                ],
+    "portion_html":  "Set the pan on the scale, subtract the empty pan weight, and divide by 14. Weigh each square into its container instead of guessing, since the stuffing layer makes the portions look bigger than they are. Every serving comes to \u003cstrong\u003e575 calories\u003c/strong\u003e and 39 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://thefoodiephysician.com/turkey-and-stuffing-casserole/\" target=\"_blank\" rel=\"noopener\"\u003ethefoodiephysician.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Thanksgiving dinner on a weeknight budget, about $4.21 a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "cost_batch":  25.81,
+    "cost_batch_true":  35.79,
+    "cost_per_serving":  1.84,
+    "cost_per_serving_true":  2.56,
+    "cost_pantry_add":  23.21,
+    "cost_first_run":  59,
+    "scaler":  {
+                   "cost":  "35.79",
+                   "ing":  [
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  76,
+                                   "buy":  "5.75 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  78,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  87,
+                                   "buy":  "11 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  672,
+                                   "buy":  "2.75 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  343,
+                                   "buy":  "1.5 cups",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "Onion Powder",
+                                   "canon":  "Onion Powder",
+                                   "grams":  13,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "onion-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  9,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Poultry Seasoning",
+                                   "canon":  "Poultry Seasoning",
+                                   "grams":  15,
+                                   "buy":  "0.5 oz",
+                                   "bid":  "poultry-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  8,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Hot Sauce",
+                                   "canon":  "Hot Sauce",
+                                   "grams":  14,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "hot-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Greek Yogurt",
+                                   "canon":  "Greek Yogurt",
+                                   "grams":  343,
+                                   "buy":  "1.5 cups",
+                                   "bid":  "yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "canon":  "Cheddar Cheese, Shredded",
+                                   "grams":  158,
+                                   "buy":  "5.5 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Turkey Breast",
+                                   "canon":  "Turkey Breast",
+                                   "grams":  1176,
+                                   "buy":  "2.5 lb",
+                                   "bid":  "turkey-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Frozen Green Peas",
+                                   "canon":  "Frozen Green Peas",
+                                   "grams":  1126,
+                                   "buy":  "2.5 lb",
+                                   "bid":  "frozen-peas",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Stuffing Mix",
+                                   "canon":  "Stuffing Mix",
+                                   "grams":  830,
+                                   "buy":  "15 cups",
+                                   "bid":  "stuffing-mix",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey and stuffing casserole meal prep: turkey and peas in poultry gravy under a golden stuffing crust. 575 calories, 39g protein, about $4.21 a serving (at everyday cost).",
+                 "keywords":  "turkey and stuffing casserole, leftover turkey recipes, thanksgiving casserole, turkey meal prep, budget casserole, stove top stuffing bake",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT35M",
+                 "totalTime":  "PT55M",
+                 "costPerServing":  4.21,
+                 "recipeIngredient":  [
+                                          "8.5 cups diced cooked turkey breast",
+                                          "15 cups prepared stuffing mix",
+                                          "8.5 cups frozen green peas",
+                                          "1.5 lb chicken broth",
+                                          "1.5 cups milk",
+                                          "1.5 cups Greek yogurt",
+                                          "5.5 oz shredded cheddar cheese",
+                                          "5.5 tbsp butter",
+                                          "11 tbsp all-purpose flour",
+                                          "5.75 tbsp olive oil"
+                                      ],
+                 "steps":  [
+                               "Whisk flour into melted butter and olive oil for two minutes, then add the broth and milk and cook until thickened.",
+                               "Season the gravy with onion powder, garlic powder, poultry seasoning, salt, pepper, and hot sauce, then remove from the heat.",
+                               "Stir in the Greek yogurt and cheddar, then fold in the diced turkey and frozen peas.",
+                               "Spread into a greased 9x13 pan and top with stuffing prepared per the box, pressed level.",
+                               "Bake uncovered at 375F for 30 to 35 minutes until browned, rest 10 minutes, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  76
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  78
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  87
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  672
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  343
+                              },
+                              {
+                                  "item":  "Onion Powder",
+                                  "grams":  13
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Poultry Seasoning",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Hot Sauce",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Greek Yogurt",
+                                  "grams":  343
+                              },
+                              {
+                                  "item":  "Cheddar Cheese, Shredded",
+                                  "grams":  158
+                              },
+                              {
+                                  "item":  "Turkey Breast",
+                                  "grams":  1176
+                              },
+                              {
+                                  "item":  "Frozen Green Peas",
+                                  "grams":  1126
+                              },
+                              {
+                                  "item":  "Stuffing Mix",
+                                  "grams":  830
+                              }
+                          ]
+}

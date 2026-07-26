@@ -1,0 +1,307 @@
+{
+    "name":  "Ropa Vieja Rice Bowls",
+    "slug":  "ropa-vieja-rice-bowls",
+    "cuisine":  "Cuban",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.themagicalslowcooker.com/slow-cooker-ropa-vieja/",
+    "source_site":  "themagicalslowcooker.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 400g (src scale)",
+                   "base +25% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Cuba\u0027s national dish and a natural companion to the live Cuban Beef Picadillo Rice Bowls without duplicating it (shredded whole muscle with peppers and olives vs ground beef with raisins). Chuck substitutes for flank at a third the cost. Source pages report 26-39g protein for the meat alone. Confidence: medium-high. | HARVEST: Rice is a serving suggestion, not in the source ingredient list.",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 400g (src scale)",
+                         "TUNING: base +25% (Rice)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  563,
+                 "protein":  44,
+                 "carbs":  60,
+                 "fat":  15,
+                 "cost_ps":  "5.70"
+             },
+    "intro_html":  "Ropa vieja means old clothes, which is what shredded beef in a pepper and tomato sauce apparently looked like to whoever named it. It is Cuba\u0027s national dish, it is built for a long slow cook, and the olives at the end are not optional. They are the salt and the sharpness that make the whole pot work. Each bowl carries \u003cstrong\u003e44 grams of protein\u003c/strong\u003e and 563 calories for about \u003cstrong\u003e$5.70\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 5.25 lb (2381 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1.75 cups (420 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1.8 cans (298 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 1.7 cans (695 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (16 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 0.75 tbsp (2 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 0.75 tbsp (4 g)",
+                                "\u003cstrong\u003eGround Turmeric (Great Value):\u003c/strong\u003e 0.25 tbsp (3 g)",
+                                "\u003cstrong\u003eApple Cider Vinegar (Great Value):\u003c/strong\u003e 1.75 tbsp (26 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 (122 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3.5 (420 g)",
+                                "\u003cstrong\u003eOlives (generic):\u003c/strong\u003e 1.75 cups (236 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 tbsp (26 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.75 cups dry (893 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Flank/Sirloin Steak, 5.25 lb: ~$46.30. \u003cstrong\u003eBuy 6 lbs: $52.92.\u003c/strong\u003e",
+                       "Beef Broth, 1.75 cups: ~$0.56. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Tomato Paste, 1.8 cans: ~$1.51. \u003cstrong\u003eBuy 2 6oz cans: $1.72.\u003c/strong\u003e",
+                       "Diced Tomatoes, 1.7 cans: ~$1.62. \u003cstrong\u003eBuy 2 cans: $1.92.\u003c/strong\u003e",
+                       "Apple Cider Vinegar, 1.75 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 1: ~$0.31. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Green Bell Peppers, 3.5: ~$3.01. \u003cstrong\u003eBuy 4 each: $3.44.\u003c/strong\u003e",
+                       "Olives, 1.75 cups: ~$2.60. \u003cstrong\u003eBuy 2 6oz cans: $3.74.\u003c/strong\u003e",
+                       "Garlic, 3 tbsp: ~$0.37. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Rice, 4.75 cups dry: ~$1.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, dried oregano, ground cumin, ground turmeric): ~$0.35. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $57.80 across 14 servings, so roughly $4.13 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $67.54 across 14 servings, roughly $4.82 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.28 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $79.82. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$5.70 a bowl\u003c/strong\u003e (at everyday cost). Flank is traditional and expensive, so this build leans on the cheaper steak the board prices well and gets to the same shredded place.",
+    "shop_smart":  [
+                       "Tomato paste and canned diced tomatoes together build the sauce. Paste comes in a small can, so freeze the remainder in spoonfuls instead of letting it die in the fridge.",
+                       "Green bell peppers are the traditional choice and the cheap one. That is a rare alignment, so take it.",
+                       "Olives are the flavor that makes this ropa vieja instead of generic shredded beef. Buy them by the can rather than from the olive bar, where you are paying a premium for the brine.",
+                       "Cider vinegar is a small amount from a bottle that lasts forever. It brightens the sauce at the end and there is no good substitute for that job."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Season the steak with salt, black pepper, cumin, oregano, and turmeric and lay it in the slow cooker.",
+                    "Slice the onion and green bell peppers into strips and scatter them over the beef with the minced garlic.",
+                    "Stir the tomato paste into the beef broth until smooth, then pour it over along with the diced tomatoes and their juice.",
+                    "Cover and cook on low for 8 hours, until the beef pulls into strands with almost no effort.",
+                    "Shred the beef directly in the cooker with two forks and stir it back through the peppers and sauce.",
+                    "Stir in the sliced olives and the apple cider vinegar and let it sit 10 minutes on the heat so the flavors settle.",
+                    "Cook the rice separately and taste the sauce for salt, remembering the olives brought plenty."
+                ],
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of shredded beef, peppers, and sauce into each container, then add the same weight of rice to every one. Each bowl lands at \u003cstrong\u003e563 calories with 44 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/slow-cooker-ropa-vieja/\" target=\"_blank\" rel=\"noopener\"\u003ethemagicalslowcooker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Ropa vieja for about $5.70 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  57.8,
+    "cost_batch_true":  67.54,
+    "cost_per_serving":  4.13,
+    "cost_per_serving_true":  4.82,
+    "cost_pantry_add":  12.28,
+    "cost_first_run":  79.82,
+    "scaler":  {
+                   "cost":  "67.54",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Flank/Sirloin Steak",
+                                   "canon":  "Beef Flank/Sirloin Steak",
+                                   "grams":  2381,
+                                   "buy":  "5.25 lb",
+                                   "bid":  "sirloin-steak",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  420,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  298,
+                                   "buy":  "1.8 cans",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  695,
+                                   "buy":  "1.7 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  16,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  2,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  4,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Turmeric",
+                                   "canon":  "Ground Turmeric",
+                                   "grams":  3,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "ground-turmeric",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Apple Cider Vinegar",
+                                   "canon":  "Apple Cider Vinegar",
+                                   "grams":  26,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "apple-cider-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  122,
+                                   "buy":  "1",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  420,
+                                   "buy":  "3.5",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Olives",
+                                   "canon":  "Olives",
+                                   "grams":  236,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "green-olives",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  26,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  893,
+                                   "buy":  "4.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Cuban ropa vieja meal prep: beef slow cooked 8 hours into strands with peppers, tomato, and olives, served over rice. 563 calories, 44g protein, about $5.70 per serving (at everyday cost).",
+                 "keywords":  "ropa vieja, cuban shredded beef, beef with peppers and olives, cuban rice bowls, budget meal prep, cuban recipes",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT8H",
+                 "totalTime":  "PT8H20M",
+                 "costPerServing":  5.70,
+                 "recipeIngredient":  [
+                                          "5.25 lb beef flank or sirloin steak",
+                                          "1 lb beef broth",
+                                          "1.8 cans tomato paste",
+                                          "1.7 cans diced tomatoes",
+                                          "1.75 tbsp apple cider vinegar",
+                                          "1 yellow onion",
+                                          "3.5 green bell peppers",
+                                          "1.75 cups olives",
+                                          "3 tbsp garlic",
+                                          "4.75 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Season the steak with cumin, oregano, and turmeric and set it in the slow cooker.",
+                               "Add sliced onion, green bell peppers, and garlic.",
+                               "Stir tomato paste into the beef broth and pour it over with the diced tomatoes.",
+                               "Cook on low 8 hours, then shred the beef into the sauce.",
+                               "Stir in olives and cider vinegar, cook the rice, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Flank/Sirloin Steak",
+                                  "grams":  2381
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  298
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  695
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  16
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Ground Turmeric",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Apple Cider Vinegar",
+                                  "grams":  26
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  122
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Olives",
+                                  "grams":  236
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  26
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  893
+                              }
+                          ]
+}

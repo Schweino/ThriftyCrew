@@ -1,0 +1,192 @@
+{
+    "name":  "Slow Cooker Pork Posole Verde Bowls",
+    "slug":  "slow-cooker-pork-posole-verde-bowls",
+    "cuisine":  "Mexican",
+    "protein":  "pork",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  562,
+                 "protein":  56,
+                 "carbs":  43,
+                 "fat":  16,
+                 "cost_ps":  "3.72"
+             },
+    "intro_html":  "Posole verde is a hearty green Mexican stew, and this version leans on tomatillos and poblanos for a bright, mildly spicy broth. Built on hominy with 56 grams of protein a bowl, it runs about $3.72 a serving (at everyday cost). Fourteen servings means a big pot of soul-warming stew ready whenever you are.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 8 lb (3500 g)",
+                                "\u003cstrong\u003eHominy (generic):\u003c/strong\u003e 6 cans (3600 g)",
+                                "\u003cstrong\u003eTomatillos (generic):\u003c/strong\u003e 2 lb (900 g)",
+                                "\u003cstrong\u003ePoblano Peppers (generic):\u003c/strong\u003e 4 peppers (400 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (160 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (15 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 container (10 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 jar (4 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 jar (Mexican oregano) (4 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 jar (8 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1 jar (10 g)",
+                                "\u003cstrong\u003eOrange Juice:\u003c/strong\u003e 1/2 cup (120 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 2 limes, juiced (60 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (480 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.72 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eCanned hominy is the heart of posole\u003c/strong\u003e and it is cheap. Grab a few cans, since it doubles as both starch and body for the stew.",
+                       "Tomatillos and poblanos are usually \u003cstrong\u003etucked in the Mexican produce section\u003c/strong\u003e and cost a lot less than you would guess. Look there first.",
+                       "This stew reheats beautifully, so \u003cstrong\u003efreeze half the batch\u003c/strong\u003e if fourteen servings is more than a week\u0027s worth for you."
+                   ],
+    "make_it":  [
+                    "Set the pork loin in the slow cooker with the chopped onion.",
+                    "Add the tomatillos, poblano peppers, and enough water to nearly cover.",
+                    "Cover and cook on low for 7 to 8 hours until the pork is tender.",
+                    "Shred the pork right in the pot and stir it back through the broth.",
+                    "Stir in the drained hominy and cook another 20 to 30 minutes to warm through.",
+                    "Ladle into bowls, hominy and all, and portion into containers."
+                ],
+    "portion_html":  "Each serving runs about 562 calories with 56 grams of protein.",
+    "credit_html":  "",
+    "upsell_html":  "A warm bowl of this on a cold day is worth every minute the slow cooker spent on it. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  36.19,
+    "cost_batch_true":  41.71,
+    "cost_per_serving":  2.58,
+    "cost_per_serving_true":  2.98,
+    "cost_pantry_add":  10.31,
+    "cost_first_run":  52.02,
+    "scaler":  {
+                   "cost":  "41.71",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Loin",
+                                   "grams":  3500,
+                                   "buy":  "8 lb",
+                                   "bid":  "pork-loin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Hominy",
+                                   "grams":  3600,
+                                   "buy":  "6 cans",
+                                   "bid":  "hominy",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomatillos",
+                                   "grams":  900,
+                                   "buy":  "2 lb",
+                                   "bid":  "tomatillos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Poblano Peppers",
+                                   "grams":  400,
+                                   "buy":  "4 peppers",
+                                   "bid":  "poblano-peppers",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  160,
+                                   "buy":  "2 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  15,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  10,
+                                   "buy":  "1 container",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "1 jar",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "grams":  4,
+                                   "buy":  "1 jar (Mexican oregano)",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  8,
+                                   "buy":  "1 jar",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "grams":  10,
+                                   "buy":  "1 jar",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Orange Juice",
+                                   "grams":  120,
+                                   "buy":  "1/2 cup",
+                                   "bid":  "orange-juice",
+                                   "gpu":  "31.000"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "grams":  60,
+                                   "buy":  "2 limes, juiced",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  480,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 562 calories and 56 grams of protein for roughly $3.72 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker pork posole verde bowls, budget dinner",
+                 "costPerServing":  3.72,
+                 "recipeIngredient":  [
+                                          "8 lb Pork Loin",
+                                          "6 cans Hominy",
+                                          "2 lb Tomatillos",
+                                          "4 peppers Poblano Peppers",
+                                          "2 onions Yellow Onion",
+                                          "1 bulb Garlic"
+                                      ],
+                 "steps":  [
+                               "Set the pork loin in the slow cooker with the chopped onion.",
+                               "Add the tomatillos, poblano peppers, and enough water to nearly cover.",
+                               "Cover and cook on low for 7 to 8 hours until the pork is tender.",
+                               "Shred the pork right in the pot and stir it back through the broth.",
+                               "Stir in the drained hominy and cook another 20 to 30 minutes to warm through.",
+                               "Ladle into bowls, hominy and all, and portion into containers."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

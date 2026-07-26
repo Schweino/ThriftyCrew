@@ -1,0 +1,208 @@
+{
+    "name":  "Slow Cooker King Ranch Chicken Bowls",
+    "slug":  "slow-cooker-king-ranch-chicken-bowls",
+    "cuisine":  "Tex-Mex",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  567,
+                 "protein":  60,
+                 "carbs":  50,
+                 "fat":  12,
+                 "cost_ps":  "3.71"
+             },
+    "intro_html":  "King Ranch chicken is a Texas classic, all cheesy, saucy comfort in one pot. This meal prep version keeps the flavor, stacks up the protein, and stays cheap per serving. One batch makes 14 servings.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3100 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (850 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 1 can (200 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 2 bags (280 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 2 bags (400 g)",
+                                "\u003cstrong\u003eCorn Tortillas:\u003c/strong\u003e 15 corn tortillas, torn (450 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 8 tbsp (250 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 1/2 cup (140 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 4 cups (1440 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (25 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 4 tsp (24 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (16 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 1 medium (45 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (14 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.71 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Buy the \u003cstrong\u003echeddar in the bigger two-bag size\u003c/strong\u003e. It is cheaper per ounce and this recipe puts it to good use.",
+                       "Reach for the \u003cstrong\u003ebulk chicken breast\u003c/strong\u003e to keep the per serving price low.",
+                       "A single \u003cstrong\u003ecan of diced tomatoes\u003c/strong\u003e is all the sauce base you need, so no pricey extras here."
+                   ],
+    "make_it":  [
+                    "Set the chicken breast in the crock with the can of diced tomatoes.",
+                    "Cover and cook on low for 6 to 8 hours until the chicken shreds easily.",
+                    "Shred the chicken and stir it back into the sauce.",
+                    "Stir in most of the cheddar and let it melt through.",
+                    "Steam the broccoli and cook the rice.",
+                    "Build bowls with rice, king ranch chicken, broccoli, and the last of the cheese on top."
+                ],
+    "portion_html":  "Each of the 14 servings comes in around 60g protein for about 567 calories, at roughly $2.16 a bowl.",
+    "credit_html":  "",
+    "upsell_html":  "Cheesy, comforting, and cheap, this bowl proves meal prep does not have to taste like a diet. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  34.81,
+    "cost_batch_true":  41.97,
+    "cost_per_serving":  2.49,
+    "cost_per_serving_true":  3,
+    "cost_pantry_add":  10.68,
+    "cost_first_run":  52.65,
+    "scaler":  {
+                   "cost":  "41.97",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3100,
+                                   "buy":  "7 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  850,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "grams":  200,
+                                   "buy":  "1 can",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "grams":  280,
+                                   "buy":  "2 bags",
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  400,
+                                   "buy":  "2 bags",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Corn Tortillas",
+                                   "grams":  450,
+                                   "buy":  "15 corn tortillas, torn",
+                                   "bid":  "corn-tortillas",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "grams":  250,
+                                   "buy":  "8 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "grams":  140,
+                                   "buy":  "1/2 cup",
+                                   "bid":  "all-purpose-flour",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  1440,
+                                   "buy":  "4 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  25,
+                                   "buy":  "2 cloves",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "grams":  24,
+                                   "buy":  "4 tsp",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  16,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "grams":  45,
+                                   "buy":  "1 medium",
+                                   "bid":  "jalapeno",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "1 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "to taste",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Tex-Mex meal prep. Fourteen servings at about 567 calories and 60 grams of protein for roughly $3.71 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker king ranch chicken bowls, budget dinner",
+                 "costPerServing":  3.71,
+                 "recipeIngredient":  [
+                                          "7 lb Boneless Skinless Chicken Breast",
+                                          "1 lb Rice",
+                                          "1 can Diced Tomatoes",
+                                          "2 bags Cheddar Cheese, Shredded",
+                                          "2 bags Broccoli Florets",
+                                          "15 corn tortillas, torn Corn Tortillas"
+                                      ],
+                 "steps":  [
+                               "Set the chicken breast in the crock with the can of diced tomatoes.",
+                               "Cover and cook on low for 6 to 8 hours until the chicken shreds easily.",
+                               "Shred the chicken and stir it back into the sauce.",
+                               "Stir in most of the cheddar and let it melt through.",
+                               "Steam the broccoli and cook the rice.",
+                               "Build bowls with rice, king ranch chicken, broccoli, and the last of the cheese on top."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

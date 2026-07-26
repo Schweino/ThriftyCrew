@@ -1,0 +1,307 @@
+{
+    "name":  "Creamy Turkey Gnocchi Soup",
+    "slug":  "creamy-turkey-gnocchi-soup",
+    "cuisine":  "italian-american",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://dashfordinner.com/creamy-turkey-gnocchi-soup/",
+    "source_site":  "dashfordinner.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +5% (Potato Gnocchi)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 4 servings, 607 cal, 28g protein, clears both gates as published. Gnocchi is already a tracked commodity. The live Creamy Tomato Ground Turkey Gnocchi is a skillet in red sauce; this is a cream soup, different dish. | HARVEST: Source ingredient line says \u0027cooked chicken\u0027 even though the recipe is titled turkey; transcribed as published. Instant Pot variation also given.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: base +5% (Potato Gnocchi)",
+                         "OVERRIDE Boneless Skinless Chicken Breast: TITLE-PROTEIN SWAP: titled turkey; diced chicken -\u003e turkey breast, grams kept"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  565,
+                 "protein":  27,
+                 "carbs":  58,
+                 "fat":  25,
+                 "cost_ps":  "4.89"
+             },
+    "intro_html":  "Pillowy potato gnocchi in a cream soup loaded with turkey breast, spinach and a proper carrot, celery and onion base. This is the soup people order at the chain restaurant and then talk about for a week. Made at home in one pot, it comes in for less than the tip you would leave on that meal, and you get 14 of them.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 3.5 (192 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 (245 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 7.25 tbsp (61 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3.5 (214 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 3.6 cartons (3360 g)",
+                                "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 2.25 lb (980 g)",
+                                "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 0.75 tbsp (2 g)",
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 0.5 tbsp (2 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2 tbsp (14 g)",
+                                "\u003cstrong\u003ePotato Gnocchi (Great Value):\u003c/strong\u003e 58.75 oz dry (1667 g)",
+                                "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 3.5 cups (833 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 3.5 cups (858 g)",
+                                "\u003cstrong\u003eFrozen Chopped Spinach (generic):\u003c/strong\u003e 1.25 lb (595 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 3.5 tbsp: ~$0.66. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Celery, 3.5: ~$1.01. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Yellow Onion, 2: ~$0.62. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 7.25 tbsp: ~$0.88. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Carrots, 3.5: ~$0.45. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Chicken Broth, 3.6 cartons: ~$4.51. \u003cstrong\u003ePantry staple; this batch alone uses about 4 32oz cartons.\u003c/strong\u003e",
+                       "Turkey Breast, 2.25 lb: ~$10.40. \u003cstrong\u003eBuy 1 3lb frozen roast: $14.44.\u003c/strong\u003e",
+                       "Potato Gnocchi, 58.75 oz dry: ~$9.66. \u003cstrong\u003eBuy 4 17.6oz packs: $11.56.\u003c/strong\u003e",
+                       "Heavy Cream, 3.5 cups: ~$5.17. \u003cstrong\u003eBuy 2 pints: $5.87.\u003c/strong\u003e",
+                       "Milk, 3.5 cups: ~$0.68. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
+                       "Frozen Chopped Spinach, 1.25 lb: ~$4.20. \u003cstrong\u003eBuy 3 10oz boxes: $6.01.\u003c/strong\u003e",
+                       "Pantry seasonings (dried thyme, italian seasoning, black pepper, salt): ~$0.86. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $39.10 across 14 servings, so roughly $2.79 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $52.54 across 14 servings, roughly $3.75 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.98 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $68.52. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.89 a bowl\u003c/strong\u003e (at everyday cost) for a cream soup with real turkey and real gnocchi in it. That is restaurant food at grocery store math.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eShelf-stable gnocchi is the cheap kind.\u003c/strong\u003e It lives in the pasta aisle, not the refrigerated case, it keeps for months, and it cooks in about three minutes right in the broth.",
+                       "\u003cstrong\u003eBuy a frozen turkey breast roast and portion it.\u003c/strong\u003e Turkey breast is at its cheapest around the holidays. Cook one, pull it, and freeze it in bags for soups like this one.",
+                       "\u003cstrong\u003eHeavy cream and milk together, not cream alone.\u003c/strong\u003e Cutting the cream with milk keeps the soup silky, drops the cost, and drops the fat without anyone noticing.",
+                       "\u003cstrong\u003eFrozen chopped spinach goes in straight from the box.\u003c/strong\u003e It costs less than fresh, it does not wilt into nothing, and there is no washing involved."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Dice the onion, celery and carrots small and sweat them in the olive oil in your big pot over medium heat until soft, about 8 minutes.",
+                    "Add the minced garlic, the dried thyme and the Italian seasoning and stir for a minute until fragrant.",
+                    "Pour in the chicken broth, bring it to a simmer, and let the vegetables get fully tender.",
+                    "Add the gnocchi and cook until they float and turn soft, only a few minutes. Do not walk away here.",
+                    "Stir in the cooked turkey breast, the thawed chopped spinach, the heavy cream and the milk, then bring it back to a bare simmer without letting it boil.",
+                    "Season with salt and black pepper and let it sit off the heat for a few minutes so it thickens up."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide what is left by 14 and ladle that exact weight into each container. Every bowl lands near 565 calories with 27 grams of protein. Reheat gently, because gnocchi and cream both prefer low and slow.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://dashfordinner.com/creamy-turkey-gnocchi-soup/\" target=\"_blank\" rel=\"noopener\"\u003edashfordinner.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cem\u003eChain restaurant soup for about $4.89 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "cost_batch":  39.1,
+    "cost_batch_true":  52.54,
+    "cost_per_serving":  2.79,
+    "cost_per_serving_true":  3.75,
+    "cost_pantry_add":  15.98,
+    "cost_first_run":  68.52,
+    "scaler":  {
+                   "cost":  "52.54",
+                   "ing":  [
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  47,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "canon":  "Celery",
+                                   "grams":  192,
+                                   "buy":  "3.5",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  245,
+                                   "buy":  "2",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  61,
+                                   "buy":  "7.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  214,
+                                   "buy":  "3.5",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  3360,
+                                   "buy":  "3.6 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Turkey Breast",
+                                   "canon":  "Turkey Breast",
+                                   "grams":  980,
+                                   "buy":  "2.25 lb",
+                                   "bid":  "turkey-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  2,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "canon":  "Italian Seasoning",
+                                   "grams":  2,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  14,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Potato Gnocchi",
+                                   "canon":  "Potato Gnocchi",
+                                   "grams":  1667,
+                                   "buy":  "58.75 oz dry",
+                                   "bid":  "potato-gnocchi",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Heavy Cream",
+                                   "canon":  "Heavy Cream",
+                                   "grams":  833,
+                                   "buy":  "3.5 cups",
+                                   "bid":  "heavy-cream",
+                                   "gpu":  "29.800"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  858,
+                                   "buy":  "3.5 cups",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "Frozen Chopped Spinach",
+                                   "canon":  "Frozen Chopped Spinach",
+                                   "grams":  595,
+                                   "buy":  "1.25 lb",
+                                   "bid":  "spinach",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Potato gnocchi, shredded turkey breast and spinach in a creamy herbed broth. A 14 serving copycat cream soup built for budget meal prep.",
+                 "keywords":  "creamy turkey gnocchi soup, gnocchi soup recipe, turkey soup, budget meal prep, leftover turkey recipe, cheap dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT35M",
+                 "totalTime":  "PT55M",
+                 "costPerServing":  4.89,
+                 "recipeIngredient":  [
+                                          "Olive Oil",
+                                          "Yellow Onion",
+                                          "Celery",
+                                          "Carrots",
+                                          "Garlic",
+                                          "Chicken Broth",
+                                          "Potato Gnocchi",
+                                          "Turkey Breast",
+                                          "Frozen Chopped Spinach",
+                                          "Heavy Cream",
+                                          "Milk"
+                                      ],
+                 "steps":  [
+                               "Sweat the onion, celery and carrots in olive oil until soft.",
+                               "Add the garlic, thyme and Italian seasoning, then pour in the chicken broth.",
+                               "Simmer until the vegetables are tender, then add the gnocchi and cook until they float.",
+                               "Stir in the turkey breast, spinach, heavy cream and milk.",
+                               "Bring back to a bare simmer, season, and rest off the heat to thicken."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Celery",
+                                  "grams":  192
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  245
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  61
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  214
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  3360
+                              },
+                              {
+                                  "item":  "Turkey Breast",
+                                  "grams":  980
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Italian Seasoning",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Potato Gnocchi",
+                                  "grams":  1667
+                              },
+                              {
+                                  "item":  "Heavy Cream",
+                                  "grams":  833
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  858
+                              },
+                              {
+                                  "item":  "Frozen Chopped Spinach",
+                                  "grams":  595
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              }
+                          ]
+}

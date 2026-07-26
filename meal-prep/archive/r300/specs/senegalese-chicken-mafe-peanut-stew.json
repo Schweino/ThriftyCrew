@@ -1,0 +1,265 @@
+{
+    "name":  "Senegalese Chicken Mafe (Peanut Stew)",
+    "slug":  "senegalese-chicken-mafe-peanut-stew",
+    "cuisine":  "West African / Senegalese",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.africanbites.com/maafe-west-african-peanut-soup/",
+    "source_site":  "africanbites.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 250g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Page verified: full recipe, 5 servings, 519 cal / 30g protein per serving before rice. Peanut-butter thickened braise scales cleanly to 14 servings in one pot and portions by weight over rice. Every signature ingredient (peanut-butter, sweet-potatoes, crushed-tomatoes) is a live board commodity. No live chicken recipe uses a West African groundnut base (Jollof and Doro Wat are the only African chicken entries). Confidence: high, nutrition read directly from the recipe card. | HARVEST: Source lets the cook choose beef or chicken; use chicken for this run.",
+                         "SOURCE YIELD: 5 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 250g (src scale)",
+                         "OVERRIDE Beef Chuck Roast: TITLE-PROTEIN SWAP: titled chicken; stew chunks -\u003e chicken thigh (braise-stable cut), grams kept"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  586,
+                 "protein":  36,
+                 "carbs":  53,
+                 "fat":  24,
+                 "cost_ps":  "2.47"
+             },
+    "intro_html":  "Mafe is Senegal\u0027s groundnut stew, and it has been feeding large tables on small budgets for a very long time. Peanut butter melts into tomato and broth until the whole pot turns the color of terra cotta and thickens on its own, no flour and no cream involved. Chicken goes in early and comes out falling apart. Over rice, each bowl runs \u003cstrong\u003e586 calories and 36 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.47\u003c/strong\u003e (at everyday cost). Peanut butter as a dinner ingredient is one of the best deals in the store and almost nobody uses it that way.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 4.25 lb (1890 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.75 cups (168 g)",
+                                "\u003cstrong\u003eSmoked Paprika (Great Value):\u003c/strong\u003e 1 tbsp (7 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2.25 tbsp (15 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 5.6 cans (2302 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 (308 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5.75 tbsp (49 g)",
+                                "\u003cstrong\u003ePeanut Butter (generic):\u003c/strong\u003e 0.75 cups (179 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2.3 cartons (2156 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 4.25 tbsp (39 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Thigh, 4.25 lb: ~$7.37. \u003cstrong\u003eBuy 5 lbs: $8.85.\u003c/strong\u003e",
+                       "Vegetable Oil, 0.75 cups: ~$0.41. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Diced Tomatoes, 5.6 cans: ~$5.38. \u003cstrong\u003eBuy 6 cans: $5.76.\u003c/strong\u003e",
+                       "Yellow Onion, 3: ~$0.77. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 5.75 tbsp: ~$0.71. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Peanut Butter, 0.75 cups: ~$0.58. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 2.3 cartons: ~$2.89. \u003cstrong\u003ePantry staple; this batch alone uses about 3 32oz cartons.\u003c/strong\u003e",
+                       "Jalapeno, 4.25 tbsp: ~$0.15. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (smoked paprika, black pepper, salt): ~$0.80. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $19.92 across 14 servings, so roughly $1.42 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $24.20 across 14 servings, roughly $1.73 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.37 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $34.57. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.47 a bowl\u003c/strong\u003e (at everyday cost) for a West African stew that gets richer as it sits in the fridge. Chicken and canned tomatoes are the only lines worth watching, and a little peanut butter does the work a pint of cream would do in a European braise.",
+    "shop_smart":  [
+                       "Buy the big jar of plain peanut butter and skip anything labeled natural or no-stir if you are counting pennies. This recipe uses less than a cup, so one jar covers several batches and the rest goes on toast.",
+                       "Canned diced tomatoes are the volume in this pot and they are one of the few groceries that barely moved in price. Buy them by the case when they hit a sale, since they sit on a shelf for a year without complaining.",
+                       "Boneless skinless thighs are the braising cut. They cost less per pound than breast and they will not turn stringy after an hour in a hot pot.",
+                       "One jalapeno is the entire heat budget. Traditional mafe uses a scotch bonnet, so if your store carries habanero and you like the fire, one of those swaps in without changing the price much."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Season the chicken thighs with salt, black pepper and smoked paprika. Heat the vegetable oil in your largest pot over medium-high and brown the chicken in batches, working in a single layer so it colors instead of steams. Set it aside.",
+                    "Drop the diced onion into the same pot and cook 5 to 6 minutes until soft and starting to catch, then add the garlic and the minced jalapeno and cook one more minute.",
+                    "Stir the peanut butter directly into the hot onions and let it toast for a minute. It will look wrong and seize up. That is exactly what it should do.",
+                    "Add the diced tomatoes and the chicken broth a little at a time, whisking as you go so the peanut butter loosens into a smooth sauce instead of clumping.",
+                    "Return the chicken and any juices to the pot, bring it to a simmer, then cover and hold it at a low bubble for 45 minutes to an hour, stirring now and then so the bottom does not scorch. Peanut butter sauces catch fast.",
+                    "While it simmers, cook the rice and let it steam covered off the heat for 10 minutes.",
+                    "Pull the chicken, shred or chop it, and stir it back into the sauce with the cooked rice folded through so every bowl gets both."
+                ],
+    "portion_html":  "Set the pot on the scale, subtract the empty-pot weight, and divide by 14. Scoop the same number into all fourteen containers. Each one delivers \u003cstrong\u003e586 calories\u003c/strong\u003e, and this one genuinely tastes better on day three than it did on day one.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.africanbites.com/maafe-west-african-peanut-soup/\" target=\"_blank\" rel=\"noopener\"\u003eafricanbites.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "West African peanut stew over rice for about $2.47 a bowl (at everyday cost). This is one of a few hundred recipes in the same range. Members get the whole Meal Prep section plus every money lesson, calculator, and tool on the site for $1 a month.",
+    "cost_batch":  19.92,
+    "cost_batch_true":  24.2,
+    "cost_per_serving":  1.42,
+    "cost_per_serving_true":  1.73,
+    "cost_pantry_add":  10.37,
+    "cost_first_run":  34.57,
+    "scaler":  {
+                   "cost":  "24.20",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  1890,
+                                   "buy":  "4.25 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  168,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Smoked Paprika",
+                                   "canon":  "Smoked Paprika",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  15,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  2302,
+                                   "buy":  "5.6 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  308,
+                                   "buy":  "3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  49,
+                                   "buy":  "5.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Peanut Butter",
+                                   "canon":  "Peanut Butter",
+                                   "grams":  179,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "peanut-butter",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  2156,
+                                   "buy":  "2.3 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  39,
+                                   "buy":  "4.25 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Senegalese chicken mafe, a peanut butter and tomato braise served over rice as 14 meal prep bowls. 586 calories, 36g protein, about $2.47 a bowl (at everyday cost).",
+                 "keywords":  "chicken mafe, senegalese peanut stew, west african peanut stew, groundnut stew, budget meal prep, peanut butter chicken stew",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT1H",
+                 "totalTime":  "PT1H20M",
+                 "costPerServing":  2.47,
+                 "recipeIngredient":  [
+                                          "4.25 lb boneless skinless chicken thighs",
+                                          "0.75 cups peanut butter",
+                                          "5.6 cans diced tomatoes",
+                                          "4.75 lb chicken broth",
+                                          "3 yellow onions",
+                                          "5.75 tbsp garlic",
+                                          "4.25 tbsp jalapeno",
+                                          "3.75 cups dry rice",
+                                          "0.75 cups vegetable oil"
+                                      ],
+                 "steps":  [
+                               "Season and brown the chicken thighs in oil in batches, then set aside.",
+                               "Soften the onion, garlic and jalapeno in the same pot, then toast the peanut butter in with them.",
+                               "Whisk in the diced tomatoes and broth gradually until the sauce is smooth.",
+                               "Return the chicken, cover, and simmer 45 minutes to an hour, stirring so the bottom does not scorch.",
+                               "Cook the rice, shred the chicken back into the sauce, fold in the rice, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  1890
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  168
+                              },
+                              {
+                                  "item":  "Smoked Paprika",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  2302
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  308
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  49
+                              },
+                              {
+                                  "item":  "Peanut Butter",
+                                  "grams":  179
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  2156
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  39
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

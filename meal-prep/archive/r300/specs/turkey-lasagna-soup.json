@@ -1,0 +1,323 @@
+{
+    "name":  "Turkey Lasagna Soup",
+    "slug":  "turkey-lasagna-soup",
+    "cuisine":  "italian-american",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://ohsnapmacros.com/turkey-lasagna-soup/",
+    "source_site":  "ohsnapmacros.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Ziti Pasta)",
+                   "portion factor 1.15"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 8 servings, 322 cal, 35g protein at 99/1 turkey. Protein density is excellent; we get to 500+ by using 93/7 and a heavier noodle-and-cheese portion. Soup form is nothing like the pasta bakes in the catalog. Confidence: high on page, medium on est_cal (our re-ratio). | HARVEST: ",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Ziti Pasta)",
+                         "TUNING: portion factor 1.15",
+                         "OVERRIDE Red Pepper Flakes: \u0027crushed red pepper\u0027 garnish line, no qty",
+                         "OVERRIDE Ricotta Cheese: 3 oz in-soup + garnish dollops line with no qty; 170 g total"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  562,
+                 "protein":  41,
+                 "carbs":  60,
+                 "fat":  17,
+                 "cost_ps":  "4.19"
+             },
+    "intro_html":  "Lasagna soup is what happens when somebody admits out loud that layering a lasagna is the least fun part of making one. Same flavors, same ricotta and parmesan, none of the assembly. It is a one pot dinner that hits \u003cstrong\u003e562 calories and 41 grams of protein\u003c/strong\u003e a bowl for about \u003cstrong\u003e$4.19\u003c/strong\u003e (at everyday cost), and it freezes better than an actual lasagna does.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 4 lb (1826 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 0.75 tbsp (9 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 (231 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4.75 tbsp (40 g)",
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 6 tbsp (25 g)",
+                                "\u003cstrong\u003eDried Basil (Great Value):\u003c/strong\u003e 3 tbsp (9 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (24 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 0.75 tbsp (4 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.25 tbsp (8 g)",
+                                "\u003cstrong\u003eCrushed Tomatoes (generic):\u003c/strong\u003e 2 cans (1598 g)",
+                                "\u003cstrong\u003eDiced Tomatoes \u0026 Green Chilies (Great Value (Ro-Tel style)):\u003c/strong\u003e 2 cans (570 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 8 cups (1932 g)",
+                                "\u003cstrong\u003eZiti Pasta (Great Value):\u003c/strong\u003e 29 oz dry (820 g)",
+                                "\u003cstrong\u003eRicotta Cheese (Great Value):\u003c/strong\u003e 12 oz (342 g)",
+                                "\u003cstrong\u003eFresh Basil:\u003c/strong\u003e 11.25 tbsp (17 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 4.75 oz (138 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 4 lb: ~$15.38. \u003cstrong\u003eBuy 5 lbs: $19.11.\u003c/strong\u003e",
+                       "Yellow Onion, 2: ~$0.58. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 4.75 tbsp: ~$0.58. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Crushed Tomatoes, 2 cans: ~$3.04. \u003cstrong\u003eBuy 2 28oz cans: $3.04.\u003c/strong\u003e",
+                       "Diced Tomatoes \u0026 Green Chilies, 2 cans: ~$1.95. \u003cstrong\u003eBuy 2 10oz cans: $1.95.\u003c/strong\u003e",
+                       "Beef Broth, 8 cups: ~$2.59. \u003cstrong\u003ePantry staple; this batch alone uses about 3 32oz cartons.\u003c/strong\u003e",
+                       "Ziti Pasta, 29 oz dry: ~$1.75. \u003cstrong\u003eBuy 2 16oz boxes: $1.94.\u003c/strong\u003e",
+                       "Ricotta Cheese, 12 oz: ~$2.21. \u003cstrong\u003eBuy 1 15oz tub: $2.74.\u003c/strong\u003e",
+                       "Fresh Basil, 11.25 tbsp: ~$2.13. \u003cstrong\u003eBuy 2 0.5oz packs: $3.52.\u003c/strong\u003e",
+                       "Parmesan Cheese, 4.75 oz: ~$1.69. \u003cstrong\u003eBuy 1 8oz tub: $2.78.\u003c/strong\u003e",
+                       "Pantry seasonings (olive oil, italian seasoning, dried basil, salt, red pepper flakes, black pepper): ~$1.80. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $33.70 across 14 servings, so roughly $2.41 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $41.19 across 14 servings, roughly $2.94 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.45 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $58.64. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.19\u003c/strong\u003e a bowl (at everyday cost). Canned tomatoes and a box of ziti carry the whole thing, and neither one has ever cost real money.",
+    "shop_smart":  [
+                       "Ziti is about the cheapest structure you can put in a soup. Broken lasagna noodles work too if you have a box sitting around, and honestly that is the more authentic move here.",
+                       "Crushed tomatoes in the 28 ounce can are one of the best values in the aisle. Buy the big cans, not the small ones, because tomato in a soup this size is a volume ingredient.",
+                       "One tub of ricotta covers this batch with a little left over. It goes in as dollops at serving, not stirred through, so a small amount goes a long way visually and texturally.",
+                       "The turkey is nearly half the cost. Buy the 5 pound pack when it is on sale and portion it into freezer bags the day you get home, while you still care."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Heat a little olive oil in a big pot and brown the ground turkey hard, breaking it up, until it is cooked through to 165F. Let it get some color, because color is flavor in a soup that cooks this fast.",
+                    "Add the diced onion and minced garlic and cook 5 minutes until soft.",
+                    "Stir in the italian seasoning, dried basil, red pepper flakes, salt, and black pepper and toast them for one minute.",
+                    "Add the crushed tomatoes, the diced tomatoes with green chilies, and the beef broth, and simmer 20 minutes so it stops tasting like separate ingredients.",
+                    "Cook the ziti separately in salted water and drain it. Keep it separate. Pasta cooked in soup keeps swelling in the fridge and by Wednesday you have a casserole.",
+                    "Stir most of the parmesan into the hot soup and let it melt in, then tear the fresh basil over the pot off the heat.",
+                    "Move the drained pasta into your weighed pot and hold the ricotta out for the containers."
+                ],
+    "portion_html":  "Set the pot of drained pasta on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the pasta in each container. Ladle the soup evenly over all 14, then top each with a dollop of ricotta and the rest of the parmesan. Every bowl lands at \u003cstrong\u003e562 calories and 41 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://ohsnapmacros.com/turkey-lasagna-soup/\" target=\"_blank\" rel=\"noopener\"\u003eohsnapmacros.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Lasagna soup for about \u003cstrong\u003e$4.19\u003c/strong\u003e a bowl (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  33.7,
+    "cost_batch_true":  41.19,
+    "cost_per_serving":  2.41,
+    "cost_per_serving_true":  2.94,
+    "cost_pantry_add":  17.45,
+    "cost_first_run":  58.64,
+    "scaler":  {
+                   "cost":  "41.19",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1826,
+                                   "buy":  "4 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  9,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  231,
+                                   "buy":  "2",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  40,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "canon":  "Italian Seasoning",
+                                   "grams":  25,
+                                   "buy":  "6 tbsp",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Basil",
+                                   "canon":  "Dried Basil",
+                                   "grams":  9,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "dried-basil",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  24,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Pepper Flakes",
+                                   "canon":  "Red Pepper Flakes",
+                                   "grams":  4,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "red-pepper-flakes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  8,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Crushed Tomatoes",
+                                   "canon":  "Crushed Tomatoes",
+                                   "grams":  1598,
+                                   "buy":  "2 cans",
+                                   "bid":  "crushed-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes \u0026 Green Chilies",
+                                   "canon":  "Diced Tomatoes \u0026 Green Chilies",
+                                   "grams":  570,
+                                   "buy":  "2 cans",
+                                   "bid":  "tomatoes-green-chilies",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  1932,
+                                   "buy":  "8 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Ziti Pasta",
+                                   "canon":  "Ziti Pasta",
+                                   "grams":  820,
+                                   "buy":  "29 oz dry",
+                                   "bid":  "pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ricotta Cheese",
+                                   "canon":  "Ricotta Cheese",
+                                   "grams":  342,
+                                   "buy":  "12 oz",
+                                   "bid":  "ricotta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Basil",
+                                   "canon":  "Fresh Basil",
+                                   "grams":  17,
+                                   "buy":  "11.25 tbsp",
+                                   "bid":  "fresh-basil",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "canon":  "Parmesan Cheese",
+                                   "grams":  138,
+                                   "buy":  "4.75 oz",
+                                   "bid":  "parmesan",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey lasagna soup meal prep: ground turkey, tomatoes, and ziti in one pot, topped with ricotta and parmesan. 562 calories, 41g protein, about $4.19 a bowl (at everyday cost).",
+                 "keywords":  "lasagna soup, turkey soup, one pot pasta soup, turkey meal prep, budget meal prep, ricotta soup",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT40M",
+                 "totalTime":  "PT55M",
+                 "costPerServing":  4.19,
+                 "recipeIngredient":  [
+                                          "4 lb 93/7 ground turkey",
+                                          "29 oz dry ziti pasta",
+                                          "2 cans crushed tomatoes",
+                                          "2 cans diced tomatoes with green chilies",
+                                          "4.25 lb beef broth",
+                                          "12 oz ricotta cheese",
+                                          "4.75 oz parmesan cheese",
+                                          "11.25 tbsp fresh basil",
+                                          "2 yellow onions",
+                                          "4.75 tbsp garlic"
+                                      ],
+                 "steps":  [
+                               "Brown the ground turkey in olive oil to 165F.",
+                               "Add onion and garlic and cook 5 minutes, then toast the italian seasoning, basil, and red pepper flakes.",
+                               "Add crushed tomatoes, diced tomatoes with green chilies, and beef broth and simmer 20 minutes.",
+                               "Cook the ziti separately and drain.",
+                               "Stir most of the parmesan into the soup and finish with fresh basil.",
+                               "Portion the pasta by weight into 14 containers, ladle the soup over, and top with ricotta."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1826
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  231
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  40
+                              },
+                              {
+                                  "item":  "Italian Seasoning",
+                                  "grams":  25
+                              },
+                              {
+                                  "item":  "Dried Basil",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  24
+                              },
+                              {
+                                  "item":  "Red Pepper Flakes",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Crushed Tomatoes",
+                                  "grams":  1598
+                              },
+                              {
+                                  "item":  "Diced Tomatoes \u0026 Green Chilies",
+                                  "grams":  570
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  1932
+                              },
+                              {
+                                  "item":  "Ziti Pasta",
+                                  "grams":  820
+                              },
+                              {
+                                  "item":  "Ricotta Cheese",
+                                  "grams":  342
+                              },
+                              {
+                                  "item":  "Fresh Basil",
+                                  "grams":  17
+                              },
+                              {
+                                  "item":  "Parmesan Cheese",
+                                  "grams":  138
+                              }
+                          ]
+}

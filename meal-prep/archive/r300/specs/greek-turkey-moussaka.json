@@ -1,0 +1,381 @@
+{
+    "name":  "Greek Turkey Moussaka",
+    "slug":  "greek-turkey-moussaka",
+    "cuisine":  "greek",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://coleycooks.com/turkey-moussaka/",
+    "source_site":  "coleycooks.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Potato)",
+                   "portion factor 1.3"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Layered casserole with bechamel - cuts into 14 squares, which is ideal portioning. Verified source: full recipe, 8 servings, 381 cal / 16g protein, and the source explicitly lists turkey among the meat options. Confidence note: we would spec the potato-layered variant so every layer maps to the board, and raise the meat ratio for protein. | HARVEST: ",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Potato)",
+                         "TUNING: portion factor 1.3",
+                         "OVERRIDE +Potato: WAVE-4: replaces the auto-Rice base with the classic Greek moussaka POTATO layer (dish-true starch)",
+                         "OVERRIDE 93/7 Ground Beef: TITLE-PROTEIN SWAP: titled turkey; ground-\u003eground, grams kept"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  575,
+                 "protein":  29,
+                 "carbs":  68,
+                 "fat":  22,
+                 "cost_ps":  "4.91"
+             },
+    "intro_html":  "Moussaka is the Greek casserole everybody admires and almost nobody makes, because it has three parts and a reputation. Here is the truth: roasted eggplant, a cinnamon-warmed turkey tomato sauce, and a bechamel you whisk in eight minutes. Bake it, cut it into squares, set each square over rice, and you have \u003cstrong\u003e575 calories and 29 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.91\u003c/strong\u003e a container (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 6.75 tbsp (92 g)",
+                                "\u003cstrong\u003eEggplant:\u003c/strong\u003e 8.3 (3754 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2.5 tbsp (18 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 (341 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (34 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 0.75 tbsp (2 g)",
+                                "\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 0.75 tbsp (6 g)",
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 2.25 lb (1033 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1.5 cups (364 g)",
+                                "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 1.25 cups (279 g)",
+                                "\u003cstrong\u003eRed Wine Vinegar (generic):\u003c/strong\u003e 0.75 tbsp (11 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 0.5 cups (127 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 9 tbsp (73 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 4.5 cups (1115 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.04 oz (1 g)",
+                                "\u003cstrong\u003eGround Nutmeg (Great Value):\u003c/strong\u003e 0.04 oz (1 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 2 large eggs (114 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 1.25 oz (38 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 15.3 (3268 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.5 tbsp (26 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 6.75 tbsp: ~$1.30. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Eggplant, 8.3: ~$12.47. \u003cstrong\u003eBuy 7 each: $12.74.\u003c/strong\u003e",
+                       "Yellow Onion, 3: ~$0.86. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 4 tbsp: ~$0.49. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 2.25 lb: ~$8.70. \u003cstrong\u003eBuy 3 lbs: $11.46.\u003c/strong\u003e",
+                       "Beef Broth, 1.5 cups: ~$0.49. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Tomato Sauce, 1.25 cups: ~$0.63. \u003cstrong\u003eBuy 1 15oz can: $0.96.\u003c/strong\u003e",
+                       "Butter, 0.5 cups: ~$0.83. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "All-Purpose Flour, 9 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Milk, 4.5 cups: ~$0.89. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
+                       "Eggs, 2 large eggs: ~$0.27. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
+                       "Parmesan Cheese, 1.25 oz: ~$0.46. \u003cstrong\u003eBuy 1 8oz tub: $2.78.\u003c/strong\u003e",
+                       "Potato, 15.3: ~$4.09. \u003cstrong\u003eBuy 8 lbs: $4.54.\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, dried oregano, ground cinnamon, red wine vinegar, bay leaves, ground nutmeg, salt): ~$1.31. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $32.86 across 14 servings, so roughly $2.35 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $44.80 across 14 servings, roughly $3.20 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $23.98 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $68.78. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.91\u003c/strong\u003e a container (at everyday cost) for a dish restaurants treat as a special occasion. The eggplant is the single biggest line on the list, and it is still a vegetable.",
+    "shop_smart":  [
+                       "Eggplant is the biggest line on this list, so buy it in season when the price per each drops. Late summer is when it practically gives itself away in the Midwest.",
+                       "The bechamel is butter, flour, milk, an egg, and a little parmesan. That is a small pile of dairy doing the job of a sauce most people think is fancy.",
+                       "A gallon of milk costs about the same as a quart-size specialty carton, and you only need a few cups here. Buy the gallon, use the rest for breakfast, and stop paying the small-container tax.",
+                       "Parmesan by the tub keeps for months in the fridge and one ounce goes into this whole batch. It is a jar that earns its shelf space across dozens of recipes."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Slice the eggplant into rounds, salt them, and let them sit 20 minutes to draw out water. Pat them dry, brush them with the olive oil, and roast at 425F for about 25 minutes until they are soft and browned.",
+                    "While the eggplant roasts, cook the diced onion in a large pot until soft, add the garlic for a minute, then brown the ground turkey until it reaches 165F.",
+                    "Add the tomato sauce, beef broth, cinnamon, oregano, red wine vinegar, bay leaves, salt, and pepper. Simmer 20 minutes until the sauce is thick and almost dry, because a wet meat layer means a soggy casserole.",
+                    "Make the bechamel: melt the butter, whisk in the flour and cook two minutes, then pour in the milk slowly while whisking until it thickens. Off the heat, whisk in the beaten eggs, the parmesan, nutmeg, salt, and pepper.",
+                    "Layer the roasted eggplant and the meat sauce in your baking pans, pour the bechamel over the top, and smooth it flat.",
+                    "Bake at 350F for 45 minutes until the top is set and golden, then let it rest at least 20 minutes so the squares hold together when you cut them.",
+                    "Cook the rice, move it into your weighed pot, and cut the moussaka into 14 even squares."
+                ],
+    "portion_html":  "Set the pot of rice on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the rice bed in each container. Lay one moussaka square on top of each bed and you are done, no guessing required. Each portion lands at \u003cstrong\u003e575 calories and 29 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://coleycooks.com/turkey-moussaka/\" target=\"_blank\" rel=\"noopener\"\u003ecoleycooks.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Greek moussaka for about \u003cstrong\u003e$4.91\u003c/strong\u003e a container (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  32.86,
+    "cost_batch_true":  44.8,
+    "cost_per_serving":  2.35,
+    "cost_per_serving_true":  3.2,
+    "cost_pantry_add":  23.98,
+    "cost_first_run":  68.78,
+    "scaler":  {
+                   "cost":  "44.80",
+                   "ing":  [
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  92,
+                                   "buy":  "6.75 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Eggplant",
+                                   "canon":  "Eggplant",
+                                   "grams":  3754,
+                                   "buy":  "8.3",
+                                   "bid":  "eggplant",
+                                   "gpu":  "548.000"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  18,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  341,
+                                   "buy":  "3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  34,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  2,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cinnamon",
+                                   "canon":  "Ground Cinnamon",
+                                   "grams":  6,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "ground-cinnamon",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1033,
+                                   "buy":  "2.25 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  364,
+                                   "buy":  "1.5 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Tomato Sauce",
+                                   "canon":  "Tomato Sauce",
+                                   "grams":  279,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "tomato-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Wine Vinegar",
+                                   "canon":  "Red Wine Vinegar",
+                                   "grams":  11,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "red-wine-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  127,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  73,
+                                   "buy":  "9 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  1115,
+                                   "buy":  "4.5 cups",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  1,
+                                   "buy":  "0.04 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Nutmeg",
+                                   "canon":  "Ground Nutmeg",
+                                   "grams":  1,
+                                   "buy":  "0.04 oz",
+                                   "bid":  "ground-nutmeg",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  114,
+                                   "buy":  "2 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "canon":  "Parmesan Cheese",
+                                   "grams":  38,
+                                   "buy":  "1.25 oz",
+                                   "bid":  "parmesan",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  3268,
+                                   "buy":  "15.3",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  26,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Greek turkey moussaka meal prep: roasted eggplant, cinnamon turkey tomato sauce, and bechamel, cut into squares over rice. 575 calories, 29g protein, about $4.91 a serving (at everyday cost).",
+                 "keywords":  "turkey moussaka, greek casserole, eggplant casserole, turkey meal prep, budget meal prep, bechamel",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT1H10M",
+                 "totalTime":  "PT1H40M",
+                 "costPerServing":  4.91,
+                 "recipeIngredient":  [
+                                          "1.75 lb 93/7 ground turkey",
+                                          "6.4 eggplants",
+                                          "2.4 yellow onions",
+                                          "3 tbsp garlic",
+                                          "0.75 cups tomato sauce",
+                                          "0.5 lb beef broth",
+                                          "7 tbsp butter",
+                                          "7 tbsp all-purpose flour",
+                                          "3.5 cups milk",
+                                          "2 large eggs",
+                                          "1 oz parmesan cheese",
+                                          "5.25 tbsp olive oil",
+                                          "5.5 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Salt and drain the sliced eggplant, brush with olive oil, and roast at 425F for 25 minutes.",
+                               "Cook onion and garlic, brown the ground turkey to 165F, then add tomato sauce, broth, cinnamon, oregano, vinegar, and bay leaves and simmer 20 minutes until thick.",
+                               "Whisk a bechamel from butter, flour, and milk, then finish off heat with eggs, parmesan, and nutmeg.",
+                               "Layer eggplant and meat sauce in pans and top with bechamel.",
+                               "Bake at 350F for 45 minutes and rest 20 minutes.",
+                               "Cook the rice, portion it by weight into 14 containers, and set one moussaka square on each."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  92
+                              },
+                              {
+                                  "item":  "Eggplant",
+                                  "grams":  3754
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  18
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  341
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  34
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Ground Cinnamon",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1033
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  364
+                              },
+                              {
+                                  "item":  "Tomato Sauce",
+                                  "grams":  279
+                              },
+                              {
+                                  "item":  "Red Wine Vinegar",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  127
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  73
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  1115
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Ground Nutmeg",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  114
+                              },
+                              {
+                                  "item":  "Parmesan Cheese",
+                                  "grams":  38
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  3268
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  26
+                              }
+                          ]
+}

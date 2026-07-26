@@ -1,0 +1,283 @@
+{
+    "name":  "Chicken Pot Pie Casserole with Biscuits",
+    "slug":  "chicken-pot-pie-biscuit-casserole",
+    "cuisine":  "American",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.spendwithpennies.com/chicken-pot-pie-casserole/",
+    "source_site":  "spendwithpennies.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +10% (Refrigerated Biscuits)",
+                   "protein +20% (Boneless Skinless Chicken Breast)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Source lists 629 cal / 23g protein - calories clear, protein needs a meat bump. Every ingredient including the biscuit topping is a tracked board id. Bakes in a 9x13, portions by the square, freezer friendly. Confidence high. | HARVEST: ",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +10% (Refrigerated Biscuits)",
+                         "TUNING: protein +20% (Boneless Skinless Chicken Breast)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  582,
+                 "protein":  25,
+                 "carbs":  61,
+                 "fat":  26,
+                 "cost_ps":  "2.48"
+             },
+    "intro_html":  "Pot pie has one real problem as a meal prep dish, which is that a bottom crust turns to wet cardboard in the fridge. This version fixes it by skipping the bottom entirely and topping a creamy chicken and vegetable filling with biscuits, which hold up far better and taste better anyway. It bakes in a 9x13 and cuts by the square. Each serving lands at 582 calories and \u003cstrong\u003e25 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.48 a serving\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 2.3 (497 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1 cups (242 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 (128 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.75 tbsp (23 g)",
+                                "\u003cstrong\u003ePoultry Seasoning (generic (USDA)):\u003c/strong\u003e 0.25 oz (9 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 12 tbsp (97 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 3.5 cups (858 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 3 cups (700 g)",
+                                "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 1.75 lb (782 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 1.75 lb (794 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (7 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)",
+                                "\u003cstrong\u003eRefrigerated Biscuits (Pillsbury):\u003c/strong\u003e 20.5 (1189 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Potato, 2.3: ~$0.62. \u003cstrong\u003eBuy 2 lbs: $1.14.\u003c/strong\u003e",
+                       "Butter, 1 cups: ~$1.59. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Yellow Onion, 1: ~$0.32. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 2.75 tbsp: ~$0.33. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "All-Purpose Flour, 12 tbsp: ~$0.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Milk, 3.5 cups: ~$0.68. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
+                       "Chicken Broth, 3 cups: ~$0.94. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Frozen Green Peas, 1.75 lb: ~$1.69. \u003cstrong\u003eBuy 3 12oz bags: $2.20.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 1.75 lb: ~$5.72. \u003cstrong\u003eBuy 2 lbs: $6.54.\u003c/strong\u003e",
+                       "Refrigerated Biscuits, 20.5: ~$5.17. \u003cstrong\u003eBuy 3 8ct cans: $6.03.\u003c/strong\u003e",
+                       "Pantry seasonings (poultry seasoning, salt, black pepper): ~$0.57. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $17.72 across 14 servings, so roughly $1.27 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $25.23 across 14 servings, roughly $1.80 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.48 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $34.71. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.48 a serving\u003c/strong\u003e (at everyday cost). The biscuits are the biggest line, which is a strange thing to say about a chicken dish, and it tells you how little the filling actually costs to build.",
+    "shop_smart":  [
+                       "Canned biscuits are the single largest expense here. If your store runs them on a buy one get one, that is the week to make this, because everything else on the list is pantry cheap.",
+                       "The filling is butter, flour, milk, and broth, which is the cheapest cream sauce in cooking. There is no canned soup required and it tastes noticeably fresher without one.",
+                       "Frozen peas cost a fraction of fresh and are picked at peak, so there is no quality argument against them. Same with buying potatoes in the bigger bag.",
+                       "Chicken breast is used in a modest amount on purpose. This is a vegetable and gravy dish with chicken in it, and stretching the meat is exactly how the per-serving number stays where it is."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Heat the oven to 375F. Dice the potatoes small and boil them until just tender, then drain. Small dice matters, because big chunks will still be hard when the biscuits are done.",
+                    "Cook the diced chicken breast in a little of the butter until browned and cooked through, then set it aside.",
+                    "Melt the rest of the butter in a large pot, cook the diced onion until soft, add the garlic, then whisk in the flour and cook it for 2 minutes.",
+                    "Add the chicken broth and milk slowly while whisking, then simmer until it thickens into a proper gravy. Season with the poultry seasoning, salt, and pepper.",
+                    "Fold in the chicken, potatoes, and frozen peas and pour everything into a large baking dish.",
+                    "Separate the biscuits and arrange them across the top with a little space between each one so they can spread and brown.",
+                    "Bake 25 to 30 minutes, until the biscuits are deep golden on top and cooked through underneath. Pale biscuits mean raw dough in the middle, so trust the color and not the timer."
+                ],
+    "portion_html":  "Score the top into 14 even squares before you cut so each portion gets its own biscuit share. Weigh two or three portions on the scale to confirm you are close and adjust from there. Every serving comes in at \u003cstrong\u003e582 calories\u003c/strong\u003e. Reheat uncovered so the biscuit tops crisp back up instead of steaming soft.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.spendwithpennies.com/chicken-pot-pie-casserole/\" target=\"_blank\" rel=\"noopener\"\u003espendwithpennies.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Chicken pot pie casserole for about \u003cstrong\u003e$2.48 a serving\u003c/strong\u003e (at everyday cost). Members get the entire Meal Prep library plus every money lesson and calculator on the site for $1 a month.",
+    "cost_batch":  17.72,
+    "cost_batch_true":  25.23,
+    "cost_per_serving":  1.27,
+    "cost_per_serving_true":  1.8,
+    "cost_pantry_add":  9.48,
+    "cost_first_run":  34.71,
+    "scaler":  {
+                   "cost":  "25.23",
+                   "ing":  [
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  497,
+                                   "buy":  "2.3",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  242,
+                                   "buy":  "1 cups",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  128,
+                                   "buy":  "1",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  23,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Poultry Seasoning",
+                                   "canon":  "Poultry Seasoning",
+                                   "grams":  9,
+                                   "buy":  "0.25 oz",
+                                   "bid":  "poultry-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  97,
+                                   "buy":  "12 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  858,
+                                   "buy":  "3.5 cups",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  700,
+                                   "buy":  "3 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Frozen Green Peas",
+                                   "canon":  "Frozen Green Peas",
+                                   "grams":  782,
+                                   "buy":  "1.75 lb",
+                                   "bid":  "frozen-peas",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  794,
+                                   "buy":  "1.75 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  7,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Refrigerated Biscuits",
+                                   "canon":  "Refrigerated Biscuits",
+                                   "grams":  1189,
+                                   "buy":  "20.5",
+                                   "bid":  "refrigerated-biscuits",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Chicken pot pie casserole with a creamy vegetable filling and a biscuit top that survives reheating, at about $2.48 per meal prep serving (at everyday cost).",
+                 "keywords":  "chicken pot pie casserole, biscuit topped casserole, creamy chicken bake, budget casserole, cheap meal prep, freezer friendly dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT40M",
+                 "totalTime":  "PT1H5M",
+                 "costPerServing":  2.48,
+                 "recipeIngredient":  [
+                                          "1.75 lb boneless skinless chicken breast",
+                                          "20.5 refrigerated biscuits",
+                                          "2.3 potatoes",
+                                          "5.75 cups frozen green peas",
+                                          "1 cup butter",
+                                          "12 tbsp all-purpose flour",
+                                          "3.5 cups milk",
+                                          "1.5 lb chicken broth",
+                                          "1 yellow onion",
+                                          "2.75 tbsp minced garlic",
+                                          "Pantry: poultry seasoning, salt, black pepper"
+                                      ],
+                 "steps":  [
+                               "Boil the small diced potatoes until just tender and drain.",
+                               "Brown the diced chicken in butter and set aside.",
+                               "Cook onion and garlic in butter, whisk in flour, then add broth and milk to make a gravy.",
+                               "Fold in the chicken, potatoes, and peas and pour into a large baking dish.",
+                               "Arrange the biscuits on top and bake at 375F for 25 to 30 minutes until deep golden.",
+                               "Score into 14 even squares and portion."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Potato",
+                                  "grams":  497
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  242
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  128
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  23
+                              },
+                              {
+                                  "item":  "Poultry Seasoning",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  97
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  858
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Frozen Green Peas",
+                                  "grams":  782
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  794
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Refrigerated Biscuits",
+                                  "grams":  1189
+                              }
+                          ]
+}

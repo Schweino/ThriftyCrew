@@ -1,0 +1,269 @@
+{
+    "name":  "Turkey Nasi Goreng",
+    "slug":  "turkey-nasi-goreng",
+    "cuisine":  "indonesian",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.recipetineats.com/nasi-goreng-indonesian-fried-rice/",
+    "source_site":  "recipetineats.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +40% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Sweet-soy fried rice with a distinct caramelized profile. Verified source: full recipe, 4 servings, 453 cal / 23.7g protein with egg. Source uses chicken breast; ours is ground turkey, which is cheaper on the board. Different enough from the live Ground Beef Fried Rice Bowls (kecap manis and chili paste base) that I would defend it, but the selector should confirm. | HARVEST: Published nutrition is per serving including the fried egg. Source uses chicken breast; adapt to turkey.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: base +40% (Rice)",
+                         "OVERRIDE Boneless Skinless Chicken Breast: TITLE-PROTEIN SWAP + [BUMP x3.0]: source 150 g chicken for 4 (fried-rice garnish scale); house 1 lb turkey breast",
+                         "OVERRIDE Rice: duplicate \u0027Rice\u0027 header line was pulling a serve-default on top of the real \u00273 cups cooked\u0027 line; 3 cups cooked = 171 g dry"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  560,
+                 "protein":  39,
+                 "carbs":  64,
+                 "fat":  16,
+                 "cost_ps":  "3.94"
+             },
+    "intro_html":  "Nasi goreng is Indonesian fried rice, and what sets it apart from every other fried rice is kecap manis, the thick sweet soy sauce that caramelizes on the hot pan and turns the whole thing dark and glossy. Fried egg on top, cool cucumber on the side. Each bowl lands at \u003cstrong\u003e560 calories and 39 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.94\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 3.5 lb (1575 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.5 cups (122 g)",
+                                "\u003cstrong\u003eSweet Soy Sauce (ABC (Kecap Manis)):\u003c/strong\u003e 6 oz (168 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.75 cups dry (884 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 2 tbsp (19 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 14 large eggs (700 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 8.75 tbsp (52 g)",
+                                "\u003cstrong\u003eCucumber:\u003c/strong\u003e 1 (300 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Turkey Breast, 3.5 lb: ~$16.71. \u003cstrong\u003eBuy 2 3lb frozen roasts: $28.88.\u003c/strong\u003e",
+                       "Vegetable Oil, 0.5 cups: ~$0.30. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sweet Soy Sauce, 6 oz: ~$1.76. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 4.75 cups dry: ~$1.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Jalapeno, 2 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Yellow Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Eggs, 14 large eggs: ~$1.66. \u003cstrong\u003eBuy 2 dozens: $2.85.\u003c/strong\u003e",
+                       "Green Onions, 8.75 tbsp: ~$0.62. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
+                       "Cucumber, 1: ~$0.76. \u003cstrong\u003eBuy 1 each: $0.76.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $24.67 across 14 servings, so roughly $1.76 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $40.42 across 14 servings, roughly $2.89 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.69 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.11. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.94\u003c/strong\u003e a bowl (at everyday cost). One bottle of sweet soy sauce is the difference between plain fried rice and this, and that bottle keeps paying you back long after this batch.",
+    "shop_smart":  [
+                       "Kecap manis is the one thing you cannot fake here, and it is worth the bottle. It keeps for a year in the pantry and this batch uses only a portion of it, so the real cost per bowl keeps falling.",
+                       "Turkey breast is two thirds of the batch. Frozen roasts are the cheap form, and the clearance shelf after the holidays is where you should be buying turkey for the whole year.",
+                       "Cook the rice the day before and refrigerate it. Cold day-old rice fries into separate grains instead of a sticky clump, and it costs you nothing but planning.",
+                       "Fourteen eggs cost very little and they add a fried egg to every single container. That is the cheapest way to make a bowl feel like a restaurant plate."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice a day ahead if you can and chill it uncovered. Cold rice is the entire secret to fried rice that is not mush.",
+                    "Cut the turkey breast into small cubes and season them with salt and black pepper.",
+                    "Heat some of the vegetable oil in your largest skillet or wok over high heat and sear the turkey in batches until browned and cooked through to 165F. Set it aside.",
+                    "Add the rest of the oil, then the sliced onion, minced garlic, and chopped jalapeno, and stir-fry 3 minutes until fragrant and just softening.",
+                    "Add the cold rice and press it into the pan, letting it sit undisturbed for a minute at a time so it toasts, then tossing. Do this for about 5 minutes.",
+                    "Pour in the sweet soy sauce, return the turkey, and toss for 2 minutes until every grain is dark and coated. Taste for salt.",
+                    "Fry the eggs separately, one per container, and slice the cucumber into rounds while the rice cools enough to portion."
+                ],
+    "portion_html":  "Set the pot of fried rice on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is your per-container gram target. Top each with a fried egg, a few cucumber rounds, and the sliced green onions. Every bowl lands at \u003cstrong\u003e560 calories and 39 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.recipetineats.com/nasi-goreng-indonesian-fried-rice/\" target=\"_blank\" rel=\"noopener\"\u003erecipetineats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Indonesian fried rice for about \u003cstrong\u003e$3.94\u003c/strong\u003e a bowl (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  24.67,
+    "cost_batch_true":  40.42,
+    "cost_per_serving":  1.76,
+    "cost_per_serving_true":  2.89,
+    "cost_pantry_add":  14.69,
+    "cost_first_run":  55.11,
+    "scaler":  {
+                   "cost":  "40.42",
+                   "ing":  [
+                               {
+                                   "item":  "Turkey Breast",
+                                   "canon":  "Turkey Breast",
+                                   "grams":  1575,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "turkey-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  122,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Sweet Soy Sauce",
+                                   "canon":  "Sweet Soy Sauce",
+                                   "grams":  168,
+                                   "buy":  "6 oz",
+                                   "bid":  "sweet-soy-sauce",
+                                   "gpu":  "38.000"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  884,
+                                   "buy":  "4.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  35,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  19,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  385,
+                                   "buy":  "3.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  700,
+                                   "buy":  "14 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  52,
+                                   "buy":  "8.75 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Cucumber",
+                                   "canon":  "Cucumber",
+                                   "grams":  300,
+                                   "buy":  "1",
+                                   "bid":  "cucumbers",
+                                   "gpu":  "300.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey nasi goreng meal prep: Indonesian fried rice with sweet soy sauce, seared turkey, fried egg, and cucumber. 560 calories, 39g protein, about $3.94 a bowl (at everyday cost).",
+                 "keywords":  "nasi goreng, indonesian fried rice, kecap manis, turkey meal prep, budget meal prep, sweet soy fried rice",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  3.94,
+                 "recipeIngredient":  [
+                                          "Turkey breast, cut into cubes",
+                                          "4.75 cups dry rice",
+                                          "6 oz sweet soy sauce (kecap manis)",
+                                          "14 large eggs",
+                                          "3.5 yellow onions",
+                                          "4 tbsp garlic",
+                                          "2 tbsp jalapeno",
+                                          "0.5 cups vegetable oil",
+                                          "8.75 tbsp green onions",
+                                          "1 cucumber"
+                                      ],
+                 "steps":  [
+                               "Cook the rice ahead and chill it uncovered.",
+                               "Sear cubed turkey breast in hot oil in batches to 165F and set aside.",
+                               "Stir-fry onion, garlic, and jalapeno for 3 minutes.",
+                               "Add the cold rice and toast it in the pan for about 5 minutes.",
+                               "Add sweet soy sauce and the turkey and toss 2 minutes until dark and glossy.",
+                               "Portion by weight into 14 containers and top each with a fried egg, cucumber, and green onion."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Turkey Breast",
+                                  "grams":  1575
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  122
+                              },
+                              {
+                                  "item":  "Sweet Soy Sauce",
+                                  "grams":  168
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  884
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  19
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Cucumber",
+                                  "grams":  300
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

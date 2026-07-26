@@ -1,0 +1,334 @@
+{
+    "name":  "Louisiana Red Beans and Rice with Sausage",
+    "slug":  "louisiana-red-beans-and-rice-with-sausage",
+    "cuisine":  "Cajun/Creole",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.smalltownwoman.com/red-beans-and-rice-2/",
+    "source_site":  "smalltownwoman.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Rice)",
+                   "portion factor 1.35",
+                   "protein +10% (Smoked Turkey Sausage)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 586 cal / 32g protein per serving on the source page, clears both bars as published. Dried beans plus smoked sausage is about as cheap as a high-protein dinner gets, and every component except andouille specifically maps to a tracked commodity (tracked kielbasa is the standard budget sub). Distinct from the live Cajun jambalaya and etouffee, which are both chicken. | HARVEST: \"teaspooon\" typo is as published.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Rice)",
+                         "TUNING: portion factor 1.35",
+                         "TUNING: protein +10% (Smoked Turkey Sausage)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  581,
+                 "protein":  25,
+                 "carbs":  91,
+                 "fat":  13,
+                 "cost_ps":  "3.32"
+             },
+    "intro_html":  "In New Orleans, red beans and rice is a Monday dish. Monday was wash day, the pot could sit on the back of the stove all morning while you worked, and it used up the ham bone from Sunday. That is a budget tradition older than any of us, and it still holds up. Beans, the holy trinity of onion, celery, and bell pepper, smoked sausage, and rice. Cheap, filling, and better on day three than on day one, which is exactly what you want out of a meal prep.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eKidney Beans (generic):\u003c/strong\u003e 5.6 cans (1429 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 4.75 tbsp (66 g)",
+                                "\u003cstrong\u003eSmoked Turkey Sausage (Butterball):\u003c/strong\u003e 2.25 lb (985 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 (347 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 6.3 (347 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3 (378 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5.5 tbsp (47 g)",
+                                "\u003cstrong\u003eDried Parsley (Great Value):\u003c/strong\u003e 2 tbsp (3 g)",
+                                "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 1 tbsp (3 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 tbsp (3 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 1 tbsp (7 g)",
+                                "\u003cstrong\u003eCajun Seasoning (Tony Chachere\u0027s):\u003c/strong\u003e 1 tbsp (9 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.25 oz (4 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 3.2 cartons (3024 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.25 cups dry (967 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.5 tbsp (27 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Kidney Beans, 5.6 cans: ~$4.60. \u003cstrong\u003eBuy 6 cans: $4.93.\u003c/strong\u003e",
+                       "Vegetable Oil, 4.75 tbsp: ~$0.16. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Smoked Turkey Sausage, 2.25 lb: ~$8.79. \u003cstrong\u003eBuy 3 13oz ropes: $9.86.\u003c/strong\u003e",
+                       "Yellow Onion, 3: ~$0.87. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Celery, 6.3: ~$1.83. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Green Bell Peppers, 3: ~$2.71. \u003cstrong\u003eBuy 4 each: $3.44.\u003c/strong\u003e",
+                       "Garlic, 5.5 tbsp: ~$0.68. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Chicken Broth, 3.2 cartons: ~$4.06. \u003cstrong\u003ePantry staple; this batch alone uses about 4 32oz cartons.\u003c/strong\u003e",
+                       "Rice, 5.25 cups dry: ~$1.19. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (dried parsley, dried thyme, dried oregano, paprika, cajun seasoning, black pepper, bay leaves, salt): ~$1.60. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.49 across 14 servings, so roughly $1.89 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $29.90 across 14 servings, roughly $2.14 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.65 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.55. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.32 a bowl\u003c/strong\u003e (at everyday cost) for a Louisiana classic that gets better every day it sits in your fridge.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eCanned kidney beans are the shortcut worth taking.\u003c/strong\u003e Dried beans are cheaper per ounce, but they need a soak and an hour of babysitting. If you have the time, the dried bag saves real money on a batch this size.",
+                       "\u003cstrong\u003eSmoked sausage is the flavor engine, so buy the rope.\u003c/strong\u003e Pre-sliced costs more per pound for a cut you can make in thirty seconds.",
+                       "\u003cstrong\u003eOnion, celery, and bell pepper are the trinity and they are not optional.\u003c/strong\u003e Bell peppers are the priciest of the three, so buy them when the multi-packs are on sale and freeze the extras chopped.",
+                       "\u003cstrong\u003eYour spice rack is doing most of the seasoning here.\u003c/strong\u003e Thyme, oregano, paprika, bay leaves, and a Cajun blend are jars you already own, and they cost a fraction of what a boxed red beans mix does."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Slice the smoked sausage into coins and brown them in the vegetable oil in a large pot, then set them aside.",
+                    "Add the diced onion, celery, and green bell pepper to the same pot and cook until softened and the bottom of the pot picks up color.",
+                    "Stir in the garlic and the dried seasonings and cook for a minute so the spices bloom in the fat.",
+                    "Add the kidney beans with their liquid and the chicken broth, then return the sausage to the pot.",
+                    "Simmer uncovered for at least forty minutes, mashing some of the beans against the side of the pot to thicken the gravy.",
+                    "Cook the rice separately according to the package while the beans simmer.",
+                    "Fish out the bay leaves, season with salt and black pepper to taste, and serve the beans over the rice."
+                ],
+    "portion_html":  "Weigh the rice and the beans separately. Put each pot on the scale, subtract the empty-pot weight from Step 1, and divide by 14 so every container gets the same rice base and the same ladle of beans. Every serving lands near \u003cstrong\u003e581 calories with 25 grams of protein\u003c/strong\u003e. The beans thicken overnight, so add a splash of water when you reheat.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.smalltownwoman.com/red-beans-and-rice-2/\" target=\"_blank\" rel=\"noopener\"\u003esmalltownwoman.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Slow-simmered Southern dinners for about $3.32 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  26.49,
+    "cost_batch_true":  29.9,
+    "cost_per_serving":  1.89,
+    "cost_per_serving_true":  2.14,
+    "cost_pantry_add":  16.65,
+    "cost_first_run":  46.55,
+    "scaler":  {
+                   "cost":  "29.90",
+                   "ing":  [
+                               {
+                                   "item":  "Kidney Beans",
+                                   "canon":  "Kidney Beans",
+                                   "grams":  1429,
+                                   "buy":  "5.6 cans",
+                                   "bid":  "kidney-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  66,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Smoked Turkey Sausage",
+                                   "canon":  "Smoked Turkey Sausage",
+                                   "grams":  985,
+                                   "buy":  "2.25 lb",
+                                   "bid":  "smoked-turkey-sausage",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  347,
+                                   "buy":  "3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "canon":  "Celery",
+                                   "grams":  347,
+                                   "buy":  "6.3",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  378,
+                                   "buy":  "3",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  47,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Dried Parsley",
+                                   "canon":  "Dried Parsley",
+                                   "grams":  3,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "dried-parsley",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  3,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  3,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cajun Seasoning",
+                                   "canon":  "Cajun Seasoning",
+                                   "grams":  9,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "cajun-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  4,
+                                   "buy":  "0.25 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  3024,
+                                   "buy":  "3.2 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  967,
+                                   "buy":  "5.25 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  27,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Louisiana red beans and rice with smoked sausage, rebuilt for 14-serving meal prep with the holy trinity and Cajun spices. 581 calories, 25g protein, about $3.32 per serving (at everyday cost).",
+                 "keywords":  "red beans and rice, cajun meal prep, smoked sausage beans, creole dinner, budget meal prep, louisiana red beans",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT55M",
+                 "totalTime":  "PT75M",
+                 "costPerServing":  3.32,
+                 "recipeIngredient":  [
+                                          "5.6 cans kidney beans",
+                                          "2.25 lb smoked sausage",
+                                          "5.25 cups dry rice",
+                                          "6.75 lb chicken broth",
+                                          "3 yellow onions",
+                                          "6.3 celery stalks",
+                                          "3 green bell peppers",
+                                          "5.5 tbsp garlic",
+                                          "4.75 tbsp vegetable oil"
+                                      ],
+                 "steps":  [
+                               "Slice and brown the smoked sausage, then set it aside.",
+                               "Cook the onion, celery, and bell pepper in the same pot until soft.",
+                               "Add garlic and dried seasonings and bloom them in the fat.",
+                               "Add the beans, broth, and sausage and simmer at least forty minutes, mashing some beans to thicken.",
+                               "Cook the rice separately.",
+                               "Season, remove the bay leaves, and portion beans over rice into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Kidney Beans",
+                                  "grams":  1429
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  66
+                              },
+                              {
+                                  "item":  "Smoked Turkey Sausage",
+                                  "grams":  985
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  347
+                              },
+                              {
+                                  "item":  "Celery",
+                                  "grams":  347
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  378
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Dried Parsley",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Cajun Seasoning",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  3024
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  967
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  27
+                              }
+                          ]
+}

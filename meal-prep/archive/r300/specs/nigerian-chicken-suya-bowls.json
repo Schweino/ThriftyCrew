@@ -1,0 +1,260 @@
+{
+    "name":  "Nigerian Chicken Suya Bowls",
+    "slug":  "nigerian-chicken-suya-bowls",
+    "cuisine":  "West African / Nigerian",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.africanbites.com/suyachicken/",
+    "source_site":  "africanbites.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 300g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Page verified: full recipe, serves 6, 300 cal / 32g protein per 115g of chicken alone - over 500 cal and 40g+ protein once built as a rice bowl. Sheet-pan roasted (not fried to order), so it batches at 14. Suya spice / kuli kuli has no board id but is literally ground peanuts + paprika + cayenne + onion-powder + garlic-powder, all five tracked, so we build the blend. Peanut-crusted roast chicken is unlike any live recipe. Confidence: high. | HARVEST: Source is the suya chicken itself; bowl components (rice/veg) are not in the source ingredient list.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 300g (src scale)",
+                         "OVERRIDE Hot Sauce: \u0027African pepper sauce\u0027 no qty; house 60 g"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  591,
+                 "protein":  52,
+                 "carbs":  44,
+                 "fat":  21,
+                 "cost_ps":  "2.38"
+             },
+    "intro_html":  "Suya is Nigerian street food, sold off charcoal grills at night, and the magic is in the rub. Ground peanuts, smoked paprika, cayenne, onion powder and garlic powder make a dry spice mix called yaji that crusts onto the meat as it cooks. We use peanut butter to carry it, roast the chicken on sheet pans instead of skewers, and build the whole thing into a rice bowl. Each container lands \u003cstrong\u003e591 calories and 52 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.38\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1.25 tbsp (12 g)",
+                                "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 2 tbsp (14 g)",
+                                "\u003cstrong\u003eSmoked Paprika (Great Value):\u003c/strong\u003e 2.25 tbsp (16 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tbsp (5 g)",
+                                "\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e 1 tbsp (6 g)",
+                                "\u003cstrong\u003ePeanut Butter (generic):\u003c/strong\u003e 0.5 cups (149 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 0.25 cups (84 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3175 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (16 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 6.25 tbsp (88 g)",
+                                "\u003cstrong\u003eHot Sauce (Frank\u0027s RedHot):\u003c/strong\u003e 0.5 cups (140 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Peanut Butter, 0.5 cups: ~$0.48. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 0.25 cups: ~$0.11. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Thigh, 7 lb: ~$12.39. \u003cstrong\u003eBuy 7 lbs: $12.39.\u003c/strong\u003e",
+                       "Vegetable Oil, 6.25 tbsp: ~$0.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Hot Sauce, 0.5 cups: ~$1.44. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (garlic powder, onion powder, smoked paprika, black pepper, cayenne pepper, salt): ~$0.97. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $16.46 across 14 servings, so roughly $1.18 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $16.46 across 14 servings, roughly $1.18 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.91 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $33.37. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.38 a bowl\u003c/strong\u003e (at everyday cost). There are six ingredients on the shopping list and the chicken is nearly all of the cost. That is what a short ingredient list buys you.",
+    "shop_smart":  [
+                       "This is a six line grocery list. When a recipe is this short, buy the best version of the one thing that matters, which is the chicken, and let everything else be store brand.",
+                       "Peanut butter is standing in for the ground peanuts in a traditional yaji rub. Buy the big plain jar, not the natural style, since the added oil helps the rub stick to the meat.",
+                       "The seven pound club pack of boneless skinless thighs is the whole meat purchase and it is the best price per pound in the case. Break it down and freeze half if you are not cooking a double batch.",
+                       "Cayenne and smoked paprika carry the heat and the color. Buy both in bags from an international grocer, where the same amount costs a fraction of what the branded jars charge."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Make the suya rub: whisk the peanut butter with the garlic powder, onion powder, smoked paprika, cayenne pepper, black pepper, salt and just enough chicken broth to loosen it into a thick paste that will spread.",
+                    "Cut the chicken thighs into large strips and work the rub into every piece with your hands. Let them sit at least 30 minutes, or refrigerate overnight for a deeper crust.",
+                    "Heat the oven to 450F and put a rack in the upper third. Brush two sheet pans with the vegetable oil so nothing welds itself to the metal.",
+                    "Spread the chicken in a single layer with space between the pieces. Crowded suya steams and goes gray instead of crusting.",
+                    "Roast 18 to 22 minutes, then run the broiler for 2 to 3 minutes at the end until the edges char in spots and the peanut rub sets into a crust. Watch it, because peanut burns fast.",
+                    "While it roasts, cook the rice and let it steam covered off the heat for 10 minutes.",
+                    "Chop the chicken into bite-size pieces, fold it into your mixing pot with the rice and the pan drippings, and stir the hot sauce through the whole batch."
+                ],
+    "portion_html":  "Put the pot on the scale, subtract the empty-pot weight, and divide by 14. Same amount in every container, every time. Each bowl carries \u003cstrong\u003e591 calories\u003c/strong\u003e, and the peanut crust holds up on reheat better than any breading would.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.africanbites.com/suyachicken/\" target=\"_blank\" rel=\"noopener\"\u003eafricanbites.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Nigerian suya chicken bowls for about $2.38 a bowl (at everyday cost), with a grocery list you can read in one breath. This is one of a few hundred recipes here. Members get the entire Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "cost_batch":  16.46,
+    "cost_batch_true":  16.46,
+    "cost_per_serving":  1.18,
+    "cost_per_serving_true":  1.18,
+    "cost_pantry_add":  16.91,
+    "cost_first_run":  33.37,
+    "scaler":  {
+                   "cost":  "16.46",
+                   "ing":  [
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  12,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Onion Powder",
+                                   "canon":  "Onion Powder",
+                                   "grams":  14,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "onion-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Smoked Paprika",
+                                   "canon":  "Smoked Paprika",
+                                   "grams":  16,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  5,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cayenne Pepper",
+                                   "canon":  "Cayenne Pepper",
+                                   "grams":  6,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "cayenne-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Peanut Butter",
+                                   "canon":  "Peanut Butter",
+                                   "grams":  149,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "peanut-butter",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  84,
+                                   "buy":  "0.25 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  3175,
+                                   "buy":  "7 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  16,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  88,
+                                   "buy":  "6.25 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Hot Sauce",
+                                   "canon":  "Hot Sauce",
+                                   "grams":  140,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "hot-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Nigerian chicken suya bowls: peanut and cayenne rubbed thighs roasted on sheet pans over rice. 14 meal prep containers at 591 calories, 52g protein, about $2.38 each (at everyday cost).",
+                 "keywords":  "chicken suya, nigerian suya, suya spice, west african chicken, peanut rubbed chicken, high protein meal prep, budget chicken bowls",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT25M",
+                 "totalTime":  "PT45M",
+                 "costPerServing":  2.38,
+                 "recipeIngredient":  [
+                                          "7 lb boneless skinless chicken thighs",
+                                          "0.5 cups peanut butter",
+                                          "0.5 cups hot sauce",
+                                          "3.75 cups dry rice",
+                                          "6.25 tbsp vegetable oil",
+                                          "0.25 lb chicken broth",
+                                          "Garlic powder, onion powder, smoked paprika, cayenne pepper and black pepper"
+                                      ],
+                 "steps":  [
+                               "Whisk peanut butter with garlic powder, onion powder, smoked paprika, cayenne, black pepper and a little broth into a thick rub.",
+                               "Coat the strips of chicken thigh in the rub and rest at least 30 minutes.",
+                               "Roast in a single layer on oiled sheet pans at 450F for 18 to 22 minutes, then broil 2 to 3 minutes to set the crust.",
+                               "Cook the rice and steam it covered off the heat.",
+                               "Chop the chicken, fold with the rice, pan drippings and hot sauce, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Onion Powder",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Smoked Paprika",
+                                  "grams":  16
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Cayenne Pepper",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Peanut Butter",
+                                  "grams":  149
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  3175
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  16
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  88
+                              },
+                              {
+                                  "item":  "Hot Sauce",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

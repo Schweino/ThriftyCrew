@@ -1,0 +1,206 @@
+{
+    "name":  "Ground Beef Teriyaki Bowls",
+    "slug":  "ground-beef-teriyaki-bowls",
+    "cuisine":  "Asian",
+    "protein":  "beef",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  593,
+                 "protein":  44,
+                 "carbs":  73,
+                 "fat":  13,
+                 "cost_ps":  "5.72"
+             },
+    "intro_html":  "Sweet, savory teriyaki beef over rice, prepped ahead so weeknights run themselves. You get 44 grams of protein per bowl for about $5.72 (at everyday cost), and the pan makes 14 servings. All the flavor of the food-court plate, none of the food-court price.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2240 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1031 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 3 bags (1000 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 4 peppers (400 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 bottle (170 g)",
+                                "\u003cstrong\u003eHoisin Sauce (generic):\u003c/strong\u003e 1 jar (80 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1 bottle (70 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 carton (200 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1 bottle (15 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 1 boxs (25 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (20 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 1 root (15 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 tbsp (42 g)",
+                                "\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 1 tsp (15 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$5.72 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eHoney and hoisin\u003c/strong\u003e do the heavy lifting here, so skip the bottled teriyaki sauce that charges extra for the same sweet-savory mix.",
+                       "A \u003cstrong\u003ebag of frozen broccoli\u003c/strong\u003e is the cheapest veg in the recipe and keeps for weeks, so lean on it.",
+                       "One \u003cstrong\u003ered bell pepper\u003c/strong\u003e adds color and crunch, but green peppers are cheaper if you want to shave a little more off the total."
+                   ],
+    "make_it":  [
+                    "Brown 4.9 pounds of 93/7 ground beef with the chopped onion, then drain.",
+                    "Steam the broccoli florets and sliced red bell pepper until crisp-tender.",
+                    "Whisk the soy sauce, hoisin, honey, beef broth, sesame oil, garlic, ginger, and cornstarch into a glaze.",
+                    "Pour the glaze over the beef and simmer until it thickens and coats the meat.",
+                    "Serve the teriyaki beef and veggies over rice in each container."
+                ],
+    "portion_html":  "Each of the 14 bowls carries 44 grams of protein at just 593 calories, keeping this one light, sweet, and filling.",
+    "credit_html":  "",
+    "upsell_html":  "Food-court flavor, home-cook price, and a fridge full of dinners already handled. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  48.6,
+    "cost_batch_true":  50.79,
+    "cost_per_serving":  3.47,
+    "cost_per_serving_true":  3.63,
+    "cost_pantry_add":  32.97,
+    "cost_first_run":  83.76,
+    "scaler":  {
+                   "cost":  "50.79",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "grams":  2240,
+                                   "buy":  "5 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  1031,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  1000,
+                                   "buy":  "3 bags",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "grams":  400,
+                                   "buy":  "4 peppers",
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "grams":  170,
+                                   "buy":  "1 bottle",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Hoisin Sauce",
+                                   "grams":  80,
+                                   "buy":  "1 jar",
+                                   "bid":  "hoisin-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "grams":  70,
+                                   "buy":  "1 bottle",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "grams":  200,
+                                   "buy":  "1 carton",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "grams":  15,
+                                   "buy":  "1 bottle",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Cornstarch",
+                                   "grams":  25,
+                                   "buy":  "1 boxs",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  20,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "grams":  15,
+                                   "buy":  "1 root",
+                                   "bid":  "ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  42,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Rice Vinegar",
+                                   "grams":  15,
+                                   "buy":  "1 tsp",
+                                   "bid":  "rice-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Pepper Flakes",
+                                   "grams":  2,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "red-pepper-flakes",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Asian meal prep. Fourteen servings at about 593 calories and 44 grams of protein for roughly $5.72 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, ground beef teriyaki bowls, budget dinner",
+                 "costPerServing":  5.72,
+                 "recipeIngredient":  [
+                                          "5 lb 93/7 Ground Beef",
+                                          "1 lb Rice",
+                                          "3 bags Broccoli Florets",
+                                          "4 peppers Red Bell Pepper",
+                                          "1 bottle Soy Sauce",
+                                          "1 jar Hoisin Sauce"
+                                      ],
+                 "steps":  [
+                               "Brown 4.9 pounds of 93/7 ground beef with the chopped onion, then drain.",
+                               "Steam the broccoli florets and sliced red bell pepper until crisp-tender.",
+                               "Whisk the soy sauce, hoisin, honey, beef broth, sesame oil, garlic, ginger, and cornstarch into a glaze.",
+                               "Pour the glaze over the beef and simmer until it thickens and coats the meat.",
+                               "Serve the teriyaki beef and veggies over rice in each container."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

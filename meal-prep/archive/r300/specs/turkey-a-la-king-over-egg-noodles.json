@@ -1,0 +1,281 @@
+{
+    "name":  "Turkey a la King over Egg Noodles",
+    "slug":  "turkey-a-la-king-over-egg-noodles",
+    "cuisine":  "American",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.spendwithpennies.com/chicken-ala-king/",
+    "source_site":  "spendwithpennies.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Retro diner dish, no catalog equivalent (the creamy chicken-and-mushroom entry is a slow-cooker bowl, not a la king). Source verified at 4 servings, 438 cal / 11g protein but it is the chicken version; our turkey build loads the protein to ~540 cal / 35g. Confidence: source is chicken, not turkey; numbers are our build. | HARVEST: Source is Chicken a la King - uses cooked chicken, not turkey, and publishes no egg noodles in the ingredient list. Nutrition covers the a la King sauce only, excludes noodles.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "OVERRIDE +Egg Noodles: WAVE-4: title base was MISSING - a la king OVER EGG NOODLES needs the noodles (62 g dry/serving x 4)",
+                         "OVERRIDE Butter: WAVE-4 roux sanity: source 1/2 cup butter for 4 is restaurant-rich; house roux 1/3 cup",
+                         "OVERRIDE Heavy Cream: WAVE-4: source is 1 cup HALF-AND-HALF; counted as its ~half cream fraction instead of a full cup of heavy cream",
+                         "OVERRIDE Boneless Skinless Chicken Breast: TITLE-PROTEIN SWAP: titled turkey; diced chicken -\u003e diced turkey breast, grams kept"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  727,
+                 "protein":  40,
+                 "carbs":  69,
+                 "fat":  33,
+                 "cost_ps":  "4.57"
+             },
+    "intro_html":  "A la king was a fixture on American hotel menus for decades, then it fell out of fashion and everybody forgot how good it is. Turkey and mushrooms in a cream sauce, peas for color, olives for a salty little surprise, spooned over egg noodles. Each serving carries \u003cstrong\u003e40 grams of protein\u003c/strong\u003e and 727 calories for about \u003cstrong\u003e$4.57\u003c/strong\u003e (at everyday cost). Retro is only a criticism until you taste it.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1.25 cups (266 g)",
+                                "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 1.75 lb (794 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 (245 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1.25 tbsp (11 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (10 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 1.75 cups (219 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.8 cartons (1680 g)",
+                                "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 1.75 cups (420 g)",
+                                "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 1 lb (469 g)",
+                                "\u003cstrong\u003eOlives (generic):\u003c/strong\u003e 1.75 cups (236 g)",
+                                "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 3.25 lb (1470 g)",
+                                "\u003cstrong\u003eEgg Noodles (Great Value wide):\u003c/strong\u003e 30.75 oz dry (875 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Butter, 1.25 cups: ~$1.75. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "White Mushrooms, 1.75 lb: ~$6.62. \u003cstrong\u003eBuy 4 8oz packs: $7.57.\u003c/strong\u003e",
+                       "Yellow Onion, 2: ~$0.62. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "All-Purpose Flour, 1.75 cups: ~$0.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 1.8 cartons: ~$2.26. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Heavy Cream, 1.75 cups: ~$2.61. \u003cstrong\u003eBuy 1 pint: $2.94.\u003c/strong\u003e",
+                       "Frozen Green Peas, 1 lb: ~$1.01. \u003cstrong\u003eBuy 2 12oz bags: $1.47.\u003c/strong\u003e",
+                       "Olives, 1.75 cups: ~$2.60. \u003cstrong\u003eBuy 2 6oz cans: $3.74.\u003c/strong\u003e",
+                       "Turkey Breast, 3.25 lb: ~$15.60. \u003cstrong\u003eBuy 2 3lb frozen roasts: $28.88.\u003c/strong\u003e",
+                       "Egg Noodles, 30.75 oz dry: ~$3.36. \u003cstrong\u003eBuy 3 12oz bags: $3.91.\u003c/strong\u003e",
+                       "Pantry seasonings (garlic powder, black pepper, salt): ~$0.32. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $36.96 across 14 servings, so roughly $2.64 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $55.42 across 14 servings, roughly $3.96 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.55 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $63.97. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.57 a serving\u003c/strong\u003e (at everyday cost). Mushrooms, cream, and butter push this one up the scale, and the payoff is a sauce that eats like something off a supper club menu.",
+    "shop_smart":  [
+                       "White mushrooms in 8 oz packs cost roughly half what pre-sliced baby bellas do and there are eleven cups of them in this recipe. Slicing them yourself is the single biggest saving available here.",
+                       "Heavy cream is the second cost driver. Buy pints rather than half pints, since the price per ounce drops sharply and cream freezes if you do not use it all.",
+                       "Canned sliced olives in the 6 oz cans are far cheaper than anything from the olive bar and they are getting stirred into a cream sauce, where nobody can tell the difference.",
+                       "Two frozen turkey breast roasts cover this batch. Cook both at once and freeze the extra diced meat for another dish."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Melt the butter in your largest pot over medium heat and cook the sliced mushrooms and diced onion for 10 to 12 minutes, until all the mushroom liquid has cooked away and they start to brown.",
+                    "Sprinkle the flour over the vegetables and stir constantly for two full minutes. This is a big roux and it needs the time to lose its raw taste.",
+                    "Pour in the chicken broth gradually, whisking hard after each addition so no lumps form, and bring it to a simmer until it thickens.",
+                    "Stir in the heavy cream and season with the garlic powder, salt, and plenty of black pepper, then let it bubble gently for 5 minutes.",
+                    "Fold in the diced turkey breast and warm it through without boiling, since hard boiling will make the turkey tighten and go stringy.",
+                    "Add the frozen peas and the sliced olives at the very end and let the residual heat warm them for 3 to 4 minutes, which keeps the peas bright instead of gray.",
+                    "Cook egg noodles separately and spoon the a la king over them just before portioning, so the noodles do not swell and drink the sauce overnight."
+                ],
+    "portion_html":  "Weigh the pot of a la king, subtract the empty pot weight you wrote down, and divide by 14. Ladle that weight over each portion of noodles so the sauce, not the noodles, sets the serving size. Each serving comes to \u003cstrong\u003e727 calories\u003c/strong\u003e and 40 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.spendwithpennies.com/chicken-ala-king/\" target=\"_blank\" rel=\"noopener\"\u003espendwithpennies.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A supper club classic for about $4.57 a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "cost_batch":  36.96,
+    "cost_batch_true":  55.42,
+    "cost_per_serving":  2.64,
+    "cost_per_serving_true":  3.96,
+    "cost_pantry_add":  8.55,
+    "cost_first_run":  63.97,
+    "scaler":  {
+                   "cost":  "55.42",
+                   "ing":  [
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  266,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "White Mushrooms",
+                                   "canon":  "White Mushrooms",
+                                   "grams":  794,
+                                   "buy":  "1.75 lb",
+                                   "bid":  "mushrooms",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  245,
+                                   "buy":  "2",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  11,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  10,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  219,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  1680,
+                                   "buy":  "1.8 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Heavy Cream",
+                                   "canon":  "Heavy Cream",
+                                   "grams":  420,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "heavy-cream",
+                                   "gpu":  "29.800"
+                               },
+                               {
+                                   "item":  "Frozen Green Peas",
+                                   "canon":  "Frozen Green Peas",
+                                   "grams":  469,
+                                   "buy":  "1 lb",
+                                   "bid":  "frozen-peas",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olives",
+                                   "canon":  "Olives",
+                                   "grams":  236,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "green-olives",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Turkey Breast",
+                                   "canon":  "Turkey Breast",
+                                   "grams":  1470,
+                                   "buy":  "3.25 lb",
+                                   "bid":  "turkey-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Egg Noodles",
+                                   "canon":  "Egg Noodles",
+                                   "grams":  875,
+                                   "buy":  "30.75 oz dry",
+                                   "bid":  "egg-noodles",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey a la king meal prep: turkey and mushrooms in a cream sauce with peas and olives, served over egg noodles. 727 calories, 40g protein, about $4.57 a serving (at everyday cost).",
+                 "keywords":  "turkey a la king, chicken a la king, creamy turkey and mushrooms, leftover turkey recipes, retro dinner, budget meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT35M",
+                 "totalTime":  "PT55M",
+                 "costPerServing":  4.57,
+                 "recipeIngredient":  [
+                                          "10.5 cups diced cooked turkey breast",
+                                          "11.25 cups white mushrooms",
+                                          "3.5 cups heavy cream",
+                                          "3.75 lb chicken broth",
+                                          "3.5 cups frozen green peas",
+                                          "1.75 cups sliced olives",
+                                          "1.75 cups butter",
+                                          "1.75 cups all-purpose flour",
+                                          "2 yellow onions"
+                                      ],
+                 "steps":  [
+                               "Cook the mushrooms and onion in butter 10 to 12 minutes until browned and dry.",
+                               "Stir in the flour for two minutes, then whisk in the chicken broth and simmer until thickened.",
+                               "Add the heavy cream and season with garlic powder, salt, and black pepper.",
+                               "Fold in the diced turkey and warm through without boiling.",
+                               "Stir in the peas and olives off the heat, spoon over cooked egg noodles, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Butter",
+                                  "grams":  266
+                              },
+                              {
+                                  "item":  "White Mushrooms",
+                                  "grams":  794
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  245
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  219
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  1680
+                              },
+                              {
+                                  "item":  "Heavy Cream",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Frozen Green Peas",
+                                  "grams":  469
+                              },
+                              {
+                                  "item":  "Olives",
+                                  "grams":  236
+                              },
+                              {
+                                  "item":  "Turkey Breast",
+                                  "grams":  1470
+                              },
+                              {
+                                  "item":  "Egg Noodles",
+                                  "grams":  875
+                              }
+                          ]
+}

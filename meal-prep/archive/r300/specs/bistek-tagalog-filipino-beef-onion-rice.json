@@ -1,0 +1,223 @@
+{
+    "name":  "Bistek Tagalog (Filipino Beef and Onions over Rice)",
+    "slug":  "bistek-tagalog-filipino-beef-onion-rice",
+    "cuisine":  "Filipino",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://gypsyplate.com/bistek-tagalog/",
+    "source_site":  "gypsyplate.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 300g (src scale)",
+                   "base +50% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Five-ingredient braise that gets better held overnight. Filipino beef is missing from the catalog (only pork and chicken are represented). Confidence: page verified via site listing; calories estimated. | HARVEST: Rice is a serving suggestion, not in the source ingredient list.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 300g (src scale)",
+                         "TUNING: base +50% (Rice)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  564,
+                 "protein":  33,
+                 "carbs":  69,
+                 "fat":  16,
+                 "cost_ps":  "3.85"
+             },
+    "intro_html":  "Bistek Tagalog answers the question every budget cook eventually asks: how do you make a little steak feed a lot of people? You slice it thin, soak it in lemon juice, soy sauce, and a serious amount of garlic, then bury it under soft fried onions. Each bowl carries \u003cstrong\u003e33 grams of protein\u003c/strong\u003e and 564 calories for about \u003cstrong\u003e$3.85\u003c/strong\u003e (at everyday cost). Five real ingredients, one pan, fourteen dinners.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 3 (141 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.75 cups (161 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 (350 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 8.25 tbsp (114 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 6.25 cups dry (1140 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Flank/Sirloin Steak, 3.5 lb: ~$30.88. \u003cstrong\u003eBuy 4 lbs: $35.28.\u003c/strong\u003e",
+                       "Lemon Juice, 3: ~$0.53. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 0.75 cups: ~$0.61. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 8.25 tbsp: ~$1.01. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Yellow Onion, 3: ~$0.88. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Vegetable Oil, 8.25 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 6.25 cups dry: ~$1.41. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, salt): ~$0.19. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $35.79 across 14 servings, so roughly $2.56 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $40.59 across 14 servings, roughly $2.90 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.36 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.95. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.85 a bowl\u003c/strong\u003e (at everyday cost) for steak and rice. The onions do as much work on the plate as the beef does, and onions are the cheapest thing in the produce aisle.",
+    "shop_smart":  [
+                       "The flank or sirloin is the entire budget here. Buy it when the case gets marked down and freeze it flat. You are slicing it thin anyway, and a half frozen steak slices a lot cleaner than a room temperature one.",
+                       "Bottled lemon juice is the right call. Calamansi is the traditional citrus and it is nearly impossible to find in Omaha, so ReaLemon is the honest stand in and it keeps in the fridge door for months.",
+                       "Garlic goes in by the handful in this dish. Buy whole heads instead of the peeled jars. Heads keep for weeks in a dry bowl and cost far less per clove.",
+                       "Yellow onions are a main ingredient, not a garnish. Grab the mesh bag instead of loose singles, because the per pound price is almost always lower."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Slice the beef thin against the grain. Toss it with the lemon juice, soy sauce, minced garlic, and black pepper, then let it sit at least 30 minutes while you prep everything else.",
+                    "Slice the onions into rings. Fry them in a little of the oil over medium heat until soft and just starting to brown, then pull them out and set them aside.",
+                    "Lift the beef out of the marinade and save every drop of that liquid. Sear the beef in batches over high heat so it browns instead of steaming.",
+                    "Return all the beef to the pot, pour in the reserved marinade and a splash of water, and bring it to a simmer.",
+                    "Cover and simmer gently for 25 to 30 minutes, until the beef is tender and the sauce has thickened into a glaze.",
+                    "Cook the rice separately while the beef simmers.",
+                    "Stir the fried onions back in for the last 2 minutes, taste, and add salt only if the soy sauce did not carry it far enough."
+                ],
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Scoop that weight of beef and onions into each container, then add the same weight of rice to every one. Every bowl lands at \u003cstrong\u003e564 calories with 33 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://gypsyplate.com/bistek-tagalog/\" target=\"_blank\" rel=\"noopener\"\u003egypsyplate.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Steak dinners for about $3.85 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  35.79,
+    "cost_batch_true":  40.59,
+    "cost_per_serving":  2.56,
+    "cost_per_serving_true":  2.9,
+    "cost_pantry_add":  13.36,
+    "cost_first_run":  53.95,
+    "scaler":  {
+                   "cost":  "40.59",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Flank/Sirloin Steak",
+                                   "canon":  "Beef Flank/Sirloin Steak",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "sirloin-steak",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Lemon Juice",
+                                   "canon":  "Lemon Juice",
+                                   "grams":  141,
+                                   "buy":  "3",
+                                   "bid":  "lemon-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  161,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  70,
+                                   "buy":  "8.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  350,
+                                   "buy":  "3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  114,
+                                   "buy":  "8.25 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1140,
+                                   "buy":  "6.25 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Filipino Bistek Tagalog meal prep: thin steak braised in lemon, soy, and garlic under soft fried onions, served over rice. 564 calories, 33g protein, about $3.85 per serving (at everyday cost).",
+                 "keywords":  "bistek tagalog, filipino beef, beef and onions, budget meal prep, steak rice bowls, filipino meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT40M",
+                 "totalTime":  "PT60M",
+                 "costPerServing":  3.85,
+                 "recipeIngredient":  [
+                                          "3.5 lb beef flank or sirloin steak",
+                                          "3 lemons worth of lemon juice",
+                                          "0.75 cups soy sauce",
+                                          "8.25 tbsp garlic",
+                                          "3 yellow onions",
+                                          "8.25 tbsp vegetable oil",
+                                          "6.25 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Slice the beef thin and marinate it in lemon juice, soy sauce, garlic, and pepper.",
+                               "Fry the onion rings in oil until soft, then set them aside.",
+                               "Sear the drained beef in batches over high heat.",
+                               "Add the reserved marinade and a splash of water, then simmer covered 25 to 30 minutes.",
+                               "Stir the onions back in, cook the rice, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Flank/Sirloin Steak",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Lemon Juice",
+                                  "grams":  141
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  161
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  350
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  114
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1140
+                              }
+                          ]
+}

@@ -1,0 +1,176 @@
+{
+    "name":  "Slow Cooker Apple Cider Pork Bowls",
+    "slug":  "slow-cooker-apple-cider-pork-bowls",
+    "cuisine":  "American",
+    "protein":  "pork",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  562,
+                 "protein":  59,
+                 "carbs":  45,
+                 "fat":  14,
+                 "cost_ps":  "2.92"
+             },
+    "intro_html":  "This is the kind of dinner that makes the whole house smell like fall while you go about your day. Lean pork loin, sweet apples, and onion cook down into something tender and comforting, all served over potatoes. You get 59 grams of protein a serving for right around $2.92 (at everyday cost), and it makes 14 servings from one pot.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 9 lb (3700 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 6 lb (2700 g)",
+                                "\u003cstrong\u003eApple (generic):\u003c/strong\u003e 4 apples (700 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (320 g)",
+                                "\u003cstrong\u003eHoney Dijon Mustard (Great Value):\u003c/strong\u003e 1 bottle (60 g)",
+                                "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 1 jar (8 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 jar (8 g)",
+                                "\u003cstrong\u003eApple Cider:\u003c/strong\u003e 12 oz (600 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tsp kosher (16 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (3 g)",
+                                "\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 1/2 tsp (3 g)",
+                                "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 1/2 tsp (2 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.92 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Whole pork loin runs about two dollars a pound, roughly half the price of tenderloin. \u003cstrong\u003eBuy the loin, not the tenderloin\u003c/strong\u003e, and you save real money without losing a bit of protein.",
+                       "Apples go on sale in big bags every fall. \u003cstrong\u003eGrab the bagged apples over the loose ones\u003c/strong\u003e and they cost pennies apiece.",
+                       "A five pound bag of potatoes is one of the cheapest foods in the store. \u003cstrong\u003eAlways buy the bag over loose spuds\u003c/strong\u003e to stretch this even further."
+                   ],
+    "make_it":  [
+                    "Cut the pork loin into big chunks and lay them in the slow cooker.",
+                    "Add the sliced apples and onions right on top.",
+                    "Stir the honey dijon mustard, onion powder, and garlic powder together, then pour it over everything.",
+                    "Cover and cook on low for 7 to 8 hours until the pork shreds with a fork.",
+                    "While that finishes, roast or boil the potatoes until fork tender.",
+                    "Pull the pork, spoon it over the potatoes, and ladle a little of that cider gravy over the top."
+                ],
+    "portion_html":  "Each of the 14 servings lands at 59 grams of protein and 562 calories, so this fills you up without wrecking your day.",
+    "credit_html":  "",
+    "upsell_html":  "Set it in the morning, forget about it, and come home to dinner already handled. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  27.11,
+    "cost_batch_true":  33.15,
+    "cost_per_serving":  1.94,
+    "cost_per_serving_true":  2.37,
+    "cost_pantry_add":  9.63,
+    "cost_first_run":  42.78,
+    "scaler":  {
+                   "cost":  "33.15",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Loin",
+                                   "grams":  3700,
+                                   "buy":  "9 lb",
+                                   "bid":  "pork-loin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "grams":  2700,
+                                   "buy":  "6 lb",
+                                   "bid":  "potato",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Apple",
+                                   "grams":  700,
+                                   "buy":  "4 apples",
+                                   "bid":  "apple",
+                                   "gpu":  "175.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  320,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Honey Dijon Mustard",
+                                   "grams":  60,
+                                   "buy":  "1 bottle",
+                                   "bid":  "honey-dijon-mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Onion Powder",
+                                   "grams":  8,
+                                   "buy":  "1 jar",
+                                   "bid":  "onion-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "grams":  8,
+                                   "buy":  "1 jar",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Apple Cider",
+                                   "grams":  600,
+                                   "buy":  "12 oz",
+                                   "bid":  "apple-cider",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  16,
+                                   "buy":  "2 tsp kosher",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Coriander",
+                                   "grams":  3,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "ground-coriander",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "grams":  2,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 562 calories and 59 grams of protein for roughly $2.92 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker apple cider pork bowls, budget dinner",
+                 "costPerServing":  2.92,
+                 "recipeIngredient":  [
+                                          "9 lb Pork Loin",
+                                          "6 lb Potato",
+                                          "4 apples Apple",
+                                          "3 onions Yellow Onion",
+                                          "1 bottle Honey Dijon Mustard",
+                                          "1 jar Onion Powder"
+                                      ],
+                 "steps":  [
+                               "Cut the pork loin into big chunks and lay them in the slow cooker.",
+                               "Add the sliced apples and onions right on top.",
+                               "Stir the honey dijon mustard, onion powder, and garlic powder together, then pour it over everything.",
+                               "Cover and cook on low for 7 to 8 hours until the pork shreds with a fork.",
+                               "While that finishes, roast or boil the potatoes until fork tender.",
+                               "Pull the pork, spoon it over the potatoes, and ladle a little of that cider gravy over the top."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

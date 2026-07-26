@@ -1,0 +1,306 @@
+{
+    "name":  "Irish Beef and Guinness Stew",
+    "slug":  "irish-beef-and-guinness-stew",
+    "cuisine":  "Irish",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.recipetineats.com/irish-beef-and-guinness-stew/",
+    "source_site":  "recipetineats.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Deeper and maltier than plain beef stew, with bacon adding fat and flavor for pennies. Clearly separable from the classic stew on the plate and in the write-up. The only ingredient off the board is the stout, which is one cheap can per batch. Confidence: medium-high on calories. | HARVEST: ",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14."
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  638,
+                 "protein":  50,
+                 "carbs":  14,
+                 "fat":  40,
+                 "cost_ps":  "5.94"
+             },
+    "intro_html":  "Irish beef stew goes darker and maltier than the American version, and bacon is why. A pound of it renders into the pot before the beef ever hits, and everything that follows tastes like it. The stout is the traditional finish and the one thing we do not price on our grocery board, so treat it as optional. Each bowl carries \u003cstrong\u003e50 grams of protein\u003c/strong\u003e and 638 calories for about \u003cstrong\u003e$5.94\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 4.75 tbsp (63 g)",
+                                "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 5.75 lb (2646 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 4.7 (513 g)",
+                                "\u003cstrong\u003eHickory Smoked Bacon (Great Value):\u003c/strong\u003e 1 lb (397 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 7 tbsp (56 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 4.25 cups (1027 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1 can (149 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.8 cartons (1750 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 7 (427 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 4.7 (257 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.11 oz (3 g)",
+                                "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 2.25 tbsp (7 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 4.75 tbsp: ~$0.89. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Beef Chuck Roast, 5.75 lb: ~$46.49. \u003cstrong\u003eBuy 6 lbs: $47.82.\u003c/strong\u003e",
+                       "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Yellow Onion, 4.7: ~$1.29. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Hickory Smoked Bacon, 1 lb: ~$3.47. \u003cstrong\u003eBuy 1 lb: $3.96.\u003c/strong\u003e",
+                       "All-Purpose Flour, 7 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Beef Broth, 4.25 cups: ~$1.38. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Tomato Paste, 1 can: ~$0.75. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "Chicken Broth, 1.8 cartons: ~$2.35. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Carrots, 7: ~$0.90. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Celery, 4.7: ~$1.35. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, bay leaves, dried thyme, salt): ~$1.14. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $60.56 across 14 servings, so roughly $4.33 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $64.63 across 14 servings, roughly $4.62 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $18.48 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $83.11. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$5.94 a bowl\u003c/strong\u003e (at everyday cost). Bacon is the cheapest flavor upgrade in the meat case, and a single pound of it changes this entire pot.",
+    "shop_smart":  [
+                       "Bacon ends and pieces, if your store carries them, cost far less than sliced bacon and are perfect for a stew where nobody is looking at the strips.",
+                       "Chuck roast bought whole and cubed at home beats packaged stew meat on both price and quality. That holds for every stew in this section.",
+                       "You will use a lot of broth. Bouillon base in a jar makes more broth per dollar than boxes and it keeps in the fridge for months.",
+                       "One can of stout is the traditional addition and it is the only thing here that is not on our grocery board, so it is not in the numbers above. Beef broth in its place still makes a very good stew."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Chop the bacon and render it slowly in the pot until it is crisp, then lift it out and leave the fat behind.",
+                    "Cut the chuck into large cubes, pat them dry, season with salt and black pepper, and brown them hard in the bacon fat and olive oil in batches.",
+                    "Cook the chopped onion and garlic in the same pot until soft, scraping the bottom clean.",
+                    "Stir in the flour and tomato paste and cook 2 minutes.",
+                    "Pour in the beef broth and chicken broth, and add a can of stout here if you are using it. Add the bay leaves and thyme.",
+                    "Return the beef and bacon, cover, and simmer very low for 2.5 hours, until the beef surrenders completely.",
+                    "Add the carrots and celery for the last 40 minutes, then pull the bay leaves and correct the salt."
+                ],
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Ladle that weight into each of 14 containers, stirring between scoops so the bacon and beef do not collect in the first few. Each bowl lands at \u003cstrong\u003e638 calories with 50 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.recipetineats.com/irish-beef-and-guinness-stew/\" target=\"_blank\" rel=\"noopener\"\u003erecipetineats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Irish stew for about $5.94 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  60.56,
+    "cost_batch_true":  64.63,
+    "cost_per_serving":  4.33,
+    "cost_per_serving_true":  4.62,
+    "cost_pantry_add":  18.48,
+    "cost_first_run":  83.11,
+    "scaler":  {
+                   "cost":  "64.63",
+                   "ing":  [
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  63,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Beef Chuck Roast",
+                                   "canon":  "Beef Chuck Roast",
+                                   "grams":  2646,
+                                   "buy":  "5.75 lb",
+                                   "bid":  "beef-chuck-roast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  35,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  513,
+                                   "buy":  "4.7",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Hickory Smoked Bacon",
+                                   "canon":  "Hickory Smoked Bacon",
+                                   "grams":  397,
+                                   "buy":  "1 lb",
+                                   "bid":  "bacon",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  56,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  1027,
+                                   "buy":  "4.25 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  149,
+                                   "buy":  "1 can",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  1750,
+                                   "buy":  "1.8 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  427,
+                                   "buy":  "7",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "canon":  "Celery",
+                                   "grams":  257,
+                                   "buy":  "4.7",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  3,
+                                   "buy":  "0.11 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  7,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Irish beef and Guinness stew meal prep: chuck roast browned in bacon fat and simmered dark with carrots, celery, and thyme. 638 calories, 50g protein, about $5.94 per serving (at everyday cost).",
+                 "keywords":  "irish beef stew, guinness stew, beef and stout stew, bacon beef stew, budget meal prep, irish recipes",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT3H",
+                 "totalTime":  "PT3H25M",
+                 "costPerServing":  5.94,
+                 "recipeIngredient":  [
+                                          "5.75 lb beef chuck roast",
+                                          "1 lb hickory smoked bacon",
+                                          "4.75 tbsp olive oil",
+                                          "4 tbsp garlic",
+                                          "4.7 yellow onions",
+                                          "7 tbsp all-purpose flour",
+                                          "2.25 lb beef broth",
+                                          "1 can tomato paste",
+                                          "3.75 lb chicken broth",
+                                          "7 carrots",
+                                          "4.7 celery stalks"
+                                      ],
+                 "steps":  [
+                               "Render the chopped bacon until crisp and lift it out, keeping the fat.",
+                               "Brown the cubed chuck roast in the bacon fat and olive oil in batches.",
+                               "Soften onion and garlic, then stir in flour and tomato paste.",
+                               "Add both broths, bay, and thyme, return the beef and bacon, and simmer 2.5 hours.",
+                               "Add carrots and celery for the last 40 minutes and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  63
+                              },
+                              {
+                                  "item":  "Beef Chuck Roast",
+                                  "grams":  2646
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  513
+                              },
+                              {
+                                  "item":  "Hickory Smoked Bacon",
+                                  "grams":  397
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  1027
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  149
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  1750
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  427
+                              },
+                              {
+                                  "item":  "Celery",
+                                  "grams":  257
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              }
+                          ]
+}

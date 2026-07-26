@@ -1,0 +1,314 @@
+{
+    "name":  "Mexican Chipotle Pork and Beans",
+    "slug":  "mexican-chipotle-pork-and-beans",
+    "cuisine":  "Mexican-inspired",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.recipetineats.com/mexican-chipotle-pork-beans/",
+    "source_site":  "recipetineats.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Source verified at 323 cal / 27g protein per serving over 8 servings for the braise; over rice it is a 520-560 cal dinner. Braised 3 hours, shreds, reheats well. Dedup note: overlaps thematically with frijol con puerco above - if only one pork-and-beans dish survives, this is the more approachable American-pantry version. | HARVEST: Source yield published as \u00276 - 8 people\u0027; midpoint 7 recorded. Nutrition panel assumes 8 servings.",
+                         "SOURCE YIELD: 7 servings, rebuilt to 14."
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  621,
+                 "protein":  47,
+                 "carbs":  35,
+                 "fat":  31,
+                 "cost_ps":  "4.65"
+             },
+    "intro_html":  "Pork and beans out of a can is a side dish. Pork and beans made like this is dinner. Pork shoulder braised for three hours in orange juice, chipotles in adobo and tomato paste until it shreds, then white beans stirred in to soak up all that sauce. The orange juice is doing two jobs, tenderizing the meat and balancing the smoke. Every ingredient is something you can find in any grocery store in America.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Shoulder (generic (USDA)):\u003c/strong\u003e 6.5 lb (3000 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (24 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (2 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 2 tbsp (13 g)",
+                                "\u003cstrong\u003eChipotle in Adobo (La Costena):\u003c/strong\u003e 2 cans (400 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 4 tbsp (54 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 (220 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4.75 tbsp (40 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 0.5 cups (131 g)",
+                                "\u003cstrong\u003eOrange Juice:\u003c/strong\u003e 5.5 (498 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (960 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.07 oz (2 g)",
+                                "\u003cstrong\u003eCannellini Beans (generic):\u003c/strong\u003e 6 cans (1530 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 2 tbsp (6 g)",
+                                "\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 0.75 tbsp (4 g)",
+                                "\u003cstrong\u003eGround Allspice (Great Value):\u003c/strong\u003e 0.07 oz (2 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Shoulder, 6.5 lb: ~$23.61. \u003cstrong\u003eBuy 7 lbs: $24.99.\u003c/strong\u003e",
+                       "Chipotle in Adobo, 2 cans: ~$3.31. \u003cstrong\u003ePantry staple; this batch alone uses about 3 7oz cans.\u003c/strong\u003e",
+                       "Olive Oil, 4 tbsp: ~$0.76. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2: ~$0.55. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 4.75 tbsp: ~$0.58. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Tomato Paste, 0.5 cups: ~$0.66. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "Orange Juice, 5.5: ~$1.07. \u003cstrong\u003eBuy 1 52floz carton: $3.36.\u003c/strong\u003e",
+                       "Chicken Broth, 1 carton: ~$1.29. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Cannellini Beans, 6 cans: ~$4.95. \u003cstrong\u003eBuy 6 cans: $4.95.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, ground cumin, bay leaves, dried oregano, ground coriander, ground allspice): ~$1.15. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $37.93 across 14 servings, so roughly $2.71 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $42.39 across 14 servings, roughly $3.03 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $22.75 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $65.14. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.65 a bowl\u003c/strong\u003e (at everyday cost) for a dish that eats like it came out of a restaurant kitchen. The beans stretch a big cut of pork across 14 servings without watering anything down.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy the whole pork shoulder, not the pre-cubed stew meat.\u003c/strong\u003e Cubing it yourself takes ten minutes with a sharp knife and saves real money per pound.",
+                       "\u003cstrong\u003eChipotles in adobo are the cheapest big flavor in the store.\u003c/strong\u003e A couple of small cans season this whole batch. Freeze what you do not use in a flat bag and break off pieces later.",
+                       "\u003cstrong\u003eOrange juice from a carton is fine here.\u003c/strong\u003e You are cooking it down, not drinking it, so buy the store brand and use the rest for breakfast.",
+                       "\u003cstrong\u003eCanned cannellini beans go in at the end.\u003c/strong\u003e Added late they hold their shape and absorb the sauce. Added early they turn to paste, and paste is not what you want."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cube the pork shoulder, pat it dry, season generously with salt and black pepper, and brown it hard in the olive oil in a heavy pot, in batches so it sears rather than steams.",
+                    "Cook the diced onion in the rendered fat until soft, then add the minced garlic, the ground cumin, ground coriander and ground allspice and stir for a minute.",
+                    "Stir in the tomato paste and let it darken against the bottom of the pot for two minutes. That step is what separates a deep sauce from a flat one.",
+                    "Add the chopped chipotles in adobo, the orange juice and the chicken broth, scrape the pot clean, and return the pork along with the bay leaves and dried oregano.",
+                    "Cover and braise gently for about 3 hours, until the pork shreds under a fork and the liquid has reduced into a thick sauce.",
+                    "Stir in the drained cannellini beans, simmer 15 more minutes so they take on the sauce, and pull out the bay leaves before portioning."
+                ],
+    "portion_html":  "Set the pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and spoon that exact weight into each container. Every serving lands near 621 calories with 47 grams of protein. It thickens in the fridge, so a splash of broth on reheat brings the sauce right back.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.recipetineats.com/mexican-chipotle-pork-beans/\" target=\"_blank\" rel=\"noopener\"\u003erecipetineats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cem\u003eThree hour braised pork and beans for about $4.65 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "cost_batch":  37.93,
+    "cost_batch_true":  42.39,
+    "cost_per_serving":  2.71,
+    "cost_per_serving_true":  3.03,
+    "cost_pantry_add":  22.75,
+    "cost_first_run":  65.14,
+    "scaler":  {
+                   "cost":  "42.39",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Shoulder",
+                                   "canon":  "Pork Shoulder",
+                                   "grams":  3000,
+                                   "buy":  "6.5 lb",
+                                   "bid":  "pork-shoulder",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  24,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  13,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chipotle in Adobo",
+                                   "canon":  "Chipotle in Adobo",
+                                   "grams":  400,
+                                   "buy":  "2 cans",
+                                   "bid":  "chipotle-adobo",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  54,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  220,
+                                   "buy":  "2",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  40,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  131,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Orange Juice",
+                                   "canon":  "Orange Juice",
+                                   "grams":  498,
+                                   "buy":  "5.5",
+                                   "bid":  "orange-juice",
+                                   "gpu":  "31.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  960,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  2,
+                                   "buy":  "0.07 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cannellini Beans",
+                                   "canon":  "Cannellini Beans",
+                                   "grams":  1530,
+                                   "buy":  "6 cans",
+                                   "bid":  "cannellini-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  6,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Coriander",
+                                   "canon":  "Ground Coriander",
+                                   "grams":  4,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "ground-coriander",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Allspice",
+                                   "canon":  "Ground Allspice",
+                                   "grams":  2,
+                                   "buy":  "0.07 oz",
+                                   "bid":  "ground-allspice",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Pork shoulder braised three hours in orange juice and chipotle adobo, then finished with white beans. A 14 serving pork and beans built for meal prep.",
+                 "keywords":  "chipotle pork and beans, braised pork shoulder, mexican pork recipe, white bean pork stew, budget meal prep, cheap dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT3H15M",
+                 "totalTime":  "PT3H40M",
+                 "costPerServing":  4.65,
+                 "recipeIngredient":  [
+                                          "Pork Shoulder",
+                                          "Olive Oil",
+                                          "Yellow Onion",
+                                          "Garlic",
+                                          "Tomato Paste",
+                                          "Chipotle in Adobo",
+                                          "Orange Juice",
+                                          "Chicken Broth",
+                                          "Cannellini Beans"
+                                      ],
+                 "steps":  [
+                               "Season and brown the cubed pork shoulder in olive oil in batches.",
+                               "Cook the onion and garlic, then toast the cumin, coriander and allspice.",
+                               "Darken the tomato paste, then add the chipotles, orange juice and chicken broth.",
+                               "Return the pork and braise covered about 3 hours until it shreds.",
+                               "Stir in the cannellini beans and simmer 15 minutes more."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Pork Shoulder",
+                                  "grams":  3000
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  24
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  13
+                              },
+                              {
+                                  "item":  "Chipotle in Adobo",
+                                  "grams":  400
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  54
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  220
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  40
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  131
+                              },
+                              {
+                                  "item":  "Orange Juice",
+                                  "grams":  498
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  960
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Cannellini Beans",
+                                  "grams":  1530
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Ground Coriander",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Ground Allspice",
+                                  "grams":  2
+                              }
+                          ]
+}

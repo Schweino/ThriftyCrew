@@ -1,0 +1,325 @@
+{
+    "name":  "Izmir Kofte Turkey Meatball and Potato Bake",
+    "slug":  "izmir-kofte-turkey-meatball-potato-bake",
+    "cuisine":  "turkish",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.giverecipe.com/easy-meatballs-with-potatoes/",
+    "source_site":  "giverecipe.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Classic Turkish oven casserole: meatballs and thick potato slices baked in tomato sauce. Verified source: full recipe, 4 servings, 833 cal / 32g protein - the rare global dish that already clears both our calorie and protein bars. Bakes in hotel pans, portions by weight, fully board-mappable. | HARVEST: Source uses ground beef or lamb; adapt to turkey.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "OVERRIDE Crushed Tomatoes: WAVE-4: \u00273 medium tomatoes pureed\u0027 are fresh (~150 g each), not 3 x 28 oz cans",
+                         "OVERRIDE Diced Tomatoes: WAVE-4: \u00272 medium tomatoes\u0027 fresh, not cans",
+                         "OVERRIDE 93/7 Ground Beef: TITLE-PROTEIN SWAP: titled turkey; ground-\u003eground, grams kept"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  587,
+                 "protein":  34,
+                 "carbs":  59,
+                 "fat":  24,
+                 "cost_ps":  "3.92"
+             },
+    "intro_html":  "Izmir kofte is the Turkish answer to the question every tired cook asks on a Sunday: what if the meatballs and the potatoes just cooked themselves in the same pan? Seasoned turkey kofte and thick potato slices bake together under a tomato and pepper sauce until the potatoes drink up everything around them. Each portion lands at \u003cstrong\u003e587 calories and 34 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.92\u003c/strong\u003e (at everyday cost), and it comes out of the oven looking like somebody worked a lot harder than you did.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)",
+                                "\u003cstrong\u003eBread Crumbs (generic):\u003c/strong\u003e 13.5 tbsp (94 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.25 tbsp (8 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 0.75 tbsp (4 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 1.25 tbsp (8 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.25 tbsp (42 g)",
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.75 lb (1750 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 4 large eggs (175 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 14 (2982 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 6 tbsp (84 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 7 tbsp (94 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 3.5 tbsp (56 g)",
+                                "\u003cstrong\u003eCrushed Tomatoes (generic):\u003c/strong\u003e 2 cans (1575 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2.6 cans (1050 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3.5 (420 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Yellow Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Bread Crumbs, 13.5 tbsp: ~$0.27. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 3.75 lb: ~$14.74. \u003cstrong\u003eBuy 4 lbs: $15.29.\u003c/strong\u003e",
+                       "Eggs, 4 large eggs: ~$0.42. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
+                       "Potato, 14: ~$3.73. \u003cstrong\u003eBuy 7 lbs: $3.98.\u003c/strong\u003e",
+                       "Vegetable Oil, 6 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 7 tbsp: ~$1.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Tomato Paste, 3.5 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "Crushed Tomatoes, 2 cans: ~$2.99. \u003cstrong\u003eBuy 2 28oz cans: $3.02.\u003c/strong\u003e",
+                       "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Diced Tomatoes, 2.6 cans: ~$2.45. \u003cstrong\u003eBuy 3 cans: $2.88.\u003c/strong\u003e",
+                       "Green Bell Peppers, 3.5: ~$3.01. \u003cstrong\u003eBuy 4 each: $3.44.\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, ground cumin, paprika, salt): ~$0.66. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $31.54 across 14 servings, so roughly $2.25 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.07 across 14 servings, roughly $2.50 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $19.82 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.89. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.92\u003c/strong\u003e a container (at everyday cost) for a baked Turkish casserole with real meat in it. The potatoes and the canned tomatoes are doing the heavy lifting on price, and neither one of them has ever been expensive.",
+    "shop_smart":  [
+                       "The ground turkey is over half this batch cost by itself. Buy the 4 pound pack instead of two smaller ones, freeze what you do not use that day, and you have a head start on the next batch.",
+                       "Canned crushed and diced tomatoes are the sauce here, and they are the ingredient most worth buying deep. Store brand, biggest can, whatever is on the shelf tag that week. Nothing about this sauce cares whose name is on the label.",
+                       "Potatoes are cheapest by the bag, not by the each. A 7 pound bag runs close to what a handful of loose ones cost, and potatoes keep for weeks in a cool dark spot.",
+                       "The bread crumbs, tomato paste, and both oils are pantry items that outlive this batch by a mile. You pay for the container once and it shows up in a dozen recipes after this one."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Grate or finely mince the onion, then mix it with the ground turkey, bread crumbs, eggs, cumin, paprika, salt, and black pepper. Work it just until it holds together and no further.",
+                    "Roll the mixture into small oval kofte, about the size of your thumb, and set them on a sheet pan.",
+                    "Peel the potatoes and cut them into thick slices, then toss them with the vegetable oil and a pinch of salt. Spread them on a second sheet pan.",
+                    "Roast the kofte and the potatoes at 400F for about 20 minutes, until the meat is browned and cooked through to 165F and the potato edges are starting to color.",
+                    "While those roast, build the sauce: warm the olive oil in a pot, soften the sliced garlic and bell peppers for 5 minutes, stir in the tomato paste for a minute, then add the crushed and diced tomatoes with salt and pepper. Simmer 15 minutes.",
+                    "Layer the potatoes and kofte in your baking pans, pour the sauce over everything, and bake at 375F for 30 to 35 minutes until the sauce is bubbling and thick.",
+                    "Let it sit 10 minutes before you touch it, then transfer the whole bake into your weighed pot and stir gently so every scoop gets sauce."
+                ],
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is your per-container gram target. Scoop it into 14 containers, making sure each one gets kofte, potato, and sauce instead of a lucky draw. Each portion lands at \u003cstrong\u003e587 calories and 34 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.giverecipe.com/easy-meatballs-with-potatoes/\" target=\"_blank\" rel=\"noopener\"\u003egiverecipe.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A Turkish oven casserole for about \u003cstrong\u003e$3.92\u003c/strong\u003e a container (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  31.54,
+    "cost_batch_true":  35.07,
+    "cost_per_serving":  2.25,
+    "cost_per_serving_true":  2.5,
+    "cost_pantry_add":  19.82,
+    "cost_first_run":  54.89,
+    "scaler":  {
+                   "cost":  "35.07",
+                   "ing":  [
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  385,
+                                   "buy":  "3.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Bread Crumbs",
+                                   "canon":  "Bread Crumbs",
+                                   "grams":  94,
+                                   "buy":  "13.5 tbsp",
+                                   "bid":  "bread-crumbs",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  8,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  4,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  8,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  42,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1750,
+                                   "buy":  "3.75 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  175,
+                                   "buy":  "4 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  2982,
+                                   "buy":  "14",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  84,
+                                   "buy":  "6 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  94,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  56,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Crushed Tomatoes",
+                                   "canon":  "Crushed Tomatoes",
+                                   "grams":  1575,
+                                   "buy":  "2 cans",
+                                   "bid":  "crushed-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  35,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  1050,
+                                   "buy":  "2.6 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  420,
+                                   "buy":  "3.5",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkish izmir kofte meal prep: seasoned turkey meatballs and thick potato slices baked in tomato pepper sauce. 587 calories, 34g protein, about $3.92 a serving (at everyday cost).",
+                 "keywords":  "izmir kofte, turkish meatballs, turkey meal prep, budget meal prep, meatball potato bake, high protein casserole",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT55M",
+                 "totalTime":  "PT1H20M",
+                 "costPerServing":  3.92,
+                 "recipeIngredient":  [
+                                          "3.75 lb 93/7 ground turkey",
+                                          "3.5 yellow onions",
+                                          "13.5 tbsp bread crumbs",
+                                          "4 large eggs",
+                                          "14 potatoes",
+                                          "6 tbsp vegetable oil",
+                                          "7 tbsp olive oil",
+                                          "3.5 tbsp tomato paste",
+                                          "10.5 cans crushed tomatoes",
+                                          "7 cans diced tomatoes",
+                                          "4 tbsp garlic",
+                                          "3.5 green bell peppers"
+                                      ],
+                 "steps":  [
+                               "Mix ground turkey with grated onion, bread crumbs, eggs, cumin, paprika, salt, and pepper, then roll into small ovals.",
+                               "Cut potatoes into thick slices and toss with vegetable oil and salt.",
+                               "Roast the kofte and potatoes at 400F for about 20 minutes, until the meat reaches 165F.",
+                               "Simmer olive oil, garlic, bell peppers, tomato paste, crushed tomatoes, and diced tomatoes into a sauce.",
+                               "Layer potatoes and kofte in baking pans, cover with sauce, and bake at 375F for 30 to 35 minutes.",
+                               "Rest 10 minutes, then portion by weight into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Bread Crumbs",
+                                  "grams":  94
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1750
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  175
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  2982
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  94
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Crushed Tomatoes",
+                                  "grams":  1575
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  1050
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  420
+                              }
+                          ]
+}

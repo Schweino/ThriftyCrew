@@ -1,0 +1,193 @@
+{
+    "name":  "Slow Cooker Beef and Noodles",
+    "slug":  "slow-cooker-beef-and-noodles",
+    "cuisine":  "American",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.themagicalslowcooker.com/beef-and-noodles/",
+    "source_site":  "themagicalslowcooker.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Egg Noodles)",
+                   "portion factor 1.1"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Chuck roast plus egg noodles plus broth, cooked in one vessel, noodles finished in the same pot. About as cheap per serving as beef gets and every ingredient is board-tracked. Distinct from the existing Ground Beef Stroganoff Pasta because there is no dairy and the beef is shredded whole-muscle. Confidence: medium on calories, estimated from the ingredient set. | HARVEST: ",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Egg Noodles)",
+                         "TUNING: portion factor 1.1"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  560,
+                 "protein":  37,
+                 "carbs":  61,
+                 "fat":  19,
+                 "cost_ps":  "3.26"
+             },
+    "intro_html":  "Beef and noodles is what farm kitchens made when there was one roast and a lot of people. Chuck roast goes in with broth and a splash of Worcestershire, cooks all day, then the egg noodles finish right in the same pot and drink up everything the beef left behind. Five ingredients, one vessel. Each bowl carries \u003cstrong\u003e37 grams of protein\u003c/strong\u003e and 560 calories for about \u003cstrong\u003e$3.26\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 3.75 lb (1746 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.75 tbsp (12 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 0.5 tbsp (5 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (2 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 3.75 cups (924 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 3.75 tbsp (65 g)",
+                                "\u003cstrong\u003eEgg Noodles (Great Value wide):\u003c/strong\u003e 41.5 oz dry (1176 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Chuck Roast, 3.75 lb: ~$30.68. \u003cstrong\u003eBuy 4 lbs: $31.88.\u003c/strong\u003e",
+                       "Garlic, 0.5 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Beef Broth, 3.75 cups: ~$1.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Worcestershire Sauce, 3.75 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Egg Noodles, 41.5 oz dry: ~$4.51. \u003cstrong\u003eBuy 4 12oz bags: $5.22.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.12. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $36.84 across 14 servings, so roughly $2.63 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $39.26 across 14 servings, roughly $2.80 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.38 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.64. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.26 a bowl\u003c/strong\u003e (at everyday cost). Noodles are cheap, broth is cheap, and the roast gets stretched further than it has any right to be.",
+    "shop_smart":  [
+                       "Egg noodles keep in a sealed bag for a year. Buy several when they hit the sale price, because pasta prices swing more than people notice.",
+                       "Boxed beef broth works, but bouillon base in a jar is the cheaper way to make a lot of broth and it stores in the fridge for months.",
+                       "Cooking the noodles in the beef liquid instead of a separate pot of water is the whole reason this tastes like more than the sum of its parts. It also saves you a pot to wash.",
+                       "Chuck roast on the sale cycle. This recipe has so few ingredients that the beef price is basically the whole number."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Season the chuck roast with salt and black pepper and set it in the slow cooker whole.",
+                    "Add the minced garlic, beef broth, and Worcestershire sauce around the roast.",
+                    "Cover and cook on low for 8 hours, until the beef comes apart when you press it.",
+                    "Shred the beef with two forks right in the cooker and leave it in the liquid.",
+                    "Turn the cooker to high, stir in the dry egg noodles, and add enough hot water to just cover them.",
+                    "Cover and cook 25 to 35 minutes, stirring once or twice, until the noodles are tender and most of the liquid has been absorbed.",
+                    "Taste and correct the salt and pepper, then let it sit 10 minutes so the noodles finish soaking up the gravy."
+                ],
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Scoop that weight into each of 14 containers, stirring between scoops so the beef does not settle to the bottom of the pot. Each bowl lands at \u003cstrong\u003e560 calories with 37 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/beef-and-noodles/\" target=\"_blank\" rel=\"noopener\"\u003ethemagicalslowcooker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Beef and noodles for about $3.26 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  36.84,
+    "cost_batch_true":  39.26,
+    "cost_per_serving":  2.63,
+    "cost_per_serving_true":  2.8,
+    "cost_pantry_add":  6.38,
+    "cost_first_run":  45.64,
+    "scaler":  {
+                   "cost":  "39.26",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Chuck Roast",
+                                   "canon":  "Beef Chuck Roast",
+                                   "grams":  1746,
+                                   "buy":  "3.75 lb",
+                                   "bid":  "beef-chuck-roast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  12,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  5,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  924,
+                                   "buy":  "3.75 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "canon":  "Worcestershire Sauce",
+                                   "grams":  65,
+                                   "buy":  "3.75 tbsp",
+                                   "bid":  "worcestershire",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Egg Noodles",
+                                   "canon":  "Egg Noodles",
+                                   "grams":  1176,
+                                   "buy":  "41.5 oz dry",
+                                   "bid":  "egg-noodles",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Slow cooker beef and noodles meal prep: shredded chuck roast cooked all day in broth, with egg noodles finished in the same pot. 560 calories, 37g protein, about $3.26 per serving (at everyday cost).",
+                 "keywords":  "beef and noodles, slow cooker beef, egg noodles, shredded beef, budget meal prep, chuck roast recipes",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT10M",
+                 "cookTime":  "PT8H30M",
+                 "totalTime":  "PT8H40M",
+                 "costPerServing":  3.26,
+                 "recipeIngredient":  [
+                                          "3.75 lb beef chuck roast",
+                                          "0.5 tbsp garlic",
+                                          "2 lb beef broth",
+                                          "3.75 tbsp worcestershire sauce",
+                                          "41.5 oz dry egg noodles"
+                                      ],
+                 "steps":  [
+                               "Season the chuck roast and set it in the slow cooker with garlic, broth, and Worcestershire.",
+                               "Cook on low 8 hours until the beef falls apart.",
+                               "Shred the beef in the cooker and leave it in the liquid.",
+                               "Turn to high, stir in the dry egg noodles with enough hot water to cover, and cook 25 to 35 minutes.",
+                               "Rest 10 minutes, correct the seasoning, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Chuck Roast",
+                                  "grams":  1746
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  924
+                              },
+                              {
+                                  "item":  "Worcestershire Sauce",
+                                  "grams":  65
+                              },
+                              {
+                                  "item":  "Egg Noodles",
+                                  "grams":  1176
+                              }
+                          ]
+}

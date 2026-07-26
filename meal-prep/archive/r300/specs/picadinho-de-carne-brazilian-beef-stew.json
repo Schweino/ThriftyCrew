@@ -1,0 +1,281 @@
+{
+    "name":  "Picadinho de Carne (Brazilian Beef and Vegetable Stew)",
+    "slug":  "picadinho-de-carne-brazilian-beef-stew",
+    "cuisine":  "Brazilian",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.easyanddelish.com/brazilian-beef-stew/",
+    "source_site":  "easyanddelish.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Sweet Potatoes)",
+                   "portion factor 1.1"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Diced-beef stew served over rice and beans, entirely board-mapped. Different dish from Escondidinho above (stew versus bake) so both can survive. Confidence: page verified via site listing; calories estimated. | HARVEST: ",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Sweet Potatoes)",
+                         "TUNING: portion factor 1.1"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  566,
+                 "protein":  44,
+                 "carbs":  23,
+                 "fat":  32,
+                 "cost_ps":  "6.34"
+             },
+    "intro_html":  "Picadinho is what a Brazilian kitchen makes when it wants beef stew without waiting all afternoon. The beef gets diced small instead of cubed large, which means more browned surface, faster cooking, and a piece of meat in every single spoonful. Carrots and sweet potato round it out. Each bowl carries \u003cstrong\u003e44 grams of protein\u003c/strong\u003e and 566 calories for about \u003cstrong\u003e$6.34\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 6.5 lb (2911 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.75 tbsp (31 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tbsp (6 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 0.75 tbsp (5 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 7.75 tbsp (104 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.6 (282 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6 tbsp (51 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 2.5 tbsp (41 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 7.75 cups (1848 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 4.6 (282 g)",
+                                "\u003cstrong\u003eSweet Potatoes:\u003c/strong\u003e 10 (1306 g)",
+                                "\u003cstrong\u003eRed Wine Vinegar (generic):\u003c/strong\u003e 5.25 tbsp (77 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 10 tbsp (10 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Chuck Roast, 6.5 lb: ~$51.15. \u003cstrong\u003eBuy 7 lbs: $55.79.\u003c/strong\u003e",
+                       "Olive Oil, 7.75 tbsp: ~$1.46. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2.6: ~$0.71. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 6 tbsp: ~$0.73. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Tomato Paste, 2.5 tbsp: ~$0.21. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "Beef Broth, 7.75 cups: ~$2.48. \u003cstrong\u003ePantry staple; this batch alone uses about 3 32oz cartons.\u003c/strong\u003e",
+                       "Carrots, 4.6: ~$0.59. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Sweet Potatoes, 10: ~$4.26. \u003cstrong\u003eBuy 3 lbs: $4.44.\u003c/strong\u003e",
+                       "Red Wine Vinegar, 5.25 tbsp: ~$0.46. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fresh Cilantro, 10 tbsp: ~$0.31. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, ground cumin): ~$0.44. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $62.80 across 14 servings, so roughly $4.49 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $70.95 across 14 servings, roughly $5.07 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.74 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $88.69. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$6.34 a bowl\u003c/strong\u003e (at everyday cost). Dicing the beef small is not just a texture choice, it is a budget choice, because a small dice makes a modest amount of meat read as a lot more on the plate.",
+    "shop_smart":  [
+                       "Dice the chuck yourself rather than buying pre cut stew meat. Pre cut costs more per pound and it is usually trim from cuts you would not have chosen.",
+                       "Sweet potatoes carry a lot of the volume in this pot. They store for weeks in a cool dark spot, so buy the bag when the price is right.",
+                       "Tomato paste comes in a small can and you use a couple spoonfuls. Freeze the rest in tablespoon blobs on wax paper and drop them straight into the next braise.",
+                       "Cilantro goes in at the very end. Buy one bunch, use the stems in the pot and the leaves on top, and nothing goes in the trash."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cut the chuck roast into a small dice, about half inch cubes, and pat it dry. Wet beef will not brown.",
+                    "Sear the beef in the olive oil in batches over high heat, giving each batch room. Pull it out as it browns.",
+                    "Cook the chopped onion and garlic in the same pot until soft, scraping up the browned bits.",
+                    "Stir in the tomato paste and the cumin and cook a minute so the paste darkens.",
+                    "Return the beef with the beef broth, cover, and simmer 60 to 75 minutes until the beef is tender.",
+                    "Add the diced carrots and sweet potatoes and simmer uncovered another 20 to 25 minutes, until they are soft and the stew has thickened.",
+                    "Turn off the heat, stir in the red wine vinegar and the chopped cilantro, then taste for salt and pepper."
+                ],
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight into each of 14 containers, stirring the pot between scoops so the beef and the vegetables stay evenly split. Each bowl lands at \u003cstrong\u003e566 calories with 44 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.easyanddelish.com/brazilian-beef-stew/\" target=\"_blank\" rel=\"noopener\"\u003eeasyanddelish.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Brazilian beef stew for about $6.34 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  62.8,
+    "cost_batch_true":  70.95,
+    "cost_per_serving":  4.49,
+    "cost_per_serving_true":  5.07,
+    "cost_pantry_add":  17.74,
+    "cost_first_run":  88.69,
+    "scaler":  {
+                   "cost":  "70.95",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Chuck Roast",
+                                   "canon":  "Beef Chuck Roast",
+                                   "grams":  2911,
+                                   "buy":  "6.5 lb",
+                                   "bid":  "beef-chuck-roast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  31,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  6,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  5,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  104,
+                                   "buy":  "7.75 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  282,
+                                   "buy":  "2.6",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  51,
+                                   "buy":  "6 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  41,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  1848,
+                                   "buy":  "7.75 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  282,
+                                   "buy":  "4.6",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Sweet Potatoes",
+                                   "canon":  "Sweet Potatoes",
+                                   "grams":  1306,
+                                   "buy":  "10",
+                                   "bid":  "sweet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Wine Vinegar",
+                                   "canon":  "Red Wine Vinegar",
+                                   "grams":  77,
+                                   "buy":  "5.25 tbsp",
+                                   "bid":  "red-wine-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  10,
+                                   "buy":  "10 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Brazilian picadinho de carne meal prep: small diced chuck roast browned and stewed with carrots, sweet potato, and cilantro. 566 calories, 44g protein, about $6.34 per serving (at everyday cost).",
+                 "keywords":  "picadinho de carne, brazilian beef stew, diced beef stew, budget meal prep, brazilian recipes, chuck roast stew",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT1H40M",
+                 "totalTime":  "PT2H",
+                 "costPerServing":  6.34,
+                 "recipeIngredient":  [
+                                          "6.5 lb beef chuck roast",
+                                          "7.75 tbsp olive oil",
+                                          "2.6 yellow onions",
+                                          "6 tbsp garlic",
+                                          "2.5 tbsp tomato paste",
+                                          "4 lb beef broth",
+                                          "4.6 carrots",
+                                          "10 sweet potatoes",
+                                          "5.25 tbsp red wine vinegar",
+                                          "10 tbsp fresh cilantro"
+                                      ],
+                 "steps":  [
+                               "Cut the chuck roast into a small dice and sear it in batches in olive oil.",
+                               "Soften onion and garlic in the pot, then cook in the tomato paste and cumin.",
+                               "Return the beef with broth and simmer covered 60 to 75 minutes.",
+                               "Add carrots and sweet potatoes and simmer uncovered until tender.",
+                               "Finish with red wine vinegar and cilantro and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Chuck Roast",
+                                  "grams":  2911
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  31
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  104
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  282
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  51
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  41
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  1848
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  282
+                              },
+                              {
+                                  "item":  "Sweet Potatoes",
+                                  "grams":  1306
+                              },
+                              {
+                                  "item":  "Red Wine Vinegar",
+                                  "grams":  77
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  10
+                              }
+                          ]
+}

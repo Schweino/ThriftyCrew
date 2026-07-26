@@ -1,0 +1,150 @@
+{
+    "name":  "Buffalo Turkey and Potato Bowls",
+    "slug":  "buffalo-turkey-potato-bowls",
+    "cuisine":  "American",
+    "protein":  "turkey",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  661,
+                 "protein":  44,
+                 "carbs":  56,
+                 "fat":  29,
+                 "cost_ps":  "3.72"
+             },
+    "intro_html":  "Buffalo wings without the wing prices, and a whole lot more protein per bite. This skillet packs 44 grams of protein into a bowl that lands at about $3.72 (at everyday cost). Fourteen servings out of one pan means lunch is handled for the better part of two weeks.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 6 lb (2710 g)",
+                                "\u003cstrong\u003eFries (Great Value):\u003c/strong\u003e 4 bags (3579 g)",
+                                "\u003cstrong\u003eBuffalo Wing Sauce (Frank\u0027s RedHot):\u003c/strong\u003e 1 bottle (210 g)",
+                                "\u003cstrong\u003eShredded Carrots:\u003c/strong\u003e 2 bags (300 g)",
+                                "\u003cstrong\u003eFat Free Cheddar (Great Value):\u003c/strong\u003e 1 bag (200 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (200 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 Tbsp (32 g)",
+                                "\u003cstrong\u003eCelery Salt:\u003c/strong\u003e 1 tsp (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 tsp ground (8 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.72 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Buy the \u003cstrong\u003estore-brand frozen fries\u003c/strong\u003e. At around $2.48 a bag they cook up the same as the name brand and save you real money across four bags.",
+                       "One bottle of buffalo sauce covers the whole batch, so \u003cstrong\u003eskip the fancy small-batch stuff\u003c/strong\u003e and grab the standard wing sauce.",
+                       "Fat-free cheddar melts fine on hot food, so use it here and \u003cstrong\u003esave the block cheese for another recipe\u003c/strong\u003e."
+                   ],
+    "make_it":  [
+                    "Brown 6 pounds of 93/7 ground turkey with a chopped yellow onion until no pink is left.",
+                    "Bake the fries on sheet pans while the turkey cooks so nothing sits waiting.",
+                    "Stir the buffalo wing sauce and shredded carrots into the turkey and let it simmer a few minutes.",
+                    "Pile the buffalo turkey over the fries in each container.",
+                    "Sprinkle the fat-free cheddar on top while everything is hot so it melts in."
+                ],
+    "portion_html":  "Each of the 14 bowls delivers 44 grams of protein and 661 calories, so it eats like a real meal, not a snack.",
+    "credit_html":  "",
+    "upsell_html":  "Big flavor, small price, and two weeks of lunches ready to grab. That is a win any way you count it. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  45.74,
+    "cost_batch_true":  50.53,
+    "cost_per_serving":  3.27,
+    "cost_per_serving_true":  3.61,
+    "cost_pantry_add":  4.79,
+    "cost_first_run":  55.32,
+    "scaler":  {
+                   "cost":  "50.53",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "grams":  2710,
+                                   "buy":  "6 lb",
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Fries",
+                                   "grams":  3579,
+                                   "buy":  "4 bags",
+                                   "bid":  "fries",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Buffalo Wing Sauce",
+                                   "grams":  210,
+                                   "buy":  "1 bottle",
+                                   "bid":  "buffalo-wing-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Shredded Carrots",
+                                   "grams":  300,
+                                   "buy":  "2 bags",
+                                   "bid":  "shredded-carrots",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fat Free Cheddar",
+                                   "grams":  200,
+                                   "buy":  "1 bag",
+                                   "bid":  "fat-free-cheddar",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  200,
+                                   "buy":  "2 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "grams":  32,
+                                   "buy":  "1 Tbsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Celery Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tsp",
+                                   "bid":  "celery-salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  8,
+                                   "buy":  "1 tsp ground",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 661 calories and 44 grams of protein for roughly $3.72 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, buffalo turkey and potato bowls, budget dinner",
+                 "costPerServing":  3.72,
+                 "recipeIngredient":  [
+                                          "6 lb 93/7 Ground Turkey",
+                                          "4 bags Fries",
+                                          "1 bottle Buffalo Wing Sauce",
+                                          "2 bags Shredded Carrots",
+                                          "1 bag Fat Free Cheddar",
+                                          "2 onions Yellow Onion"
+                                      ],
+                 "steps":  [
+                               "Brown 6 pounds of 93/7 ground turkey with a chopped yellow onion until no pink is left.",
+                               "Bake the fries on sheet pans while the turkey cooks so nothing sits waiting.",
+                               "Stir the buffalo wing sauce and shredded carrots into the turkey and let it simmer a few minutes.",
+                               "Pile the buffalo turkey over the fries in each container.",
+                               "Sprinkle the fat-free cheddar on top while everything is hot so it melts in."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

@@ -1,0 +1,292 @@
+{
+    "name":  "Brazilian Feijoada Pork and Black Bean Stew Bowls",
+    "slug":  "brazilian-feijoada-pork-black-bean-bowls",
+    "cuisine":  "Brazilian",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.panningtheglobe.com/slow-cooker-brazilian-feijoada/",
+    "source_site":  "panningtheglobe.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 400g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: National dish of Brazil, slow cooker, black beans plus pork shoulder and bacon over rice. Beans carry the calories and pork carries the protein, so it holds 500+ cal and 30g+ at real portions. Confidence note: source page publishes no nutrition panel, so the calorie/protein figures here are my estimate from the ingredient list, not verified from the page. Live catalog has Brazilian-style pork ribs but no feijoada. | HARVEST: No nutrition panel published. 6-quart slow cooker, low 8-9 hours.",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 400g (src scale)",
+                         "OVERRIDE Beef Chuck Roast: \u00273 or 4 bone-in short ribs\u0027 unparseable; 3.5 ribs x ~227 g x 55% bone yield = 440 g meat"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  695,
+                 "protein":  48,
+                 "carbs":  57,
+                 "fat":  28,
+                 "cost_ps":  "3.99"
+             },
+    "intro_html":  "Feijoada is the national dish of Brazil, and it started the way most great dishes start, with cooks making something extraordinary out of the cuts nobody else wanted. Black beans and several kinds of pork go into one pot and cook until the beans break down into a dark, glossy gravy. Served over white rice on a Saturday, it is the meal an entire country slows down for.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 3 cans (794 g)",
+                                "\u003cstrong\u003eHickory Smoked Bacon (Great Value):\u003c/strong\u003e 0.75 lb (298 g)",
+                                "\u003cstrong\u003ePork Shoulder (generic (USDA)):\u003c/strong\u003e 2.75 lb (1191 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tbsp (35 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 tbsp (7 g)",
+                                "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 1.75 lb (770 g)",
+                                "\u003cstrong\u003eDiced Ham (John Morrell (Smithfield)):\u003c/strong\u003e 1 lb (446 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 5.5 (604 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6 tbsp (52 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.3 cartons (1260 g)",
+                                "\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 0.25 tbsp (2 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.07 oz (2 g)",
+                                "\u003cstrong\u003eWhite Vinegar (generic):\u003c/strong\u003e 1.75 tbsp (26 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Seasoned Black Beans, 3 cans: ~$2.67. \u003cstrong\u003eBuy 4 cans: $3.44.\u003c/strong\u003e",
+                       "Hickory Smoked Bacon, 0.75 lb: ~$2.60. \u003cstrong\u003eBuy 1 lb: $3.96.\u003c/strong\u003e",
+                       "Pork Shoulder, 2.75 lb: ~$9.37. \u003cstrong\u003eBuy 3 lbs: $10.71.\u003c/strong\u003e",
+                       "Beef Chuck Roast, 1.75 lb: ~$13.53. \u003cstrong\u003eBuy 2 lbs: $15.94.\u003c/strong\u003e",
+                       "Diced Ham, 1 lb: ~$4.88. \u003cstrong\u003eBuy 1 16oz pack: $4.96.\u003c/strong\u003e",
+                       "Yellow Onion, 5.5: ~$1.52. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Garlic, 6 tbsp: ~$0.75. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Chicken Broth, 1.3 cartons: ~$1.69. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "White Vinegar, 1.75 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, ground coriander, bay leaves): ~$0.74. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $38.66 across 14 servings, so roughly $2.76 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $45.78 across 14 servings, roughly $3.27 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.13 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.91. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.99 a bowl\u003c/strong\u003e (at everyday cost) for a dish with four different meats in it. Black beans are the cheapest protein in the store and they are what let this pot carry that much pork without wrecking the math.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBeans are the point, not the filler.\u003c/strong\u003e Black beans give this dish its body, its color and a good chunk of its protein, and they cost less per serving than almost anything else you can put in a pot.",
+                       "\u003cstrong\u003eBuy the pork shoulder, use the trimmings.\u003c/strong\u003e Feijoada was built on scraps. Every bit of fat and every bone you throw in makes the gravy richer, so buy bone-in when you can.",
+                       "\u003cstrong\u003eBacon and diced ham are seasoning meats.\u003c/strong\u003e Small amounts of each add smoke and salt through the whole pot. This is where a half pound does the job of two.",
+                       "\u003cstrong\u003eSlow cooker on low is the right setting.\u003c/strong\u003e Eight or nine hours is what turns beans into gravy. Rushing it on high gives you beans in broth, which is not the same dish."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Brown the chopped bacon in a skillet, then use that fat to sear the cubed pork shoulder and the cubed beef chuck roast on all sides. Do it in batches so the meat browns instead of steams.",
+                    "Cook the diced onion and minced garlic in the same skillet until soft, scraping up everything stuck to the bottom.",
+                    "Move the bacon, seared meats, onion and garlic to the slow cooker along with the diced ham, the drained black beans, the chicken broth, the white vinegar, the bay leaves, ground coriander, salt and black pepper.",
+                    "Cook on low for 8 to 9 hours, until the pork shreds under a fork and the beans have gone soft enough to thicken the liquid.",
+                    "Mash a scoop of the beans against the side of the crock and stir it back in. That is what turns the broth into gravy.",
+                    "Pull out the bay leaves, shred the larger pieces of meat, and cook the rice per the package to serve underneath."
+                ],
+    "portion_html":  "Spread the cooked rice across your 14 containers, then set your mixing pot on the scale, subtract the empty pot weight from Step 1, divide by 14, and spoon that exact weight of beans and meat over the rice. Every bowl lands near 695 calories with 48 grams of protein, and it is even better on day two.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.panningtheglobe.com/slow-cooker-brazilian-feijoada/\" target=\"_blank\" rel=\"noopener\"\u003epanningtheglobe.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cem\u003eBrazil\u0027s national dish for about $3.99 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "cost_batch":  38.66,
+    "cost_batch_true":  45.78,
+    "cost_per_serving":  2.76,
+    "cost_per_serving_true":  3.27,
+    "cost_pantry_add":  10.13,
+    "cost_first_run":  55.91,
+    "scaler":  {
+                   "cost":  "45.78",
+                   "ing":  [
+                               {
+                                   "item":  "Seasoned Black Beans",
+                                   "canon":  "Seasoned Black Beans",
+                                   "grams":  794,
+                                   "buy":  "3 cans",
+                                   "bid":  "canned-black-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Hickory Smoked Bacon",
+                                   "canon":  "Hickory Smoked Bacon",
+                                   "grams":  298,
+                                   "buy":  "0.75 lb",
+                                   "bid":  "bacon",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Pork Shoulder",
+                                   "canon":  "Pork Shoulder",
+                                   "grams":  1191,
+                                   "buy":  "2.75 lb",
+                                   "bid":  "pork-shoulder",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  35,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Chuck Roast",
+                                   "canon":  "Beef Chuck Roast",
+                                   "grams":  770,
+                                   "buy":  "1.75 lb",
+                                   "bid":  "beef-chuck-roast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Ham",
+                                   "canon":  "Diced Ham",
+                                   "grams":  446,
+                                   "buy":  "1 lb",
+                                   "bid":  "diced-ham",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  604,
+                                   "buy":  "5.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  52,
+                                   "buy":  "6 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  1260,
+                                   "buy":  "1.3 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Ground Coriander",
+                                   "canon":  "Ground Coriander",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "ground-coriander",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  2,
+                                   "buy":  "0.07 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "White Vinegar",
+                                   "canon":  "White Vinegar",
+                                   "grams":  26,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "white-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Black beans slow cooked with pork shoulder, beef chuck, bacon and ham into a dark gravy over rice. A 14 serving Brazilian feijoada for meal prep.",
+                 "keywords":  "brazilian feijoada, black bean pork stew, slow cooker feijoada, pork and beans recipe, budget meal prep, cheap dinner ideas",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT9H",
+                 "totalTime":  "PT9H30M",
+                 "costPerServing":  3.99,
+                 "recipeIngredient":  [
+                                          "Seasoned Black Beans",
+                                          "Pork Shoulder",
+                                          "Beef Chuck Roast",
+                                          "Hickory Smoked Bacon",
+                                          "Diced Ham",
+                                          "Yellow Onion",
+                                          "Garlic",
+                                          "Chicken Broth",
+                                          "White Vinegar",
+                                          "Rice"
+                                      ],
+                 "steps":  [
+                               "Brown the bacon, then sear the cubed pork shoulder and beef chuck in the fat.",
+                               "Cook the onion and garlic in the same pan, scraping up the browned bits.",
+                               "Combine everything in the slow cooker with the diced ham, black beans, broth, vinegar and bay leaves.",
+                               "Cook on low 8 to 9 hours until the meat shreds and the beans soften.",
+                               "Mash some beans to thicken, shred the meat, and serve over cooked rice."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Seasoned Black Beans",
+                                  "grams":  794
+                              },
+                              {
+                                  "item":  "Hickory Smoked Bacon",
+                                  "grams":  298
+                              },
+                              {
+                                  "item":  "Pork Shoulder",
+                                  "grams":  1191
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Beef Chuck Roast",
+                                  "grams":  770
+                              },
+                              {
+                                  "item":  "Diced Ham",
+                                  "grams":  446
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  604
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  1260
+                              },
+                              {
+                                  "item":  "Ground Coriander",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "White Vinegar",
+                                  "grams":  26
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

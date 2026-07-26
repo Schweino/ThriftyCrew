@@ -1,0 +1,176 @@
+{
+    "name":  "Slow Cooker Char Siu Pork Bowls",
+    "slug":  "slow-cooker-char-siu-pork-bowls",
+    "cuisine":  "Chinese",
+    "protein":  "pork",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  562,
+                 "protein":  55,
+                 "carbs":  51,
+                 "fat":  13,
+                 "cost_ps":  "3.61"
+             },
+    "intro_html":  "Char siu is that sweet, glossy Chinese barbecue pork you see hanging in restaurant windows, and here it comes out of the slow cooker for pennies. Each bowl runs 55 grams of protein over rice and broccoli at just $3.61 (at everyday cost). Fourteen servings from one batch is a steal you will want on repeat.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 8 lb (3300 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (640 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 3 bags (900 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1 bottle (120 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (240 g)",
+                                "\u003cstrong\u003eHoisin Sauce (generic):\u003c/strong\u003e 1 jar (120 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 bottle (120 g)",
+                                "\u003cstrong\u003eKetchup (generic):\u003c/strong\u003e 3 tbsp (115 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 tsp minced (18 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 2 tsp grated fresh (10 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1 tsp dark sesame oil (10 g)",
+                                "\u003cstrong\u003eFive-Spice Powder (McCormick Gourmet):\u003c/strong\u003e 1/2 tsp (3 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.61 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Hoisin sauce is the secret to that char siu taste. One \u003cstrong\u003ejar lasts through several recipes\u003c/strong\u003e, so buy it once and it earns its shelf space.",
+                       "Stick with \u003cstrong\u003epork loin over tenderloin\u003c/strong\u003e here. It stays juicy through the long cook and cuts your protein cost nearly in half.",
+                       "Honey in the \u003cstrong\u003esqueeze bottle keeps forever\u003c/strong\u003e and you only need a few tablespoons, so it barely dents this recipe\u0027s cost."
+                   ],
+    "make_it":  [
+                    "Lay the pork loin in the slow cooker.",
+                    "Stir together the hoisin sauce, soy sauce, honey, and chicken broth, then pour it over.",
+                    "Cover and cook on low for 7 to 8 hours until the pork is fall-apart tender.",
+                    "Shred the pork and stir it back through the glaze.",
+                    "Steam the broccoli florets until bright green and just tender.",
+                    "Serve over cooked white rice with the broccoli alongside and pack it up."
+                ],
+    "portion_html":  "You get about 562 calories and 55 grams of protein in every serving.",
+    "credit_html":  "",
+    "upsell_html":  "Restaurant flavor, home-cook price. Once you taste it you are hooked. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  25.83,
+    "cost_batch_true":  28.9,
+    "cost_per_serving":  1.84,
+    "cost_per_serving_true":  2.06,
+    "cost_pantry_add":  21.69,
+    "cost_first_run":  50.59,
+    "scaler":  {
+                   "cost":  "28.90",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Loin",
+                                   "grams":  3300,
+                                   "buy":  "8 lb",
+                                   "bid":  "pork-loin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  640,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  900,
+                                   "buy":  "3 bags",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "grams":  120,
+                                   "buy":  "1 bottle",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  240,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Hoisin Sauce",
+                                   "grams":  120,
+                                   "buy":  "1 jar",
+                                   "bid":  "hoisin-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "grams":  120,
+                                   "buy":  "1 bottle",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Ketchup",
+                                   "grams":  115,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "ketchup",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  18,
+                                   "buy":  "2 tsp minced",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "grams":  10,
+                                   "buy":  "2 tsp grated fresh",
+                                   "bid":  "ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "grams":  10,
+                                   "buy":  "1 tsp dark sesame oil",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Five-Spice Powder",
+                                   "grams":  3,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "five-spice-powder",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Chinese meal prep. Fourteen servings at about 562 calories and 55 grams of protein for roughly $3.61 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker char siu pork bowls, budget dinner",
+                 "costPerServing":  3.61,
+                 "recipeIngredient":  [
+                                          "8 lb Pork Loin",
+                                          "1 lb Rice",
+                                          "3 bags Broccoli Florets",
+                                          "1 bottle Honey",
+                                          "1 carton Chicken Broth",
+                                          "1 jar Hoisin Sauce"
+                                      ],
+                 "steps":  [
+                               "Lay the pork loin in the slow cooker.",
+                               "Stir together the hoisin sauce, soy sauce, honey, and chicken broth, then pour it over.",
+                               "Cover and cook on low for 7 to 8 hours until the pork is fall-apart tender.",
+                               "Shred the pork and stir it back through the glaze.",
+                               "Steam the broccoli florets until bright green and just tender.",
+                               "Serve over cooked white rice with the broccoli alongside and pack it up."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

@@ -1,0 +1,287 @@
+{
+    "name":  "Indian Keema Matar (Ground Beef \u0026 Peas Curry) Bowls",
+    "slug":  "indian-keema-matar-bowls",
+    "cuisine":  "Indian / Pakistani",
+    "protein":  "ground beef",
+    "visibility":  "paid",
+    "source_url":  "https://www.teaforturmeric.com/keema-matar/",
+    "source_site":  "Tea for Turmeric",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 200g (src scale)",
+                   "base +20% (Rice)"
+               ],
+    "stat":  {
+                 "cal":  563,
+                 "protein":  33,
+                 "carbs":  64,
+                 "fat":  19,
+                 "cost_ps":  "4.21"
+             },
+    "intro_html":  "Keema matar is Pakistani and North Indian home cooking at its best: spiced ground beef simmered with browned onions, tomatoes, and sweet peas over rice. Each bowl carries \u003cstrong\u003e33 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.21\u003c/strong\u003e (at everyday cost). The spice rack does the expensive-tasting work for pennies.",
+    "ingredients_display": ["\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.75 cups (147 g)","\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (7 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 7 (770 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 11.25 tbsp (96 g)","\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 8.75 tbsp (52 g)","\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1588 g)","\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2 cans (875 g)","\u003cstrong\u003eJalapeno:\u003c/strong\u003e 8.25 tbsp (74 g)","\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 3.5 tbsp (52 g)","\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 1 tbsp (6 g)","\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1 tbsp (7 g)","\u003cstrong\u003eGround Turmeric (Great Value):\u003c/strong\u003e 0.5 tbsp (5 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (24 g)","\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 3.5 cups (455 g)","\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 0.5 tbsp (3 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.5 cups dry (851 g)"],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Vegetable Oil, 0.75 cups: ~$0.36. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 7: ~$1.94. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Garlic, 11.25 tbsp: ~$1.38. \u003cstrong\u003eBuy 3 heads: $1.73.\u003c/strong\u003e",
+                       "Ginger, 8.75 tbsp: ~$0.46. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "93/7 Ground Beef, 3.5 lb: ~$21.99. \u003cstrong\u003eBuy 4 lbs: $25.12.\u003c/strong\u003e",
+                       "Diced Tomatoes, 2 cans: ~$2.04. \u003cstrong\u003eBuy 3 cans: $2.88.\u003c/strong\u003e",
+                       "Jalapeno, 8.25 tbsp: ~$0.29. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Greek Yogurt, 3.5 tbsp: ~$0.15. \u003cstrong\u003eBuy 1 32oz tub: $2.64.\u003c/strong\u003e",
+                       "Frozen Green Peas, 3.5 cups: ~$0.98. \u003cstrong\u003eBuy 2 12oz bags: $1.47.\u003c/strong\u003e",
+                       "Rice, 4.5 cups dry: ~$1.26. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, ground coriander, chili powder, ground turmeric, salt, garam masala, black pepper): ~$0.95. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $31.80 across 14 servings, so roughly $2.27 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $41.33 across 14 servings, roughly $2.95 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.24 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $56.57. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.21 a bowl\u003c/strong\u003e (at everyday cost) for a curry an Indian takeout menu prices at $14 with rice. The whole spice lineup here costs next to nothing across the entire batch.",
+    "shop_smart":  [
+                       "All seven spices together, cumin, coriander, chili powder, turmeric, garam masala and friends, cost about $1.09 this batch. Once the jars are on your shelf, that is 8 cents a bowl for restaurant flavor.",
+                       "Seven onions browned slowly are the flavor base, and at $1.94 they are the cheapest depth money can buy. Do not rush that step.",
+                       "Beef is two thirds of the bill at $21.60, so make this the week the 4 lb pack of 93/7 is on sale. Ground turkey also works when it is cheaper."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice: rinse, simmer covered with water until tender, and set aside.",
+                    "Heat the vegetable oil in your biggest pot and cook the sliced onions until deeply golden, 12 to 15 minutes. This browning is where keema gets its flavor, so take your time.",
+                    "Add the garlic, ginger, and minced jalapeno and cook 2 minutes, then stir in the cumin, coriander, chili powder, turmeric, and salt for 30 seconds.",
+                    "Add the ground beef and break it up as it browns until no pink remains.",
+                    "Stir in the diced tomatoes and Greek yogurt and simmer uncovered 15 minutes until the mixture thickens and the oil starts to separate at the edges.",
+                    "Stir in the peas and garam masala, simmer 5 minutes, and season with black pepper.",
+                    "Portion rice into 14 containers and top with an even share of the keema."
+                ],
+    "portion_html":  "Weigh the rice pot and the keema pot, subtract the empty pot number, and divide each by 14 so every box gets its share of both. Each bowl comes out to about 563 calories and 33 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.teaforturmeric.com/keema-matar/\" target=\"_blank\" rel=\"noopener\"\u003eTea for Turmeric\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Hearty dinners for about $4.21 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  31.8,
+    "cost_batch_true":  41.33,
+    "cost_per_serving":  2.27,
+    "cost_per_serving_true":  2.95,
+    "cost_pantry_add":  15.24,
+    "cost_first_run":  56.57,
+    "scaler":  {
+                   "cost":  "41.33",
+                   "ing":  [
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "grams":  147,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  770,
+                                   "buy":  "7",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  96,
+                                   "buy":  "11.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "grams":  52,
+                                   "buy":  "8.75 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "ground-beef-8020",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "grams":  875,
+                                   "buy":  "2 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "grams":  74,
+                                   "buy":  "8.25 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Greek Yogurt",
+                                   "grams":  52,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Coriander",
+                                   "grams":  6,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-coriander",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Turmeric",
+                                   "grams":  5,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "ground-turmeric",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  24,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Frozen Green Peas",
+                                   "grams":  455,
+                                   "buy":  "3.5 cups",
+                                   "bid":  "frozen-peas",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garam Masala",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "garam-masala",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  851,
+                                   "buy":  "4.5 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Indian keema matar meal prep: 563 calories and 33g protein at about $4.21 a bowl (at everyday cost). Spiced ground beef and pea curry with browned onions over rice.",
+                 "keywords":  "keema matar, indian ground beef curry, keema meal prep, budget curry recipe, cheap high protein dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT65M",
+                 "costPerServing":  4.21,
+                 "recipeIngredient":  [
+                                          "3.5 lb 93/7 ground beef",
+                                          "7 yellow onions",
+                                          "11.25 tbsp minced garlic",
+                                          "8.75 tbsp ginger",
+                                          "2 cans diced tomatoes",
+                                          "3.5 cups frozen green peas",
+                                          "4.5 cups dry rice",
+                                          "0.75 cup vegetable oil",
+                                          "8.25 tbsp jalapeno",
+                                          "3.5 tbsp Greek yogurt"
+                                      ],
+                 "steps":  [
+                               "Cook the rice and set aside.",
+                               "Brown the sliced onions slowly in oil, then add garlic, ginger, jalapeno, and the ground spices.",
+                               "Brown the ground beef, then simmer with diced tomatoes and yogurt until thick.",
+                               "Stir in peas and garam masala and simmer 5 minutes.",
+                               "Portion rice into 14 containers and top with the keema."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  147
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  770
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  96
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "93/7 Ground Beef",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  875
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  74
+                              },
+                              {
+                                  "item":  "Greek Yogurt",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Ground Coriander",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Chili Powder",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Ground Turmeric",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  24
+                              },
+                              {
+                                  "item":  "Frozen Green Peas",
+                                  "grams":  455
+                              },
+                              {
+                                  "item":  "Garam Masala",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  851
+                              }
+                          ]
+}

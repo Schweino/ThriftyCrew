@@ -1,0 +1,302 @@
+{
+    "name":  "Pozole Rojo (Red Pork and Hominy Stew) Bowls",
+    "slug":  "pozole-rojo-pork-hominy-bowls",
+    "cuisine":  "Mexican",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.isabeleats.com/red-posole-recipe/",
+    "source_site":  "isabeleats.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 500g (src scale)",
+                   "base +15% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Hominy is already a board commodity. Source states 194 cal / 16g protein per serving at 10 servings, which is thin, so this needs a heavier meat ratio and a rice or tortilla side to reach dinner size. Confidence note: est_cal here assumes we raise pork per serving and serve it as a full bowl, not the source\u0027s soup portion. The live catalog has Posole Verde; red pozole with dried chiles is the distinct classic version. | HARVEST: ",
+                         "SOURCE YIELD: 10 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 500g (src scale)",
+                         "TUNING: base +15% (Rice)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  564,
+                 "protein":  28,
+                 "carbs":  69,
+                 "fat":  19,
+                 "cost_ps":  "4.20"
+             },
+    "intro_html":  "This is the classic. Pork and hominy in a red broth built from dried chiles you toast yourself, the pot that has been cooked in Mexico since before anyone was writing recipes down. Guajillo brings the color and a mild fruity heat, ancho brings the raisin sweetness, and a couple of arbol chiles bring the fire. The hominy is what makes it pozole and nothing else. Nothing chewy quite like it.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eDried Guajillo Chiles (generic (USDA)):\u003c/strong\u003e 1.75 oz (50 g)",
+                                "\u003cstrong\u003eDried Ancho Chiles (generic (USDA)):\u003c/strong\u003e 3.25 oz (95 g)",
+                                "\u003cstrong\u003eDried Arbol Chiles (generic (USDA)):\u003c/strong\u003e 0.08 cups (2 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1.5 tbsp (11 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (6 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tbsp (38 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3.25 tbsp (28 g)",
+                                "\u003cstrong\u003eCocoa Powder (generic unsweetened (USDA)):\u003c/strong\u003e 0.5 oz (11 g)",
+                                "\u003cstrong\u003ePork Shoulder (generic (USDA)):\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 2.75 tbsp (39 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2 cartons (2016 g)",
+                                "\u003cstrong\u003eHominy (generic):\u003c/strong\u003e 4.2 cans (1428 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.5 cups dry (810 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Dried Guajillo Chiles, 1.75 oz: ~$3.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Dried Ancho Chiles, 3.25 oz: ~$1.88. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 3.25 tbsp: ~$0.40. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Pork Shoulder, 3.5 lb: ~$12.50. \u003cstrong\u003eBuy 4 lbs: $14.28.\u003c/strong\u003e",
+                       "Vegetable Oil, 2.75 tbsp: ~$0.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 2 cartons: ~$2.71. \u003cstrong\u003ePantry staple; this batch alone uses about 3 32oz cartons.\u003c/strong\u003e",
+                       "Hominy, 4.2 cans: ~$2.71. \u003cstrong\u003eBuy 5 cans: $3.22.\u003c/strong\u003e",
+                       "Rice, 4.5 cups dry: ~$1.00. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (dried arbol chiles, chili powder, ground cumin, salt, cocoa powder, black pepper, dried oregano): ~$0.97. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $25.34 across 14 servings, so roughly $1.81 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $27.81 across 14 servings, roughly $1.99 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $31.06 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $58.87. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.20 a bowl\u003c/strong\u003e (at everyday cost). The dried chiles look expensive on the shelf, but a bag lasts through several batches, so the real per bowl cost of the flavor base is small.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy dried chiles in the big bag from the Hispanic aisle.\u003c/strong\u003e The branded packets on the spice rack cost several times more per ounce for the exact same dried chile.",
+                       "\u003cstrong\u003eCanned hominy saves you a day.\u003c/strong\u003e The dried version needs soaking and hours of cooking. Canned is rinse and go, and the per serving price is about the same.",
+                       "\u003cstrong\u003ePork shoulder is the correct cut and the cheap one.\u003c/strong\u003e This is one of those happy cases where the traditional choice is also the value choice. Bone-in makes better broth.",
+                       "\u003cstrong\u003eToasting the chiles is a free upgrade.\u003c/strong\u003e Thirty seconds a side in a dry pan and the sauce goes from flat to deep. It costs nothing but attention."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Stem and seed the dried guajillo and ancho chiles, toast them in a dry skillet about 30 seconds a side until they smell nutty, then soak them in hot water for 20 minutes.",
+                    "Blend the softened chiles with some of their soaking water, several cloves of garlic, the chili powder, ground cumin, dried oregano and a spoon of cocoa powder into a smooth sauce, then strain it.",
+                    "Cube the pork shoulder, season it with salt and black pepper, and brown it hard in the vegetable oil in your big pot, working in batches.",
+                    "Fry the strained chile sauce in the pot for five minutes so it darkens and loses its raw edge, then return all the pork.",
+                    "Pour in the chicken broth, add the dried arbol chiles whole if you want heat, and simmer covered for about 2 hours until the pork is fully tender.",
+                    "Add the drained hominy and simmer 20 minutes more so it takes on the red broth, then cook the rice per the package to serve alongside."
+                ],
+    "portion_html":  "Spread the cooked rice across your 14 containers, then set the pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and ladle that exact weight over the rice. Every bowl lands near 564 calories with 28 grams of protein. It gets better every day it sits.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.isabeleats.com/red-posole-recipe/\" target=\"_blank\" rel=\"noopener\"\u003eisabeleats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cem\u003eClassic red pozole for about $4.20 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "cost_batch":  25.34,
+    "cost_batch_true":  27.81,
+    "cost_per_serving":  1.81,
+    "cost_per_serving_true":  1.99,
+    "cost_pantry_add":  31.06,
+    "cost_first_run":  58.87,
+    "scaler":  {
+                   "cost":  "27.81",
+                   "ing":  [
+                               {
+                                   "item":  "Dried Guajillo Chiles",
+                                   "canon":  "Dried Guajillo Chiles",
+                                   "grams":  50,
+                                   "buy":  "1.75 oz",
+                                   "bid":  "dried-guajillo-chiles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Ancho Chiles",
+                                   "canon":  "Dried Ancho Chiles",
+                                   "grams":  95,
+                                   "buy":  "3.25 oz",
+                                   "bid":  "dried-ancho-chiles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Arbol Chiles",
+                                   "canon":  "Dried Arbol Chiles",
+                                   "grams":  2,
+                                   "buy":  "0.08 cups",
+                                   "bid":  "dried-arbol-chiles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "canon":  "Chili Powder",
+                                   "grams":  11,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  6,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  38,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  28,
+                                   "buy":  "3.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Cocoa Powder",
+                                   "canon":  "Cocoa Powder",
+                                   "grams":  11,
+                                   "buy":  "0.5 oz",
+                                   "bid":  "cocoa-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Pork Shoulder",
+                                   "canon":  "Pork Shoulder",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "pork-shoulder",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  39,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  2016,
+                                   "buy":  "2 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Hominy",
+                                   "canon":  "Hominy",
+                                   "grams":  1428,
+                                   "buy":  "4.2 cans",
+                                   "bid":  "hominy",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  4,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  810,
+                                   "buy":  "4.5 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Pork shoulder and hominy simmered in a toasted guajillo and ancho chile broth, served over rice. A 14 serving pozole rojo built for cheap meal prep.",
+                 "keywords":  "pozole rojo, red posole recipe, pork and hominy stew, mexican pork soup, budget meal prep, cheap dinner ideas",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT35M",
+                 "cookTime":  "PT2H30M",
+                 "totalTime":  "PT3H5M",
+                 "costPerServing":  4.20,
+                 "recipeIngredient":  [
+                                          "Dried Guajillo Chiles",
+                                          "Dried Ancho Chiles",
+                                          "Garlic",
+                                          "Pork Shoulder",
+                                          "Vegetable Oil",
+                                          "Chicken Broth",
+                                          "Hominy",
+                                          "Rice"
+                                      ],
+                 "steps":  [
+                               "Toast and soak the dried guajillo and ancho chiles.",
+                               "Blend the chiles with garlic and spices into a sauce and strain it.",
+                               "Brown the cubed pork shoulder in oil, then fry the chile sauce in the pot.",
+                               "Add the chicken broth and simmer covered about 2 hours until tender.",
+                               "Stir in the hominy, simmer 20 minutes more, and serve over rice."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Dried Guajillo Chiles",
+                                  "grams":  50
+                              },
+                              {
+                                  "item":  "Dried Ancho Chiles",
+                                  "grams":  95
+                              },
+                              {
+                                  "item":  "Dried Arbol Chiles",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Chili Powder",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  38
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Cocoa Powder",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Pork Shoulder",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  39
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  2016
+                              },
+                              {
+                                  "item":  "Hominy",
+                                  "grams":  1428
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  810
+                              }
+                          ]
+}

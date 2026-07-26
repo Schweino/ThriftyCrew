@@ -1,0 +1,405 @@
+{
+    "name":  "Chipotle Sweet Potato Pork Chili",
+    "slug":  "chipotle-sweet-potato-pork-chili",
+    "cuisine":  "Southwestern",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.isabeleats.com/chipotle-sweet-potato-pork-chili/",
+    "source_site":  "isabeleats.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Tortilla)",
+                   "portion factor 1.1"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Every signature ingredient maps to a tracked commodity (chipotle-adobo, poblano-peppers, sweet-potatoes, both bean ids). Source verified at 349 cal / 40g protein per serving over 10 servings; add cornbread or rice and it is a 500+ cal dinner with an excellent protein-to-calorie ratio. Catalog has beef and turkey chilis but no pork chili. | HARVEST: Last four lines are optional toppings in the source list.",
+                         "SOURCE YIELD: 10 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Tortilla)",
+                         "TUNING: portion factor 1.1"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  571,
+                 "protein":  41,
+                 "carbs":  46,
+                 "fat":  28,
+                 "cost_ps":  "4.78"
+             },
+    "intro_html":  "Most chili is ground beef and a packet. This one is cubed pork shoulder braised until it shreds, sweet potato that goes soft enough to thicken the pot, poblano peppers for a mild green heat, and chipotles in adobo for the smoke. Sweet, smoky, a little bit hot, and a great deal more interesting than what comes out of a can. Two kinds of beans keep the cost down and the protein up.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Shoulder (generic (USDA)):\u003c/strong\u003e 5.5 lb (2445 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 3 tbsp (55 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.5 tbsp (11 g)",
+                                "\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 1 tbsp (15 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1.5 tbsp (21 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.5 (169 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5.5 tbsp (46 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 1.5 cans (633 g)",
+                                "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 1.5 cans (393 g)",
+                                "\u003cstrong\u003eKidney Beans (generic):\u003c/strong\u003e 1.5 cans (393 g)",
+                                "\u003cstrong\u003eChipotle in Adobo (La Costena):\u003c/strong\u003e 5 tbsp (83 g)",
+                                "\u003cstrong\u003eRed Wine Vinegar (generic):\u003c/strong\u003e 1 tbsp (15 g)",
+                                "\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 0.25 tbsp (5 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1.5 tbsp (12 g)",
+                                "\u003cstrong\u003eSmoked Paprika (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 0.25 tbsp (2 g)",
+                                "\u003cstrong\u003eGround Allspice (Great Value):\u003c/strong\u003e 0.04 oz (1 g)",
+                                "\u003cstrong\u003eSweet Potatoes:\u003c/strong\u003e 3 (400 g)",
+                                "\u003cstrong\u003ePoblano Peppers (generic):\u003c/strong\u003e 1.5 (131 g)",
+                                "\u003cstrong\u003eLight Sour Cream (generic):\u003c/strong\u003e 1.5 cups (330 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 28 tbsp (28 g)",
+                                "\u003cstrong\u003eTortilla (La Banderita):\u003c/strong\u003e 29.25 oz (830 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Shoulder, 5.5 lb: ~$19.24. \u003cstrong\u003eBuy 6 lbs: $21.42.\u003c/strong\u003e",
+                       "Dijon Mustard, 1 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 1.5 tbsp: ~$0.30. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 1.5: ~$0.42. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 5.5 tbsp: ~$0.66. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Diced Tomatoes, 1.5 cans: ~$1.48. \u003cstrong\u003eBuy 2 cans: $1.92.\u003c/strong\u003e",
+                       "Seasoned Black Beans, 1.5 cans: ~$1.32. \u003cstrong\u003eBuy 2 cans: $1.72.\u003c/strong\u003e",
+                       "Kidney Beans, 1.5 cans: ~$1.27. \u003cstrong\u003eBuy 2 cans: $1.64.\u003c/strong\u003e",
+                       "Chipotle in Adobo, 5 tbsp: ~$0.69. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Red Wine Vinegar, 1 tbsp: ~$0.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sweet Potatoes, 3: ~$1.31. \u003cstrong\u003eBuy 1 lb: $1.48.\u003c/strong\u003e",
+                       "Poblano Peppers, 1.5: ~$0.94. \u003cstrong\u003eBuy 1 lb: $3.26.\u003c/strong\u003e",
+                       "Light Sour Cream, 1.5 cups: ~$1.19. \u003cstrong\u003eBuy 1 16oz tub: $1.64.\u003c/strong\u003e",
+                       "Fresh Cilantro, 28 tbsp: ~$0.87. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Tortilla, 29.25 oz: ~$1.96. \u003cstrong\u003eBuy 3 10ct packs: $2.12.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, fish sauce, chili powder, smoked paprika, ground cumin, ground allspice): ~$0.96. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $32.78 across 14 servings, so roughly $2.34 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $41.39 across 14 servings, roughly $2.96 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $25.50 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $66.89. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.78 a bowl\u003c/strong\u003e (at everyday cost). Beans and sweet potatoes are cheap ballast, which is what lets a pot with this much pork shoulder in it land where it does.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eChipotles in adobo are the best flavor per dollar in the aisle.\u003c/strong\u003e One small can brings smoke and heat to the entire pot. Freeze the leftovers in a small bag and chip off what you need next time.",
+                       "\u003cstrong\u003eSweet potatoes are cheapest by the pound loose in fall.\u003c/strong\u003e They also thicken this chili naturally as they break down, so you are buying body and flavor in the same item.",
+                       "\u003cstrong\u003ePoblanos are milder and cheaper than bell peppers.\u003c/strong\u003e They bring a deeper roasted flavor for less money. If your store keeps them near the jalapenos, that is where the value hides.",
+                       "\u003cstrong\u003eTwo cans of beans, two different kinds.\u003c/strong\u003e Black and kidney beans cost about the same and using both gives the chili more texture than a double dose of either."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cube the pork shoulder, pat it dry, season with salt, black pepper, chili powder, smoked paprika, ground cumin and a pinch of ground allspice, and brown it hard in the olive oil in batches.",
+                    "Cook the diced onion and chopped poblano peppers in the same pot until soft, then add the minced garlic and the chopped chipotles in adobo and stir for a minute.",
+                    "Stir in the Dijon mustard, the red wine vinegar and the splash of fish sauce, which sounds strange and is the reason this chili tastes like it cooked twice as long.",
+                    "Add the diced tomatoes with their juice, return the pork, and simmer covered for about 2 hours until the pork shreds.",
+                    "Add the cubed sweet potatoes and both drained beans and simmer another 30 minutes, until the sweet potato is tender and starting to break apart and thicken the pot.",
+                    "Warm the tortillas and keep the sour cream and chopped cilantro in separate containers for topping at reheat."
+                ],
+    "portion_html":  "Set the pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and spoon that exact weight into each container with the tortillas packed alongside. Every serving lands near 571 calories with 41 grams of protein once the sour cream and cilantro go on top.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.isabeleats.com/chipotle-sweet-potato-pork-chili/\" target=\"_blank\" rel=\"noopener\"\u003eisabeleats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cem\u003eSmoky pork and sweet potato chili for about $4.78 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "cost_batch":  32.78,
+    "cost_batch_true":  41.39,
+    "cost_per_serving":  2.34,
+    "cost_per_serving_true":  2.96,
+    "cost_pantry_add":  25.5,
+    "cost_first_run":  66.89,
+    "scaler":  {
+                   "cost":  "41.39",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Shoulder",
+                                   "canon":  "Pork Shoulder",
+                                   "grams":  2445,
+                                   "buy":  "5.5 lb",
+                                   "bid":  "pork-shoulder",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  55,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  11,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dijon Mustard",
+                                   "canon":  "Dijon Mustard",
+                                   "grams":  15,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "dijon-mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  21,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  169,
+                                   "buy":  "1.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  46,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  633,
+                                   "buy":  "1.5 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Seasoned Black Beans",
+                                   "canon":  "Seasoned Black Beans",
+                                   "grams":  393,
+                                   "buy":  "1.5 cans",
+                                   "bid":  "canned-black-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Kidney Beans",
+                                   "canon":  "Kidney Beans",
+                                   "grams":  393,
+                                   "buy":  "1.5 cans",
+                                   "bid":  "kidney-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chipotle in Adobo",
+                                   "canon":  "Chipotle in Adobo",
+                                   "grams":  83,
+                                   "buy":  "5 tbsp",
+                                   "bid":  "chipotle-adobo",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Wine Vinegar",
+                                   "canon":  "Red Wine Vinegar",
+                                   "grams":  15,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "red-wine-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Fish Sauce",
+                                   "canon":  "Fish Sauce",
+                                   "grams":  5,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "fish-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "canon":  "Chili Powder",
+                                   "grams":  12,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Smoked Paprika",
+                                   "canon":  "Smoked Paprika",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Allspice",
+                                   "canon":  "Ground Allspice",
+                                   "grams":  1,
+                                   "buy":  "0.04 oz",
+                                   "bid":  "ground-allspice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sweet Potatoes",
+                                   "canon":  "Sweet Potatoes",
+                                   "grams":  400,
+                                   "buy":  "3",
+                                   "bid":  "sweet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Poblano Peppers",
+                                   "canon":  "Poblano Peppers",
+                                   "grams":  131,
+                                   "buy":  "1.5",
+                                   "bid":  "poblano-peppers",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Light Sour Cream",
+                                   "canon":  "Light Sour Cream",
+                                   "grams":  330,
+                                   "buy":  "1.5 cups",
+                                   "bid":  "sour-cream",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  28,
+                                   "buy":  "28 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Tortilla",
+                                   "canon":  "Tortilla",
+                                   "grams":  830,
+                                   "buy":  "29.25 oz",
+                                   "bid":  "tortillas",
+                                   "gpu":  "45.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Braised pork shoulder, sweet potato, poblano and chipotle in a two bean chili with tortillas. A 14 serving smoky batch built for budget meal prep.",
+                 "keywords":  "chipotle pork chili, sweet potato chili, pork chili recipe, chipotle in adobo, budget meal prep, cheap dinner ideas",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT2H30M",
+                 "totalTime":  "PT3H",
+                 "costPerServing":  4.78,
+                 "recipeIngredient":  [
+                                          "Pork Shoulder",
+                                          "Olive Oil",
+                                          "Yellow Onion",
+                                          "Poblano Peppers",
+                                          "Garlic",
+                                          "Chipotle in Adobo",
+                                          "Dijon Mustard",
+                                          "Red Wine Vinegar",
+                                          "Diced Tomatoes",
+                                          "Sweet Potatoes",
+                                          "Seasoned Black Beans",
+                                          "Kidney Beans",
+                                          "Tortilla"
+                                      ],
+                 "steps":  [
+                               "Season and brown the cubed pork shoulder in batches.",
+                               "Cook the onion and poblano, then add garlic and chopped chipotles in adobo.",
+                               "Stir in the mustard, vinegar and diced tomatoes, return the pork, and simmer 2 hours.",
+                               "Add the sweet potatoes and both beans and simmer 30 minutes more.",
+                               "Serve with warm tortillas, sour cream and cilantro."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Pork Shoulder",
+                                  "grams":  2445
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  55
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Dijon Mustard",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  169
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  46
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  633
+                              },
+                              {
+                                  "item":  "Seasoned Black Beans",
+                                  "grams":  393
+                              },
+                              {
+                                  "item":  "Kidney Beans",
+                                  "grams":  393
+                              },
+                              {
+                                  "item":  "Chipotle in Adobo",
+                                  "grams":  83
+                              },
+                              {
+                                  "item":  "Red Wine Vinegar",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Fish Sauce",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Chili Powder",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Smoked Paprika",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Ground Allspice",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Sweet Potatoes",
+                                  "grams":  400
+                              },
+                              {
+                                  "item":  "Poblano Peppers",
+                                  "grams":  131
+                              },
+                              {
+                                  "item":  "Light Sour Cream",
+                                  "grams":  330
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Tortilla",
+                                  "grams":  830
+                              }
+                          ]
+}

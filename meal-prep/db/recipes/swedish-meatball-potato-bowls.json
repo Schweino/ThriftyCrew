@@ -1,0 +1,214 @@
+{
+    "name":  "Swedish Meatball and Potato Bowls",
+    "slug":  "swedish-meatball-potato-bowls",
+    "cuisine":  "Swedish",
+    "protein":  "beef",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  546,
+                 "protein":  49,
+                 "carbs":  52,
+                 "fat":  16,
+                 "cost_ps":  "6.28"
+             },
+    "intro_html":  "Comfort food that actually works for meal prep, with a creamy gravy that clings to tender potatoes. You get a big 49 grams of protein per bowl for about $6.28 a serving (at everyday cost). It makes 14 servings, so cook once and you are set.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2730 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 8 lb (3505 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 carton (720 g)",
+                                "\u003cstrong\u003eBread Crumbs (generic):\u003c/strong\u003e 1 container (120 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (160 g)",
+                                "\u003cstrong\u003eLight Sour Cream (generic):\u003c/strong\u003e 1 tub (180 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 1 quart (120 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 1 large (120 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1 tbsp (30 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 tbsp (sauce) (30 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1-2 tbsp (meatballs) (40 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 1/4 cup (70 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1 tsp (meatballs) + 1 tsp (sauce) (20 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (12 g)",
+                                "\u003cstrong\u003eGround Nutmeg (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)",
+                                "\u003cstrong\u003eGround Allspice (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 tsp (3 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$6.28 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "The \u003cstrong\u003e6 lb ground beef pack\u003c/strong\u003e is the whole ballgame here, so buy the big size and skip the small trays.",
+                       "Grab \u003cstrong\u003eplain russet or gold potatoes by the bag\u003c/strong\u003e. An 8 lb bag runs about a buck a pound and beats anything pre-cut.",
+                       "Use \u003cstrong\u003elight sour cream\u003c/strong\u003e to keep the fat in check without giving up the creamy texture."
+                   ],
+    "make_it":  [
+                    "Mix the ground beef with bread crumbs, a little milk, and grated onion, then roll into small meatballs.",
+                    "Brown the meatballs in a large skillet until they are cooked through, working in batches if you need to.",
+                    "Pour in the beef broth and let it simmer so the meatballs soak up the flavor.",
+                    "Stir in the sour cream off the heat to build a smooth, creamy gravy.",
+                    "Serve the meatballs and gravy over cooked potatoes and spoon extra sauce on top."
+                ],
+    "portion_html":  "Each of the 14 bowls delivers 49 grams of protein and about 546 calories.",
+    "credit_html":  "",
+    "upsell_html":  "This is the kind of dinner that feels like a treat but keeps your grocery budget right where you want it. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  52.84,
+    "cost_batch_true":  61.77,
+    "cost_per_serving":  3.77,
+    "cost_per_serving_true":  4.41,
+    "cost_pantry_add":  30.83,
+    "cost_first_run":  92.6,
+    "scaler":  {
+                   "cost":  "61.77",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "grams":  2730,
+                                   "buy":  "6 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "grams":  3505,
+                                   "buy":  "8 lb",
+                                   "bid":  "potato",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "grams":  720,
+                                   "buy":  "1 carton",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Bread Crumbs",
+                                   "grams":  120,
+                                   "buy":  "1 container",
+                                   "bid":  "bread-crumbs",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  160,
+                                   "buy":  "2 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Light Sour Cream",
+                                   "grams":  180,
+                                   "buy":  "1 tub",
+                                   "bid":  "light-sour-cream",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "grams":  120,
+                                   "buy":  "1 quart",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "grams":  120,
+                                   "buy":  "1 large",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "grams":  30,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  30,
+                                   "buy":  "1 tbsp (sauce)",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "grams":  40,
+                                   "buy":  "1-2 tbsp (meatballs)",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "grams":  70,
+                                   "buy":  "1/4 cup",
+                                   "bid":  "all-purpose-flour",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "grams":  20,
+                                   "buy":  "1 tsp (meatballs) + 1 tsp (sauce)",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  12,
+                                   "buy":  "1 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Nutmeg",
+                                   "grams":  2,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "ground-nutmeg",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Allspice",
+                                   "grams":  2,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "ground-allspice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Swedish meal prep. Fourteen servings at about 546 calories and 49 grams of protein for roughly $6.28 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, swedish meatball and potato bowls, budget dinner",
+                 "costPerServing":  6.28,
+                 "recipeIngredient":  [
+                                          "6 lb 93/7 Ground Beef",
+                                          "8 lb Potato",
+                                          "1 carton Beef Broth",
+                                          "1 container Bread Crumbs",
+                                          "2 onions Yellow Onion",
+                                          "1 tub Light Sour Cream"
+                                      ],
+                 "steps":  [
+                               "Mix the ground beef with bread crumbs, a little milk, and grated onion, then roll into small meatballs.",
+                               "Brown the meatballs in a large skillet until they are cooked through, working in batches if you need to.",
+                               "Pour in the beef broth and let it simmer so the meatballs soak up the flavor.",
+                               "Stir in the sour cream off the heat to build a smooth, creamy gravy.",
+                               "Serve the meatballs and gravy over cooked potatoes and spoon extra sauce on top."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

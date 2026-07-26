@@ -1,0 +1,311 @@
+{
+    "name":  "High-Protein Turkey Burger Bowl",
+    "slug":  "highprotein-turkey-burger-bowl",
+    "cuisine":  "American",
+    "protein":  "ground turkey",
+    "visibility":  "paid",
+    "source_url":  "https://thebalancednutritionist.com/turkey-burger-bowl/",
+    "source_site":  "The Balanced Nutritionist",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Potato)",
+                   "portion factor 1.05"
+               ],
+    "stat":  {
+                 "cal":  565,
+                 "protein":  38,
+                 "carbs":  48,
+                 "fat":  24,
+                 "cost_ps":  "4.30"
+             },
+    "intro_html":  "Everything you like about a cheeseburger and fries, deconstructed into a bowl: seasoned turkey, roasted potatoes, crunchy cabbage, cheddar, pickles, and a tangy burger sauce. Each one packs \u003cstrong\u003e38 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.30\u003c/strong\u003e (at everyday cost). Drive-thru flavor without the drive-thru math.",
+    "ingredients_display": ["\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 13 (2812 g)","\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.75 lb (1667 g)","\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1.25 tbsp (21 g)","\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1.25 tbsp (11 g)","\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 1.25 tbsp (9 g)","\u003cstrong\u003ePaprika:\u003c/strong\u003e 0.5 tbsp (4 g)","\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1.75 cups (450 g)","\u003cstrong\u003eMayonnaise (Great Value):\u003c/strong\u003e 7.5 tbsp (96 g)","\u003cstrong\u003eKetchup (generic):\u003c/strong\u003e 3.75 tbsp (62 g)","\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 5.5 tbsp (83 g)","\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1.25 tbsp (26 g)","\u003cstrong\u003eApple Cider Vinegar (Great Value):\u003c/strong\u003e 1.25 tbsp (18 g)","\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 7.25 cups (514 g)","\u003cstrong\u003eCherry Tomatoes:\u003c/strong\u003e 3.75 cups (548 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 (211 g)","\u003cstrong\u003eDill Pickles (Great Value):\u003c/strong\u003e 4 (263 g)","\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 14.75 oz (415 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Potato, 13: ~$3.41. \u003cstrong\u003eBuy 7 lbs: $3.85.\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 3.75 lb: ~$20.07. \u003cstrong\u003eBuy 4 lbs: $21.84.\u003c/strong\u003e",
+                       "Worcestershire Sauce, 1.25 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Greek Yogurt, 1.75 cups: ~$1.31. \u003cstrong\u003eBuy 1 32oz tub: $2.64.\u003c/strong\u003e",
+                       "Mayonnaise, 7.5 tbsp: ~$0.34. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Ketchup, 3.75 tbsp: ~$0.11. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Dijon Mustard, 5.5 tbsp: ~$0.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Honey, 1.25 tbsp: ~$0.23. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Apple Cider Vinegar, 1.25 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Cabbage, 7.25 cups: ~$0.96. \u003cstrong\u003eBuy 1 head: $1.69.\u003c/strong\u003e",
+                       "Cherry Tomatoes, 3.75 cups: ~$1.17. \u003cstrong\u003eBuy 2 10oz clamshells: $1.21.\u003c/strong\u003e",
+                       "Yellow Onion, 2: ~$0.53. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 14.75 oz: ~$3.60. \u003cstrong\u003eBuy 2 8oz bags: $3.94.\u003c/strong\u003e",
+                       "Pantry seasonings (garlic powder, onion powder, paprika, dill pickles, salt, black pepper): ~$1.51. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $33.78 across 14 servings, so roughly $2.41 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $39.04 across 14 servings, roughly $2.79 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $20.42 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.46. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.30 a bowl\u003c/strong\u003e (at everyday cost) for what a burger joint charges $14 once fries and a drink sneak on the receipt. Same craving, under a third of the damage.",
+    "shop_smart":  [
+                       "Potatoes remain the best calorie deal in the store: about $2.73 covers 13 of them, and the 7 lb bag at $3.08 leaves extras for breakfast.",
+                       "The burger sauce leans on Greek yogurt instead of straight mayo, which cuts cost and fat while quietly adding protein.",
+                       "Cherry tomatoes are the priciest produce line at $5.37. If the clamshells are not on sale, chopped roma tomatoes save a couple dollars and nobody complains."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Heat the oven to 425F. Dice the potatoes, toss with a little oil, salt, and paprika, and roast 30 to 35 minutes until crisp at the edges.",
+                    "Brown the ground turkey in a big skillet, breaking it up, until it reaches 165F with no pink remaining. Season with the Worcestershire, garlic powder, onion powder, salt, and black pepper.",
+                    "Whisk the burger sauce: Greek yogurt, mayonnaise, ketchup, Dijon, honey, apple cider vinegar, and finely chopped dill pickles.",
+                    "Shred the cabbage, halve the cherry tomatoes, and dice the yellow onion.",
+                    "Portion potatoes and turkey into 14 containers, then top with cabbage, tomatoes, onion, cheddar, and extra pickles.",
+                    "Keep the sauce in a corner of each box or in small cups and add it after reheating so the crunch survives."
+                ],
+    "portion_html":  "Weigh the skillet of turkey and the pan of potatoes, subtract the empty pot number, and divide each by 14 so every container gets an even share. Each bowl comes out to about 565 calories and 38 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://thebalancednutritionist.com/turkey-burger-bowl/\" target=\"_blank\" rel=\"noopener\"\u003eThe Balanced Nutritionist\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Hearty dinners for about $4.30 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  33.78,
+    "cost_batch_true":  39.04,
+    "cost_per_serving":  2.41,
+    "cost_per_serving_true":  2.79,
+    "cost_pantry_add":  20.42,
+    "cost_first_run":  59.46,
+    "scaler":  {
+                   "cost":  "39.04",
+                   "ing":  [
+                               {
+                                   "item":  "Potato",
+                                   "grams":  2812,
+                                   "buy":  "13",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "grams":  1667,
+                                   "buy":  "3.75 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "grams":  21,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "worcestershire",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "grams":  11,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Onion Powder",
+                                   "grams":  9,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "onion-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Greek Yogurt",
+                                   "grams":  450,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Mayonnaise",
+                                   "grams":  96,
+                                   "buy":  "7.5 tbsp",
+                                   "bid":  "mayonnaise",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ketchup",
+                                   "grams":  62,
+                                   "buy":  "3.75 tbsp",
+                                   "bid":  "ketchup",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dijon Mustard",
+                                   "grams":  83,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "dijon-mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "grams":  26,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Apple Cider Vinegar",
+                                   "grams":  18,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "apple-cider-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Green Cabbage",
+                                   "grams":  514,
+                                   "buy":  "7.25 cups",
+                                   "bid":  "cabbage",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cherry Tomatoes",
+                                   "grams":  548,
+                                   "buy":  "3.75 cups",
+                                   "bid":  "tomatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  211,
+                                   "buy":  "2",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Dill Pickles",
+                                   "grams":  263,
+                                   "buy":  "4",
+                                   "bid":  "pickles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "grams":  415,
+                                   "buy":  "14.75 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  21,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "High-protein turkey burger bowl meal prep: 565 calories and 38g protein at about $4.30 a bowl (at everyday cost). Roasted potatoes, seasoned turkey, burger sauce.",
+                 "keywords":  "turkey burger bowl, high protein meal prep, burger bowl recipe, budget meal prep, cheap healthy dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT35M",
+                 "totalTime":  "PT60M",
+                 "costPerServing":  4.30,
+                 "recipeIngredient":  [
+                                          "3.75 lb 93/7 ground turkey",
+                                          "13 potatoes",
+                                          "1.75 cups Greek yogurt",
+                                          "7.5 tbsp mayonnaise",
+                                          "3.75 tbsp ketchup",
+                                          "5.5 tbsp Dijon mustard",
+                                          "7.25 cups green cabbage",
+                                          "3.75 cups cherry tomatoes",
+                                          "2 yellow onions",
+                                          "14.75 oz shredded cheddar cheese"
+                                      ],
+                 "steps":  [
+                               "Roast diced, seasoned potatoes at 425F until crisp, 30 to 35 minutes.",
+                               "Brown the turkey to 165F with Worcestershire and seasonings.",
+                               "Whisk yogurt, mayo, ketchup, Dijon, honey, vinegar, and chopped pickles into burger sauce.",
+                               "Portion potatoes and turkey into 14 containers; top with cabbage, tomatoes, onion, and cheddar.",
+                               "Add the sauce after reheating."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Potato",
+                                  "grams":  2812
+                              },
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1667
+                              },
+                              {
+                                  "item":  "Worcestershire Sauce",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Onion Powder",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Greek Yogurt",
+                                  "grams":  450
+                              },
+                              {
+                                  "item":  "Mayonnaise",
+                                  "grams":  96
+                              },
+                              {
+                                  "item":  "Ketchup",
+                                  "grams":  62
+                              },
+                              {
+                                  "item":  "Dijon Mustard",
+                                  "grams":  83
+                              },
+                              {
+                                  "item":  "Honey",
+                                  "grams":  26
+                              },
+                              {
+                                  "item":  "Apple Cider Vinegar",
+                                  "grams":  18
+                              },
+                              {
+                                  "item":  "Green Cabbage",
+                                  "grams":  514
+                              },
+                              {
+                                  "item":  "Cherry Tomatoes",
+                                  "grams":  548
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  211
+                              },
+                              {
+                                  "item":  "Dill Pickles",
+                                  "grams":  263
+                              },
+                              {
+                                  "item":  "Cheddar Cheese, Shredded",
+                                  "grams":  415
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

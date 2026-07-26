@@ -1,0 +1,372 @@
+{
+    "name":  "Goan Pork Vindaloo Rice Bowls",
+    "slug":  "goan-pork-vindaloo-rice-bowls",
+    "cuisine":  "Indian (Goan)",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://greatcurryrecipes.net/2013/05/22/vindaloo-curry-recipe-authentic-goan-pork-vindaloo/",
+    "source_site":  "greatcurryrecipes.net",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 250g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 766 cal / 47g protein per serving on the source page, the strongest protein-to-calorie number in this slice. Vinegar-and-garlic braise, cooks in one pot, tastes better reheated. Nothing like the live Indian entries (all chicken or ground beef keema). Spice base is nearly all tracked commodities; tamarind can be dropped for extra vinegar. | HARVEST: Source states 4-6 servings; midpoint 5 recorded. Rice is not in the source ingredient list.",
+                         "SOURCE YIELD: 5 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 250g (src scale)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  710,
+                 "protein":  36,
+                 "carbs":  68,
+                 "fat":  32,
+                 "cost_ps":  "4.66"
+             },
+    "intro_html":  "Real Goan vindaloo is not a heat contest. The name comes from the Portuguese carne de vinha d\u0027alhos, meaning meat in wine and garlic, and the dish that grew out of it in Goa swapped the wine for vinegar and added chilies. Sour, garlicky, deeply spiced pork over rice. It carries 36 grams of protein for about $4.66 a bowl (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Shoulder (generic (USDA)):\u003c/strong\u003e 5 lb (2240 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.75 cups (157 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1.75 cups (230 g)",
+                                "\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 1 tbsp (14 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 5.6 (616 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 8.4 cans (3452 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 2.75 tbsp (22 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 5.75 tbsp (87 g)",
+                                "\u003cstrong\u003eDried Arbol Chiles (generic (USDA)):\u003c/strong\u003e 0.25 cups (6 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 2.75 tbsp (18 g)",
+                                "\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 2.75 tbsp (15 g)",
+                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 1.75 tbsp (11 g)",
+                                "\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 1 tbsp (7 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.11 oz (3 g)",
+                                "\u003cstrong\u003eGround Turmeric (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 5.5 oz (157 g)",
+                                "\u003cstrong\u003eWhite Vinegar (generic):\u003c/strong\u003e 1 cups (210 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 5.75 tbsp (76 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Shoulder, 5 lb: ~$17.63. \u003cstrong\u003eBuy 5 lbs: $17.85.\u003c/strong\u003e",
+                       "Vegetable Oil, 0.75 cups: ~$0.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 1.75 cups: ~$3.31. \u003cstrong\u003eBuy 6 heads: $3.46.\u003c/strong\u003e",
+                       "Yellow Onion, 5.6: ~$1.55. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Diced Tomatoes, 8.4 cans: ~$8.06. \u003cstrong\u003eBuy 9 cans: $8.64.\u003c/strong\u003e",
+                       "Lime Juice, 5.75 tbsp: ~$0.72. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Dried Arbol Chiles, 0.25 cups: ~$0.18. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Jalapeno, 5.5 oz: ~$0.61. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "White Vinegar, 1 cups: ~$0.39. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Brown Sugar, 5.75 tbsp: ~$0.43. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (dijon mustard, chili powder, ground cumin, ground coriander, garam masala, ground cinnamon, bay leaves, ground turmeric, salt): ~$2.59. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $36.71 across 14 servings, so roughly $2.62 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $39.54 across 14 servings, roughly $2.82 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $31.65 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $71.19. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.66 a bowl\u003c/strong\u003e (at everyday cost) for a braise that takes an afternoon and tastes better every day it sits. Vindaloo was designed as a preserved dish, which is why the vinegar makes it hold so well in the fridge.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eThe spice paste is almost entirely jars you own.\u003c/strong\u003e Cumin, coriander, garam masala, turmeric, cinnamon and chili powder are pantry items, and buying them whole and grinding them yourself is cheaper still.",
+                       "\u003cstrong\u003eDried arbol chiles cost pennies and last forever.\u003c/strong\u003e A small bag sits in the cupboard for a year and gives you real chile flavor instead of just heat from a powder.",
+                       "\u003cstrong\u003eSkip the tamarind.\u003c/strong\u003e Extra vinegar covers the sourness it would bring, and tamarind paste is a specialty purchase you would use twice.",
+                       "\u003cstrong\u003eBuy garlic by the head and buy a lot of it.\u003c/strong\u003e This recipe uses an unusual amount, and garlic is the point of the dish, not a background note. Jarred garlic will not do here."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Soak the dried arbol chiles in hot water until they soften, then blend them with most of the garlic, the white vinegar, the cumin, coriander, garam masala, cinnamon, turmeric, chili powder and dijon mustard into a smooth paste.",
+                    "Cut the pork shoulder into large cubes and coat it in the paste. Let it marinate at least an hour, and overnight in the fridge if you have the time. This is the step that makes it taste like vindaloo instead of curry.",
+                    "Slice the onions and the jalapenos.",
+                    "Heat the vegetable oil in a heavy pot and cook the onions slowly until they go deep golden and sweet.",
+                    "Add the marinated pork with all its paste and cook over medium heat, stirring, until the meat browns and the paste darkens and smells toasted rather than raw.",
+                    "Add the diced tomatoes, the sliced jalapenos, the brown sugar, the bay leaves, salt and enough water to just cover, then bring it to a bare simmer.",
+                    "Cover and braise low until the pork shreds under a fork, then stir in the lime juice off the heat and cook the rice separately to serve underneath."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and ladle the exact amount over rice in each container, stirring the pot so the meat and sauce stay even. Every bowl lands near 710 calories and 36 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://greatcurryrecipes.net/2013/05/22/vindaloo-curry-recipe-authentic-goan-pork-vindaloo/\" target=\"_blank\" rel=\"noopener\"\u003egreatcurryrecipes.net\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Real regional curries for about $4.66 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  36.71,
+    "cost_batch_true":  39.54,
+    "cost_per_serving":  2.62,
+    "cost_per_serving_true":  2.82,
+    "cost_pantry_add":  31.65,
+    "cost_first_run":  71.19,
+    "scaler":  {
+                   "cost":  "39.54",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Shoulder",
+                                   "canon":  "Pork Shoulder",
+                                   "grams":  2240,
+                                   "buy":  "5 lb",
+                                   "bid":  "pork-shoulder",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  157,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  230,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Dijon Mustard",
+                                   "canon":  "Dijon Mustard",
+                                   "grams":  14,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "dijon-mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  616,
+                                   "buy":  "5.6",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  3452,
+                                   "buy":  "8.4 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "canon":  "Chili Powder",
+                                   "grams":  22,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "canon":  "Lime Juice",
+                                   "grams":  87,
+                                   "buy":  "5.75 tbsp",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Dried Arbol Chiles",
+                                   "canon":  "Dried Arbol Chiles",
+                                   "grams":  6,
+                                   "buy":  "0.25 cups",
+                                   "bid":  "dried-arbol-chiles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  18,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Coriander",
+                                   "canon":  "Ground Coriander",
+                                   "grams":  15,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "ground-coriander",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garam Masala",
+                                   "canon":  "Garam Masala",
+                                   "grams":  11,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "garam-masala",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cinnamon",
+                                   "canon":  "Ground Cinnamon",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-cinnamon",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  3,
+                                   "buy":  "0.11 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Turmeric",
+                                   "canon":  "Ground Turmeric",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "ground-turmeric",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  157,
+                                   "buy":  "5.5 oz",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "White Vinegar",
+                                   "canon":  "White Vinegar",
+                                   "grams":  210,
+                                   "buy":  "1 cups",
+                                   "bid":  "white-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "canon":  "Brown Sugar",
+                                   "grams":  76,
+                                   "buy":  "5.75 tbsp",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Goan pork vindaloo, a vinegar and garlic braise with a toasted chile spice paste, served over rice. 14 servings, 710 calories, 36g protein, about $4.66 each (at everyday cost).",
+                 "keywords":  "goan pork vindaloo, pork vindaloo recipe, indian pork curry, vinegar garlic braise, curry meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT1H30M",
+                 "totalTime":  "PT2H",
+                 "costPerServing":  4.66,
+                 "recipeIngredient":  [
+                                          "5 lb pork shoulder",
+                                          "1.75 cups garlic",
+                                          "1 cup white vinegar",
+                                          "0.25 cups dried arbol chiles",
+                                          "8.4 cans diced tomatoes",
+                                          "5.6 yellow onions",
+                                          "5.5 oz jalapeno",
+                                          "5.75 tbsp brown sugar",
+                                          "5.75 tbsp lime juice",
+                                          "3.75 cups dry rice",
+                                          "0.75 cups vegetable oil"
+                                      ],
+                 "steps":  [
+                               "Soak the dried chiles, then blend them with garlic, vinegar and the ground spices into a paste.",
+                               "Coat the cubed pork shoulder in the paste and marinate at least an hour.",
+                               "Cook the sliced onions slowly in oil until deep golden.",
+                               "Add the marinated pork and cook until browned and the paste darkens.",
+                               "Add tomatoes, jalapenos, brown sugar and bay leaves, braise until the pork shreds, then finish with lime juice and serve over rice."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Pork Shoulder",
+                                  "grams":  2240
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  157
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  230
+                              },
+                              {
+                                  "item":  "Dijon Mustard",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  616
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  3452
+                              },
+                              {
+                                  "item":  "Chili Powder",
+                                  "grams":  22
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  87
+                              },
+                              {
+                                  "item":  "Dried Arbol Chiles",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  18
+                              },
+                              {
+                                  "item":  "Ground Coriander",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Garam Masala",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Ground Cinnamon",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Ground Turmeric",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  157
+                              },
+                              {
+                                  "item":  "White Vinegar",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Brown Sugar",
+                                  "grams":  76
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

@@ -1,0 +1,349 @@
+{
+    "name":  "Nigerian Beef Stew over Rice",
+    "slug":  "nigerian-beef-stew-rice-bowls",
+    "cuisine":  "Nigerian",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://cheflolaskitchen.com/african-stew/",
+    "source_site":  "cheflolaskitchen.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 400g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: The base stew of Nigerian home cooking, all board-mapped including bouillon. Cooks in one pot at any volume. Confidence: page verified via site listing; calories estimated. | HARVEST: Source sections: \u0027boiling the beef\u0027 then \u0027the stew\u0027. Nutrition is for the stew only; rice not included in source ingredients.",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 400g (src scale)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  588,
+                 "protein":  29,
+                 "carbs":  54,
+                 "fat":  27,
+                 "cost_ps":  "5.24"
+             },
+    "intro_html":  "This is the red stew that sits at the center of Nigerian home cooking, the one that gets spooned over rice at every table and every party. The beef gets boiled first so its stock becomes part of the sauce, then a blended pepper base is fried down until the oil separates and the color goes deep. Each bowl carries \u003cstrong\u003e29 grams of protein\u003c/strong\u003e and 588 calories for about \u003cstrong\u003e$5.24\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 4 (455 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.04 oz (1 g)",
+                                "\u003cstrong\u003eCurry Powder (generic):\u003c/strong\u003e 1 tbsp (7 g)",
+                                "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 0.12 cups (28 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 4 tbsp (70 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3.5 (420 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 5.5 tbsp (49 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 7 cans (2877 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 tbsp (26 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 2.25 tbsp (13 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 6.75 tbsp (95 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 7 tbsp (94 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 3.5 tbsp (56 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 2.25 cups (525 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Chuck Roast, 3.5 lb: ~$27.90. \u003cstrong\u003eBuy 4 lbs: $31.88.\u003c/strong\u003e",
+                       "Yellow Onion, 4: ~$1.14. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Chicken Broth, 0.12 cups: ~$0.04. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Bell Peppers, 3.5: ~$3.01. \u003cstrong\u003eBuy 4 each: $3.44.\u003c/strong\u003e",
+                       "Jalapeno, 5.5 tbsp: ~$0.19. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Diced Tomatoes, 7 cans: ~$6.72. \u003cstrong\u003eBuy 7 cans: $6.72.\u003c/strong\u003e",
+                       "Garlic, 3 tbsp: ~$0.37. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Ginger, 2.25 tbsp: ~$0.11. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Vegetable Oil, 6.75 tbsp: ~$0.23. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 7 tbsp: ~$1.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Tomato Paste, 3.5 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "Beef Broth, 2.25 cups: ~$0.70. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (bay leaves, curry powder, dried thyme, salt, black pepper): ~$1.05. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $43.92 across 14 servings, so roughly $3.14 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $51.46 across 14 servings, roughly $3.68 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $21.88 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $73.34. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$5.24 a bowl\u003c/strong\u003e (at everyday cost). Seven cans of tomatoes sounds like a lot until you realize they are what turns three and a half pounds of beef into fourteen full dinners.",
+    "shop_smart":  [
+                       "Canned diced tomatoes are the backbone and you need a stack of them. This is a case buy, so watch for the multi can promotions and stock the shelf when they hit.",
+                       "Boiling the beef first is not a shortcut, it is the point. That liquid becomes the stock, so do not pour it down the drain and do not buy extra broth to replace it.",
+                       "Bell peppers are the priciest produce on this list. Red ones look prettier in photos but green ones cost less and are what most home cooks actually use.",
+                       "The stew freezes flat and thaws clean. Make the full batch even if you only need half this week, because the second half costs you nothing extra in effort."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cut the chuck roast into chunks and boil it with some of the onion, the bay leaves, thyme, curry powder, and salt until just tender. Strain and keep the stock.",
+                    "Blend the diced tomatoes with the bell peppers, jalapeno, remaining onion, garlic, and ginger until smooth.",
+                    "Heat the vegetable oil and olive oil in a wide pot and pour in the blended base. Fry it, stirring, until it thickens noticeably and the raw edge cooks off.",
+                    "Stir in the tomato paste and keep frying a few more minutes so the paste loses its metallic taste.",
+                    "Add the boiled beef, the reserved stock, and the beef broth. Simmer uncovered 30 to 40 minutes until the sauce is thick enough to sit on a spoon.",
+                    "Taste and correct the salt and pepper. The stew should taste sharper than you think, because the rice will mute it.",
+                    "Cook the rice separately and keep it plain."
+                ],
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Ladle that weight of stew over the same weight of rice in each of 14 containers. Each bowl lands at \u003cstrong\u003e588 calories with 29 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://cheflolaskitchen.com/african-stew/\" target=\"_blank\" rel=\"noopener\"\u003echeflolaskitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Nigerian red stew for about $5.24 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  43.92,
+    "cost_batch_true":  51.46,
+    "cost_per_serving":  3.14,
+    "cost_per_serving_true":  3.68,
+    "cost_pantry_add":  21.88,
+    "cost_first_run":  73.34,
+    "scaler":  {
+                   "cost":  "51.46",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Chuck Roast",
+                                   "canon":  "Beef Chuck Roast",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "beef-chuck-roast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  455,
+                                   "buy":  "4",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  1,
+                                   "buy":  "0.04 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Curry Powder",
+                                   "canon":  "Curry Powder",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "curry-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  4,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  28,
+                                   "buy":  "0.12 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  70,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  420,
+                                   "buy":  "3.5",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  49,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  2877,
+                                   "buy":  "7 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  26,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  13,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  95,
+                                   "buy":  "6.75 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  94,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  56,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  525,
+                                   "buy":  "2.25 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Nigerian beef stew meal prep: boiled chuck roast simmered in a fried blended pepper and tomato base, served over rice. 588 calories, 29g protein, about $5.24 per serving (at everyday cost).",
+                 "keywords":  "nigerian beef stew, african stew, red stew, beef and rice bowls, budget meal prep, west african recipes",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT1H45M",
+                 "totalTime":  "PT2H5M",
+                 "costPerServing":  5.24,
+                 "recipeIngredient":  [
+                                          "3.5 lb beef chuck roast",
+                                          "4 yellow onions",
+                                          "3.5 green bell peppers",
+                                          "5.5 tbsp jalapeno",
+                                          "7 cans diced tomatoes",
+                                          "3 tbsp garlic",
+                                          "2.25 tbsp ginger",
+                                          "6.75 tbsp vegetable oil",
+                                          "7 tbsp olive oil",
+                                          "3.5 tbsp tomato paste",
+                                          "1.25 lb beef broth",
+                                          "3.75 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Boil the cubed beef with onion, bay, thyme, and curry powder, then reserve the stock.",
+                               "Blend tomatoes, bell peppers, jalapeno, onion, garlic, and ginger smooth.",
+                               "Fry the blended base in oil until thick, then fry in the tomato paste.",
+                               "Add the beef, reserved stock, and broth and simmer 30 to 40 minutes.",
+                               "Cook the rice and portion stew and rice into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Chuck Roast",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  455
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Curry Powder",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  49
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  2877
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  26
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  13
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  95
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  94
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  525
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

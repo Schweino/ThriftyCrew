@@ -1,0 +1,182 @@
+{
+    "name":  "Slow Cooker Chicken Gyro Bowls",
+    "slug":  "slow-cooker-chicken-gyro-bowls",
+    "cuisine":  "Greek",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  573,
+                 "protein":  65,
+                 "carbs":  55,
+                 "fat":  9,
+                 "cost_ps":  "4.00"
+             },
+    "intro_html":  "Gyro flavor without the giant vertical rotisserie is exactly what a slow cooker is for. This bowl packs 65 grams of protein for about $4.00 (at everyday cost), topped with a cool yogurt sauce that plays off the savory chicken. Fourteen servings means one afternoon of prep feeds you well past the week.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3450 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (880 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 3 bags (1000 g)",
+                                "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1 tub (300 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (28 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1 bottle (45 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (120 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (12 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 1/2 tsp (7 g)",
+                                "\u003cstrong\u003eDried Dill (Great Value):\u003c/strong\u003e 1 1/2 tsp (4 g)",
+                                "\u003cstrong\u003eDried Basil (Great Value):\u003c/strong\u003e 1 1/2 tsp (5 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (14 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 tsp (6 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.00 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Onions are one of the cheapest ways to build flavor, so \u003cstrong\u003ekeep a bag on the counter\u003c/strong\u003e and lean on them.",
+                       "That same tub of Greek yogurt sauces both the gyro and the shawarma bowls, so \u003cstrong\u003ebuy one tub and cover two recipes\u003c/strong\u003e.",
+                       "Skip the specialty gyro seasoning and \u003cstrong\u003emix oregano, garlic powder, and a little onion powder\u003c/strong\u003e from your own rack."
+                   ],
+    "make_it":  [
+                    "Add the chicken, olive oil, sliced onion, and garlic to the slow cooker and stir to combine.",
+                    "Cover and cook on low for 6 to 7 hours until the chicken is tender and shreddable.",
+                    "Stir the Greek yogurt and lime juice together for a quick tzatziki-style sauce and chill it.",
+                    "Steam or roast the broccoli florets to round out the bowl.",
+                    "Shred the chicken over white rice with the broccoli, then finish with the yogurt sauce."
+                ],
+    "portion_html":  "Each serving carries 65 grams of protein and 573 calories, lean and filling in equal measure.",
+    "credit_html":  "",
+    "upsell_html":  "All the flavor of the food-truck favorite, none of the food-truck markup. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  34.23,
+    "cost_batch_true":  39.48,
+    "cost_per_serving":  2.44,
+    "cost_per_serving_true":  2.82,
+    "cost_pantry_add":  17.89,
+    "cost_first_run":  57.37,
+    "scaler":  {
+                   "cost":  "39.48",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3450,
+                                   "buy":  "8 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  880,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  1000,
+                                   "buy":  "3 bags",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Greek Yogurt",
+                                   "grams":  300,
+                                   "buy":  "1 tub",
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  28,
+                                   "buy":  "1 bottle",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "grams":  45,
+                                   "buy":  "1 bottle",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  120,
+                                   "buy":  "2 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  12,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "grams":  7,
+                                   "buy":  "1 1/2 tsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Dill",
+                                   "grams":  4,
+                                   "buy":  "1 1/2 tsp",
+                                   "bid":  "dried-dill",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Basil",
+                                   "grams":  5,
+                                   "buy":  "1 1/2 tsp",
+                                   "bid":  "dried-basil",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "1 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  6,
+                                   "buy":  "1 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Greek meal prep. Fourteen servings at about 573 calories and 65 grams of protein for roughly $4.00 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker chicken gyro bowls, budget dinner",
+                 "costPerServing":  4.00,
+                 "recipeIngredient":  [
+                                          "8 lb Boneless Skinless Chicken Breast",
+                                          "1 lb Rice",
+                                          "3 bags Broccoli Florets",
+                                          "1 tub Greek Yogurt",
+                                          "1 bottle Olive Oil",
+                                          "1 bottle Lime Juice"
+                                      ],
+                 "steps":  [
+                               "Add the chicken, olive oil, sliced onion, and garlic to the slow cooker and stir to combine.",
+                               "Cover and cook on low for 6 to 7 hours until the chicken is tender and shreddable.",
+                               "Stir the Greek yogurt and lime juice together for a quick tzatziki-style sauce and chill it.",
+                               "Steam or roast the broccoli florets to round out the bowl.",
+                               "Shred the chicken over white rice with the broccoli, then finish with the yogurt sauce."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

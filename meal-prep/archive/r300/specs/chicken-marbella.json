@@ -1,0 +1,296 @@
+{
+    "name":  "Chicken Marbella",
+    "slug":  "chicken-marbella",
+    "cuisine":  "Mediterranean",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.themediterraneandish.com/chicken-marbella/",
+    "source_site":  "themediterraneandish.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 300g (src scale)",
+                   "base +10% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Source lists 459.3 cal / 24.3g protein for 6 - right at the line, so our build needs a slightly bigger meat portion. Marinate-and-roast, gets better on day three, ideal meal prep. NEAR-DUPE WATCH vs the live Slow Cooker Chicken Tagine Bowls: both pair chicken with olives and dried fruit; Marbella is vinegar/oregano and roasted, the tagine is warm-spiced and stewed. | HARVEST: ",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 300g (src scale)",
+                         "TUNING: base +10% (Rice)",
+                         "OVERRIDE Boneless Skinless Chicken Breast: \u00271 whole chicken, cut up\u0027 parsed as one breast; ~3.75 lb bird x 55% meat yield"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  566,
+                 "protein":  41,
+                 "carbs":  66,
+                 "fat":  15,
+                 "cost_ps":  "3.80"
+             },
+    "intro_html":  "Chicken Marbella made its name in the early eighties as the dinner party dish that could be made entirely ahead, and forty years later that is exactly why it belongs in a meal prep rotation. Chicken marinates overnight in red wine vinegar, oregano, garlic, olives, and dried fruit, then roasts in the same pan with brown sugar on top. It is salty, sweet, and sour at once, and it gets better every day it sits. Each serving lands at 566 calories and \u003cstrong\u003e41 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.80 a serving\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2217 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.25 oz (4 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 11 tbsp (93 g)",
+                                "\u003cstrong\u003eGolden Raisins (generic):\u003c/strong\u003e 1.25 cups (169 g)",
+                                "\u003cstrong\u003eOlives (generic):\u003c/strong\u003e 1.25 cups (158 g)",
+                                "\u003cstrong\u003eCapers (generic (USDA)):\u003c/strong\u003e 0.5 cups (75 g)",
+                                "\u003cstrong\u003eRed Wine Vinegar (generic):\u003c/strong\u003e 0.5 cups (140 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 0.5 cups (126 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 4.75 tbsp (14 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.5 tbsp (47 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.25 tbsp (9 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.25 cups (280 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 0.5 cups (124 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.25 cups dry (772 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 5 lb: ~$15.98. \u003cstrong\u003eBuy 5 lbs: $16.35.\u003c/strong\u003e",
+                       "Garlic, 11 tbsp: ~$1.34. \u003cstrong\u003eBuy 3 heads: $1.73.\u003c/strong\u003e",
+                       "Golden Raisins, 1.25 cups: ~$1.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olives, 1.25 cups: ~$1.74. \u003cstrong\u003eBuy 1 6oz can: $1.87.\u003c/strong\u003e",
+                       "Capers, 0.5 cups: ~$2.60. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Red Wine Vinegar, 0.5 cups: ~$0.84. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 0.5 cups: ~$1.77. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 1.25 cups: ~$0.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Brown Sugar, 0.5 cups: ~$0.70. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 4.25 cups dry: ~$0.95. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (bay leaves, dried oregano, salt, black pepper): ~$1.69. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $29.41 across 14 servings, so roughly $2.10 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $30.30 across 14 servings, roughly $2.16 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $22.91 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.21. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.80 a serving\u003c/strong\u003e (at everyday cost) for the dish that used to signal you had money. The capers and olives are the only unusual line items, and both are jars that last through several batches.",
+    "shop_smart":  [
+                       "Chicken breast is the biggest line here, so buy it in the family pack and portion it down yourself. The per pound difference between the family pack and the small tray is one of the most reliable savings in the store.",
+                       "Capers and olives feel like luxury items but they are shelf stable, cheap by the jar, and used in modest amounts. One jar of each covers multiple batches and they do not go bad in the meantime.",
+                       "Golden raisins are a fraction of the price of prunes and do the same job of sweet chewy contrast against the vinegar.",
+                       "Red wine vinegar and dried oregano are the flavor of this dish and both are pantry items you already have. That is the whole reason a fancy sounding recipe lands where it does on price."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Make the marinade by combining the red wine vinegar, olive oil, garlic, oregano, bay leaves, olives, capers with a little of their brine, golden raisins, salt, and pepper.",
+                    "Cut the chicken breast into large pieces, put them in the marinade, and refrigerate overnight. Marbella genuinely does not work with a thirty minute marinade, so plan this one a day ahead.",
+                    "Heat the oven to 350F. Spread the chicken and all the marinade into a large baking dish in a single layer so everything roasts rather than steams.",
+                    "Sprinkle the brown sugar over the top and pour the chicken broth around the edges, not over the sugar.",
+                    "Roast 45 to 50 minutes, basting with the pan juices two or three times along the way. The basting is what builds the glaze, so it is worth opening the oven for.",
+                    "Cook the rice while the chicken roasts.",
+                    "Let the pan rest 10 minutes, then pull the bay leaves and slice the chicken. The juices in the bottom of the pan are the sauce, so do not leave any of them behind."
+                ],
+    "portion_html":  "Weigh the rice into each container, then weigh the chicken on top and spoon the pan juices, olives, and raisins over everything. Set the pan on the scale, subtract its empty weight, and divide by 14 if you want to be exact about it. Every portion lands at \u003cstrong\u003e566 calories\u003c/strong\u003e, and this is one of the few dishes that genuinely peaks on day three.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themediterraneandish.com/chicken-marbella/\" target=\"_blank\" rel=\"noopener\"\u003ethemediterraneandish.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "The classic make-ahead dinner party chicken for about \u003cstrong\u003e$3.80 a serving\u003c/strong\u003e (at everyday cost). Members get the entire Meal Prep library plus every money lesson and calculator on the site for $1 a month.",
+    "cost_batch":  29.41,
+    "cost_batch_true":  30.3,
+    "cost_per_serving":  2.1,
+    "cost_per_serving_true":  2.16,
+    "cost_pantry_add":  22.91,
+    "cost_first_run":  53.21,
+    "scaler":  {
+                   "cost":  "30.30",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  2217,
+                                   "buy":  "5 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  4,
+                                   "buy":  "0.25 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  93,
+                                   "buy":  "11 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Golden Raisins",
+                                   "canon":  "Golden Raisins",
+                                   "grams":  169,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "raisins",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olives",
+                                   "canon":  "Olives",
+                                   "grams":  158,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "green-olives",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Capers",
+                                   "canon":  "Capers",
+                                   "grams":  75,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "capers",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Red Wine Vinegar",
+                                   "canon":  "Red Wine Vinegar",
+                                   "grams":  140,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "red-wine-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  126,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  14,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  47,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  9,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  280,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "canon":  "Brown Sugar",
+                                   "grams":  124,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  772,
+                                   "buy":  "4.25 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Chicken Marbella with red wine vinegar, olives, capers, and golden raisins, marinated overnight and roasted, at about $3.80 per meal prep serving (at everyday cost).",
+                 "keywords":  "chicken marbella, make ahead chicken, olive caper chicken, mediterranean meal prep, roasted chicken dinner, budget chicken recipe, high protein meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT50M",
+                 "totalTime":  "PT1H15M",
+                 "costPerServing":  3.80,
+                 "recipeIngredient":  [
+                                          "5 lb boneless skinless chicken breast",
+                                          "11 tbsp minced garlic",
+                                          "0.5 cups red wine vinegar",
+                                          "0.5 cups olive oil",
+                                          "1.25 cups golden raisins",
+                                          "1.25 cups olives",
+                                          "0.5 cups capers",
+                                          "0.5 cups brown sugar",
+                                          "0.5 lb chicken broth",
+                                          "4.25 cups dry rice",
+                                          "Pantry: dried oregano, bay leaves, salt, black pepper"
+                                      ],
+                 "steps":  [
+                               "Combine vinegar, olive oil, garlic, oregano, bay leaves, olives, capers, and raisins into a marinade.",
+                               "Marinate the cut chicken breast overnight in the refrigerator.",
+                               "Spread chicken and marinade in a baking dish, sprinkle with brown sugar, and add the broth.",
+                               "Roast at 350F for 45 to 50 minutes, basting with the pan juices.",
+                               "Cook the rice, rest the chicken, then weigh both into 14 containers with the pan juices."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  2217
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  93
+                              },
+                              {
+                                  "item":  "Golden Raisins",
+                                  "grams":  169
+                              },
+                              {
+                                  "item":  "Olives",
+                                  "grams":  158
+                              },
+                              {
+                                  "item":  "Capers",
+                                  "grams":  75
+                              },
+                              {
+                                  "item":  "Red Wine Vinegar",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  126
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  280
+                              },
+                              {
+                                  "item":  "Brown Sugar",
+                                  "grams":  124
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  772
+                              }
+                          ]
+}

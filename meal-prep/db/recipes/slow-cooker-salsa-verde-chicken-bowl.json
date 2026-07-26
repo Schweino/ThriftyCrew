@@ -1,0 +1,186 @@
+{
+    "name":  "Salsa Verde Chicken Burrito Bowl",
+    "slug":  "slow-cooker-salsa-verde-chicken-bowl",
+    "cuisine":  "Mexican",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  543,
+                 "protein":  53,
+                 "carbs":  66,
+                 "fat":  5,
+                 "cost_ps":  "3.21"
+             },
+    "intro_html":  "This is a week of burrito-bowl dinners done the easy way, bright salsa verde chicken slow-cooked until it falls apart, piled over rice with black beans, corn, and cheddar. It is loaded with lean protein and a squeeze of lime keeps it tasting fresh instead of heavy. A build-your-own bowl at the burrito chain costs you $11 or more each time, and this makes the same thing for a fraction of that per serving.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2495 g)",
+                                "\u003cstrong\u003eSalsa Verde (Herdez):\u003c/strong\u003e 2 jars (900 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 jar (6 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 2 limes (42 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (800 g)",
+                                "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 4 cans (910 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 2 cans (420 g)",
+                                "\u003cstrong\u003eFat Free Cheddar (Great Value):\u003c/strong\u003e 1 bag (196 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 (scaled ~3) (330 g)",
+                                "\u003cstrong\u003eGreen Bell Pepper:\u003c/strong\u003e 1 (scaled ~3) (350 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/4 tsp (8 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (3 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1/8 tsp (3 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.21 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy the big family pack of chicken breast.\u003c/strong\u003e The per-pound price drops on the larger size, and this recipe puts every ounce to use.",
+                       "\u003cstrong\u003eStick with jarred salsa verde and canned beans and corn.\u003c/strong\u003e Canned beans cost a fraction of dried once you factor in the cooking, and a good jarred salsa verde does all the flavor work for you.",
+                       "\u003cstrong\u003eCheck the store brand on the salsa verde, beans, and corn.\u003c/strong\u003e They are usually a dollar or more cheaper per item than the name brands and you will not taste the difference in a loaded bowl."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot on a kitchen scale and write the number down. You will need it to portion evenly at the end.",
+                    "Put the chicken breast in the slow cooker, sprinkle on the cumin and a little salt, then pour most of the salsa verde over the top. Save a little for the end. Cook on low for 4 to 5 hours or high for about 3, until the chicken shreds easily.",
+                    "While it cooks, make your rice per the package. This is the base that carries the whole batch.",
+                    "Drain and rinse the black beans and drain the corn, then warm them through in a pan or the microwave.",
+                    "Shred the chicken right in the slow cooker with two forks, then stir in the reserved salsa verde and a good squeeze of lime juice. Adding the salsa at the end keeps it saucy and fresh instead of cooked down.",
+                    "Fold the cooked rice, warm beans, and corn into your weighed mixing pot along with the chicken.",
+                    "Stir in the fat free cheddar to taste and mix until everything is evenly combined."
+                ],
+    "portion_html":  "Weigh the full pot, subtract the empty-pot weight you noted at the start, and divide by 14. Scoop that same weight into each of the 14 containers so every burrito bowl lands with an equal, filling share of protein.",
+    "credit_html":  "",
+    "upsell_html":  "Fourteen burrito bowls for two, at a per-bowl price that undercuts a single trip to the burrito line. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  38.86,
+    "cost_batch_true":  41.96,
+    "cost_per_serving":  2.78,
+    "cost_per_serving_true":  3,
+    "cost_pantry_add":  9.75,
+    "cost_first_run":  51.71,
+    "scaler":  {
+                   "cost":  "41.96",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  2495,
+                                   "buy":  "6 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salsa Verde",
+                                   "grams":  900,
+                                   "buy":  "2 jars",
+                                   "bid":  "salsa-verde",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  6,
+                                   "buy":  "1 jar",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "grams":  42,
+                                   "buy":  "2 limes",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  800,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Seasoned Black Beans",
+                                   "grams":  910,
+                                   "buy":  "4 cans",
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sweet Whole Kernel Corn",
+                                   "grams":  420,
+                                   "buy":  "2 cans",
+                                   "bid":  "canned-sweet-corn",
+                                   "gpu":  "210.000"
+                               },
+                               {
+                                   "item":  "Fat Free Cheddar",
+                                   "grams":  196,
+                                   "buy":  "1 bag",
+                                   "bid":  "fat-free-cheddar",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  330,
+                                   "buy":  "1 (scaled ~3)",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Bell Pepper",
+                                   "grams":  350,
+                                   "buy":  "1 (scaled ~3)",
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  8,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "to taste",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "grams":  3,
+                                   "buy":  "1/8 tsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 543 calories and 53 grams of protein for roughly $3.21 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, salsa verde chicken burrito bowl, budget dinner",
+                 "costPerServing":  3.21,
+                 "recipeIngredient":  [
+                                          "6 lb Boneless Skinless Chicken Breast",
+                                          "2 jars Salsa Verde",
+                                          "1 jar Ground Cumin",
+                                          "2 limes Lime Juice",
+                                          "1 lb Rice",
+                                          "4 cans Seasoned Black Beans"
+                                      ],
+                 "steps":  [
+                               "Weigh your empty mixing pot on a kitchen scale and write the number down. You will need it to portion evenly at the end.",
+                               "Put the chicken breast in the slow cooker, sprinkle on the cumin and a little salt, then pour most of the salsa verde over the top. Save a little for the end. Cook on low for 4 to 5 hours or high for about 3, until the chicken shreds easily.",
+                               "While it cooks, make your rice per the package. This is the base that carries the whole batch.",
+                               "Drain and rinse the black beans and drain the corn, then warm them through in a pan or the microwave.",
+                               "Shred the chicken right in the slow cooker with two forks, then stir in the reserved salsa verde and a good squeeze of lime juice. Adding the salsa at the end keeps it saucy and fresh instead of cooked down.",
+                               "Fold the cooked rice, warm beans, and corn into your weighed mixing pot along with the chicken.",
+                               "Stir in the fat free cheddar to taste and mix until everything is evenly combined."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

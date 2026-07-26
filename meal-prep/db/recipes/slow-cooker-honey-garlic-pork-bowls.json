@@ -1,0 +1,168 @@
+{
+    "name":  "Slow Cooker Honey Garlic Pork Bowls",
+    "slug":  "slow-cooker-honey-garlic-pork-bowls",
+    "cuisine":  "Asian",
+    "protein":  "pork",
+    "visibility":  "public",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  586,
+                 "protein":  54,
+                 "carbs":  61,
+                 "fat":  12,
+                 "cost_ps":  "2.96"
+             },
+    "intro_html":  "Sweet, garlicky, and dead simple, this one tastes like takeout for a fraction of the cost. Lean pork loin slow cooks in a honey soy sauce until it falls apart, then goes over rice with broccoli. It runs about $2.96 a serving (at everyday cost) and gives you 54 grams of protein across 14 bowls.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 7 lb (3050 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (820 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 4 bags (1200 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1 bottle (150 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 bottle (180 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (60 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 3/4 cup (320 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 3 Tbsp (40 g)",
+                                "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 1/2 tsp (3 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1/2 tsp (2 g)",
+                                "\u003cstrong\u003eGround Ginger (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.96 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Pork loin at around two dollars a pound is your workhorse here. \u003cstrong\u003eSkip the pre-cut pork chops\u003c/strong\u003e and buy the whole loin to slice yourself.",
+                       "Frozen broccoli is cheaper than fresh and never goes to waste. \u003cstrong\u003eKeep a few bags in the freezer\u003c/strong\u003e and pull them as you need them.",
+                       "A one pound bag of rice cooks up into a mountain of servings. \u003cstrong\u003eBuy the big bag of plain white rice\u003c/strong\u003e instead of the seasoned pouches."
+                   ],
+    "make_it":  [
+                    "Place the pork loin in the slow cooker.",
+                    "Whisk together the honey, soy sauce, and minced garlic, then pour it over the pork.",
+                    "Cover and cook on low for 7 to 8 hours until the meat shreds easily.",
+                    "Steam the broccoli florets in the last few minutes so they stay bright and crisp.",
+                    "Cook the rice while the pork rests.",
+                    "Shred the pork, pile it over rice, add the broccoli, and drizzle the pan sauce on top."
+                ],
+    "portion_html":  "Every bowl brings 54 grams of protein at just 586 calories, which is a lot of eating for the money.",
+    "credit_html":  "",
+    "upsell_html":  "One pot, a handful of pantry staples, and dinner practically makes itself. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  26.04,
+    "cost_batch_true":  27.46,
+    "cost_per_serving":  1.86,
+    "cost_per_serving_true":  1.96,
+    "cost_pantry_add":  13.61,
+    "cost_first_run":  41.07,
+    "scaler":  {
+                   "cost":  "27.46",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Loin",
+                                   "grams":  3050,
+                                   "buy":  "7 lb",
+                                   "bid":  "pork-loin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  820,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  1200,
+                                   "buy":  "4 bags",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "grams":  150,
+                                   "buy":  "1 bottle",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "grams":  180,
+                                   "buy":  "1 bottle",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  60,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  320,
+                                   "buy":  "3/4 cup",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Cornstarch",
+                                   "grams":  40,
+                                   "buy":  "3 Tbsp",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Onion Powder",
+                                   "grams":  3,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "onion-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Pepper Flakes",
+                                   "grams":  2,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "red-pepper-flakes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Ginger",
+                                   "grams":  2,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "ground-ginger",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Asian meal prep. Fourteen servings at about 586 calories and 54 grams of protein for roughly $2.96 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker honey garlic pork bowls, budget dinner",
+                 "costPerServing":  2.96,
+                 "recipeIngredient":  [
+                                          "7 lb Pork Loin",
+                                          "1 lb Rice",
+                                          "4 bags Broccoli Florets",
+                                          "1 bottle Honey",
+                                          "1 bottle Soy Sauce",
+                                          "1 bulb Garlic"
+                                      ],
+                 "steps":  [
+                               "Place the pork loin in the slow cooker.",
+                               "Whisk together the honey, soy sauce, and minced garlic, then pour it over the pork.",
+                               "Cover and cook on low for 7 to 8 hours until the meat shreds easily.",
+                               "Steam the broccoli florets in the last few minutes so they stay bright and crisp.",
+                               "Cook the rice while the pork rests.",
+                               "Shred the pork, pile it over rice, add the broccoli, and drizzle the pan sauce on top."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

@@ -1,0 +1,329 @@
+{
+    "name":  "Cape Malay Chicken Curry",
+    "slug":  "cape-malay-chicken-curry",
+    "cuisine":  "South African / Cape Malay",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.beyondkimchee.com/cape-malay-chicken-curry/",
+    "source_site":  "beyondkimchee.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 200g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Page verified: full recipe, 4 servings, 469 cal / 25g protein before rice. Tomato-based (no coconut milk) sweet-savory curry - deliberately chosen so it does not collide with the coconut curries already live. Apricot/fruit chutney is optional and has no board id; brown-sugar plus canned-peaches are tracked substitutes. Confidence: high. | HARVEST: ",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 200g (src scale)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  582,
+                 "protein":  40,
+                 "carbs":  54,
+                 "fat":  22,
+                 "cost_ps":  "3.11"
+             },
+    "intro_html":  "Cape Malay curry came out of Cape Town, built by cooks who brought Indonesian and Malay spicing into a South African kitchen. What makes it different from every other curry on this site is the balance: warm spices like cinnamon and garam masala, a tomato base with no coconut milk anywhere, and a spoonful of sugar and lemon at the end that turns the whole thing sweet-savory. Each bowl runs \u003cstrong\u003e582 calories and 40 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.11\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1 cups (196 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 7 tbsp (42 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1 tbsp (6 g)",
+                                "\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 1.75 tbsp (9 g)",
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 2.5 tbsp (10 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1.75 tbsp (11 g)",
+                                "\u003cstrong\u003eGround Turmeric (Great Value):\u003c/strong\u003e 1 tbsp (10 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tbsp (6 g)",
+                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 7 tbsp (42 g)",
+                                "\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 0.75 tbsp (5 g)",
+                                "\u003cstrong\u003eCrushed Tomatoes (generic):\u003c/strong\u003e 1.7 cans (1389 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 5.25 lb (2381 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.25 tbsp (20 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 2.25 tbsp (32 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 1 (52 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Vegetable Oil, 1 cups: ~$0.48. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Ginger, 7 tbsp: ~$0.37. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Crushed Tomatoes, 1.7 cans: ~$2.64. \u003cstrong\u003eBuy 2 28oz cans: $3.02.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Thigh, 5.25 lb: ~$9.29. \u003cstrong\u003eBuy 6 lbs: $10.62.\u003c/strong\u003e",
+                       "Garlic, 2.25 tbsp: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Brown Sugar, 2.25 tbsp: ~$0.18. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lemon Juice, 1: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (red pepper flakes, ground coriander, italian seasoning, ground cumin, ground turmeric, black pepper, garam masala, ground cinnamon): ~$4.07. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $19.35 across 14 servings, so roughly $1.38 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $22.03 across 14 servings, roughly $1.57 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $21.53 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.56. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.11 a bowl\u003c/strong\u003e (at everyday cost). Leaving out coconut milk is not a compromise here, it is the recipe, and it happens to be the reason this lands under the coconut curries on this site.",
+    "shop_smart":  [
+                       "Crushed tomatoes carry this sauce, so buy the 28 ounce cans. They run well under half the per-ounce price of the small cans and this recipe uses close to two of them.",
+                       "Fresh ginger keeps for months in the freezer. Buy a whole hand, use what you need, and grate the rest straight from frozen next time instead of watching a shriveled knob die in the crisper.",
+                       "Whole spices are the budget trap in curries. Cinnamon, cumin, coriander, turmeric and garam masala together are one of the bigger lines in this batch, and buying them in bags from an international grocer instead of branded jars cuts that cost by half or better.",
+                       "Boneless skinless thighs are the right cut for a tomato braise and the six pound club pack beats every tray pack in the case on price per pound."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Heat the vegetable oil in your largest pot over medium and cook the sliced onion slowly for 10 to 12 minutes, until it is deeply soft and golden. Cape Malay curry starts with patient onions, not fast ones.",
+                    "Add the garlic and grated ginger and cook one minute, then add the red pepper flakes, ground coriander, italian seasoning, ground cumin, ground turmeric, garam masala, ground cinnamon and black pepper. Stir them in the hot oil for about 45 seconds until the kitchen smells like the spice aisle.",
+                    "Pour in the crushed tomatoes, scrape the bottom, and cook 10 minutes until the sauce darkens and thickens.",
+                    "Add the chicken thighs, cut into large chunks, and turn them until every piece is coated. Cover and simmer 30 to 35 minutes, stirring occasionally, until the chicken is tender and reads 165F.",
+                    "Stir in the brown sugar and lemon juice. This is the step that makes it Cape Malay instead of generic, so taste as you go and adjust until it tastes bright and slightly sweet at the same time.",
+                    "While it finishes, cook the rice and let it steam covered off the heat for 10 minutes.",
+                    "Fold the cooked rice through the curry so every serving gets sauce and grain in the same scoop."
+                ],
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight, and divide by 14. Fourteen equal containers, no guessing. Each one lands at \u003cstrong\u003e582 calories\u003c/strong\u003e, and a tomato-based curry like this one reheats better than a cream or coconut sauce ever will.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.beyondkimchee.com/cape-malay-chicken-curry/\" target=\"_blank\" rel=\"noopener\"\u003ebeyondkimchee.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "South African Cape Malay chicken curry over rice for about $3.11 a bowl (at everyday cost). This is one of a few hundred. Members get every recipe in the Meal Prep section plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  19.35,
+    "cost_batch_true":  22.03,
+    "cost_per_serving":  1.38,
+    "cost_per_serving_true":  1.57,
+    "cost_pantry_add":  21.53,
+    "cost_first_run":  43.56,
+    "scaler":  {
+                   "cost":  "22.03",
+                   "ing":  [
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  196,
+                                   "buy":  "1 cups",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  385,
+                                   "buy":  "3.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  42,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Pepper Flakes",
+                                   "canon":  "Red Pepper Flakes",
+                                   "grams":  6,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "red-pepper-flakes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Coriander",
+                                   "canon":  "Ground Coriander",
+                                   "grams":  9,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "ground-coriander",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "canon":  "Italian Seasoning",
+                                   "grams":  10,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  11,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Turmeric",
+                                   "canon":  "Ground Turmeric",
+                                   "grams":  10,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-turmeric",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  6,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garam Masala",
+                                   "canon":  "Garam Masala",
+                                   "grams":  42,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "garam-masala",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cinnamon",
+                                   "canon":  "Ground Cinnamon",
+                                   "grams":  5,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "ground-cinnamon",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Crushed Tomatoes",
+                                   "canon":  "Crushed Tomatoes",
+                                   "grams":  1389,
+                                   "buy":  "1.7 cans",
+                                   "bid":  "crushed-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  2381,
+                                   "buy":  "5.25 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  20,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "canon":  "Brown Sugar",
+                                   "grams":  32,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Lemon Juice",
+                                   "canon":  "Lemon Juice",
+                                   "grams":  52,
+                                   "buy":  "1",
+                                   "bid":  "lemon-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Cape Malay chicken curry: a sweet-savory tomato curry with cinnamon and garam masala, no coconut milk, over rice. 14 bowls at 582 calories, 40g protein, about $3.11 (at everyday cost).",
+                 "keywords":  "cape malay curry, south african chicken curry, tomato chicken curry, no coconut curry, chicken thigh meal prep, budget curry recipe",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT55M",
+                 "totalTime":  "PT1H15M",
+                 "costPerServing":  3.11,
+                 "recipeIngredient":  [
+                                          "5.25 lb boneless skinless chicken thighs",
+                                          "1.7 cans crushed tomatoes",
+                                          "3.5 yellow onions",
+                                          "7 tbsp ginger",
+                                          "2.25 tbsp garlic",
+                                          "2.25 tbsp brown sugar",
+                                          "1 lemon worth of lemon juice",
+                                          "3.75 cups dry rice",
+                                          "1 cup vegetable oil"
+                                      ],
+                 "steps":  [
+                               "Cook the sliced onion slowly in oil for 10 to 12 minutes until deeply golden.",
+                               "Add garlic, ginger and the full spice blend and toast for about 45 seconds.",
+                               "Add crushed tomatoes and cook down 10 minutes until thick.",
+                               "Add the chunked chicken, cover, and simmer 30 to 35 minutes until it reads 165F.",
+                               "Finish with brown sugar and lemon juice, fold in the cooked rice, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Red Pepper Flakes",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Ground Coriander",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Italian Seasoning",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Ground Turmeric",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Garam Masala",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Ground Cinnamon",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Crushed Tomatoes",
+                                  "grams":  1389
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  2381
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Brown Sugar",
+                                  "grams":  32
+                              },
+                              {
+                                  "item":  "Lemon Juice",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

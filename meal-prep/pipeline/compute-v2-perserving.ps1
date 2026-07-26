@@ -18,14 +18,16 @@ $feedMap = @{}; foreach($p in $feed.PSObject.Properties){ $feedMap[$p.Name] = $p
 
 function Slugify([string]$s){ (($s.ToLower() -replace "[^a-z0-9]+","-").Trim('-')) }
 
+# 2026-07-26 engine consolidation: reads the canonical stores (db\recipes + db\costed) - run-agnostic,
+# any catalog size. db\costed.json is produced by engine\cost-recipes.ps1.
+$dbCosted = @{}
+foreach($c in (Get-Content (Join-Path $mp 'db\costed.json') -Raw | ConvertFrom-Json)){ $dbCosted[[string]$c.slug]=$c }
 $rows = @()
-foreach($run in 'r100','r300','orig'){
-  $costed = Get-Content (Join-Path $mp "$run\recipes-costed.json") -Raw | ConvertFrom-Json
-  foreach($sf in (Get-ChildItem (Join-Path $mp "$run\specs\*.json") | Where-Object Name -ne '_index.json')){
+foreach($run in @('db')){
+  foreach($sf in (Get-ChildItem (Join-Path $mp "db\recipes\*.json"))){
     $spec = Get-Content $sf.FullName -Raw | ConvertFrom-Json
-    $cr = $costed | Where-Object { $_.proposed_name -eq $spec.name }
-    if(-not $cr){ $cr = $costed | Where-Object { (Slugify $_.proposed_name) -eq $spec.slug } }
-    if(($cr | Measure-Object).Count -ne 1){ throw "costed match failed for $($spec.slug) ($((@($cr)).Count))" }
+    $cr = $dbCosted[[string]$spec.slug]
+    if(-not $cr){ throw "no db\costed entry for $($spec.slug)" }
     $clines = @{}; foreach($l in $cr.lines){ $clines[$l.item] = $l }
     $ev = 0.0; $ch = 0.0
     foreach($ing in $spec.scaler.ing){

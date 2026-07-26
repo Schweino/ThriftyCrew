@@ -1,0 +1,181 @@
+{
+    "name":  "Bratwurst and Sauerkraut with Potatoes",
+    "slug":  "bratwurst-sauerkraut-potatoes-bake",
+    "cuisine":  "german",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.theseasonedmom.com/bratwurst-recipe/",
+    "source_site":  "theseasonedmom.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +45% (Potato)",
+                   "protein +5% (Bratwurst)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Uses the bratwurst commodity, which nothing in the live catalog touches, and pairs it with sauerkraut and red-potatoes (both tracked). Dump-and-bake construction is about as batch-friendly as it gets. CONFIDENCE: source is 436 cal / 17g protein at 5 servings, under both bars, so our version bumps to two brats per serving and adds a mustard-cream finish; est_cal projected. Beer is the only off-board item and chicken-broth substitutes directly. | HARVEST: ",
+                         "SOURCE YIELD: 5 servings, rebuilt to 14.",
+                         "TUNING: base +45% (Potato)",
+                         "TUNING: protein +5% (Bratwurst)",
+                         "OVERRIDE Potato: [BUMP x2.6] source 12 oz baby potatoes for 5 is garnish-scale; house brat-and-potato dinner = 2 lb"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  581,
+                 "protein":  25,
+                 "carbs":  55,
+                 "fat":  29,
+                 "cost_ps":  "1.78"
+             },
+    "intro_html":  "Four ingredients. One pan. Put them in the oven and walk away. Bratwurst, sauerkraut and potatoes is the plate you get at every German festival, and it turns out the festival version was never complicated. It lands at 25 grams of protein for about $1.78 a bowl (at everyday cost), and it stays one of the simplest dinners we have.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 18.4 (3909 g)",
+                                "\u003cstrong\u003eBratwurst (Johnsonville):\u003c/strong\u003e 3.5 lb (1543 g)",
+                                "\u003cstrong\u003eSauerkraut (generic canned (USDA)):\u003c/strong\u003e 7.75 cups (1111 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1.5 cups (336 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Potato, 18.4: ~$4.89. \u003cstrong\u003eBuy 9 lbs: $5.11.\u003c/strong\u003e",
+                       "Bratwurst, 3.5 lb: ~$8.51. \u003cstrong\u003eBuy 3 19oz 5-packs: $8.92.\u003c/strong\u003e",
+                       "Sauerkraut, 7.75 cups: ~$3.57. \u003cstrong\u003eBuy 3 14.5oz cans: $3.96.\u003c/strong\u003e",
+                       "Beef Broth, 1.5 cups: ~$0.45. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $17.65 across 14 servings, so roughly $1.26 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $18.67 across 14 servings, roughly $1.33 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.26 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $24.93. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.78 a bowl\u003c/strong\u003e (at everyday cost) for a dump and bake dinner with four items on the shopping list. If you want proof that cheap food does not have to be complicated, this is it.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy bratwurst in the five pack, and buy them on sale.\u003c/strong\u003e Brats are the biggest cost line here by a wide margin, and they freeze in the package without any trouble at all.",
+                       "\u003cstrong\u003eCanned sauerkraut is the cheap way in.\u003c/strong\u003e A few cans cover this batch cheaply, and the long bake softens them into the potatoes anyway.",
+                       "\u003cstrong\u003eThe nine pound potato bag is the right buy.\u003c/strong\u003e This recipe eats most of it and the per pound price is roughly half what loose potatoes cost.",
+                       "\u003cstrong\u003eBroth replaces the beer.\u003c/strong\u003e The traditional version braises brats in beer. Beef broth does the same job for a fraction of the price and you do not have to buy a six pack to cook dinner."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Heat the oven to 400F and grease two large baking dishes or deep sheet pans.",
+                    "Cut the potatoes into even chunks and spread them across the pans, then season them with salt and black pepper.",
+                    "Drain the sauerkraut, squeeze out some of the liquid, and scatter it over the potatoes.",
+                    "Lay the bratwurst on top so they sit above the kraut and can brown instead of steam.",
+                    "Pour the beef broth around the edges of the pans, then cover them tightly with foil.",
+                    "Bake covered until the potatoes are tender all the way through, then pull the foil off and bake again until the brats are browned and split.",
+                    "Slice the brats into thick coins and combine everything with the pan juices in your big pot."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container, keeping the sausage coins evenly counted. Every bowl lands near 581 calories and 25 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.theseasonedmom.com/bratwurst-recipe/\" target=\"_blank\" rel=\"noopener\"\u003etheseasonedmom.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Four ingredient dinners for about $1.78 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  17.65,
+    "cost_batch_true":  18.67,
+    "cost_per_serving":  1.26,
+    "cost_per_serving_true":  1.33,
+    "cost_pantry_add":  6.26,
+    "cost_first_run":  24.93,
+    "scaler":  {
+                   "cost":  "18.67",
+                   "ing":  [
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  3909,
+                                   "buy":  "18.4",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Bratwurst",
+                                   "canon":  "Bratwurst",
+                                   "grams":  1543,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "bratwurst",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Sauerkraut",
+                                   "canon":  "Sauerkraut",
+                                   "grams":  1111,
+                                   "buy":  "7.75 cups",
+                                   "bid":  "sauerkraut",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  336,
+                                   "buy":  "1.5 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Bratwurst baked over sauerkraut and potatoes in one pan, built for 14 servings. 581 calories, 25g protein, about $1.78 per serving (at everyday cost).",
+                 "keywords":  "bratwurst and sauerkraut, brats with potatoes, german sausage bake, four ingredient dinner, cheap meal prep, budget dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT1H",
+                 "totalTime":  "PT1H15M",
+                 "costPerServing":  1.78,
+                 "recipeIngredient":  [
+                                          "14.7 bratwurst",
+                                          "18.4 potatoes",
+                                          "7.75 cups sauerkraut",
+                                          "0.75 lb beef broth",
+                                          "salt",
+                                          "black pepper"
+                                      ],
+                 "steps":  [
+                               "Cut the potatoes into chunks, season, and spread them across greased baking pans.",
+                               "Scatter drained sauerkraut over the potatoes and lay the bratwurst on top.",
+                               "Pour beef broth around the edges and cover the pans tightly with foil.",
+                               "Bake covered at 400F until the potatoes are tender.",
+                               "Uncover and bake until the brats brown, then slice and combine with the pan juices."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Potato",
+                                  "grams":  3909
+                              },
+                              {
+                                  "item":  "Bratwurst",
+                                  "grams":  1543
+                              },
+                              {
+                                  "item":  "Sauerkraut",
+                                  "grams":  1111
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  336
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

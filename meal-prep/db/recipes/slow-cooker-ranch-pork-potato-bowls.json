@@ -1,0 +1,144 @@
+{
+    "name":  "Slow Cooker Ranch Pork and Potato Bowls",
+    "slug":  "slow-cooker-ranch-pork-potato-bowls",
+    "cuisine":  "American",
+    "protein":  "pork",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  551,
+                 "protein":  52,
+                 "carbs":  40,
+                 "fat":  18,
+                 "cost_ps":  "3.37"
+             },
+    "intro_html":  "This is meat-and-potatoes comfort food with a ranch twist, and it could not be simpler. Tender ranch pork over potatoes and carrots gives you 52 grams of protein a bowl for about $3.37 (at everyday cost). Fourteen servings means one pot feeds you well for a whole week.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 8 lb (3300 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 6 lb (2650 g)",
+                                "\u003cstrong\u003eShredded Carrots:\u003c/strong\u003e 4 bags (1000 g)",
+                                "\u003cstrong\u003eRanch Seasoning Mix (Hidden Valley):\u003c/strong\u003e 1 packet (27 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1 boxs (60 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (27 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp kosher (8 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 tsp (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.37 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "One \u003cstrong\u003epacket of ranch seasoning\u003c/strong\u003e is all the flavor this needs. Skip the separate herbs and spices entirely.",
+                       "Buy \u003cstrong\u003epork loin over tenderloin\u003c/strong\u003e for this. At about $2 a pound it keeps the whole bowl easy on the budget.",
+                       "Shredded carrots come \u003cstrong\u003epre-bagged and ready to go\u003c/strong\u003e, which saves you the peeling and chopping when you are already cooking a big batch."
+                   ],
+    "make_it":  [
+                    "Rub the pork loin with a little olive oil and set it in the slow cooker.",
+                    "Add the potatoes and shredded carrots around the pork.",
+                    "Sprinkle the ranch seasoning mix over everything and dot the top with butter.",
+                    "Cover and cook on low for 7 to 8 hours until the pork and potatoes are tender.",
+                    "Shred the pork and stir it through the buttery ranch juices.",
+                    "Divide the pork, potatoes, and carrots into your containers."
+                ],
+    "portion_html":  "Every serving runs about 551 calories with 52 grams of protein.",
+    "credit_html":  "",
+    "upsell_html":  "Simple, hearty, and cheap. Sometimes the plain-looking meals are the ones you crave most. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  28.95,
+    "cost_batch_true":  34.13,
+    "cost_per_serving":  2.07,
+    "cost_per_serving_true":  2.44,
+    "cost_pantry_add":  14.88,
+    "cost_first_run":  49.01,
+    "scaler":  {
+                   "cost":  "34.13",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Loin",
+                                   "grams":  3300,
+                                   "buy":  "8 lb",
+                                   "bid":  "pork-loin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "grams":  2650,
+                                   "buy":  "6 lb",
+                                   "bid":  "potato",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Shredded Carrots",
+                                   "grams":  1000,
+                                   "buy":  "4 bags",
+                                   "bid":  "shredded-carrots",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ranch Seasoning Mix",
+                                   "grams":  27,
+                                   "buy":  "1 packet",
+                                   "bid":  "ranch-seasoning-mix",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "grams":  60,
+                                   "buy":  "1 boxs",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  27,
+                                   "buy":  "1 bottle",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  8,
+                                   "buy":  "1 tsp kosher",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "1 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 551 calories and 52 grams of protein for roughly $3.37 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker ranch pork and potato bowls, budget dinner",
+                 "costPerServing":  3.37,
+                 "recipeIngredient":  [
+                                          "8 lb Pork Loin",
+                                          "6 lb Potato",
+                                          "4 bags Shredded Carrots",
+                                          "1 packet Ranch Seasoning Mix",
+                                          "1 boxs Butter",
+                                          "1 bottle Olive Oil"
+                                      ],
+                 "steps":  [
+                               "Rub the pork loin with a little olive oil and set it in the slow cooker.",
+                               "Add the potatoes and shredded carrots around the pork.",
+                               "Sprinkle the ranch seasoning mix over everything and dot the top with butter.",
+                               "Cover and cook on low for 7 to 8 hours until the pork and potatoes are tender.",
+                               "Shred the pork and stir it through the buttery ranch juices.",
+                               "Divide the pork, potatoes, and carrots into your containers."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

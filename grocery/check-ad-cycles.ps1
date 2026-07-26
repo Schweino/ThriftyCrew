@@ -327,7 +327,14 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # reverts automatically when a sale ends). MUST run BEFORE resolve-worklist so the link worklist reflects
       # TODAY's recipe board, not yesterday's. Non-fatal - only runs once the recipe rule-set exists.
       try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'recipe-overlay.ps1') | Out-Null; Log 'recipe-overlay applied' } catch { Log ('recipe-overlay threw: ' + $_.Exception.Message) }
-      # re-cost the 113 recipes from today's board + refresh the hub's Top 5 (only publishes on change). Non-fatal.
+      # UNIFIED ENGINE (2026-07-26 consolidation): re-cost the whole catalog from today's boards into
+      # db\costed.json, then recompute the v2 per-serving manifest (everyday + cheapest whole-package)
+      # that top5-weekly reads. MUST run before top5-weekly or per_serving falls back to the legacy
+      # basis. Feed path = the local smp-feed (regenerated later in this same sequence; one-day lag on
+      # feed-only movements, same as the retired per-run flow). Non-fatal.
+      try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\engine\cost-recipes.ps1') | Out-Null; Log 'engine cost-recipes refreshed db\costed' } catch { Log ('engine cost-recipes threw: ' + $_.Exception.Message) }
+      try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\compute-v2-perserving.ps1') -FeedPath (Join-Path $OutDir 'smp-feed.json') | Out-Null; Log 'v2 per-serving manifest recomputed' } catch { Log ('compute-v2-perserving threw: ' + $_.Exception.Message) }
+      # re-cost the recipes from today's board + refresh the hub's Top 5 (only publishes on change). Non-fatal.
       # Brad's final call 2026-07-25: the ORIGINAL SMP-TOP5 hub section stays (he preferred it over the
       # green free-week grid, which was removed same day). The free ROTATION still runs below - it just
       # renders nothing on the hub; the Top 5 section is the display.

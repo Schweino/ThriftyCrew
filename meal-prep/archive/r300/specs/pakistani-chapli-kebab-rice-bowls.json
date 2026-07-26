@@ -1,0 +1,370 @@
+{
+    "name":  "Pakistani Chapli Kebab Rice Bowls",
+    "slug":  "pakistani-chapli-kebab-rice-bowls",
+    "cuisine":  "Pakistani",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.teaforturmeric.com/chapli-kabab/",
+    "source_site":  "teaforturmeric.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 500g (src scale)",
+                   "base +60% (Rice)",
+                   "portion factor 1.2",
+                   "protein +30% (93/7 Ground Beef)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Patties, but sheet-pan bakeable in a single tray rather than fried to order, so it survives the batch test. Distinct from the live keema recipes: whole toasted spices, tomato in the mix, patty format. Confidence: page verified; calories estimated with rice. | HARVEST: Yield published as 10 chapli kababs; nutrition is per kabab. Rice not in source ingredient list.",
+                         "SOURCE YIELD: 10 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 500g (src scale)",
+                         "TUNING: base +60% (Rice)",
+                         "TUNING: portion factor 1.2",
+                         "TUNING: protein +30% (93/7 Ground Beef)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  607,
+                 "protein":  26,
+                 "carbs":  92,
+                 "fat":  13,
+                 "cost_ps":  "3.80"
+             },
+    "intro_html":  "Chapli kebabs come from Peshawar and they are nothing like the smooth ground meat kebabs you get at most Pakistani restaurants. These are wide, flat, craggy patties packed with tomato, onion, cilantro, and whole coriander seeds that you crush yourself so they crunch. Pomegranate molasses brings the sour note that makes them unmistakable. Traditionally they are shallow fried one at a time, which is a nightmare at this scale, so we bake them on sheet pans instead and get the same crisp edges with none of the standing around.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 5 tbsp (27 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1.75 tbsp (11 g)",
+                                "\u003cstrong\u003ePomegranate Molasses (Cortas):\u003c/strong\u003e 3 tbsp (59 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 5.25 tbsp (42 g)",
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 2.25 lb (1022 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 1 (92 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 8.25 tbsp (50 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 1 tbsp (8 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3.5 tbsp (29 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 2.75 tbsp (16 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 15 tbsp (15 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 0.12 tbsp (1 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.75 tbsp (15 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 2 large eggs (84 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 0.5 cups (143 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 7.25 tbsp (101 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 8.25 cups dry (1508 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pomegranate Molasses, 3 tbsp: ~$1.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "All-Purpose Flour, 5.25 tbsp: ~$0.04. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "93/7 Ground Beef, 2.25 lb: ~$14.94. \u003cstrong\u003eBuy 3 lbs: $19.90.\u003c/strong\u003e",
+                       "Red Onion, 1: ~$0.27. \u003cstrong\u003eBuy 1 lb: $1.34.\u003c/strong\u003e",
+                       "Green Onions, 8.25 tbsp: ~$0.59. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
+                       "Jalapeno, 1 tbsp: ~$0.03. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Garlic, 3.5 tbsp: ~$0.42. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Ginger, 2.75 tbsp: ~$0.14. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Fresh Cilantro, 15 tbsp: ~$0.47. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Eggs, 2 large eggs: ~$0.20. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
+                       "Diced Tomatoes, 0.5 cups: ~$0.33. \u003cstrong\u003eBuy 1 can: $0.96.\u003c/strong\u003e",
+                       "Vegetable Oil, 7.25 tbsp: ~$0.25. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 8.25 cups dry: ~$1.86. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (ground coriander, ground cumin, red pepper flakes, chili powder, black pepper, salt): ~$1.31. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $21.94 across 14 servings, so roughly $1.57 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $34.25 across 14 servings, roughly $2.45 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $18.89 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.14. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.80 a bowl\u003c/strong\u003e (at everyday cost) for Peshawari kebabs that most people only ever eat at a restaurant.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eCrush whole coriander seeds yourself.\u003c/strong\u003e The whole seed is cheaper than the ground jar and the crunch of the cracked seed is the entire texture of a chapli kebab.",
+                       "\u003cstrong\u003eTomato and onion in the mix stretch the beef.\u003c/strong\u003e That is traditional, not a shortcut, and it is why the meat number stays modest while the patties stay big.",
+                       "\u003cstrong\u003ePomegranate molasses is one bottle you will keep reaching for.\u003c/strong\u003e It lasts a long time in the fridge and there is no clean substitute for what it does here.",
+                       "\u003cstrong\u003eBake, do not fry.\u003c/strong\u003e Frying fourteen servings of patties eats a bottle of oil and an hour of your evening. Sheet pans in a hot oven get you there while you cook the rice."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Crush the whole coriander seeds coarsely, then mix them with the ground cumin, red pepper flakes, chili powder, black pepper, and salt.",
+                    "Combine the ground beef with the finely chopped red onion, green onions, minced jalapeno, garlic, ginger, cilantro, eggs, all-purpose flour, pomegranate molasses, and the spice mix.",
+                    "Fold in the drained diced tomatoes last and gently, so they stay in pieces instead of turning the mixture to slurry.",
+                    "Chill the mixture for thirty minutes, which makes it far easier to shape.",
+                    "Form wide, flat, thin patties, brush the sheet pans and the tops with the vegetable oil, and lay them out without touching.",
+                    "Bake at 425 degrees, flipping once, until browned and crisp at the edges and cooked through.",
+                    "Cook the rice according to the package while the kebabs bake."
+                ],
+    "portion_html":  "Weigh the rice pot, subtract the empty-pot weight from Step 1, and divide by 14 for an even base in every container. Then split the kebabs evenly across the fourteen. Every bowl lands near \u003cstrong\u003e607 calories with 26 grams of protein\u003c/strong\u003e. Reheat them in a hot oven or a dry pan rather than the microwave if you want to keep the crisp edges.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.teaforturmeric.com/chapli-kabab/\" target=\"_blank\" rel=\"noopener\"\u003eteaforturmeric.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Spice-crusted dinners for about $3.80 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  21.94,
+    "cost_batch_true":  34.25,
+    "cost_per_serving":  1.57,
+    "cost_per_serving_true":  2.45,
+    "cost_pantry_add":  18.89,
+    "cost_first_run":  53.14,
+    "scaler":  {
+                   "cost":  "34.25",
+                   "ing":  [
+                               {
+                                   "item":  "Ground Coriander",
+                                   "canon":  "Ground Coriander",
+                                   "grams":  27,
+                                   "buy":  "5 tbsp",
+                                   "bid":  "ground-coriander",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  11,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Pomegranate Molasses",
+                                   "canon":  "Pomegranate Molasses",
+                                   "grams":  59,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "pomegranate-molasses",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  42,
+                                   "buy":  "5.25 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "canon":  "93/7 Ground Beef",
+                                   "grams":  1022,
+                                   "buy":  "2.25 lb",
+                                   "bid":  "ground-beef-8020",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Onion",
+                                   "canon":  "Red Onion",
+                                   "grams":  92,
+                                   "buy":  "1",
+                                   "bid":  "red-onion",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  50,
+                                   "buy":  "8.25 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  8,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  29,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  16,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  15,
+                                   "buy":  "15 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Red Pepper Flakes",
+                                   "canon":  "Red Pepper Flakes",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "red-pepper-flakes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "canon":  "Chili Powder",
+                                   "grams":  1,
+                                   "buy":  "0.12 tbsp",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  15,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  84,
+                                   "buy":  "2 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  143,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  101,
+                                   "buy":  "7.25 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1508,
+                                   "buy":  "8.25 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Pakistani chapli kebab rice bowls rebuilt for 14-serving meal prep: sheet-pan baked beef kebabs with cracked coriander and tomato. 607 calories, 26g protein, about $3.80 per serving (at everyday cost).",
+                 "keywords":  "chapli kebab, pakistani kebab, peshawari kabab, sheet pan kebabs, pakistani meal prep, budget beef kebabs",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT25M",
+                 "totalTime":  "PT55M",
+                 "costPerServing":  3.80,
+                 "recipeIngredient":  [
+                                          "2.25 lb 93/7 ground beef",
+                                          "8.25 cups dry rice",
+                                          "0.5 cups diced tomatoes",
+                                          "1 red onion",
+                                          "8.25 tbsp green onions",
+                                          "15 tbsp fresh cilantro",
+                                          "2 large eggs",
+                                          "3 tbsp pomegranate molasses",
+                                          "5.25 tbsp all-purpose flour",
+                                          "3.5 tbsp garlic",
+                                          "2.75 tbsp fresh ginger",
+                                          "1 tbsp jalapeno",
+                                          "7.25 tbsp vegetable oil"
+                                      ],
+                 "steps":  [
+                               "Coarsely crush the whole coriander seeds and mix with the other spices.",
+                               "Combine the beef with onion, herbs, egg, flour, pomegranate molasses, and spices.",
+                               "Fold in drained diced tomatoes gently and chill the mixture.",
+                               "Shape wide flat patties and lay them on oiled sheet pans.",
+                               "Bake at 425F, flipping once, until crisp and cooked through.",
+                               "Cook the rice and portion kebabs over it into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Ground Coriander",
+                                  "grams":  27
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Pomegranate Molasses",
+                                  "grams":  59
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "93/7 Ground Beef",
+                                  "grams":  1022
+                              },
+                              {
+                                  "item":  "Red Onion",
+                                  "grams":  92
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  50
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  29
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  16
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Red Pepper Flakes",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Chili Powder",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  143
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  101
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1508
+                              }
+                          ]
+}

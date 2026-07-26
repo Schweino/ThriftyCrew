@@ -1,0 +1,166 @@
+{
+    "name":  "Thai Turkey Larb Bowls",
+    "slug":  "thai-turkey-larb-bowls",
+    "cuisine":  "Thai",
+    "protein":  "turkey",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  642,
+                 "protein":  50,
+                 "carbs":  59,
+                 "fat":  19,
+                 "cost_ps":  "4.55"
+             },
+    "intro_html":  "Bright, zesty, and a little addictive, this Thai-style larb is proof that healthy prep never has to be boring. Each bowl brings 50 grams of protein for about $4.55 a serving (at everyday cost). One skillet makes 14 servings.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 8 lb (3300 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (950 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1 bottle (90 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1 bottle (42 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3 peppers (300 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (27 g)",
+                                "\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 3 Tbsp (160 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 3-4 dry chiles or 1.5 Tbsp chile powder (35 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1/2 cup rough chopped (30 g)",
+                                "\u003cstrong\u003eFresh Mint:\u003c/strong\u003e 1/3 cup fresh (25 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.55 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "The \u003cstrong\u003e8 lb ground turkey pack\u003c/strong\u003e is your best value, so buy the big size and portion it out.",
+                       "A \u003cstrong\u003ebottle of lime juice\u003c/strong\u003e is cheaper than fresh limes for a big batch and lasts a long time in the fridge.",
+                       "Fresh \u003cstrong\u003egreen peppers around a dollar each\u003c/strong\u003e add crunch and color without much cost."
+                   ],
+    "make_it":  [
+                    "Heat a little olive oil in a large skillet and brown the ground turkey.",
+                    "Add the chopped onion and green peppers and cook until they soften.",
+                    "Stir in the lime juice and honey to build that classic sweet-and-sour larb balance.",
+                    "Let it simmer a couple minutes so the flavors soak in, then season with salt to taste.",
+                    "Serve it over cooked white rice with extra lime on the side."
+                ],
+    "portion_html":  "Each of the 14 bowls gives you 50 grams of protein and about 642 calories.",
+    "credit_html":  "",
+    "upsell_html":  "Fresh, punchy, and cheap, this is the bowl that keeps your taste buds interested all week. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  45.86,
+    "cost_batch_true":  52.55,
+    "cost_per_serving":  3.28,
+    "cost_per_serving_true":  3.75,
+    "cost_pantry_add":  18.98,
+    "cost_first_run":  71.53,
+    "scaler":  {
+                   "cost":  "52.55",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "grams":  3300,
+                                   "buy":  "8 lb",
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  950,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  300,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "grams":  90,
+                                   "buy":  "1 bottle",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "grams":  42,
+                                   "buy":  "1 bottle",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "grams":  300,
+                                   "buy":  "3 peppers",
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  27,
+                                   "buy":  "1 bottle",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Fish Sauce",
+                                   "grams":  160,
+                                   "buy":  "3 Tbsp",
+                                   "bid":  "fish-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "grams":  35,
+                                   "buy":  "3-4 dry chiles or 1.5 Tbsp chile powder",
+                                   "bid":  "jalapeno",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "grams":  30,
+                                   "buy":  "1/2 cup rough chopped",
+                                   "bid":  "fresh-cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Fresh Mint",
+                                   "grams":  25,
+                                   "buy":  "1/3 cup fresh",
+                                   "bid":  "fresh-mint",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Thai meal prep. Fourteen servings at about 642 calories and 50 grams of protein for roughly $4.55 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, thai turkey larb bowls, budget dinner",
+                 "costPerServing":  4.55,
+                 "recipeIngredient":  [
+                                          "8 lb 93/7 Ground Turkey",
+                                          "1 lb Rice",
+                                          "3 onions Yellow Onion",
+                                          "1 bottle Lime Juice",
+                                          "1 bottle Honey",
+                                          "3 peppers Green Bell Peppers"
+                                      ],
+                 "steps":  [
+                               "Heat a little olive oil in a large skillet and brown the ground turkey.",
+                               "Add the chopped onion and green peppers and cook until they soften.",
+                               "Stir in the lime juice and honey to build that classic sweet-and-sour larb balance.",
+                               "Let it simmer a couple minutes so the flavors soak in, then season with salt to taste.",
+                               "Serve it over cooked white rice with extra lime on the side."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

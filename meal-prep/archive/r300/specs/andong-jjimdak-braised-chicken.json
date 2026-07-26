@@ -1,0 +1,326 @@
+{
+    "name":  "Andong Jjimdak (Korean Soy-Braised Chicken with Noodles)",
+    "slug":  "andong-jjimdak-braised-chicken",
+    "cuisine":  "Korean",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.beyondkimchee.com/korean-braised-chicken-jjimdak/",
+    "source_site":  "beyondkimchee.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Potato)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Source lists 755 cal / 47g protein per serving - clears both bars outright with no adjustment. Big-pot braise, scales linearly, and it is a different flavor axis (dark soy, no chili paste) from dakdoritang. Confidence high, numbers taken straight from the page. | HARVEST: ",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Potato)",
+                         "NAME IT RIGHT: call \"Rice Noodles\" -\u003e \"Korean glass noodles (dangmyeon)\" in every sentence; the canonical name is a macro/pricing basis only."
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  562,
+                 "protein":  50,
+                 "carbs":  67,
+                 "fat":  10,
+                 "cost_ps":  "3.81"
+             },
+    "intro_html":  "Andong jjimdak comes from a market town in Korea and it is the quiet cousin to the spicy chicken stews. No chili paste here. The flavor is dark soy, garlic, and a fair amount of sweetness, with Korean glass noodles (dangmyeon) dropped in at the end to soak up everything left in the pot. Those noodles are the best part and everyone at the table knows it. Each bowl runs 562 calories and \u003cstrong\u003e50 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.81 a serving\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eKorean glass noodles (dangmyeon):\u003c/strong\u003e 14 oz dry (397 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 6.75 lb (3033 g)",
+                                "\u003cstrong\u003eDried Arbol Chiles (generic (USDA)):\u003c/strong\u003e 0.5 cups (11 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1.5 cups (373 g)",
+                                "\u003cstrong\u003eOyster Sauce (Lee Kum Kee):\u003c/strong\u003e 4 tbsp (70 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 2 tbsp (12 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 0.75 cups (146 g)",
+                                "\u003cstrong\u003eCocoa Powder (generic unsweetened (USDA)):\u003c/strong\u003e 0.5 oz (14 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 0.5 cups (140 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tbsp (5 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (257 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 4.7 (285 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 6.4 (1362 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 5.5 tbsp (49 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Korean glass noodles (dangmyeon), 14 oz dry: ~$4.76. \u003cstrong\u003eBuy 1 14oz box: $4.76.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Thigh, 6.75 lb: ~$11.83. \u003cstrong\u003eBuy 7 lbs: $12.39.\u003c/strong\u003e",
+                       "Dried Arbol Chiles, 0.5 cups: ~$0.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 1.5 cups: ~$1.41. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Oyster Sauce, 4 tbsp: ~$0.61. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Ginger, 2 tbsp: ~$0.11. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Brown Sugar, 0.75 cups: ~$0.82. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Honey, 0.5 cups: ~$2.66. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2.3: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 4.7: ~$0.60. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Potato, 6.4: ~$1.71. \u003cstrong\u003eBuy 3 lbs: $1.71.\u003c/strong\u003e",
+                       "Jalapeno, 5.5 tbsp: ~$0.19. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Pantry seasonings (cocoa powder, black pepper, salt): ~$0.56. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.73 across 14 servings, so roughly $1.91 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $30.55 across 14 servings, roughly $2.18 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $22.80 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.35. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.81 a bowl\u003c/strong\u003e (at everyday cost) for a braise that looks like it came from a restaurant. Chicken thighs and potatoes are doing the heavy lifting on price, and the Korean glass noodles (dangmyeon) are the one specialty item, bought once per batch.",
+    "shop_smart":  [
+                       "Korean glass noodles (dangmyeon) are the biggest single line on the list and there is no substitute that behaves the same way. They are sweet potato starch, they stay springy instead of going soft, and one box does the whole batch.",
+                       "Boneless thighs cost far less than breast and are the only cut that makes sense for a braise this long. They stay juicy where breast would go stringy.",
+                       "Honey and brown sugar together give jjimdak its glaze. Buy honey in the large jug rather than the little bear, since the price per ounce is dramatically better and honey keeps forever.",
+                       "Potatoes and carrots in bulk bags cost almost nothing and add real volume. The potato starch also helps thicken the braising liquid so it coats the noodles instead of pooling."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Soak the Korean glass noodles (dangmyeon) in cold water for 30 minutes while everything else cooks. Do not boil them yet.",
+                    "Cut the chicken thighs into large pieces and blanch them in boiling water for two minutes, then drain and rinse. This gives you a clean braising liquid rather than a murky one.",
+                    "Whisk the soy sauce, oyster sauce, brown sugar, honey, garlic, ginger, black pepper, and a spoonful of cocoa powder together. The cocoa is what gives jjimdak its dark color without turning it bitter.",
+                    "Put the chicken in a wide pot with the sauce and enough water to come halfway up, add the dried arbol chiles, and simmer covered for 20 minutes.",
+                    "Add the potatoes, carrots, and onion in big chunks and cook another 20 minutes until they are tender and the liquid has reduced by about a third.",
+                    "Drain the soaked noodles, add them to the pot with the sliced jalapeno, and cook 5 more minutes until they turn clear and springy. They will drink up a lot of the sauce, which is the point.",
+                    "Taste for salt and sweetness, then pull it off the heat before the noodles go soft."
+                ],
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. Use tongs to get an even share of noodles into each container, because they tangle and one scoop can easily take double. Every portion lands at \u003cstrong\u003e562 calories\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.beyondkimchee.com/korean-braised-chicken-jjimdak/\" target=\"_blank\" rel=\"noopener\"\u003ebeyondkimchee.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Korean soy braised chicken for about \u003cstrong\u003e$3.81 a bowl\u003c/strong\u003e (at everyday cost). Members get the full Meal Prep library, every money lesson, and all the site calculators and tools for $1 a month.",
+    "cost_batch":  26.73,
+    "cost_batch_true":  30.55,
+    "cost_per_serving":  1.91,
+    "cost_per_serving_true":  2.18,
+    "cost_pantry_add":  22.8,
+    "cost_first_run":  53.35,
+    "scaler":  {
+                   "cost":  "30.55",
+                   "ing":  [
+                               {
+                                   "item":  "Korean glass noodles (dangmyeon)",
+                                   "canon":  "Rice Noodles",
+                                   "grams":  397,
+                                   "buy":  "14 oz dry",
+                                   "bid":  "rice-noodles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  3033,
+                                   "buy":  "6.75 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Dried Arbol Chiles",
+                                   "canon":  "Dried Arbol Chiles",
+                                   "grams":  11,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "dried-arbol-chiles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  373,
+                                   "buy":  "1.5 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Oyster Sauce",
+                                   "canon":  "Oyster Sauce",
+                                   "grams":  70,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "oyster-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  35,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  12,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "canon":  "Brown Sugar",
+                                   "grams":  146,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cocoa Powder",
+                                   "canon":  "Cocoa Powder",
+                                   "grams":  14,
+                                   "buy":  "0.5 oz",
+                                   "bid":  "cocoa-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "canon":  "Honey",
+                                   "grams":  140,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  5,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  257,
+                                   "buy":  "2.3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  285,
+                                   "buy":  "4.7",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  1362,
+                                   "buy":  "6.4",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  49,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Andong jjimdak, Korean soy braised chicken with potatoes and glass noodles, rebuilt for 14 meal prep servings at 562 calories for about $3.81 a bowl (at everyday cost).",
+                 "keywords":  "andong jjimdak, korean braised chicken, dangmyeon glass noodles, soy braised chicken, korean meal prep, budget chicken recipe, high protein meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT50M",
+                 "totalTime":  "PT1H20M",
+                 "costPerServing":  3.81,
+                 "recipeIngredient":  [
+                                          "6.75 lb boneless skinless chicken thighs",
+                                          "14 oz dry Korean glass noodles (dangmyeon)",
+                                          "1.5 cups soy sauce",
+                                          "4 tbsp oyster sauce",
+                                          "0.75 cups brown sugar",
+                                          "0.5 cups honey",
+                                          "4 tbsp minced garlic",
+                                          "2 tbsp grated ginger",
+                                          "0.5 cups dried arbol chiles",
+                                          "2.3 yellow onions",
+                                          "4.7 carrots",
+                                          "6.4 potatoes",
+                                          "5.5 tbsp jalapeno"
+                                      ],
+                 "steps":  [
+                               "Soak the Korean glass noodles (dangmyeon) in cold water for 30 minutes.",
+                               "Blanch the cut chicken thighs, then drain and rinse.",
+                               "Whisk soy sauce, oyster sauce, brown sugar, honey, garlic, ginger, and cocoa powder into a braising sauce.",
+                               "Simmer the chicken in the sauce with dried chiles for 20 minutes, then add potatoes, carrots, and onion for 20 more.",
+                               "Add the drained noodles and jalapeno and cook 5 minutes until springy.",
+                               "Weigh the pot and divide into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Rice Noodles",
+                                  "grams":  397
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  3033
+                              },
+                              {
+                                  "item":  "Dried Arbol Chiles",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  373
+                              },
+                              {
+                                  "item":  "Oyster Sauce",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Brown Sugar",
+                                  "grams":  146
+                              },
+                              {
+                                  "item":  "Cocoa Powder",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Honey",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  257
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  285
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  1362
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  49
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              }
+                          ]
+}

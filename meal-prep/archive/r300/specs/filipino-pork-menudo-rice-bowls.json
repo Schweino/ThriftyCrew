@@ -1,0 +1,325 @@
+{
+    "name":  "Filipino Pork Menudo Rice Bowls",
+    "slug":  "filipino-pork-menudo-rice-bowls",
+    "cuisine":  "Filipino",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.kawalingpinoy.com/pork-menudo/",
+    "source_site":  "kawalingpinoy.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 389 cal / 33g protein per serving on the source page before rice, so the protein ratio clears comfortably and rice pushes calories over 500. Tomato-braised pork with potato, carrot and chickpeas is all tracked commodities. Distinct from the two live Filipino pork entries (adobo and giniling). Beef liver is traditional but optional and gets dropped; annatto subs to tracked achiote-paste. | HARVEST: Rice not in source ingredient list.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14."
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  592,
+                 "protein":  41,
+                 "carbs":  47,
+                 "fat":  27,
+                 "cost_ps":  "3.80"
+             },
+    "intro_html":  "Filipino menudo has nothing to do with the Mexican soup of the same name. This one is a tomato braise of pork, potatoes, carrots, and bell peppers, sweetened with raisins and rounded out with chickpeas. It shows up at every family party in the Philippines because it stretches a modest amount of meat across a lot of people and it holds beautifully on a buffet table for hours. That last part is precisely what we ask of a meal prep, so this dish arrived pre-qualified for the job.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 4.75 tbsp (65 g)",
+                                "\u003cstrong\u003eAchiote Paste (El Yucateco):\u003c/strong\u003e 0.75 tbsp (12 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (257 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.75 tbsp (23 g)",
+                                "\u003cstrong\u003ePork Shoulder (generic (USDA)):\u003c/strong\u003e 4.75 lb (2117 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 6.2 cans (2548 g)",
+                                "\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 2.25 tbsp (42 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 7 (1491 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 5.5 (336 g)",
+                                "\u003cstrong\u003eChicken Livers (generic (USDA)):\u003c/strong\u003e 1.25 lb (529 g)",
+                                "\u003cstrong\u003eChickpeas (generic):\u003c/strong\u003e 2.3 cans (595 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 1 (140 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 1 (140 g)",
+                                "\u003cstrong\u003eGolden Raisins (generic):\u003c/strong\u003e 9.25 tbsp (84 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.25 tbsp (9 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Vegetable Oil, 4.75 tbsp: ~$0.16. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Achiote Paste, 0.75 tbsp: ~$0.27. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2.3: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 2.75 tbsp: ~$0.33. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Pork Shoulder, 4.75 lb: ~$16.66. \u003cstrong\u003eBuy 5 lbs: $17.85.\u003c/strong\u003e",
+                       "Diced Tomatoes, 6.2 cans: ~$5.95. \u003cstrong\u003eBuy 7 cans: $6.72.\u003c/strong\u003e",
+                       "Fish Sauce, 2.25 tbsp: ~$0.40. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Potato, 7: ~$1.87. \u003cstrong\u003eBuy 4 lbs: $2.27.\u003c/strong\u003e",
+                       "Carrots, 5.5: ~$0.71. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Chicken Livers, 1.25 lb: ~$1.76. \u003cstrong\u003eBuy 1 1.25lb tub: $1.88.\u003c/strong\u003e",
+                       "Chickpeas, 2.3 cans: ~$1.92. \u003cstrong\u003eBuy 3 cans: $2.46.\u003c/strong\u003e",
+                       "Green Bell Peppers, 1: ~$1.00. \u003cstrong\u003eBuy 2 each: $1.72.\u003c/strong\u003e",
+                       "Red Bell Pepper, 1: ~$1.00. \u003cstrong\u003eBuy 2 each: $1.72.\u003c/strong\u003e",
+                       "Golden Raisins, 9.25 tbsp: ~$0.71. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, salt): ~$0.44. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $33.83 across 14 servings, so roughly $2.42 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $39.27 across 14 servings, roughly $2.80 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.95 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.22. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.80 a bowl\u003c/strong\u003e (at everyday cost) for a Filipino party braise that stretches pork across potatoes, carrots, and chickpeas.",
+    "shop_smart":  [
+                       "\u003cstrong\u003ePork shoulder is the right cut and the cheap one at the same time.\u003c/strong\u003e It needs the long braise to break down, which means the budget choice is also the correct choice.",
+                       "\u003cstrong\u003ePotatoes, carrots, and canned tomatoes are doing the volume work.\u003c/strong\u003e That is the whole trick of this dish. The meat sets the flavor and the cheap stuff sets the portion size.",
+                       "\u003cstrong\u003eCanned chickpeas are the quiet protein add.\u003c/strong\u003e They cost almost nothing per can and they soak up the tomato sauce better than anything else in the pot.",
+                       "\u003cstrong\u003eRaisins sound strange and are not optional.\u003c/strong\u003e They melt into the sauce and give it the faint sweetness that makes menudo taste like menudo rather than like generic pork stew."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cut the pork shoulder into cubes and season with salt and black pepper.",
+                    "Heat the vegetable oil in a large pot, stir in the achiote paste until it colors the oil, then brown the pork in batches.",
+                    "Add the diced yellow onion and garlic and cook until softened.",
+                    "Stir in the diced tomatoes and fish sauce, bring to a simmer, cover, and cook until the pork is starting to turn tender.",
+                    "Add the cubed potatoes, carrots, and chicken livers and simmer uncovered until the vegetables are cooked through and the sauce reduces.",
+                    "Fold in the chickpeas, diced green and red bell peppers, and golden raisins, and cook just until the peppers soften but keep some bite.",
+                    "Taste and adjust the salt, then cook rice separately to serve underneath."
+                ],
+    "portion_html":  "Weigh the rice and the menudo in separate pots, subtracting the empty-pot weight from Step 1 each time, and divide each by 14. Even rice base first, even ladle of stew second. Every bowl comes in at \u003cstrong\u003e592 calories with 41 grams of protein\u003c/strong\u003e. This one reheats particularly well because the potatoes keep drinking up the sauce.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.kawalingpinoy.com/pork-menudo/\" target=\"_blank\" rel=\"noopener\"\u003ekawalingpinoy.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Braised, party-sized dinners for about $3.80 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  33.83,
+    "cost_batch_true":  39.27,
+    "cost_per_serving":  2.42,
+    "cost_per_serving_true":  2.8,
+    "cost_pantry_add":  13.95,
+    "cost_first_run":  53.22,
+    "scaler":  {
+                   "cost":  "39.27",
+                   "ing":  [
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  65,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Achiote Paste",
+                                   "canon":  "Achiote Paste",
+                                   "grams":  12,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "achiote-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  257,
+                                   "buy":  "2.3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  23,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Pork Shoulder",
+                                   "canon":  "Pork Shoulder",
+                                   "grams":  2117,
+                                   "buy":  "4.75 lb",
+                                   "bid":  "pork-shoulder",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  2548,
+                                   "buy":  "6.2 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fish Sauce",
+                                   "canon":  "Fish Sauce",
+                                   "grams":  42,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "fish-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  1491,
+                                   "buy":  "7",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  336,
+                                   "buy":  "5.5",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chicken Livers",
+                                   "canon":  "Chicken Livers",
+                                   "grams":  529,
+                                   "buy":  "1.25 lb",
+                                   "bid":  "chicken-livers",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chickpeas",
+                                   "canon":  "Chickpeas",
+                                   "grams":  595,
+                                   "buy":  "2.3 cans",
+                                   "bid":  "chickpeas",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  140,
+                                   "buy":  "1",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "canon":  "Red Bell Pepper",
+                                   "grams":  140,
+                                   "buy":  "1",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Golden Raisins",
+                                   "canon":  "Golden Raisins",
+                                   "grams":  84,
+                                   "buy":  "9.25 tbsp",
+                                   "bid":  "raisins",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  9,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Filipino pork menudo rebuilt for 14-serving meal prep: tomato-braised pork with potatoes, carrots, chickpeas, and raisins over rice. 592 calories, 41g protein, about $3.80 per serving (at everyday cost).",
+                 "keywords":  "pork menudo, filipino pork stew, tomato braised pork, filipino meal prep, budget high protein dinner, kawaling pinoy style menudo",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT60M",
+                 "totalTime":  "PT85M",
+                 "costPerServing":  3.80,
+                 "recipeIngredient":  [
+                                          "4.75 lb pork shoulder",
+                                          "6.2 cans diced tomatoes",
+                                          "7 potatoes",
+                                          "5.5 carrots",
+                                          "2.3 cans chickpeas",
+                                          "1.25 lb chicken livers",
+                                          "9.25 tbsp golden raisins",
+                                          "1 green bell pepper",
+                                          "1 red bell pepper",
+                                          "2.3 yellow onions",
+                                          "2.75 tbsp garlic",
+                                          "2.25 tbsp fish sauce",
+                                          "0.75 tbsp achiote paste"
+                                      ],
+                 "steps":  [
+                               "Cube and season the pork, then brown it in achiote-colored oil.",
+                               "Cook the onion and garlic until soft.",
+                               "Add diced tomatoes and fish sauce and simmer covered until the pork softens.",
+                               "Add potatoes, carrots, and chicken livers and simmer until tender.",
+                               "Fold in chickpeas, bell peppers, and raisins and cook briefly.",
+                               "Cook rice separately and portion the stew over it into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  65
+                              },
+                              {
+                                  "item":  "Achiote Paste",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  257
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  23
+                              },
+                              {
+                                  "item":  "Pork Shoulder",
+                                  "grams":  2117
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  2548
+                              },
+                              {
+                                  "item":  "Fish Sauce",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  1491
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  336
+                              },
+                              {
+                                  "item":  "Chicken Livers",
+                                  "grams":  529
+                              },
+                              {
+                                  "item":  "Chickpeas",
+                                  "grams":  595
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "Golden Raisins",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              }
+                          ]
+}

@@ -1,0 +1,279 @@
+{
+    "name":  "Turkey Florentine Rice Bake",
+    "slug":  "turkey-florentine-rice-bake",
+    "cuisine":  "American",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://spicysouthernkitchen.com/turkey-florentine/",
+    "source_site":  "spicysouthernkitchen.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 300g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Creamed-spinach turkey bake; distinct from the existing broccoli-cheddar rice skillet. Source verified at 6 servings, 399 cal (protein not printed); over rice at our portion it is ~545 cal with an estimated 34g protein. Confidence: source protein figure unavailable. | HARVEST: Calories published, protein grams not published. Rice/noodles are a serving-side, not baked in; published calories likely exclude the rice.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 300g (src scale)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  572,
+                 "protein":  35,
+                 "carbs":  56,
+                 "fat":  22,
+                 "cost_ps":  "3.79"
+             },
+    "intro_html":  "Florentine on a menu means there is spinach in it, a naming convention we inherited from French kitchens honoring Catherine de Medici. What it means for your kitchen is that frozen chopped spinach, which costs almost nothing, is about to carry a creamy turkey bake. Each serving lands at 572 calories with \u003cstrong\u003e35 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.79\u003c/strong\u003e (at everyday cost). There is a whisper of curry powder in the sauce that sounds strange and tastes exactly right.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1.25 cups (261 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 (89 g)",
+                                "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 1.25 lb (529 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2.25 cups (560 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 1.25 cups (146 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 5.25 cups (1286 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.75 tbsp (14 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)",
+                                "\u003cstrong\u003eCurry Powder (generic):\u003c/strong\u003e 0.25 tbsp (2 g)",
+                                "\u003cstrong\u003eMexican Cheese Blend (Great Value):\u003c/strong\u003e 9.25 oz (264 g)",
+                                "\u003cstrong\u003eFrozen Chopped Spinach (generic):\u003c/strong\u003e 3 lb (1325 g)",
+                                "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 2.25 lb (980 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Butter, 1.25 cups: ~$1.71. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Yellow Onion, 1: ~$0.22. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "White Mushrooms, 1.25 lb: ~$4.41. \u003cstrong\u003eBuy 3 8oz packs: $5.67.\u003c/strong\u003e",
+                       "Chicken Broth, 2.25 cups: ~$0.75. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "All-Purpose Flour, 1.25 cups: ~$0.14. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Milk, 5.25 cups: ~$1.03. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
+                       "Mexican Cheese Blend, 9.25 oz: ~$2.01. \u003cstrong\u003eBuy 2 8oz bags: $3.45.\u003c/strong\u003e",
+                       "Frozen Chopped Spinach, 3 lb: ~$9.35. \u003cstrong\u003eBuy 5 10oz boxes: $10.02.\u003c/strong\u003e",
+                       "Turkey Breast, 2.25 lb: ~$10.40. \u003cstrong\u003eBuy 1 3lb frozen roast: $14.44.\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, curry powder): ~$0.24. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $31.12 across 14 servings, so roughly $2.22 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $42.71 across 14 servings, roughly $3.05 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.31 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.02. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.79 a serving\u003c/strong\u003e (at everyday cost). Frozen spinach and rice are two of the cheapest things you can put on a plate, and the mushroom cream sauce makes them taste expensive.",
+    "shop_smart":  [
+                       "Frozen chopped spinach in 10 oz boxes costs a fraction of fresh spinach for the same cooked volume. Fresh would need several pounds to equal what five boxes deliver here.",
+                       "Squeeze the thawed spinach dry in a clean towel before it goes in. Skipping this is how a cream sauce turns into a puddle, and wasted sauce is wasted money.",
+                       "White mushrooms in 8 oz packs beat pre-sliced on price every time. Slicing three packs takes about five minutes.",
+                       "Rice from the big bag is the cheapest base you can build a casserole on, and it never spoils on the shelf."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice and spread it across the bottom of a greased 9x13 pan as the base layer.",
+                    "Thaw the frozen chopped spinach and squeeze it dry in a clean kitchen towel, wringing hard. You want a compact ball, not a wet clump.",
+                    "Melt the butter in a large pot over medium heat, add the diced onion and sliced mushrooms, and cook 8 to 10 minutes until the mushroom liquid cooks away.",
+                    "Whisk in the flour and cook two minutes, then add the chicken broth and the milk gradually, whisking, and cook until the sauce thickens.",
+                    "Season with salt, black pepper, and the curry powder. It is a small amount and it is what separates this from every other cream sauce.",
+                    "Off the heat, melt in most of the shredded cheese, then fold in the squeezed spinach and the diced turkey breast.",
+                    "Pour the sauce over the rice, top with the remaining cheese, and bake at 375F for 30 minutes until bubbling and browned, then rest 10 minutes before portioning."
+                ],
+    "portion_html":  "Set the pan on the scale, subtract the empty pan weight, and divide by 14. Cut through the rice base and the creamed spinach layer together so every container gets both. Each serving comes to \u003cstrong\u003e572 calories\u003c/strong\u003e and 35 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://spicysouthernkitchen.com/turkey-florentine/\" target=\"_blank\" rel=\"noopener\"\u003espicysouthernkitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Creamed spinach and turkey over rice for about $3.79 a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "cost_batch":  31.12,
+    "cost_batch_true":  42.71,
+    "cost_per_serving":  2.22,
+    "cost_per_serving_true":  3.05,
+    "cost_pantry_add":  10.31,
+    "cost_first_run":  53.02,
+    "scaler":  {
+                   "cost":  "42.71",
+                   "ing":  [
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  261,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  89,
+                                   "buy":  "1",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "White Mushrooms",
+                                   "canon":  "White Mushrooms",
+                                   "grams":  529,
+                                   "buy":  "1.25 lb",
+                                   "bid":  "mushrooms",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  560,
+                                   "buy":  "2.25 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  146,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  1286,
+                                   "buy":  "5.25 cups",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Curry Powder",
+                                   "canon":  "Curry Powder",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "curry-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Mexican Cheese Blend",
+                                   "canon":  "Mexican Cheese Blend",
+                                   "grams":  264,
+                                   "buy":  "9.25 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Frozen Chopped Spinach",
+                                   "canon":  "Frozen Chopped Spinach",
+                                   "grams":  1325,
+                                   "buy":  "3 lb",
+                                   "bid":  "spinach",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Turkey Breast",
+                                   "canon":  "Turkey Breast",
+                                   "grams":  980,
+                                   "buy":  "2.25 lb",
+                                   "bid":  "turkey-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey Florentine rice bake meal prep: creamed spinach and mushroom sauce with turkey over a rice base. 572 calories, 35g protein, about $3.79 a serving (at everyday cost).",
+                 "keywords":  "turkey florentine, creamed spinach casserole, spinach rice bake, leftover turkey recipes, budget meal prep, high protein casserole",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M",
+                 "costPerServing":  3.79,
+                 "recipeIngredient":  [
+                                          "7 cups diced cooked turkey breast",
+                                          "15.5 cups frozen chopped spinach",
+                                          "7.5 cups white mushrooms",
+                                          "5.25 cups milk",
+                                          "3.75 cups dry rice",
+                                          "9.25 oz Mexican cheese blend",
+                                          "1.25 lb chicken broth",
+                                          "1.25 cups butter",
+                                          "1.25 cups all-purpose flour",
+                                          "1 yellow onion"
+                                      ],
+                 "steps":  [
+                               "Cook the rice and spread it into a greased 9x13 pan.",
+                               "Thaw and wring the frozen spinach completely dry.",
+                               "Cook the onion and mushrooms in butter until dry, whisk in the flour, then add the broth and milk and cook until thick.",
+                               "Season with salt, pepper, and curry powder, melt in most of the cheese off the heat, and fold in the spinach and turkey.",
+                               "Pour over the rice, top with the rest of the cheese, bake at 375F for 30 minutes, rest 10 minutes, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Butter",
+                                  "grams":  261
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  89
+                              },
+                              {
+                                  "item":  "White Mushrooms",
+                                  "grams":  529
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  560
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  146
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  1286
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Curry Powder",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Mexican Cheese Blend",
+                                  "grams":  264
+                              },
+                              {
+                                  "item":  "Frozen Chopped Spinach",
+                                  "grams":  1325
+                              },
+                              {
+                                  "item":  "Turkey Breast",
+                                  "grams":  980
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

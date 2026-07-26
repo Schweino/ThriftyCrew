@@ -1,0 +1,349 @@
+{
+    "name":  "Chicken and Sausage Gumbo",
+    "slug":  "chicken-sausage-gumbo",
+    "cuisine":  "Cajun",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.africanbites.com/chicken-and-sausage-gumbo/",
+    "source_site":  "africanbites.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 400g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Source lists 486 cal / 23g protein for the gumbo; est 690 over rice - confidence medium on calories. Big-pot dish that is arguably better on day two. NEAR-DUPE WATCH: the catalog already has Cajun Chicken and Sausage Jambalaya and Cajun Chicken Etouffee, so this is the third Louisiana entry - roux-dark and soupy rather than rice-cooked-in or tomato-thickened, but it is a real judgment call for the selector. | HARVEST: ",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 400g (src scale)",
+                         "OVERRIDE Italian Seasoning: WAVE-4 CANON-MAPPER FIX (5th sausages-\u003eItalian Seasoning victim): \u002712 oz smoked sausage\u0027 costed as 595 g of SPICE = the $22.31 pantry-seasonings line; -\u003e Smoked Turkey Sausage per board precedent, which also puts the sausage back in the gumbo"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  562,
+                 "protein":  46,
+                 "carbs":  54,
+                 "fat":  17,
+                 "cost_ps":  "3.85"
+             },
+    "intro_html":  "Gumbo is a roux dish first and everything else second. You stir flour and fat over heat until it turns the color of an old penny, and that dark roux is where the flavor, the color, and the whole identity of the pot come from. Skip it, rush it, or scorch it and you do not have gumbo, you have soup. Take your time and you get 562 calories and \u003cstrong\u003e46 grams of protein\u003c/strong\u003e per bowl for about \u003cstrong\u003e$3.85 a serving\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 4.75 lb (2183 g)",
+                                "\u003cstrong\u003eCajun Seasoning (Tony Chachere\u0027s):\u003c/strong\u003e 3 tbsp (26 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1.75 tbsp (26 g)",
+                                "\u003cstrong\u003eSmoked Turkey Sausage (Butterball):\u003c/strong\u003e 1.25 lb (595 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 7.5 tbsp (105 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 13 tbsp (105 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.7 (192 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 2 (210 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 4 (210 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 tbsp (26 g)",
+                                "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 3.25 tbsp (10 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.07 oz (2 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 3 cartons (2734 g)",
+                                "\u003cstrong\u003eSmoked Paprika (Great Value):\u003c/strong\u003e 1.25 tbsp (8 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 8.75 tbsp (52 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 4.75 lb: ~$15.74. \u003cstrong\u003eBuy 5 lbs: $16.35.\u003c/strong\u003e",
+                       "Vegetable Oil, 1.75 tbsp: ~$0.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Smoked Turkey Sausage, 1.25 lb: ~$5.31. \u003cstrong\u003eBuy 2 13oz ropes: $6.57.\u003c/strong\u003e",
+                       "Butter, 7.5 tbsp: ~$0.69. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "All-Purpose Flour, 13 tbsp: ~$0.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 1.7: ~$0.48. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Green Bell Peppers, 2: ~$1.50. \u003cstrong\u003eBuy 2 each: $1.72.\u003c/strong\u003e",
+                       "Celery, 4: ~$1.11. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Garlic, 3 tbsp: ~$0.37. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Chicken Broth, 3 cartons: ~$3.67. \u003cstrong\u003ePantry staple; this batch alone uses about 3 32oz cartons.\u003c/strong\u003e",
+                       "Green Onions, 8.75 tbsp: ~$0.62. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (cajun seasoning, dried thyme, bay leaves, smoked paprika, salt, black pepper): ~$1.64. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $32.15 across 14 servings, so roughly $2.30 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $39.11 across 14 servings, roughly $2.79 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.82 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.93. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.85 a bowl\u003c/strong\u003e (at everyday cost) for a big pot dish that is famously better on day two. Gumbo was invented to feed a lot of people from not much, and the math still works.",
+    "shop_smart":  [
+                       "The holy trinity of onion, bell pepper, and celery is the cheapest flavor base in American cooking. Buy the whole bunch of celery and a couple of green peppers and you have the foundation of a dozen Cajun dishes.",
+                       "Flour and butter cost pennies and they are the single most important ingredient in the pot. Nothing you can buy in a jar replaces a real dark roux.",
+                       "Chicken breast is the biggest line here. Buy the family pack and cut it down yourself rather than paying for the small tray.",
+                       "Cajun seasoning, smoked paprika, thyme, and bay leaves are pantry jars that turn up in every Louisiana recipe. Buy the larger containers, since the price per ounce is far better than the little bottles and none of it goes to waste."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cut the chicken breast into large pieces, season it with the cajun seasoning, and brown it in the vegetable oil in a heavy pot. Set it aside.",
+                    "Melt the butter in the same pot, whisk in the flour, and now settle in. Stir constantly over medium-low heat for 25 to 30 minutes until the roux turns the color of milk chocolate. Do not answer the phone. If black flecks appear, throw it out and start over, because a burnt roux poisons the entire pot.",
+                    "Add the diced onion, bell pepper, and celery straight into the hot roux. It will hiss and stop the cooking, which is exactly what you want. Cook 8 minutes until soft.",
+                    "Add the garlic, thyme, smoked paprika, italian seasoning, bay leaves, salt, and pepper and stir for a minute.",
+                    "Pour in the chicken broth slowly while whisking so the roux incorporates smoothly instead of clumping, then return the chicken.",
+                    "Simmer uncovered for 45 minutes, skimming any fat that rises. The gumbo should thicken to the point where it coats a spoon but still pours.",
+                    "Cook the rice, then stir the sliced green onions in off the heat."
+                ],
+    "portion_html":  "Weigh the rice into each container first, then set the pot on the scale, subtract the empty-pot weight, and divide by 14. Stir the pot thoroughly before each scoop, because the chicken settles and the last bowl otherwise ends up as broth. Every portion lands at \u003cstrong\u003e562 calories\u003c/strong\u003e, and gumbo genuinely improves for the first two or three days.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.africanbites.com/chicken-and-sausage-gumbo/\" target=\"_blank\" rel=\"noopener\"\u003eafricanbites.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A pot of real Louisiana gumbo for about \u003cstrong\u003e$3.85 a bowl\u003c/strong\u003e (at everyday cost). Members get every recipe in the Meal Prep section plus the full library of money lessons, calculators, and tools for $1 a month.",
+    "cost_batch":  32.15,
+    "cost_batch_true":  39.11,
+    "cost_per_serving":  2.3,
+    "cost_per_serving_true":  2.79,
+    "cost_pantry_add":  14.82,
+    "cost_first_run":  53.93,
+    "scaler":  {
+                   "cost":  "39.11",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  2183,
+                                   "buy":  "4.75 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cajun Seasoning",
+                                   "canon":  "Cajun Seasoning",
+                                   "grams":  26,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "cajun-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  26,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Smoked Turkey Sausage",
+                                   "canon":  "Smoked Turkey Sausage",
+                                   "grams":  595,
+                                   "buy":  "1.25 lb",
+                                   "bid":  "smoked-turkey-sausage",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  105,
+                                   "buy":  "7.5 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  105,
+                                   "buy":  "13 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  192,
+                                   "buy":  "1.7",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  210,
+                                   "buy":  "2",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "canon":  "Celery",
+                                   "grams":  210,
+                                   "buy":  "4",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  26,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  10,
+                                   "buy":  "3.25 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  2,
+                                   "buy":  "0.07 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  2734,
+                                   "buy":  "3 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Smoked Paprika",
+                                   "canon":  "Smoked Paprika",
+                                   "grams":  8,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  52,
+                                   "buy":  "8.75 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Louisiana gumbo built on a dark roux with the holy trinity and chicken over rice, rebuilt for 14 meal prep servings at 562 calories for about $3.85 a bowl (at everyday cost).",
+                 "keywords":  "chicken gumbo, cajun gumbo recipe, dark roux, holy trinity, louisiana meal prep, big pot dinner, high protein meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT1H30M",
+                 "totalTime":  "PT1H55M",
+                 "costPerServing":  3.85,
+                 "recipeIngredient":  [
+                                          "4.75 lb boneless skinless chicken breast",
+                                          "7.5 tbsp butter",
+                                          "13 tbsp all-purpose flour",
+                                          "1.75 tbsp vegetable oil",
+                                          "1.7 yellow onions",
+                                          "2 green bell peppers",
+                                          "4 celery stalks",
+                                          "3 tbsp minced garlic",
+                                          "6 lb chicken broth",
+                                          "8.75 tbsp green onions",
+                                          "3.75 cups dry rice",
+                                          "Pantry: cajun seasoning, italian seasoning, dried thyme, bay leaves, smoked paprika, salt, black pepper"
+                                      ],
+                 "steps":  [
+                               "Season and brown the chicken pieces, then set aside.",
+                               "Whisk flour into melted butter and stir constantly 25 to 30 minutes until the roux is milk chocolate colored.",
+                               "Add the onion, bell pepper, and celery to the roux and cook 8 minutes, then add garlic and seasonings.",
+                               "Whisk in the chicken broth slowly, return the chicken, and simmer uncovered 45 minutes.",
+                               "Cook the rice, stir in green onions, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  2183
+                              },
+                              {
+                                  "item":  "Cajun Seasoning",
+                                  "grams":  26
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  26
+                              },
+                              {
+                                  "item":  "Smoked Turkey Sausage",
+                                  "grams":  595
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  105
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  105
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  192
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Celery",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  26
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  2734
+                              },
+                              {
+                                  "item":  "Smoked Paprika",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

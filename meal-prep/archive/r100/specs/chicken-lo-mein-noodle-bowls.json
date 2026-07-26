@@ -1,0 +1,267 @@
+{
+    "name":  "Chicken Lo Mein Noodle Bowls",
+    "slug":  "chicken-lo-mein-noodle-bowls",
+    "cuisine":  "Chinese",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "https://www.spendwithpennies.com/chicken-lo-mein-take-out/",
+    "source_site":  "Spend With Pennies",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  660,
+                 "protein":  57,
+                 "carbs":  74,
+                 "fat":  16,
+                 "cost_ps":  "4.31"
+             },
+    "intro_html":  "Takeout lo mein without the takeout markup: chewy noodles, tender chicken, and a glossy hoisin-soy sauce that clings to everything. Each bowl packs \u003cstrong\u003e57 grams of protein\u003c/strong\u003e at 660 calories for about \u003cstrong\u003e$4.31\u003c/strong\u003e (at everyday cost). The delivery apps want triple that before the fees even start.",
+    "ingredients_display": ["\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 6.25 lb (2800 g)","\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2 (210 g)","\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 3.5 tbsp (49 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)","\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 3.5 tbsp (21 g)","\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 4.25 cups (210 g)","\u003cstrong\u003eEgg Noodles (Great Value wide):\u003c/strong\u003e 31.5 oz dry (892 g)","\u003cstrong\u003eHoisin Sauce (generic):\u003c/strong\u003e 2.25 cups (560 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 lb (420 g)","\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 cups (224 g)","\u003cstrong\u003eOyster Sauce (Lee Kum Kee):\u003c/strong\u003e 4.5 oz (126 g)","\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 2.25 tbsp (32 g)","\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 4.75 tbsp (38 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 6.25 lb: ~$13.77. \u003cstrong\u003eBuy 7 lbs: $15.61.\u003c/strong\u003e",
+                       "Vegetable Oil, 3.5 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 8.25 tbsp: ~$1.01. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Ginger, 3.5 tbsp: ~$0.18. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Green Onions, 4.25 cups: ~$2.50. \u003cstrong\u003eBuy 3 bunchs: $3.21.\u003c/strong\u003e",
+                       "Egg Noodles, 31.5 oz dry: ~$3.42. \u003cstrong\u003eBuy 3 12oz bags: $3.91.\u003c/strong\u003e",
+                       "Hoisin Sauce, 2.25 cups: ~$5.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 1 lb: ~$0.56. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 1 cups: ~$0.85. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Oyster Sauce, 4.5 oz: ~$1.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sesame Oil, 2.25 tbsp: ~$0.67. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Cornstarch, 4.75 tbsp: ~$0.16. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (red bell pepper, salt, black pepper): ~$1.70. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $31.17 across 14 servings, so roughly $2.23 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.27 across 14 servings, roughly $2.52 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.59 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.86. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.31 a bowl\u003c/strong\u003e (at everyday cost) for a full plate of chicken lo mein. The same order at a Chinese takeout spot runs $11 to $14 before tip and delivery fees, so this batch pays for itself by the second container.",
+    "shop_smart":  [
+                       "Chicken breast in the big club pack costs about $2.23 a pound. The 6.25 pounds here is the priciest line at $13.77, and it is still cheaper than 2 pounds of restaurant chicken.",
+                       "Regular wide egg noodles do the job of \u0027lo mein noodles\u0027 for a third of the price of anything labeled Asian noodles. Same wheat, same egg, different label.",
+                       "Hoisin and oyster sauce look expensive per bottle, but they last across several batches. Counted at what this recipe actually uses, they add well under a dollar per bowl of restaurant-level flavor."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Whisk the sauce: hoisin, soy sauce, oyster sauce, sesame oil, chicken broth, and cornstarch in a bowl until smooth. Set it by the stove.",
+                    "Boil the egg noodles 1 minute short of the package time, drain, and toss with a little oil so they do not clump.",
+                    "Slice the chicken breast into thin strips. Working in batches, sear in vegetable oil over high heat until cooked through to 165 F. Set aside.",
+                    "In the same pot, stir fry the sliced red bell pepper 2 minutes, then add the garlic, ginger, and most of the green onions for 1 minute more.",
+                    "Return the chicken, pour in the sauce, and simmer 1 to 2 minutes until it thickens and turns glossy.",
+                    "Add the noodles and toss until every strand is coated. Finish with the remaining green onions.",
+                    "Portion into 14 containers while still warm so the sauce distributes evenly."
+                ],
+    "portion_html":  "Set the full pot on the scale, subtract the empty pot weight you wrote down, and divide by 14. Weigh that amount into each container. Every bowl comes out to about 660 calories with 57 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.spendwithpennies.com/chicken-lo-mein-take-out/\" target=\"_blank\" rel=\"noopener\"\u003eSpend With Pennies\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Hearty dinners for about $4.31 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  31.17,
+    "cost_batch_true":  35.27,
+    "cost_per_serving":  2.23,
+    "cost_per_serving_true":  2.52,
+    "cost_pantry_add":  16.59,
+    "cost_first_run":  51.86,
+    "scaler":  {
+                   "cost":  "35.27",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  2800,
+                                   "buy":  "6.25 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "grams":  210,
+                                   "buy":  "2",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "grams":  49,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  70,
+                                   "buy":  "8.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "grams":  21,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "grams":  210,
+                                   "buy":  "4.25 cups",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Egg Noodles",
+                                   "grams":  892,
+                                   "buy":  "31.5 oz dry",
+                                   "bid":  "egg-noodles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Hoisin Sauce",
+                                   "grams":  560,
+                                   "buy":  "2.25 cups",
+                                   "bid":  "hoisin-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  420,
+                                   "buy":  "1 lb",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "grams":  224,
+                                   "buy":  "1 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Oyster Sauce",
+                                   "grams":  126,
+                                   "buy":  "4.5 oz",
+                                   "bid":  "oyster-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "grams":  32,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Cornstarch",
+                                   "grams":  38,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Takeout-style chicken lo mein meal prep. 14 noodle bowls at 660 calories and 57g protein each, about $4.31 a serving (at everyday cost) instead of $12 delivery.",
+                 "keywords":  "chicken lo mein, lo mein meal prep, takeout fakeout, budget meal prep, high protein noodles, cheap dinner recipes",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  4.31,
+                 "recipeIngredient":  [
+                                          "6.25 lb boneless skinless chicken breast",
+                                          "31.5 oz dry wide egg noodles",
+                                          "2.25 cups hoisin sauce",
+                                          "1 cup soy sauce",
+                                          "4.5 oz oyster sauce",
+                                          "2.25 tbsp sesame oil",
+                                          "1 lb chicken broth",
+                                          "8.25 tbsp garlic",
+                                          "3.5 tbsp ginger",
+                                          "4.25 cups green onions",
+                                          "4.75 tbsp cornstarch"
+                                      ],
+                 "steps":  [
+                               "Whisk hoisin, soy, oyster sauce, sesame oil, broth, and cornstarch into a sauce.",
+                               "Boil egg noodles just short of done and toss with a little oil.",
+                               "Sear sliced chicken to 165 F, then stir fry pepper, garlic, ginger, and green onions.",
+                               "Return chicken, add sauce, and simmer until glossy.",
+                               "Toss in the noodles, coat well, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  2800
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  49
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Egg Noodles",
+                                  "grams":  892
+                              },
+                              {
+                                  "item":  "Hoisin Sauce",
+                                  "grams":  560
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  224
+                              },
+                              {
+                                  "item":  "Oyster Sauce",
+                                  "grams":  126
+                              },
+                              {
+                                  "item":  "Sesame Oil",
+                                  "grams":  32
+                              },
+                              {
+                                  "item":  "Cornstarch",
+                                  "grams":  38
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

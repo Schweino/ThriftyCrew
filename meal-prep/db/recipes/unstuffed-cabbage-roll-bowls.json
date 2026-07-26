@@ -1,0 +1,174 @@
+{
+    "name":  "Unstuffed Cabbage Roll Bowls",
+    "slug":  "unstuffed-cabbage-roll-bowls",
+    "cuisine":  "Eastern European",
+    "protein":  "beef",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  560,
+                 "protein":  49,
+                 "carbs":  59,
+                 "fat":  14,
+                 "cost_ps":  "4.81"
+             },
+    "intro_html":  "All the cozy flavor of cabbage rolls without the fussy rolling and stuffing. Each bowl brings 49 grams of protein and costs about $4.81 a serving (at everyday cost). One skillet, 14 servings, and none of the babysitting.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2710 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (808 g)",
+                                "\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 4 lb (1400 g)",
+                                "\u003cstrong\u003eCrushed Tomatoes (generic):\u003c/strong\u003e 2 cans (1200 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (240 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (12 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2 tbsp (80 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 1/2 tsp (25 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 tsp (7 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 tsp (5 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 3/4 tsp (6 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1/2 tsp (3 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.81 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Buy the \u003cstrong\u003e6 lb ground beef value pack\u003c/strong\u003e and let the cheap cabbage do the rest of the stretching.",
+                       "A \u003cstrong\u003ewhole head of green cabbage runs under a dollar a pound\u003c/strong\u003e and shreds down to a huge pile, so it is one of the best deals in the store.",
+                       "Canned crushed tomatoes are fine here, so grab the \u003cstrong\u003estore brand cans\u003c/strong\u003e and skip the name-brand markup."
+                   ],
+    "make_it":  [
+                    "Brown the ground beef in a large skillet, breaking it up as it goes, then drain the grease.",
+                    "Add the chopped onion and garlic and cook until they soften.",
+                    "Stir in the crushed tomatoes and the chopped cabbage, then cover and simmer until the cabbage wilts down, about 15 minutes.",
+                    "Fold in the cooked rice and let it warm through so it soaks up the sauce.",
+                    "Taste, adjust the salt and pepper, and serve it up in bowls."
+                ],
+    "portion_html":  "Each of the 14 bowls gives you 49 grams of protein and about 560 calories.",
+    "credit_html":  "",
+    "upsell_html":  "Cheap, filling, and loaded with veggies, this is meal prep that earns its spot in the fridge. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  51.39,
+    "cost_batch_true":  54.01,
+    "cost_per_serving":  3.67,
+    "cost_per_serving_true":  3.86,
+    "cost_pantry_add":  16.67,
+    "cost_first_run":  70.68,
+    "scaler":  {
+                   "cost":  "54.01",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "grams":  2710,
+                                   "buy":  "6 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  808,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Cabbage",
+                                   "grams":  1400,
+                                   "buy":  "4 lb",
+                                   "bid":  "green-cabbage",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Crushed Tomatoes",
+                                   "grams":  1200,
+                                   "buy":  "2 cans",
+                                   "bid":  "crushed-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  240,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  12,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  80,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  25,
+                                   "buy":  "1 1/2 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  7,
+                                   "buy":  "1 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "grams":  5,
+                                   "buy":  "1 tsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "grams":  6,
+                                   "buy":  "3/4 tsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Pepper Flakes",
+                                   "grams":  3,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "red-pepper-flakes",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Eastern European meal prep. Fourteen servings at about 560 calories and 49 grams of protein for roughly $4.81 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, unstuffed cabbage roll bowls, budget dinner",
+                 "costPerServing":  4.81,
+                 "recipeIngredient":  [
+                                          "6 lb 93/7 Ground Beef",
+                                          "1 lb Rice",
+                                          "4 lb Green Cabbage",
+                                          "2 cans Crushed Tomatoes",
+                                          "3 onions Yellow Onion",
+                                          "1 bulb Garlic"
+                                      ],
+                 "steps":  [
+                               "Brown the ground beef in a large skillet, breaking it up as it goes, then drain the grease.",
+                               "Add the chopped onion and garlic and cook until they soften.",
+                               "Stir in the crushed tomatoes and the chopped cabbage, then cover and simmer until the cabbage wilts down, about 15 minutes.",
+                               "Fold in the cooked rice and let it warm through so it soaks up the sauce.",
+                               "Taste, adjust the salt and pepper, and serve it up in bowls."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

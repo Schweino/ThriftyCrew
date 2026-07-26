@@ -11,8 +11,8 @@ $old = Get-Content (Join-Path $here 'v2-perserving.bak-prespicefix.json') -Raw |
 $om=@{}; foreach($r in $old){ $om[$r.slug]=$r }
 $fields = 'intro_html','cost_closing_html','upsell_html','description'
 $edited=0
-foreach($run in 'r100','r300'){
-  foreach($sf in (Get-ChildItem (Join-Path $mp "$run\specs\*.json") | Where-Object Name -ne '_index.json')){
+foreach($run in @('db')){
+  foreach($sf in (Get-ChildItem (Join-Path $mp "db\recipes\*.json"))){
     $slug=$sf.BaseName; $ne=$new | Where-Object slug -eq $slug; $oe=$om[$slug]
     if(-not $ne -or -not $oe){ continue }
     $oldS = ('{0:0.00}' -f [double]$oe.everyday_ps); $newS = ('{0:0.00}' -f [double]$ne.everyday_ps)

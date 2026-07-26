@@ -1,0 +1,252 @@
+{
+    "name":  "Turkey Huevos Rancheros Rice Bowls",
+    "slug":  "turkey-huevos-rancheros-rice-bowls",
+    "cuisine":  "Tex-Mex",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.jennieo.com/recipes/huevos-rancheros-open-faced-taco/",
+    "source_site":  "jennieo.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +50% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Huevos rancheros rebuilt as a rice bowl so it portions instead of being plated to order. Source verified at 6 servings, 400 cal / 24g protein as an open-faced taco; on rice with extra turkey our portion is ~540 cal / 36g. Queso fresco would be swapped for board feta. Confidence: est_cal is our build. | HARVEST: Source is an open-faced taco built on tortillas, not a rice bowl; no rice in the ingredient list.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +50% (Rice)",
+                         "OVERRIDE Eggs: source 4 eggs for 6 bowls; house = 1 egg per bowl (6 x 50 g)",
+                         "OVERRIDE Turkey Breast: [BUMP x1.36] source \u00272 cups\u0027 (280 g) for 6; house = 380 g",
+                         "OVERRIDE +Rice: ADD rice base: titled \u0027Rice Bowls\u0027 but source (tortilla-plated) has no rice line; 55 g dry/serving x 6"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  574,
+                 "protein":  34,
+                 "carbs":  88,
+                 "fat":  10,
+                 "cost_ps":  "2.64"
+             },
+    "intro_html":  "Huevos rancheros is ranch-hand breakfast: fried eggs on a warm tortilla with salsa, the kind of meal built to keep somebody working until dark. Plated to order it is perfect and completely useless for meal prep. Built into a rice bowl instead, it portions cleanly and reheats without ruining anything. Each serving carries \u003cstrong\u003e34 grams of protein\u003c/strong\u003e and 574 calories for about \u003cstrong\u003e$2.64\u003c/strong\u003e a serving (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eTortilla (La Banderita):\u003c/strong\u003e 14.75 oz (420 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.75 tbsp (10 g)",
+                                "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 2 lb (887 g)",
+                                "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 1.6 cans (401 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 14 large eggs (700 g)",
+                                "\u003cstrong\u003eSalsa (Pace):\u003c/strong\u003e 1.25 cups (303 g)",
+                                "\u003cstrong\u003eMexican Cheese Blend (Great Value):\u003c/strong\u003e 3 oz (88 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 9 tbsp (9 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 6.75 cups dry (1254 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Tortilla, 14.75 oz: ~$0.99. \u003cstrong\u003eBuy 2 10ct packs: $1.41.\u003c/strong\u003e",
+                       "Turkey Breast, 2 lb: ~$9.41. \u003cstrong\u003eBuy 1 3lb frozen roast: $14.44.\u003c/strong\u003e",
+                       "Seasoned Black Beans, 1.6 cans: ~$1.35. \u003cstrong\u003eBuy 2 cans: $1.72.\u003c/strong\u003e",
+                       "Eggs, 14 large eggs: ~$1.66. \u003cstrong\u003eBuy 2 dozens: $2.85.\u003c/strong\u003e",
+                       "Salsa, 1.25 cups: ~$1.32. \u003cstrong\u003eBuy 1 16oz jar: $1.97.\u003c/strong\u003e",
+                       "Mexican Cheese Blend, 3 oz: ~$0.67. \u003cstrong\u003eBuy 1 8oz bag: $1.73.\u003c/strong\u003e",
+                       "Fresh Cilantro, 9 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Rice, 6.75 cups dry: ~$1.55. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (vegetable oil, salt, black pepper): ~$0.25. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $17.48 across 14 servings, so roughly $1.25 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $27.70 across 14 servings, roughly $1.98 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.33 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.03. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.64 a serving\u003c/strong\u003e (at everyday cost). Rice, eggs, canned black beans, and corn tortillas are four of the least expensive foods in an American grocery store, and together they make a genuinely good dinner.",
+    "shop_smart":  [
+                       "Eggs are the cheapest complete protein you can buy and this recipe uses one per bowl. Two dozen covers the batch, and eggs keep for weeks past the carton date.",
+                       "Corn tortillas cost less than flour and crisp better. Buy the larger packs and cut them into strips or wedges for the crunch on top.",
+                       "Canned black beans are the second cheapest protein in the recipe. Rinse them well, warm them with a little cumin, and they taste like you cooked them from dried.",
+                       "Jarred salsa on sale beats making your own out of season, when tomatoes are expensive and mealy. Buy the store brand and check the ingredient list for tomatoes first, not water."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice and hold it warm. It is the base of every bowl, so make sure it is seasoned with salt while it cooks rather than after.",
+                    "Cut the corn tortillas into strips and crisp them in a little vegetable oil until golden, then drain them on paper towels and salt them right away.",
+                    "Warm the chopped turkey breast in a skillet with a splash of the salsa and a pinch of salt and black pepper, just until it is heated through.",
+                    "Warm the drained black beans in a small pot with a little water so they stay loose rather than drying out in the fridge.",
+                    "Fry the eggs in batches to your preference. For meal prep, cook them a shade past runny, because a broken yolk in a container on Thursday helps nobody.",
+                    "Build the bowls: rice on the bottom, then beans, then turkey, then salsa spooned across the top.",
+                    "Set an egg on each bowl, scatter the Mexican cheese blend and the chopped cilantro over it, and add the crisped tortilla strips last so they stay crunchy."
+                ],
+    "portion_html":  "Weigh the rice, beans, and turkey together, subtract your empty pot weight, and divide by 14, then top each bowl with one egg. Building to a weight keeps the base even and the eggs make the count obvious. Each serving comes to \u003cstrong\u003e574 calories\u003c/strong\u003e and 34 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.jennieo.com/recipes/huevos-rancheros-open-faced-taco/\" target=\"_blank\" rel=\"noopener\"\u003ejennieo.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A full dinner for about $2.64 a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "cost_batch":  17.48,
+    "cost_batch_true":  27.7,
+    "cost_per_serving":  1.25,
+    "cost_per_serving_true":  1.98,
+    "cost_pantry_add":  9.33,
+    "cost_first_run":  37.03,
+    "scaler":  {
+                   "cost":  "27.70",
+                   "ing":  [
+                               {
+                                   "item":  "Tortilla",
+                                   "canon":  "Tortilla",
+                                   "grams":  420,
+                                   "buy":  "14.75 oz",
+                                   "bid":  "tortillas",
+                                   "gpu":  "45.000"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  10,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Turkey Breast",
+                                   "canon":  "Turkey Breast",
+                                   "grams":  887,
+                                   "buy":  "2 lb",
+                                   "bid":  "turkey-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Seasoned Black Beans",
+                                   "canon":  "Seasoned Black Beans",
+                                   "grams":  401,
+                                   "buy":  "1.6 cans",
+                                   "bid":  "canned-black-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  700,
+                                   "buy":  "14 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Salsa",
+                                   "canon":  "Salsa",
+                                   "grams":  303,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "salsa",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Mexican Cheese Blend",
+                                   "canon":  "Mexican Cheese Blend",
+                                   "grams":  88,
+                                   "buy":  "3 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  9,
+                                   "buy":  "9 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1254,
+                                   "buy":  "6.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey huevos rancheros rice bowls meal prep: rice, black beans, turkey, salsa, and a fried egg with crisped tortilla strips. 574 calories, 34g protein, about $2.64 a serving (at everyday cost).",
+                 "keywords":  "huevos rancheros bowls, turkey rice bowls, breakfast for dinner, black bean egg bowls, cheap high protein meal prep, tex mex bowls",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  2.64,
+                 "recipeIngredient":  [
+                                          "6.25 cups chopped cooked turkey breast",
+                                          "6.75 cups dry rice",
+                                          "14 large eggs",
+                                          "1.6 cans seasoned black beans",
+                                          "14.75 oz corn tortillas",
+                                          "1.25 cups salsa",
+                                          "3 oz Mexican cheese blend",
+                                          "9 tbsp fresh cilantro"
+                                      ],
+                 "steps":  [
+                               "Cook the rice, salting the water, and hold it warm.",
+                               "Cut the tortillas into strips and crisp them in vegetable oil, then salt and drain.",
+                               "Warm the chopped turkey with a splash of salsa, and warm the drained black beans separately.",
+                               "Fry the eggs a shade past runny, one per bowl.",
+                               "Build bowls with rice, beans, turkey, salsa, an egg, cheese, cilantro, and tortilla strips, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Tortilla",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Turkey Breast",
+                                  "grams":  887
+                              },
+                              {
+                                  "item":  "Seasoned Black Beans",
+                                  "grams":  401
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Salsa",
+                                  "grams":  303
+                              },
+                              {
+                                  "item":  "Mexican Cheese Blend",
+                                  "grams":  88
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1254
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

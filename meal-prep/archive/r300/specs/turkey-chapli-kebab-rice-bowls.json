@@ -1,0 +1,342 @@
+{
+    "name":  "Turkey Chapli Kebab Rice Bowls",
+    "slug":  "turkey-chapli-kebab-rice-bowls",
+    "cuisine":  "pakistani",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://spicechronicles.com/chaapli-kebabs-spicy-flat-turkey-kebabs/",
+    "source_site":  "spicechronicles.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 250g (src scale)",
+                   "base +45% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Flat spiced turkey patties, oven or sheet-pan finished, over rice with yogurt sauce. Verified source: full recipe, 4-6 servings, written for ground turkey specifically, and the source explicitly gives a sheet-pan-plus-broil method instead of frying - which is what makes it batch-legal. Confidence note: no nutrition published, est_cal is my estimate. | HARVEST: Source yield published as 4 to 6; midpoint 5 recorded.",
+                         "SOURCE YIELD: 5 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 250g (src scale)",
+                         "TUNING: base +45% (Rice)",
+                         "OVERRIDE 93/7 Ground Turkey: splitter split \u00271 and 1/2 pounds ground turkey\u0027 -\u003e 1.5 lb",
+                         "OVERRIDE Salt: splitter split \u00271 and 1/2 teaspoons salt\u0027",
+                         "OVERRIDE Garam Masala: splitter split \u00271 and 1/2 teaspoons garam masala\u0027",
+                         "OVERRIDE Yellow Onion: \u0027Thinly Sliced onions\u0027 garnish, no qty anywhere; house 100 g"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  571,
+                 "protein":  34,
+                 "carbs":  71,
+                 "fat":  13,
+                 "cost_ps":  "3.63"
+             },
+    "intro_html":  "Chapli kebab is the flat, spiced patty of northwest Pakistan, cumin and coriander forward with tomato and green chili worked right into the meat. Traditionally they hit a hot pan of oil. We put them on sheet pans and finish under the broiler, which means you can make fourteen servings without standing over a skillet all afternoon. Over rice they come to \u003cstrong\u003e571 calories and 34 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.63\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 4.25 lb (1904 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 2 tbsp (12 g)",
+                                "\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 1.75 tbsp (10 g)",
+                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 1.25 tbsp (8 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.75 tbsp (24 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 1.75 tbsp (11 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 4.75 oz (137 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.5 tbsp (25 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 0.5 cups (126 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2.8 cans (1151 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 31 tbsp (31 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 3 large eggs (140 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 5.5 tbsp (45 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 2.75 tbsp (39 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.5 (280 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.75 cups dry (1086 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 4.25 lb: ~$16.04. \u003cstrong\u003eBuy 5 lbs: $19.11.\u003c/strong\u003e",
+                       "Garlic, 2.75 tbsp: ~$0.35. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Ginger, 1.75 tbsp: ~$0.10. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Jalapeno, 4.75 oz: ~$0.53. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Lime Juice, 0.5 cups: ~$1.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Diced Tomatoes, 2.8 cans: ~$2.69. \u003cstrong\u003eBuy 3 cans: $2.88.\u003c/strong\u003e",
+                       "Fresh Cilantro, 31 tbsp: ~$0.97. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Eggs, 3 large eggs: ~$0.33. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
+                       "All-Purpose Flour, 5.5 tbsp: ~$0.04. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Butter, 2.75 tbsp: ~$0.26. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Yellow Onion, 2.5: ~$0.70. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Rice, 5.75 cups dry: ~$1.34. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, ground coriander, garam masala, salt, black pepper): ~$1.28. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $25.68 across 14 servings, so roughly $1.83 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $36.25 across 14 servings, roughly $2.59 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $20.53 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $56.78. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.63\u003c/strong\u003e a bowl (at everyday cost). Spiced kebabs and rice at that price is the kind of math that makes takeout look silly.",
+    "shop_smart":  [
+                       "Ground turkey is nearly two thirds of this batch. The 5 pound pack drops the price per pound noticeably over the small trays, and anything you do not use goes straight in the freezer.",
+                       "Jalapenos cost almost nothing for what this batch uses. Fresh chili is the cheapest way to add real heat, and it beats any bottled sauce on both price and flavor.",
+                       "Cumin, coriander, and garam masala are the spine of this recipe and they live in your cabinet already. Buy them in the larger bags at an international market and you will pay a third of the grocery store spice aisle price.",
+                       "One bunch of cilantro covers the whole batch. Chop the tender stems too instead of throwing them out, because they carry more flavor than the leaves do."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Drain the diced tomatoes well and chop them fine. Wet tomato makes patties that fall apart, so squeeze the liquid out before it goes anywhere near the meat.",
+                    "Mix the ground turkey with the drained tomato, minced garlic, grated ginger, chopped jalapeno, chopped cilantro, eggs, flour, cumin, coriander, garam masala, salt, and black pepper.",
+                    "Chill the mixture 20 minutes in the fridge. Cold mix holds its shape and this is the difference between kebabs and a sheet pan of crumbles.",
+                    "Form flat patties, about half an inch thick and wider than you think, and lay them on sheet pans brushed with the melted butter.",
+                    "Bake at 425F for 15 minutes, then run them under the broiler 3 to 4 minutes until the tops char in spots and the meat reaches 165F.",
+                    "Squeeze the lime juice over the hot patties and scatter the thinly sliced onion on top so it softens in the residual heat.",
+                    "Cook the rice and move it into your weighed pot while the kebabs rest."
+                ],
+    "portion_html":  "Set the pot of rice on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the rice bed for each container. Lay the kebabs on top, divided evenly across all 14, with a share of the lime-dressed onions on each. Every bowl lands at \u003cstrong\u003e571 calories and 34 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://spicechronicles.com/chaapli-kebabs-spicy-flat-turkey-kebabs/\" target=\"_blank\" rel=\"noopener\"\u003espicechronicles.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Pakistani chapli kebab bowls for about \u003cstrong\u003e$3.63\u003c/strong\u003e a serving (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  25.68,
+    "cost_batch_true":  36.25,
+    "cost_per_serving":  1.83,
+    "cost_per_serving_true":  2.59,
+    "cost_pantry_add":  20.53,
+    "cost_first_run":  56.78,
+    "scaler":  {
+                   "cost":  "36.25",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1904,
+                                   "buy":  "4.25 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  12,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Coriander",
+                                   "canon":  "Ground Coriander",
+                                   "grams":  10,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "ground-coriander",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garam Masala",
+                                   "canon":  "Garam Masala",
+                                   "grams":  8,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "garam-masala",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  24,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  11,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  137,
+                                   "buy":  "4.75 oz",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  25,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "canon":  "Lime Juice",
+                                   "grams":  126,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  1151,
+                                   "buy":  "2.8 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  31,
+                                   "buy":  "31 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  140,
+                                   "buy":  "3 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  45,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  39,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  280,
+                                   "buy":  "2.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1086,
+                                   "buy":  "5.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey chapli kebab rice bowls: flat spiced Pakistani turkey patties baked and broiled, served over rice with lime onions. 571 calories, 34g protein, about $3.63 (at everyday cost).",
+                 "keywords":  "chapli kebab, pakistani kebab, turkey patties, turkey meal prep, budget meal prep, sheet pan kebabs",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT35M",
+                 "totalTime":  "PT1H5M",
+                 "costPerServing":  3.63,
+                 "recipeIngredient":  [
+                                          "4.25 lb 93/7 ground turkey",
+                                          "2.8 cans diced tomatoes",
+                                          "4.75 oz jalapeno",
+                                          "31 tbsp fresh cilantro",
+                                          "2.75 tbsp garlic",
+                                          "1.75 tbsp ginger",
+                                          "3 large eggs",
+                                          "5.5 tbsp all-purpose flour",
+                                          "2.75 tbsp butter",
+                                          "0.5 cups lime juice",
+                                          "2.5 yellow onions",
+                                          "5.75 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Drain and finely chop the diced tomatoes.",
+                               "Mix ground turkey with tomato, garlic, ginger, jalapeno, cilantro, eggs, flour, cumin, coriander, garam masala, salt, and pepper.",
+                               "Chill the mixture 20 minutes, then form flat patties on buttered sheet pans.",
+                               "Bake at 425F for 15 minutes, then broil 3 to 4 minutes to 165F.",
+                               "Finish with lime juice and thinly sliced raw onion.",
+                               "Cook the rice, portion by weight into 14 containers, and divide the kebabs evenly."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1904
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Ground Coriander",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Garam Masala",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  24
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  137
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  25
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  126
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  1151
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  31
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  45
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  39
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  280
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1086
+                              }
+                          ]
+}

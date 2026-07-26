@@ -1,0 +1,208 @@
+{
+    "name":  "Kielbasa Cabbage and Potato Skillet",
+    "slug":  "kielbasa-cabbage-potato-skillet",
+    "cuisine":  "polish",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://barefeetinthekitchen.com/20-minute-kielbasa-cabbage-potato-skillet/",
+    "source_site":  "barefeetinthekitchen.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Potato)",
+                   "portion factor 1.6"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Source verifies 508 cal / 20g protein per serving already, so it clears the calorie bar as written and only needs a modest sausage bump for 25g+. Five ingredients, all board commodities, no substitutions needed. Pure weigh-and-divide skillet, ideal at 14 servings. Distinct from the sheet-pan brats entry (stovetop, cabbage-forward, no peppers). | HARVEST: Source states \"4-5 servings\"; midpoint rounded to 5. Published nutrition appears calculated on 4 servings.",
+                         "SOURCE YIELD: 5 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Potato)",
+                         "TUNING: portion factor 1.6"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  550,
+                 "protein":  26,
+                 "carbs":  71,
+                 "fat":  20,
+                 "cost_ps":  "3.40"
+             },
+    "intro_html":  "Six ingredients, one skillet, and nothing in it costs much. Diced potatoes crisped in olive oil, cabbage cooked down until it sweetens, garlic and onion, and browned coins of smoked sausage tying it all together. It lands at 26 grams of protein for about $3.40 (at everyday cost), and it reheats better than most skillet meals because the potatoes hold their shape.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 17 (3650 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tbsp (5 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 4.5 tbsp (60 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 (314 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8 tbsp (67 g)",
+                                "\u003cstrong\u003eSmoked Turkey Sausage (Butterball):\u003c/strong\u003e 4.5 lb (2032 g)",
+                                "\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 2 (2016 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Potato, 17: ~$4.57. \u003cstrong\u003eBuy 9 lbs: $5.11.\u003c/strong\u003e",
+                       "Olive Oil, 4.5 tbsp: ~$0.84. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 3: ~$0.79. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 8 tbsp: ~$0.96. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Smoked Turkey Sausage, 4.5 lb: ~$18.14. \u003cstrong\u003eBuy 6 13oz ropes: $19.71.\u003c/strong\u003e",
+                       "Green Cabbage, 2: ~$3.78. \u003cstrong\u003eBuy 3 heads: $5.06.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.27. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $29.35 across 14 servings, so roughly $2.10 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $33.28 across 14 servings, roughly $2.38 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.32 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.60. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.40 a bowl\u003c/strong\u003e (at everyday cost) for a stovetop dinner where the two biggest ingredients by volume, potatoes and cabbage, are also the two cheapest things you can put in a cart.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy potatoes in the nine pound bag.\u003c/strong\u003e This recipe eats a lot of them, and the big bag runs close to half the per pound price of loose potatoes.",
+                       "\u003cstrong\u003eSmoked sausage is the one real expense.\u003c/strong\u003e It is about three quarters of the batch cost. Buy the ropes on sale, freeze them, and this recipe gets a lot cheaper.",
+                       "\u003cstrong\u003eA few heads of cabbage feed this entire batch.\u003c/strong\u003e Nothing else in the produce aisle stretches like that for the money, and it keeps for weeks in the crisper.",
+                       "\u003cstrong\u003eSalt and black pepper are the whole seasoning list.\u003c/strong\u003e No spice blend to buy. The browning on the sausage and the sweetness of the cooked cabbage do the work."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Dice the potatoes small and even so they cook through at the same rate. Core and slice the cabbage into ribbons, and slice the onion.",
+                    "Heat the olive oil in your largest skillet and add the potatoes in a single layer. Let them sit undisturbed so they brown before you stir. Cover and cook until tender.",
+                    "Push the potatoes to the side, add the sliced sausage coins, and brown them so the edges get some color.",
+                    "Add the onion and cook until it softens, then stir in the garlic just until it smells good.",
+                    "Pile in the cabbage a handful at a time, letting each addition wilt before adding the next.",
+                    "Season with salt and black pepper, cover, and cook until the cabbage goes tender and sweet at the edges.",
+                    "Stir everything together in your big pot, scraping the browned bits off the bottom of the skillet into it."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container, stirring between scoops so the sausage stays even. Every bowl lands near 550 calories and 26 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://barefeetinthekitchen.com/20-minute-kielbasa-cabbage-potato-skillet/\" target=\"_blank\" rel=\"noopener\"\u003ebarefeetinthekitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "One skillet dinners for about $3.40 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  29.35,
+    "cost_batch_true":  33.28,
+    "cost_per_serving":  2.1,
+    "cost_per_serving_true":  2.38,
+    "cost_pantry_add":  14.32,
+    "cost_first_run":  47.6,
+    "scaler":  {
+                   "cost":  "33.28",
+                   "ing":  [
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  3650,
+                                   "buy":  "17",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  5,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  60,
+                                   "buy":  "4.5 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  314,
+                                   "buy":  "3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  67,
+                                   "buy":  "8 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Smoked Turkey Sausage",
+                                   "canon":  "Smoked Turkey Sausage",
+                                   "grams":  2032,
+                                   "buy":  "4.5 lb",
+                                   "bid":  "smoked-turkey-sausage",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Cabbage",
+                                   "canon":  "Green Cabbage",
+                                   "grams":  2016,
+                                   "buy":  "2",
+                                   "bid":  "cabbage",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "One skillet smoked sausage with crisped potatoes and sweet cooked cabbage, built for 14 servings. 550 calories, 26g protein, about $3.40 per serving (at everyday cost).",
+                 "keywords":  "kielbasa cabbage potato skillet, smoked sausage skillet, cheap one pan dinner, budget meal prep, cabbage and potatoes",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT45M",
+                 "costPerServing":  3.40,
+                 "recipeIngredient":  [
+                                          "4.5 lb smoked sausage",
+                                          "17 potatoes",
+                                          "2 heads green cabbage",
+                                          "3 yellow onions",
+                                          "8 tbsp garlic",
+                                          "4.5 tbsp olive oil"
+                                      ],
+                 "steps":  [
+                               "Dice the potatoes, slice the cabbage into ribbons and slice the onion.",
+                               "Brown the potatoes in olive oil in a large skillet, then cover and cook until tender.",
+                               "Push the potatoes aside and brown the sliced sausage coins.",
+                               "Add the onion and garlic, then pile in the cabbage a handful at a time until it wilts.",
+                               "Season with salt and pepper, cover, and cook until the cabbage is tender before combining."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Potato",
+                                  "grams":  3650
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  60
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  314
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  67
+                              },
+                              {
+                                  "item":  "Smoked Turkey Sausage",
+                                  "grams":  2032
+                              },
+                              {
+                                  "item":  "Green Cabbage",
+                                  "grams":  2016
+                              }
+                          ]
+}

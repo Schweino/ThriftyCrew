@@ -1,0 +1,184 @@
+{
+    "name":  "Chicken Parmesan Pasta",
+    "slug":  "chicken-parmesan-pasta",
+    "cuisine":  "Italian-American",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  403,
+                 "protein":  42,
+                 "carbs":  40,
+                 "fat":  9,
+                 "cost_ps":  "3.30"
+             },
+    "intro_html":  "Chicken parm is a restaurant order that usually comes with a restaurant price. This meal-prep version skips the breading and the deep fryer but keeps everything you actually love: tender chicken, marinara, and a blanket of melty cheese over high-protein pasta. At 42 grams of protein a bowl for about $3.30 (at everyday cost), it is a filling, high-protein dinner.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb raw (1587 g)",
+                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 2 boxes (14.5 oz each) (719 g)",
+                                "\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e about 3.5 cups (861 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 7/8 cup grated (98 g)",
+                                "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 1 3/4 cups shredded (196 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2 tbsp (60 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 tsp minced (35 g)",
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 2 tsp (10 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e to taste (15 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (5 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 tsp (7 g)",
+                                "\u003cstrong\u003ePanko Breadcrumbs:\u003c/strong\u003e 1/2 cup (125 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 3 tbsp (100 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.30 a bowl\u003c/strong\u003e (at everyday cost) for a chicken parm that would run $16 or more at a sit-down spot.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eChicken on sale, frozen,\u003c/strong\u003e is the move that quietly lowers the cost of half the recipes on this site.",
+                       "\u003cstrong\u003eA little parmesan goes far.\u003c/strong\u003e One container covers several batches, so the per-serving cost stays tiny.",
+                       "\u003cstrong\u003eStore-brand sauce and cheese\u003c/strong\u003e save a couple dollars with no difference on the plate."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Boil the penne to al dente per the box, then drain.",
+                    "Cube the chicken and cook in a large skillet over medium-high heat until it reaches 165F inside.",
+                    "Pour in the pasta sauce and simmer a couple of minutes until hot.",
+                    "Add the drained penne and stir to coat, then fold in the parmesan.",
+                    "Scatter the mozzarella over the top and cover for a minute until it melts."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near 403 calories and 42 grams of protein.",
+    "credit_html":  "",
+    "upsell_html":  "Restaurant flavor for about $3.30 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  22.07,
+    "cost_batch_true":  30.56,
+    "cost_per_serving":  1.58,
+    "cost_per_serving_true":  2.18,
+    "cost_pantry_add":  15.67,
+    "cost_first_run":  46.23,
+    "scaler":  {
+                   "cost":  "30.56",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  1587,
+                                   "buy":  "3.5 lb raw",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Penne Pasta",
+                                   "grams":  719,
+                                   "buy":  "2 boxes (14.5 oz each)",
+                                   "bid":  "penne-pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Marinara Sauce",
+                                   "grams":  861,
+                                   "buy":  "about 3.5 cups",
+                                   "bid":  "marinara-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "grams":  98,
+                                   "buy":  "7/8 cup grated",
+                                   "bid":  "parmesan-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Reduced Fat Mozzarella",
+                                   "grams":  196,
+                                   "buy":  "1 3/4 cups shredded",
+                                   "bid":  "reduced-fat-mozzarella",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  60,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  35,
+                                   "buy":  "3 tsp minced",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "grams":  10,
+                                   "buy":  "2 tsp",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  15,
+                                   "buy":  "to taste",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  5,
+                                   "buy":  "to taste",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "grams":  7,
+                                   "buy":  "1 tsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Panko Breadcrumbs",
+                                   "grams":  125,
+                                   "buy":  "1/2 cup",
+                                   "bid":  "breadcrumbs",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "grams":  100,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A lightened-up chicken parmesan meal prep over high-protein penne. Fourteen servings at about 403 calories and 42 grams of protein for roughly $3.30 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, chicken parmesan pasta, budget dinner",
+                 "costPerServing":  3.30,
+                 "recipeIngredient":  [
+                                          "3.5 lb raw Boneless Skinless Chicken Breast",
+                                          "2 boxes (14.5 oz each) Penne Pasta",
+                                          "about 3.5 cups Marinara Sauce",
+                                          "7/8 cup grated Parmesan Cheese",
+                                          "1 3/4 cups shredded Reduced Fat Mozzarella",
+                                          "2 tbsp Olive Oil"
+                                      ],
+                 "steps":  [
+                               "Boil the penne to al dente and drain.",
+                               "Cube and cook the chicken until it reaches 165F.",
+                               "Add the pasta sauce and simmer until hot.",
+                               "Stir in the penne and fold in the parmesan.",
+                               "Top with mozzarella and cover until melted.",
+                               "Weigh the batch and divide into 14 containers."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

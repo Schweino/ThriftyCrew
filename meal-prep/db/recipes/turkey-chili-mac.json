@@ -1,0 +1,206 @@
+{
+    "name":  "High-Protein Turkey Chili Mac",
+    "slug":  "turkey-chili-mac",
+    "cuisine":  "American",
+    "protein":  "turkey",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  568,
+                 "protein":  56,
+                 "carbs":  45,
+                 "fat":  16,
+                 "cost_ps":  "4.41"
+             },
+    "intro_html":  "Chili and mac and cheese had a baby, and it happens to be loaded with protein. This one-skillet meal hits a serious 56 grams of protein per serving for around $4.41 (at everyday cost), and it makes 14 hearty bowls. Comfort food that actually works for your goals and your wallet.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 7 lb (3000 g)",
+                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 2 boxs (620 g)",
+                                "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 2 cans (600 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 3 cans (900 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1 can (130 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (240 g)",
+                                "\u003cstrong\u003eFat Free Cheddar (Great Value):\u003c/strong\u003e 1 bag (180 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 tbsp (42 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2 1/2 cups low sodium (1800 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 tbsp minced (~3 cloves) (45 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 2 tsp (15 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 2 tsp (15 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 2 tsp (15 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 tsp (8 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e to taste (18 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.41 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Grab the \u003cstrong\u003estore-brand canned beans and tomatoes\u003c/strong\u003e. They are the same beans and tomatoes as the name brand for less, and this recipe uses a stack of them.",
+                       "Undercook the pasta by a minute so it \u003cstrong\u003eholds its bite after reheating\u003c/strong\u003e all week instead of going mushy.",
+                       "One \u003cstrong\u003eseasoning packet or a spoonful of chili powder\u003c/strong\u003e from a jar you already own beats buying pricey pre-made chili kits."
+                   ],
+    "make_it":  [
+                    "Brown 6.6 pounds of 93/7 ground turkey with the chopped onion in a large skillet.",
+                    "Boil the penne pasta separately until just shy of tender, then drain.",
+                    "Stir the black beans, diced tomatoes, and tomato paste into the turkey and let it simmer.",
+                    "Fold in the cooked pasta so every noodle catches the chili.",
+                    "Melt the fat-free cheddar over the top and stir it through before you portion it out."
+                ],
+    "portion_html":  "Each of the 14 bowls brings 56 grams of protein at 568 calories, making this one of the highest-protein plates in the lineup.",
+    "credit_html":  "",
+    "upsell_html":  "One pan, a pile of protein, and the kind of dinner that makes leftovers something to look forward to. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  45.54,
+    "cost_batch_true":  51.65,
+    "cost_per_serving":  3.25,
+    "cost_per_serving_true":  3.69,
+    "cost_pantry_add":  18.22,
+    "cost_first_run":  69.87,
+    "scaler":  {
+                   "cost":  "51.65",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "grams":  3000,
+                                   "buy":  "7 lb",
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Penne Pasta",
+                                   "grams":  620,
+                                   "buy":  "2 boxs",
+                                   "bid":  "penne-pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Seasoned Black Beans",
+                                   "grams":  600,
+                                   "buy":  "2 cans",
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "grams":  900,
+                                   "buy":  "3 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "grams":  130,
+                                   "buy":  "1 can",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  240,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Fat Free Cheddar",
+                                   "grams":  180,
+                                   "buy":  "1 bag",
+                                   "bid":  "fat-free-cheddar",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  42,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  1800,
+                                   "buy":  "2 1/2 cups low sodium",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  45,
+                                   "buy":  "1 tbsp minced (~3 cloves)",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  15,
+                                   "buy":  "2 tsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "grams":  15,
+                                   "buy":  "2 tsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "grams":  15,
+                                   "buy":  "2 tsp",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "grams":  8,
+                                   "buy":  "1 tsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  18,
+                                   "buy":  "to taste",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "to taste",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 568 calories and 56 grams of protein for roughly $4.41 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, high-protein turkey chili mac, budget dinner",
+                 "costPerServing":  4.41,
+                 "recipeIngredient":  [
+                                          "7 lb 93/7 Ground Turkey",
+                                          "2 boxs Penne Pasta",
+                                          "2 cans Seasoned Black Beans",
+                                          "3 cans Diced Tomatoes",
+                                          "1 can Tomato Paste",
+                                          "3 onions Yellow Onion"
+                                      ],
+                 "steps":  [
+                               "Brown 6.6 pounds of 93/7 ground turkey with the chopped onion in a large skillet.",
+                               "Boil the penne pasta separately until just shy of tender, then drain.",
+                               "Stir the black beans, diced tomatoes, and tomato paste into the turkey and let it simmer.",
+                               "Fold in the cooked pasta so every noodle catches the chili.",
+                               "Melt the fat-free cheddar over the top and stir it through before you portion it out."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

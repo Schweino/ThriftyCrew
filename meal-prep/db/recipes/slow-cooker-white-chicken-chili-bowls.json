@@ -1,0 +1,200 @@
+{
+    "name":  "Slow Cooker White Chicken Chili Bowls",
+    "slug":  "slow-cooker-white-chicken-chili-bowls",
+    "cuisine":  "Tex-Mex",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  575,
+                 "protein":  65,
+                 "carbs":  42,
+                 "fat":  16,
+                 "cost_ps":  "3.99"
+             },
+    "intro_html":  "White chicken chili is creamy, comforting, and quietly loaded with protein. Cannellini beans make it filling and the coconut milk gives it that rich body without breaking the bank. One batch makes 14 servings.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3100 g)",
+                                "\u003cstrong\u003eCannellini Beans (generic):\u003c/strong\u003e 7 cans (2600 g)",
+                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 2 cans (750 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3 peppers (300 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 1 jalapeno (30 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (12 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 jar (8 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 jar (4 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1 jar (14 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 container (10 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 jar (4 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (360 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 2 limes, juiced (60 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1 bunch (28 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.99 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Canned \u003cstrong\u003ecannellini beans\u003c/strong\u003e are the cheap, protein-packed backbone of this chili, so stock up when they go on sale.",
+                       "\u003cstrong\u003eCoconut milk\u003c/strong\u003e gives you a rich, creamy base for less than cream or half-and-half.",
+                       "Buy the \u003cstrong\u003echicken breast in a value pack\u003c/strong\u003e to keep every bowl affordable."
+                   ],
+    "make_it":  [
+                    "Add the chicken breast, chopped onion, and diced bell peppers to the crock.",
+                    "Pour in both cans of coconut milk.",
+                    "Cover and cook on low for 6 to 8 hours until the chicken is tender.",
+                    "Shred the chicken, then stir in the drained cannellini beans.",
+                    "Let it warm through and thicken for another 20 minutes.",
+                    "Ladle into bowls and dig in."
+                ],
+    "portion_html":  "Each of the 14 servings lands around 65g protein for about 575 calories, at roughly $2.60 a bowl.",
+    "credit_html":  "",
+    "upsell_html":  "This is a seriously high-protein bowl, and it tastes like pure comfort while it fuels you up. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  39.84,
+    "cost_batch_true":  44.76,
+    "cost_per_serving":  2.85,
+    "cost_per_serving_true":  3.2,
+    "cost_pantry_add":  10.42,
+    "cost_first_run":  55.18,
+    "scaler":  {
+                   "cost":  "44.76",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3100,
+                                   "buy":  "7 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cannellini Beans",
+                                   "grams":  2600,
+                                   "buy":  "7 cans",
+                                   "bid":  "cannellini-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Coconut Milk",
+                                   "grams":  750,
+                                   "buy":  "2 cans",
+                                   "bid":  "coconut-milk",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  300,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "grams":  300,
+                                   "buy":  "3 peppers",
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "grams":  30,
+                                   "buy":  "1 jalapeno",
+                                   "bid":  "jalapeno",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  12,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  8,
+                                   "buy":  "1 jar",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "grams":  4,
+                                   "buy":  "1 jar",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "grams":  14,
+                                   "buy":  "1 jar",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  10,
+                                   "buy":  "1 container",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "1 jar",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  360,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "grams":  60,
+                                   "buy":  "2 limes, juiced",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "grams":  28,
+                                   "buy":  "1 bunch",
+                                   "bid":  "fresh-cilantro",
+                                   "gpu":  "57.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Tex-Mex meal prep. Fourteen servings at about 575 calories and 65 grams of protein for roughly $3.99 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker white chicken chili bowls, budget dinner",
+                 "costPerServing":  3.99,
+                 "recipeIngredient":  [
+                                          "7 lb Boneless Skinless Chicken Breast",
+                                          "7 cans Cannellini Beans",
+                                          "2 cans Coconut Milk",
+                                          "3 onions Yellow Onion",
+                                          "3 peppers Green Bell Peppers",
+                                          "1 jalapeno Jalapeno"
+                                      ],
+                 "steps":  [
+                               "Add the chicken breast, chopped onion, and diced bell peppers to the crock.",
+                               "Pour in both cans of coconut milk.",
+                               "Cover and cook on low for 6 to 8 hours until the chicken is tender.",
+                               "Shred the chicken, then stir in the drained cannellini beans.",
+                               "Let it warm through and thicken for another 20 minutes.",
+                               "Ladle into bowls and dig in."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

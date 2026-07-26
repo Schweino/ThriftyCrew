@@ -1,0 +1,277 @@
+{
+    "name":  "Chicken Cordon Bleu Casserole",
+    "slug":  "chicken-cordon-bleu-casserole",
+    "cuisine":  "American",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.plainchicken.com/easy-chicken-cordon-bleu-casserole/",
+    "source_site":  "plainchicken.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 300g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Source lists 445 cal / 37g protein; est 600 over rice - confidence medium on calories, protein is strong as written. Ham plus chicken is a cheap way to lift protein per dollar. NEAR-DUPE WATCH vs the live Poppy Seed Chicken and Rice Casserole - same cream-soup-plus-cracker-topping architecture, different flavor (ham and Dijon). Selector call. | HARVEST: ",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 300g (src scale)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  645,
+                 "protein":  43,
+                 "carbs":  50,
+                 "fat":  29,
+                 "cost_ps":  "3.12"
+             },
+    "intro_html":  "Real chicken cordon bleu means pounding cutlets flat, rolling them around ham and cheese, breading each one, and praying nothing leaks in the oven. Nobody is doing that fourteen times on a Sunday. This casserole takes the same four flavors, chicken, ham, swiss, and dijon, and layers them in one dish with a cracker topping. Each serving carries 645 calories and \u003cstrong\u003e43 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.12 a serving\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3 lb (1307 g)",
+                                "\u003cstrong\u003eDiced Ham (John Morrell (Smithfield)):\u003c/strong\u003e 1.25 lb (529 g)",
+                                "\u003cstrong\u003eLight Sour Cream (generic):\u003c/strong\u003e 3.5 cups (805 g)",
+                                "\u003cstrong\u003eSwiss Cheese (generic (USDA)):\u003c/strong\u003e 14 oz (396 g)",
+                                "\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 1.5 tbsp (23 g)",
+                                "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 0.5 tbsp (3 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 0.25 tbsp (2 g)",
+                                "\u003cstrong\u003eCream of Chicken Soup (generic condensed (USDA)):\u003c/strong\u003e 2.3 cans (695 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 0.5 cups (133 g)",
+                                "\u003cstrong\u003eButter Crackers (Great Value):\u003c/strong\u003e 0.25 cups (8 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 3 lb: ~$9.42. \u003cstrong\u003eBuy 3 lbs: $9.81.\u003c/strong\u003e",
+                       "Diced Ham, 1.25 lb: ~$5.78. \u003cstrong\u003eBuy 2 16oz packs: $9.93.\u003c/strong\u003e",
+                       "Light Sour Cream, 3.5 cups: ~$2.91. \u003cstrong\u003eBuy 2 16oz tubs: $3.28.\u003c/strong\u003e",
+                       "Swiss Cheese, 14 oz: ~$2.92. \u003cstrong\u003eBuy 2 8ozes: $3.35.\u003c/strong\u003e",
+                       "Dijon Mustard, 1.5 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Cream of Chicken Soup, 2.3 cans: ~$1.73. \u003cstrong\u003eBuy 3 10.5oz cans: $2.22.\u003c/strong\u003e",
+                       "Butter, 0.5 cups: ~$0.87. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (onion powder, garlic powder, butter crackers, salt, black pepper): ~$0.32. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $24.93 across 14 servings, so roughly $1.78 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.87 across 14 servings, roughly $2.35 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.81 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.68. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.12 a serving\u003c/strong\u003e (at everyday cost). Ham is the trick on that number, because it adds protein and salt cured flavor for less than chicken costs per pound, which lets the whole dish punch above its price.",
+    "shop_smart":  [
+                       "Diced ham is the second biggest line and it earns its place. It brings protein and a cured, salty depth that chicken alone cannot, and it costs less per pound than most cuts of meat in the case.",
+                       "Swiss cheese is what makes this cordon bleu rather than generic cheesy chicken. Buy the block and slice or shred it yourself, since pre-shredded swiss is usually a poor value and does not melt as well.",
+                       "Cream of chicken soup is the binder, and it goes on sale constantly. Grab several cans when it does, because it keeps for years.",
+                       "Butter crackers crushed with melted butter make the topping. A sleeve costs very little and gives you crunch that bread crumbs cannot match, which matters more than it sounds like it should in a soft casserole."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Heat the oven to 350F and cook the rice, since it goes into the dish rather than under it.",
+                    "Cook the chicken breast and cut it into bite sized pieces.",
+                    "In a large bowl, stir together the cream of chicken soup, sour cream, dijon mustard, onion powder, garlic powder, salt, and pepper into a smooth sauce. The dijon is not optional. It is what keeps a rich casserole from tasting flat.",
+                    "Fold in the cooked rice, chicken, and diced ham until everything is coated.",
+                    "Spread half the mixture into a large baking dish, layer the swiss cheese across it, then add the rest of the mixture on top.",
+                    "Crush the butter crackers, toss them with the melted butter, and scatter them over the surface in an even layer.",
+                    "Bake 30 to 35 minutes until it bubbles around the edges and the topping is golden, then rest 10 minutes before cutting."
+                ],
+    "portion_html":  "Score the bake into 14 even squares and lift one into each container. Weigh a couple of them to confirm your squares are honest, since the corners always look bigger than they are. Every portion lands at \u003cstrong\u003e645 calories\u003c/strong\u003e. Reheat uncovered so the cracker topping crisps instead of going soft.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.plainchicken.com/easy-chicken-cordon-bleu-casserole/\" target=\"_blank\" rel=\"noopener\"\u003eplainchicken.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "All the cordon bleu flavor with none of the rolling and breading, for about \u003cstrong\u003e$3.12 a serving\u003c/strong\u003e (at everyday cost). Members get every recipe in the Meal Prep section plus the full library of money lessons and tools for $1 a month.",
+    "cost_batch":  24.93,
+    "cost_batch_true":  32.87,
+    "cost_per_serving":  1.78,
+    "cost_per_serving_true":  2.35,
+    "cost_pantry_add":  10.81,
+    "cost_first_run":  43.68,
+    "scaler":  {
+                   "cost":  "32.87",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  1307,
+                                   "buy":  "3 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Ham",
+                                   "canon":  "Diced Ham",
+                                   "grams":  529,
+                                   "buy":  "1.25 lb",
+                                   "bid":  "diced-ham",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Light Sour Cream",
+                                   "canon":  "Light Sour Cream",
+                                   "grams":  805,
+                                   "buy":  "3.5 cups",
+                                   "bid":  "sour-cream",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Swiss Cheese",
+                                   "canon":  "Swiss Cheese",
+                                   "grams":  396,
+                                   "buy":  "14 oz",
+                                   "bid":  "swiss-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dijon Mustard",
+                                   "canon":  "Dijon Mustard",
+                                   "grams":  23,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "dijon-mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Onion Powder",
+                                   "canon":  "Onion Powder",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "onion-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cream of Chicken Soup",
+                                   "canon":  "Cream of Chicken Soup",
+                                   "grams":  695,
+                                   "buy":  "2.3 cans",
+                                   "bid":  "cream-of-chicken-soup",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  133,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Butter Crackers",
+                                   "canon":  "Butter Crackers",
+                                   "grams":  8,
+                                   "buy":  "0.25 cups",
+                                   "bid":  "crackers",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Chicken cordon bleu casserole with ham, swiss, dijon, and a buttery cracker topping over rice, rebuilt for 14 meal prep servings at about $3.12 a serving (at everyday cost).",
+                 "keywords":  "chicken cordon bleu casserole, ham and swiss chicken bake, cracker topped casserole, budget casserole, cheap meal prep, make ahead dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT35M",
+                 "totalTime":  "PT1H",
+                 "costPerServing":  3.12,
+                 "recipeIngredient":  [
+                                          "3 lb boneless skinless chicken breast",
+                                          "3.75 cups diced ham",
+                                          "14 oz swiss cheese",
+                                          "3.5 cups light sour cream",
+                                          "1.5 lb cream of chicken soup",
+                                          "1.5 tbsp dijon mustard",
+                                          "0.5 cups butter",
+                                          "3.75 cups dry rice",
+                                          "Pantry: butter crackers, onion powder, garlic powder, salt, black pepper"
+                                      ],
+                 "steps":  [
+                               "Cook the rice and the chicken, then cut the chicken into bite sized pieces.",
+                               "Stir the cream of chicken soup, sour cream, dijon, and seasonings into a sauce.",
+                               "Fold in the rice, chicken, and diced ham.",
+                               "Layer half the mixture, then the swiss cheese, then the rest in a large baking dish.",
+                               "Top with crushed butter crackers tossed in melted butter and bake at 350F for 30 to 35 minutes.",
+                               "Rest, then score into 14 squares and portion."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  1307
+                              },
+                              {
+                                  "item":  "Diced Ham",
+                                  "grams":  529
+                              },
+                              {
+                                  "item":  "Light Sour Cream",
+                                  "grams":  805
+                              },
+                              {
+                                  "item":  "Swiss Cheese",
+                                  "grams":  396
+                              },
+                              {
+                                  "item":  "Dijon Mustard",
+                                  "grams":  23
+                              },
+                              {
+                                  "item":  "Onion Powder",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Cream of Chicken Soup",
+                                  "grams":  695
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  133
+                              },
+                              {
+                                  "item":  "Butter Crackers",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

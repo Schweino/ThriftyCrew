@@ -1,0 +1,174 @@
+{
+    "name":  "Slow Cooker French Onion Chicken Bowls",
+    "slug":  "slow-cooker-french-onion-chicken-bowls",
+    "cuisine":  "American",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  580,
+                 "protein":  67,
+                 "carbs":  54,
+                 "fat":  9,
+                 "cost_ps":  "3.42"
+             },
+    "intro_html":  "French onion soup gets all its magic from slow-cooked onions, and that same trick makes this chicken bowl shine. It brings a big 67 grams of protein for about $3.42 (at everyday cost), with deep, savory, oniony flavor throughout. One batch makes 14 servings, so a bag of cheap onions carries you a long way.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3450 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (820 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 9 onions (900 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 carton (480 g)",
+                                "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1 tub (340 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 1 container (140 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 jar (12 g)",
+                                "\u003cstrong\u003eCondensed French Onion Soup:\u003c/strong\u003e 2 cans (10.5 oz each) (600 g)",
+                                "\u003cstrong\u003eSwiss Cheese (generic (USDA)):\u003c/strong\u003e 2.5 oz + topping (180 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1 tbsp (40 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e to taste (14 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (3 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.42 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "This whole dish is built on onions, so \u003cstrong\u003ebuy the big three-pound bag\u003c/strong\u003e when it\u0027s cheap and you\u0027ve got the star ingredient covered.",
+                       "Greek yogurt stands in for cream here, so \u003cstrong\u003euse plain yogurt instead of heavy cream\u003c/strong\u003e to cut cost and add protein.",
+                       "A little grated parmesan brings the salty, nutty punch, so \u003cstrong\u003ekeep a shaker of it on hand\u003c/strong\u003e for cheap flavor across many meals."
+                   ],
+    "make_it":  [
+                    "Add the chicken, sliced onions, beef broth, and garlic powder to the slow cooker.",
+                    "Cover and cook on low for 7 to 8 hours so the onions go soft, sweet, and jammy.",
+                    "Shred the chicken into the pot and stir so it soaks up the broth.",
+                    "Stir in the Greek yogurt off the heat for a creamy, tangy finish.",
+                    "Serve over white rice and top each bowl with grated parmesan."
+                ],
+    "portion_html":  "You get a strong 67 grams of protein and 580 calories per serving, one of the highest-protein bowls here.",
+    "credit_html":  "",
+    "upsell_html":  "Cheap onions, patient cooking, and a big protein payoff. That\u0027s a win any way you slice it. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  37.23,
+    "cost_batch_true":  42.4,
+    "cost_per_serving":  2.66,
+    "cost_per_serving_true":  3.03,
+    "cost_pantry_add":  8.13,
+    "cost_first_run":  50.53,
+    "scaler":  {
+                   "cost":  "42.40",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3450,
+                                   "buy":  "8 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  820,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  900,
+                                   "buy":  "9 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "grams":  480,
+                                   "buy":  "1 carton",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Greek Yogurt",
+                                   "grams":  340,
+                                   "buy":  "1 tub",
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "grams":  140,
+                                   "buy":  "1 container",
+                                   "bid":  "parmesan-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "grams":  12,
+                                   "buy":  "1 jar",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Condensed French Onion Soup",
+                                   "grams":  600,
+                                   "buy":  "2 cans (10.5 oz each)",
+                                   "bid":  "condensed-french-onion-soup",
+                                   "gpu":  "298.000"
+                               },
+                               {
+                                   "item":  "Swiss Cheese",
+                                   "grams":  180,
+                                   "buy":  "2.5 oz + topping",
+                                   "bid":  "swiss-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "grams":  40,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "worcestershire-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "to taste",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "to taste",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 580 calories and 67 grams of protein for roughly $3.42 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker french onion chicken bowls, budget dinner",
+                 "costPerServing":  3.42,
+                 "recipeIngredient":  [
+                                          "8 lb Boneless Skinless Chicken Breast",
+                                          "1 lb Rice",
+                                          "9 onions Yellow Onion",
+                                          "1 carton Beef Broth",
+                                          "1 tub Greek Yogurt",
+                                          "1 container Parmesan Cheese"
+                                      ],
+                 "steps":  [
+                               "Add the chicken, sliced onions, beef broth, and garlic powder to the slow cooker.",
+                               "Cover and cook on low for 7 to 8 hours so the onions go soft, sweet, and jammy.",
+                               "Shred the chicken into the pot and stir so it soaks up the broth.",
+                               "Stir in the Greek yogurt off the heat for a creamy, tangy finish.",
+                               "Serve over white rice and top each bowl with grated parmesan."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

@@ -1,0 +1,324 @@
+{
+    "name":  "Turkey Zha Jiang Mian (Beijing Noodles)",
+    "slug":  "turkey-zha-jiang-mian",
+    "cuisine":  "chinese",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://thewoksoflife.com/beijing-fried-sauce-noodles-zha-jiang-mian/",
+    "source_site":  "thewoksoflife.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Lo Mein Noodles)",
+                   "portion factor 1.45"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Savory brown-sauce meat noodle - a dish family the catalog has nothing in. Verified source: full recipe, sauce yields 8 servings, 410 cal / 7g protein for the pork-belly sauce alone. Confidence note: the source is deliberately fat-heavy pork belly; our turkey version is a substantial reformulation, and the bean sauces are the real sourcing risk. | HARVEST: Source uses pork belly; adapt to ground turkey.",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Lo Mein Noodles)",
+                         "TUNING: portion factor 1.45",
+                         "OVERRIDE Pork Shoulder: TITLE-PROTEIN SWAP: turkey zha jiang uses ground turkey in place of the source\u0027s 1 lb pork; grams kept at source scale"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  567,
+                 "protein":  25,
+                 "carbs":  70,
+                 "fat":  21,
+                 "cost_ps":  "3.20"
+             },
+    "intro_html":  "Zha jiang mian is the Beijing noodle bowl that built the whole category: a dark, salty, fried sauce spooned over noodles with raw cucumber and carrot piled on top for crunch. The traditional version leans on pork belly and fermented bean paste. Ours uses ground turkey with hoisin carrying the sweet-savory bean note, and it comes to \u003cstrong\u003e567 calories and 25 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.20\u003c/strong\u003e a bowl (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 2.5 lb (1149 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.75 cups (184 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 4.5 cups (228 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 6.25 tbsp (38 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.25 oz (9 g)",
+                                "\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 1 tbsp (7 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.75 tbsp (12 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 0.75 cups (162 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 3.75 tbsp (61 g)",
+                                "\u003cstrong\u003eHoisin Sauce (generic):\u003c/strong\u003e 1 cups (284 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 1 tbsp (11 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (8 g)",
+                                "\u003cstrong\u003eLo Mein Noodles (Simply Asia):\u003c/strong\u003e 36.5 oz dry (1034 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 4.6 (279 g)",
+                                "\u003cstrong\u003eCucumber:\u003c/strong\u003e 1 (264 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6 tbsp (51 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 2.5 lb: ~$9.68. \u003cstrong\u003eBuy 3 lbs: $11.46.\u003c/strong\u003e",
+                       "Vegetable Oil, 0.75 cups: ~$0.45. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Onions, 4.5 cups: ~$2.71. \u003cstrong\u003eBuy 3 bunches: $3.21.\u003c/strong\u003e",
+                       "Ginger, 6.25 tbsp: ~$0.33. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Chicken Broth, 0.75 cups: ~$0.22. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 3.75 tbsp: ~$0.23. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Hoisin Sauce, 1 cups: ~$2.60. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lo Mein Noodles, 36.5 oz dry: ~$3.97. \u003cstrong\u003eBuy 3 14oz packs: $4.57.\u003c/strong\u003e",
+                       "Carrots, 4.6: ~$0.59. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Cucumber, 1: ~$0.67. \u003cstrong\u003eBuy 1 each: $0.76.\u003c/strong\u003e",
+                       "Garlic, 6 tbsp: ~$0.73. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Pantry seasonings (bay leaves, ground cinnamon, black pepper, sugar, salt): ~$1.94. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $24.12 across 14 servings, so roughly $1.72 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $28.42 across 14 servings, roughly $2.03 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.45 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $44.87. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.20\u003c/strong\u003e a bowl (at everyday cost). The sauce is the whole dish and the sauce is mostly hoisin and aromatics, which is why this one stays so cheap.",
+    "shop_smart":  [
+                       "Hoisin sauce is the backbone here. One jar covers several batches and keeps in the fridge for months, so the real per-bowl cost keeps dropping every time you use it.",
+                       "Lo mein noodles are the second biggest line. Buy the multipack, or check the international aisle where the same dried noodles often run noticeably less per pack than the Americanized brand.",
+                       "Cucumber and carrot go in raw as the garnish and together they cost almost nothing. Do not skip them. The cold crunch against the hot sauce is the entire point of the dish.",
+                       "Green onions are a real line here because this recipe uses a lot of them. Regrow the root ends in water on your windowsill and the next batch costs you nothing."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Prep the toppings first and refrigerate them: cut the cucumber and carrot into thin matchsticks. They go on cold, so getting them out of the way early is the smart order.",
+                    "Heat the vegetable oil in a wok or heavy skillet, add the grated ginger, minced garlic, and the white parts of the green onions, and cook 1 minute until fragrant.",
+                    "Add the ground turkey and brown it hard, breaking it into fine crumbles, until it is cooked through to 165F and starting to catch on the pan.",
+                    "Add the hoisin sauce and soy sauce and fry them with the meat for 3 to 4 minutes. This frying step is what the dish is named for, and it is where the sauce loses its raw edge and turns glossy.",
+                    "Pour in the chicken broth with a pinch of sugar, cinnamon, black pepper, and the bay leaves, then simmer 20 minutes until the sauce is thick enough to coat a spoon.",
+                    "Boil the lo mein noodles just to the firm side of done, drain them, and rinse them under cold water so they do not keep cooking and clump in the containers.",
+                    "Move the noodles into your weighed pot and toss them with a small spoon of oil so they stay loose."
+                ],
+    "portion_html":  "Set the pot of noodles on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the noodle bed for each container. Spoon the sauce evenly over all 14, then top each with the cold cucumber and carrot matchsticks and the green onion tops. Every bowl lands at \u003cstrong\u003e567 calories and 25 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://thewoksoflife.com/beijing-fried-sauce-noodles-zha-jiang-mian/\" target=\"_blank\" rel=\"noopener\"\u003ethewoksoflife.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Beijing noodles for about \u003cstrong\u003e$3.20\u003c/strong\u003e a bowl (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  24.12,
+    "cost_batch_true":  28.42,
+    "cost_per_serving":  1.72,
+    "cost_per_serving_true":  2.03,
+    "cost_pantry_add":  16.45,
+    "cost_first_run":  44.87,
+    "scaler":  {
+                   "cost":  "28.42",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1149,
+                                   "buy":  "2.5 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  184,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  228,
+                                   "buy":  "4.5 cups",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  38,
+                                   "buy":  "6.25 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  9,
+                                   "buy":  "0.25 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cinnamon",
+                                   "canon":  "Ground Cinnamon",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-cinnamon",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  12,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  162,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  61,
+                                   "buy":  "3.75 tbsp",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Hoisin Sauce",
+                                   "canon":  "Hoisin Sauce",
+                                   "grams":  284,
+                                   "buy":  "1 cups",
+                                   "bid":  "hoisin-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  11,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  8,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lo Mein Noodles",
+                                   "canon":  "Lo Mein Noodles",
+                                   "grams":  1034,
+                                   "buy":  "36.5 oz dry",
+                                   "bid":  "egg-noodles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  279,
+                                   "buy":  "4.6",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cucumber",
+                                   "canon":  "Cucumber",
+                                   "grams":  264,
+                                   "buy":  "1",
+                                   "bid":  "cucumbers",
+                                   "gpu":  "300.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  51,
+                                   "buy":  "6 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey zha jiang mian meal prep: Beijing style fried sauce noodles with ground turkey, hoisin, cucumber, and carrot. 567 calories, 25g protein, about $3.20 a bowl (at everyday cost).",
+                 "keywords":  "zha jiang mian, beijing noodles, fried sauce noodles, turkey meal prep, budget meal prep, lo mein",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT35M",
+                 "totalTime":  "PT55M",
+                 "costPerServing":  3.20,
+                 "recipeIngredient":  [
+                                          "2.5 lb 93/7 ground turkey",
+                                          "36.5 oz dry lo mein noodles",
+                                          "1 cup hoisin sauce",
+                                          "3.75 tbsp soy sauce",
+                                          "0.25 lb chicken broth",
+                                          "4.5 cups green onions",
+                                          "6.25 tbsp ginger",
+                                          "6 tbsp garlic",
+                                          "4.6 carrots",
+                                          "1 cucumber",
+                                          "0.75 cups vegetable oil"
+                                      ],
+                 "steps":  [
+                               "Cut the cucumber and carrot into matchsticks and chill them.",
+                               "Cook ginger, garlic, and green onion whites in vegetable oil, then brown the ground turkey to 165F.",
+                               "Add hoisin and soy sauce and fry 3 to 4 minutes until glossy.",
+                               "Add chicken broth, sugar, cinnamon, pepper, and bay leaves and simmer 20 minutes.",
+                               "Boil and rinse the lo mein noodles.",
+                               "Portion the noodles by weight into 14 containers and top with sauce, cucumber, carrot, and green onion."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1149
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  184
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  228
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  38
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Ground Cinnamon",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  162
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  61
+                              },
+                              {
+                                  "item":  "Hoisin Sauce",
+                                  "grams":  284
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Lo Mein Noodles",
+                                  "grams":  1034
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  279
+                              },
+                              {
+                                  "item":  "Cucumber",
+                                  "grams":  264
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  51
+                              }
+                          ]
+}

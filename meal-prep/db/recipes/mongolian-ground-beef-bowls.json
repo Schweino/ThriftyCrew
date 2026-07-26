@@ -1,0 +1,216 @@
+{
+    "name":  "Mongolian Ground Beef Bowls",
+    "slug":  "mongolian-ground-beef-bowls",
+    "cuisine":  "Chinese",
+    "protein":  "beef",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  559,
+                 "protein":  43,
+                 "carbs":  68,
+                 "fat":  12,
+                 "cost_ps":  "6.21"
+             },
+    "intro_html":  "This Mongolian beef bowl gives you that sweet and savory restaurant flavor without the restaurant bill. Lean ground beef browns fast, then simmers in a honey soy garlic sauce with broccoli and peppers over rice. It runs about $6.21 a serving (at everyday cost) with 43 grams of protein, and it makes 14 bowls.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2280 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1031 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 3 bags (700 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3 peppers (300 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 bottle (120 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1 bottle (80 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (24 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 1 root (20 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 Tbsp (50 g)",
+                                "\u003cstrong\u003eHoisin Sauce (generic):\u003c/strong\u003e 1 Tbsp (52 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1 tsp (16 g)",
+                                "\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 1 tsp (17 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 1 Tbsp (28 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1/4 cup (or water) (210 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 1/4 cup, thinly sliced (40 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$6.21 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Lean 93/7 ground beef is the priciest part, so shop the sales. \u003cstrong\u003eBuy ground beef in family packs when it is marked down\u003c/strong\u003e and freeze in meal-sized portions.",
+                       "Frozen broccoli is cheaper than fresh and skillet-ready. \u003cstrong\u003eKeep frozen florets on hand\u003c/strong\u003e and add them straight to the pan.",
+                       "Honey and soy sauce season the whole batch for pennies. \u003cstrong\u003eBuy one bottle of each\u003c/strong\u003e and they will outlast many meals."
+                   ],
+    "make_it":  [
+                    "Brown the ground beef in a large skillet, breaking it up as it cooks, then drain any grease.",
+                    "Add the minced garlic and grated ginger and stir for about a minute.",
+                    "Pour in the soy sauce and honey and let it bubble into a glaze.",
+                    "Add the broccoli florets and sliced red pepper and cook until just tender.",
+                    "Cook the rice while the skillet finishes.",
+                    "Spoon the saucy beef and vegetables over the rice and serve."
+                ],
+    "portion_html":  "Each of the 14 servings delivers 43 grams of protein at 559 calories.",
+    "credit_html":  "",
+    "upsell_html":  "Fifteen minutes of work and you have takeout flavor at a fraction of the cost. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  47.84,
+    "cost_batch_true":  57.66,
+    "cost_per_serving":  3.42,
+    "cost_per_serving_true":  4.12,
+    "cost_pantry_add":  33.05,
+    "cost_first_run":  90.71,
+    "scaler":  {
+                   "cost":  "57.66",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "grams":  2280,
+                                   "buy":  "5 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  1031,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  700,
+                                   "buy":  "3 bags",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "grams":  300,
+                                   "buy":  "3 peppers",
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "grams":  120,
+                                   "buy":  "1 bottle",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "grams":  80,
+                                   "buy":  "1 bottle",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  24,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "grams":  20,
+                                   "buy":  "1 root",
+                                   "bid":  "ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  50,
+                                   "buy":  "1 Tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Hoisin Sauce",
+                                   "grams":  52,
+                                   "buy":  "1 Tbsp",
+                                   "bid":  "hoisin-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "grams":  16,
+                                   "buy":  "1 tsp",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Rice Vinegar",
+                                   "grams":  17,
+                                   "buy":  "1 tsp",
+                                   "bid":  "rice-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Cornstarch",
+                                   "grams":  28,
+                                   "buy":  "1 Tbsp",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Pepper Flakes",
+                                   "grams":  2,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "red-pepper-flakes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "grams":  210,
+                                   "buy":  "1/4 cup (or water)",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "grams":  40,
+                                   "buy":  "1/4 cup, thinly sliced",
+                                   "bid":  "green-onions",
+                                   "gpu":  "100.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Chinese meal prep. Fourteen servings at about 559 calories and 43 grams of protein for roughly $6.21 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, mongolian ground beef bowls, budget dinner",
+                 "costPerServing":  6.21,
+                 "recipeIngredient":  [
+                                          "5 lb 93/7 Ground Beef",
+                                          "1 lb Rice",
+                                          "3 bags Broccoli Florets",
+                                          "3 peppers Red Bell Pepper",
+                                          "1 bottle Soy Sauce",
+                                          "1 bottle Honey"
+                                      ],
+                 "steps":  [
+                               "Brown the ground beef in a large skillet, breaking it up as it cooks, then drain any grease.",
+                               "Add the minced garlic and grated ginger and stir for about a minute.",
+                               "Pour in the soy sauce and honey and let it bubble into a glaze.",
+                               "Add the broccoli florets and sliced red pepper and cook until just tender.",
+                               "Cook the rice while the skillet finishes.",
+                               "Spoon the saucy beef and vegetables over the rice and serve."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

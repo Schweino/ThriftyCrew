@@ -1,0 +1,337 @@
+{
+    "name":  "Xinjiang Cumin Beef Rice Bowls",
+    "slug":  "xinjiang-cumin-beef-rice-bowls",
+    "cuisine":  "Chinese (Uyghur)",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.beyondkimchee.com/cumin-beef/",
+    "source_site":  "beyondkimchee.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 200g (src scale)",
+                   "base +25% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Heavy cumin and chili, nothing like the live Mongolian or beef-and-broccoli bowls. Stir-fries in batches. Confidence: page verified via search listing; calories estimated, and the cut should be repriced against chuck-roast if sirloin runs expensive that week. | HARVEST: Published protein figure (7g) looks inconsistent with 1 lb beef over 4 servings; transcribed as published, verify before using. Rice is serving suggestion, not in source ingredients.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 200g (src scale)",
+                         "TUNING: base +25% (Rice)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  561,
+                 "protein":  31,
+                 "carbs":  55,
+                 "fat":  23,
+                 "cost_ps":  "4.51"
+             },
+    "intro_html":  "Cumin beef out of Xinjiang is what happens when Central Asian spice meets a Chinese wok. Thin sliced beef gets a cornstarch coating so it stays tender, then hits screaming heat with a heavy pour of cumin and chili flakes. Total cook time is under half an hour once the slicing is done. Each bowl carries \u003cstrong\u003e31 grams of protein\u003c/strong\u003e and 561 calories for about \u003cstrong\u003e$4.51\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 0.25 cups (56 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 5.75 tbsp (93 g)",
+                                "\u003cstrong\u003eBaking Soda (generic (USDA)):\u003c/strong\u003e 0.25 oz (9 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 2.5 tbsp (19 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1 cups (196 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 3.5 tbsp (21 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 7 oz (196 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1.75 tbsp (11 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1 tbsp (6 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1.25 tbsp (16 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 17.5 tbsp (105 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 14 tbsp (14 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.75 cups dry (894 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Flank/Sirloin Steak, 3.5 lb: ~$30.88. \u003cstrong\u003eBuy 4 lbs: $35.28.\u003c/strong\u003e",
+                       "Chicken Broth, 0.25 cups: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 5.75 tbsp: ~$0.35. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Cornstarch, 2.5 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Vegetable Oil, 1 cups: ~$0.48. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Ginger, 3.5 tbsp: ~$0.18. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Jalapeno, 7 oz: ~$0.76. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Sesame Oil, 1.25 tbsp: ~$0.34. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Onions, 17.5 tbsp: ~$1.25. \u003cstrong\u003eBuy 2 bunches: $2.14.\u003c/strong\u003e",
+                       "Fresh Cilantro, 14 tbsp: ~$0.44. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Rice, 4.75 cups dry: ~$1.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (baking soda, ground cumin, red pepper flakes, salt, black pepper): ~$0.59. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $37.03 across 14 servings, so roughly $2.64 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $45.44 across 14 servings, roughly $3.25 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.71 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $63.15. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.51 a bowl\u003c/strong\u003e (at everyday cost). A stir fry stretches meat further than almost any other technique, because thin slices coat every grain of rice instead of sitting in a lump on top.",
+    "shop_smart":  [
+                       "Freeze the steak for about 45 minutes before you slice it. Firm beef slices thin and even, and thin even slices are what make a small amount of meat feel like plenty.",
+                       "Cumin is the whole point of this dish, so buy it in the larger container rather than the tiny spice jar. Ground cumin in bulk costs a fraction per ounce.",
+                       "Cornstarch is the cheapest tenderizer in the kitchen. A box lasts years and it is what keeps stir fried beef from turning into shoe leather.",
+                       "One bunch of green onions and one of cilantro covers the whole batch. Both go in at the very end, so buy them the day you cook."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Slice the beef thin against the grain, then toss it with a pinch of baking soda, the soy sauce, cornstarch, and the chicken broth until every slice is slick. Let it sit 20 minutes.",
+                    "Mince the ginger and garlic, slice the jalapenos, and cut the green onions into short lengths. Have all of it within arm\u0027s reach, because this cooks fast.",
+                    "Heat the vegetable oil in your widest pan until it is genuinely hot, then sear the beef in batches, spread out, without stirring for the first 30 seconds.",
+                    "Pull each batch out as soon as it loses its raw color. Overcrowding the pan steams the beef and steamed beef is tough.",
+                    "Return the pan to high heat, add the ginger, garlic, and jalapenos, and stir for 30 seconds.",
+                    "Add all the beef back with the ground cumin, red pepper flakes, salt, and pepper, and toss hard for a minute so everything coats.",
+                    "Kill the heat, hit it with the sesame oil, green onions, and cilantro, and cook the rice separately."
+                ],
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of cumin beef over the same weight of rice in each of 14 containers. Each bowl lands at \u003cstrong\u003e561 calories with 31 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.beyondkimchee.com/cumin-beef/\" target=\"_blank\" rel=\"noopener\"\u003ebeyondkimchee.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Cumin beef bowls for about $4.51 a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  37.03,
+    "cost_batch_true":  45.44,
+    "cost_per_serving":  2.64,
+    "cost_per_serving_true":  3.25,
+    "cost_pantry_add":  17.71,
+    "cost_first_run":  63.15,
+    "scaler":  {
+                   "cost":  "45.44",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Flank/Sirloin Steak",
+                                   "canon":  "Beef Flank/Sirloin Steak",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "sirloin-steak",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  56,
+                                   "buy":  "0.25 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  93,
+                                   "buy":  "5.75 tbsp",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Baking Soda",
+                                   "canon":  "Baking Soda",
+                                   "grams":  9,
+                                   "buy":  "0.25 oz",
+                                   "bid":  "baking-soda",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cornstarch",
+                                   "canon":  "Cornstarch",
+                                   "grams":  19,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  196,
+                                   "buy":  "1 cups",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  21,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  35,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  196,
+                                   "buy":  "7 oz",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  11,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Pepper Flakes",
+                                   "canon":  "Red Pepper Flakes",
+                                   "grams":  6,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "red-pepper-flakes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "canon":  "Sesame Oil",
+                                   "grams":  16,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  105,
+                                   "buy":  "17.5 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  14,
+                                   "buy":  "14 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  894,
+                                   "buy":  "4.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Xinjiang cumin beef rice bowls meal prep: thin sliced beef stir fried with heavy cumin, chili, and garlic over rice. 561 calories, 31g protein, about $4.51 per serving (at everyday cost).",
+                 "keywords":  "cumin beef, xinjiang beef, uyghur cumin lamb style beef, beef stir fry, budget meal prep, chinese beef rice bowls",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT20M",
+                 "totalTime":  "PT45M",
+                 "costPerServing":  4.51,
+                 "recipeIngredient":  [
+                                          "3.5 lb beef flank or sirloin steak",
+                                          "0.12 lb chicken broth",
+                                          "5.75 tbsp soy sauce",
+                                          "2.5 tbsp cornstarch",
+                                          "1 cup vegetable oil",
+                                          "3.5 tbsp ginger",
+                                          "4 tbsp garlic",
+                                          "7 oz jalapeno",
+                                          "1.25 tbsp sesame oil",
+                                          "17.5 tbsp green onions",
+                                          "14 tbsp fresh cilantro",
+                                          "4.75 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Slice the beef thin and toss with baking soda, soy sauce, cornstarch, and broth.",
+                               "Sear the beef in batches in very hot oil, pulling each batch as it colors.",
+                               "Stir fry ginger, garlic, and jalapenos for 30 seconds.",
+                               "Return the beef with cumin and chili flakes and toss hard for a minute.",
+                               "Finish with sesame oil, green onion, and cilantro and portion over rice into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Flank/Sirloin Steak",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  93
+                              },
+                              {
+                                  "item":  "Baking Soda",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Cornstarch",
+                                  "grams":  19
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Red Pepper Flakes",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Sesame Oil",
+                                  "grams":  16
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  105
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  894
+                              }
+                          ]
+}

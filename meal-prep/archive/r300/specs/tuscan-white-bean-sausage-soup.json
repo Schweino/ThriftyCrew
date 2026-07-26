@@ -1,0 +1,351 @@
+{
+    "name":  "Tuscan White Bean and Sausage Soup",
+    "slug":  "tuscan-white-bean-sausage-soup",
+    "cuisine":  "italian",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.daringgourmet.com/tuscan-white-bean-and-sausage-soup/",
+    "source_site":  "daringgourmet.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Potato)",
+                   "portion factor 1.35"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 467 cal / 27g protein at the source, protein already clears and calories land at 500+ with our portion size. All eight ingredients board-tracked, canned-white-beans keeps cost per serving very low. Freezes for two months per the source, which suits the meal-prep audience. Distinct from Zuppa Toscana (tomato-and-bean broth, no cream, no potatoes). | HARVEST: ",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Potato)",
+                         "TUNING: portion factor 1.35",
+                         "OVERRIDE Potato: [BUMP x2.8] source \u00271 large potato (optional)\u0027 for 8; house 600 g to carry the 550 gate"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  569,
+                 "protein":  29,
+                 "carbs":  66,
+                 "fat":  22,
+                 "cost_ps":  "4.05"
+             },
+    "intro_html":  "This is Tuscan peasant cooking, which is to say it was designed from the start to feed a lot of people for very little. Hot Italian sausage, cannellini beans, tomatoes, potatoes and kale in a broth that thickens itself as the beans break down. It carries 29 grams of protein at about $4.05 (at everyday cost), and the source notes it freezes for two months.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 4.75 tbsp (64 g)",
+                                "\u003cstrong\u003eHot Italian Sausage (Johnsonville):\u003c/strong\u003e 2.25 lb (1072 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.4 (260 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 5.6 (340 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 4.7 (260 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 12 (2546 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 4.7 cans (1942 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 2.5 tbsp (38 g)",
+                                "\u003cstrong\u003eCannellini Beans (generic):\u003c/strong\u003e 4.2 cans (1072 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 4.8 cartons (4536 g)",
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 0.5 tbsp (2 g)",
+                                "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.11 oz (3 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)",
+                                "\u003cstrong\u003eKale:\u003c/strong\u003e 2 lb (945 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 4.75 tbsp: ~$0.90. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Hot Italian Sausage, 2.25 lb: ~$5.91. \u003cstrong\u003eBuy 3 lbs: $7.50.\u003c/strong\u003e",
+                       "Yellow Onion, 2.4: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Carrots, 5.6: ~$0.72. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Celery, 4.7: ~$1.37. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Potato, 12: ~$3.19. \u003cstrong\u003eBuy 6 lbs: $3.41.\u003c/strong\u003e",
+                       "Diced Tomatoes, 4.7 cans: ~$4.53. \u003cstrong\u003eBuy 5 cans: $4.80.\u003c/strong\u003e",
+                       "Tomato Paste, 2.5 tbsp: ~$0.19. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "Cannellini Beans, 4.2 cans: ~$3.47. \u003cstrong\u003eBuy 5 cans: $4.12.\u003c/strong\u003e",
+                       "Chicken Broth, 4.8 cartons: ~$6.09. \u003cstrong\u003ePantry staple; this batch alone uses about 5 32oz cartons.\u003c/strong\u003e",
+                       "Kale, 2 lb: ~$5.59. \u003cstrong\u003eBuy 4 bunches: $5.92.\u003c/strong\u003e",
+                       "Pantry seasonings (italian seasoning, dried thyme, dried oregano, bay leaves, salt, black pepper): ~$0.79. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $33.90 across 14 servings, so roughly $2.42 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $39.43 across 14 servings, roughly $2.82 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.22 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $56.65. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.05 a bowl\u003c/strong\u003e (at everyday cost) for a soup you can freeze and forget about. Half the batch in the freezer means two weeks of dinners handled from one afternoon of work.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eCanned white beans are the cheapest protein in the pot.\u003c/strong\u003e A few cans deliver more protein per dollar than anything else on this list. Dried cannellini cost even less if you soak them the night before.",
+                       "\u003cstrong\u003eChicken broth is the biggest line after the sausage.\u003c/strong\u003e Buy the large cartons of store brand. In a soup this heavily seasoned, nobody can tell the difference.",
+                       "\u003cstrong\u003eKale bunches on sale beat the bagged stuff.\u003c/strong\u003e Strip the leaves off the stems yourself. It takes two minutes and cuts the price meaningfully.",
+                       "\u003cstrong\u003eTomato paste is the cheapest depth you can buy.\u003c/strong\u003e One small can gives the broth a backbone that diced tomatoes alone will not."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Dice the onion, carrots, celery and potatoes, mince the garlic, and strip the kale leaves off their stems.",
+                    "Heat the olive oil in a large pot and brown the hot Italian sausage, breaking it into crumbles, until it has real color on it.",
+                    "Add the onion, carrots and celery and cook until softened, then add the garlic, italian seasoning, dried thyme and oregano for a minute.",
+                    "Stir in the tomato paste and cook it for two minutes so it darkens, then add the diced tomatoes, the chicken broth and the bay leaves.",
+                    "Add the cubed potatoes and simmer until they are tender and the broth has picked up their starch.",
+                    "Stir in the drained cannellini beans and cook long enough for them to warm through and start softening the broth.",
+                    "Fold in the kale at the very end and cook just until it wilts, then pull the bay leaves and season with salt and black pepper."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and ladle the exact amount into each container, stirring the pot between scoops so the beans and sausage spread out. Every bowl lands near 569 calories and 29 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.daringgourmet.com/tuscan-white-bean-and-sausage-soup/\" target=\"_blank\" rel=\"noopener\"\u003edaringgourmet.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Freezer friendly soups for about $4.05 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  33.9,
+    "cost_batch_true":  39.43,
+    "cost_per_serving":  2.42,
+    "cost_per_serving_true":  2.82,
+    "cost_pantry_add":  17.22,
+    "cost_first_run":  56.65,
+    "scaler":  {
+                   "cost":  "39.43",
+                   "ing":  [
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  64,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Hot Italian Sausage",
+                                   "canon":  "Hot Italian Sausage",
+                                   "grams":  1072,
+                                   "buy":  "2.25 lb",
+                                   "bid":  "italian-sausage",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  260,
+                                   "buy":  "2.4",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  35,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  340,
+                                   "buy":  "5.6",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "canon":  "Celery",
+                                   "grams":  260,
+                                   "buy":  "4.7",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  2546,
+                                   "buy":  "12",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  1942,
+                                   "buy":  "4.7 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  38,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cannellini Beans",
+                                   "canon":  "Cannellini Beans",
+                                   "grams":  1072,
+                                   "buy":  "4.2 cans",
+                                   "bid":  "cannellini-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  4536,
+                                   "buy":  "4.8 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "canon":  "Italian Seasoning",
+                                   "grams":  2,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  3,
+                                   "buy":  "0.11 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  21,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Kale",
+                                   "canon":  "Kale",
+                                   "grams":  945,
+                                   "buy":  "2 lb",
+                                   "bid":  "kale",
+                                   "gpu":  "250.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Tuscan soup with hot Italian sausage, cannellini beans, potatoes and kale in a tomato broth. 14 servings, 569 calories, 29g protein, about $4.05 each (at everyday cost).",
+                 "keywords":  "tuscan white bean soup, italian sausage soup, cannellini bean soup, freezer friendly soup, budget meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT50M",
+                 "totalTime":  "PT1H10M",
+                 "costPerServing":  4.05,
+                 "recipeIngredient":  [
+                                          "2.25 lb hot Italian sausage",
+                                          "4.2 cans cannellini beans",
+                                          "10 lb chicken broth",
+                                          "12 potatoes",
+                                          "4.7 cans diced tomatoes",
+                                          "2.5 tbsp tomato paste",
+                                          "45 cups kale",
+                                          "5.6 carrots",
+                                          "4.7 celery stalks",
+                                          "2.4 yellow onions",
+                                          "4 tbsp garlic",
+                                          "4.75 tbsp olive oil"
+                                      ],
+                 "steps":  [
+                               "Brown and crumble the hot Italian sausage in olive oil.",
+                               "Add the onion, carrots and celery, then the garlic and dried herbs.",
+                               "Cook the tomato paste until it darkens, then add the diced tomatoes, chicken broth and bay leaves.",
+                               "Add the cubed potatoes and simmer until tender, then stir in the drained white beans.",
+                               "Fold in the kale at the end and cook just until wilted, then season."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  64
+                              },
+                              {
+                                  "item":  "Hot Italian Sausage",
+                                  "grams":  1072
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  260
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  340
+                              },
+                              {
+                                  "item":  "Celery",
+                                  "grams":  260
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  2546
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  1942
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  38
+                              },
+                              {
+                                  "item":  "Cannellini Beans",
+                                  "grams":  1072
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  4536
+                              },
+                              {
+                                  "item":  "Italian Seasoning",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Kale",
+                                  "grams":  945
+                              }
+                          ]
+}

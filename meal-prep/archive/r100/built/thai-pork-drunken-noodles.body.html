@@ -1,0 +1,204 @@
+<p class="smp-credit"><span class="smp-credit-eyebrow">Source</span> Recipe adapted from <a href="https://www.platingsandpairings.com/pad-kee-mao/" target="_blank" rel="noopener">Platings + Pairings</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</p>
+
+<!--SMP-SCALER2--><style>.smp-sc{margin:1.6rem 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px;text-align:center}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}
+.smp-credit{background:#f8f6f0;border-left:4px solid #e2a43c;border-radius:0 8px 8px 0;padding:1rem 1.3rem;margin:0 0 1.8rem;font-size:1.38rem;line-height:1.55;color:#3a4658}
+.smp-credit a{color:#16263F;font-weight:600}
+.smp-credit-eyebrow{display:block;font-size:1.05rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8a6d1f;margin-bottom:.3rem}
+.smp-ct{margin:2.8rem 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-ct h2{margin:0 0 .8rem}
+.smp-ct-why{margin:0 0 1.4rem}
+.smp-ct-list{margin-top:.4rem}
+.smp-ct-btns{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 1.2rem}
+.smp-ct-btn{flex:1 1 auto;min-width:110px;padding:.7rem .9rem;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.32rem;font-weight:700;cursor:pointer;line-height:1.2}
+.smp-ct-btn.on{background:#16263F;color:#fff}
+.smp-ct-sub{color:#4a5568;font-size:1.3rem;margin:0 0 1rem;line-height:1.55}
+.smp-ct-sub b{color:#16263F}
+.smp-ct-list{margin:0;padding:0;list-style:none}
+.smp-ct-list li{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:.6rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-ct-list li.smp-ct-off{opacity:.45}
+.smp-ct-list li.smp-ct-off .smp-ct-r b{text-decoration:line-through}
+.smp-ct-ck{display:flex;align-items:center;gap:9px;cursor:pointer;margin:0}
+.smp-ct-ck input{width:19px;height:19px;accent-color:#16263F;cursor:pointer;margin:0;flex:none}
+.smp-ct-r{text-align:right}
+.smp-ct-qty{color:#8a94a6;font-size:1.2rem;margin-right:6px}
+.smp-ct-r a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.22rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.18rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.42rem}
+.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b;font-size:1.24rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+@media (max-width:480px){.smp-sc,.smp-ct{padding:1.4rem 1.2rem}.smp-ct-btn{min-width:100%;flex:1 1 100%}.smp-ct-list li{flex-direction:column;align-items:flex-start;gap:4px}.smp-ct-r{text-align:left}}</style>
+<script>
+(function(){
+if(window.__smpScaler2)return; window.__smpScaler2=1;
+// live price feed (Cloudflare). Fetched once per page; everyday package prices show instantly if slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null,feedData=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function esc(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+function money(v){ return '$'+v.toFixed(2); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num');
+  var ct=document.querySelector('.smp-ct');
+  var ingUl=document.querySelector('.smp-ing');   // the Ingredients section list - rewritten in place when servings change
+  var removed={}, tab='custom';
+  function nServ(){ return Math.max(2,Math.min(42,parseInt(num.value)||data.base)); }
+  // WHOLE-PACKAGE MODEL: you cannot buy 7.5 tbsp of vinegar. Packages needed = ceil of what the batch
+  // uses over the package size, never less than one. Every tab prices whole packages; only the price
+  // source differs (everyday shelf price vs this week's cheapest verified store).
+  function pkgs(it,nn){ return Math.max(1,Math.ceil(it.grams*(nn/data.base)/it.pkg_g - 0.02)); }
+  function pkgLabel(it,k){ if(it.pkg_l==='lb'){return k+' lb';} if(it.pkg_l==='head'){return k+(k>1?' heads':' head');} if(k===1){return '1 '+it.pkg_l;} return k+' × '+it.pkg_l; }
+  function price(it,nn,basis){
+    var k=pkgs(it,nn), ev=k*it.pkg_p;
+    if(basis==='everyday'){ return {cost:ev,live:false,k:k}; }
+    var e=(feedData&&feedData.ingredients&&it.bid)?feedData.ingredients[it.bid]:null;
+    if(e&&e.cheapest>0&&it.gpu>0){ return {cost:k*(it.pkg_g/it.gpu)*e.cheapest,live:true,k:k,store:e.store,url:e.url,unit:e.unit,up:e.cheapest,sale:e.type==='sale',cn:e.n}; }
+    return {cost:ev,live:false,k:k,fallback:true};
+  }
+  function renderIngredients(){
+    // No duplicate list in the scaler box: the recipe's own Ingredients section IS the scaled view.
+    if(!ingUl) return;
+    var nn=nServ(), f=nn/data.base, html='';
+    data.ing.forEach(function(it){ html+='<li><strong>'+esc(it.disp||it.item)+':</strong> '+scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'')+'</li>'; });
+    ingUl.innerHTML=html;
+  }
+  function renderTabs(){
+    if(!ct) return;
+    var nn=nServ(), html='', tot=0;
+    var basis=(tab==='everyday')?'everyday':'cheapest';
+    data.ing.forEach(function(it,i){
+      var p=price(it,nn,basis);
+      var inc=!(tab==='custom'&&removed[i]);
+      if(inc){ tot+=p.cost; }
+      var left, right, qty='<span class="smp-ct-qty">'+pkgLabel(it,p.k)+'</span> ';
+      if(tab==='custom'){ left='<label class="smp-ct-ck"><input type="checkbox" data-i="'+i+'"'+(inc?' checked':'')+'> <span>'+esc(it.item)+(p.sale?'<span class="smp-sc-saletag">sale</span>':'')+'</span></label>'; }
+      else{ left='<span>'+esc(it.item)+(p.sale?'<span class="smp-sc-saletag">sale</span>':'')+'</span>'; }
+      if(tab==='cheapest'&&p.live){
+        var covN=(p.cn>0&&p.cn<6)?(' <span class="smp-cp-un">(checked at '+p.cn+' of 6 stores)</span>'):'';
+        var link=p.url?(' <a href="'+esc(p.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        right=qty+'<b class="smp-cp-tot">'+money(p.cost)+'</b> <span class="smp-sc-lp">'+money(p.up)+'/'+p.unit+' at '+esc(p.store)+'</span>'+covN+link;
+      } else if(tab==='cheapest'){
+        right=qty+'<b class="smp-cp-tot">'+money(p.cost)+'</b> <span class="smp-cp-un">everyday price (no live price this week)</span>';
+      } else if(tab==='custom'&&p.live){
+        right=qty+'<b class="smp-cp-tot">'+money(p.cost)+'</b> <span class="smp-cp-un">at '+esc(p.store)+'</span>';
+      } else {
+        right=qty+'<b class="smp-cp-tot">'+money(p.cost)+'</b>';
+      }
+      html+='<li'+((tab==='custom'&&!inc)?' class="smp-ct-off"':'')+'>'+left+'<span class="smp-ct-r">'+right+'</span></li>';
+    });
+    var lbl = (tab==='custom')?'Your shopping total':((tab==='everyday')?'Everyday register total':'Register total at the cheapest stores');
+    html+='<li class="smp-cp-total"><span><b>'+lbl+', '+nn+' servings</b></span><span class="smp-ct-r"><b class="smp-cp-tot">'+money(tot)+'</b> <span class="smp-cp-un">about '+money(nn>0?tot/nn:0)+' a serving</span></span></li>';
+    ct.querySelector('.smp-ct-list').innerHTML=html;
+    var sub=ct.querySelector('.smp-ct-sub');
+    if(sub){
+      if(tab==='custom'){ sub.innerHTML='Your real register trip. Every ingredient is priced as the <b>whole package</b> you would buy, at this week&rsquo;s cheapest verified store (everyday price where we don&rsquo;t have a live one). <b>Already have something at home? Uncheck it</b> and the total becomes what you still need to spend.'; }
+      else if(tab==='everyday'){ sub.innerHTML='Typical Omaha shelf prices on a normal week, whole packages, no sales. This is the number to beat.'; }
+      else { sub.innerHTML='This week&rsquo;s cheapest verified price for each package across the stores we track. Links go to the exact item.'; }
+    }
+    ct.querySelectorAll('.smp-ct-ck input').forEach(function(cb){ cb.addEventListener('change',function(){ removed[cb.getAttribute('data-i')]=!cb.checked; renderTabs(); }); });
+  }
+  function updateStats(){
+    // The blue stat rectangle follows the scaler: servings shows the chosen count, and per-serving
+    // is the current-cheapest whole-package total at that count (everyday fallback pre-feed/untracked).
+    try{
+      var bar=document.querySelector('.mts-recipe-stats'); if(!bar) return;
+      var nn=nServ(), t=0;
+      data.ing.forEach(function(it){ t+=price(it,nn,'cheapest').cost; });
+      bar.querySelectorAll('.stat').forEach(function(s){
+        var lEl=s.querySelector('.lbl'), b=s.querySelector('b');
+        if(!lEl||!b) return;
+        var l=lEl.textContent.trim();
+        if(/per serving/i.test(l) && t>0){ b.textContent='$'+(t/nn).toFixed(2); }
+        else if(/^servings$/i.test(l)){ b.textContent=String(nn); }
+      });
+    }catch(e){}
+    // The bold "Makes N servings ... per serving (at everyday cost)" line and the Portion It
+    // "divide by N" instruction follow the scaler too (idempotent regex rewrites of the numbers).
+    try{
+      var nn2=nServ(), tev=0;
+      data.ing.forEach(function(it){ tev+=price(it,nn2,'everyday').cost; });
+      var stat=document.querySelector('.smp-stat');
+      if(stat){ stat.innerHTML=stat.innerHTML
+        .replace(/Makes \d+ servings/,'Makes '+nn2+' servings')
+        .replace(/~\$\d+(?:\.\d+)? per serving/,'~$'+(tev/nn2).toFixed(2)+' per serving'); }
+      var por=document.querySelector('.smp-portion');
+      if(por){ por.innerHTML=por.innerHTML.replace(/divide by \d+/,'divide by '+nn2); }
+    }catch(e){}
+  }
+  function renderAll(){ renderIngredients(); renderTabs(); updateStats(); }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); renderAll(); }); });
+  num.addEventListener('change',renderAll);
+  if(ct){ ct.querySelectorAll('.smp-ct-btn').forEach(function(b){ b.addEventListener('click',function(){ tab=b.getAttribute('data-t'); ct.querySelectorAll('.smp-ct-btn').forEach(function(x){ x.classList.toggle('on',x===b); }); renderTabs(); }); }); }
+  renderAll();
+  smpGetFeed().then(function(f){ feedData=f; renderTabs(); updateStats(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">Enter the # of servings and the recipe adapts.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-note">The ingredient list and every cost below update as you change it. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"thai-pork-drunken-noodles","base":14,"ing":[{"item":"Fish Sauce","disp":"Fish Sauce (Thai Kitchen)","grams":252,"buy":"1 cups","bid":"fish-sauce","gpu":29.570,"pkg_g":200,"pkg_p":1.92,"pkg_l":"6.76floz bottle"},{"item":"Soy Sauce","disp":"Soy Sauce (generic)","grams":223,"buy":"0.75 cups","bid":"soy-sauce","gpu":29.570,"pkg_g":444,"pkg_p":1.68,"pkg_l":"15floz bottle"},{"item":"Rice Vinegar","disp":"Rice Vinegar (Nakano)","grams":35,"buy":"2.25 tbsp","bid":"rice-vinegar","gpu":29.570,"pkg_g":355,"pkg_p":2.92,"pkg_l":"12floz bottle"},{"item":"Garlic","disp":"Garlic","grams":105,"buy":"12.25 tbsp","bid":"garlic","gpu":50.000,"pkg_g":40,"pkg_p":0.5767,"pkg_l":"head"},{"item":"Jalapeno","disp":"Jalapeno","grams":196,"buy":"7 oz","bid":"jalapenos","gpu":453.592,"pkg_g":453.592,"pkg_p":1.76,"pkg_l":"lb"},{"item":"Vegetable Oil","disp":"Vegetable Oil (Great Value)","grams":147,"buy":"0.75 cups","bid":"vegetable-oil","gpu":28.000,"pkg_g":1306,"pkg_p":3.17,"pkg_l":"48floz bottle"},{"item":"Yellow Onion","disp":"Yellow Onion","grams":262,"buy":"2.4","bid":"onions","gpu":453.592,"pkg_g":453.592,"pkg_p":1.14,"pkg_l":"lb"},{"item":"Ground Pork","disp":"Ground Pork","grams":1588,"buy":"3.5 lb","bid":"ground-pork","gpu":453.592,"pkg_g":453.592,"pkg_p":3.41,"pkg_l":"lb"},{"item":"Red Bell Pepper","disp":"Red Bell Pepper (generic)","grams":420,"buy":"3.5","bid":"bell-peppers","gpu":120.000,"pkg_g":120,"pkg_p":0.86,"pkg_l":"each"},{"item":"Rice Noodles","disp":"Rice Noodles (Thai Kitchen)","grams":1191,"buy":"42 oz dry","bid":"rice-noodles","gpu":28.350,"pkg_g":397,"pkg_p":4.76,"pkg_l":"14oz box"},{"item":"Fresh Basil","disp":"Fresh Basil","grams":35,"buy":"23.25 tbsp","bid":"fresh-basil","gpu":28.350,"pkg_g":14,"pkg_p":1.7567,"pkg_l":"0.5oz pack"},{"item":"Lime Juice","disp":"Lime Juice","grams":105,"buy":"7 tbsp","bid":"limes","gpu":30.000,"pkg_g":237,"pkg_p":1.98,"pkg_l":"8floz bottle"},{"item":"Salt","disp":"Salt (Morton)","grams":20,"buy":"1 tbsp","bid":"salt","gpu":28.350,"pkg_g":737,"pkg_p":2.15,"pkg_l":"26oz canister"},{"item":"Black Pepper","disp":"Black Pepper (Great Value)","grams":4,"buy":"0.5 tbsp","bid":"black-pepper","gpu":28.350,"pkg_g":85,"pkg_p":3.57,"pkg_l":"3oz shaker"}]}</script></div><!--/SMP-SCALER2-->
+
+<p class="smp-stat"><strong>Makes 14 servings &middot; ~730 cal &middot; 31g protein &middot; 78g carbs &middot; 34g fat &middot; ~$4.33 per serving (at everyday cost).</strong></p>
+
+<p>Pad kee mao, drunken noodles, is the spicy, basil-loaded stir fry that ruins mild takeout forever. Each bowl packs <strong>31 grams of protein</strong> from ground pork for about <strong>$4.33</strong> (at everyday cost), with jalapeno heat and wide rice noodles that actually catch the sauce.</p>
+
+<h2>Ingredients</h2>
+<ul class="smp-ing">
+<li><strong>Fish Sauce (Thai Kitchen):</strong> 1 cups (252 g)</li>
+<li><strong>Soy Sauce (generic):</strong> 0.75 cups (223 g)</li>
+<li><strong>Rice Vinegar (Nakano):</strong> 2.25 tbsp (35 g)</li>
+<li><strong>Garlic:</strong> 12.25 tbsp (105 g)</li>
+<li><strong>Jalapeno:</strong> 7 oz (196 g)</li>
+<li><strong>Vegetable Oil (Great Value):</strong> 0.75 cups (147 g)</li>
+<li><strong>Yellow Onion:</strong> 2.4 (262 g)</li>
+<li><strong>Ground Pork:</strong> 3.5 lb (1588 g)</li>
+<li><strong>Red Bell Pepper (generic):</strong> 3.5 (420 g)</li>
+<li><strong>Rice Noodles (Thai Kitchen):</strong> 42 oz dry (1191 g)</li>
+<li><strong>Fresh Basil:</strong> 23.25 tbsp (35 g)</li>
+<li><strong>Lime Juice:</strong> 7 tbsp (105 g)</li>
+<li><strong>Salt (Morton):</strong> 1 tbsp (20 g)</li>
+<li><strong>Black Pepper (Great Value):</strong> 0.5 tbsp (4 g)</li>
+</ul>
+
+<div class="smp-ct"><h2>What This Batch Costs</h2>
+<p class="smp-ct-why"><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<div class="smp-ct-btns"><button type="button" class="smp-ct-btn on" data-t="custom">Customized pricing</button><button type="button" class="smp-ct-btn" data-t="everyday">Everyday cost</button><button type="button" class="smp-ct-btn" data-t="cheapest">Current cheapest pricing</button></div>
+<p class="smp-ct-sub"></p>
+<ul class="smp-ct-list"></ul>
+<p class="smp-sc-note">Totals price whole packages, cans, and jars, because that is how the register works. Change the servings in Make It Your Size above and these totals follow.</p></div>
+<p>About <strong>$4.33 a bowl</strong> (at everyday cost) for pad kee mao that would run $14 at a Thai restaurant. Fourteen bowls here costs less than three there, and yours has more pork in it.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>Ground pork covers the protein at about $13.16 for 3.75 pounds. It is consistently cheaper than the sliced pork most stir fry recipes call for, and it browns faster too.</li>
+<li>Rice noodles at about $11.91 are the other big line. Buy them from the international aisle or an Asian market and that number can drop by a third.</li>
+<li>Fish sauce, soy sauce, and rice vinegar are all buy-once bottles that live in the pantry. This batch uses about $1.60 of soy and vinegar combined off bottles that season months of cooking.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Soak or boil the rice noodles per the package until just shy of tender, then drain and rinse. They finish in the pan.</li>
+<li>Stir together the fish sauce, soy sauce, and rice vinegar for the sauce.</li>
+<li>Heat the vegetable oil in your largest skillet or pot over high heat. Cook the onion 2 minutes, then add the garlic and jalapeno for 1 minute more.</li>
+<li>Add the ground pork and brown it hard, breaking it into crumbles, until cooked through with crispy edges.</li>
+<li>Add the noodles and the sauce and toss until the noodles soak it up and everything is coated.</li>
+<li>Kill the heat and fold in the fresh basil, sliced bell pepper, and lime juice. The basil should wilt in the residual heat, not cook.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p class="smp-portion">Weigh the full pot, subtract the empty pot weight you wrote down, and divide by 14. Portion to that number and each bowl lands at about 730 calories with 31 grams of protein. A proper full-size dinner bowl.</p>
+
+<hr>
+<p><em>Hearty dinners for about $4.33 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.</em></p>

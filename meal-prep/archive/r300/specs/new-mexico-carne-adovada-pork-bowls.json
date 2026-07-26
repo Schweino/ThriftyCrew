@@ -1,0 +1,317 @@
+{
+    "name":  "New Mexico Carne Adovada Pork Bowls",
+    "slug":  "new-mexico-carne-adovada-pork-bowls",
+    "cuisine":  "New Mexican",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.isabeleats.com/carne-adovada/",
+    "source_site":  "isabeleats.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 400g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Source verified at 468 cal / 29g protein per serving over 8 servings for the pork alone, which is already dinner-weight before rice. Slow-braised, shreds, holds for a week. The live catalog\u0027s New Mexican entry is green chili; adovada is the red-chile counterpart and a different dish. | HARVEST: ",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 400g (src scale)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  645,
+                 "protein":  38,
+                 "carbs":  59,
+                 "fat":  28,
+                 "cost_ps":  "4.81"
+             },
+    "intro_html":  "New Mexico takes chile seriously enough to have made it the state question. Red or green? This is the red answer. Carne adovada is pork shoulder marinated in a thick red chile puree, then braised in that same puree until the meat falls apart and the sauce turns almost black. There is no tomato in it, no cream, nothing hiding behind the chile. It is one of the great American regional dishes and almost nobody outside the state has had it.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eDried Ancho Chiles (generic (USDA)):\u003c/strong\u003e 8.5 oz (238 g)",
+                                "\u003cstrong\u003eDried Guajillo Chiles (generic (USDA)):\u003c/strong\u003e 4.5 oz (126 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.04 oz (1 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)",
+                                "\u003cstrong\u003eWhite Vinegar (generic):\u003c/strong\u003e 1 cups (210 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 7 tbsp (112 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 tbsp (3 g)",
+                                "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 1.25 tbsp (15 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (6 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.5 tbsp (47 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 5.25 tbsp (74 g)",
+                                "\u003cstrong\u003ePork Shoulder (generic (USDA)):\u003c/strong\u003e 5.25 lb (2381 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.7 (192 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Dried Ancho Chiles, 8.5 oz: ~$4.72. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Dried Guajillo Chiles, 4.5 oz: ~$7.77. \u003cstrong\u003ePantry staple; this batch alone uses about 2 4oz bags.\u003c/strong\u003e",
+                       "Garlic, 8.25 tbsp: ~$1.01. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "White Vinegar, 1 cups: ~$0.39. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 7 tbsp: ~$0.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sugar, 1.25 tbsp: ~$0.03. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Vegetable Oil, 5.25 tbsp: ~$0.18. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pork Shoulder, 5.25 lb: ~$18.74. \u003cstrong\u003eBuy 6 lbs: $21.42.\u003c/strong\u003e",
+                       "Yellow Onion, 1.7: ~$0.48. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (bay leaves, dried oregano, dried thyme, ground cumin, salt, black pepper): ~$0.77. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $35.37 across 14 servings, so roughly $2.53 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $38.85 across 14 servings, roughly $2.78 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $28.55 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $67.40. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.81 a bowl\u003c/strong\u003e (at everyday cost). The dried chiles carry a real cost the first time, but they are shelf stable for a year, so every batch after this one is cheaper.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eDried chiles from the Hispanic aisle, in the bag.\u003c/strong\u003e Ancho and guajillo in the big bags cost a fraction of the branded spice-rack packets, and they keep a year sealed in the pantry.",
+                       "\u003cstrong\u003ePork shoulder is the right cut and the cheap cut.\u003c/strong\u003e A long braise in acidic chile sauce is exactly what a tough shoulder wants. A lean loin would dry out here.",
+                       "\u003cstrong\u003eMarinate overnight. It is free.\u003c/strong\u003e The vinegar in the puree tenderizes the pork while you sleep, which means less cooking time and better texture for zero extra dollars.",
+                       "\u003cstrong\u003eVinegar and a spoon of sugar do the balancing.\u003c/strong\u003e Cheap pantry items keep the chile from turning bitter, which is the mistake that ruins most homemade red chile."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Stem and seed the dried ancho and guajillo chiles, toast them briefly in a dry pan, then soak in hot water for 20 minutes until fully soft.",
+                    "Blend the chiles with some soaking water, the garlic, white vinegar, soy sauce, sugar, ground cumin, dried oregano, dried thyme, salt and black pepper into a thick smooth puree, then strain out the skins.",
+                    "Cut the pork shoulder into large cubes, coat every piece in the red puree, and refrigerate overnight.",
+                    "Brown the diced onion in the vegetable oil in a heavy oven-safe pot, then add the pork with all of its marinade and the bay leaves.",
+                    "Cover and braise at 325F for about 3 hours, stirring once an hour, until the pork shreds under a fork and the sauce has gone dark and thick.",
+                    "Cook the rice per the package, then taste the chile for salt and pull out the bay leaves before you portion."
+                ],
+    "portion_html":  "Spread the cooked rice across your 14 containers, then set the braising pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and spoon that exact weight of pork and red chile over the rice. Every bowl lands near 645 calories with 38 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.isabeleats.com/carne-adovada/\" target=\"_blank\" rel=\"noopener\"\u003eisabeleats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cem\u003eNew Mexico red chile pork for about $4.81 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "cost_batch":  35.37,
+    "cost_batch_true":  38.85,
+    "cost_per_serving":  2.53,
+    "cost_per_serving_true":  2.78,
+    "cost_pantry_add":  28.55,
+    "cost_first_run":  67.4,
+    "scaler":  {
+                   "cost":  "38.85",
+                   "ing":  [
+                               {
+                                   "item":  "Dried Ancho Chiles",
+                                   "canon":  "Dried Ancho Chiles",
+                                   "grams":  238,
+                                   "buy":  "8.5 oz",
+                                   "bid":  "dried-ancho-chiles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Guajillo Chiles",
+                                   "canon":  "Dried Guajillo Chiles",
+                                   "grams":  126,
+                                   "buy":  "4.5 oz",
+                                   "bid":  "dried-guajillo-chiles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  1,
+                                   "buy":  "0.04 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  70,
+                                   "buy":  "8.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "White Vinegar",
+                                   "canon":  "White Vinegar",
+                                   "grams":  210,
+                                   "buy":  "1 cups",
+                                   "bid":  "white-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  112,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  3,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  15,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  6,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  47,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  74,
+                                   "buy":  "5.25 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Pork Shoulder",
+                                   "canon":  "Pork Shoulder",
+                                   "grams":  2381,
+                                   "buy":  "5.25 lb",
+                                   "bid":  "pork-shoulder",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  192,
+                                   "buy":  "1.7",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Pork shoulder marinated overnight in ancho and guajillo puree, then braised until it shreds. A 14 serving New Mexico carne adovada for meal prep.",
+                 "keywords":  "carne adovada, new mexico red chile pork, braised pork recipe, pork rice bowls, budget meal prep, cheap dinner ideas",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT35M",
+                 "cookTime":  "PT3H",
+                 "totalTime":  "PT3H35M",
+                 "costPerServing":  4.81,
+                 "recipeIngredient":  [
+                                          "Dried Ancho Chiles",
+                                          "Dried Guajillo Chiles",
+                                          "Garlic",
+                                          "White Vinegar",
+                                          "Soy Sauce",
+                                          "Sugar",
+                                          "Vegetable Oil",
+                                          "Pork Shoulder",
+                                          "Yellow Onion",
+                                          "Rice"
+                                      ],
+                 "steps":  [
+                               "Toast and soak the dried ancho and guajillo chiles until soft.",
+                               "Blend with garlic, vinegar, soy sauce, sugar and spices into a thick puree and strain.",
+                               "Coat the cubed pork shoulder in the puree and marinate overnight.",
+                               "Brown the onion, add the pork and marinade, and braise covered at 325F for 3 hours.",
+                               "Season the sauce and serve over cooked rice."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Dried Ancho Chiles",
+                                  "grams":  238
+                              },
+                              {
+                                  "item":  "Dried Guajillo Chiles",
+                                  "grams":  126
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "White Vinegar",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  112
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  74
+                              },
+                              {
+                                  "item":  "Pork Shoulder",
+                                  "grams":  2381
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  192
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

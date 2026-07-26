@@ -1,0 +1,271 @@
+{
+    "name":  "Turkey Egg Roll in a Bowl over Rice",
+    "slug":  "turkey-egg-roll-in-a-bowl-over-rice",
+    "cuisine":  "chinese-american",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://ifoodreal.com/turkey-egg-roll-in-a-bowl/",
+    "source_site":  "ifoodreal.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 300g (src scale)",
+                   "base +60% (Rice)",
+                   "portion factor 1.05"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Cabbage-and-turkey skillet over rice; cabbage is one of the cheapest board items and the dish is famously forgiving at volume. Verified source: full 15-minute recipe built on ground turkey. Confidence note: per-serving numbers not captured from the page; est_cal assumes the rice base, which is also what pushes it past 500. Nothing in the live catalog covers this. | HARVEST: Published nutrition is for the skillet mixture only; excludes rice.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 300g (src scale)",
+                         "TUNING: base +60% (Rice)",
+                         "TUNING: portion factor 1.05"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  568,
+                 "protein":  25,
+                 "carbs":  85,
+                 "fat":  12,
+                 "cost_ps":  "2.75"
+             },
+    "intro_html":  "Somebody figured out that everything good about an egg roll is on the inside, and the wrapper is mostly a delivery vehicle. So here it is without the wrapper: ground turkey and cabbage in a soy and ginger pan sauce, served over rice. It is a fifteen minute skillet that scales to fourteen containers, and it lands at \u003cstrong\u003e568 calories and 25 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.75\u003c/strong\u003e (at everyday cost), which is one of the more affordable bowls in this batch.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 2.5 lb (1111 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.5 (270 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4.25 tbsp (37 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 6.25 tbsp (88 g)",
+                                "\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 1.6 (1458 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 2.5 tbsp (33 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.5 cups (156 g)",
+                                "\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 2.5 tbsp (37 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 6.75 tbsp (41 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 7.25 cups dry (1320 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 2.5 lb: ~$9.36. \u003cstrong\u003eBuy 3 lbs: $11.46.\u003c/strong\u003e",
+                       "Yellow Onion, 2.5: ~$0.68. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 4.25 tbsp: ~$0.53. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Vegetable Oil, 6.25 tbsp: ~$0.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Cabbage, 1.6: ~$2.73. \u003cstrong\u003eBuy 2 heads: $3.37.\u003c/strong\u003e",
+                       "Brown Sugar, 2.5 tbsp: ~$0.19. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 0.5 cups: ~$0.59. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice Vinegar, 2.5 tbsp: ~$0.30. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Onions, 6.75 tbsp: ~$0.49. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
+                       "Rice, 7.25 cups dry: ~$1.63. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $16.94 across 14 servings, so roughly $1.21 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $20.77 across 14 servings, roughly $1.48 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.70 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.47. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.75\u003c/strong\u003e a bowl (at everyday cost). Cabbage is the reason. Nothing else in the produce section gives you that much food for that little money.",
+    "shop_smart":  [
+                       "Green cabbage is the cheapest vegetable in the store by weight and it is not close. Two heads fill this entire skillet for pocket change. Buy whole heads, never the bagged slaw, which charges you triple for the knife work.",
+                       "A whole cabbage keeps for weeks in the fridge, so buy an extra when they are cheap. It is the one vegetable that does not punish you for planning ahead.",
+                       "Soy sauce, rice vinegar, and brown sugar are the entire sauce and together they cost almost nothing for this batch. That is what a pantry does for you.",
+                       "The ground turkey is over half the batch cost, so it is the one line worth timing to a sale. Everything else here is already priced like a rounding error."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Shred the cabbage thin and slice the onion. Do this before you turn the stove on, because once the pan is hot this dish moves fast.",
+                    "Whisk the soy sauce, rice vinegar, and brown sugar together in a small bowl so the sauce is ready to pour.",
+                    "Heat the vegetable oil in your largest skillet or a wide pot over medium-high, add the ground turkey, and brown it hard, breaking it up, until it is cooked through to 165F.",
+                    "Add the sliced onion and the minced garlic and cook 3 minutes until fragrant.",
+                    "Pile in the cabbage. It will look like too much and then it will cook down by half in about 6 minutes. Stir it often and stop while it still has some bite left.",
+                    "Pour in the sauce, toss everything to coat, and cook 2 minutes more so the liquid clings instead of pooling in the bottom.",
+                    "Cook the rice, move it into your weighed pot, and slice the green onions for the top."
+                ],
+    "portion_html":  "Set the pot of rice on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the rice bed for each container. Then divide the turkey and cabbage evenly across all 14, stirring the skillet between scoops so the meat does not settle to the bottom, and finish each with green onions. Every bowl lands at \u003cstrong\u003e568 calories and 25 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://ifoodreal.com/turkey-egg-roll-in-a-bowl/\" target=\"_blank\" rel=\"noopener\"\u003eifoodreal.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A full dinner for about \u003cstrong\u003e$2.75\u003c/strong\u003e a bowl (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  16.94,
+    "cost_batch_true":  20.77,
+    "cost_per_serving":  1.21,
+    "cost_per_serving_true":  1.48,
+    "cost_pantry_add":  17.7,
+    "cost_first_run":  38.47,
+    "scaler":  {
+                   "cost":  "20.77",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1111,
+                                   "buy":  "2.5 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  270,
+                                   "buy":  "2.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  37,
+                                   "buy":  "4.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  88,
+                                   "buy":  "6.25 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Green Cabbage",
+                                   "canon":  "Green Cabbage",
+                                   "grams":  1458,
+                                   "buy":  "1.6",
+                                   "bid":  "cabbage",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "canon":  "Brown Sugar",
+                                   "grams":  33,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  156,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Rice Vinegar",
+                                   "canon":  "Rice Vinegar",
+                                   "grams":  37,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "rice-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  41,
+                                   "buy":  "6.75 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  21,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1320,
+                                   "buy":  "7.25 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey egg roll in a bowl over rice: ground turkey and cabbage in a soy ginger pan sauce. 568 calories, 25g protein, about $2.75 a bowl of budget meal prep (at everyday cost).",
+                 "keywords":  "egg roll in a bowl, turkey cabbage skillet, turkey meal prep, budget meal prep, cheap dinner, one skillet",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT25M",
+                 "totalTime":  "PT40M",
+                 "costPerServing":  2.75,
+                 "recipeIngredient":  [
+                                          "2.5 lb 93/7 ground turkey",
+                                          "1.6 heads green cabbage",
+                                          "2.5 yellow onions",
+                                          "4.25 tbsp garlic",
+                                          "0.5 cups soy sauce",
+                                          "2.5 tbsp rice vinegar",
+                                          "2.5 tbsp brown sugar",
+                                          "6.25 tbsp vegetable oil",
+                                          "6.75 tbsp green onions",
+                                          "7.25 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Shred the cabbage and slice the onion.",
+                               "Whisk soy sauce, rice vinegar, and brown sugar into a sauce.",
+                               "Brown the ground turkey in vegetable oil to 165F, then add onion and garlic.",
+                               "Add the cabbage and cook about 6 minutes until wilted but still crisp.",
+                               "Pour in the sauce and toss 2 minutes to coat.",
+                               "Cook the rice, portion by weight into 14 containers, and top with the skillet mixture and green onions."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1111
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  270
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  37
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  88
+                              },
+                              {
+                                  "item":  "Green Cabbage",
+                                  "grams":  1458
+                              },
+                              {
+                                  "item":  "Brown Sugar",
+                                  "grams":  33
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  156
+                              },
+                              {
+                                  "item":  "Rice Vinegar",
+                                  "grams":  37
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  41
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1320
+                              }
+                          ]
+}

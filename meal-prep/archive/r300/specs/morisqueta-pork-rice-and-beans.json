@@ -1,0 +1,305 @@
+{
+    "name":  "Morisqueta (Michoacan Pork, Rice and Beans)",
+    "slug":  "morisqueta-pork-rice-and-beans",
+    "cuisine":  "Mexican (Michoacan)",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.isabeleats.com/morisqueta/",
+    "source_site":  "isabeleats.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified on the source at 573 cal / 31g protein per serving over 6 servings, which is exactly the profile we want with no adjustment. Built as layered rice + beans + saucy pork, so it is already a weigh-and-divide bowl. Source uses pork ribs; swapping to board-tracked pork-shoulder keeps it cheap. No morisqueta in the catalog. | HARVEST: Multi-component: pork simmered in a pot, salsa blended, rice cooked separately, assembled in bowls.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "OVERRIDE Diced Tomatoes: WAVE-4: \u00274 Roma tomatoes\u0027 fresh, not 4 cans"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  765,
+                 "protein":  48,
+                 "carbs":  71,
+                 "fat":  30,
+                 "cost_ps":  "4.38"
+             },
+    "intro_html":  "Morisqueta is a Michoacan plate and it is beautifully simple in its construction. A bed of plain white rice, a ladle of soupy beans, and pork simmered in a roasted tomato salsa on top, with cheese and cilantro to finish. Three components, layered instead of stirred, and every one of them cheap. It is home cooking from a state that does not export many of its recipes, and it batches almost perfectly.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Shoulder (generic (USDA)):\u003c/strong\u003e 5.75 lb (2646 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 3.5 tbsp (63 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (257 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.04 oz (1 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2.8 cans (1167 g)",
+                                "\u003cstrong\u003eTomatillos (generic):\u003c/strong\u003e 11.25 oz (317 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 7.25 tbsp (65 g)",
+                                "\u003cstrong\u003eDried Arbol Chiles (generic (USDA)):\u003c/strong\u003e 0.12 cups (3 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 0.75 tbsp (10 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.75 cups dry (863 g)",
+                                "\u003cstrong\u003eKidney Beans (generic):\u003c/strong\u003e 3 cans (803 g)",
+                                "\u003cstrong\u003eMexican Cheese Blend (Great Value):\u003c/strong\u003e 8.75 oz (250 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 25 tbsp (25 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Shoulder, 5.75 lb: ~$20.83. \u003cstrong\u003eBuy 6 lbs: $21.42.\u003c/strong\u003e",
+                       "Yellow Onion, 2.3: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 8.25 tbsp: ~$1.01. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Diced Tomatoes, 2.8 cans: ~$2.73. \u003cstrong\u003eBuy 3 cans: $2.88.\u003c/strong\u003e",
+                       "Tomatillos, 11.25 oz: ~$2.57. \u003cstrong\u003eBuy 1 lb: $3.68.\u003c/strong\u003e",
+                       "Jalapeno, 7.25 tbsp: ~$0.25. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Rice, 4.75 cups dry: ~$1.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Kidney Beans, 3 cans: ~$2.59. \u003cstrong\u003eBuy 4 cans: $3.29.\u003c/strong\u003e",
+                       "Mexican Cheese Blend, 8.75 oz: ~$1.90. \u003cstrong\u003eBuy 2 8oz bags: $3.45.\u003c/strong\u003e",
+                       "Fresh Cilantro, 25 tbsp: ~$0.78. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, bay leaves, dried arbol chiles, olive oil, black pepper): ~$0.72. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $35.10 across 14 servings, so roughly $2.51 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $42.34 across 14 servings, roughly $3.02 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $18.92 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.26. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.38 a bowl\u003c/strong\u003e (at everyday cost) for a layered plate with real pork shoulder, beans, rice and cheese. Rice and beans are the cheapest foundation in cooking, and this dish knows it.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eTomatillos are cheaper than they look.\u003c/strong\u003e Buy them by the pound with the husks on, peel and rinse the sticky coating off, and you have the tang that makes this salsa work.",
+                       "\u003cstrong\u003eArbol chiles are sold by the bag for pocket change.\u003c/strong\u003e A few of them bring real heat to a big pot of salsa, and the bag will outlast several batches.",
+                       "\u003cstrong\u003eBuy the shredded Mexican cheese blend on sale and freeze it.\u003c/strong\u003e Shredded cheese freezes fine and thaws ready to use, so there is no reason to pay the regular price.",
+                       "\u003cstrong\u003eKeep the three components separate until you plate.\u003c/strong\u003e Rice, beans and pork stored apart reheat much better than one stirred-together mess, and it costs nothing to do it right."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cube the pork shoulder, season with salt and black pepper, and brown it in a heavy pot with a little olive oil, then add the bay leaves and enough water to nearly cover and simmer 90 minutes until tender.",
+                    "While the pork cooks, blend the diced tomatoes, the husked tomatillos, the jalapeno, the arbol chiles, half the onion and the garlic into a rough salsa.",
+                    "Cook the remaining diced onion in the pot, pour in the blended salsa, and let it fry and reduce for 15 minutes until it darkens and thickens.",
+                    "Return the tender pork to the salsa and simmer another 20 minutes so the meat takes it on.",
+                    "Cook the rice per the package, and warm the kidney beans with a little of their liquid so they stay soupy rather than dry.",
+                    "Layer each portion rice first, then beans, then the saucy pork, and finish with the shredded Mexican cheese blend and chopped cilantro."
+                ],
+    "portion_html":  "Divide the rice across your 14 containers, then the beans, then set your pot of saucy pork on the scale, subtract the empty pot weight from Step 1, divide by 14, and lay that exact weight on top of each. Every plate lands near 765 calories with 48 grams of protein, so this is one of the biggest servings in the section.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.isabeleats.com/morisqueta/\" target=\"_blank\" rel=\"noopener\"\u003eisabeleats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cem\u003eA Michoacan layered plate for about $4.38 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "cost_batch":  35.1,
+    "cost_batch_true":  42.34,
+    "cost_per_serving":  2.51,
+    "cost_per_serving_true":  3.02,
+    "cost_pantry_add":  18.92,
+    "cost_first_run":  61.26,
+    "scaler":  {
+                   "cost":  "42.34",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Shoulder",
+                                   "canon":  "Pork Shoulder",
+                                   "grams":  2646,
+                                   "buy":  "5.75 lb",
+                                   "bid":  "pork-shoulder",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  63,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  257,
+                                   "buy":  "2.3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  70,
+                                   "buy":  "8.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  1,
+                                   "buy":  "0.04 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  1167,
+                                   "buy":  "2.8 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomatillos",
+                                   "canon":  "Tomatillos",
+                                   "grams":  317,
+                                   "buy":  "11.25 oz",
+                                   "bid":  "tomatillos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  65,
+                                   "buy":  "7.25 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Dried Arbol Chiles",
+                                   "canon":  "Dried Arbol Chiles",
+                                   "grams":  3,
+                                   "buy":  "0.12 cups",
+                                   "bid":  "dried-arbol-chiles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  10,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  863,
+                                   "buy":  "4.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Kidney Beans",
+                                   "canon":  "Kidney Beans",
+                                   "grams":  803,
+                                   "buy":  "3 cans",
+                                   "bid":  "kidney-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Mexican Cheese Blend",
+                                   "canon":  "Mexican Cheese Blend",
+                                   "grams":  250,
+                                   "buy":  "8.75 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  25,
+                                   "buy":  "25 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "White rice layered with soupy beans and pork shoulder simmered in a roasted tomato and tomatillo salsa. A 14 serving Michoacan morisqueta for meal prep.",
+                 "keywords":  "morisqueta, michoacan pork recipe, mexican rice and beans, pork salsa recipe, budget meal prep, cheap dinner ideas",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT2H",
+                 "totalTime":  "PT2H30M",
+                 "costPerServing":  4.38,
+                 "recipeIngredient":  [
+                                          "Pork Shoulder",
+                                          "Yellow Onion",
+                                          "Garlic",
+                                          "Diced Tomatoes",
+                                          "Tomatillos",
+                                          "Jalapeno",
+                                          "Dried Arbol Chiles",
+                                          "Rice",
+                                          "Kidney Beans",
+                                          "Mexican Cheese Blend",
+                                          "Fresh Cilantro"
+                                      ],
+                 "steps":  [
+                               "Brown the cubed pork shoulder, then simmer with bay leaves about 90 minutes until tender.",
+                               "Blend the tomatoes, tomatillos, jalapeno, arbol chiles, onion and garlic into a salsa.",
+                               "Fry and reduce the salsa in the pot, then return the pork and simmer 20 minutes.",
+                               "Cook the rice and warm the beans in a little of their liquid.",
+                               "Layer rice, beans and saucy pork, then top with cheese and cilantro."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Pork Shoulder",
+                                  "grams":  2646
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  63
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  257
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  1167
+                              },
+                              {
+                                  "item":  "Tomatillos",
+                                  "grams":  317
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  65
+                              },
+                              {
+                                  "item":  "Dried Arbol Chiles",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  863
+                              },
+                              {
+                                  "item":  "Kidney Beans",
+                                  "grams":  803
+                              },
+                              {
+                                  "item":  "Mexican Cheese Blend",
+                                  "grams":  250
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  25
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

@@ -1,0 +1,346 @@
+{
+    "name":  "Kenyan Beef Pilau",
+    "slug":  "kenyan-beef-pilau-rice",
+    "cuisine":  "Kenyan",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://cheflolaskitchen.com/east-african-pilau/",
+    "source_site":  "cheflolaskitchen.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: One-pot spiced rice, absolutely built for batch cooking, and East African cuisine is entirely absent from the catalog. Chuck keeps the cost down versus cubed sirloin. Confidence: page verified; calories estimated. | HARVEST: Published figures are 366.2 cal and 22.5 g protein. Source sections: Pilau Masala spices (first 5 lines) and Rice Pilau (last 15).",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14."
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  633,
+                 "protein":  28,
+                 "carbs":  94,
+                 "fat":  15,
+                 "cost_ps":  "4.70"
+             },
+    "intro_html":  "Pilau is the dish Kenyan families make when there is something to celebrate. It came up the Swahili coast with the spice trade, which is why it tastes like cumin, cardamom, cloves, and cinnamon rather than like the curry powder most Americans expect from East African food. The rice cooks in the same pot as the beef so every grain takes on color and spice. It is one of the few dishes where cooking a huge amount is actually easier than cooking a small one, which makes it a natural fit for fourteen containers.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eGround Cloves (Great Value):\u003c/strong\u003e 0.25 oz (5 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 4.5 tbsp (29 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.25 tbsp (8 g)",
+                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 4.25 tbsp (25 g)",
+                                "\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 0.75 tbsp (6 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.75 cups dry (863 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 11.7 (2485 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.5 cups (127 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 4.7 (513 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5.5 tbsp (47 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 4.75 tbsp (28 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 3.75 tbsp (33 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 4.75 cups (1120 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 9 tbsp (9 g)",
+                                "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 2.25 lb (1058 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 7 cans (2877 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.11 oz (3 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.5 tbsp (47 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Rice, 4.75 cups dry: ~$1.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Potato, 11.7: ~$3.11. \u003cstrong\u003eBuy 6 lbs: $3.41.\u003c/strong\u003e",
+                       "Vegetable Oil, 0.5 cups: ~$0.31. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Red Onion, 4.7: ~$1.52. \u003cstrong\u003eBuy 2 lbs: $2.68.\u003c/strong\u003e",
+                       "Garlic, 5.5 tbsp: ~$0.68. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Ginger, 4.75 tbsp: ~$0.25. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Jalapeno, 3.75 tbsp: ~$0.13. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Beef Broth, 4.75 cups: ~$1.50. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Fresh Cilantro, 9 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Beef Flank/Sirloin Steak, 2.25 lb: ~$20.57. \u003cstrong\u003eBuy 3 lbs: $26.46.\u003c/strong\u003e",
+                       "Diced Tomatoes, 7 cans: ~$6.72. \u003cstrong\u003eBuy 7 cans: $6.72.\u003c/strong\u003e",
+                       "Pantry seasonings (ground cloves, ground cumin, black pepper, garam masala, ground cinnamon, bay leaves, salt): ~$3.21. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $39.35 across 14 servings, so roughly $2.81 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $50.93 across 14 servings, roughly $3.64 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.82 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $65.75. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.70 a bowl\u003c/strong\u003e (at everyday cost) for a celebration rice that East African families make by the potful.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eThe beef is the largest line here by a wide margin.\u003c/strong\u003e Buy it when the case is marked down. A cheaper braising cut also works, since everything simmers long enough to tenderize.",
+                       "\u003cstrong\u003eBuild your own pilau masala from jars you already own.\u003c/strong\u003e Cumin, cloves, cinnamon, black pepper, and garam masala get you there for a fraction of the price of a specialty blend.",
+                       "\u003cstrong\u003eBrown the onions properly and you buy nothing else for color.\u003c/strong\u003e Deeply browned onions are what make pilau dark. Skipping that step is why home versions come out pale and flat.",
+                       "\u003cstrong\u003ePotatoes stretch the pot for almost nothing.\u003c/strong\u003e They soak up the same spiced broth as the rice and they cost less per pound than anything else in the cart."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Rinse the rice until the water runs clear and let it drain, which keeps the grains separate.",
+                    "Heat the vegetable oil in a large heavy pot and cook the sliced red onions over medium heat, patiently, until they go deep brown. This takes longer than you want it to and it is the most important step.",
+                    "Add the garlic, ginger, and minced jalapeno and cook until fragrant.",
+                    "Stir in the ground cumin, ground cloves, ground cinnamon, garam masala, black pepper, and bay leaves and let them toast in the oil for a minute.",
+                    "Add the cubed beef and brown it on all sides, then add the diced tomatoes and cook until the sauce darkens and thickens.",
+                    "Add the cubed potatoes and the beef broth, bring to a boil, then stir in the drained rice and season with salt.",
+                    "Cover tightly, drop the heat as low as it goes, and cook undisturbed until the liquid is absorbed and the rice is tender, then rest ten minutes off the heat and fluff with the chopped cilantro."
+                ],
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight from Step 1, and divide by 14. Fluff first, then weigh, because rice packs down hard in the bottom of a pot and a scoop from the top is not the same as a scoop from the bottom. Every serving comes in at \u003cstrong\u003e633 calories with 28 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://cheflolaskitchen.com/east-african-pilau/\" target=\"_blank\" rel=\"noopener\"\u003echeflolaskitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Spiced one-pot dinners for about $4.70 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  39.35,
+    "cost_batch_true":  50.93,
+    "cost_per_serving":  2.81,
+    "cost_per_serving_true":  3.64,
+    "cost_pantry_add":  14.82,
+    "cost_first_run":  65.75,
+    "scaler":  {
+                   "cost":  "50.93",
+                   "ing":  [
+                               {
+                                   "item":  "Ground Cloves",
+                                   "canon":  "Ground Cloves",
+                                   "grams":  5,
+                                   "buy":  "0.25 oz",
+                                   "bid":  "ground-cloves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  29,
+                                   "buy":  "4.5 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  8,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garam Masala",
+                                   "canon":  "Garam Masala",
+                                   "grams":  25,
+                                   "buy":  "4.25 tbsp",
+                                   "bid":  "garam-masala",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cinnamon",
+                                   "canon":  "Ground Cinnamon",
+                                   "grams":  6,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "ground-cinnamon",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  863,
+                                   "buy":  "4.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  2485,
+                                   "buy":  "11.7",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  127,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Red Onion",
+                                   "canon":  "Red Onion",
+                                   "grams":  513,
+                                   "buy":  "4.7",
+                                   "bid":  "red-onion",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  47,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  28,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  33,
+                                   "buy":  "3.75 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  1120,
+                                   "buy":  "4.75 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  9,
+                                   "buy":  "9 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Beef Flank/Sirloin Steak",
+                                   "canon":  "Beef Flank/Sirloin Steak",
+                                   "grams":  1058,
+                                   "buy":  "2.25 lb",
+                                   "bid":  "sirloin-steak",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  2877,
+                                   "buy":  "7 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  3,
+                                   "buy":  "0.11 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  47,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Kenyan beef pilau rebuilt for 14-serving meal prep: spiced one-pot rice with beef, potatoes, and deeply browned onions. 633 calories, 28g protein, about $4.70 per serving (at everyday cost).",
+                 "keywords":  "kenyan pilau, east african beef pilau, spiced rice with beef, swahili pilau, african meal prep, one pot rice dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT60M",
+                 "totalTime":  "PT85M",
+                 "costPerServing":  4.70,
+                 "recipeIngredient":  [
+                                          "2.25 lb beef steak, cubed",
+                                          "4.75 cups dry rice",
+                                          "11.7 potatoes",
+                                          "7 cans diced tomatoes",
+                                          "4.7 red onions",
+                                          "2.5 lb beef broth",
+                                          "5.5 tbsp garlic",
+                                          "4.75 tbsp fresh ginger",
+                                          "3.75 tbsp jalapeno",
+                                          "9 tbsp fresh cilantro",
+                                          "0.5 cups vegetable oil"
+                                      ],
+                 "steps":  [
+                               "Rinse the rice until the water runs clear and drain it.",
+                               "Brown the sliced red onions slowly until deep brown.",
+                               "Add garlic, ginger, and jalapeno, then toast the pilau spices in the oil.",
+                               "Brown the cubed beef, then add diced tomatoes and cook until thick.",
+                               "Add potatoes and beef broth, bring to a boil, then stir in the rice.",
+                               "Cover and cook on low until absorbed, rest, fluff with cilantro, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Ground Cloves",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  29
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Garam Masala",
+                                  "grams":  25
+                              },
+                              {
+                                  "item":  "Ground Cinnamon",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  863
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  2485
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  127
+                              },
+                              {
+                                  "item":  "Red Onion",
+                                  "grams":  513
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  33
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  1120
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Beef Flank/Sirloin Steak",
+                                  "grams":  1058
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  2877
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  47
+                              }
+                          ]
+}

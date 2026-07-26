@@ -1,0 +1,269 @@
+{
+    "name":  "Pork Egg Roll in a Bowl",
+    "slug":  "pork-egg-roll-in-a-bowl",
+    "cuisine":  "Chinese-American",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.yellowblissroad.com/one-pan-egg-roll-in-a-bowl-crack-slaw/",
+    "source_site":  "yellowblissroad.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 200g (src scale)",
+                   "base +15% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Every ingredient maps to a tracked commodity and cabbage plus ground pork is one of the cheapest protein-per-dollar combinations on the board. Single skillet, no assembly, portions by weight. Source publishes 372 cal / 22g protein with no starch; adding a rice base clears 500 cal and a modest pork bump clears 25g protein. | HARVEST: Published figures are 372.43 cal and 21.92 g protein per serving.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 200g (src scale)",
+                         "TUNING: base +15% (Rice)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  564,
+                 "protein":  27,
+                 "carbs":  54,
+                 "fat":  26,
+                 "cost_ps":  "2.26"
+             },
+    "intro_html":  "Somebody figured out that the good part of an egg roll is the filling, and the wrapper is just an expensive way to deliver it. So we skipped the wrapper. Ground pork, a whole head of cabbage, carrots, and ginger hit one skillet, get a good soak of soy sauce, and go over rice. That is the entire operation. Cabbage and ground pork happen to be two of the cheapest ways to fill a container on our whole grocery board, which is why this one stays genuinely cheap without tasting like it.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 3.5 tbsp (49 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 tbsp (18 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 3.5 tbsp (21 g)",
+                                "\u003cstrong\u003eGround Pork:\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 (122 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 6.3 (385 g)",
+                                "\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 1 (788 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.75 cups (223 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 10 tbsp (60 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.5 cups dry (810 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Vegetable Oil, 3.5 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 2 tbsp: ~$0.26. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Ginger, 3.5 tbsp: ~$0.18. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Ground Pork, 3.5 lb: ~$11.94. \u003cstrong\u003eBuy 4 lbs: $13.64.\u003c/strong\u003e",
+                       "Yellow Onion, 1: ~$0.31. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 6.3: ~$0.81. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Green Cabbage, 1: ~$1.48. \u003cstrong\u003eBuy 1 head: $1.69.\u003c/strong\u003e",
+                       "Soy Sauce, 0.75 cups: ~$0.84. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Onions, 10 tbsp: ~$0.71. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
+                       "Rice, 4.5 cups dry: ~$1.00. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $17.88 across 14 servings, so roughly $1.28 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $22.14 across 14 servings, roughly $1.58 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.50 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $31.64. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.26 a bowl\u003c/strong\u003e (at everyday cost) for a skillet dinner that feeds you better than the frozen version and takes exactly one pan to make.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy a whole head of cabbage, not the bagged slaw.\u003c/strong\u003e The bag is convenience packaging on the cheapest vegetable in the store, and shredding a head takes about four minutes with a knife.",
+                       "\u003cstrong\u003eGround pork beats ground beef here on both price and flavor.\u003c/strong\u003e It has the fat to carry the soy and ginger, and it is consistently cheaper per pound.",
+                       "\u003cstrong\u003eRice is why this bowl is filling and still cheap.\u003c/strong\u003e A big bag runs through many batches, so it barely moves the per-serving number at all.",
+                       "\u003cstrong\u003eCarrots and green onions are pocket change.\u003c/strong\u003e Buy the pound bag of carrots instead of the pre-shredded cup and you get several batches out of it."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice according to the package and set it aside to steam.",
+                    "Heat the vegetable oil in a large skillet or wide pot over medium-high heat.",
+                    "Add the ground pork, break it apart, and cook until browned with no pink remaining.",
+                    "Stir in the garlic, ginger, and diced yellow onion and cook until the onion softens.",
+                    "Add the shredded cabbage and carrots and cook, stirring often, until the cabbage wilts down but still has some bite.",
+                    "Pour in the soy sauce, toss everything together, and season with salt and black pepper to taste.",
+                    "Combine the rice and the pork and cabbage mixture in your big pot, stir, and finish with the sliced green onions."
+                ],
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight from Step 1, and divide the remainder by 14. Scoop that weight into each container and you are done. Every bowl lands near \u003cstrong\u003e564 calories with 27 grams of protein\u003c/strong\u003e. Cabbage keeps releasing water as it sits, so leave the lids cracked until everything cools.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.yellowblissroad.com/one-pan-egg-roll-in-a-bowl-crack-slaw/\" target=\"_blank\" rel=\"noopener\"\u003eyellowblissroad.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Fast, filling dinners for about $2.26 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  17.88,
+    "cost_batch_true":  22.14,
+    "cost_per_serving":  1.28,
+    "cost_per_serving_true":  1.58,
+    "cost_pantry_add":  9.5,
+    "cost_first_run":  31.64,
+    "scaler":  {
+                   "cost":  "22.14",
+                   "ing":  [
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  49,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  18,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  21,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ground Pork",
+                                   "canon":  "Ground Pork",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "ground-pork",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  122,
+                                   "buy":  "1",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  385,
+                                   "buy":  "6.3",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Cabbage",
+                                   "canon":  "Green Cabbage",
+                                   "grams":  788,
+                                   "buy":  "1",
+                                   "bid":  "cabbage",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  223,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  60,
+                                   "buy":  "10 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  810,
+                                   "buy":  "4.5 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "One-skillet pork egg roll in a bowl over rice, rebuilt for 14-serving meal prep with cabbage, carrots, and ginger. 564 calories, 27g protein, about $2.26 per serving (at everyday cost).",
+                 "keywords":  "egg roll in a bowl, crack slaw, ground pork cabbage skillet, budget meal prep, one pan pork dinner, cheap high protein meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT25M",
+                 "totalTime":  "PT40M",
+                 "costPerServing":  2.26,
+                 "recipeIngredient":  [
+                                          "3.5 lb ground pork",
+                                          "1 green cabbage",
+                                          "6.3 carrots",
+                                          "1 yellow onion",
+                                          "4.5 cups dry rice",
+                                          "0.75 cups soy sauce",
+                                          "3.5 tbsp vegetable oil",
+                                          "2 tbsp garlic",
+                                          "3.5 tbsp fresh ginger",
+                                          "10 tbsp green onions"
+                                      ],
+                 "steps":  [
+                               "Cook the rice per the package and set it aside.",
+                               "Brown the ground pork in a large skillet until no pink remains.",
+                               "Add garlic, ginger, and onion and cook until softened.",
+                               "Add cabbage and carrots and cook until wilted but still crisp.",
+                               "Stir in the soy sauce and season with salt and pepper.",
+                               "Combine with the rice, finish with green onions, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  49
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  18
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Ground Pork",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  122
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Green Cabbage",
+                                  "grams":  788
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  223
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  60
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  810
+                              }
+                          ]
+}

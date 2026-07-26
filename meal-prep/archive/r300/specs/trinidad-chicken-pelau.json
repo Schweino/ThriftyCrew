@@ -1,0 +1,375 @@
+{
+    "name":  "Trinidad Chicken Pelau",
+    "slug":  "trinidad-chicken-pelau",
+    "cuisine":  "Caribbean / Trinidadian",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.africanbites.com/trinidad-pelau/",
+    "source_site":  "africanbites.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Burnt-sugar caramelized one-pot rice. Distinct from the live Trinidadian Curry Chicken Bowls (curry powder, separate rice) - pelau is a caramel-braised rice dish, different cooking method and flavor base. Pigeon peas have no board id; kidney-beans (tracked) is the standard swap. Confidence: MEDIUM - URL confirmed on site search index, page not individually fetched. | HARVEST: Source servings listed as 6-7; 6 used (midpoint 6.5 rounded down). Ingredients split into \u0027Chicken Marinate\u0027 (first 8 lines) and \u0027Trinidad Pelau\u0027 (rest).",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "OVERRIDE Brown Sugar: WAVE-4: burnt-sugar step uses 2-3 tbsp; the \u00271/4 - 1/2 cup\u0027 range read carried 186 g into a savory pelau"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  700,
+                 "protein":  30,
+                 "carbs":  90,
+                 "fat":  24,
+                 "cost_ps":  "3.89"
+             },
+    "intro_html":  "Pelau is Trinidad\u0027s Sunday pot, and it starts with an act that looks like a mistake: sugar melted in hot oil until it turns almost black. Chicken hits that caramel and takes the color, then rice, pigeon peas, coconut milk and sweet potato all cook down in the same pot until it is one thick, brown, sweet-and-savory thing. Each bowl lands \u003cstrong\u003e700 calories and 30 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.89\u003c/strong\u003e (at everyday cost). Big flavor, one pot, fourteen dinners.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 3 lb (1323 g)",
+                                "\u003cstrong\u003eCajun Seasoning (Tony Chachere\u0027s):\u003c/strong\u003e 1.75 tbsp (16 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.25 tbsp (20 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 0.25 tbsp (2 g)",
+                                "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.75 tbsp (12 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2 cartons (1963 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 19 tbsp (19 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 7 tbsp (93 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (257 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.5 cups (127 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.11 oz (3 g)",
+                                "\u003cstrong\u003eKetchup (generic):\u003c/strong\u003e 4.75 tbsp (79 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.75 cups dry (863 g)",
+                                "\u003cstrong\u003eSweet Potatoes:\u003c/strong\u003e 7 (931 g)",
+                                "\u003cstrong\u003ePigeon Peas (La Preferida):\u003c/strong\u003e 2.25 lb (1025 g)",
+                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 2.2 cans (893 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 0.75 tbsp (5 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 3.75 tbsp (33 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Thigh, 3 lb: ~$5.16. \u003cstrong\u003eBuy 3 lbs: $5.31.\u003c/strong\u003e",
+                       "Garlic, 2.25 tbsp: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Ginger, 0.25 tbsp: ~$0.02. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Chicken Broth, 2 cartons: ~$2.64. \u003cstrong\u003ePantry staple; this batch alone uses about 3 32oz cartons.\u003c/strong\u003e",
+                       "Fresh Cilantro, 19 tbsp: ~$0.59. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Brown Sugar, 7 tbsp: ~$0.52. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2.3: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Vegetable Oil, 0.5 cups: ~$0.31. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Ketchup, 4.75 tbsp: ~$0.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 4.75 cups dry: ~$1.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sweet Potatoes, 7: ~$3.04. \u003cstrong\u003eBuy 3 lbs: $4.44.\u003c/strong\u003e",
+                       "Pigeon Peas, 2.25 lb: ~$5.76. \u003cstrong\u003eBuy 3 15oz cans: $7.16.\u003c/strong\u003e",
+                       "Coconut Milk, 2.2 cans: ~$4.43. \u003cstrong\u003eBuy 3 13.5oz cans: $5.95.\u003c/strong\u003e",
+                       "Jalapeno, 3.75 tbsp: ~$0.13. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Pantry seasonings (cajun seasoning, dried thyme, black pepper, bay leaves, paprika, salt): ~$1.53. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.27 across 14 servings, so roughly $1.88 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.20 across 14 servings, roughly $2.51 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $19.20 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.40. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.89 a bowl\u003c/strong\u003e (at everyday cost). Pigeon peas and coconut milk are the two lines carrying the cost here, and they are also the two ingredients that make it pelau instead of just chicken and rice.",
+    "shop_smart":  [
+                       "Pigeon peas are the single most expensive line in this recipe, more than the chicken. Check the international aisle rather than the canned vegetable aisle, where they are usually cheaper, and buy dried if you are willing to soak them overnight.",
+                       "Coconut milk is the next biggest line. Store brand cans, full fat, bought on sale, and stacked in the pantry since they keep for a year.",
+                       "Sweet potatoes go in whole chunks and hold their shape through the whole cook. Buy them by the bag rather than the each and pick medium ones, since the giant ones cook unevenly.",
+                       "Brown sugar is what makes the caramel, and one bag lasts through many batches. Keep it sealed tight or it turns into a brick you have to chisel."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Season the chicken thighs with the cajun seasoning, minced garlic, grated ginger, dried thyme, black pepper, salt and most of the chopped cilantro. Let it marinate at least an hour, or overnight.",
+                    "Rinse the rice until the water runs clear and set it aside to drain.",
+                    "Heat the vegetable oil in your largest heavy pot over medium-high, add the brown sugar, and let it melt and bubble until it goes dark amber and starts to smoke slightly. This is the burnt sugar step and it is what makes pelau pelau, so stay at the stove.",
+                    "Add the marinated chicken all at once and stir hard so every piece takes the caramel. Cook 5 to 7 minutes until browned, then add the diced onion, minced jalapeno, ketchup and bay leaves.",
+                    "Stir in the drained rice, pigeon peas and cubed sweet potato and coat everything in the caramel.",
+                    "Pour in the coconut milk and chicken broth, season with the paprika and more salt, and bring to a boil. Drop to the lowest heat, cover tightly, and cook 25 to 30 minutes without lifting the lid.",
+                    "Rest it covered off the heat 10 minutes, pull the bay leaves, and fold from the bottom with the remaining cilantro so the browned rice at the base gets spread through."
+                ],
+    "portion_html":  "Set the pot on the scale, subtract the empty-pot weight, and divide by 14. Fourteen equal containers, no favorites. Each one carries \u003cstrong\u003e700 calories\u003c/strong\u003e, and a splash of water before you reheat loosens the rice back up.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.africanbites.com/trinidad-pelau/\" target=\"_blank\" rel=\"noopener\"\u003eafricanbites.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Trinidad chicken pelau, burnt sugar and all, for about $3.89 a bowl (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "cost_batch":  26.27,
+    "cost_batch_true":  35.2,
+    "cost_per_serving":  1.88,
+    "cost_per_serving_true":  2.51,
+    "cost_pantry_add":  19.2,
+    "cost_first_run":  54.4,
+    "scaler":  {
+                   "cost":  "35.20",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  1323,
+                                   "buy":  "3 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cajun Seasoning",
+                                   "canon":  "Cajun Seasoning",
+                                   "grams":  16,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "cajun-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  20,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  4,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  12,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  1963,
+                                   "buy":  "2 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  19,
+                                   "buy":  "19 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "canon":  "Brown Sugar",
+                                   "grams":  93,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  257,
+                                   "buy":  "2.3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  127,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  3,
+                                   "buy":  "0.11 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ketchup",
+                                   "canon":  "Ketchup",
+                                   "grams":  79,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "ketchup",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  863,
+                                   "buy":  "4.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Sweet Potatoes",
+                                   "canon":  "Sweet Potatoes",
+                                   "grams":  931,
+                                   "buy":  "7",
+                                   "bid":  "sweet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Pigeon Peas",
+                                   "canon":  "Pigeon Peas",
+                                   "grams":  1025,
+                                   "buy":  "2.25 lb",
+                                   "bid":  "pigeon-peas",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Coconut Milk",
+                                   "canon":  "Coconut Milk",
+                                   "grams":  893,
+                                   "buy":  "2.2 cans",
+                                   "bid":  "coconut-milk-canned",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  5,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  33,
+                                   "buy":  "3.75 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Trinidad chicken pelau: burnt sugar caramelized chicken cooked into rice with pigeon peas, coconut milk and sweet potato. 14 bowls at 700 calories, 30g protein, about $3.89 (at everyday cost).",
+                 "keywords":  "trinidad pelau, chicken pelau, caribbean rice dish, burnt sugar chicken, pigeon peas rice, one pot caribbean meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT55M",
+                 "totalTime":  "PT1H20M",
+                 "costPerServing":  3.89,
+                 "recipeIngredient":  [
+                                          "3 lb boneless skinless chicken thighs",
+                                          "4.75 cups dry rice",
+                                          "36.25 oz pigeon peas",
+                                          "2.2 cans coconut milk",
+                                          "7 sweet potatoes",
+                                          "0.75 cups brown sugar",
+                                          "4.25 lb chicken broth",
+                                          "2.3 yellow onions",
+                                          "4.75 tbsp ketchup",
+                                          "19 tbsp fresh cilantro",
+                                          "3.75 tbsp jalapeno"
+                                      ],
+                 "steps":  [
+                               "Marinate the chicken thighs with cajun seasoning, garlic, ginger, thyme and cilantro for at least an hour.",
+                               "Melt brown sugar in hot oil until dark amber, then add the chicken and stir until coated and browned.",
+                               "Add onion, jalapeno, ketchup and bay leaves, then fold in the rinsed rice, pigeon peas and cubed sweet potato.",
+                               "Add coconut milk and broth, cover tightly, and cook on low 25 to 30 minutes.",
+                               "Rest 10 minutes, fold from the bottom with the remaining cilantro, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  1323
+                              },
+                              {
+                                  "item":  "Cajun Seasoning",
+                                  "grams":  16
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  1963
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  19
+                              },
+                              {
+                                  "item":  "Brown Sugar",
+                                  "grams":  93
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  257
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  127
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Ketchup",
+                                  "grams":  79
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  863
+                              },
+                              {
+                                  "item":  "Sweet Potatoes",
+                                  "grams":  931
+                              },
+                              {
+                                  "item":  "Pigeon Peas",
+                                  "grams":  1025
+                              },
+                              {
+                                  "item":  "Coconut Milk",
+                                  "grams":  893
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  33
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              }
+                          ]
+}

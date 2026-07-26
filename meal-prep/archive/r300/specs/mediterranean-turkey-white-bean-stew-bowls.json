@@ -1,0 +1,325 @@
+{
+    "name":  "Mediterranean Turkey and White Bean Stew Bowls",
+    "slug":  "mediterranean-turkey-white-bean-stew-bowls",
+    "cuisine":  "mediterranean",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://ifoodreal.com/ground-turkey-stew/",
+    "source_site":  "ifoodreal.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 300g (src scale)",
+                   "base +40% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Bean-and-kale turkey braise; beans push protein per dollar up hard. Verified source: full recipe, 6 servings, 182 cal / 21g protein. Confidence note: as published this is well under 500 cal - it only qualifies served over rice or with a bigger turkey ratio, which is how I would spec it. NOTE for dedup: Mediterranean Ground Turkey Bowls is live; that one is a rice-and-tzatziki bowl, this is a stew, but they are adjacent. | HARVEST: Nutrition stated per 1.5 cup serving.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 300g (src scale)",
+                         "TUNING: base +40% (Rice)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  561,
+                 "protein":  29,
+                 "carbs":  84,
+                 "fat":  11,
+                 "cost_ps":  "3.82"
+             },
+    "intro_html":  "This is the stew that leans on beans to stretch the protein for very little. Ground turkey, cannellini beans, kale, olives, and tomatoes simmer into something thick and savory, then it goes over rice with fresh basil on top. Beans are the reason it works: they carry protein and fiber for pennies. Each bowl comes to \u003cstrong\u003e561 calories and 29 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.82\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 (350 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6.75 tbsp (58 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2.25 tbsp (32 g)",
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 2.25 lb (1058 g)",
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 0.75 tbsp (3 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2.3 cans (926 g)",
+                                "\u003cstrong\u003eCannellini Beans (generic):\u003c/strong\u003e 4.7 cans (1190 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2.25 cups (560 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (7 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.11 oz (3 g)",
+                                "\u003cstrong\u003eKale:\u003c/strong\u003e 7 oz (196 g)",
+                                "\u003cstrong\u003eOlives (generic):\u003c/strong\u003e 1.75 cups (236 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 1 (55 g)",
+                                "\u003cstrong\u003eFresh Basil:\u003c/strong\u003e 18.75 tbsp (28 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.5 cups dry (1034 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Yellow Onion, 3: ~$0.88. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 6.75 tbsp: ~$0.84. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Olive Oil, 2.25 tbsp: ~$0.45. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 2.25 lb: ~$8.91. \u003cstrong\u003eBuy 3 lbs: $11.46.\u003c/strong\u003e",
+                       "Diced Tomatoes, 2.3 cans: ~$2.16. \u003cstrong\u003eBuy 3 cans: $2.88.\u003c/strong\u003e",
+                       "Cannellini Beans, 4.7 cans: ~$3.85. \u003cstrong\u003eBuy 5 cans: $4.12.\u003c/strong\u003e",
+                       "Chicken Broth, 2.25 cups: ~$0.75. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Kale, 7 oz: ~$1.16. \u003cstrong\u003eBuy 1 bunch: $1.48.\u003c/strong\u003e",
+                       "Olives, 1.75 cups: ~$2.60. \u003cstrong\u003eBuy 2 6oz cans: $3.74.\u003c/strong\u003e",
+                       "Lemon Juice, 1: ~$0.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fresh Basil, 18.75 tbsp: ~$3.52. \u003cstrong\u003eBuy 2 0.5oz packs: $3.52.\u003c/strong\u003e",
+                       "Rice, 5.5 cups dry: ~$1.28. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (italian seasoning, salt, black pepper, bay leaves): ~$0.67. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $27.28 across 14 servings, so roughly $1.95 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.85 across 14 servings, roughly $2.35 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $20.68 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.53. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.82\u003c/strong\u003e a bowl (at everyday cost). Beans do most of the heavy lifting here, and beans have never once been expensive in the history of the grocery store.",
+    "shop_smart":  [
+                       "Canned cannellini beans are among the cheapest cans in the store and they add protein for a fraction of what the meat costs. Any time a recipe lets beans carry part of the protein load, your cost per gram drops through the floor.",
+                       "Kale by the bunch is cheap and cooks down to nothing. Strip the leaves off the stems, and do not pay triple for the pre-washed bag of the same plant.",
+                       "Fresh basil is the priciest herb in this batch. If it is out of season, cut the amount and lean on the italian seasoning instead, or grow a plant on the sill for the price of one clamshell.",
+                       "Olives are the one splurge, and they earn it by making the whole pot taste briny and finished. Buy the canned sliced ones, not the deli bar, and you save half."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Heat the olive oil in a heavy pot and cook the diced onion for 6 minutes, then add the garlic and italian seasoning for one minute.",
+                    "Add the ground turkey and brown it, breaking it apart as it goes, until it is cooked through to 165F.",
+                    "Stir in the diced tomatoes, the chicken broth, the bay leaves, salt, and black pepper, and simmer 15 minutes.",
+                    "Drain and rinse the cannellini beans and add them, then simmer another 10 minutes so they take on the flavor of the pot without falling apart.",
+                    "Stir in the chopped kale and the sliced olives and cook 5 minutes more, just until the kale wilts and goes deep green.",
+                    "Pull the bay leaves, add the lemon juice, and stir in most of the torn basil. Save some for the top.",
+                    "Cook the rice, move it into your weighed pot, and keep the stew in its own pot for portioning."
+                ],
+    "portion_html":  "Set the pot of rice on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the rice bed for each container. Ladle the stew evenly over all 14, stirring the pot between scoops so the beans and turkey do not all settle into the first few, then finish each with the reserved basil. Each bowl lands at \u003cstrong\u003e561 calories and 29 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://ifoodreal.com/ground-turkey-stew/\" target=\"_blank\" rel=\"noopener\"\u003eifoodreal.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A Mediterranean bean stew for about \u003cstrong\u003e$3.82\u003c/strong\u003e a bowl (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  27.28,
+    "cost_batch_true":  32.85,
+    "cost_per_serving":  1.95,
+    "cost_per_serving_true":  2.35,
+    "cost_pantry_add":  20.68,
+    "cost_first_run":  53.53,
+    "scaler":  {
+                   "cost":  "32.85",
+                   "ing":  [
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  350,
+                                   "buy":  "3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  58,
+                                   "buy":  "6.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  32,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1058,
+                                   "buy":  "2.25 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "canon":  "Italian Seasoning",
+                                   "grams":  3,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  926,
+                                   "buy":  "2.3 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cannellini Beans",
+                                   "canon":  "Cannellini Beans",
+                                   "grams":  1190,
+                                   "buy":  "4.7 cans",
+                                   "bid":  "cannellini-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  560,
+                                   "buy":  "2.25 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  7,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  3,
+                                   "buy":  "0.11 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Kale",
+                                   "canon":  "Kale",
+                                   "grams":  196,
+                                   "buy":  "7 oz",
+                                   "bid":  "kale",
+                                   "gpu":  "250.000"
+                               },
+                               {
+                                   "item":  "Olives",
+                                   "canon":  "Olives",
+                                   "grams":  236,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "green-olives",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lemon Juice",
+                                   "canon":  "Lemon Juice",
+                                   "grams":  55,
+                                   "buy":  "1",
+                                   "bid":  "lemon-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Fresh Basil",
+                                   "canon":  "Fresh Basil",
+                                   "grams":  28,
+                                   "buy":  "18.75 tbsp",
+                                   "bid":  "fresh-basil",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1034,
+                                   "buy":  "5.5 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Mediterranean turkey and white bean stew bowls with kale, olives, and basil over rice. 561 calories, 29g protein, about $3.82 a bowl (at everyday cost) of budget meal prep.",
+                 "keywords":  "turkey white bean stew, mediterranean stew, cannellini beans, turkey meal prep, budget meal prep, kale stew",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M",
+                 "costPerServing":  3.82,
+                 "recipeIngredient":  [
+                                          "2.25 lb 93/7 ground turkey",
+                                          "4.7 cans cannellini beans",
+                                          "2.3 cans diced tomatoes",
+                                          "1.25 lb chicken broth",
+                                          "9.25 cups kale",
+                                          "1.75 cups olives",
+                                          "3 yellow onions",
+                                          "6.75 tbsp garlic",
+                                          "2.25 tbsp olive oil",
+                                          "18.75 tbsp fresh basil",
+                                          "1 lemon worth of lemon juice",
+                                          "5.5 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Cook the onion in olive oil, then add garlic and italian seasoning.",
+                               "Brown the ground turkey to 165F.",
+                               "Add diced tomatoes, chicken broth, and bay leaves and simmer 15 minutes.",
+                               "Add the drained cannellini beans and simmer 10 minutes more.",
+                               "Stir in kale and olives for 5 minutes, then finish with lemon juice and basil.",
+                               "Cook the rice, portion it by weight into 14 containers, and ladle the stew over the top."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  350
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  58
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  32
+                              },
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1058
+                              },
+                              {
+                                  "item":  "Italian Seasoning",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  926
+                              },
+                              {
+                                  "item":  "Cannellini Beans",
+                                  "grams":  1190
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  560
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Kale",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Olives",
+                                  "grams":  236
+                              },
+                              {
+                                  "item":  "Lemon Juice",
+                                  "grams":  55
+                              },
+                              {
+                                  "item":  "Fresh Basil",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1034
+                              }
+                          ]
+}

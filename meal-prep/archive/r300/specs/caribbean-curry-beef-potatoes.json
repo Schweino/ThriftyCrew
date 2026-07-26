@@ -1,0 +1,294 @@
+{
+    "name":  "Caribbean Curry Beef with Potatoes",
+    "slug":  "caribbean-curry-beef-potatoes",
+    "cuisine":  "Trinidadian",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://caribbeanpot.com/tropical-curry-beef-with-potato/",
+    "source_site":  "caribbeanpot.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Potato)",
+                   "portion factor 1.05"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Caribbean curry is a distinct spice profile from the live Indian and Thai curries and the catalog has none. One-pot braise, potato stretches the beef. Confidence: page verified via site listing; calories estimated. | HARVEST: Source publishes NO serving yield and no nutrition; source_servings set to 0 rather than guessed.",
+                         "TUNING: base +60% (Potato)",
+                         "TUNING: portion factor 1.05",
+                         "OVERRIDE Diced Tomatoes: \u00271 medium tomato\u0027 is fresh, not a can"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  586,
+                 "protein":  30,
+                 "carbs":  60,
+                 "fat":  25,
+                 "cost_ps":  "4.26"
+             },
+    "intro_html":  "Trinidadian curry beef starts somewhere most curries do not: you burn the curry powder in hot oil first, on purpose, until it goes dark and nutty. Then the beef goes in, the potatoes go in later, and the whole thing simmers into its own thick gravy. Green seasoning does the rest. Each bowl carries \u003cstrong\u003e30 grams of protein\u003c/strong\u003e and 586 calories for about \u003cstrong\u003e$4.26\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 3.75 lb (1667 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (22 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 29 tbsp (29 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 9.25 tbsp (55 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 3 tbsp (26 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 1 can (452 g)",
+                                "\u003cstrong\u003eKetchup (generic):\u003c/strong\u003e 1 tbsp (19 g)",
+                                "\u003cstrong\u003eCurry Powder (generic):\u003c/strong\u003e 3.75 tbsp (23 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 0.25 tbsp (2 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.7 (404 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6.5 tbsp (55 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.75 cups (154 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 20 (4217 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Chuck Roast, 3.75 lb: ~$29.29. \u003cstrong\u003eBuy 4 lbs: $31.88.\u003c/strong\u003e",
+                       "Fresh Cilantro, 29 tbsp: ~$0.91. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Green Onions, 9.25 tbsp: ~$0.65. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
+                       "Jalapeno, 3 tbsp: ~$0.10. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Diced Tomatoes, 1 can: ~$1.06. \u003cstrong\u003eBuy 2 cans: $1.92.\u003c/strong\u003e",
+                       "Ketchup, 1 tbsp: ~$0.03. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 3.7: ~$1.02. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 6.5 tbsp: ~$0.79. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Vegetable Oil, 0.75 cups: ~$0.37. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Potato, 20: ~$5.28. \u003cstrong\u003eBuy 10 lbs: $5.68.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, curry powder, ground cumin): ~$0.98. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $40.48 across 14 servings, so roughly $2.89 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $47.76 across 14 servings, roughly $3.41 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.94 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.70. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.26 a bowl\u003c/strong\u003e (at everyday cost). Potatoes are the reason. They soak up the curry, they cost almost nothing per pound, and they turn under four pounds of beef into fourteen full plates.",
+    "shop_smart":  [
+                       "Buy potatoes in the ten pound bag. The per pound price is usually less than half of what the small bags run, and this recipe uses a serious amount of them.",
+                       "Curry powder is the soul of the dish and Caribbean blends are different from Indian ones. If you can find a Trinidadian style blend, buy the big bag, it will not sit unused.",
+                       "Green seasoning is just cilantro, green onion, garlic, onion, and hot pepper blended together. Make a double batch and freeze half in an ice cube tray for the next cook.",
+                       "Chuck roast holds up to a long curry simmer better than any expensive cut would. Cheaper and better is a rare combination, so take it."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Blend most of the cilantro, the green onions, the jalapeno, half the garlic, and some of the onion into a rough green seasoning. Rub it into the cubed chuck roast and let it sit at least 30 minutes.",
+                    "Heat the vegetable oil in a heavy pot, add the curry powder and cumin, and stir constantly for 1 to 2 minutes until it darkens and smells toasted. Do not walk away.",
+                    "Add the remaining chopped onion and garlic and cook until soft.",
+                    "Add the seasoned beef and stir until every piece is coated in curry, then let it sear and stick a little before you add liquid.",
+                    "Stir in the chopped tomato and the ketchup, add enough water to nearly cover, and simmer covered 60 to 75 minutes until the beef is tender.",
+                    "Add the peeled and chunked potatoes and simmer uncovered another 25 to 30 minutes, until they are soft and starting to break down and thicken the gravy.",
+                    "Taste for salt and pepper and finish with the last of the chopped cilantro."
+                ],
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight into each of 14 containers, stirring between scoops so the beef does not all end up in the first four. Each bowl lands at \u003cstrong\u003e586 calories with 30 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://caribbeanpot.com/tropical-curry-beef-with-potato/\" target=\"_blank\" rel=\"noopener\"\u003ecaribbeanpot.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Caribbean curry beef for about $4.26 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  40.48,
+    "cost_batch_true":  47.76,
+    "cost_per_serving":  2.89,
+    "cost_per_serving_true":  3.41,
+    "cost_pantry_add":  11.94,
+    "cost_first_run":  59.7,
+    "scaler":  {
+                   "cost":  "47.76",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Chuck Roast",
+                                   "canon":  "Beef Chuck Roast",
+                                   "grams":  1667,
+                                   "buy":  "3.75 lb",
+                                   "bid":  "beef-chuck-roast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  22,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  29,
+                                   "buy":  "29 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  55,
+                                   "buy":  "9.25 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  26,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  452,
+                                   "buy":  "1 can",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ketchup",
+                                   "canon":  "Ketchup",
+                                   "grams":  19,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ketchup",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Curry Powder",
+                                   "canon":  "Curry Powder",
+                                   "grams":  23,
+                                   "buy":  "3.75 tbsp",
+                                   "bid":  "curry-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  404,
+                                   "buy":  "3.7",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  55,
+                                   "buy":  "6.5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  154,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  4217,
+                                   "buy":  "20",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Trinidadian curry beef meal prep: chuck roast marinated in green seasoning and stewed with burnt curry powder and potatoes. 586 calories, 30g protein, about $4.26 per serving (at everyday cost).",
+                 "keywords":  "caribbean curry beef, trinidad curry beef, curry beef and potatoes, green seasoning, budget meal prep, trinidadian recipes",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT1H45M",
+                 "totalTime":  "PT2H10M",
+                 "costPerServing":  4.26,
+                 "recipeIngredient":  [
+                                          "3.75 lb beef chuck roast",
+                                          "29 tbsp fresh cilantro",
+                                          "9.25 tbsp green onions",
+                                          "3 tbsp jalapeno",
+                                          "1 can diced tomatoes",
+                                          "1 tbsp ketchup",
+                                          "3.7 yellow onions",
+                                          "6.5 tbsp garlic",
+                                          "0.75 cups vegetable oil",
+                                          "20 potatoes"
+                                      ],
+                 "steps":  [
+                               "Blend cilantro, green onion, jalapeno, garlic, and onion into green seasoning and marinate the cubed beef.",
+                               "Burn the curry powder in hot oil for 1 to 2 minutes until dark and toasted.",
+                               "Add onion, garlic, and the seasoned beef and coat it in the curry.",
+                               "Add tomato, ketchup, and water and simmer covered 60 to 75 minutes.",
+                               "Add the potatoes, simmer until the gravy thickens, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Chuck Roast",
+                                  "grams":  1667
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  22
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  29
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  55
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  26
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  452
+                              },
+                              {
+                                  "item":  "Ketchup",
+                                  "grams":  19
+                              },
+                              {
+                                  "item":  "Curry Powder",
+                                  "grams":  23
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  404
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  55
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  154
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  4217
+                              }
+                          ]
+}

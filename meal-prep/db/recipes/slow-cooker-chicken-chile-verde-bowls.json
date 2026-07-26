@@ -1,0 +1,208 @@
+{
+    "name":  "Slow Cooker Chicken Chile Verde Bowls",
+    "slug":  "slow-cooker-chicken-chile-verde-bowls",
+    "cuisine":  "Mexican",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  557,
+                 "protein":  52,
+                 "carbs":  58,
+                 "fat":  10,
+                 "cost_ps":  "3.46"
+             },
+    "intro_html":  "Chile verde is that tangy, green, slow-simmered chicken that makes people ask for your recipe. Thighs keep it juicy, tomatillos and green chiles do the heavy lifting on flavor, and it stays high protein and cheap per serving. One batch makes 14 servings.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3200 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (900 g)",
+                                "\u003cstrong\u003eTomatillos (generic):\u003c/strong\u003e 2 lb (700 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
+                                "\u003cstrong\u003eDiced Green Chiles (Old El Paso):\u003c/strong\u003e 2 cans (200 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 2 bags (400 g)",
+                                "\u003cstrong\u003ePoblano Peppers (generic):\u003c/strong\u003e 1.5 poblano peppers (200 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 1 jalapeno (30 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (12 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1 bunch (28 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 2 limes, juiced (60 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 jar (8 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 jar (4 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 container (10 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 jar (4 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (240 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.46 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Go with \u003cstrong\u003eboneless skinless thighs\u003c/strong\u003e here. They are cheaper than breast and stay tender through a long cook.",
+                       "Fresh \u003cstrong\u003etomatillos\u003c/strong\u003e are usually cents on the dollar in season, so buy them when they are cheap.",
+                       "Canned \u003cstrong\u003ediced green chiles\u003c/strong\u003e save you the roasting and peeling, and they cost next to nothing."
+                   ],
+    "make_it":  [
+                    "Husk and quarter the tomatillos, then lay them in the crock with the chicken thighs.",
+                    "Add the chopped onion and both cans of green chiles.",
+                    "Cover and cook on low for 6 to 8 hours until the chicken pulls apart easily.",
+                    "Shred the thighs and stir them back into the green sauce.",
+                    "Cook up your rice and steam the broccoli.",
+                    "Serve the chile verde over rice with broccoli on the side."
+                ],
+    "portion_html":  "Each of the 14 servings runs about 52g protein for roughly 557 calories, at around $2.44 a bowl.",
+    "credit_html":  "",
+    "upsell_html":  "One pot of this and you will look forward to lunch instead of dreading it. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  38.1,
+    "cost_batch_true":  48.64,
+    "cost_per_serving":  2.72,
+    "cost_per_serving_true":  3.47,
+    "cost_pantry_add":  10.08,
+    "cost_first_run":  58.72,
+    "scaler":  {
+                   "cost":  "48.64",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  3200,
+                                   "buy":  "8 lb",
+                                   "bid":  "boneless-skinless-chicken-thigh",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  900,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomatillos",
+                                   "grams":  700,
+                                   "buy":  "2 lb",
+                                   "bid":  "tomatillos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  300,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Green Chiles",
+                                   "grams":  200,
+                                   "buy":  "2 cans",
+                                   "bid":  "diced-green-chiles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  400,
+                                   "buy":  "2 bags",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Poblano Peppers",
+                                   "grams":  200,
+                                   "buy":  "1.5 poblano peppers",
+                                   "bid":  "poblano-peppers",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "grams":  30,
+                                   "buy":  "1 jalapeno",
+                                   "bid":  "jalapeno",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  12,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "grams":  28,
+                                   "buy":  "1 bunch",
+                                   "bid":  "fresh-cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "grams":  60,
+                                   "buy":  "2 limes, juiced",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  8,
+                                   "buy":  "1 jar",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "grams":  4,
+                                   "buy":  "1 jar",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  10,
+                                   "buy":  "1 container",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "1 jar",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  240,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 557 calories and 52 grams of protein for roughly $3.46 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker chicken chile verde bowls, budget dinner",
+                 "costPerServing":  3.46,
+                 "recipeIngredient":  [
+                                          "8 lb Boneless Skinless Chicken Thigh",
+                                          "1 lb Rice",
+                                          "2 lb Tomatillos",
+                                          "3 onions Yellow Onion",
+                                          "2 cans Diced Green Chiles",
+                                          "2 bags Broccoli Florets"
+                                      ],
+                 "steps":  [
+                               "Husk and quarter the tomatillos, then lay them in the crock with the chicken thighs.",
+                               "Add the chopped onion and both cans of green chiles.",
+                               "Cover and cook on low for 6 to 8 hours until the chicken pulls apart easily.",
+                               "Shred the thighs and stir them back into the green sauce.",
+                               "Cook up your rice and steam the broccoli.",
+                               "Serve the chile verde over rice with broccoli on the side."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

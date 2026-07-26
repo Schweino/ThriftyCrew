@@ -1,0 +1,296 @@
+{
+    "name":  "Vietnamese Chicken Curry (Ca Ri Ga)",
+    "slug":  "vietnamese-chicken-curry-ca-ri-ga",
+    "cuisine":  "Vietnamese",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.wokandkin.com/vietnamese-chicken-curry-ca-ri-ga/",
+    "source_site":  "wokandkin.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "sugar clamp 51-\u003e24 g/serving"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Lemongrass-and-coconut curry, fish-sauce seasoned rather than garam-masala - a different lane from the Indian and Thai coconut curries in this pool, though it is the closest call in the batch and worth an explicit dedup look. Every ingredient board-mapped. Confidence: MEDIUM - URL confirmed on site search index, page not individually fetched. | HARVEST: Very large party-scale batch (5 L stock). Downstream scaling will likely be needed.",
+                         "SOURCE YIELD: 10 servings, rebuilt to 14.",
+                         "TUNING: sugar clamp 51-\u003e24 g/serving",
+                         "OVERRIDE Chicken Livers: \u0027duck giblets (optional)\u0027 - house drops giblets; deliberate zero",
+                         "OVERRIDE Vegetable Oil: FRY-OIL HOUSE RULE: \u00272 US cup cooking oil\u0027 for a 10-serving pot fries aromatics; 84 g/14 x 10 = 60 g",
+                         "OVERRIDE Sugar: \u00272 US cup sweetened condensed milk\u0027 mapped to Sugar; 612 g condensed x (321/387 cal density) = 508 g sugar-equivalent (macro-honest)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  708,
+                 "protein":  27,
+                 "carbs":  70,
+                 "fat":  34,
+                 "cost_ps":  "4.48"
+             },
+    "intro_html":  "Ca ri ga is Vietnam\u0027s curry, and it sits in its own lane. Lemongrass and coconut milk give it perfume, potato and sweet potato give it body, and it is seasoned with fish sauce rather than the spice cabinet, which is why it tastes lighter and more soup-like than the Indian and Thai curries on this site. It is traditionally eaten with a baguette for dipping, which tells you everything about Vietnam\u0027s history in one detail. Each bowl runs \u003cstrong\u003e708 calories and 27 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.48\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 3 lb (1400 g)",
+                                "\u003cstrong\u003eGround Turmeric (Great Value):\u003c/strong\u003e 8.5 tbsp (76 g)",
+                                "\u003cstrong\u003eLemongrass Paste (Gourmet Garden (McCormick)):\u003c/strong\u003e 2.25 tbsp (34 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3.25 tbsp (28 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 7.4 cartons (7022 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 4 (840 g)",
+                                "\u003cstrong\u003eSweet Potatoes:\u003c/strong\u003e 6.5 (840 g)",
+                                "\u003cstrong\u003eJapanese Curry Roux (S\u0026B):\u003c/strong\u003e 3.5 (322 g)",
+                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 3.5 cans (1400 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 1.75 cups (336 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 4.25 tbsp (76 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 6 tbsp (84 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 4 (420 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Thigh, 3 lb: ~$5.46. \u003cstrong\u003eBuy 4 lbs: $7.08.\u003c/strong\u003e",
+                       "Lemongrass Paste, 2.25 tbsp: ~$1.50. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 3.25 tbsp: ~$0.40. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Chicken Broth, 7.4 cartons: ~$9.43. \u003cstrong\u003ePantry staple; this batch alone uses about 8 32oz cartons.\u003c/strong\u003e",
+                       "Potato, 4: ~$1.05. \u003cstrong\u003eBuy 2 lbs: $1.14.\u003c/strong\u003e",
+                       "Sweet Potatoes, 6.5: ~$2.74. \u003cstrong\u003eBuy 2 lbs: $2.96.\u003c/strong\u003e",
+                       "Japanese Curry Roux, 3.5: ~$10.36. \u003cstrong\u003eBuy 4 3.2oz boxes: $11.85.\u003c/strong\u003e",
+                       "Coconut Milk, 3.5 cans: ~$6.95. \u003cstrong\u003eBuy 4 13.5oz cans: $7.94.\u003c/strong\u003e",
+                       "Sugar, 1.75 cups: ~$0.59. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Vegetable Oil, 6 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 4: ~$1.06. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Pantry seasonings (ground turmeric, salt, black pepper): ~$2.57. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $42.31 across 14 servings, so roughly $3.02 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $46.98 across 14 servings, roughly $3.36 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.78 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $62.76. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.48 a bowl\u003c/strong\u003e (at everyday cost). The curry roux and the coconut milk are the two lines doing that, and the roux is the one you can most easily trade down on if you want a cheaper pot.",
+    "shop_smart":  [
+                       "The curry roux blocks are the biggest line in this recipe. Curry powder plus a spoonful of flour cooked in oil does the same thickening job for a small fraction of the cost, and it moves the dish closer to the traditional Vietnamese version anyway.",
+                       "Coconut milk is the second biggest line. Store brand, full fat, bought on sale and stacked in the pantry, because the cans keep for a year.",
+                       "This pot uses a lot of broth. Homemade stock from a roasted chicken carcass costs you nothing but freezer space, and boxed broth on sale is the next best thing.",
+                       "Potatoes and sweet potatoes are the cheap volume here. Buy both by the bag and cut them in large chunks so they do not disintegrate into the sauce during the simmer."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cut the chicken thighs into large chunks and toss them with the ground turmeric, lemongrass paste, minced garlic, salt and black pepper. Let them sit at least 30 minutes.",
+                    "Heat the vegetable oil in your largest pot over medium-high and brown the marinated chicken in batches until the turmeric has gone from yellow to gold, then set it aside.",
+                    "Cook the sliced onion in the same pot for 5 minutes, scraping the bottom, then return the chicken and pour in the chicken broth.",
+                    "Bring it up to a simmer and cook covered for 20 minutes so the chicken starts to give.",
+                    "Add the potato and sweet potato in large chunks and simmer another 15 to 20 minutes, uncovered, until they are just fork tender. Do not stir hard or they will fall apart on you.",
+                    "Break the curry roux into pieces and stir it in until it dissolves and the broth thickens, then add the coconut milk and the sugar and bring it back to a bare simmer for 5 minutes.",
+                    "Taste it and adjust the salt. It should be lightly sweet, coconut-forward and thinner than an Indian curry, because that is what ca ri ga is."
+                ],
+    "portion_html":  "Set the pot on the scale, subtract the empty-pot weight, and divide by 14. Fourteen equal containers, potatoes and all. Each one carries \u003cstrong\u003e708 calories\u003c/strong\u003e, and reheat this gently, since a hard boil will split the coconut milk and turn the potatoes to mush.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.wokandkin.com/vietnamese-chicken-curry-ca-ri-ga/\" target=\"_blank\" rel=\"noopener\"\u003ewokandkin.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Vietnamese chicken curry for about $4.48 a bowl (at everyday cost), with a swap in the notes that brings it down. This is one of a few hundred recipes here. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "cost_batch":  42.31,
+    "cost_batch_true":  46.98,
+    "cost_per_serving":  3.02,
+    "cost_per_serving_true":  3.36,
+    "cost_pantry_add":  15.78,
+    "cost_first_run":  62.76,
+    "scaler":  {
+                   "cost":  "46.98",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  1400,
+                                   "buy":  "3 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ground Turmeric",
+                                   "canon":  "Ground Turmeric",
+                                   "grams":  76,
+                                   "buy":  "8.5 tbsp",
+                                   "bid":  "ground-turmeric",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lemongrass Paste",
+                                   "canon":  "Lemongrass Paste",
+                                   "grams":  34,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "lemongrass-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  28,
+                                   "buy":  "3.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  7022,
+                                   "buy":  "7.4 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  840,
+                                   "buy":  "4",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Sweet Potatoes",
+                                   "canon":  "Sweet Potatoes",
+                                   "grams":  840,
+                                   "buy":  "6.5",
+                                   "bid":  "sweet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Japanese Curry Roux",
+                                   "canon":  "Japanese Curry Roux",
+                                   "grams":  322,
+                                   "buy":  "3.5",
+                                   "bid":  "japanese-curry-roux",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Coconut Milk",
+                                   "canon":  "Coconut Milk",
+                                   "grams":  1400,
+                                   "buy":  "3.5 cans",
+                                   "bid":  "coconut-milk-canned",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  336,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  76,
+                                   "buy":  "4.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  84,
+                                   "buy":  "6 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  420,
+                                   "buy":  "4",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Vietnamese chicken curry (ca ri ga): lemongrass and coconut curry with potato and sweet potato. Built as 14 meal prep bowls at 708 calories, 27g protein, about $4.48 (at everyday cost).",
+                 "keywords":  "ca ri ga, vietnamese chicken curry, lemongrass coconut curry, sweet potato curry, vietnamese meal prep, coconut chicken stew",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT55M",
+                 "totalTime":  "PT1H20M",
+                 "costPerServing":  4.48,
+                 "recipeIngredient":  [
+                                          "3 lb boneless skinless chicken thighs",
+                                          "3.5 cans coconut milk",
+                                          "15.5 lb chicken broth",
+                                          "4 potatoes",
+                                          "6.5 sweet potatoes",
+                                          "3.5 blocks curry roux",
+                                          "2.25 tbsp lemongrass paste",
+                                          "4 yellow onions",
+                                          "3.25 tbsp garlic",
+                                          "6 tbsp vegetable oil"
+                                      ],
+                 "steps":  [
+                               "Marinate chunked chicken thighs in turmeric, lemongrass, garlic, salt and pepper for 30 minutes.",
+                               "Brown the chicken in oil in batches, then soften the onion in the same pot.",
+                               "Return the chicken, add the broth, and simmer covered 20 minutes.",
+                               "Add potato and sweet potato chunks and simmer 15 to 20 minutes until just tender.",
+                               "Dissolve in the curry roux, add coconut milk and sugar, simmer 5 minutes, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  1400
+                              },
+                              {
+                                  "item":  "Ground Turmeric",
+                                  "grams":  76
+                              },
+                              {
+                                  "item":  "Lemongrass Paste",
+                                  "grams":  34
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  7022
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  840
+                              },
+                              {
+                                  "item":  "Sweet Potatoes",
+                                  "grams":  840
+                              },
+                              {
+                                  "item":  "Japanese Curry Roux",
+                                  "grams":  322
+                              },
+                              {
+                                  "item":  "Coconut Milk",
+                                  "grams":  1400
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  336
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  76
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

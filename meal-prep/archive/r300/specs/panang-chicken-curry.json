@@ -1,0 +1,350 @@
+{
+    "name":  "Panang Chicken Curry",
+    "slug":  "panang-chicken-curry",
+    "cuisine":  "Thai",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.recipetineats.com/panang-curry/",
+    "source_site":  "recipetineats.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "protein +15% (Boneless Skinless Chicken Thigh)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Page verified: full recipe, 4-5 servings, explicitly offers the chicken version. Thicker and peanut-rounded vs the thinner green curry, so the two are not near-duplicates. Peanuts and peanut-butter are tracked. Panang paste has no board id. Confidence: MEDIUM on est_cal - source\u0027s nutrition panel excludes rice and was not fully readable; macros to come from our DB. | HARVEST: Source servings listed as 4-5; the nutrition line states \u0027per serving assuming 5 servings, excluding rice\u0027, so 5 used. Numeric calorie/protein values could not be read from the page on two fetches, so nutrition is null. Protein is a choose-ONE between prawns and chicken; use the chicken line (350g chicken thighs). The prawn stock line applies only to the prawn version.",
+                         "SOURCE YIELD: 5 servings, rebuilt to 14.",
+                         "TUNING: protein +15% (Boneless Skinless Chicken Thigh)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  592,
+                 "protein":  26,
+                 "carbs":  60,
+                 "fat":  27,
+                 "cost_ps":  "3.59"
+             },
+    "intro_html":  "Panang is the thick one. Where green curry runs loose and soupy, panang reduces down until it coats the back of a spoon, and it gets its roundness from ground peanuts worked right into the paste. We build the paste from scratch here with dried chiles, peanuts, lemongrass, ginger and garlic, which sounds ambitious until you realize it is one blender and four minutes. Each bowl comes in at \u003cstrong\u003e592 calories and 26 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.59\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 2.5 lb (1135 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (1008 g)",
+                                "\u003cstrong\u003eDried Arbol Chiles (generic (USDA)):\u003c/strong\u003e 2 cups (47 g)",
+                                "\u003cstrong\u003ePeanuts (Great Value):\u003c/strong\u003e 0.75 cups (126 g)",
+                                "\u003cstrong\u003eLemongrass Paste (Gourmet Garden (McCormick)):\u003c/strong\u003e 5.5 tbsp (84 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 5.6 (616 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 2.75 tbsp (17 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)",
+                                "\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 8.5 tbsp (118 g)",
+                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 2 cans (791 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 3.25 tbsp (41 g)",
+                                "\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 4.25 tbsp (76 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.25 tbsp (4 g)",
+                                "\u003cstrong\u003eGreen Beans (generic):\u003c/strong\u003e 1.25 lb (560 g)",
+                                "\u003cstrong\u003eFresh Basil:\u003c/strong\u003e 21.25 tbsp (32 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Thigh, 2.5 lb: ~$4.43. \u003cstrong\u003eBuy 3 lbs: $5.31.\u003c/strong\u003e",
+                       "Chicken Broth, 1 carton: ~$1.35. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Dried Arbol Chiles, 2 cups: ~$1.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Peanuts, 0.75 cups: ~$0.72. \u003cstrong\u003eBuy 1 16oz jar: $2.58.\u003c/strong\u003e",
+                       "Lemongrass Paste, 5.5 tbsp: ~$3.70. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 5.6: ~$1.55. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Ginger, 2.75 tbsp: ~$0.15. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Garlic, 8.25 tbsp: ~$1.01. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Vegetable Oil, 8.5 tbsp: ~$0.29. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Coconut Milk, 2 cans: ~$3.92. \u003cstrong\u003eBuy 2 13.5oz cans: $3.97.\u003c/strong\u003e",
+                       "Sugar, 3.25 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fish Sauce, 4.25 tbsp: ~$0.73. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Beans, 1.25 lb: ~$1.20. \u003cstrong\u003eBuy 2 12oz bags: $1.46.\u003c/strong\u003e",
+                       "Fresh Basil, 21.25 tbsp: ~$4.02. \u003cstrong\u003eBuy 3 0.5oz packs: $5.27.\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (ground coriander, salt, black pepper): ~$0.29. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $25.67 across 14 servings, so roughly $1.83 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $31.57 across 14 servings, roughly $2.26 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $18.75 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.32. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.59 a bowl\u003c/strong\u003e (at everyday cost) for a curry you made the paste for yourself. Fresh basil and coconut milk set the price, and building the paste from dried chiles and peanuts costs less than buying it in a jar.",
+    "shop_smart":  [
+                       "Making your own paste is the actual savings here. Dried chiles, peanuts, lemongrass paste and aromatics cost less than premade panang paste and taste considerably louder.",
+                       "Fresh basil is the most expensive fresh ingredient in this recipe. A living basil plant from the produce section runs about the price of two clamshells and keeps growing on a sunny sill.",
+                       "Two cans of coconut milk, store brand and full fat, cover this whole batch. Do not shake them; you want the thick cream separated out for frying the paste.",
+                       "Frozen green beans are the vegetable of choice here on price and behavior. They cost less than fresh, need no trimming, and go into the pot straight from the bag."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Soak the dried chiles in hot water for 20 minutes. Drain them and blend with the peanuts, lemongrass paste, ginger, garlic, ground coriander, salt and a splash of the soaking water into a thick, coarse paste.",
+                    "Spoon the thick cream off the top of the unshaken coconut milk cans into your largest pot, reserving the thin liquid. Cook it with the vegetable oil over medium-high for 3 to 5 minutes until the oil splits out.",
+                    "Add your panang paste and the diced onion and fry it in that oil for 3 to 4 minutes, stirring hard, until it darkens a shade and smells nutty and sharp at the same time.",
+                    "Add the chicken thighs cut into strips and turn them in the paste for 3 minutes, then pour in the reserved coconut liquid and the chicken broth.",
+                    "Simmer uncovered 20 to 25 minutes, letting the sauce reduce until it is genuinely thick. Panang is supposed to cling, not pool, so give it the time.",
+                    "Season with the fish sauce and sugar, add the green beans, and cook 4 minutes until they are tender but still have snap.",
+                    "Turn off the heat and stir in the fresh basil. Cook the rice separately, steam it covered 10 minutes, and fold it in or bed the curry on top of it."
+                ],
+    "portion_html":  "Put the pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. Fourteen containers, one number, no eyeballing. Each one carries \u003cstrong\u003e592 calories\u003c/strong\u003e, and reheat at half power so the coconut sauce stays smooth.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.recipetineats.com/panang-curry/\" target=\"_blank\" rel=\"noopener\"\u003erecipetineats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Panang curry with a homemade paste for about $3.59 a bowl (at everyday cost). This is one of a few hundred recipes here. Members get the whole Meal Prep section plus every money lesson, calculator, and tool on the site for $1 a month.",
+    "cost_batch":  25.67,
+    "cost_batch_true":  31.57,
+    "cost_per_serving":  1.83,
+    "cost_per_serving_true":  2.26,
+    "cost_pantry_add":  18.75,
+    "cost_first_run":  50.32,
+    "scaler":  {
+                   "cost":  "31.57",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  1135,
+                                   "buy":  "2.5 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  1008,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Dried Arbol Chiles",
+                                   "canon":  "Dried Arbol Chiles",
+                                   "grams":  47,
+                                   "buy":  "2 cups",
+                                   "bid":  "dried-arbol-chiles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Peanuts",
+                                   "canon":  "Peanuts",
+                                   "grams":  126,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "peanuts",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lemongrass Paste",
+                                   "canon":  "Lemongrass Paste",
+                                   "grams":  84,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "lemongrass-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  616,
+                                   "buy":  "5.6",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  17,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  70,
+                                   "buy":  "8.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ground Coriander",
+                                   "canon":  "Ground Coriander",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "ground-coriander",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  118,
+                                   "buy":  "8.5 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Coconut Milk",
+                                   "canon":  "Coconut Milk",
+                                   "grams":  791,
+                                   "buy":  "2 cans",
+                                   "bid":  "coconut-milk-canned",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  41,
+                                   "buy":  "3.25 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Fish Sauce",
+                                   "canon":  "Fish Sauce",
+                                   "grams":  76,
+                                   "buy":  "4.25 tbsp",
+                                   "bid":  "fish-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  4,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Beans",
+                                   "canon":  "Green Beans",
+                                   "grams":  560,
+                                   "buy":  "1.25 lb",
+                                   "bid":  "frozen-green-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Basil",
+                                   "canon":  "Fresh Basil",
+                                   "grams":  32,
+                                   "buy":  "21.25 tbsp",
+                                   "bid":  "fresh-basil",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Panang chicken curry with a homemade peanut chile paste, green beans and basil over rice. 14 meal prep bowls at 592 calories, 26g protein, about $3.59 each (at everyday cost).",
+                 "keywords":  "panang curry, thai peanut curry, chicken panang, homemade curry paste, thai meal prep, budget coconut curry",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT40M",
+                 "totalTime":  "PT1H10M",
+                 "costPerServing":  3.59,
+                 "recipeIngredient":  [
+                                          "2.5 lb boneless skinless chicken thighs",
+                                          "2 cans coconut milk",
+                                          "2 cups dried arbol chiles",
+                                          "0.75 cups peanuts",
+                                          "5.5 tbsp lemongrass paste",
+                                          "5 cups green beans",
+                                          "21.25 tbsp fresh basil",
+                                          "5.6 yellow onions",
+                                          "4.25 tbsp fish sauce",
+                                          "2.25 lb chicken broth",
+                                          "3.75 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Soak the dried chiles, then blend with peanuts, lemongrass, ginger, garlic and coriander into a coarse paste.",
+                               "Fry the thick coconut cream with oil until it splits, then fry the paste and onion 3 to 4 minutes.",
+                               "Add the chicken, the reserved coconut liquid and the broth, and simmer uncovered 20 to 25 minutes until thick.",
+                               "Season with fish sauce and sugar and add the green beans for 4 minutes.",
+                               "Stir in the basil off the heat and portion into 14 containers with rice."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  1135
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  1008
+                              },
+                              {
+                                  "item":  "Dried Arbol Chiles",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Peanuts",
+                                  "grams":  126
+                              },
+                              {
+                                  "item":  "Lemongrass Paste",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  616
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  17
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Ground Coriander",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  118
+                              },
+                              {
+                                  "item":  "Coconut Milk",
+                                  "grams":  791
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  41
+                              },
+                              {
+                                  "item":  "Fish Sauce",
+                                  "grams":  76
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Green Beans",
+                                  "grams":  560
+                              },
+                              {
+                                  "item":  "Fresh Basil",
+                                  "grams":  32
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

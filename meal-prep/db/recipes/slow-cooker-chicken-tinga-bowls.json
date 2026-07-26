@@ -1,0 +1,168 @@
+{
+    "name":  "Slow Cooker Chicken Tinga Bowls",
+    "slug":  "slow-cooker-chicken-tinga-bowls",
+    "cuisine":  "Mexican",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  560,
+                 "protein":  58,
+                 "carbs":  59,
+                 "fat":  9,
+                 "cost_ps":  "3.00"
+             },
+    "intro_html":  "Tinga is smoky, a little spicy, and tastes like you fussed over it, even though you did not. This chipotle-and-tomato chicken is high in protein and comes in cheap per serving, which is exactly what you want from a meal prep. One batch makes 14 servings.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3100 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (940 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2 cans (500 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 2 bags (400 g)",
+                                "\u003cstrong\u003eChipotle in Adobo (La Costena):\u003c/strong\u003e 1 can (90 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 1 bag (112 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (20 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 tsp (2 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (12 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.00 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "One \u003cstrong\u003ecan of chipotle in adobo\u003c/strong\u003e flavors the whole batch, so you only need the one and the rest of your spice budget stays put.",
+                       "Reach for the \u003cstrong\u003evalue pack chicken breast\u003c/strong\u003e to knock the per pound cost way down.",
+                       "Use \u003cstrong\u003estore-brand diced tomatoes\u003c/strong\u003e. They cook down into the sauce and save you real money over the fancy cans."
+                   ],
+    "make_it":  [
+                    "Set the chicken breast in the crock.",
+                    "Add the chopped onion, both cans of diced tomatoes, and the chipotle in adobo.",
+                    "Cover and cook on low for 6 to 8 hours until fork tender.",
+                    "Shred the chicken and stir it back through the smoky sauce.",
+                    "Steam the broccoli and cook the rice.",
+                    "Fill bowls with rice, tinga chicken, broccoli, and a little cheddar on top."
+                ],
+    "portion_html":  "Each of the 14 servings comes in around 58g protein for about 560 calories, at roughly $2.26 a bowl.",
+    "credit_html":  "",
+    "upsell_html":  "Make the batch and you have a smoky, satisfying lunch that beats anything from the drive-thru. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  30.26,
+    "cost_batch_true":  34.08,
+    "cost_per_serving":  2.16,
+    "cost_per_serving_true":  2.43,
+    "cost_pantry_add":  9.63,
+    "cost_first_run":  43.71,
+    "scaler":  {
+                   "cost":  "34.08",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3100,
+                                   "buy":  "7 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  940,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "grams":  500,
+                                   "buy":  "2 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  300,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  400,
+                                   "buy":  "2 bags",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chipotle in Adobo",
+                                   "grams":  90,
+                                   "buy":  "1 can",
+                                   "bid":  "chipotle-in-adobo",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "grams":  112,
+                                   "buy":  "1 bag",
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  20,
+                                   "buy":  "2 cloves",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "grams":  2,
+                                   "buy":  "1 tsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  12,
+                                   "buy":  "1 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 560 calories and 58 grams of protein for roughly $3.00 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker chicken tinga bowls, budget dinner",
+                 "costPerServing":  3.00,
+                 "recipeIngredient":  [
+                                          "7 lb Boneless Skinless Chicken Breast",
+                                          "1 lb Rice",
+                                          "2 cans Diced Tomatoes",
+                                          "3 onions Yellow Onion",
+                                          "2 bags Broccoli Florets",
+                                          "1 can Chipotle in Adobo"
+                                      ],
+                 "steps":  [
+                               "Set the chicken breast in the crock.",
+                               "Add the chopped onion, both cans of diced tomatoes, and the chipotle in adobo.",
+                               "Cover and cook on low for 6 to 8 hours until fork tender.",
+                               "Shred the chicken and stir it back through the smoky sauce.",
+                               "Steam the broccoli and cook the rice.",
+                               "Fill bowls with rice, tinga chicken, broccoli, and a little cheddar on top."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

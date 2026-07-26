@@ -1,0 +1,158 @@
+{
+    "name":  "Slow Cooker Thai Peanut Chicken Bowls",
+    "slug":  "slow-cooker-thai-peanut-chicken-bowls",
+    "cuisine":  "Thai",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  603,
+                 "protein":  63,
+                 "carbs":  52,
+                 "fat":  15,
+                 "cost_ps":  "3.42"
+             },
+    "intro_html":  "Peanut sauce makes almost anything taste like a treat, and this Thai-inspired bowl is no exception. It brings 63 grams of protein and a creamy coconut-peanut sauce for about $3.42 a serving (at everyday cost). Fourteen servings from one pot means you can eat like this all week and still come out ahead.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3400 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (800 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 5 peppers (600 g)",
+                                "\u003cstrong\u003ePeanut Butter (generic):\u003c/strong\u003e 1 jar (170 g)",
+                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 1 can (180 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (120 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 bottle (60 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1 bottle (21 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (12 g)",
+                                "\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 2 tbsp (70 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.42 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "That jar of peanut butter powers the whole sauce for under a dollar\u0027s worth, so \u003cstrong\u003ethe pantry staple you already own\u003c/strong\u003e is doing the heavy lifting.",
+                       "Canned coconut milk is far cheaper than the carton kind and keeps for a year, so \u003cstrong\u003ebuy a few cans at once\u003c/strong\u003e.",
+                       "Red peppers cost the most of any veg here, so \u003cstrong\u003ewatch for the three-pack sale\u003c/strong\u003e and buy them when they\u0027re marked down."
+                   ],
+    "make_it":  [
+                    "Add the chicken, peanut butter, coconut milk, chicken broth, soy sauce, honey, and garlic to the slow cooker and stir.",
+                    "Cover and cook on low for 6 to 7 hours until the chicken is tender and the sauce is glossy.",
+                    "Stir in the sliced red bell pepper for the last 45 minutes so it softens but holds its shape.",
+                    "Whisk the sauce smooth, then shred the chicken right back into it.",
+                    "Serve over white rice and spoon extra sauce on top."
+                ],
+    "portion_html":  "You get 63 grams of protein and 603 calories per serving, richer than the others but still a smart, filling plate.",
+    "credit_html":  "",
+    "upsell_html":  "Creamy, a little sweet, and cheap enough to keep on repeat. Hard combo to beat. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  34.59,
+    "cost_batch_true":  37.75,
+    "cost_per_serving":  2.47,
+    "cost_per_serving_true":  2.7,
+    "cost_pantry_add":  12.16,
+    "cost_first_run":  49.91,
+    "scaler":  {
+                   "cost":  "37.75",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3400,
+                                   "buy":  "8 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  800,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "grams":  600,
+                                   "buy":  "5 peppers",
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Peanut Butter",
+                                   "grams":  170,
+                                   "buy":  "1 jar",
+                                   "bid":  "peanut-butter",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Coconut Milk",
+                                   "grams":  180,
+                                   "buy":  "1 can",
+                                   "bid":  "coconut-milk",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  120,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "grams":  60,
+                                   "buy":  "1 bottle",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "grams":  21,
+                                   "buy":  "1 bottle",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  12,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Rice Vinegar",
+                                   "grams":  70,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "rice-vinegar",
+                                   "gpu":  "29.570"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Thai meal prep. Fourteen servings at about 603 calories and 63 grams of protein for roughly $3.42 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker thai peanut chicken bowls, budget dinner",
+                 "costPerServing":  3.42,
+                 "recipeIngredient":  [
+                                          "8 lb Boneless Skinless Chicken Breast",
+                                          "1 lb Rice",
+                                          "5 peppers Red Bell Pepper",
+                                          "1 jar Peanut Butter",
+                                          "1 can Coconut Milk",
+                                          "1 carton Chicken Broth"
+                                      ],
+                 "steps":  [
+                               "Add the chicken, peanut butter, coconut milk, chicken broth, soy sauce, honey, and garlic to the slow cooker and stir.",
+                               "Cover and cook on low for 6 to 7 hours until the chicken is tender and the sauce is glossy.",
+                               "Stir in the sliced red bell pepper for the last 45 minutes so it softens but holds its shape.",
+                               "Whisk the sauce smooth, then shred the chicken right back into it.",
+                               "Serve over white rice and spoon extra sauce on top."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

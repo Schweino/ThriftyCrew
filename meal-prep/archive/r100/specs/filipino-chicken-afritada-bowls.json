@@ -1,0 +1,241 @@
+{
+    "name":  "Filipino Chicken Afritada Bowls",
+    "slug":  "filipino-chicken-afritada-bowls",
+    "cuisine":  "Filipino",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "https://www.kawalingpinoy.com/chicken-afritada/",
+    "source_site":  "Kawaling Pinoy",
+    "manual_balance":  false,
+    "tuning":  [
+                   "protein clamp 340-\u003e240 g/serving"
+               ],
+    "stat":  {
+                 "cal":  675,
+                 "protein":  57,
+                 "carbs":  54,
+                 "fat":  24,
+                 "cost_ps":  "3.91"
+             },
+    "intro_html":  "Filipino comfort in a bowl: chicken thighs braised in a tomato sauce with potatoes, carrots, bell peppers, and peas, seasoned the traditional way with fish sauce. Each serving lands \u003cstrong\u003e57 grams of protein\u003c/strong\u003e at 675 calories for about \u003cstrong\u003e$3.91\u003c/strong\u003e (at everyday cost). The potatoes cook in the stew, so the starch is built right in.",
+    "ingredients_display": ["\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1 cups (191 g)","\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 7 (1491 g)","\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3.5 (214 g)","\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2 (210 g)","\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 2 (210 g)","\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 7.5 lb (3360 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 6 tbsp (52 g)","\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 21 cans (8631 g)","\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 3.5 tbsp (63 g)","\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 1.75 cups (234 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2 tbsp (14 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)"],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Vegetable Oil, 1 cups: ~$0.46. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Potato, 7: ~$1.81. \u003cstrong\u003eBuy 4 lbs: $2.20.\u003c/strong\u003e",
+                       "Carrots, 3.5: ~$0.53. \u003cstrong\u003eBuy 1 lb: $1.13.\u003c/strong\u003e",
+                       "Green Bell Peppers, 2: ~$1.50. \u003cstrong\u003eBuy 2 eachs: $1.72.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Thigh, 7.5 lb: ~$13.11. \u003cstrong\u003eBuy 8 lbs: $14.16.\u003c/strong\u003e",
+                       "Yellow Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 6 tbsp: ~$0.75. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Diced Tomatoes, 21 cans: ~$20.15. \u003cstrong\u003eBuy 21 cans: $20.15.\u003c/strong\u003e",
+                       "Fish Sauce, 3.5 tbsp: ~$0.61. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Frozen Green Peas, 1.75 cups: ~$0.51. \u003cstrong\u003eBuy 1 12oz bag: $0.73.\u003c/strong\u003e",
+                       "Pantry seasonings (red bell pepper, black pepper, salt): ~$2.12. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $42.52 across 14 servings, so roughly $3.04 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $45.79 across 14 servings, roughly $3.27 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.91 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.70. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.91 a bowl\u003c/strong\u003e (at everyday cost) for chicken afritada. Filipino turo-turo plates run $12 to $15 where you can find them, and in most of the Midwest you cannot, which makes your version priceless and also $3.91.",
+    "shop_smart":  [
+                       "Chicken thighs carry the dish at $18.37 for 7.5 pounds, about $2.45 a pound. The clamp on this recipe keeps portions honest at a still-huge 57 grams of protein.",
+                       "The tomato base is the other big line at $20.15 in canned diced tomatoes. Store-brand cans are the move, and if crushed tomatoes are cheaper that week they work the same here.",
+                       "A splash of fish sauce is the authentic secret and costs 61 cents worth per batch. The bottle lasts a year of Filipino and Thai recipes."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cut the chicken thighs into large chunks and pat dry. Brown them in batches in some of the vegetable oil in your big pot. Set aside.",
+                    "Fry the diced potatoes and carrots in the remaining oil 5 minutes until they pick up color. Set aside with the chicken.",
+                    "Saute the diced onion until soft, then the garlic for 1 minute.",
+                    "Add the diced tomatoes and fish sauce, bring to a simmer, and cook 10 minutes to concentrate.",
+                    "Return the chicken, potatoes, and carrots. Cover and simmer 20 to 25 minutes until the chicken reads 165 F and the potatoes are tender.",
+                    "Stir in the sliced green and red bell peppers and the peas for the last 5 minutes so they keep some snap. Season with black pepper and salt to taste.",
+                    "Portion into 14 containers, distributing chicken and vegetables evenly."
+                ],
+    "portion_html":  "Weigh the finished pot, subtract the empty pot weight you wrote down, and divide by 14. Scale that into each container. Each bowl comes in at about 675 calories with 57 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.kawalingpinoy.com/chicken-afritada/\" target=\"_blank\" rel=\"noopener\"\u003eKawaling Pinoy\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Hearty dinners for about $3.91 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  42.52,
+    "cost_batch_true":  45.79,
+    "cost_per_serving":  3.04,
+    "cost_per_serving_true":  3.27,
+    "cost_pantry_add":  7.91,
+    "cost_first_run":  53.7,
+    "scaler":  {
+                   "cost":  "45.79",
+                   "ing":  [
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "grams":  191,
+                                   "buy":  "1 cups",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "grams":  1491,
+                                   "buy":  "7",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "grams":  214,
+                                   "buy":  "3.5",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "grams":  210,
+                                   "buy":  "2",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "grams":  210,
+                                   "buy":  "2",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  3360,
+                                   "buy":  "7.5 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  385,
+                                   "buy":  "3.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  52,
+                                   "buy":  "6 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "grams":  8631,
+                                   "buy":  "21 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fish Sauce",
+                                   "grams":  63,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "fish-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Frozen Green Peas",
+                                   "grams":  234,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "frozen-peas",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  14,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Filipino chicken afritada meal prep: tomato-braised thighs with potatoes and peppers. 14 bowls, 675 calories and 57g protein each, about $3.91 (at everyday cost).",
+                 "keywords":  "chicken afritada, filipino chicken stew, filipino meal prep, tomato braised chicken, budget meal prep, high protein dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT55M",
+                 "totalTime":  "PT80M",
+                 "costPerServing":  3.91,
+                 "recipeIngredient":  [
+                                          "7.5 lb boneless skinless chicken thighs",
+                                          "7 potatoes (1491 g)",
+                                          "3.5 carrots",
+                                          "2 green bell peppers",
+                                          "21 cans diced tomatoes (8631 g)",
+                                          "3.5 yellow onions",
+                                          "6 tbsp garlic",
+                                          "3.5 tbsp fish sauce",
+                                          "1.75 cups frozen green peas"
+                                      ],
+                 "steps":  [
+                               "Brown chunked chicken thighs, then fry the potatoes and carrots.",
+                               "Saute onion and garlic, then simmer the diced tomatoes with fish sauce.",
+                               "Return chicken and vegetables and braise to 165 F until tender.",
+                               "Add bell peppers and peas for the last 5 minutes.",
+                               "Portion evenly into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  191
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  1491
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  214
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  3360
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  8631
+                              },
+                              {
+                                  "item":  "Fish Sauce",
+                                  "grams":  63
+                              },
+                              {
+                                  "item":  "Frozen Green Peas",
+                                  "grams":  234
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              }
+                          ]
+}

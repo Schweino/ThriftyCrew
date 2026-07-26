@@ -1,0 +1,294 @@
+{
+    "name":  "Chicken Divan (Broccoli Cheese Bake)",
+    "slug":  "chicken-divan-broccoli-bake",
+    "cuisine":  "American",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.spendwithpennies.com/quick-simple-chicken-broccoli-divan/",
+    "source_site":  "spendwithpennies.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 300g (src scale)",
+                   "base +20% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Source lists 399 cal / 32g protein for the bake; est 570 served over rice - confidence medium on calories, and protein is already strong. All-mapped ingredient list, mixes cold and bakes, textbook 14-serving casserole. Distinct from the live Loaded Chicken and Potato Casserole and Poppy Seed Chicken. | HARVEST: ",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 300g (src scale)",
+                         "TUNING: base +20% (Rice)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  566,
+                 "protein":  34,
+                 "carbs":  64,
+                 "fat":  18,
+                 "cost_ps":  "3.06"
+             },
+    "intro_html":  "Chicken Divan started life at a fancy New York hotel and got adopted by every church potluck in America, which is usually a sign a dish is genuinely good. Chicken and broccoli under a cheddar and sour cream sauce, topped with buttered bread crumbs and baked until it bubbles at the edges. You mix it cold, put it in the oven, and walk away. Each serving lands at 566 calories and \u003cstrong\u003e34 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.06 a serving\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 2.25 lb (980 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 14 oz (396 g)",
+                                "\u003cstrong\u003eCream of Mushroom Soup (Campbell\u0027s (USDA SR)):\u003c/strong\u003e 2.3 cans (695 g)",
+                                "\u003cstrong\u003eLight Sour Cream (generic):\u003c/strong\u003e 1.5 cups (358 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 1.25 cups (286 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 0.5 tbsp (3 g)",
+                                "\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 0.5 tbsp (6 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.25 tbsp (4 g)",
+                                "\u003cstrong\u003eBread Crumbs (generic):\u003c/strong\u003e 7 tbsp (49 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 2.25 tbsp (33 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.5 cups dry (851 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Broccoli Florets, 3.5 lb: ~$7.42. \u003cstrong\u003eBuy 5 12oz bags: $7.95.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 2.25 lb: ~$7.06. \u003cstrong\u003eBuy 3 lbs: $9.81.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 14 oz: ~$3.01. \u003cstrong\u003eBuy 2 8oz bags: $3.45.\u003c/strong\u003e",
+                       "Cream of Mushroom Soup, 2.3 cans: ~$1.73. \u003cstrong\u003eBuy 3 10.5oz cans: $2.22.\u003c/strong\u003e",
+                       "Light Sour Cream, 1.5 cups: ~$1.29. \u003cstrong\u003eBuy 1 16oz tub: $1.64.\u003c/strong\u003e",
+                       "Milk, 1.25 cups: ~$0.23. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
+                       "Bread Crumbs, 7 tbsp: ~$0.14. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Butter, 2.25 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Rice, 4.5 cups dry: ~$1.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (garlic powder, onion powder, dijon mustard, black pepper, salt): ~$0.25. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $22.40 across 14 servings, so roughly $1.60 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.51 across 14 servings, roughly $2.32 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.30 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.81. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.06 a serving\u003c/strong\u003e (at everyday cost) for a casserole that feeds a crowd. Broccoli is the biggest line, and it is also what keeps this from being just another cheese and chicken bake.",
+    "shop_smart":  [
+                       "Frozen broccoli florets cost less than fresh, are already trimmed, and hold their texture better in a casserole than fresh does. Thaw and drain them well, because the water they release is the number one cause of a soupy divan.",
+                       "Buy block cheddar and shred it yourself when it beats the bag on price. The block also melts smoother, since bagged shreds are coated with starch to keep them separate.",
+                       "Cream of mushroom soup on sale is worth stocking up on. It keeps for years and it is the backbone of half the casseroles in the American repertoire.",
+                       "Light sour cream costs the same as regular and works exactly the same way in a baked dish, so this is one of the few places where the lighter version is a free upgrade."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Heat the oven to 350F. Thaw the broccoli and press it dry in a towel. Do not skip the drying step, because every drop of water you leave in ends up thinning the sauce.",
+                    "Cook the chicken breast, then cut or shred it into bite sized pieces.",
+                    "In a large bowl, stir together the cream of mushroom soup, sour cream, milk, most of the shredded cheddar, garlic powder, onion powder, dijon mustard, salt, and pepper.",
+                    "Fold the chicken and broccoli into the sauce until everything is coated evenly.",
+                    "Spread it into a large baking dish and scatter the rest of the cheddar over the top.",
+                    "Toss the bread crumbs with the melted butter and sprinkle them over the cheese. This is what gives you a crunchy top instead of a soft one.",
+                    "Bake 30 to 35 minutes until it bubbles at the edges and the crumbs are golden. Cook the rice while it bakes and rest the dish 10 minutes before cutting."
+                ],
+    "portion_html":  "Weigh the rice into each container first, then score the bake into 14 even squares and lift one into each. Set the dish on the scale and subtract the empty weight if you want to check your squares are honest. Every portion lands at \u003cstrong\u003e566 calories\u003c/strong\u003e. Reheat uncovered so the crumb topping crisps back up.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.spendwithpennies.com/quick-simple-chicken-broccoli-divan/\" target=\"_blank\" rel=\"noopener\"\u003espendwithpennies.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A church potluck classic for about \u003cstrong\u003e$3.06 a serving\u003c/strong\u003e (at everyday cost). Members get the whole Meal Prep library, every money lesson, and all the site calculators and tools for $1 a month.",
+    "cost_batch":  22.4,
+    "cost_batch_true":  32.51,
+    "cost_per_serving":  1.6,
+    "cost_per_serving_true":  2.32,
+    "cost_pantry_add":  10.3,
+    "cost_first_run":  42.81,
+    "scaler":  {
+                   "cost":  "32.51",
+                   "ing":  [
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "canon":  "Broccoli Florets",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "broccoli",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  980,
+                                   "buy":  "2.25 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "canon":  "Cheddar Cheese, Shredded",
+                                   "grams":  396,
+                                   "buy":  "14 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cream of Mushroom Soup",
+                                   "canon":  "Cream of Mushroom Soup",
+                                   "grams":  695,
+                                   "buy":  "2.3 cans",
+                                   "bid":  "cream-of-mushroom-soup",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Light Sour Cream",
+                                   "canon":  "Light Sour Cream",
+                                   "grams":  358,
+                                   "buy":  "1.5 cups",
+                                   "bid":  "sour-cream",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  286,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Onion Powder",
+                                   "canon":  "Onion Powder",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "onion-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dijon Mustard",
+                                   "canon":  "Dijon Mustard",
+                                   "grams":  6,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "dijon-mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  4,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bread Crumbs",
+                                   "canon":  "Bread Crumbs",
+                                   "grams":  49,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "bread-crumbs",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  33,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  851,
+                                   "buy":  "4.5 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Chicken Divan, a broccoli and cheddar chicken bake with a buttered crumb topping over rice, rebuilt for 14 meal prep servings at about $3.06 a serving (at everyday cost).",
+                 "keywords":  "chicken divan, broccoli cheese chicken bake, chicken broccoli casserole, budget casserole, cheap meal prep, make ahead dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT35M",
+                 "totalTime":  "PT1H",
+                 "costPerServing":  3.06,
+                 "recipeIngredient":  [
+                                          "2.25 lb boneless skinless chicken breast",
+                                          "18.75 cups broccoli florets",
+                                          "14 oz shredded cheddar cheese",
+                                          "2.3 cans cream of mushroom soup",
+                                          "1.5 cups light sour cream",
+                                          "1.25 cups milk",
+                                          "7 tbsp bread crumbs",
+                                          "2.25 tbsp butter",
+                                          "4.5 cups dry rice",
+                                          "Pantry: garlic powder, onion powder, dijon mustard, salt, black pepper"
+                                      ],
+                 "steps":  [
+                               "Thaw the broccoli and press it completely dry.",
+                               "Cook the chicken breast and cut it into bite sized pieces.",
+                               "Stir the soup, sour cream, milk, most of the cheddar, and seasonings into a sauce.",
+                               "Fold in the chicken and broccoli and spread into a baking dish, topped with the rest of the cheese.",
+                               "Sprinkle buttered bread crumbs over and bake at 350F for 30 to 35 minutes.",
+                               "Rest, cook the rice, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Broccoli Florets",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  980
+                              },
+                              {
+                                  "item":  "Cheddar Cheese, Shredded",
+                                  "grams":  396
+                              },
+                              {
+                                  "item":  "Cream of Mushroom Soup",
+                                  "grams":  695
+                              },
+                              {
+                                  "item":  "Light Sour Cream",
+                                  "grams":  358
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  286
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Onion Powder",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Dijon Mustard",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Bread Crumbs",
+                                  "grams":  49
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  33
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  851
+                              }
+                          ]
+}

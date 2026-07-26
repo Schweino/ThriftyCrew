@@ -1,0 +1,303 @@
+{
+    "name":  "Slow Cooker Chile Colorado Bowls",
+    "slug":  "chile-colorado-bowls",
+    "cuisine":  "Mexican",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.isabeleats.com/chile-colorado-recipe/",
+    "source_site":  "isabeleats.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 300g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Beef stewed in pure red chile sauce, no beans, no tomato. Different enough from birria (no consomme, no vinegar-clove profile) and from the existing enchilada skillet (ground beef, canned sauce). Chuck is the correct and cheapest cut. Confidence: medium on calories. | HARVEST: Source method is a stovetop Dutch oven braise, not a slow cooker despite the target slug name.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 300g (src scale)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  570,
+                 "protein":  36,
+                 "carbs":  51,
+                 "fat":  23,
+                 "cost_ps":  "6.08"
+             },
+    "intro_html":  "Chile colorado is beef stewed in pure red chile sauce. No beans, no tomato base, no shortcuts through a can of enchilada sauce. Dried guajillos and anchos get soaked and blended, the chuck browns in flour first so the sauce clings, and then it just simmers until the beef gives up. Each bowl carries \u003cstrong\u003e36 grams of protein\u003c/strong\u003e and 570 calories for about \u003cstrong\u003e$6.08\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eDried Guajillo Chiles (generic (USDA)):\u003c/strong\u003e 4 oz (112 g)",
+                                "\u003cstrong\u003eDried Ancho Chiles (generic (USDA)):\u003c/strong\u003e 2.75 oz (79 g)",
+                                "\u003cstrong\u003eDried Arbol Chiles (generic (USDA)):\u003c/strong\u003e 0.08 cups (2 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 (128 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 0.75 tbsp (2 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1.5 tbsp (12 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 0.25 tbsp (2 g)",
+                                "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 4.75 lb (2117 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 4.5 tbsp (37 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 4.75 tbsp (63 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 5.75 cups (1400 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.04 oz (1 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Dried Guajillo Chiles, 4 oz: ~$6.90. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Dried Ancho Chiles, 2.75 oz: ~$1.57. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 1: ~$0.32. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 1.5 tbsp: ~$0.17. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Beef Chuck Roast, 4.75 lb: ~$37.20. \u003cstrong\u003eBuy 5 lbs: $39.85.\u003c/strong\u003e",
+                       "All-Purpose Flour, 4.5 tbsp: ~$0.04. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 4.75 tbsp: ~$0.89. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Beef Broth, 5.75 cups: ~$1.88. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (dried arbol chiles, dried oregano, salt, ground cumin, black pepper, bay leaves): ~$0.43. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $50.26 across 14 servings, so roughly $3.59 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $54.14 across 14 servings, roughly $3.87 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $30.99 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $85.13. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$6.08 a bowl\u003c/strong\u003e (at everyday cost). Nine ingredients, and once you own the bag of dried chiles the recurring cost is basically beef, broth, and rice.",
+    "shop_smart":  [
+                       "Buy dried chiles by the bag in the Latin foods aisle rather than in spice jars. The price difference per ounce is not small, it is enormous.",
+                       "Chuck roast is the correct cut for a two hour braise. Anything more tender would cost more and fall apart into strings.",
+                       "The flour dredge is a free thickener. It gives you a browned crust and a sauce that coats instead of running, from an ingredient you already own.",
+                       "Rice cooked plain is the right base. The chile sauce is doing enough, and seasoning the rice would just muddy it."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Stem and seed the guajillo and ancho chiles along with the arbol chiles from the pantry list, and toast them briefly in a dry pan until fragrant.",
+                    "Soak the toasted chiles in hot water for 20 minutes, then blend them with the onion, garlic, oregano, cumin, and a cup of the soaking liquid until smooth. Strain the sauce.",
+                    "Cut the chuck roast into large cubes, season with salt and black pepper, and toss them in the flour.",
+                    "Brown the floured beef in the olive oil in batches in a heavy pot, working in batches so the flour crisps rather than steams.",
+                    "Return all the beef, pour in the strained chile sauce and the beef broth, and add the bay leaves.",
+                    "Cover and simmer on the lowest heat for 2 to 2.5 hours, stirring now and then, until the beef is fork tender and the sauce has darkened and thickened.",
+                    "Pull the bay leaves, taste for salt, and cook the rice separately."
+                ],
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of beef and red chile sauce into each container, then add the same weight of rice to every one. Each bowl lands at \u003cstrong\u003e570 calories with 36 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.isabeleats.com/chile-colorado-recipe/\" target=\"_blank\" rel=\"noopener\"\u003eisabeleats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Chile colorado for about $6.08 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  50.26,
+    "cost_batch_true":  54.14,
+    "cost_per_serving":  3.59,
+    "cost_per_serving_true":  3.87,
+    "cost_pantry_add":  30.99,
+    "cost_first_run":  85.13,
+    "scaler":  {
+                   "cost":  "54.14",
+                   "ing":  [
+                               {
+                                   "item":  "Dried Guajillo Chiles",
+                                   "canon":  "Dried Guajillo Chiles",
+                                   "grams":  112,
+                                   "buy":  "4 oz",
+                                   "bid":  "dried-guajillo-chiles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Ancho Chiles",
+                                   "canon":  "Dried Ancho Chiles",
+                                   "grams":  79,
+                                   "buy":  "2.75 oz",
+                                   "bid":  "dried-ancho-chiles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Arbol Chiles",
+                                   "canon":  "Dried Arbol Chiles",
+                                   "grams":  2,
+                                   "buy":  "0.08 cups",
+                                   "bid":  "dried-arbol-chiles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  128,
+                                   "buy":  "1",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  2,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  21,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  12,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Chuck Roast",
+                                   "canon":  "Beef Chuck Roast",
+                                   "grams":  2117,
+                                   "buy":  "4.75 lb",
+                                   "bid":  "beef-chuck-roast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  37,
+                                   "buy":  "4.5 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  63,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  1400,
+                                   "buy":  "5.75 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  1,
+                                   "buy":  "0.04 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Chile colorado meal prep: chuck roast dredged in flour and braised in a pure guajillo and ancho red chile sauce, served over rice. 570 calories, 36g protein, about $6.08 per serving (at everyday cost).",
+                 "keywords":  "chile colorado, red chile beef, guajillo beef stew, mexican beef bowls, budget meal prep, mexican recipes",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT2H30M",
+                 "totalTime":  "PT2H55M",
+                 "costPerServing":  6.08,
+                 "recipeIngredient":  [
+                                          "4.75 lb beef chuck roast",
+                                          "4 oz dried guajillo chiles",
+                                          "2.75 oz dried ancho chiles",
+                                          "1 yellow onion",
+                                          "1.5 tbsp garlic",
+                                          "4.5 tbsp all-purpose flour",
+                                          "4.75 tbsp olive oil",
+                                          "3 lb beef broth",
+                                          "3.75 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Toast and soak the dried guajillo, ancho, and arbol chiles.",
+                               "Blend the chiles with onion, garlic, oregano, and cumin, then strain the sauce.",
+                               "Dredge the cubed chuck roast in flour and brown it in olive oil in batches.",
+                               "Add the chile sauce, beef broth, and bay leaves and simmer 2 to 2.5 hours.",
+                               "Cook the rice and portion beef, sauce, and rice into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Dried Guajillo Chiles",
+                                  "grams":  112
+                              },
+                              {
+                                  "item":  "Dried Ancho Chiles",
+                                  "grams":  79
+                              },
+                              {
+                                  "item":  "Dried Arbol Chiles",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  128
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Beef Chuck Roast",
+                                  "grams":  2117
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  37
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  63
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  1400
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

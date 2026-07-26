@@ -1,0 +1,281 @@
+{
+    "name":  "Thai Basil Pork Pad Kra Pao Bowls",
+    "slug":  "thai-basil-pork-pad-kra-pao-bowls",
+    "cuisine":  "Thai",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://hungryinthailand.com/pad-kra-pao/",
+    "source_site":  "hungryinthailand.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 657 cal / 33g protein per serving on the source page, clears both bars as published. Fast ground-pork skillet, sauce is four tracked pantry bottles. Distinct from the live Thai pork entries (peanut tenderloin bowl and drunken noodles). Holy basil substitutes to tracked fresh-basil; Thai chilies sub to tracked jalapenos or red pepper flakes. | HARVEST: Rice is not in the source ingredient list; nutrition excludes rice.",
+                         "SOURCE YIELD: 2 servings, rebuilt to 14.",
+                         "OVERRIDE +Rice: WAVE-4: kra pao is served on rice, no rice line; 55 g dry/serving x 2"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  838,
+                 "protein":  37,
+                 "carbs":  65,
+                 "fat":  48,
+                 "cost_ps":  "3.83"
+             },
+    "intro_html":  "Pad kra pao is the dish Thai people actually eat on a Tuesday. Ground pork hits a screaming hot pan with a pile of garlic and chilies, gets a splash of fish sauce, oyster sauce, and soy, and then a mountain of basil goes in at the very end and collapses into it. Five minutes of cooking, and it tastes like something that should have taken an hour. Holy basil is the traditional leaf and it is nearly impossible to find outside a Thai market, so this build uses regular fresh basil, which is the substitution every American cook makes. Note that the numbers below cover the pork itself. Rice is the standard partner and is not counted in this batch.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1 cups (196 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 cups (140 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 13.75 oz (392 g)",
+                                "\u003cstrong\u003eGround Pork:\u003c/strong\u003e 5.25 lb (2381 g)",
+                                "\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 3.5 tbsp (63 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 cups (224 g)",
+                                "\u003cstrong\u003eOyster Sauce (Lee Kum Kee):\u003c/strong\u003e 1 cups (252 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 0.75 cups (132 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 0.25 cups (56 g)",
+                                "\u003cstrong\u003eFresh Basil:\u003c/strong\u003e 46.75 tbsp (70 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.25 cups dry (770 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Vegetable Oil, 1 cups: ~$0.48. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 1 cups: ~$2.02. \u003cstrong\u003eBuy 4 heads: $2.30.\u003c/strong\u003e",
+                       "Jalapeno, 13.75 oz: ~$1.52. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Ground Pork, 5.25 lb: ~$17.90. \u003cstrong\u003eBuy 6 lbs: $20.46.\u003c/strong\u003e",
+                       "Fish Sauce, 3.5 tbsp: ~$0.61. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 1 cups: ~$0.85. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Oyster Sauce, 1 cups: ~$2.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sugar, 0.75 cups: ~$0.23. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 0.25 cups: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fresh Basil, 46.75 tbsp: ~$8.79. \u003cstrong\u003eBuy 5 0.5oz packs: $8.79.\u003c/strong\u003e",
+                       "Rice, 4.25 cups dry: ~$0.95. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $35.86 across 14 servings, so roughly $2.56 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $38.94 across 14 servings, roughly $2.78 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.62 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.56. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.83 a bowl\u003c/strong\u003e (at everyday cost) for a Thai street-food staple made with more pork than any restaurant would give you.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eGround pork is the whole point and the whole cost.\u003c/strong\u003e It is the largest line on this receipt by a wide margin, so buy it when the meat case marks it down and freeze it in batch-sized bags.",
+                       "\u003cstrong\u003eFresh basil is the second biggest line, and it is worth it.\u003c/strong\u003e If you have a sunny windowsill, one basil plant costs about what a single clamshell does and keeps producing all summer.",
+                       "\u003cstrong\u003eFish sauce, oyster sauce, and soy sauce are three bottles that never run out fast.\u003c/strong\u003e They are the backbone of a dozen dinners and each one costs pennies per batch once you own it.",
+                       "\u003cstrong\u003eJalapenos stand in for Thai chilies without complaint.\u003c/strong\u003e They are cheaper, always stocked, and you control the heat by how many seeds you leave in."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Mince the garlic and jalapenos together, coarsely, so you get bursts of heat rather than an even burn.",
+                    "Stir the fish sauce, soy sauce, oyster sauce, sugar, and chicken broth together in a bowl so the sauce goes in all at once later.",
+                    "Heat the vegetable oil in a very large skillet or wok over high heat until it shimmers.",
+                    "Add the garlic and jalapenos and cook for about thirty seconds, just until fragrant, without letting the garlic brown.",
+                    "Add the ground pork and cook hard, breaking it up, until it is browned and the liquid has cooked off.",
+                    "Pour in the sauce mixture and let it bubble and glaze the pork, then season with salt and black pepper to taste.",
+                    "Kill the heat, dump in all the basil at once, and fold it through until it just wilts."
+                ],
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight from Step 1, and divide by 14. Scoop that weight into each container. Every serving comes in at \u003cstrong\u003e838 calories with 37 grams of protein\u003c/strong\u003e. The basil darkens overnight, which is normal and does not hurt a thing.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://hungryinthailand.com/pad-kra-pao/\" target=\"_blank\" rel=\"noopener\"\u003ehungryinthailand.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Fast, punchy dinners for about $3.83 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  35.86,
+    "cost_batch_true":  38.94,
+    "cost_per_serving":  2.56,
+    "cost_per_serving_true":  2.78,
+    "cost_pantry_add":  14.62,
+    "cost_first_run":  53.56,
+    "scaler":  {
+                   "cost":  "38.94",
+                   "ing":  [
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  196,
+                                   "buy":  "1 cups",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  140,
+                                   "buy":  "1 cups",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  392,
+                                   "buy":  "13.75 oz",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ground Pork",
+                                   "canon":  "Ground Pork",
+                                   "grams":  2381,
+                                   "buy":  "5.25 lb",
+                                   "bid":  "ground-pork",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Fish Sauce",
+                                   "canon":  "Fish Sauce",
+                                   "grams":  63,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "fish-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  224,
+                                   "buy":  "1 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Oyster Sauce",
+                                   "canon":  "Oyster Sauce",
+                                   "grams":  252,
+                                   "buy":  "1 cups",
+                                   "bid":  "oyster-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  132,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  56,
+                                   "buy":  "0.25 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Fresh Basil",
+                                   "canon":  "Fresh Basil",
+                                   "grams":  70,
+                                   "buy":  "46.75 tbsp",
+                                   "bid":  "fresh-basil",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  770,
+                                   "buy":  "4.25 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Thai pad kra pao rebuilt for 14-serving meal prep: ground pork stir-fried with garlic, chilies, and a mountain of basil. 838 calories, 37g protein, about $3.83 per serving (at everyday cost).",
+                 "keywords":  "pad kra pao, thai basil pork, ground pork stir fry, thai meal prep, high protein meal prep, budget thai dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT15M",
+                 "totalTime":  "PT30M",
+                 "costPerServing":  3.83,
+                 "recipeIngredient":  [
+                                          "5.25 lb ground pork",
+                                          "1 cup garlic",
+                                          "13.75 oz jalapenos",
+                                          "46.75 tbsp fresh basil",
+                                          "3.5 tbsp fish sauce",
+                                          "1 cup soy sauce",
+                                          "1 cup oyster sauce",
+                                          "0.75 cups sugar",
+                                          "1 cup vegetable oil",
+                                          "0.12 lb chicken broth"
+                                      ],
+                 "steps":  [
+                               "Coarsely mince the garlic and jalapenos together.",
+                               "Whisk the fish sauce, soy sauce, oyster sauce, sugar, and broth into one sauce.",
+                               "Cook the garlic and chilies in very hot oil for about thirty seconds.",
+                               "Add the ground pork and cook hard until browned and dry.",
+                               "Pour in the sauce and let it glaze the pork.",
+                               "Fold in all the basil off the heat and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  392
+                              },
+                              {
+                                  "item":  "Ground Pork",
+                                  "grams":  2381
+                              },
+                              {
+                                  "item":  "Fish Sauce",
+                                  "grams":  63
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  224
+                              },
+                              {
+                                  "item":  "Oyster Sauce",
+                                  "grams":  252
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  132
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Fresh Basil",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  770
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

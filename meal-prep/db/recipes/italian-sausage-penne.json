@@ -1,0 +1,136 @@
+{
+    "name":  "Italian Sausage Penne with Peppers",
+    "slug":  "italian-sausage-penne",
+    "cuisine":  "Italian-American",
+    "protein":  "pork",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  394,
+                 "protein":  23,
+                 "carbs":  44,
+                 "fat":  15,
+                 "cost_ps":  "2.01"
+             },
+    "intro_html":  "Sometimes you just want comfort food that does not blow the budget or the whole day. Spicy Italian sausage, high-protein penne, marinara, and sweet peppers come together in one pan into a rich, satisfying bowl that still costs less than a fast-food value meal. This one is a little heartier on the fat side, and worth every gram.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHot Italian Sausage (Johnsonville):\u003c/strong\u003e 2 lb (two ~1 lb packages) (735 g)",
+                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 2 boxes (14.5 oz each) (719 g)",
+                                "\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e 2 jars (24 oz each) (1076 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 1 cup grated (98 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 4 medium (416 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1/2 yellow onion, sliced (220 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 tablespoon (50 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.01 a bowl\u003c/strong\u003e (at everyday cost) for a from-scratch sausage pasta that beats anything from a box or a drive-thru.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eSausage freezes great.\u003c/strong\u003e Buy an extra package when it is on sale and freeze it. It thaws fast and keeps for months.",
+                       "\u003cstrong\u003ePeppers in a 3-count bag are cheaper.\u003c/strong\u003e Or use frozen pepper strips, which cost less and skip the slicing.",
+                       "\u003cstrong\u003eStore-brand parmesan and sauce\u003c/strong\u003e save a dollar or two each with no real difference in the finished dish."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Boil the penne to al dente per the box, then drain.",
+                    "Slice the sausage into coins (or squeeze it from the casing) and brown it in a large skillet over medium-high heat.",
+                    "Add the sliced peppers and cook until they soften, a few minutes.",
+                    "Pour in the pasta sauce and simmer until hot.",
+                    "Add the drained penne, stir to coat, then fold in the parmesan off the heat."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near 394 calories and 23 grams of protein.",
+    "credit_html":  "",
+    "upsell_html":  "Comfort-food dinners for about $2.01 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  18.35,
+    "cost_batch_true":  24.14,
+    "cost_per_serving":  1.31,
+    "cost_per_serving_true":  1.72,
+    "cost_pantry_add":  9.01,
+    "cost_first_run":  33.15,
+    "scaler":  {
+                   "cost":  "24.14",
+                   "ing":  [
+                               {
+                                   "item":  "Hot Italian Sausage",
+                                   "grams":  735,
+                                   "buy":  "2 lb (two ~1 lb packages)",
+                                   "bid":  "hot-italian-sausage",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Penne Pasta",
+                                   "grams":  719,
+                                   "buy":  "2 boxes (14.5 oz each)",
+                                   "bid":  "penne-pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Marinara Sauce",
+                                   "grams":  1076,
+                                   "buy":  "2 jars (24 oz each)",
+                                   "bid":  "marinara-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "grams":  98,
+                                   "buy":  "1 cup grated",
+                                   "bid":  "parmesan-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "grams":  416,
+                                   "buy":  "4 medium",
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  220,
+                                   "buy":  "1/2 yellow onion, sliced",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  50,
+                                   "buy":  "1 tablespoon",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A hearty one-pan sausage, penne, marinara, and pepper meal prep. Fourteen servings at about 394 calories and 23 grams of protein for roughly $2.01 each (at everyday cost).",
+                 "keywords":  "cheap meal prep, sausage pasta, budget dinner, high protein pasta",
+                 "costPerServing":  2.01,
+                 "recipeIngredient":  [
+                                          "2 lb (two ~1 lb packages) Hot Italian Sausage",
+                                          "2 boxes (14.5 oz each) Penne Pasta",
+                                          "2 jars (24 oz each) Marinara Sauce",
+                                          "1 cup grated Parmesan Cheese",
+                                          "4 medium Green Bell Peppers",
+                                          "1/2 yellow onion, sliced Yellow Onion"
+                                      ],
+                 "steps":  [
+                               "Boil the penne to al dente and drain.",
+                               "Brown the sliced sausage in a large skillet.",
+                               "Add the peppers and cook until softened.",
+                               "Add the pasta sauce and simmer until hot.",
+                               "Stir in the penne and fold in the parmesan off the heat.",
+                               "Weigh the batch and divide into 14 containers."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

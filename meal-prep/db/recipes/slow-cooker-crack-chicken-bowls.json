@@ -1,0 +1,134 @@
+{
+    "name":  "Slow Cooker Crack Chicken Bowls",
+    "slug":  "slow-cooker-crack-chicken-bowls",
+    "cuisine":  "American",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  588,
+                 "protein":  65,
+                 "carbs":  47,
+                 "fat":  15,
+                 "cost_ps":  "2.86"
+             },
+    "intro_html":  "Crack chicken earned its nickname honestly, because the creamy, cheesy, bacon-flecked flavor is genuinely hard to stop eating. This bowl packs 65 grams of protein for about $2.86 a serving (at everyday cost), served over tender potatoes. It runs a touch pricier than the others, but 14 servings from one pot still makes it a bargain against takeout.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3450 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 8 lb (3500 g)",
+                                "\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 1 block (140 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 1 bag (170 g)",
+                                "\u003cstrong\u003eRanch Seasoning Mix (Hidden Valley):\u003c/strong\u003e 1 packet (45 g)",
+                                "\u003cstrong\u003eHickory Smoked Bacon (Great Value):\u003c/strong\u003e 1 package (60 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (240 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.86 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Bacon is the priciest bit here, so \u003cstrong\u003euse it as a topping, not a base\u003c/strong\u003e, and a little goes a long way for that smoky hit.",
+                       "Skip the packet and \u003cstrong\u003emix your own ranch seasoning from dried herbs\u003c/strong\u003e, which is cheaper and lets you dial back the salt.",
+                       "The lower-fat cream cheese and a modest handful of cheddar keep this rich without wrecking the budget, so \u003cstrong\u003ebuy the store-brand blocks\u003c/strong\u003e."
+                   ],
+    "make_it":  [
+                    "Add the chicken, cream cheese, ranch seasoning, and chicken broth to the slow cooker.",
+                    "Nestle the cut potatoes around the chicken so they cook in the creamy broth.",
+                    "Cover and cook on low for 6 to 7 hours until the potatoes are tender and the chicken shreds.",
+                    "Cook and crumble the bacon while everything finishes.",
+                    "Shred the chicken, stir in the shredded cheddar until melted, then top with the crumbled bacon and serve."
+                ],
+    "portion_html":  "Each serving carries 65 grams of protein and 588 calories, indulgent tasting but still protein-forward.",
+    "credit_html":  "",
+    "upsell_html":  "Sometimes the comfort-food bowl is exactly what gets you through a long week, and this one earns it. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  35.74,
+    "cost_batch_true":  41.86,
+    "cost_per_serving":  2.55,
+    "cost_per_serving_true":  2.99,
+    "cost_pantry_add":  1.09,
+    "cost_first_run":  42.95,
+    "scaler":  {
+                   "cost":  "41.86",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3450,
+                                   "buy":  "8 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "grams":  3500,
+                                   "buy":  "8 lb",
+                                   "bid":  "potato",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "1/3 Fat Cream Cheese",
+                                   "grams":  140,
+                                   "buy":  "1 block",
+                                   "bid":  "1-3-fat-cream-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "grams":  170,
+                                   "buy":  "1 bag",
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ranch Seasoning Mix",
+                                   "grams":  45,
+                                   "buy":  "1 packet",
+                                   "bid":  "ranch-seasoning-mix",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Hickory Smoked Bacon",
+                                   "grams":  60,
+                                   "buy":  "1 package",
+                                   "bid":  "hickory-smoked-bacon",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  240,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 588 calories and 65 grams of protein for roughly $2.86 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker crack chicken bowls, budget dinner",
+                 "costPerServing":  2.86,
+                 "recipeIngredient":  [
+                                          "8 lb Boneless Skinless Chicken Breast",
+                                          "8 lb Potato",
+                                          "1 block 1/3 Fat Cream Cheese",
+                                          "1 bag Cheddar Cheese, Shredded",
+                                          "1 packet Ranch Seasoning Mix",
+                                          "1 package Hickory Smoked Bacon"
+                                      ],
+                 "steps":  [
+                               "Add the chicken, cream cheese, ranch seasoning, and chicken broth to the slow cooker.",
+                               "Nestle the cut potatoes around the chicken so they cook in the creamy broth.",
+                               "Cover and cook on low for 6 to 7 hours until the potatoes are tender and the chicken shreds.",
+                               "Cook and crumble the bacon while everything finishes.",
+                               "Shred the chicken, stir in the shredded cheddar until melted, then top with the crumbled bacon and serve."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

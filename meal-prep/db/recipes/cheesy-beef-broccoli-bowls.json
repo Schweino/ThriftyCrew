@@ -1,0 +1,150 @@
+{
+    "name":  "Cheesy Beef and Broccoli Rice Bowls",
+    "slug":  "cheesy-beef-broccoli-bowls",
+    "cuisine":  "American",
+    "protein":  "beef",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  389,
+                 "protein":  34,
+                 "carbs":  43,
+                 "fat":  8,
+                 "cost_ps":  "3.00"
+             },
+    "intro_html":  "This is the bowl for when you want something that feels a little lighter but still fills you up. Lean beef and tender broccoli over rice, pulled together with a splash of beef broth and a melt of cheddar. Real vegetables, real protein, and it still lands right around $3.00 a bowl (at everyday cost). Your future self, opening the fridge on a busy Tuesday, will thank you.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb raw (1587 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.5 cups dry jasmine (700 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 7 cups (about 21 oz) (595 g)",
+                                "\u003cstrong\u003eFat Free Cheddar (Great Value):\u003c/strong\u003e 1 3/4 cups shredded (196 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 3/4 cups (420 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e ~1 tsp (per 4) (10 g)",
+                                "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e ~1 tsp (per 4) (10 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e to taste (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.00 a bowl\u003c/strong\u003e (at everyday cost) for a balanced, veggie-loaded dinner. Frozen broccoli keeps this cheap and fast year round.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eFrozen broccoli beats fresh here.\u003c/strong\u003e It is cheaper, lasts for months, and cooks straight from the bag with no waste.",
+                       "\u003cstrong\u003eBuy the beef on sale and freeze.\u003c/strong\u003e The one rule that quietly lowers the cost of every batch you make.",
+                       "\u003cstrong\u003eBroth in a big carton\u003c/strong\u003e is cheaper per cup than the little cans, and it keeps in the fridge for your next few batches."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice. Three and a half cups dry jasmine with water per the package, then set aside.",
+                    "Brown the ground beef in a large skillet over medium-high heat, breaking it up. Drain any excess.",
+                    "Add the broccoli and the beef broth, cover, and steam a few minutes until the broccoli is bright and tender.",
+                    "Combine the rice, beef, and broccoli in your big pot and stir. Fold in the shredded cheddar."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near 389 calories and 34 grams of protein.",
+    "credit_html":  "",
+    "upsell_html":  "Balanced dinners for about $3.00 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  31.32,
+    "cost_batch_true":  35.41,
+    "cost_per_serving":  2.24,
+    "cost_per_serving_true":  2.53,
+    "cost_pantry_add":  8.45,
+    "cost_first_run":  43.86,
+    "scaler":  {
+                   "cost":  "35.41",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "grams":  1587,
+                                   "buy":  "3.5 lb raw",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.5 cups dry jasmine",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  595,
+                                   "buy":  "7 cups (about 21 oz)",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fat Free Cheddar",
+                                   "grams":  196,
+                                   "buy":  "1 3/4 cups shredded",
+                                   "bid":  "fat-free-cheddar",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "grams":  420,
+                                   "buy":  "1 3/4 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "grams":  10,
+                                   "buy":  "~1 tsp (per 4)",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Onion Powder",
+                                   "grams":  10,
+                                   "buy":  "~1 tsp (per 4)",
+                                   "bid":  "onion-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "to taste",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "to taste",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A lean beef, broccoli, and rice meal prep bowl with cheddar. Fourteen servings at about 389 calories and 34 grams of protein for roughly $3.00 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, beef and broccoli, budget dinner, veggie meal prep",
+                 "costPerServing":  3.00,
+                 "recipeIngredient":  [
+                                          "3.5 lb raw 93/7 Ground Beef",
+                                          "3.5 cups dry jasmine Rice",
+                                          "7 cups (about 21 oz) Broccoli Florets",
+                                          "1 3/4 cups shredded Fat Free Cheddar",
+                                          "1 3/4 cups Beef Broth",
+                                          "~1 tsp (per 4) Garlic Powder"
+                                      ],
+                 "steps":  [
+                               "Cook 3.5 cups dry jasmine rice per the package and set aside.",
+                               "Brown the ground beef in a large skillet and drain any excess.",
+                               "Add the broccoli and beef broth, cover, and steam until tender.",
+                               "Combine rice, beef, and broccoli and fold in the cheddar.",
+                               "Weigh the batch and divide into 14 containers."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

@@ -1,0 +1,375 @@
+{
+    "name":  "Moroccan Beef Tagine with Chickpeas",
+    "slug":  "moroccan-beef-tagine-chickpeas",
+    "cuisine":  "Moroccan",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.supergoldenbakes.com/beef-tagine/",
+    "source_site":  "supergoldenbakes.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified on the card at roughly 700 cal / 65g protein at 4 servings, so it clears the bar with enormous headroom. Chickpeas stretch the beef and are board-tracked, which makes this one of the cheapest per-serving candidates in the slice. Catalog has chicken tagine but no beef. Confidence: high on nutrition. | HARVEST: ",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14."
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  681,
+                 "protein":  55,
+                 "carbs":  47,
+                 "fat":  29,
+                 "cost_ps":  "7.04"
+             },
+    "intro_html":  "A tagine is a slow braise built on warm spice instead of heat, and this one leans on cumin, turmeric, paprika, and cinnamon with golden raisins for sweetness and a squeeze of lemon to cut it. The chickpeas are the budget trick. They stretch the beef, add their own protein, and soak up the sauce. Each bowl runs 681 calories and \u003cstrong\u003e55 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$7.04 a serving\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 7 lb (3150 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 7 (770 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 10.5 (640 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6 tbsp (52 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 3.5 tbsp (21 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 2.5 tbsp (15 g)",
+                                "\u003cstrong\u003eGround Turmeric (Great Value):\u003c/strong\u003e 2.25 tbsp (21 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 2.25 tbsp (16 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)",
+                                "\u003cstrong\u003eGolden Raisins (generic):\u003c/strong\u003e 3 tbsp (26 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 3.5 tbsp (47 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 1.7 (82 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1 can (168 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 3.4 cans (1400 g)",
+                                "\u003cstrong\u003eChickpeas (generic):\u003c/strong\u003e 5.5 cans (1400 g)",
+                                "\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 0.75 tbsp (5 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 3.5 cups (840 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.07 oz (2 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 25 tbsp (25 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Chuck Roast, 7 lb: ~$55.35. \u003cstrong\u003eBuy 7 lbs: $55.79.\u003c/strong\u003e",
+                       "Red Onion, 7: ~$2.27. \u003cstrong\u003eBuy 2 lbs: $2.68.\u003c/strong\u003e",
+                       "Carrots, 10.5: ~$1.35. \u003cstrong\u003eBuy 2 lbs: $1.91.\u003c/strong\u003e",
+                       "Garlic, 6 tbsp: ~$0.75. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Ginger, 3.5 tbsp: ~$0.18. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Golden Raisins, 3 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Brown Sugar, 3.5 tbsp: ~$0.27. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lemon Juice, 1.7: ~$0.31. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Tomato Paste, 1 can: ~$0.85. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "Diced Tomatoes, 3.4 cans: ~$3.27. \u003cstrong\u003eBuy 4 cans: $3.84.\u003c/strong\u003e",
+                       "Chickpeas, 5.5 cans: ~$4.51. \u003cstrong\u003eBuy 6 cans: $4.93.\u003c/strong\u003e",
+                       "Beef Broth, 3.5 cups: ~$1.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fresh Cilantro, 25 tbsp: ~$0.78. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, ground turmeric, paprika, salt, ground cinnamon, bay leaves, black pepper): ~$1.73. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $72.97 across 14 servings, so roughly $5.21 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $77.48 across 14 servings, roughly $5.53 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $21.10 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $98.58. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$7.04 a bowl\u003c/strong\u003e (at everyday cost). The beef is nearly the whole number, which means the chickpeas, carrots, and canned tomatoes are essentially riding along for free while doing half the work of filling the container.",
+    "shop_smart":  [
+                       "Chickpeas are the reason this dish is affordable at all. They carry bulk and protein for a fraction of what beef costs per pound, so never think of them as filler. They are the strategy.",
+                       "Chuck roast dominates the receipt. Buy it when it is marked down and freeze it in batch-sized chunks, because that single decision moves this recipe more than every other line combined.",
+                       "The spice rack does the heavy flavor lifting here, and jars you already own cost you nothing extra tonight. If you are buying fresh, buy whole containers of cumin and turmeric rather than the little bottles, since the per-ounce price is much better.",
+                       "Golden raisins seem fussy but a small amount goes a long way, and one bag survives many batches. They are what makes a tagine taste like a tagine instead of a beef stew with cumin in it."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cut the chuck into large cubes, pat dry, season with salt and pepper, and brown in batches in a heavy pot. Set the meat aside and leave the browned bits in the pot.",
+                    "Cook the sliced red onion until soft, then add the garlic and ginger and stir for a minute until you can smell them.",
+                    "Add the cumin, turmeric, paprika, and cinnamon and toast them in the oil for about 30 seconds. Blooming dry spices in fat is what separates a tagine from a bowl of dusty stew.",
+                    "Stir in the tomato paste, then the diced tomatoes and beef broth, scraping the bottom clean. Return the beef with the bay leaves.",
+                    "Cover and simmer gently for about 2 hours, until the beef pulls apart under a fork.",
+                    "Add the carrots, drained chickpeas, brown sugar, and golden raisins and simmer uncovered another 30 minutes so the sauce thickens and the carrots go tender.",
+                    "Finish off the heat with the lemon juice and a big handful of chopped cilantro. The acid at the end wakes the whole pot up."
+                ],
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14 for your gram target. Weigh each container instead of ladling by eye, because the beef sinks and the person who scoops last gets robbed. Every portion lands at \u003cstrong\u003e681 calories\u003c/strong\u003e that way.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.supergoldenbakes.com/beef-tagine/\" target=\"_blank\" rel=\"noopener\"\u003esupergoldenbakes.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Moroccan braised beef for about \u003cstrong\u003e$7.04 a bowl\u003c/strong\u003e (at everyday cost), made in one pot on a Sunday. Members get every recipe in the Meal Prep section along with the full money lesson library and all the site tools for $1 a month.",
+    "cost_batch":  72.97,
+    "cost_batch_true":  77.48,
+    "cost_per_serving":  5.21,
+    "cost_per_serving_true":  5.53,
+    "cost_pantry_add":  21.1,
+    "cost_first_run":  98.58,
+    "scaler":  {
+                   "cost":  "77.48",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Chuck Roast",
+                                   "canon":  "Beef Chuck Roast",
+                                   "grams":  3150,
+                                   "buy":  "7 lb",
+                                   "bid":  "beef-chuck-roast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Onion",
+                                   "canon":  "Red Onion",
+                                   "grams":  770,
+                                   "buy":  "7",
+                                   "bid":  "red-onion",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  640,
+                                   "buy":  "10.5",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  52,
+                                   "buy":  "6 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  21,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  15,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Turmeric",
+                                   "canon":  "Ground Turmeric",
+                                   "grams":  21,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "ground-turmeric",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  16,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  21,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Golden Raisins",
+                                   "canon":  "Golden Raisins",
+                                   "grams":  26,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "raisins",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "canon":  "Brown Sugar",
+                                   "grams":  47,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Lemon Juice",
+                                   "canon":  "Lemon Juice",
+                                   "grams":  82,
+                                   "buy":  "1.7",
+                                   "bid":  "lemon-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  168,
+                                   "buy":  "1 can",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  1400,
+                                   "buy":  "3.4 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chickpeas",
+                                   "canon":  "Chickpeas",
+                                   "grams":  1400,
+                                   "buy":  "5.5 cans",
+                                   "bid":  "chickpeas",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cinnamon",
+                                   "canon":  "Ground Cinnamon",
+                                   "grams":  5,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "ground-cinnamon",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  840,
+                                   "buy":  "3.5 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  2,
+                                   "buy":  "0.07 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  25,
+                                   "buy":  "25 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Moroccan beef tagine with chickpeas, carrots, and warm spices, rebuilt for 14 meal prep servings at 681 calories and 55g protein for about $7.04 a bowl (at everyday cost).",
+                 "keywords":  "beef tagine, moroccan beef stew, chickpea beef braise, moroccan meal prep, budget beef recipe, high protein meal prep, slow braise",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT2H45M",
+                 "totalTime":  "PT3H15M",
+                 "costPerServing":  7.04,
+                 "recipeIngredient":  [
+                                          "7 lb beef chuck roast",
+                                          "7 red onions",
+                                          "10.5 carrots",
+                                          "6 tbsp minced garlic",
+                                          "3.5 tbsp grated ginger",
+                                          "1 can tomato paste",
+                                          "3.4 cans diced tomatoes",
+                                          "5.5 cans chickpeas",
+                                          "1.75 lb beef broth",
+                                          "3 tbsp golden raisins",
+                                          "3.5 tbsp brown sugar",
+                                          "1.7 lemons worth of lemon juice",
+                                          "Pantry: cumin, turmeric, paprika, cinnamon, bay leaves, salt, black pepper"
+                                      ],
+                 "steps":  [
+                               "Season and brown the beef cubes in batches, then set aside.",
+                               "Soften the red onion, add garlic and ginger, then toast the dry spices in the oil.",
+                               "Stir in tomato paste, diced tomatoes, and beef broth, then return the beef and simmer covered about 2 hours.",
+                               "Add carrots, chickpeas, brown sugar, and raisins and simmer uncovered 30 minutes.",
+                               "Finish with lemon juice and cilantro, then weigh and divide into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Chuck Roast",
+                                  "grams":  3150
+                              },
+                              {
+                                  "item":  "Red Onion",
+                                  "grams":  770
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  640
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Ground Turmeric",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  16
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Golden Raisins",
+                                  "grams":  26
+                              },
+                              {
+                                  "item":  "Brown Sugar",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Lemon Juice",
+                                  "grams":  82
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  168
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  1400
+                              },
+                              {
+                                  "item":  "Chickpeas",
+                                  "grams":  1400
+                              },
+                              {
+                                  "item":  "Ground Cinnamon",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  840
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  25
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

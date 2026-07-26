@@ -1,0 +1,349 @@
+{
+    "name":  "Peruvian Pollo Saltado",
+    "slug":  "peruvian-pollo-saltado",
+    "cuisine":  "Peruvian",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://gypsyplate.com/pollo-saltado/",
+    "source_site":  "gypsyplate.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Page verified: full recipe, 4-6 servings, 464 cal / 37g protein - clears the protein bar comfortably. Soy-sauce-and-vinegar stir-fry (the Chinese-Peruvian chifa influence) served over rice with oven fries; frozen-fries is a tracked commodity, which is an unusually good board fit. Confidence: high. | HARVEST: Source servings listed as 4-6; midpoint 5 used. Published nutrition is calculated at 6 servings.",
+                         "SOURCE YIELD: 5 servings, rebuilt to 14.",
+                         "OVERRIDE Fries: \u0027fried or baked French fries\u0027 are integral to saltado, no qty; 120 g/serving x 5"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  635,
+                 "protein":  39,
+                 "carbs":  74,
+                 "fat":  21,
+                 "cost_ps":  "4.37"
+             },
+    "intro_html":  "Pollo saltado is what happened when Chinese immigrants brought wok cooking to Peru in the 1800s, and Peruvians call the whole cuisine chifa. It is a soy and vinegar stir fry with onions, tomatoes and aji amarillo, and then, because this is Peru, it gets served over rice with french fries thrown right in the pan. Yes, both starches. It sounds like a dare and it works. Each bowl runs \u003cstrong\u003e635 calories and 39 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.37\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 4.25 lb (1905 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.75 cups (179 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 0.25 tbsp (1 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)",
+                                "\u003cstrong\u003eAji Amarillo Paste (Goya (Yellow Hot Pepper Paste)):\u003c/strong\u003e 2.25 oz (67 g)",
+                                "\u003cstrong\u003eWhite Vinegar (generic):\u003c/strong\u003e 1.75 tbsp (28 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.06 tbsp (1 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.75 cups (137 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 2 (196 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3 (336 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 1.4 (168 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6.5 tbsp (56 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 2.75 tbsp (17 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 4.2 cans (1726 g)",
+                                "\u003cstrong\u003eFries (Great Value):\u003c/strong\u003e 59.25 oz (1680 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 25 tbsp (25 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 4.25 lb: ~$13.73. \u003cstrong\u003eBuy 5 lbs: $16.35.\u003c/strong\u003e",
+                       "Soy Sauce, 0.75 cups: ~$0.68. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Aji Amarillo Paste, 2.25 oz: ~$2.02. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "White Vinegar, 1.75 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Vegetable Oil, 0.75 cups: ~$0.33. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Red Onion, 2: ~$0.58. \u003cstrong\u003eBuy 1 lb: $1.34.\u003c/strong\u003e",
+                       "Red Bell Pepper, 3: ~$2.41. \u003cstrong\u003eBuy 3 each: $2.58.\u003c/strong\u003e",
+                       "Green Bell Peppers, 1.4: ~$1.20. \u003cstrong\u003eBuy 2 each: $1.72.\u003c/strong\u003e",
+                       "Garlic, 6.5 tbsp: ~$0.81. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Ginger, 2.75 tbsp: ~$0.15. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Diced Tomatoes, 4.2 cans: ~$4.03. \u003cstrong\u003eBuy 5 cans: $4.80.\u003c/strong\u003e",
+                       "Fries, 59.25 oz: ~$5.45. \u003cstrong\u003eBuy 2 32oz bags: $5.89.\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fresh Cilantro, 25 tbsp: ~$0.78. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, dried oregano, black pepper, salt): ~$0.19. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $33.27 across 14 servings, so roughly $2.38 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $40.62 across 14 servings, roughly $2.90 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $20.59 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.21. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.37 a bowl\u003c/strong\u003e (at everyday cost). Chicken breast is the biggest line by a wide margin, and the fries that make it saltado are one of the cheapest things in the cart.",
+    "shop_smart":  [
+                       "Chicken breast is the largest line here. Thighs would drop it noticeably and hold up better in a screaming hot pan, so make the swap if the number matters more than the cut.",
+                       "Frozen fries are shockingly cheap for the volume they add. Bake them separately until properly crisp rather than dumping them in soft, because a soggy fry ruins the whole idea.",
+                       "Aji amarillo paste is the flavor that makes this Peruvian rather than generic. One jar costs a couple of dollars, lasts months in the fridge, and there is no honest substitute for it.",
+                       "Canned diced tomatoes work better than fresh for a batch this size, since they cook down predictably and cost less. Buy them by the case when they hit a sale."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Slice the chicken breast into thick strips and marinate it with the soy sauce, ground cumin, dried oregano, black pepper, aji amarillo paste and white vinegar for at least 30 minutes.",
+                    "Cook the rice and let it steam covered off the heat. Bake the frozen fries on a sheet pan at 425F until they are genuinely crisp, not just hot. Keep them separate for now.",
+                    "Heat the vegetable oil in your largest skillet or wok as hot as your burner goes and sear the chicken in batches, 3 to 4 minutes per batch, until browned. Do not crowd it. Set the chicken aside.",
+                    "Add the red onion cut into thick wedges, plus the red and green bell pepper strips, and stir fry hard for 2 to 3 minutes. They should stay crunchy; wilted onion is the mark of a saltado gone wrong.",
+                    "Add the garlic and grated ginger for 30 seconds, then the drained diced tomatoes, and toss for another minute.",
+                    "Return the chicken with all the marinade, let it bubble and reduce for 2 minutes, and taste for salt and vinegar.",
+                    "Fold the crisp fries and the chopped cilantro in at the very last second, then combine with the rice in your mixing pot."
+                ],
+    "portion_html":  "Set the pot on the scale, subtract the empty-pot weight, and divide by 14. Same number in every container. Each one lands at \u003cstrong\u003e635 calories\u003c/strong\u003e, and the fries will soften in the fridge, so if that bothers you, bag them separately and crisp them in a toaster oven at reheat time.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://gypsyplate.com/pollo-saltado/\" target=\"_blank\" rel=\"noopener\"\u003egypsyplate.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Peruvian pollo saltado, fries and rice in the same bowl, for about $4.37 (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "cost_batch":  33.27,
+    "cost_batch_true":  40.62,
+    "cost_per_serving":  2.38,
+    "cost_per_serving_true":  2.9,
+    "cost_pantry_add":  20.59,
+    "cost_first_run":  61.21,
+    "scaler":  {
+                   "cost":  "40.62",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  1905,
+                                   "buy":  "4.25 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  179,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Aji Amarillo Paste",
+                                   "canon":  "Aji Amarillo Paste",
+                                   "grams":  67,
+                                   "buy":  "2.25 oz",
+                                   "bid":  "aji-amarillo-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "White Vinegar",
+                                   "canon":  "White Vinegar",
+                                   "grams":  28,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "white-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  1,
+                                   "buy":  "0.06 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  137,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Red Onion",
+                                   "canon":  "Red Onion",
+                                   "grams":  196,
+                                   "buy":  "2",
+                                   "bid":  "red-onion",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "canon":  "Red Bell Pepper",
+                                   "grams":  336,
+                                   "buy":  "3",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  168,
+                                   "buy":  "1.4",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  56,
+                                   "buy":  "6.5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  17,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  1726,
+                                   "buy":  "4.2 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fries",
+                                   "canon":  "Fries",
+                                   "grams":  1680,
+                                   "buy":  "59.25 oz",
+                                   "bid":  "fries",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  25,
+                                   "buy":  "25 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Peruvian pollo saltado: a soy and vinegar chifa stir fry with onion, peppers, tomato and french fries over rice. 14 bowls at 635 calories, 39g protein, about $4.37 (at everyday cost).",
+                 "keywords":  "pollo saltado, peruvian chicken stir fry, chifa, aji amarillo, peruvian meal prep, chicken and fries bowl",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT35M",
+                 "totalTime":  "PT1H",
+                 "costPerServing":  4.37,
+                 "recipeIngredient":  [
+                                          "4.25 lb boneless skinless chicken breast",
+                                          "59.25 oz frozen fries",
+                                          "3.75 cups dry rice",
+                                          "4.2 cans diced tomatoes",
+                                          "3 red bell peppers",
+                                          "1.4 green bell peppers",
+                                          "2 red onions",
+                                          "0.75 cups soy sauce",
+                                          "2.25 oz aji amarillo paste",
+                                          "6.5 tbsp garlic",
+                                          "25 tbsp fresh cilantro"
+                                      ],
+                 "steps":  [
+                               "Marinate sliced chicken breast in soy sauce, cumin, oregano, aji amarillo paste and vinegar for 30 minutes.",
+                               "Cook the rice and bake the fries at 425F until crisp.",
+                               "Sear the chicken in very hot oil in batches, then set aside.",
+                               "Stir fry red onion and both bell peppers 2 to 3 minutes, add garlic, ginger and drained tomatoes, then return the chicken.",
+                               "Fold in the crisp fries and cilantro, combine with the rice, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  1905
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  179
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Aji Amarillo Paste",
+                                  "grams":  67
+                              },
+                              {
+                                  "item":  "White Vinegar",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  137
+                              },
+                              {
+                                  "item":  "Red Onion",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  336
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  168
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  17
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  1726
+                              },
+                              {
+                                  "item":  "Fries",
+                                  "grams":  1680
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  25
+                              }
+                          ]
+}

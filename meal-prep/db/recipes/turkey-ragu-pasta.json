@@ -1,0 +1,174 @@
+{
+    "name":  "Turkey Ragu Pasta",
+    "slug":  "turkey-ragu-pasta",
+    "cuisine":  "Italian",
+    "protein":  "turkey",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  604,
+                 "protein":  52,
+                 "carbs":  45,
+                 "fat":  22,
+                 "cost_ps":  "4.52"
+             },
+    "intro_html":  "A hearty, saucy ragu that tastes like it simmered all day but comes together in one skillet. At about $4.52 a serving (at everyday cost) with 52 grams of protein, it is a comforting one. It makes 14 servings, so cook once and eat all week.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 7 lb (3100 g)",
+                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 2 boxs (700 g)",
+                                "\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e 3 jars (1400 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
+                                "\u003cstrong\u003eShredded Carrots:\u003c/strong\u003e 1 bag (250 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (42 g)",
+                                "\u003cstrong\u003eTurkey Bacon:\u003c/strong\u003e 4 oz, chopped (396 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 2 stalks, diced (280 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves, chopped (35 g)",
+                                "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 1 tsp (4 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/2 tsp kosher (10 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.52 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "The \u003cstrong\u003e7 lb ground turkey pack\u003c/strong\u003e is the smart buy and keeps this hearty dish easy on the budget.",
+                       "Jarred \u003cstrong\u003emarinara in the store brand\u003c/strong\u003e saves a couple bucks a jar over the name brands and works great as your base.",
+                       "Buy \u003cstrong\u003epasta by the box on sale\u003c/strong\u003e and keep a couple in the pantry. It is the cheapest way to stretch a meal."
+                   ],
+    "make_it":  [
+                    "Cook the penne according to the box while you get the sauce going.",
+                    "Heat a little olive oil in a large skillet and brown the ground turkey.",
+                    "Add the chopped onion and shredded carrots and cook until they soften.",
+                    "Pour in the marinara and let it simmer 15 minutes so it turns rich and thick.",
+                    "Toss the cooked penne into the sauce and stir until every noodle is coated."
+                ],
+    "portion_html":  "Each of the 14 servings delivers 52 grams of protein and about 604 calories.",
+    "credit_html":  "",
+    "upsell_html":  "Comforting, filling, and easy on the wallet, this is a bowl of pasta you can feel good about. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  45.73,
+    "cost_batch_true":  52.85,
+    "cost_per_serving":  3.27,
+    "cost_per_serving_true":  3.78,
+    "cost_pantry_add":  15.34,
+    "cost_first_run":  68.19,
+    "scaler":  {
+                   "cost":  "52.85",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "grams":  3100,
+                                   "buy":  "7 lb",
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Penne Pasta",
+                                   "grams":  700,
+                                   "buy":  "2 boxs",
+                                   "bid":  "penne-pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Marinara Sauce",
+                                   "grams":  1400,
+                                   "buy":  "3 jars",
+                                   "bid":  "marinara-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  300,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Shredded Carrots",
+                                   "grams":  250,
+                                   "buy":  "1 bag",
+                                   "bid":  "shredded-carrots",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  42,
+                                   "buy":  "1 bottle",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Turkey Bacon",
+                                   "grams":  396,
+                                   "buy":  "4 oz, chopped",
+                                   "bid":  "bacon",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "grams":  280,
+                                   "buy":  "2 stalks, diced",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  35,
+                                   "buy":  "2 cloves, chopped",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "grams":  4,
+                                   "buy":  "1 tsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  10,
+                                   "buy":  "1/2 tsp kosher",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Italian meal prep. Fourteen servings at about 604 calories and 52 grams of protein for roughly $4.52 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, turkey ragu pasta, budget dinner",
+                 "costPerServing":  4.52,
+                 "recipeIngredient":  [
+                                          "7 lb 93/7 Ground Turkey",
+                                          "2 boxs Penne Pasta",
+                                          "3 jars Marinara Sauce",
+                                          "3 onions Yellow Onion",
+                                          "1 bag Shredded Carrots",
+                                          "1 bottle Olive Oil"
+                                      ],
+                 "steps":  [
+                               "Cook the penne according to the box while you get the sauce going.",
+                               "Heat a little olive oil in a large skillet and brown the ground turkey.",
+                               "Add the chopped onion and shredded carrots and cook until they soften.",
+                               "Pour in the marinara and let it simmer 15 minutes so it turns rich and thick.",
+                               "Toss the cooked penne into the sauce and stir until every noodle is coated."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

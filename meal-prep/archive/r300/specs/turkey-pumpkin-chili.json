@@ -1,0 +1,377 @@
+{
+    "name":  "Turkey Pumpkin Chili",
+    "slug":  "turkey-pumpkin-chili",
+    "cuisine":  "american",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.skinnytaste.com/turkey-pumpkin-chili/",
+    "source_site":  "skinnytaste.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 300g (src scale)",
+                   "base +25% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 6 servings, 300 cal, 27g protein, and fully board-mapped including canned-pumpkin and cocoa-powder. The pumpkin-and-cocoa base is a real flavor departure from a standard chili, which is what earns it a slot despite the live turkey chili. Needs a bigger bowl to clear 500 cal. | HARVEST: Serving size stated as 1 1/2 cups.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 300g (src scale)",
+                         "TUNING: base +25% (Rice)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  563,
+                 "protein":  33,
+                 "carbs":  81,
+                 "fat":  11,
+                 "cost_ps":  "4.35"
+             },
+    "intro_html":  "Do not skip past this one because of the word pumpkin. Canned pumpkin does not make chili taste like pie. It makes it thick, a little sweet in the background, and velvety in a way that usually takes an hour of reducing. Add a spoon of cocoa powder and a pinch of cinnamon, the same move behind a good mole, and you get a chili with more depth than the standard chili powder and beans version. Nobody guesses the pumpkin. Everybody asks what is in it.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 (350 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 2.3 (280 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)",
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3 lb (1411 g)",
+                                "\u003cstrong\u003eCannellini Beans (generic):\u003c/strong\u003e 2.3 cans (595 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2.3 cans (959 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1 can (153 g)",
+                                "\u003cstrong\u003ePumpkin Puree (generic canned (USDA)):\u003c/strong\u003e 32.75 oz (926 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2.25 cups (560 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 4.5 tbsp (37 g)",
+                                "\u003cstrong\u003eCocoa Powder (generic unsweetened (USDA)):\u003c/strong\u003e 1.25 oz (37 g)",
+                                "\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 1.25 tbsp (9 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 2 tbsp (12 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.75 tbsp (14 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)",
+                                "\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (2 g)",
+                                "\u003cstrong\u003eFrozen Chopped Spinach (generic):\u003c/strong\u003e 1.75 lb (793 g)",
+                                "\u003cstrong\u003eLight Sour Cream (generic):\u003c/strong\u003e 1.25 cups (300 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 25 tbsp (25 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.75 cups dry (893 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Yellow Onion, 3: ~$0.88. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Green Bell Peppers, 2.3: ~$2.01. \u003cstrong\u003eBuy 3 each: $2.58.\u003c/strong\u003e",
+                       "Garlic, 8.25 tbsp: ~$1.01. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 3 lb: ~$11.89. \u003cstrong\u003eBuy 4 lbs: $15.29.\u003c/strong\u003e",
+                       "Cannellini Beans, 2.3 cans: ~$1.92. \u003cstrong\u003eBuy 3 cans: $2.47.\u003c/strong\u003e",
+                       "Diced Tomatoes, 2.3 cans: ~$2.24. \u003cstrong\u003eBuy 3 cans: $2.88.\u003c/strong\u003e",
+                       "Tomato Paste, 1 can: ~$0.77. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "Pumpkin Puree, 32.75 oz: ~$3.92. \u003cstrong\u003eBuy 2 29oz cans: $6.96.\u003c/strong\u003e",
+                       "Chicken Broth, 2.25 cups: ~$0.75. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Frozen Chopped Spinach, 1.75 lb: ~$5.59. \u003cstrong\u003eBuy 3 10oz boxes: $6.01.\u003c/strong\u003e",
+                       "Light Sour Cream, 1.25 cups: ~$1.08. \u003cstrong\u003eBuy 1 16oz tub: $1.64.\u003c/strong\u003e",
+                       "Fresh Cilantro, 25 tbsp: ~$0.78. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Rice, 4.75 cups dry: ~$1.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (chili powder, cocoa powder, ground cinnamon, ground cumin, salt, black pepper, cayenne pepper): ~$1.85. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $35.79 across 14 servings, so roughly $2.56 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $46.46 across 14 servings, roughly $3.32 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.51 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $60.97. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.35 a bowl\u003c/strong\u003e (at everyday cost) for a chili that tastes like it took a lot more effort than it did. Canned pumpkin is one of the cheapest thickeners on the shelf and it brings fiber along with it.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy plain canned pumpkin, not pie filling.\u003c/strong\u003e The pie filling is already sugared and spiced and it costs more. You want the one with a single ingredient on the label.",
+                       "\u003cstrong\u003eCocoa powder is a savory ingredient too.\u003c/strong\u003e A container lasts years and a spoonful of it is what separates a good chili from a flat one. Same idea as a mole.",
+                       "\u003cstrong\u003eStock up on canned pumpkin in November.\u003c/strong\u003e It is the one month of the year the price bottoms out, and the cans are good for a very long time.",
+                       "\u003cstrong\u003eFrozen chopped spinach disappears into chili.\u003c/strong\u003e It costs less than fresh, it will not go bad on you, and nobody eating it will notice it is in there."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice separately per the package and set it aside covered.",
+                    "Brown the ground turkey in your big pot over medium-high heat, breaking it up until it is cooked through.",
+                    "Add the diced onion and chopped green bell peppers and cook until soft, then stir in the garlic for the last minute.",
+                    "Stir in the chili powder, cocoa powder, ground cinnamon, ground cumin, cayenne, salt and black pepper and toast them against the hot pan for a minute.",
+                    "Add the canned pumpkin puree, the tomato paste, the diced tomatoes with their juice and the chicken broth, and stir until the pumpkin is fully blended into the base.",
+                    "Add the drained cannellini beans, simmer 30 minutes, then stir in the thawed chopped spinach at the end. Keep the sour cream and cilantro for topping at reheat."
+                ],
+    "portion_html":  "Spread the cooked rice into your 14 containers, then set the chili pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and spoon that exact weight over the rice. Every serving lands near 563 calories with 33 grams of protein once the sour cream and cilantro go on top.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.skinnytaste.com/turkey-pumpkin-chili/\" target=\"_blank\" rel=\"noopener\"\u003eskinnytaste.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cem\u003eA chili with real depth for about $4.35 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "cost_batch":  35.79,
+    "cost_batch_true":  46.46,
+    "cost_per_serving":  2.56,
+    "cost_per_serving_true":  3.32,
+    "cost_pantry_add":  14.51,
+    "cost_first_run":  60.97,
+    "scaler":  {
+                   "cost":  "46.46",
+                   "ing":  [
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  350,
+                                   "buy":  "3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  280,
+                                   "buy":  "2.3",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  70,
+                                   "buy":  "8.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1411,
+                                   "buy":  "3 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cannellini Beans",
+                                   "canon":  "Cannellini Beans",
+                                   "grams":  595,
+                                   "buy":  "2.3 cans",
+                                   "bid":  "cannellini-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  959,
+                                   "buy":  "2.3 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  153,
+                                   "buy":  "1 can",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Pumpkin Puree",
+                                   "canon":  "Pumpkin Puree",
+                                   "grams":  926,
+                                   "buy":  "32.75 oz",
+                                   "bid":  "canned-pumpkin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  560,
+                                   "buy":  "2.25 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "canon":  "Chili Powder",
+                                   "grams":  37,
+                                   "buy":  "4.5 tbsp",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cocoa Powder",
+                                   "canon":  "Cocoa Powder",
+                                   "grams":  37,
+                                   "buy":  "1.25 oz",
+                                   "bid":  "cocoa-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cinnamon",
+                                   "canon":  "Ground Cinnamon",
+                                   "grams":  9,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "ground-cinnamon",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  12,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cayenne Pepper",
+                                   "canon":  "Cayenne Pepper",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "cayenne-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Frozen Chopped Spinach",
+                                   "canon":  "Frozen Chopped Spinach",
+                                   "grams":  793,
+                                   "buy":  "1.75 lb",
+                                   "bid":  "spinach",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Light Sour Cream",
+                                   "canon":  "Light Sour Cream",
+                                   "grams":  300,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "sour-cream",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  25,
+                                   "buy":  "25 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  893,
+                                   "buy":  "4.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Ground turkey chili thickened with canned pumpkin and deepened with cocoa and cinnamon, over rice. A 14 serving batch built for cheap meal prep.",
+                 "keywords":  "turkey pumpkin chili, pumpkin chili recipe, ground turkey chili, budget meal prep, healthy chili recipe, cheap dinner ideas",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M",
+                 "costPerServing":  4.35,
+                 "recipeIngredient":  [
+                                          "93/7 Ground Turkey",
+                                          "Yellow Onion",
+                                          "Green Bell Peppers",
+                                          "Garlic",
+                                          "Pumpkin Puree",
+                                          "Tomato Paste",
+                                          "Diced Tomatoes",
+                                          "Chicken Broth",
+                                          "Cannellini Beans",
+                                          "Frozen Chopped Spinach",
+                                          "Light Sour Cream",
+                                          "Fresh Cilantro",
+                                          "Rice"
+                                      ],
+                 "steps":  [
+                               "Cook the rice separately and set it aside.",
+                               "Brown the ground turkey, then soften the onion, bell peppers and garlic.",
+                               "Toast the chili powder, cocoa, cinnamon and cumin in the pot.",
+                               "Stir in the pumpkin puree, tomato paste, diced tomatoes and broth until smooth.",
+                               "Add the beans, simmer 30 minutes, finish with spinach, and top with sour cream and cilantro."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  350
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  280
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1411
+                              },
+                              {
+                                  "item":  "Cannellini Beans",
+                                  "grams":  595
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  959
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  153
+                              },
+                              {
+                                  "item":  "Pumpkin Puree",
+                                  "grams":  926
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  560
+                              },
+                              {
+                                  "item":  "Chili Powder",
+                                  "grams":  37
+                              },
+                              {
+                                  "item":  "Cocoa Powder",
+                                  "grams":  37
+                              },
+                              {
+                                  "item":  "Ground Cinnamon",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Cayenne Pepper",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Frozen Chopped Spinach",
+                                  "grams":  793
+                              },
+                              {
+                                  "item":  "Light Sour Cream",
+                                  "grams":  300
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  25
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  893
+                              }
+                          ]
+}

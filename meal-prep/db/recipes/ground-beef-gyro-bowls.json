@@ -1,0 +1,222 @@
+{
+    "name":  "Ground Beef Gyro Bowls",
+    "slug":  "ground-beef-gyro-bowls",
+    "cuisine":  "Greek",
+    "protein":  "beef",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  593,
+                 "protein":  46,
+                 "carbs":  73,
+                 "fat":  11,
+                 "cost_ps":  "4.73"
+             },
+    "intro_html":  "Greek gyro flavor in a bowl, with a cool yogurt sauce that costs a fraction of the takeout version. Each serving brings 46 grams of protein for about $4.73 (at everyday cost) and the batch makes 14. This one is lean, bright, and one of the lowest-fat plates in the whole lineup.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2240 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1201 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (250 g)",
+                                "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1 tub (600 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3 peppers (300 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (20 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 jar (8 g)",
+                                "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 1 jar (8 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 jar (6 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 tsp (7 g)",
+                                "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 1 tsp (4 g)",
+                                "\u003cstrong\u003eGround Nutmeg (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)",
+                                "\u003cstrong\u003eCucumber:\u003c/strong\u003e 3/4 cup grated (tzatziki) (300 g)",
+                                "\u003cstrong\u003eDried Dill (Great Value):\u003c/strong\u003e 2 tbsp (tzatziki) (18 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 1/2 tbsp (tzatziki) (21 g)",
+                                "\u003cstrong\u003eFeta Cheese (Great Value crumbled):\u003c/strong\u003e 1/4 cup crumbled (tzatziki) (113 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp meat + 1/2 tsp tzatziki (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.73 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "A \u003cstrong\u003ebig tub of plain greek yogurt\u003c/strong\u003e is cheaper per ounce than the small cups and doubles as both a sauce and a protein boost.",
+                       "Build the gyro flavor from \u003cstrong\u003ecumin, garlic powder, and onion powder\u003c/strong\u003e you already own instead of buying a specialty gyro blend.",
+                       "Green peppers are the \u003cstrong\u003ebudget-friendly veg\u003c/strong\u003e here, so grab those and save the pricier colors for another day."
+                   ],
+    "make_it":  [
+                    "Brown 4.9 pounds of 93/7 ground beef with the chopped onion, cumin, garlic powder, and onion powder, then drain.",
+                    "Cook the rice separately so it stays fluffy.",
+                    "Stir the fresh garlic and a scoop of the greek yogurt into the beef for a creamy finish.",
+                    "Whisk the rest of the greek yogurt with a little garlic for a quick tzatziki-style sauce.",
+                    "Layer beef and green peppers over rice, then spoon the yogurt sauce on top."
+                ],
+    "portion_html":  "Every one of the 14 bowls delivers 46 grams of protein at 593 calories with just 11 grams of fat, making this the leanest beef bowl of the bunch.",
+    "credit_html":  "",
+    "upsell_html":  "Bright, fresh, and light on the wallet. Sometimes eating well and spending less go together. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  48.67,
+    "cost_batch_true":  52.81,
+    "cost_per_serving":  3.48,
+    "cost_per_serving_true":  3.77,
+    "cost_pantry_add":  18.55,
+    "cost_first_run":  71.36,
+    "scaler":  {
+                   "cost":  "52.81",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "grams":  2240,
+                                   "buy":  "5 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  1201,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  250,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Greek Yogurt",
+                                   "grams":  600,
+                                   "buy":  "1 tub",
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "grams":  300,
+                                   "buy":  "3 peppers",
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  20,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "grams":  8,
+                                   "buy":  "1 jar",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Onion Powder",
+                                   "grams":  8,
+                                   "buy":  "1 jar",
+                                   "bid":  "onion-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  6,
+                                   "buy":  "1 jar",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "grams":  7,
+                                   "buy":  "1 tsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "grams":  4,
+                                   "buy":  "1 tsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Nutmeg",
+                                   "grams":  2,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "ground-nutmeg",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cucumber",
+                                   "grams":  300,
+                                   "buy":  "3/4 cup grated (tzatziki)",
+                                   "bid":  "cucumber",
+                                   "gpu":  "300.000"
+                               },
+                               {
+                                   "item":  "Dried Dill",
+                                   "grams":  18,
+                                   "buy":  "2 tbsp (tzatziki)",
+                                   "bid":  "dried-dill",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lemon Juice",
+                                   "grams":  21,
+                                   "buy":  "1/2 tbsp (tzatziki)",
+                                   "bid":  "lemon-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Feta Cheese",
+                                   "grams":  113,
+                                   "buy":  "1/4 cup crumbled (tzatziki)",
+                                   "bid":  "feta-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tsp meat + 1/2 tsp tzatziki",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Greek meal prep. Fourteen servings at about 593 calories and 46 grams of protein for roughly $4.73 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, ground beef gyro bowls, budget dinner",
+                 "costPerServing":  4.73,
+                 "recipeIngredient":  [
+                                          "5 lb 93/7 Ground Beef",
+                                          "1 lb Rice",
+                                          "3 onions Yellow Onion",
+                                          "1 tub Greek Yogurt",
+                                          "3 peppers Green Bell Peppers",
+                                          "1 bulb Garlic"
+                                      ],
+                 "steps":  [
+                               "Brown 4.9 pounds of 93/7 ground beef with the chopped onion, cumin, garlic powder, and onion powder, then drain.",
+                               "Cook the rice separately so it stays fluffy.",
+                               "Stir the fresh garlic and a scoop of the greek yogurt into the beef for a creamy finish.",
+                               "Whisk the rest of the greek yogurt with a little garlic for a quick tzatziki-style sauce.",
+                               "Layer beef and green peppers over rice, then spoon the yogurt sauce on top."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

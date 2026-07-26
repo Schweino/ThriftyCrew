@@ -1,0 +1,158 @@
+{
+    "name":  "Ground Beef Shawarma Bowls",
+    "slug":  "ground-beef-shawarma-bowls",
+    "cuisine":  "Middle Eastern",
+    "protein":  "beef",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  595,
+                 "protein":  48,
+                 "carbs":  68,
+                 "fat":  13,
+                 "cost_ps":  "3.72"
+             },
+    "intro_html":  "Warm, spiced shawarma flavor over rice with a cool yogurt drizzle, all made at home for cheap. Each serving delivers 48 grams of protein for about $3.72 (at everyday cost) and the batch makes 14 bowls. That is a spice-shop of flavor for less than the price of a single street-cart wrap.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2450 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1120 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
+                                "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1 tub (500 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 1 can (400 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 carton (300 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (25 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 jar (8 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 1 jar (8 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 jar (6 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.72 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Build the shawarma spice from \u003cstrong\u003ecumin, paprika, and garlic powder\u003c/strong\u003e in your rack instead of paying up for a pre-mixed shawarma blend.",
+                       "A \u003cstrong\u003etub of plain greek yogurt\u003c/strong\u003e gives you the classic cool sauce and adds protein for pennies per serving.",
+                       "One \u003cstrong\u003ecan of diced tomatoes\u003c/strong\u003e brings the moisture and tang, so no need for expensive jarred sauces here."
+                   ],
+    "make_it":  [
+                    "Brown 5.4 pounds of 93/7 ground beef with the chopped onion, cumin, paprika, garlic, and garlic powder, then drain.",
+                    "Stir in the diced tomatoes and beef broth and simmer until saucy.",
+                    "Cook the rice separately so it stays light and fluffy.",
+                    "Whisk the greek yogurt with a little garlic for a quick cooling sauce.",
+                    "Spoon the shawarma beef over rice and finish with the yogurt drizzle."
+                ],
+    "portion_html":  "Every one of the 14 bowls carries 48 grams of protein at 595 calories, so this spiced favorite fuels you as well as it tastes.",
+    "credit_html":  "",
+    "upsell_html":  "Street-cart flavor from your own kitchen, portioned and ready. Adventure eating on a budget. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  45.68,
+    "cost_batch_true":  52.26,
+    "cost_per_serving":  3.26,
+    "cost_per_serving_true":  3.73,
+    "cost_pantry_add":  5.87,
+    "cost_first_run":  58.13,
+    "scaler":  {
+                   "cost":  "52.26",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "grams":  2450,
+                                   "buy":  "6 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  1120,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  300,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Greek Yogurt",
+                                   "grams":  500,
+                                   "buy":  "1 tub",
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "grams":  400,
+                                   "buy":  "1 can",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "grams":  300,
+                                   "buy":  "1 carton",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  25,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  8,
+                                   "buy":  "1 jar",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "grams":  8,
+                                   "buy":  "1 jar",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "grams":  6,
+                                   "buy":  "1 jar",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Middle Eastern meal prep. Fourteen servings at about 595 calories and 48 grams of protein for roughly $3.72 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, ground beef shawarma bowls, budget dinner",
+                 "costPerServing":  3.72,
+                 "recipeIngredient":  [
+                                          "6 lb 93/7 Ground Beef",
+                                          "1 lb Rice",
+                                          "3 onions Yellow Onion",
+                                          "1 tub Greek Yogurt",
+                                          "1 can Diced Tomatoes",
+                                          "1 carton Beef Broth"
+                                      ],
+                 "steps":  [
+                               "Brown 5.4 pounds of 93/7 ground beef with the chopped onion, cumin, paprika, garlic, and garlic powder, then drain.",
+                               "Stir in the diced tomatoes and beef broth and simmer until saucy.",
+                               "Cook the rice separately so it stays light and fluffy.",
+                               "Whisk the greek yogurt with a little garlic for a quick cooling sauce.",
+                               "Spoon the shawarma beef over rice and finish with the yogurt drizzle."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

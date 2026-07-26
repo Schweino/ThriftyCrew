@@ -1,0 +1,232 @@
+{
+    "name":  "Slow Cooker Butter Chicken Rice Bowls",
+    "slug":  "slow-cooker-butter-chicken-rice-bowls",
+    "cuisine":  "Indian",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  592,
+                 "protein":  57,
+                 "carbs":  62,
+                 "fat":  11,
+                 "cost_ps":  "4.78"
+             },
+    "intro_html":  "Butter chicken is rich, golden, and downright luxurious, yet this batch clocks in at about $4.78 a bowl (at everyday cost). It is creamy, high in protein, and a rich one to keep in the rotation. One batch makes 14 servings.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3000 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (980 g)",
+                                "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 2 cans (700 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1 boxs (70 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 1 quart (400 g)",
+                                "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1 tub (200 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (24 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (20 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 1 tbsp minced (35 g)",
+                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 2 tsp (12 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1 tsp (6 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tsp (6 g)",
+                                "\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (4 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 1 (1 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 2 tsp (23 g)",
+                                "\u003cstrong\u003eHalf and Half:\u003c/strong\u003e 1/4 cup (140 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e to taste (14 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.78 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Stir in \u003cstrong\u003eGreek yogurt and milk\u003c/strong\u003e instead of heavy cream to get the richness for a lower cost.",
+                       "You only need a \u003cstrong\u003elittle butter\u003c/strong\u003e for the flavor, so one box lasts across several batches.",
+                       "Buy the \u003cstrong\u003echicken breast in bulk\u003c/strong\u003e and you keep the cost per bowl down."
+                   ],
+    "make_it":  [
+                    "Add the chicken breast, chopped onion, and minced garlic to the crock.",
+                    "Pour in both cans of tomato sauce and drop in the butter with a drizzle of olive oil.",
+                    "Cover and cook on low for 6 to 8 hours until the chicken is tender.",
+                    "Shred the chicken, then stir in the milk and Greek yogurt for that creamy finish.",
+                    "Cook the rice while the sauce warms through.",
+                    "Spoon the butter chicken over rice and serve."
+                ],
+    "portion_html":  "Each of the 14 servings lands around 57g protein for about 592 calories, at roughly $2.00 a bowl.",
+    "credit_html":  "",
+    "upsell_html":  "Rich and restaurant-worthy, this one will spoil you in the best way. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  31.09,
+    "cost_batch_true":  43.07,
+    "cost_per_serving":  2.22,
+    "cost_per_serving_true":  3.08,
+    "cost_pantry_add":  27.86,
+    "cost_first_run":  70.93,
+    "scaler":  {
+                   "cost":  "43.07",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3000,
+                                   "buy":  "7 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  980,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Sauce",
+                                   "grams":  700,
+                                   "buy":  "2 cans",
+                                   "bid":  "tomato-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  300,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "grams":  70,
+                                   "buy":  "1 boxs",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "grams":  400,
+                                   "buy":  "1 quart",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "Greek Yogurt",
+                                   "grams":  200,
+                                   "buy":  "1 tub",
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  24,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  20,
+                                   "buy":  "1 bottle",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "grams":  35,
+                                   "buy":  "1 tbsp minced",
+                                   "bid":  "ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garam Masala",
+                                   "grams":  12,
+                                   "buy":  "2 tsp",
+                                   "bid":  "garam-masala",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "grams":  6,
+                                   "buy":  "1 tsp",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  6,
+                                   "buy":  "1 tsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cayenne Pepper",
+                                   "grams":  4,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "cayenne-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "grams":  1,
+                                   "buy":  "1",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lemon Juice",
+                                   "grams":  23,
+                                   "buy":  "2 tsp",
+                                   "bid":  "lemon-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Half and Half",
+                                   "grams":  140,
+                                   "buy":  "1/4 cup",
+                                   "bid":  "half-and-half",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "to taste",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "to taste",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Indian meal prep. Fourteen servings at about 592 calories and 57 grams of protein for roughly $4.78 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker butter chicken rice bowls, budget dinner",
+                 "costPerServing":  4.78,
+                 "recipeIngredient":  [
+                                          "7 lb Boneless Skinless Chicken Breast",
+                                          "1 lb Rice",
+                                          "2 cans Tomato Sauce",
+                                          "3 onions Yellow Onion",
+                                          "1 boxs Butter",
+                                          "1 quart Milk"
+                                      ],
+                 "steps":  [
+                               "Add the chicken breast, chopped onion, and minced garlic to the crock.",
+                               "Pour in both cans of tomato sauce and drop in the butter with a drizzle of olive oil.",
+                               "Cover and cook on low for 6 to 8 hours until the chicken is tender.",
+                               "Shred the chicken, then stir in the milk and Greek yogurt for that creamy finish.",
+                               "Cook the rice while the sauce warms through.",
+                               "Spoon the butter chicken over rice and serve."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

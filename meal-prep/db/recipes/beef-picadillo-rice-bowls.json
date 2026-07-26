@@ -1,0 +1,192 @@
+{
+    "name":  "Cuban Beef Picadillo Rice Bowls",
+    "slug":  "beef-picadillo-rice-bowls",
+    "cuisine":  "Cuban",
+    "protein":  "beef",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  565,
+                 "protein":  42,
+                 "carbs":  68,
+                 "fat":  13,
+                 "cost_ps":  "4.68"
+             },
+    "intro_html":  "Cuban picadillo is a beautiful mix of savory and sweet, with olives and golden raisins playing off cumin-spiced beef. It browns and simmers in one skillet, then goes over rice for an easy meal-prep bowl. This one runs around $4.68 a serving (at everyday cost) with 42 grams of protein and makes 14 bowls.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2330 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (946 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3 peppers (340 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (320 g)",
+                                "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 2 cans (800 g)",
+                                "\u003cstrong\u003eOlives (generic):\u003c/strong\u003e 1 jar (120 g)",
+                                "\u003cstrong\u003eGolden Raisins (generic):\u003c/strong\u003e 1 bag (120 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 jar (6 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (12 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 jar (6 g)",
+                                "\u003cstrong\u003eCapers (generic (USDA)):\u003c/strong\u003e 2 tablespoons, drained (36 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 1 (1 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/8 to 1/2 tsp fine salt (6 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 teaspoon (2 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.68 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "The olives and raisins are what make picadillo special for very little money. \u003cstrong\u003eA single jar of olives and one bag of raisins\u003c/strong\u003e carry the whole batch.",
+                       "Store-brand tomato sauce works perfectly here. \u003cstrong\u003eBuy the cheapest canned tomato sauce\u003c/strong\u003e and save the difference.",
+                       "Green peppers are cheapest in bulk. \u003cstrong\u003eBuy peppers by the multi-pack\u003c/strong\u003e when your store offers it."
+                   ],
+    "make_it":  [
+                    "Brown the ground beef in a large skillet, breaking it up, then drain the grease.",
+                    "Add the chopped onion, green pepper, and garlic and cook until softened.",
+                    "Stir in the tomato sauce, cumin, olives, and golden raisins.",
+                    "Simmer for 15 to 20 minutes so the flavors come together.",
+                    "Cook the rice while the picadillo simmers.",
+                    "Spoon the beef over rice and serve."
+                ],
+    "portion_html":  "Each of the 14 servings gives you 42 grams of protein at 565 calories.",
+    "credit_html":  "",
+    "upsell_html":  "Sweet, salty, savory, and cheap all at once, this bowl earns a permanent spot in the rotation. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  47.5,
+    "cost_batch_true":  54.89,
+    "cost_per_serving":  3.39,
+    "cost_per_serving_true":  3.92,
+    "cost_pantry_add":  15.05,
+    "cost_first_run":  69.94,
+    "scaler":  {
+                   "cost":  "54.89",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "grams":  2330,
+                                   "buy":  "6 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  946,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "grams":  340,
+                                   "buy":  "3 peppers",
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  320,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Tomato Sauce",
+                                   "grams":  800,
+                                   "buy":  "2 cans",
+                                   "bid":  "tomato-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olives",
+                                   "grams":  120,
+                                   "buy":  "1 jar",
+                                   "bid":  "olives",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Golden Raisins",
+                                   "grams":  120,
+                                   "buy":  "1 bag",
+                                   "bid":  "golden-raisins",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  6,
+                                   "buy":  "1 jar",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  12,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "grams":  6,
+                                   "buy":  "1 jar",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Capers",
+                                   "grams":  36,
+                                   "buy":  "2 tablespoons, drained",
+                                   "bid":  "capers",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "grams":  1,
+                                   "buy":  "1",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  6,
+                                   "buy":  "1/8 to 1/2 tsp fine salt",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "1/4 teaspoon",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Cuban meal prep. Fourteen servings at about 565 calories and 42 grams of protein for roughly $4.68 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, cuban beef picadillo rice bowls, budget dinner",
+                 "costPerServing":  4.68,
+                 "recipeIngredient":  [
+                                          "6 lb 93/7 Ground Beef",
+                                          "1 lb Rice",
+                                          "3 peppers Green Bell Peppers",
+                                          "3 onions Yellow Onion",
+                                          "2 cans Tomato Sauce",
+                                          "1 jar Olives"
+                                      ],
+                 "steps":  [
+                               "Brown the ground beef in a large skillet, breaking it up, then drain the grease.",
+                               "Add the chopped onion, green pepper, and garlic and cook until softened.",
+                               "Stir in the tomato sauce, cumin, olives, and golden raisins.",
+                               "Simmer for 15 to 20 minutes so the flavors come together.",
+                               "Cook the rice while the picadillo simmers.",
+                               "Spoon the beef over rice and serve."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

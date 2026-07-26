@@ -1,0 +1,295 @@
+{
+    "name":  "Thai Cashew Chicken",
+    "slug":  "thai-cashew-chicken",
+    "cuisine":  "Thai",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://rasamalaysia.com/thai-cashew-chicken/",
+    "source_site":  "rasamalaysia.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 150g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Page verified: full recipe, 3 servings, 411 cal / 27g protein before rice. Distinct from the live Chinese Kung Pao (peanut, Sichuan) and Honey Sesame. Cashews have no board id - almonds, peanuts and mixed-nuts are tracked, so cashews are the one buy-off-board item and are flagged. Confidence: high. | HARVEST: ",
+                         "SOURCE YIELD: 3 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 150g (src scale)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  606,
+                 "protein":  34,
+                 "carbs":  60,
+                 "fat":  27,
+                 "cost_ps":  "3.65"
+             },
+    "intro_html":  "Gai pad med mamuang is Thai cashew chicken, and the thing that makes it different from every Chinese cashew dish is the seasoning: fish sauce instead of just soy, and a lot more of it. Peppers and onion stay crunchy, the cashews get toasted first so they stay crisp instead of going soft, and the sauce is thin and salty rather than thick and gloppy. Each bowl comes in at \u003cstrong\u003e606 calories and 34 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.65\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3 lb (1323 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.5 cups (131 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5.5 tbsp (47 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.5 (163 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2.3 (280 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 2.3 (280 g)",
+                                "\u003cstrong\u003eCashews (generic):\u003c/strong\u003e 3.5 cups (480 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 2.75 cups (140 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 4.75 tbsp (75 g)",
+                                "\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 0.5 cups (126 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 4.75 tbsp (58 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 3 lb: ~$9.54. \u003cstrong\u003eBuy 3 lbs: $9.81.\u003c/strong\u003e",
+                       "Vegetable Oil, 0.5 cups: ~$0.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 5.5 tbsp: ~$0.68. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Yellow Onion, 1.5: ~$0.41. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Red Bell Pepper, 2.3: ~$2.01. \u003cstrong\u003eBuy 3 each: $2.58.\u003c/strong\u003e",
+                       "Green Bell Peppers, 2.3: ~$2.01. \u003cstrong\u003eBuy 3 each: $2.58.\u003c/strong\u003e",
+                       "Cashews, 3.5 cups: ~$10.50. \u003cstrong\u003eBuy 3 8oz cans: $14.89.\u003c/strong\u003e",
+                       "Green Onions, 2.75 cups: ~$1.66. \u003cstrong\u003eBuy 2 bunches: $2.14.\u003c/strong\u003e",
+                       "Soy Sauce, 4.75 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fish Sauce, 0.5 cups: ~$1.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sugar, 4.75 tbsp: ~$0.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $29.81 across 14 servings, so roughly $2.13 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $37.29 across 14 servings, roughly $2.66 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.80 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.09. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.65 a bowl\u003c/strong\u003e (at everyday cost). Cashews are the second biggest line after the chicken, and there is no way around that, because a cashew chicken without enough cashews is just a stir fry with regrets.",
+    "shop_smart":  [
+                       "Cashews are the expensive part. Buy them from the bulk bin or in a large bag rather than in the small cans on the snack aisle, where you pay a premium for the packaging and nothing else.",
+                       "Toast the cashews in a dry pan before they go in. It costs nothing, takes three minutes, and doubles how much they taste like cashews, which matters when they are the priciest thing in the pan.",
+                       "Green bell peppers cost less than red almost every week. This recipe uses both, so if the red ones are priced like jewelry that week, buy two green and nobody will notice.",
+                       "Fish sauce is the ingredient that makes this Thai instead of generic, and one bottle costs a few dollars and lasts a year in the pantry. Do not substitute more soy sauce for it."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Toast the cashews in a dry skillet over medium heat for 3 to 4 minutes, shaking the pan, until they smell nutty and go a shade darker. Tip them onto a plate immediately so they stop cooking.",
+                    "Whisk the soy sauce, fish sauce and sugar together with a splash of water and set the sauce next to the stove.",
+                    "Cook the rice first and let it steam covered off the heat while you stir fry.",
+                    "Slice the chicken breast thin. Heat the vegetable oil in your largest skillet or wok over high heat and sear the chicken in batches for 3 to 4 minutes until browned and cooked through, then set it aside.",
+                    "Add the minced garlic to the hot pan for 15 seconds, then the sliced onion, red bell pepper and green bell pepper. Stir fry 2 to 3 minutes so they soften at the edges but keep their bite.",
+                    "Return the chicken, pour in the sauce, and toss for a minute until everything is coated and the liquid has reduced to a glaze.",
+                    "Kill the heat and fold in the toasted cashews and the green onions, then combine with the rice in your mixing pot."
+                ],
+    "portion_html":  "Set the pot on the scale, subtract the empty-pot weight, and divide by 14. Fourteen equal containers. Each one carries \u003cstrong\u003e606 calories\u003c/strong\u003e, and if you want the cashews crunchy all week, hold half of them out and drop them on top after reheating.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://rasamalaysia.com/thai-cashew-chicken/\" target=\"_blank\" rel=\"noopener\"\u003erasamalaysia.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Thai cashew chicken over rice for about $3.65 a bowl (at everyday cost). This is one of a few hundred recipes here. Members get every recipe in the Meal Prep section plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  29.81,
+    "cost_batch_true":  37.29,
+    "cost_per_serving":  2.13,
+    "cost_per_serving_true":  2.66,
+    "cost_pantry_add":  13.8,
+    "cost_first_run":  51.09,
+    "scaler":  {
+                   "cost":  "37.29",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  1323,
+                                   "buy":  "3 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  131,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  47,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  163,
+                                   "buy":  "1.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "canon":  "Red Bell Pepper",
+                                   "grams":  280,
+                                   "buy":  "2.3",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  280,
+                                   "buy":  "2.3",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Cashews",
+                                   "canon":  "Cashews",
+                                   "grams":  480,
+                                   "buy":  "3.5 cups",
+                                   "bid":  "cashews",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  140,
+                                   "buy":  "2.75 cups",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  75,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Fish Sauce",
+                                   "canon":  "Fish Sauce",
+                                   "grams":  126,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "fish-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  58,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Thai cashew chicken with toasted cashews, peppers and a fish sauce glaze over rice. Built as 14 meal prep bowls at 606 calories, 34g protein, about $3.65 each (at everyday cost).",
+                 "keywords":  "thai cashew chicken, gai pad med mamuang, cashew chicken meal prep, thai stir fry, chicken rice bowls, budget thai recipe",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT25M",
+                 "totalTime":  "PT45M",
+                 "costPerServing":  3.65,
+                 "recipeIngredient":  [
+                                          "3 lb boneless skinless chicken breast",
+                                          "3.5 cups cashews",
+                                          "2.3 red bell peppers",
+                                          "2.3 green bell peppers",
+                                          "2.75 cups green onions",
+                                          "1.5 yellow onions",
+                                          "0.5 cups fish sauce",
+                                          "4.75 tbsp soy sauce",
+                                          "4.75 tbsp sugar",
+                                          "3.75 cups dry rice",
+                                          "5.5 tbsp garlic"
+                                      ],
+                 "steps":  [
+                               "Toast the cashews in a dry skillet 3 to 4 minutes and set aside.",
+                               "Whisk soy sauce, fish sauce and sugar with a splash of water, and cook the rice.",
+                               "Sear the sliced chicken in hot oil in batches, then set aside.",
+                               "Stir fry garlic, onion and both bell peppers 2 to 3 minutes, return the chicken, and add the sauce.",
+                               "Fold in the cashews and green onions off the heat, combine with the rice, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  1323
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  131
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  163
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  280
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  280
+                              },
+                              {
+                                  "item":  "Cashews",
+                                  "grams":  480
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  75
+                              },
+                              {
+                                  "item":  "Fish Sauce",
+                                  "grams":  126
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  58
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

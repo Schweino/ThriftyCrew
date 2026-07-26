@@ -1,0 +1,291 @@
+{
+    "name":  "Greek Turkey Giouvetsi (Baked Orzo)",
+    "slug":  "greek-turkey-giouvetsi-baked-orzo",
+    "cuisine":  "greek",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://gratsi.com/blogs/all/beef-with-orzo",
+    "source_site":  "gratsi.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Cinnamon-and-nutmeg tomato orzo bake, finished with cheese - a true oven casserole. Verified source: full Greek giouvetsi recipe, 4-6 servings, no published nutrition (confidence note: est_cal is my estimate). Source uses bone-in beef; ours is the ground-turkey weeknight version. NOTE for dedup: live catalog has Greek Turkey Meatballs with Lemon Orzo - same protein and same pasta shape, different sauce entirely (tomato-cinnamon vs egg-lemon); selector should judge. | HARVEST: Source yield published as 4-6 servings; midpoint 5 recorded. Source uses bone-in beef; adapt to turkey.",
+                         "SOURCE YIELD: 5 servings, rebuilt to 14.",
+                         "OVERRIDE Beef Chuck Roast: TITLE-PROTEIN SWAP + bone yield: source \u00273 lbs beef WITH BONES\u0027 (1361 g); ~75% boneless yield = 1020 g, as turkey for the turkey giouvetsi (also resolves its 1113-cal rich flag)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  725,
+                 "protein":  62,
+                 "carbs":  60,
+                 "fat":  26,
+                 "cost_ps":  "6.04"
+             },
+    "intro_html":  "Giouvetsi is what happens when a Greek cook decides the pasta should cook in the meat sauce instead of a separate pot of boiling water. Orzo goes into the pan near the end and swells up on tomato, cinnamon, and nutmeg while the turkey finishes around it. Parmesan on top, straight from oven to containers. Each one carries \u003cstrong\u003e725 calories and 62 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$6.04\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 6.25 lb (2856 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1.25 cups (280 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1.5 cups (336 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 5.6 (616 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3.25 tbsp (28 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 8.4 cans (3452 g)",
+                                "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 0.75 cups (168 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 0.5 tbsp (6 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2.25 tbsp (15 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 1.5 tbsp (10 g)",
+                                "\u003cstrong\u003eGround Nutmeg (Great Value):\u003c/strong\u003e 0.07 oz (2 g)",
+                                "\u003cstrong\u003eOrzo Pasta (Great Value):\u003c/strong\u003e 27.75 oz dry (784 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 3 tbsp (56 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 4.25 oz (120 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Turkey Breast, 6.25 lb: ~$30.31. \u003cstrong\u003eBuy 3 3lb frozen roasts: $43.33.\u003c/strong\u003e",
+                       "Olive Oil, 1.25 cups: ~$3.94. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Beef Broth, 1.5 cups: ~$0.45. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 5.6: ~$1.55. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Garlic, 3.25 tbsp: ~$0.40. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Diced Tomatoes, 8.4 cans: ~$8.06. \u003cstrong\u003eBuy 9 cans: $8.64.\u003c/strong\u003e",
+                       "Tomato Sauce, 0.75 cups: ~$0.38. \u003cstrong\u003eBuy 1 15oz can: $0.96.\u003c/strong\u003e",
+                       "Orzo Pasta, 27.75 oz dry: ~$1.68. \u003cstrong\u003eBuy 2 16oz boxes: $1.94.\u003c/strong\u003e",
+                       "Parmesan Cheese, 4.25 oz: ~$1.47. \u003cstrong\u003eBuy 1 8oz tub: $2.78.\u003c/strong\u003e",
+                       "Pantry seasonings (sugar, black pepper, paprika, ground nutmeg, salt): ~$1.07. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $49.31 across 14 servings, so roughly $3.52 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $65.97 across 14 servings, roughly $4.71 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $18.58 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $84.55. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$6.04\u003c/strong\u003e a container (at everyday cost), and look at what you get for it: 62 grams of protein out of a baked pasta dish. That is a number most protein powders would like to have a word about.",
+    "shop_smart":  [
+                       "Turkey breast is about two thirds of this batch. Frozen roasts are the cheap form, and the post-holiday markdown is where the real money hides. Buy two, freeze one.",
+                       "Orzo is just pasta shaped like rice, and the store brand is one of the cheapest boxes in the aisle. Do not let the fancy shape talk you into the imported shelf.",
+                       "Diced tomatoes are the second biggest line. Buy the case at sale price, because this is a recipe that eats nine cans and never apologizes.",
+                       "This recipe uses a full cup and a quarter of olive oil, so buy the big bottle. The per-ounce price on a large bottle is usually half what the small one charges."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cut the turkey breast into chunks and season with salt and pepper. Brown it in the olive oil in a wide oven-safe pot, in batches, then set it aside.",
+                    "Cook the diced onion in the same pot until soft, about 8 minutes, then add the garlic, paprika, nutmeg, a pinch of sugar, and black pepper for one minute.",
+                    "Add the diced tomatoes, the tomato sauce, and the beef broth, return the turkey, and bring it to a simmer.",
+                    "Cover and bake at 350F for 45 minutes, until the turkey is tender and cooked through to 165F and the sauce has reduced.",
+                    "Stir in the dry orzo along with enough hot water to keep everything loose, since orzo drinks more liquid than you expect. Cover and bake 20 minutes more, stirring once halfway so it does not stick to the bottom.",
+                    "Uncover, scatter the parmesan over the top, and bake 5 minutes to melt it in.",
+                    "Let it rest 10 minutes, then move it into your weighed pot and fold gently so the orzo and the turkey are evenly mixed."
+                ],
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is your per-container gram target. Portion it warm, because baked orzo firms up as it cools and gets harder to scoop honestly. Each container lands at \u003cstrong\u003e725 calories and 62 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://gratsi.com/blogs/all/beef-with-orzo\" target=\"_blank\" rel=\"noopener\"\u003egratsi.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Greek baked orzo for about \u003cstrong\u003e$6.04\u003c/strong\u003e a container (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  49.31,
+    "cost_batch_true":  65.97,
+    "cost_per_serving":  3.52,
+    "cost_per_serving_true":  4.71,
+    "cost_pantry_add":  18.58,
+    "cost_first_run":  84.55,
+    "scaler":  {
+                   "cost":  "65.97",
+                   "ing":  [
+                               {
+                                   "item":  "Turkey Breast",
+                                   "canon":  "Turkey Breast",
+                                   "grams":  2856,
+                                   "buy":  "6.25 lb",
+                                   "bid":  "turkey-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  280,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  336,
+                                   "buy":  "1.5 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  616,
+                                   "buy":  "5.6",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  28,
+                                   "buy":  "3.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  3452,
+                                   "buy":  "8.4 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Sauce",
+                                   "canon":  "Tomato Sauce",
+                                   "grams":  168,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "tomato-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  6,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  15,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  10,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Nutmeg",
+                                   "canon":  "Ground Nutmeg",
+                                   "grams":  2,
+                                   "buy":  "0.07 oz",
+                                   "bid":  "ground-nutmeg",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Orzo Pasta",
+                                   "canon":  "Orzo Pasta",
+                                   "grams":  784,
+                                   "buy":  "27.75 oz dry",
+                                   "bid":  "pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  56,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "canon":  "Parmesan Cheese",
+                                   "grams":  120,
+                                   "buy":  "4.25 oz",
+                                   "bid":  "parmesan",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Greek turkey giouvetsi meal prep: orzo baked in a cinnamon and nutmeg tomato sauce with turkey and parmesan. 725 calories, 62g protein, about $6.04 a serving (at everyday cost).",
+                 "keywords":  "giouvetsi, greek baked orzo, turkey meal prep, budget meal prep, orzo casserole, high protein pasta",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT1H15M",
+                 "totalTime":  "PT1H35M",
+                 "costPerServing":  6.04,
+                 "recipeIngredient":  [
+                                          "Turkey breast, cut into chunks",
+                                          "27.75 oz dry orzo pasta",
+                                          "1.25 cups olive oil",
+                                          "0.75 lb beef broth",
+                                          "5.6 yellow onions",
+                                          "3.25 tbsp garlic",
+                                          "8.4 cans diced tomatoes",
+                                          "0.75 cups tomato sauce",
+                                          "4.25 oz parmesan cheese"
+                                      ],
+                 "steps":  [
+                               "Brown seasoned turkey chunks in olive oil in an oven-safe pot, then set aside.",
+                               "Cook the onion, add garlic, paprika, nutmeg, sugar, and pepper.",
+                               "Add diced tomatoes, tomato sauce, and broth, return the turkey, and bake covered at 350F for 45 minutes to 165F.",
+                               "Stir in the dry orzo with hot water, cover, and bake 20 minutes more, stirring once.",
+                               "Top with parmesan and bake 5 minutes uncovered.",
+                               "Rest 10 minutes, then portion by weight into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Turkey Breast",
+                                  "grams":  2856
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  280
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  336
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  616
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  3452
+                              },
+                              {
+                                  "item":  "Tomato Sauce",
+                                  "grams":  168
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Ground Nutmeg",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Orzo Pasta",
+                                  "grams":  784
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Parmesan Cheese",
+                                  "grams":  120
+                              }
+                          ]
+}

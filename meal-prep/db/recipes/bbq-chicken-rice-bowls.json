@@ -1,0 +1,144 @@
+{
+    "name":  "Lean BBQ Chicken and Rice Bowls",
+    "slug":  "bbq-chicken-rice-bowls",
+    "cuisine":  "American",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  380,
+                 "protein":  35,
+                 "carbs":  49,
+                 "fat":  4,
+                 "cost_ps":  "2.61"
+             },
+    "intro_html":  "Lean, sweet, smoky, and stupidly cheap. This is the leanest bowl in the rotation at just 4 grams of fat, and it still brings 35 grams of protein for around $2.61 a bowl (at everyday cost). The sugar-free BBQ sauce does the heavy lifting on flavor without wrecking the macros.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb raw (1587 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.5 cups dry jasmine (700 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 4 cans, drained (840 g)",
+                                "\u003cstrong\u003eBBQ Sauce (Sugar Free) (Sweet Baby Ray\u0027s):\u003c/strong\u003e about 7/8 cup (224 g)",
+                                "\u003cstrong\u003eFat Free Cheddar (Great Value):\u003c/strong\u003e about 1 3/4 cups shredded (196 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e ~2 tbsp to cook chicken (90 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e to taste / rub (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste / rub (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "That is about \u003cstrong\u003e$2.61 a bowl\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$11 or more\u003c/strong\u003e for a fast-casual chicken bowl. Catch chicken on sale at $1.99/lb and that number drops even lower.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eChicken on sale is the whole game.\u003c/strong\u003e When breast drops to a sale price, buy a big pack and freeze it in two-pound bags. That one trip is a month of these bowls.",
+                       "\u003cstrong\u003eSugar-free sauce, same flavor.\u003c/strong\u003e The no-sugar BBQ tastes nearly identical to the regular and saves you the sugar and a few carbs per serving.",
+                       "\u003cstrong\u003eFat free cheese stretches the protein.\u003c/strong\u003e A quarter cup adds 9 grams of protein for 45 calories and zero fat. It is one of the best macro deals in the dairy aisle."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot on a kitchen scale and write the number down for portioning later.",
+                    "Cook the rice. Three and a half cups dry jasmine with water per the package, then set aside.",
+                    "Cube the chicken breast and cook in a large skillet over medium-high heat until it reaches 165F inside.",
+                    "Turn the heat to low, pour in the BBQ sauce, and toss until every piece is coated.",
+                    "Drain the corn and warm it through.",
+                    "Combine the rice, BBQ chicken, and corn in your big pot and stir. Fold in the shredded cheddar."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total food weight by 14 and scoop the exact amount into each container. Every bowl lands near 380 calories and 35 grams of protein at only 4 grams of fat.",
+    "credit_html":  "",
+    "upsell_html":  "High-protein dinners for about $2.61 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  21.3,
+    "cost_batch_true":  23.34,
+    "cost_per_serving":  1.52,
+    "cost_per_serving_true":  1.67,
+    "cost_pantry_add":  16.26,
+    "cost_first_run":  39.6,
+    "scaler":  {
+                   "cost":  "23.34",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  1587,
+                                   "buy":  "3.5 lb raw",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.5 cups dry jasmine",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sweet Whole Kernel Corn",
+                                   "grams":  840,
+                                   "buy":  "4 cans, drained",
+                                   "bid":  "canned-sweet-corn",
+                                   "gpu":  "210.000"
+                               },
+                               {
+                                   "item":  "BBQ Sauce (Sugar Free)",
+                                   "grams":  224,
+                                   "buy":  "about 7/8 cup",
+                                   "bid":  "sugar-free-bbq-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fat Free Cheddar",
+                                   "grams":  196,
+                                   "buy":  "about 1 3/4 cups shredded",
+                                   "bid":  "fat-free-cheddar",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  90,
+                                   "buy":  "~2 tbsp to cook chicken",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "to taste / rub",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "to taste / rub",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A lean, sweet, smoky meal-prep bowl. Fourteen servings at about 380 calories, 35 grams of protein, and only 4 grams of fat for roughly $2.61 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, bbq chicken bowl, low fat meal prep, budget dinner",
+                 "costPerServing":  2.61,
+                 "recipeIngredient":  [
+                                          "3.5 lb raw Boneless Skinless Chicken Breast",
+                                          "3.5 cups dry jasmine Rice",
+                                          "4 cans, drained Sweet Whole Kernel Corn",
+                                          "about 7/8 cup BBQ Sauce (Sugar Free)",
+                                          "about 1 3/4 cups shredded Fat Free Cheddar",
+                                          "~2 tbsp to cook chicken Olive Oil"
+                                      ],
+                 "steps":  [
+                               "Cook 3.5 cups dry jasmine rice per the package and set aside.",
+                               "Cube and cook the chicken breast in a large skillet until it reaches 165F.",
+                               "Lower the heat, add the BBQ sauce, and toss to coat.",
+                               "Drain and warm the corn.",
+                               "Combine rice, BBQ chicken, and corn in a large pot and fold in the cheddar.",
+                               "Weigh the batch and divide into 14 equal containers."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

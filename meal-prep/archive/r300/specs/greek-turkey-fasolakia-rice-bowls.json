@@ -1,0 +1,292 @@
+{
+    "name":  "Greek Turkey Fasolakia Rice Bowls",
+    "slug":  "greek-turkey-fasolakia-rice-bowls",
+    "cuisine":  "greek",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.themediterraneandish.com/greek-green-beans-fasolakia/",
+    "source_site":  "themediterraneandish.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Greek braised green beans and potatoes turned into a dinner by browning turkey into the base. Verified source: full recipe, 6 servings, vegan as written (confidence note: nutrition is for the meatless version, est_cal is my estimate with turkey added). Cheap, board-mappable, and it braises, so 14 servings is trivial. | HARVEST: Source recipe is meatless (Greek green beans); published nutrition excludes turkey and rice.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "OVERRIDE +93/7 Ground Turkey: ADD title protein: source fasolakia is vegetarian (olive-oil braised); turkey version = 1.5 lb for 6",
+                         "OVERRIDE +Rice: ADD rice base: titled \u0027Rice Bowls\u0027, source serves alone with bread; 55 g dry/serving x 6"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  657,
+                 "protein":  30,
+                 "carbs":  72,
+                 "fat":  26,
+                 "cost_ps":  "3.51"
+             },
+    "intro_html":  "Fasolakia is the Greek braise of green beans and potatoes cooked slow in olive oil until everything goes tender and sweet. Traditionally it is a meatless summer dish. We brown turkey into the pot and serve it over rice, which turns a light lunch into a container that actually holds you until dinner. It runs \u003cstrong\u003e657 calories and 30 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.51\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1.25 cups (252 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 (350 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6.75 tbsp (58 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 0.75 tbsp (5 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1.75 tbsp (5 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2.3 cans (959 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.04 oz (1 g)",
+                                "\u003cstrong\u003eGreen Beans (generic):\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 5 (1058 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.5 tbsp (47 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.25 tbsp (9 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 1.5 (70 g)",
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.5 lb (1587 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.25 cups dry (770 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 1.25 cups: ~$3.55. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 3: ~$0.88. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 6.75 tbsp: ~$0.84. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Diced Tomatoes, 2.3 cans: ~$2.24. \u003cstrong\u003eBuy 3 cans: $2.88.\u003c/strong\u003e",
+                       "Green Beans, 3.5 lb: ~$3.42. \u003cstrong\u003eBuy 5 12oz bags: $3.66.\u003c/strong\u003e",
+                       "Potato, 5: ~$1.32. \u003cstrong\u003eBuy 3 lbs: $1.70.\u003c/strong\u003e",
+                       "Lemon Juice, 1.5: ~$0.26. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 3.5 lb: ~$13.37. \u003cstrong\u003eBuy 4 lbs: $15.29.\u003c/strong\u003e",
+                       "Rice, 4.25 cups dry: ~$0.95. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, dried oregano, bay leaves, salt, black pepper): ~$0.98. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $27.81 across 14 servings, so roughly $1.99 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $31.56 across 14 servings, roughly $2.25 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.52 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $49.08. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.51\u003c/strong\u003e a bowl (at everyday cost). Green beans, potatoes, tomatoes, and rice are four of the cheapest things in any grocery store, and the turkey is the only line that asks for real money.",
+    "shop_smart":  [
+                       "Frozen green beans cost less per cup than fresh and come trimmed. In a braise this long, fresh beans end up in exactly the same place, so save the money and the knife work.",
+                       "Potatoes by the 3 pound bag run barely more than a couple loose ones. Keep them somewhere cool and dark and they will outlast your interest in cooking.",
+                       "This dish drinks a cup and a quarter of olive oil, and that is not a mistake. It is what makes a Greek braise taste Greek. Buy the big bottle so the per-ounce price stays sane.",
+                       "Oregano, cumin, and bay leaves are the whole spice list, and they cost almost nothing from jars already in your cabinet. Cheap seasoning is where budget cooking wins or loses."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Heat the olive oil in a wide heavy pot and cook the sliced onion over medium heat for 8 to 10 minutes until it is soft and sweet, then add the garlic for one minute.",
+                    "Add the ground turkey and brown it, breaking it up, until it is cooked through to 165F.",
+                    "Stir in the diced tomatoes, the oregano, cumin, bay leaves, salt, and black pepper, and let it bubble for 5 minutes.",
+                    "Cut the potatoes into chunks and add them along with the green beans and enough water to come about halfway up the vegetables.",
+                    "Cover and simmer on low for 35 to 40 minutes, until the potatoes are fork tender and the beans have gone soft and olive-drab. Do not chase bright green beans here, that is a different dish.",
+                    "Pull the bay leaves, stir in the lemon juice, and taste for salt. Let it sit off the heat for 10 minutes so it tightens up.",
+                    "Cook the rice, move it into your weighed pot, and keep the braise in its own pot for portioning."
+                ],
+    "portion_html":  "Set the pot of rice on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the rice bed for each container. Then spoon the braise evenly across all 14, scooping from the bottom every time so the potatoes and beans get shared out fairly. Each bowl lands at \u003cstrong\u003e657 calories and 30 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themediterraneandish.com/greek-green-beans-fasolakia/\" target=\"_blank\" rel=\"noopener\"\u003ethemediterraneandish.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A Greek olive oil braise for about \u003cstrong\u003e$3.51\u003c/strong\u003e a bowl (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  27.81,
+    "cost_batch_true":  31.56,
+    "cost_per_serving":  1.99,
+    "cost_per_serving_true":  2.25,
+    "cost_pantry_add":  17.52,
+    "cost_first_run":  49.08,
+    "scaler":  {
+                   "cost":  "31.56",
+                   "ing":  [
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  252,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  350,
+                                   "buy":  "3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  58,
+                                   "buy":  "6.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  5,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  5,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  959,
+                                   "buy":  "2.3 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  1,
+                                   "buy":  "0.04 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Beans",
+                                   "canon":  "Green Beans",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "frozen-green-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  1058,
+                                   "buy":  "5",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  47,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  9,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lemon Juice",
+                                   "canon":  "Lemon Juice",
+                                   "grams":  70,
+                                   "buy":  "1.5",
+                                   "bid":  "lemon-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1587,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  770,
+                                   "buy":  "4.25 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Greek turkey fasolakia rice bowls: green beans and potatoes braised in olive oil and tomato with ground turkey. 657 calories, 30g protein, about $3.51 a bowl (at everyday cost).",
+                 "keywords":  "fasolakia, greek green beans, turkey meal prep, budget meal prep, braised green beans, greek rice bowl",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT55M",
+                 "totalTime":  "PT1H15M",
+                 "costPerServing":  3.51,
+                 "recipeIngredient":  [
+                                          "3.5 lb 93/7 ground turkey",
+                                          "14.5 cups green beans",
+                                          "5 potatoes",
+                                          "3 yellow onions",
+                                          "6.75 tbsp garlic",
+                                          "2.3 cans diced tomatoes",
+                                          "1.25 cups olive oil",
+                                          "1.5 lemons worth of lemon juice",
+                                          "4.25 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Cook the sliced onion in olive oil until soft, then add garlic.",
+                               "Brown the ground turkey to 165F.",
+                               "Add diced tomatoes, oregano, cumin, bay leaves, salt, and pepper.",
+                               "Add chunked potatoes, green beans, and water, then simmer covered 35 to 40 minutes.",
+                               "Stir in lemon juice and rest 10 minutes off the heat.",
+                               "Cook the rice, portion it by weight into 14 containers, and spoon the braise over the top."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  252
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  350
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  58
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  959
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Green Beans",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  1058
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Lemon Juice",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1587
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  770
+                              }
+                          ]
+}

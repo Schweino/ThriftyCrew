@@ -1,0 +1,402 @@
+{
+    "name":  "Halal Cart Chicken and Rice",
+    "slug":  "halal-cart-chicken-and-rice",
+    "cuisine":  "Middle Eastern-American",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.hungrypaprikas.com/halal-cart-chicken/",
+    "source_site":  "hungrypaprikas.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "oil clamp 20-\u003e18 g/serving"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Page verified: full recipe, 6 servings, 663 cal / 36g protein - clears both bars as written, and the source explicitly notes components store 4-5 days, which is our exact use case. Turmeric rice plus marinated chicken plus white sauce, all three components board-mapped with zero flags. Confidence: high. | HARVEST: Source sections: For the Chicken (10 lines), For the Yellow Rice (7), For the White Sauce (6), To Serve (8).",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: oil clamp 20-\u003e18 g/serving",
+                         "OVERRIDE Hot Sauce: \u0027hot sauce, any brand\u0027 drizzle, no qty"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  710,
+                 "protein":  42,
+                 "carbs":  62,
+                 "fat":  31,
+                 "cost_ps":  "4.53"
+             },
+    "intro_html":  "If you have ever stood in a line on a New York sidewalk at midnight, you know this plate: turmeric yellow rice, chopped marinated chicken, a pile of lettuce and tomato, and that white sauce that people have written entire internet arguments about. It is three components, all of which hold in the fridge for the better part of a week, which is why it might be the best meal prep dish ever invented by accident. Each container carries \u003cstrong\u003e710 calories and 42 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.53\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 4.75 lb (2117 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1.25 cups (252 g)",
+                                "\u003cstrong\u003eWhite Vinegar (generic):\u003c/strong\u003e 4.75 tbsp (70 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 9.75 tbsp (82 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tbsp (35 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2 tbsp (13 g)",
+                                "\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 1.5 tbsp (8 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 1.5 tbsp (11 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 0.75 tbsp (5 g)",
+                                "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 1.5 tbsp (11 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.75 cups dry (863 g)",
+                                "\u003cstrong\u003eGround Turmeric (Great Value):\u003c/strong\u003e 0.75 tbsp (7 g)",
+                                "\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 0.75 tbsp (6 g)",
+                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 0.5 tbsp (3 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.8 cartons (1680 g)",
+                                "\u003cstrong\u003eMayonnaise (Great Value):\u003c/strong\u003e 0.5 cups (121 g)",
+                                "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 2.25 cups (572 g)",
+                                "\u003cstrong\u003eHot Sauce (Frank\u0027s RedHot):\u003c/strong\u003e 4.75 tbsp (70 g)",
+                                "\u003cstrong\u003eCucumber:\u003c/strong\u003e 4.7 (1400 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2.3 cans (959 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 0.5 cups (64 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 2.3 (110 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Thigh, 4.75 lb: ~$8.26. \u003cstrong\u003eBuy 5 lbs: $8.85.\u003c/strong\u003e",
+                       "Olive Oil, 1.25 cups: ~$3.55. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "White Vinegar, 4.75 tbsp: ~$0.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 9.75 tbsp: ~$1.18. \u003cstrong\u003eBuy 3 heads: $1.73.\u003c/strong\u003e",
+                       "Rice, 4.75 cups dry: ~$1.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 1.8 cartons: ~$2.26. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Mayonnaise, 0.5 cups: ~$0.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Greek Yogurt, 2.25 cups: ~$1.66. \u003cstrong\u003eBuy 1 32oz tub: $2.64.\u003c/strong\u003e",
+                       "Hot Sauce, 4.75 tbsp: ~$0.72. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Cucumber, 4.7: ~$3.55. \u003cstrong\u003eBuy 5 each: $3.80.\u003c/strong\u003e",
+                       "Diced Tomatoes, 2.3 cans: ~$2.24. \u003cstrong\u003eBuy 3 cans: $2.88.\u003c/strong\u003e",
+                       "Red Onion, 0.5 cups: ~$0.19. \u003cstrong\u003eBuy 1 lb: $1.34.\u003c/strong\u003e",
+                       "Lemon Juice, 2.3: ~$0.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, ground coriander, paprika, ground cumin, onion powder, ground turmeric, ground cinnamon, garam masala): ~$1.81. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $27.46 across 14 servings, so roughly $1.96 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $31.62 across 14 servings, roughly $2.26 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $31.79 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $63.41. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.53 a bowl\u003c/strong\u003e (at everyday cost) for a street cart plate that runs ten or twelve dollars in any city with a skyline. The chicken and the olive oil are the two lines that matter and everything else is small change.",
+    "shop_smart":  [
+                       "Greek yogurt is the base of the white sauce and the big tub costs far less per ounce than the little cups. Buy plain, buy the tub, and use the rest for breakfast.",
+                       "Olive oil is a surprisingly large line here because the marinade uses a real amount of it. Buy the big jug rather than the small bottle, and there is no need for extra virgin in a marinade that is going into a hot oven.",
+                       "Cucumbers and tomatoes make the salad component. Buy cucumbers loose and use canned diced tomatoes for the batch, since fresh tomatoes turn to water in a container by day three.",
+                       "The turmeric rice is what makes this taste like the cart. Turmeric, cumin, cinnamon and garam masala from an international grocer cost a fraction of the branded jars and this recipe uses all four."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Marinate the chicken: whisk the olive oil, white vinegar, minced garlic, ground coriander, paprika, ground cumin, onion powder, salt and black pepper, then turn the thighs in it and refrigerate at least 4 hours or overnight.",
+                    "Heat the oven to 450F. Spread the chicken in a single layer on sheet pans and roast 20 to 25 minutes, running the broiler at the end until the edges char in spots. Let it rest, then chop it into rough bite-size pieces on a cutting board, cart style.",
+                    "Make the turmeric rice: toast the rice in a little oil with the ground turmeric, ground cinnamon and garam masala for two minutes, then add the chicken broth, bring to a boil, cover, and cook on low 18 to 20 minutes. Rest it covered another 10 minutes and fluff.",
+                    "Make the white sauce: whisk the greek yogurt, mayonnaise, lemon juice, a little of the white vinegar, salt and black pepper until smooth. Refrigerate it, because it is better cold and it tightens as it sits.",
+                    "Dice the cucumber and drain the canned tomatoes well, then toss them with the diced red onion into a quick salad.",
+                    "Layer the chopped chicken and rice together in your mixing pot so the chicken juices get into the grains.",
+                    "Keep the white sauce, the hot sauce and the cucumber salad in separate containers so nothing goes soggy in the fridge."
+                ],
+    "portion_html":  "Set the pot of chicken and rice on the scale, subtract the empty-pot weight, and divide by 14. That is the base of every container, and the salad and sauces go beside it. Each bowl carries \u003cstrong\u003e710 calories\u003c/strong\u003e, which is the biggest plate in this batch and the right one for a long day.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.hungrypaprikas.com/halal-cart-chicken/\" target=\"_blank\" rel=\"noopener\"\u003ehungrypaprikas.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Halal cart chicken and rice with white sauce for about $4.53 a bowl (at everyday cost). This is one of a few hundred recipes on the site. Members get every recipe in the Meal Prep section plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  27.46,
+    "cost_batch_true":  31.62,
+    "cost_per_serving":  1.96,
+    "cost_per_serving_true":  2.26,
+    "cost_pantry_add":  31.79,
+    "cost_first_run":  63.41,
+    "scaler":  {
+                   "cost":  "31.62",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  2117,
+                                   "buy":  "4.75 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  252,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "White Vinegar",
+                                   "canon":  "White Vinegar",
+                                   "grams":  70,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "white-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  82,
+                                   "buy":  "9.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  35,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  13,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Coriander",
+                                   "canon":  "Ground Coriander",
+                                   "grams":  8,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "ground-coriander",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  11,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  5,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Onion Powder",
+                                   "canon":  "Onion Powder",
+                                   "grams":  11,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "onion-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  863,
+                                   "buy":  "4.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ground Turmeric",
+                                   "canon":  "Ground Turmeric",
+                                   "grams":  7,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "ground-turmeric",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cinnamon",
+                                   "canon":  "Ground Cinnamon",
+                                   "grams":  6,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "ground-cinnamon",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garam Masala",
+                                   "canon":  "Garam Masala",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "garam-masala",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  1680,
+                                   "buy":  "1.8 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Mayonnaise",
+                                   "canon":  "Mayonnaise",
+                                   "grams":  121,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "mayonnaise",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Greek Yogurt",
+                                   "canon":  "Greek Yogurt",
+                                   "grams":  572,
+                                   "buy":  "2.25 cups",
+                                   "bid":  "yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Hot Sauce",
+                                   "canon":  "Hot Sauce",
+                                   "grams":  70,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "hot-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Cucumber",
+                                   "canon":  "Cucumber",
+                                   "grams":  1400,
+                                   "buy":  "4.7",
+                                   "bid":  "cucumbers",
+                                   "gpu":  "300.000"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  959,
+                                   "buy":  "2.3 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Onion",
+                                   "canon":  "Red Onion",
+                                   "grams":  64,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "red-onion",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Lemon Juice",
+                                   "canon":  "Lemon Juice",
+                                   "grams":  110,
+                                   "buy":  "2.3",
+                                   "bid":  "lemon-juice",
+                                   "gpu":  "29.570"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Halal cart chicken and rice: marinated thighs, turmeric rice, white sauce and cucumber tomato salad. 14 meal prep containers at 710 calories, 42g protein, about $4.53 (at everyday cost).",
+                 "keywords":  "halal cart chicken, chicken over rice, white sauce recipe, turmeric rice, street cart chicken meal prep, high protein bowls",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H15M",
+                 "costPerServing":  4.53,
+                 "recipeIngredient":  [
+                                          "4.75 lb boneless skinless chicken thighs",
+                                          "4.75 cups dry rice",
+                                          "3.75 lb chicken broth",
+                                          "2.25 cups greek yogurt",
+                                          "0.5 cups mayonnaise",
+                                          "1.25 cups olive oil",
+                                          "4.7 cucumbers",
+                                          "2.3 cans diced tomatoes",
+                                          "9.75 tbsp garlic",
+                                          "4.75 tbsp white vinegar",
+                                          "4.75 tbsp hot sauce",
+                                          "2.3 lemons worth of lemon juice"
+                                      ],
+                 "steps":  [
+                               "Marinate the chicken thighs in olive oil, vinegar, garlic, coriander, paprika, cumin and onion powder overnight.",
+                               "Roast at 450F for 20 to 25 minutes, broil to char the edges, then chop the chicken.",
+                               "Toast the rice with turmeric, cinnamon and garam masala, add broth, and cook covered 18 to 20 minutes.",
+                               "Whisk greek yogurt, mayonnaise, lemon juice and vinegar into the white sauce and chill it.",
+                               "Layer chicken and rice into 14 containers with the cucumber tomato salad and sauces kept separate."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  2117
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  252
+                              },
+                              {
+                                  "item":  "White Vinegar",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  82
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  13
+                              },
+                              {
+                                  "item":  "Ground Coriander",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Onion Powder",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  863
+                              },
+                              {
+                                  "item":  "Ground Turmeric",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Ground Cinnamon",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Garam Masala",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  1680
+                              },
+                              {
+                                  "item":  "Mayonnaise",
+                                  "grams":  121
+                              },
+                              {
+                                  "item":  "Greek Yogurt",
+                                  "grams":  572
+                              },
+                              {
+                                  "item":  "Hot Sauce",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Cucumber",
+                                  "grams":  1400
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  959
+                              },
+                              {
+                                  "item":  "Red Onion",
+                                  "grams":  64
+                              },
+                              {
+                                  "item":  "Lemon Juice",
+                                  "grams":  110
+                              }
+                          ]
+}

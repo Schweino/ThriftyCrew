@@ -1,0 +1,354 @@
+{
+    "name":  "Turkey Minestrone",
+    "slug":  "turkey-minestrone",
+    "cuisine":  "italian",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://skinnyspatula.com/turkey-minestrone-soup/",
+    "source_site":  "skinnyspatula.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Pasta Shells)",
+                   "portion factor 1.35"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 8 servings, 371 cal, 29g protein. Beans plus pasta plus meat gets us to 500+ with a modest portion bump, and it is one of the cheapest per-serving dinners on this list. No minestrone of any protein in the catalog. | HARVEST: ",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Pasta Shells)",
+                         "TUNING: portion factor 1.35",
+                         "OVERRIDE Pasta Shells: [BUMP x1.6] source 1 cup ditalini (160 g) for 8 is soup-course scale; house dinner minestrone = 260 g dry"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  561,
+                 "protein":  39,
+                 "carbs":  86,
+                 "fat":  8,
+                 "cost_ps":  "4.27"
+             },
+    "intro_html":  "Minestrone was never a recipe. It was Italian for whatever is in the garden plus beans plus pasta, and that is exactly why it belongs in a budget kitchen. Ours is built with turkey breast, cannellini beans, and small shells so it eats like dinner rather than a first course. Each bowl comes to \u003cstrong\u003e561 calories and 39 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.27\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2.25 tbsp (32 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.4 (260 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 2.4 (144 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 7 (390 g)",
+                                "\u003cstrong\u003eZucchini:\u003c/strong\u003e 2.4 (463 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5.5 tbsp (47 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 0.75 tbsp (2 g)",
+                                "\u003cstrong\u003eDried Basil (Great Value):\u003c/strong\u003e 0.75 tbsp (2 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)",
+                                "\u003cstrong\u003eCannellini Beans (generic):\u003c/strong\u003e 2.4 cans (602 g)",
+                                "\u003cstrong\u003eCrushed Tomatoes (generic):\u003c/strong\u003e 2.4 cans (1875 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 3.7 cartons (3544 g)",
+                                "\u003cstrong\u003ePasta Shells (Great Value):\u003c/strong\u003e 39 oz dry (1103 g)",
+                                "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 2.25 lb (992 g)",
+                                "\u003cstrong\u003eKale:\u003c/strong\u003e 3.25 oz (95 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.25 tbsp (9 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 5.75 oz (162 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.5 tbsp (27 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 2.25 tbsp: ~$0.45. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2.4: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 2.4: ~$0.30. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Celery, 7: ~$2.05. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Zucchini, 2.4: ~$1.55. \u003cstrong\u003eBuy 2 lbs: $3.04.\u003c/strong\u003e",
+                       "Garlic, 5.5 tbsp: ~$0.68. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Cannellini Beans, 2.4 cans: ~$1.95. \u003cstrong\u003eBuy 3 cans: $2.47.\u003c/strong\u003e",
+                       "Crushed Tomatoes, 2.4 cans: ~$3.56. \u003cstrong\u003eBuy 3 28oz cans: $4.53.\u003c/strong\u003e",
+                       "Chicken Broth, 3.7 cartons: ~$4.76. \u003cstrong\u003ePantry staple; this batch alone uses about 4 32oz cartons.\u003c/strong\u003e",
+                       "Pasta Shells, 39 oz dry: ~$2.36. \u003cstrong\u003eBuy 4 12oz boxes: $2.91.\u003c/strong\u003e",
+                       "Turkey Breast, 2.25 lb: ~$10.53. \u003cstrong\u003eBuy 1 3lb frozen roast: $14.44.\u003c/strong\u003e",
+                       "Kale, 3.25 oz: ~$0.56. \u003cstrong\u003eBuy 1 bunch: $1.48.\u003c/strong\u003e",
+                       "Parmesan Cheese, 5.75 oz: ~$1.98. \u003cstrong\u003eBuy 1 8oz tub: $2.78.\u003c/strong\u003e",
+                       "Pantry seasonings (dried oregano, dried basil, red pepper flakes, black pepper, salt): ~$0.64. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $32.02 across 14 servings, so roughly $2.29 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $43.11 across 14 servings, roughly $3.08 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.67 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.78. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.27\u003c/strong\u003e a bowl (at everyday cost). Beans, pasta, and whatever vegetables were cheapest that week. This soup has been feeding people on tight budgets for four hundred years, and it is still good at it.",
+    "shop_smart":  [
+                       "Cannellini beans are the cheapest protein in this pot. Beans and pasta together are the reason a soup like this can carry 39 grams of protein without a big meat bill.",
+                       "The vegetables are meant to flex. Carrot, celery, and zucchini are the classic base, but this is the one recipe in the library where you should buy whatever is marked down and use it.",
+                       "Small shells are one of the cheapest boxes in the pasta aisle. Cook them separately from the soup, because pasta left sitting in broth turns to porridge by day two and you lose the whole batch.",
+                       "A tub of parmesan lasts months and finishes every bowl. If your store sells parmesan rinds cheap, drop one into the simmering pot and it adds savory depth for almost nothing."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Dice the onion, carrot, and celery small and cook them in the olive oil in a big pot for 10 minutes until soft and sweet. This is the base of the soup and rushing it is the most common mistake.",
+                    "Add the minced garlic, the oregano, dried basil, red pepper flakes, salt, and black pepper, and cook one minute.",
+                    "Cut the turkey breast into small cubes, add them to the pot, and cook until they are no longer pink and reach 165F.",
+                    "Add the crushed tomatoes and the chicken broth and simmer 20 minutes so the flavors come together.",
+                    "Add the diced zucchini and the drained cannellini beans and simmer 10 minutes more, until the zucchini is tender but not falling apart.",
+                    "Stir in the chopped kale for the last 3 minutes and taste for salt one more time.",
+                    "Cook the pasta shells separately, drain them, and move them into your weighed pot."
+                ],
+    "portion_html":  "Set the pot of drained pasta on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the pasta in each container. Ladle the soup evenly across all 14, digging deep so the beans and turkey get shared out, then grate parmesan over each. Every bowl lands at \u003cstrong\u003e561 calories and 39 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://skinnyspatula.com/turkey-minestrone-soup/\" target=\"_blank\" rel=\"noopener\"\u003eskinnyspatula.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A pot of minestrone for about \u003cstrong\u003e$4.27\u003c/strong\u003e a bowl (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  32.02,
+    "cost_batch_true":  43.11,
+    "cost_per_serving":  2.29,
+    "cost_per_serving_true":  3.08,
+    "cost_pantry_add":  16.67,
+    "cost_first_run":  59.78,
+    "scaler":  {
+                   "cost":  "43.11",
+                   "ing":  [
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  32,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  260,
+                                   "buy":  "2.4",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  144,
+                                   "buy":  "2.4",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "canon":  "Celery",
+                                   "grams":  390,
+                                   "buy":  "7",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Zucchini",
+                                   "canon":  "Zucchini",
+                                   "grams":  463,
+                                   "buy":  "2.4",
+                                   "bid":  "zucchini",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  47,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  2,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Basil",
+                                   "canon":  "Dried Basil",
+                                   "grams":  2,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "dried-basil",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Pepper Flakes",
+                                   "canon":  "Red Pepper Flakes",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "red-pepper-flakes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cannellini Beans",
+                                   "canon":  "Cannellini Beans",
+                                   "grams":  602,
+                                   "buy":  "2.4 cans",
+                                   "bid":  "cannellini-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Crushed Tomatoes",
+                                   "canon":  "Crushed Tomatoes",
+                                   "grams":  1875,
+                                   "buy":  "2.4 cans",
+                                   "bid":  "crushed-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  3544,
+                                   "buy":  "3.7 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Pasta Shells",
+                                   "canon":  "Pasta Shells",
+                                   "grams":  1103,
+                                   "buy":  "39 oz dry",
+                                   "bid":  "pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Turkey Breast",
+                                   "canon":  "Turkey Breast",
+                                   "grams":  992,
+                                   "buy":  "2.25 lb",
+                                   "bid":  "turkey-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Kale",
+                                   "canon":  "Kale",
+                                   "grams":  95,
+                                   "buy":  "3.25 oz",
+                                   "bid":  "kale",
+                                   "gpu":  "250.000"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  9,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "canon":  "Parmesan Cheese",
+                                   "grams":  162,
+                                   "buy":  "5.75 oz",
+                                   "bid":  "parmesan",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  27,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey minestrone meal prep: turkey breast, cannellini beans, and small shells in a tomato vegetable soup. 561 calories, 39g protein, about $4.27 a bowl (at everyday cost).",
+                 "keywords":  "turkey minestrone, italian vegetable soup, bean pasta soup, turkey meal prep, budget meal prep, cannellini soup",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H10M",
+                 "costPerServing":  4.27,
+                 "recipeIngredient":  [
+                                          "Turkey breast, cut into cubes",
+                                          "39 oz dry pasta shells",
+                                          "2.4 cans cannellini beans",
+                                          "2.4 cans crushed tomatoes",
+                                          "7.75 lb chicken broth",
+                                          "2.4 yellow onions",
+                                          "2.4 carrots",
+                                          "7 celery stalks",
+                                          "2.4 zucchini",
+                                          "4.5 cups kale",
+                                          "5.5 tbsp garlic",
+                                          "5.75 oz parmesan cheese",
+                                          "2.25 tbsp olive oil"
+                                      ],
+                 "steps":  [
+                               "Cook diced onion, carrot, and celery in olive oil for 10 minutes.",
+                               "Add garlic, oregano, basil, and red pepper flakes, then the cubed turkey breast, and cook to 165F.",
+                               "Add crushed tomatoes and chicken broth and simmer 20 minutes.",
+                               "Add zucchini and drained cannellini beans and simmer 10 minutes.",
+                               "Stir in the kale for the last 3 minutes.",
+                               "Cook the pasta separately, portion it by weight into 14 containers, ladle the soup over, and top with parmesan."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  32
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  260
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  144
+                              },
+                              {
+                                  "item":  "Celery",
+                                  "grams":  390
+                              },
+                              {
+                                  "item":  "Zucchini",
+                                  "grams":  463
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Dried Basil",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Red Pepper Flakes",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Cannellini Beans",
+                                  "grams":  602
+                              },
+                              {
+                                  "item":  "Crushed Tomatoes",
+                                  "grams":  1875
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  3544
+                              },
+                              {
+                                  "item":  "Pasta Shells",
+                                  "grams":  1103
+                              },
+                              {
+                                  "item":  "Turkey Breast",
+                                  "grams":  992
+                              },
+                              {
+                                  "item":  "Kale",
+                                  "grams":  95
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Parmesan Cheese",
+                                  "grams":  162
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  27
+                              }
+                          ]
+}

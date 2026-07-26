@@ -1,0 +1,351 @@
+{
+    "name":  "Chicken Jalfrezi",
+    "slug":  "chicken-jalfrezi",
+    "cuisine":  "Indian",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.seasonsandsuppers.ca/chicken-jalfrezi/",
+    "source_site":  "seasonsandsuppers.ca",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 200g (src scale)",
+                   "base +45% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Source lists 406 cal / 29g protein using 1.5 lb boneless thighs; est 610 over rice - confidence medium on calories. Pepper-and-onion stir-fried curry, the driest of the Indian set so it holds its texture in containers. Everything but the fenugreek maps to the board. | HARVEST: ",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 200g (src scale)",
+                         "TUNING: base +45% (Rice)",
+                         "OVERRIDE Diced Tomatoes: WAVE-4: \u00273 fresh tomatoes, chopped\u0027 - the driest Indian dish should not carry 10.5 cans"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  562,
+                 "protein":  38,
+                 "carbs":  74,
+                 "fat":  10,
+                 "cost_ps":  "3.47"
+             },
+    "intro_html":  "Jalfrezi started as a way to use up leftover roast meat, stir fried with onions and peppers so it came back to life instead of getting thrown out. That origin story is why it is the driest of the Indian curries, more stir fry than stew, with peppers that still have snap in them. Dry curries hold their texture in a container far better than saucy ones do. Each bowl runs 562 calories and \u003cstrong\u003e38 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.47 a serving\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 3.8 cans (1575 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 7 tbsp (112 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 3.5 tbsp (49 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.6 (394 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3.5 tbsp (30 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 4.75 lb (2100 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (7 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 33 tbsp (33 g)",
+                                "\u003cstrong\u003eGround Turmeric (Great Value):\u003c/strong\u003e 1 tbsp (10 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 1.25 tbsp (8 g)",
+                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 4 tbsp (24 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1 tbsp (7 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3.5 (420 g)",
+                                "\u003cstrong\u003eWhite Vinegar (generic):\u003c/strong\u003e 7 tbsp (105 g)",
+                                "\u003cstrong\u003eDried Guajillo Chiles (generic (USDA)):\u003c/strong\u003e 0.75 oz (21 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.75 cups dry (1086 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Diced Tomatoes, 3.8 cans: ~$3.68. \u003cstrong\u003eBuy 4 cans: $3.84.\u003c/strong\u003e",
+                       "Tomato Paste, 7 tbsp: ~$0.57. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "Vegetable Oil, 3.5 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 3.6: ~$0.99. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 3.5 tbsp: ~$0.43. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Thigh, 4.75 lb: ~$8.19. \u003cstrong\u003eBuy 5 lbs: $8.85.\u003c/strong\u003e",
+                       "Fresh Cilantro, 33 tbsp: ~$1.03. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Green Bell Peppers, 3.5: ~$3.01. \u003cstrong\u003eBuy 4 each: $3.44.\u003c/strong\u003e",
+                       "White Vinegar, 7 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Dried Guajillo Chiles, 0.75 oz: ~$1.29. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 5.75 cups dry: ~$1.34. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, ground turmeric, paprika, garam masala, chili powder, salt, black pepper): ~$2.26. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $23.11 across 14 servings, so roughly $1.65 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $25.70 across 14 servings, roughly $1.84 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $22.94 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.64. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.47 a bowl\u003c/strong\u003e (at everyday cost). Canned tomatoes are the biggest line, which should tell you how cheap the rest of this dish is. There is no cream, no nuts, and no expensive finishing ingredient anywhere in it.",
+    "shop_smart":  [
+                       "Canned diced tomatoes are the base of the sauce and the biggest line on the list. Buy them by the case when they hit a sale, since they keep for years and turn up in half the recipes on this site.",
+                       "Green bell peppers are cheaper than red nearly every week and they hold their bite better through cooking, which is exactly what jalfrezi wants.",
+                       "Boneless thighs cost less than breast and stay tender in a fast, hot pan. This is a stir fry, so the chicken sees high heat and thighs forgive that much better.",
+                       "Garam masala, cumin, turmeric, and chili powder are jars you buy once and use across every Indian recipe. Buying whole containers instead of the tiny bottles cuts the per-batch cost of the seasoning to nearly nothing."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Soak the dried chiles in hot water for 15 minutes and blend them smooth with a little of the soaking liquid.",
+                    "Cut the chicken thighs into bite sized pieces and toss with turmeric, salt, and a spoonful of the white vinegar.",
+                    "Start the rice.",
+                    "Heat the vegetable oil in your largest skillet and sear the chicken hard until browned at the edges, then pull it out. It does not need to be cooked through yet.",
+                    "Cook the sliced onions until golden, add the garlic and the blended chile paste, then the cumin, coriander, turmeric, paprika, garam masala, and chili powder and toast them for a minute.",
+                    "Add the tomato paste and the canned tomatoes and simmer hard, uncovered, until the sauce thickens and darkens and the oil starts to separate, about 20 minutes. This reduction is the whole difference between jalfrezi and a watery tomato curry.",
+                    "Return the chicken with the bell peppers and cook 6 to 8 minutes, just until the chicken is done and the peppers are still crisp. Finish with the rest of the vinegar and a big handful of cilantro."
+                ],
+    "portion_html":  "Weigh the rice into each container, then set the skillet on the scale, subtract the empty weight you wrote down, and divide by 14. Because this curry is thick rather than soupy, each portion holds its shape and the peppers stay recognizable all week. Every bowl lands at \u003cstrong\u003e562 calories\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.seasonsandsuppers.ca/chicken-jalfrezi/\" target=\"_blank\" rel=\"noopener\"\u003eseasonsandsuppers.ca\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Chicken jalfrezi for about \u003cstrong\u003e$3.47 a bowl\u003c/strong\u003e (at everyday cost), which beats the delivery menu by a mile. Members get every recipe in the Meal Prep section plus the full library of money lessons and tools for $1 a month.",
+    "cost_batch":  23.11,
+    "cost_batch_true":  25.7,
+    "cost_per_serving":  1.65,
+    "cost_per_serving_true":  1.84,
+    "cost_pantry_add":  22.94,
+    "cost_first_run":  48.64,
+    "scaler":  {
+                   "cost":  "25.70",
+                   "ing":  [
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  1575,
+                                   "buy":  "3.8 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  112,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  49,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  394,
+                                   "buy":  "3.6",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  30,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  2100,
+                                   "buy":  "4.75 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  33,
+                                   "buy":  "33 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Ground Turmeric",
+                                   "canon":  "Ground Turmeric",
+                                   "grams":  10,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-turmeric",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  8,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garam Masala",
+                                   "canon":  "Garam Masala",
+                                   "grams":  24,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "garam-masala",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "canon":  "Chili Powder",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  420,
+                                   "buy":  "3.5",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "White Vinegar",
+                                   "canon":  "White Vinegar",
+                                   "grams":  105,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "white-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Dried Guajillo Chiles",
+                                   "canon":  "Dried Guajillo Chiles",
+                                   "grams":  21,
+                                   "buy":  "0.75 oz",
+                                   "bid":  "dried-guajillo-chiles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1086,
+                                   "buy":  "5.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Chicken jalfrezi, a dry Indian stir fried curry with peppers, onions, and tomatoes over rice, rebuilt for 14 meal prep servings at about $3.47 a bowl (at everyday cost).",
+                 "keywords":  "chicken jalfrezi, indian stir fry curry, pepper chicken curry, indian meal prep, budget curry recipe, high protein meal prep, dry curry",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H10M",
+                 "costPerServing":  3.47,
+                 "recipeIngredient":  [
+                                          "4.75 lb boneless skinless chicken thighs",
+                                          "10.5 cans diced tomatoes",
+                                          "7 tbsp tomato paste",
+                                          "3.6 yellow onions",
+                                          "3.5 tbsp minced garlic",
+                                          "3.5 green bell peppers",
+                                          "7 tbsp white vinegar",
+                                          "0.75 oz dried guajillo chiles",
+                                          "3.5 tbsp vegetable oil",
+                                          "33 tbsp fresh cilantro",
+                                          "5 cups dry rice",
+                                          "Pantry: cumin, turmeric, paprika, garam masala, chili powder, salt, black pepper"
+                                      ],
+                 "steps":  [
+                               "Soak and blend the dried chiles into a paste.",
+                               "Toss the cut chicken with turmeric, salt, and vinegar, and start the rice.",
+                               "Sear the chicken hard in a hot skillet and set aside.",
+                               "Brown the onions, add garlic, chile paste, and dry spices, then the tomato paste and canned tomatoes.",
+                               "Reduce the sauce about 20 minutes until thick and the oil separates.",
+                               "Return the chicken with the peppers, cook 6 to 8 minutes, finish with vinegar and cilantro, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  1575
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  112
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  49
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  394
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  30
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  2100
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  33
+                              },
+                              {
+                                  "item":  "Ground Turmeric",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Garam Masala",
+                                  "grams":  24
+                              },
+                              {
+                                  "item":  "Chili Powder",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "White Vinegar",
+                                  "grams":  105
+                              },
+                              {
+                                  "item":  "Dried Guajillo Chiles",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1086
+                              }
+                          ]
+}

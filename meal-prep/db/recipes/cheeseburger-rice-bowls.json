@@ -1,0 +1,182 @@
+{
+    "name":  "Cheeseburger Rice Bowls",
+    "slug":  "cheeseburger-rice-bowls",
+    "cuisine":  "American",
+    "protein":  "beef",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  602,
+                 "protein":  47,
+                 "carbs":  63,
+                 "fat":  17,
+                 "cost_ps":  "4.77"
+             },
+    "intro_html":  "Everything you love about a cheeseburger, deconstructed into a high-protein rice bowl. Each serving brings 47 grams of protein for about $4.77 (at everyday cost) and the batch makes 14. Same juicy, cheesy, tangy flavor, no bun required and no drive-thru markup.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2450 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1000 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 carton (700 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 1 can (400 g)",
+                                "\u003cstrong\u003eKetchup (generic):\u003c/strong\u003e 1 bottle (150 g)",
+                                "\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 1 jar (40 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 1 bag (180 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (15 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 Tbsp (45 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (18 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (4 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1 Tbsp (50 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.77 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "The special sauce is just \u003cstrong\u003eketchup and dijon mustard\u003c/strong\u003e you already have, so skip any bottled burger sauce.",
+                       "\u003cstrong\u003eStore-brand shredded cheddar\u003c/strong\u003e melts into the beef just as well as the name brand for less money.",
+                       "A \u003cstrong\u003esingle can of diced tomatoes\u003c/strong\u003e stands in for fresh and adds that burger-topping tang without the waste."
+                   ],
+    "make_it":  [
+                    "Brown 5.4 pounds of 93/7 ground beef with the chopped onion, then drain.",
+                    "Stir in the beef broth, diced tomatoes, ketchup, dijon, and garlic.",
+                    "Simmer until the sauce reduces and coats the beef.",
+                    "Cook the rice separately, then stir it into the skillet or serve it underneath.",
+                    "Melt the shredded cheddar over the top before portioning into containers."
+                ],
+    "portion_html":  "Each of the 14 bowls serves 47 grams of protein at 602 calories, so this burger-in-a-bowl actually earns its keep on your plan.",
+    "credit_html":  "",
+    "upsell_html":  "Cheeseburger night, meal-prepped and budget-friendly. No bun, no regrets, all the flavor. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  46.1,
+    "cost_batch_true":  51.42,
+    "cost_per_serving":  3.29,
+    "cost_per_serving_true":  3.67,
+    "cost_pantry_add":  20.16,
+    "cost_first_run":  71.58,
+    "scaler":  {
+                   "cost":  "51.42",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "grams":  2450,
+                                   "buy":  "6 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  1000,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  300,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "grams":  700,
+                                   "buy":  "1 carton",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "grams":  400,
+                                   "buy":  "1 can",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ketchup",
+                                   "grams":  150,
+                                   "buy":  "1 bottle",
+                                   "bid":  "ketchup",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dijon Mustard",
+                                   "grams":  40,
+                                   "buy":  "1 jar",
+                                   "bid":  "dijon-mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "grams":  180,
+                                   "buy":  "1 bag",
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  15,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  45,
+                                   "buy":  "1 Tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  18,
+                                   "buy":  "1 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "grams":  50,
+                                   "buy":  "1 Tbsp",
+                                   "bid":  "worcestershire-sauce",
+                                   "gpu":  "29.570"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 602 calories and 47 grams of protein for roughly $4.77 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, cheeseburger rice bowls, budget dinner",
+                 "costPerServing":  4.77,
+                 "recipeIngredient":  [
+                                          "6 lb 93/7 Ground Beef",
+                                          "1 lb Rice",
+                                          "3 onions Yellow Onion",
+                                          "1 carton Beef Broth",
+                                          "1 can Diced Tomatoes",
+                                          "1 bottle Ketchup"
+                                      ],
+                 "steps":  [
+                               "Brown 5.4 pounds of 93/7 ground beef with the chopped onion, then drain.",
+                               "Stir in the beef broth, diced tomatoes, ketchup, dijon, and garlic.",
+                               "Simmer until the sauce reduces and coats the beef.",
+                               "Cook the rice separately, then stir it into the skillet or serve it underneath.",
+                               "Melt the shredded cheddar over the top before portioning into containers."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

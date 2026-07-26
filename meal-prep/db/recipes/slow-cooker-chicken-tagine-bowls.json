@@ -1,0 +1,222 @@
+{
+    "name":  "Slow Cooker Chicken Tagine Bowls",
+    "slug":  "slow-cooker-chicken-tagine-bowls",
+    "cuisine":  "Moroccan",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  567,
+                 "protein":  62,
+                 "carbs":  55,
+                 "fat":  9,
+                 "cost_ps":  "4.55"
+             },
+    "intro_html":  "Moroccan tagine sounds fancy, but it\u0027s really just chicken, chickpeas, and warm spices doing their thing all day. This bowl brings 62 grams of protein for about $4.55 a serving (at everyday cost). Fourteen servings means the cheapest ingredients feed you the longest.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3450 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (800 g)",
+                                "\u003cstrong\u003eChickpeas (generic):\u003c/strong\u003e 1 can (400 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 1 can (400 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (240 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 1 lb (120 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (28 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (80 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (9 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1 bottle (22 g)",
+                                "\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 1 1/2 tsp (10 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tsp (9 g)",
+                                "\u003cstrong\u003eGround Turmeric (Great Value):\u003c/strong\u003e 1/2 tsp (5 g)",
+                                "\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 1/2 tsp (5 g)",
+                                "\u003cstrong\u003eGround Ginger (Great Value):\u003c/strong\u003e 1/2 tsp (3 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1/4 cup chopped (14 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e to taste (15 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.55 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Canned chickpeas and tomatoes are pantry gold, so \u003cstrong\u003ekeep a few cans stocked\u003c/strong\u003e and you can build this almost anytime.",
+                       "Carrots and onions store for weeks, so \u003cstrong\u003ebuy them in bulk bags\u003c/strong\u003e and let the cheap vegetables do the stretching.",
+                       "Warm spices like cumin, cinnamon, and paprika are cheap in the bulk bin, so \u003cstrong\u003ebuy small scoops of each\u003c/strong\u003e instead of full jars."
+                   ],
+    "make_it":  [
+                    "Add the chicken, drained chickpeas, diced tomatoes, chopped onion, sliced carrots, olive oil, broth, garlic, and lime juice to the slow cooker.",
+                    "Stir everything together so the spices and liquid coat the chicken and vegetables.",
+                    "Cover and cook on low for 6 to 7 hours until the chicken shreds and the carrots are tender.",
+                    "Shred the chicken into the stew and let it simmer together for a few minutes.",
+                    "Spoon the tagine over white rice with plenty of the tomatoey broth."
+                ],
+    "portion_html":  "Each serving lands at 62 grams of protein and 567 calories, hearty eating for barely over two dollars.",
+    "credit_html":  "",
+    "upsell_html":  "Cheap, cozy, and packed with protein. This is what a good slow cooker night looks like. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  33.03,
+    "cost_batch_true":  38.66,
+    "cost_per_serving":  2.36,
+    "cost_per_serving_true":  2.76,
+    "cost_pantry_add":  27.65,
+    "cost_first_run":  66.31,
+    "scaler":  {
+                   "cost":  "38.66",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3450,
+                                   "buy":  "8 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  800,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chickpeas",
+                                   "grams":  400,
+                                   "buy":  "1 can",
+                                   "bid":  "chickpeas",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "grams":  400,
+                                   "buy":  "1 can",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  240,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "grams":  120,
+                                   "buy":  "1 lb",
+                                   "bid":  "shredded-carrots",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  28,
+                                   "buy":  "1 bottle",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  80,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  9,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "grams":  22,
+                                   "buy":  "1 bottle",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Ground Coriander",
+                                   "grams":  10,
+                                   "buy":  "1 1/2 tsp",
+                                   "bid":  "ground-coriander",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  9,
+                                   "buy":  "1 tsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Turmeric",
+                                   "grams":  5,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "ground-turmeric",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cinnamon",
+                                   "grams":  5,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "ground-cinnamon",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Ginger",
+                                   "grams":  3,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "ground-ginger",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "grams":  14,
+                                   "buy":  "1/4 cup chopped",
+                                   "bid":  "fresh-cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  15,
+                                   "buy":  "to taste",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "to taste",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Moroccan meal prep. Fourteen servings at about 567 calories and 62 grams of protein for roughly $4.55 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker chicken tagine bowls, budget dinner",
+                 "costPerServing":  4.55,
+                 "recipeIngredient":  [
+                                          "8 lb Boneless Skinless Chicken Breast",
+                                          "1 lb Rice",
+                                          "1 can Chickpeas",
+                                          "1 can Diced Tomatoes",
+                                          "3 onions Yellow Onion",
+                                          "1 lb Carrots"
+                                      ],
+                 "steps":  [
+                               "Add the chicken, drained chickpeas, diced tomatoes, chopped onion, sliced carrots, olive oil, broth, garlic, and lime juice to the slow cooker.",
+                               "Stir everything together so the spices and liquid coat the chicken and vegetables.",
+                               "Cover and cook on low for 6 to 7 hours until the chicken shreds and the carrots are tender.",
+                               "Shred the chicken into the stew and let it simmer together for a few minutes.",
+                               "Spoon the tagine over white rice with plenty of the tomatoey broth."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

@@ -1,0 +1,314 @@
+{
+    "name":  "Zanzibar-Style One Pot Chicken Pilau",
+    "slug":  "zanzibar-chicken-pilau",
+    "cuisine":  "East African / Swahili",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.dontmissmyplate.com/how-to-cook/2026/3/28/zanzibar-style-one-pot-chicken-pilau",
+    "source_site":  "dontmissmyplate.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Page verified: full recipe, 4-6 servings, chicken cooked directly into spiced rice. One-pot rice bake is the single most batch-scalable format we publish. Cardamom has no board id (cinnamon, cloves, cumin, bay-leaves all tracked) - it is a small-quantity spice, flagged not hidden. Confidence: MEDIUM on est_cal, source has no nutrition panel; estimate from our own macro DB at 6 oz chicken plus 1 cup cooked rice per portion. | HARVEST: Source servings listed as 4-6; midpoint 5 used.",
+                         "SOURCE YIELD: 5 servings, rebuilt to 14.",
+                         "OVERRIDE Poultry Seasoning: WAVE-5: \u00272 tbsp chicken spice\u0027 (pilau-masala stand-in) at sauce-tbsp default = 90 g/batch; 2 tbsp at true spice weight (~28 g/batch)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  574,
+                 "protein":  39,
+                 "carbs":  68,
+                 "fat":  14,
+                 "cost_ps":  "2.67"
+             },
+    "intro_html":  "Zanzibar built its whole economy on spices, and pilau is what that history tastes like at the dinner table. Red onions get cooked down dark, cumin and cinnamon and cloves go in whole-hearted, and the rice cooks in the same pot as the chicken so every grain ends up brown and perfumed instead of white and bored. One pot, one lid, and each bowl comes in at \u003cstrong\u003e574 calories and 39 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.67\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2240 g)",
+                                "\u003cstrong\u003ePoultry Seasoning (generic (USDA)):\u003c/strong\u003e 1 oz (28 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.5 cups dry (1036 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 7.6 (840 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5.75 tbsp (48 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 5.5 tbsp (90 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 0.25 cups (45 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (6 g)",
+                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 1 tbsp (6 g)",
+                                "\u003cstrong\u003eGround Cloves (Great Value):\u003c/strong\u003e 0.04 oz (1 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tbsp (6 g)",
+                                "\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 1 tbsp (7 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.11 oz (3 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2.25 cups (534 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 8.5 tbsp (118 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 3 tbsp (56 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Thigh, 5 lb: ~$8.74. \u003cstrong\u003eBuy 5 lbs: $8.85.\u003c/strong\u003e",
+                       "Rice, 5.5 cups dry: ~$1.28. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Red Onion, 7.6: ~$2.48. \u003cstrong\u003eBuy 2 lbs: $2.68.\u003c/strong\u003e",
+                       "Garlic, 5.75 tbsp: ~$0.69. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Tomato Paste, 5.5 tbsp: ~$0.45. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "Beef Broth, 0.25 cups: ~$0.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 2.25 cups: ~$0.72. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Butter, 8.5 tbsp: ~$0.77. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Pantry seasonings (poultry seasoning, ground cumin, garam masala, ground cloves, black pepper, ground cinnamon, bay leaves, salt): ~$2.77. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $17.96 across 14 servings, so roughly $1.28 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $21.35 across 14 servings, roughly $1.52 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.02 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.37. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.67 a bowl\u003c/strong\u003e (at everyday cost) for a spiced rice dish that eats like an occasion. Rice and onions cost almost nothing, the chicken is the real expense, and the spice jars you buy once feed a dozen batches.",
+    "shop_smart":  [
+                       "The spice blend is the single largest line in this recipe, which almost never happens. Buy cumin, garam masala, cloves and cinnamon in bags from an international grocer instead of branded supermarket jars and that line drops by more than half.",
+                       "Red onions are the body of the dish and you need a lot of them. Buy the two pound bag rather than loose, and pick the firm ones with tight papery skins so none of them are soft in the middle.",
+                       "Buy rice in the biggest bag you have room for. It is the cheapest calorie in this recipe and it stores indefinitely.",
+                       "Tomato paste in the small can is cheaper per ounce than the tube, and this recipe uses about a whole can, so nothing dries out in the fridge afterward."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Rinse the rice in cold water until the water runs clear, then leave it to soak while you cook. Rinsed rice is what keeps pilau grains separate instead of gluey.",
+                    "Melt the butter in your largest heavy pot over medium heat and cook the sliced red onion for 12 to 15 minutes, stirring, until it goes past golden and into deep brown. This is where pilau gets its color, and there is no shortcut.",
+                    "Add the garlic, then the ground cumin, garam masala, ground cloves, ground cinnamon, black pepper, poultry seasoning and bay leaves. Stir for a minute in the hot fat.",
+                    "Stir in the tomato paste and cook it another minute until it turns brick red, then add the chicken thighs cut into chunks and turn them until coated. Cook 5 minutes.",
+                    "Drain the rice and add it to the pot, folding gently so it takes on the spiced onion. Pour in the chicken broth and beef broth, season with salt, and bring it to a boil.",
+                    "Drop the heat to the lowest setting, cover tightly, and cook 20 to 25 minutes without lifting the lid. Then pull it off the heat and let it sit covered another 10 minutes.",
+                    "Fish out the bay leaves and fluff the whole pot with a fork, lifting from the bottom so the browned rice at the base gets distributed."
+                ],
+    "portion_html":  "Set the pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. Scoop that number into each container while the rice is still warm and fluffy. Each bowl carries \u003cstrong\u003e574 calories\u003c/strong\u003e, and a splash of water before reheating brings the rice right back.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.dontmissmyplate.com/how-to-cook/2026/3/28/zanzibar-style-one-pot-chicken-pilau\" target=\"_blank\" rel=\"noopener\"\u003edontmissmyplate.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Zanzibar chicken pilau, one pot and done, for about $2.67 a bowl (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "cost_batch":  17.96,
+    "cost_batch_true":  21.35,
+    "cost_per_serving":  1.28,
+    "cost_per_serving_true":  1.52,
+    "cost_pantry_add":  16.02,
+    "cost_first_run":  37.37,
+    "scaler":  {
+                   "cost":  "21.35",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  2240,
+                                   "buy":  "5 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Poultry Seasoning",
+                                   "canon":  "Poultry Seasoning",
+                                   "grams":  28,
+                                   "buy":  "1 oz",
+                                   "bid":  "poultry-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1036,
+                                   "buy":  "5.5 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Onion",
+                                   "canon":  "Red Onion",
+                                   "grams":  840,
+                                   "buy":  "7.6",
+                                   "bid":  "red-onion",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  48,
+                                   "buy":  "5.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  90,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  45,
+                                   "buy":  "0.25 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  6,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garam Masala",
+                                   "canon":  "Garam Masala",
+                                   "grams":  6,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "garam-masala",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cloves",
+                                   "canon":  "Ground Cloves",
+                                   "grams":  1,
+                                   "buy":  "0.04 oz",
+                                   "bid":  "ground-cloves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  6,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cinnamon",
+                                   "canon":  "Ground Cinnamon",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-cinnamon",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  3,
+                                   "buy":  "0.11 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  534,
+                                   "buy":  "2.25 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  118,
+                                   "buy":  "8.5 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  56,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Zanzibar-style one pot chicken pilau: thighs cooked into spiced rice with browned red onion, cumin, cinnamon and cloves. 14 bowls at 574 calories, 39g protein, about $2.67 (at everyday cost).",
+                 "keywords":  "chicken pilau, zanzibar pilau, swahili rice, one pot chicken rice, east african meal prep, spiced rice budget dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT55M",
+                 "totalTime":  "PT1H15M",
+                 "costPerServing":  2.67,
+                 "recipeIngredient":  [
+                                          "5 lb boneless skinless chicken thighs",
+                                          "5.5 cups dry rice",
+                                          "7.6 red onions",
+                                          "5.75 tbsp garlic",
+                                          "5.5 tbsp tomato paste",
+                                          "1.25 lb chicken broth",
+                                          "0.1 lb beef broth",
+                                          "8.5 tbsp butter"
+                                      ],
+                 "steps":  [
+                               "Rinse and soak the rice while you cook.",
+                               "Brown the sliced red onion in butter for 12 to 15 minutes until deep brown, then toast the cumin, garam masala, cloves, cinnamon and bay leaves.",
+                               "Stir in tomato paste, add the chunked chicken, and cook 5 minutes.",
+                               "Fold in the drained rice, add both broths, and cook tightly covered on the lowest heat 20 to 25 minutes.",
+                               "Rest 10 minutes covered, fluff from the bottom, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  2240
+                              },
+                              {
+                                  "item":  "Poultry Seasoning",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1036
+                              },
+                              {
+                                  "item":  "Red Onion",
+                                  "grams":  840
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  48
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  90
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  45
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Garam Masala",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Ground Cloves",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Ground Cinnamon",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  534
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  118
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  56
+                              }
+                          ]
+}

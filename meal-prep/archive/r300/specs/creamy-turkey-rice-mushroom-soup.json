@@ -1,0 +1,351 @@
+{
+    "name":  "Creamy Turkey and Rice Soup with Mushrooms",
+    "slug":  "creamy-turkey-rice-mushroom-soup",
+    "cuisine":  "american",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://stripedspatula.com/creamy-turkey-wild-rice-soup/",
+    "source_site":  "stripedspatula.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 6 servings, 618 cal, 30g protein, clears both gates as published. Renamed off wild rice deliberately because the board does not carry it and swapping to brown rice keeps the cost honest. Only creamy rice soup proposed in the slice. | HARVEST: ",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "OVERRIDE Turkey Breast: [BUMP x2.0] source \u00272 cups\u0027 (280 g) for 6; house = 560 g",
+                         "OVERRIDE Wild Rice: WAVE-4 cost-honesty swap per selector note: wild rice is $13-22/recipe and not this dish\u0027s identity - white/brown rice, grams kept"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  698,
+                 "protein":  36,
+                 "carbs":  50,
+                 "fat":  37,
+                 "cost_ps":  "4.77"
+             },
+    "intro_html":  "Bacon, butter and mushrooms build the base. Wild rice gives it that nutty chew, turkey breast gives it the muscle, and a splash of cream at the end pulls it all together. This is a cold weather soup that eats like a full plate of food, and a squeeze of lemon at the finish keeps the whole rich thing from sitting too heavy.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2.25 tbsp (32 g)",
+                                "\u003cstrong\u003eHickory Smoked Bacon (Great Value):\u003c/strong\u003e 0.5 lb (265 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 0.75 cups (196 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.4 (268 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 4.3 (236 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 4 (257 g)",
+                                "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 1.5 lb (662 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3.5 tbsp (29 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 3.3 cartons (3080 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 1.25 cups (146 g)",
+                                "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 2 tbsp (6 g)",
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 0.5 tbsp (2 g)",
+                                "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 3 lb (1307 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3 cups dry (560 g)",
+                                "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 2.25 cups (555 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.25 tbsp (9 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 1 (45 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 2.25 tbsp: ~$0.45. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Hickory Smoked Bacon, 0.5 lb: ~$2.31. \u003cstrong\u003eBuy 1 lb: $3.96.\u003c/strong\u003e",
+                       "Butter, 0.75 cups: ~$1.29. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Yellow Onion, 2.4: ~$0.67. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Celery, 4.3: ~$1.24. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Carrots, 4: ~$0.54. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "White Mushrooms, 1.5 lb: ~$5.52. \u003cstrong\u003eBuy 3 8oz packs: $5.67.\u003c/strong\u003e",
+                       "Garlic, 3.5 tbsp: ~$0.42. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Chicken Broth, 3.3 cartons: ~$4.14. \u003cstrong\u003ePantry staple; this batch alone uses about 4 32oz cartons.\u003c/strong\u003e",
+                       "All-Purpose Flour, 1.25 cups: ~$0.14. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Turkey Breast, 3 lb: ~$13.87. \u003cstrong\u003eBuy 1 3lb frozen roast: $14.44.\u003c/strong\u003e",
+                       "Rice, 3 cups dry: ~$0.69. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Heavy Cream, 2.25 cups: ~$3.45. \u003cstrong\u003eBuy 2 pints: $5.87.\u003c/strong\u003e",
+                       "Lemon Juice, 1: ~$0.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (dried thyme, italian seasoning, black pepper, salt): ~$0.93. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $35.83 across 14 servings, so roughly $2.56 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $44.48 across 14 servings, roughly $3.18 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $22.33 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $66.81. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.77 a bowl\u003c/strong\u003e (at everyday cost). The wild rice is the reason it runs where it does. If you want to bring it down, that is the line to look at first.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eWild rice is the expensive ingredient, not the turkey.\u003c/strong\u003e Check the bulk bins and the warehouse club before the boxed brands. If it is out of reach that week, a long grain brown rice will carry the soup at a fraction of the price.",
+                       "\u003cstrong\u003eBuy whole white mushrooms and slice them yourself.\u003c/strong\u003e Pre-sliced costs more per ounce and goes slimy days sooner.",
+                       "\u003cstrong\u003eBacon is a seasoning here, not a main.\u003c/strong\u003e Buy a pound, use what the recipe calls for, and freeze the rest in flat portions for the next few batches.",
+                       "\u003cstrong\u003eThe flour and butter roux replaces store-bought thickener.\u003c/strong\u003e Pennies of flour do the job that a can of condensed soup charges you a couple dollars for."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the wild rice separately per the package until tender and set it aside. It takes longer than white rice, so start it first.",
+                    "Chop the bacon and render it in your big pot with the olive oil until crisp, then lift the bacon out and leave the fat behind.",
+                    "Add the butter, then the diced onion, celery and carrots, and cook until soft. Add the sliced mushrooms and cook until they give up their water and start to brown.",
+                    "Stir in the garlic, the dried thyme and the Italian seasoning, then sprinkle the flour over everything and stir for two minutes to cook out the raw taste.",
+                    "Pour in the chicken broth slowly while stirring so the roux does not lump, then simmer until it thickens.",
+                    "Add the cooked wild rice, the turkey breast and the heavy cream, warm it through without boiling, then finish with the lemon juice, the reserved bacon, salt and black pepper."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide by 14 and ladle that exact weight into each container. Every bowl lands near 698 calories with 36 grams of protein, so this one is a serious dinner. It thickens overnight, so thin it with a splash of broth when you reheat.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://stripedspatula.com/creamy-turkey-wild-rice-soup/\" target=\"_blank\" rel=\"noopener\"\u003estripedspatula.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cem\u003eA creamy, bacon-backed turkey soup for about $4.77 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "cost_batch":  35.83,
+    "cost_batch_true":  44.48,
+    "cost_per_serving":  2.56,
+    "cost_per_serving_true":  3.18,
+    "cost_pantry_add":  22.33,
+    "cost_first_run":  66.81,
+    "scaler":  {
+                   "cost":  "44.48",
+                   "ing":  [
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  32,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Hickory Smoked Bacon",
+                                   "canon":  "Hickory Smoked Bacon",
+                                   "grams":  265,
+                                   "buy":  "0.5 lb",
+                                   "bid":  "bacon",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  196,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  268,
+                                   "buy":  "2.4",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "canon":  "Celery",
+                                   "grams":  236,
+                                   "buy":  "4.3",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  257,
+                                   "buy":  "4",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "White Mushrooms",
+                                   "canon":  "White Mushrooms",
+                                   "grams":  662,
+                                   "buy":  "1.5 lb",
+                                   "bid":  "mushrooms",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  29,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  3080,
+                                   "buy":  "3.3 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  146,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  6,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "canon":  "Italian Seasoning",
+                                   "grams":  2,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Turkey Breast",
+                                   "canon":  "Turkey Breast",
+                                   "grams":  1307,
+                                   "buy":  "3 lb",
+                                   "bid":  "turkey-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  560,
+                                   "buy":  "3 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Heavy Cream",
+                                   "canon":  "Heavy Cream",
+                                   "grams":  555,
+                                   "buy":  "2.25 cups",
+                                   "bid":  "heavy-cream",
+                                   "gpu":  "29.800"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  9,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lemon Juice",
+                                   "canon":  "Lemon Juice",
+                                   "grams":  45,
+                                   "buy":  "1",
+                                   "bid":  "lemon-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Wild rice, mushrooms, bacon and turkey breast in a creamy thyme broth. A hearty 14 serving soup portioned by weight for meal prep.",
+                 "keywords":  "creamy turkey wild rice soup, mushroom soup recipe, leftover turkey soup, budget meal prep, wild rice soup, cheap dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT55M",
+                 "totalTime":  "PT1H20M",
+                 "costPerServing":  4.77,
+                 "recipeIngredient":  [
+                                          "Hickory Smoked Bacon",
+                                          "Butter",
+                                          "Olive Oil",
+                                          "Yellow Onion",
+                                          "Celery",
+                                          "Carrots",
+                                          "White Mushrooms",
+                                          "Garlic",
+                                          "All-Purpose Flour",
+                                          "Chicken Broth",
+                                          "Wild Rice",
+                                          "Turkey Breast",
+                                          "Heavy Cream"
+                                      ],
+                 "steps":  [
+                               "Cook the wild rice separately until tender and set aside.",
+                               "Render the bacon in the pot, remove it, and cook the onion, celery, carrots and mushrooms in the fat and butter.",
+                               "Stir in the garlic and herbs, dust with flour, and cook two minutes.",
+                               "Whisk in the chicken broth and simmer until thickened.",
+                               "Add the wild rice, turkey breast and cream, warm through, and finish with lemon juice and the bacon."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  32
+                              },
+                              {
+                                  "item":  "Hickory Smoked Bacon",
+                                  "grams":  265
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  268
+                              },
+                              {
+                                  "item":  "Celery",
+                                  "grams":  236
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  257
+                              },
+                              {
+                                  "item":  "White Mushrooms",
+                                  "grams":  662
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  29
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  3080
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  146
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Italian Seasoning",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Turkey Breast",
+                                  "grams":  1307
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  560
+                              },
+                              {
+                                  "item":  "Heavy Cream",
+                                  "grams":  555
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Lemon Juice",
+                                  "grams":  45
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              }
+                          ]
+}

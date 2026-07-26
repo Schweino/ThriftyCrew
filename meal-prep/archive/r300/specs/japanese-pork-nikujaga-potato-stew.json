@@ -1,0 +1,271 @@
+{
+    "name":  "Japanese Pork Nikujaga Potato Stew",
+    "slug":  "japanese-pork-nikujaga-potato-stew",
+    "cuisine":  "Japanese",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.justonecookbook.com/nikujaga/",
+    "source_site":  "justonecookbook.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Potato)",
+                   "portion factor 1.05"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Simmered pot stew, the source explicitly states pork is the standard eastern-Japan version. Potatoes, onions and carrots are three of the cheapest tracked commodities. Source publishes 338 cal / 17g protein per serving, so it needs a pork increase and a rice base to qualify. Confidence: est numbers are mine. Dashi subs to tracked chicken-broth; shirataki gets dropped. | HARVEST: Source specifies thinly sliced beef with thinly sliced pork given as an explicit substitute; our version is the pork variant.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Potato)",
+                         "TUNING: portion factor 1.05",
+                         "OVERRIDE Beef Flank/Sirloin Steak: TITLE-PROTEIN SWAP + [BUMP x2.5]: source 1/2 lb thin beef for 4 (source itself sanctions thin pork); house 1.25 lb pork loin",
+                         "OVERRIDE Rice Noodles: \u00271 package shirataki (7 oz)\u0027 is konnyaku (~0 cal); pkg density read 397 g of rice-noodle macros - falsifies the dish"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  572,
+                 "protein":  39,
+                 "carbs":  74,
+                 "fat":  12,
+                 "cost_ps":  "2.93"
+             },
+    "intro_html":  "Nikujaga translates, more or less, to meat and potatoes. In Japan it is the dish people name when you ask what home tastes like. Thin sliced meat, potatoes, onions, and carrots simmer in a sweet soy broth of mirin, sugar, and soy sauce until the potatoes go soft at the edges and take on the color of the broth. Eastern Japan traditionally makes it with pork, and that is the version here. It is gentle food, and it is one of the least expensive stews you can put together.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.7 (404 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3.7 (224 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 20 (4217 g)",
+                                "\u003cstrong\u003eSnow Peas:\u003c/strong\u003e 3 oz (88 g)",
+                                "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 4.5 lb (2058 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 3.75 tbsp (51 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2 cartons (1882 g)",
+                                "\u003cstrong\u003eMirin (Mizkan):\u003c/strong\u003e 1 cups (265 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 cups (235 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 3.75 tbsp (46 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Yellow Onion, 3.7: ~$1.02. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 3.7: ~$0.47. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Potato, 20: ~$5.28. \u003cstrong\u003eBuy 10 lbs: $5.68.\u003c/strong\u003e",
+                       "Snow Peas, 3 oz: ~$0.98. \u003cstrong\u003eBuy 1 8oz bag: $2.53.\u003c/strong\u003e",
+                       "Pork Loin, 4.5 lb: ~$9.71. \u003cstrong\u003eBuy 5 lbs: $10.70.\u003c/strong\u003e",
+                       "Vegetable Oil, 3.75 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 2 cartons: ~$2.53. \u003cstrong\u003ePantry staple; this batch alone uses about 3 32oz cartons.\u003c/strong\u003e",
+                       "Mirin, 1 cups: ~$2.33. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 1 cups: ~$0.89. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sugar, 3.75 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $23.64 across 14 servings, so roughly $1.69 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $27.18 across 14 servings, roughly $1.94 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.83 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $41.01. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.93 a bowl\u003c/strong\u003e (at everyday cost) for a Japanese home-cooking classic built on three of the cheapest vegetables in the store.",
+    "shop_smart":  [
+                       "\u003cstrong\u003ePotatoes carry this dish and cost almost nothing.\u003c/strong\u003e Buy the ten pound bag. You will use the rest, and the per-pound price is a fraction of the loose bin.",
+                       "\u003cstrong\u003ePork loin slices thin if you freeze it for thirty minutes first.\u003c/strong\u003e That firms it up enough to cut paper thin with a regular knife, which saves you from buying pre-sliced hot pot meat at a premium.",
+                       "\u003cstrong\u003eMirin is a one-bottle investment that lasts a very long time.\u003c/strong\u003e It is the sweetness and the shine in this broth, and it turns up in a lot of Japanese cooking after this.",
+                       "\u003cstrong\u003eSnow peas are the priciest thing on the list, and they go in last.\u003c/strong\u003e They are there for color and snap, so a small handful per batch does the job."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Freeze the pork loin briefly, then slice it as thin as you can manage against the grain.",
+                    "Heat the vegetable oil in a wide pot and cook the pork over medium-high heat just until it loses its pink, then push it to the side.",
+                    "Add the sliced yellow onions and cook until they turn translucent.",
+                    "Cut the potatoes into large chunks and the carrots on a diagonal, and add both to the pot.",
+                    "Pour in the chicken broth, mirin, soy sauce, and sugar, and bring it up to a simmer.",
+                    "Lay a lid or a round of parchment directly on the surface, drop the heat to low, and simmer until the potatoes are tender all the way through but not falling apart.",
+                    "Add the snow peas in the last two minutes so they stay bright, then season with salt and black pepper to taste."
+                ],
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight from Step 1, and divide by 14. Weigh that amount into each container and make sure the potato chunks get spread evenly rather than piled into the first four. Every serving lands near \u003cstrong\u003e572 calories with 39 grams of protein\u003c/strong\u003e. Nikujaga is famously better the next day, so this one is doing you a favor.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.justonecookbook.com/nikujaga/\" target=\"_blank\" rel=\"noopener\"\u003ejustonecookbook.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Gentle, homestyle dinners for about $2.93 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  23.64,
+    "cost_batch_true":  27.18,
+    "cost_per_serving":  1.69,
+    "cost_per_serving_true":  1.94,
+    "cost_pantry_add":  13.83,
+    "cost_first_run":  41.01,
+    "scaler":  {
+                   "cost":  "27.18",
+                   "ing":  [
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  404,
+                                   "buy":  "3.7",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  224,
+                                   "buy":  "3.7",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  4217,
+                                   "buy":  "20",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Snow Peas",
+                                   "canon":  "Snow Peas",
+                                   "grams":  88,
+                                   "buy":  "3 oz",
+                                   "bid":  "snow-peas",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Pork Loin",
+                                   "canon":  "Pork Loin",
+                                   "grams":  2058,
+                                   "buy":  "4.5 lb",
+                                   "bid":  "pork-loin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  51,
+                                   "buy":  "3.75 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  1882,
+                                   "buy":  "2 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Mirin",
+                                   "canon":  "Mirin",
+                                   "grams":  265,
+                                   "buy":  "1 cups",
+                                   "bid":  "mirin",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  235,
+                                   "buy":  "1 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  46,
+                                   "buy":  "3.75 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  21,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Japanese pork nikujaga rebuilt for 14-serving meal prep: thin pork, potatoes, onions, and carrots simmered in sweet soy broth. 572 calories, 39g protein, about $2.93 per serving (at everyday cost).",
+                 "keywords":  "nikujaga, japanese meat and potatoes, pork potato stew, mirin soy simmer, japanese meal prep, budget stew recipe",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT35M",
+                 "totalTime":  "PT60M",
+                 "costPerServing":  2.93,
+                 "recipeIngredient":  [
+                                          "4.5 lb pork loin",
+                                          "20 potatoes",
+                                          "3.7 yellow onions",
+                                          "3.7 carrots",
+                                          "1.5 cups snow peas",
+                                          "4.25 lb chicken broth",
+                                          "1 cup mirin",
+                                          "1 cup soy sauce",
+                                          "3.75 tbsp sugar",
+                                          "3.75 tbsp vegetable oil"
+                                      ],
+                 "steps":  [
+                               "Freeze the pork loin briefly and slice it very thin.",
+                               "Cook the pork in oil just until it loses its pink.",
+                               "Add sliced onions and cook until translucent.",
+                               "Add chunked potatoes and carrots, then broth, mirin, soy sauce, and sugar.",
+                               "Simmer under a drop lid until the potatoes are tender.",
+                               "Add snow peas at the end, season, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  404
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  224
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  4217
+                              },
+                              {
+                                  "item":  "Snow Peas",
+                                  "grams":  88
+                              },
+                              {
+                                  "item":  "Pork Loin",
+                                  "grams":  2058
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  51
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  1882
+                              },
+                              {
+                                  "item":  "Mirin",
+                                  "grams":  265
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  235
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  46
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

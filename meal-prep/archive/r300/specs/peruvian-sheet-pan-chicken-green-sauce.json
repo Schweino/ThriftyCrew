@@ -1,0 +1,333 @@
+{
+    "name":  "Peruvian Sheet-Pan Chicken Thighs with Green Sauce",
+    "slug":  "peruvian-sheet-pan-chicken-green-sauce",
+    "cuisine":  "Peruvian",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://thewoksoflife.com/sheet-pan-peruvian-chicken-thighs/",
+    "source_site":  "thewoksoflife.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 300g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Source lists 373 cal / 25g protein for 8-10 bone-in thighs; est 620 served with rice and beans - confidence medium on calories, and every ingredient including the green sauce maps to a board id. Marinate overnight, roast one sheet pan, portion. NEAR-DUPE WATCH vs the live Filipino Chicken Inasal (also a marinated roasted thigh) - different marinade (cumin-vinegar vs annatto-calamansi) and the aji verde sauce is the point. | HARVEST: Ingredients split in source into \u0027For the chicken\u0027 (first 11 lines) and \u0027For the sauce\u0027 (last 8 lines). Published nutrition covers the chicken only, not the green sauce.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 300g (src scale)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  576,
+                 "protein":  34,
+                 "carbs":  45,
+                 "fat":  26,
+                 "cost_ps":  "3.24"
+             },
+    "intro_html":  "Peruvian roast chicken is famous for two things: a cumin and vinegar marinade that soaks in overnight, and the green sauce that shows up beside it. That sauce, aji verde, is where the whole plate turns from good to memorable. Cilantro, chile, garlic and a little mayonnaise blitzed until it looks like house paint and tastes like a secret. Thighs marinate, one pan roasts, rice underneath, sauce over the top. Each bowl runs \u003cstrong\u003e576 calories and 34 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.24\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 2.5 tbsp (15 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 2.25 tbsp (16 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 0.75 tbsp (7 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.75 tbsp (12 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 7 tbsp (94 g)",
+                                "\u003cstrong\u003eWhite Vinegar (generic):\u003c/strong\u003e 3.25 tbsp (47 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 2.3 (110 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 4.75 lb (2100 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 (350 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 7.25 tbsp (65 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 37 tbsp (37 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.75 tbsp (23 g)",
+                                "\u003cstrong\u003eMayonnaise (Great Value):\u003c/strong\u003e 1.25 cups (243 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 4.75 tbsp (70 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 7 tbsp: ~$1.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "White Vinegar, 3.25 tbsp: ~$0.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lemon Juice, 2.3: ~$0.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Thigh, 4.75 lb: ~$8.19. \u003cstrong\u003eBuy 5 lbs: $8.85.\u003c/strong\u003e",
+                       "Yellow Onion, 3: ~$0.88. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Jalapeno, 7.25 tbsp: ~$0.25. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Fresh Cilantro, 37 tbsp: ~$1.16. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Garlic, 2.75 tbsp: ~$0.33. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Mayonnaise, 1.25 cups: ~$0.85. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lime Juice, 4.75 tbsp: ~$0.58. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, paprika, salt, garlic powder, black pepper, dried oregano): ~$1.21. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $16.14 across 14 servings, so roughly $1.15 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $19.44 across 14 servings, roughly $1.39 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $31.80 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.24. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.24 a bowl\u003c/strong\u003e (at everyday cost) for marinated roast chicken with a sauce that restaurants charge extra for on the side. The chicken is the largest line on the list and everything else is pocket change.",
+    "shop_smart":  [
+                       "Boneless skinless thighs are the right cut and the cheap cut at the same time. They hold up to an overnight acid marinade without going chalky, and the five pound club pack beats the small tray packs per pound every time.",
+                       "Cilantro is the backbone of the green sauce, so buy it as bunches from the produce case rather than the little clamshell of leaves. One or two bunches covers the whole batch for the price of a soda.",
+                       "Bottled lemon and lime juice are doing real work here and cost a fraction of fresh citrus. For a marinade and a blended sauce, nobody can tell the difference.",
+                       "Jalapeno is the whole chile budget. A single pepper or two carries the heat, so buy loose by the pound and pick the firm, heavy ones."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Whisk the olive oil, white vinegar, lemon juice, ground cumin, paprika, garlic powder, dried oregano, salt and black pepper into a marinade. Add the chicken thighs, turn them until every piece is coated, and refrigerate overnight if you can spare the time, or at least four hours if you cannot.",
+                    "Heat the oven to 425F. Spread the sliced yellow onion across a large sheet pan and lay the marinated thighs on top so the onion catches everything that drips.",
+                    "Roast 30 to 35 minutes, until the chicken reads 165F and the edges have gone dark and a little sticky. Do not crowd the pan; use two if you need to.",
+                    "While it roasts, cook the rice and let it steam covered off the heat for 10 minutes.",
+                    "Make the aji verde: blend the cilantro, jalapeno, garlic, mayonnaise and lime juice with a pinch of salt until it is completely smooth and bright green. Taste it and add more chile if you want it to bite back.",
+                    "Chop the roasted chicken into bite-size pieces and stir it into your mixing pot with the roasted onion, the pan juices and the cooked rice.",
+                    "Fold about half the green sauce through the whole batch and hold the rest back to spoon on at reheat time so it stays fresh and loud."
+                ],
+    "portion_html":  "Put the full pot on the scale, subtract the empty-pot weight, and divide by 14. Same number in every container, no eyeballing. Each one carries \u003cstrong\u003e576 calories\u003c/strong\u003e, and the reserved green sauce goes on top right before you eat so it never sees the microwave.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://thewoksoflife.com/sheet-pan-peruvian-chicken-thighs/\" target=\"_blank\" rel=\"noopener\"\u003ethewoksoflife.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Marinated Peruvian chicken with real aji verde for about $3.24 a bowl (at everyday cost). This is one of a few hundred recipes like it. Members get the whole Meal Prep section plus every money lesson, calculator, and tool on the site for $1 a month.",
+    "cost_batch":  16.14,
+    "cost_batch_true":  19.44,
+    "cost_per_serving":  1.15,
+    "cost_per_serving_true":  1.39,
+    "cost_pantry_add":  31.8,
+    "cost_first_run":  51.24,
+    "scaler":  {
+                   "cost":  "19.44",
+                   "ing":  [
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  15,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  16,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  21,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  7,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  12,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  94,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "White Vinegar",
+                                   "canon":  "White Vinegar",
+                                   "grams":  47,
+                                   "buy":  "3.25 tbsp",
+                                   "bid":  "white-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Lemon Juice",
+                                   "canon":  "Lemon Juice",
+                                   "grams":  110,
+                                   "buy":  "2.3",
+                                   "bid":  "lemon-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  2100,
+                                   "buy":  "4.75 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  350,
+                                   "buy":  "3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  65,
+                                   "buy":  "7.25 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  37,
+                                   "buy":  "37 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  23,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Mayonnaise",
+                                   "canon":  "Mayonnaise",
+                                   "grams":  243,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "mayonnaise",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "canon":  "Lime Juice",
+                                   "grams":  70,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Peruvian sheet-pan chicken thighs with aji verde green sauce over rice, built as 14 meal prep bowls. 576 calories, 34g protein, about $3.24 a bowl (at everyday cost).",
+                 "keywords":  "peruvian chicken, aji verde, green sauce chicken, sheet pan chicken thighs, budget meal prep, peruvian meal prep bowls",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT35M",
+                 "totalTime":  "PT1H",
+                 "costPerServing":  3.24,
+                 "recipeIngredient":  [
+                                          "4.75 lb boneless skinless chicken thighs",
+                                          "3 yellow onions",
+                                          "3.75 cups dry rice",
+                                          "7 tbsp olive oil",
+                                          "3.25 tbsp white vinegar",
+                                          "2.3 lemons worth of lemon juice",
+                                          "37 tbsp fresh cilantro",
+                                          "7.25 tbsp jalapeno",
+                                          "1.25 cups mayonnaise",
+                                          "4.75 tbsp lime juice",
+                                          "2.75 tbsp garlic"
+                                      ],
+                 "steps":  [
+                               "Marinate the chicken thighs overnight in olive oil, vinegar, lemon juice, cumin, paprika, garlic powder and oregano.",
+                               "Roast the thighs at 425F over a bed of sliced onion for 30 to 35 minutes, until they read 165F.",
+                               "Cook the rice and let it steam covered off the heat.",
+                               "Blend cilantro, jalapeno, garlic, mayonnaise and lime juice into a smooth green sauce.",
+                               "Chop the chicken, fold it with the onion, pan juices and rice, stir in half the sauce, and portion into 14 containers with the rest reserved."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  16
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  94
+                              },
+                              {
+                                  "item":  "White Vinegar",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Lemon Juice",
+                                  "grams":  110
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  2100
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  350
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  65
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  37
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  23
+                              },
+                              {
+                                  "item":  "Mayonnaise",
+                                  "grams":  243
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

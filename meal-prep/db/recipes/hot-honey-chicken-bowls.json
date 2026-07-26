@@ -1,0 +1,152 @@
+{
+    "name":  "Hot Honey Chicken and Broccoli Bowls",
+    "slug":  "hot-honey-chicken-bowls",
+    "cuisine":  "American",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  357,
+                 "protein":  31,
+                 "carbs":  50,
+                 "fat":  3,
+                 "cost_ps":  "2.86"
+             },
+    "intro_html":  "Sweet, a little spicy, and shockingly lean. Chicken breast and tender broccoli over rice, all glazed in hot honey for a sweet-heat kick that makes leftovers something to look forward to. At 31 grams of protein and only 3 grams of fat for around $2.86 a bowl (at everyday cost), this one earns a permanent spot in the rotation.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb raw (1587 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.5 cups dry jasmine (700 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 7 cups (about 21 oz) (595 g)",
+                                "\u003cstrong\u003eHot Honey (Better Goods):\u003c/strong\u003e about 7 tbsp (7/16 cup) (147 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e ~2 tbsp (cook chicken/roast broccoli) (100 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves, minced (35 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 3 tbsp (in glaze) (90 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e to taste (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.86 a bowl\u003c/strong\u003e (at everyday cost) for a lean, crave-worthy dinner that would run $12 or more at a fast-casual spot.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eChicken on sale, frozen, is the move.\u003c/strong\u003e Buy a big pack when the price drops and freeze it in two-pound bags.",
+                       "\u003cstrong\u003eA little hot honey goes far.\u003c/strong\u003e One bottle glazes several batches, so the per-serving cost stays tiny even though it feels like a treat.",
+                       "\u003cstrong\u003eFrozen broccoli\u003c/strong\u003e is cheaper than fresh, lasts for months, and cooks right from the bag."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice. Three and a half cups dry jasmine with water per the package, then set aside.",
+                    "Cube the chicken and cook in a large skillet over medium-high heat until it reaches 165F inside.",
+                    "Steam or microwave the broccoli until bright and tender.",
+                    "Turn the heat to low, drizzle the hot honey over the chicken, and toss until glazed.",
+                    "Combine the rice, hot honey chicken, and broccoli in your big pot and stir."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near 357 calories and 31 grams of protein at just 3 grams of fat.",
+    "credit_html":  "",
+    "upsell_html":  "Lean, crave-worthy dinners for about $2.86 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  20.03,
+    "cost_batch_true":  22.04,
+    "cost_per_serving":  1.43,
+    "cost_per_serving_true":  1.57,
+    "cost_pantry_add":  18.51,
+    "cost_first_run":  40.55,
+    "scaler":  {
+                   "cost":  "22.04",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  1587,
+                                   "buy":  "3.5 lb raw",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.5 cups dry jasmine",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  595,
+                                   "buy":  "7 cups (about 21 oz)",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Hot Honey",
+                                   "grams":  147,
+                                   "buy":  "about 7 tbsp (7/16 cup)",
+                                   "bid":  "hot-honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  100,
+                                   "buy":  "~2 tbsp (cook chicken/roast broccoli)",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  35,
+                                   "buy":  "2 cloves, minced",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "grams":  90,
+                                   "buy":  "3 tbsp (in glaze)",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "to taste",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "to taste",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A lean sweet-and-spicy chicken, broccoli, and rice meal prep glazed in hot honey. Fourteen servings at about 357 calories, 31 grams of protein, and only 3 grams of fat for roughly $2.86 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, hot honey chicken, low fat meal prep, budget dinner",
+                 "costPerServing":  2.86,
+                 "recipeIngredient":  [
+                                          "3.5 lb raw Boneless Skinless Chicken Breast",
+                                          "3.5 cups dry jasmine Rice",
+                                          "7 cups (about 21 oz) Broccoli Florets",
+                                          "about 7 tbsp (7/16 cup) Hot Honey",
+                                          "~2 tbsp (cook chicken/roast broccoli) Olive Oil",
+                                          "2 cloves, minced Garlic"
+                                      ],
+                 "steps":  [
+                               "Cook 3.5 cups dry jasmine rice per the package and set aside.",
+                               "Cube and cook the chicken breast until it reaches 165F.",
+                               "Steam or microwave the broccoli until tender.",
+                               "Lower the heat, drizzle hot honey over the chicken, and toss to glaze.",
+                               "Combine rice, chicken, and broccoli and stir.",
+                               "Weigh the batch and divide into 14 containers."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

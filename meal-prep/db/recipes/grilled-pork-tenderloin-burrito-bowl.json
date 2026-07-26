@@ -1,0 +1,252 @@
+{
+    "name":  "Grilled Pork Tenderloin Burrito Bowl",
+    "slug":  "grilled-pork-tenderloin-burrito-bowl",
+    "cuisine":  "Tex-Mex",
+    "protein":  "pork",
+    "visibility":  "paid",
+    "source_url":  "https://grilling24x7.com/leftover-pork-tenderloin-burrito-bowl/",
+    "source_site":  "Grilling 24x7",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Rice)",
+                   "portion factor 1.1"
+               ],
+    "stat":  {
+                 "cal":  571,
+                 "protein":  39,
+                 "carbs":  65,
+                 "fat":  15,
+                 "cost_ps":  "3.13"
+             },
+    "intro_html":  "Taco-rubbed pork tenderloin glazed with a touch of BBQ sauce, diced over broth-cooked rice with a quick tomato jalapeno salsa, cheddar, and cilantro. Every bowl serves up \u003cstrong\u003e39 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.13\u003c/strong\u003e (at everyday cost). Lean meat, loud flavor, quiet grocery bill.",
+    "ingredients_display": ["\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 3.75 lb (1746 g)","\u003cstrong\u003eTaco Seasoning (Great Value):\u003c/strong\u003e 7.75 tbsp (62 g)","\u003cstrong\u003eBBQ Sauce (generic):\u003c/strong\u003e 1 cups (274 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2 lb (924 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 (221 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.25 cups dry (788 g)","\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 15.25 oz (435 g)","\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 46 tbsp (46 g)","\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 4.5 cans (1848 g)","\u003cstrong\u003eJalapeno:\u003c/strong\u003e 6 tbsp (54 g)","\u003cstrong\u003eLime Juice:\u003c/strong\u003e 7.75 tbsp (116 g)","\u003cstrong\u003eRed Onion:\u003c/strong\u003e 2 (221 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (22 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Tenderloin, 3.75 lb: ~$15.28. \u003cstrong\u003eBuy 4 lbs: $15.88.\u003c/strong\u003e",
+                       "BBQ Sauce, 1 cups: ~$1.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 2 lb: ~$1.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2: ~$0.56. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Rice, 4.25 cups dry: ~$1.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 15.25 oz: ~$3.78. \u003cstrong\u003eBuy 2 8oz bags: $3.94.\u003c/strong\u003e",
+                       "Fresh Cilantro, 46 tbsp: ~$1.44. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Diced Tomatoes, 4.5 cans: ~$4.32. \u003cstrong\u003eBuy 5 cans: $4.80.\u003c/strong\u003e",
+                       "Jalapeno, 6 tbsp: ~$0.21. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Lime Juice, 7.75 tbsp: ~$0.97. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Red Onion, 2: ~$0.56. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Pantry seasonings (taco seasoning, salt, black pepper): ~$1.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $31.96 across 14 servings, so roughly $2.28 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $36.25 across 14 servings, roughly $2.59 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.78 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $49.03. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.13 a bowl\u003c/strong\u003e (at everyday cost) for a burrito bowl the chains sell for $12 before you say the word guacamole. The tenderloin is the whole trick: lean, tender, and cheaper than people assume.",
+    "shop_smart":  [
+                       "Whole pork tenderloin ran about $4 a pound here. Skip the pre-marinated ones; you pay extra for sugar water and lose control of the seasoning.",
+                       "The salsa is canned diced tomatoes, jalapeno, red onion, and lime for about $6 total. A tub of fresh pico that size would cost double.",
+                       "Rice cooked in chicken broth instead of water is a 62 cent upgrade that makes the whole bowl taste intentional."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Pat the tenderloins dry and rub them all over with most of the taco seasoning, salt, and black pepper.",
+                    "Grill over medium-high heat, or sear in a hot pan and finish in a 400F oven, until the thickest part reads 145F, about 15 to 20 minutes. Rest 10 minutes, then dice and toss with the BBQ sauce.",
+                    "While the pork cooks, simmer the rice in the chicken broth with the diced yellow onion, covered, until tender.",
+                    "Make the salsa: drain the diced tomatoes well, then stir them with minced jalapeno, diced red onion, lime juice, chopped cilantro, and a pinch of taco seasoning.",
+                    "Portion rice into 14 containers, then divide the BBQ pork, salsa, and shredded cheddar on top."
+                ],
+    "portion_html":  "Weigh the rice pot and the bowl of diced pork, subtract the empty pot number, and divide each by 14 so every container gets an even cut. Each bowl lands at about 571 calories and 39 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://grilling24x7.com/leftover-pork-tenderloin-burrito-bowl/\" target=\"_blank\" rel=\"noopener\"\u003eGrilling 24x7\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Hearty dinners for about $3.13 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  31.96,
+    "cost_batch_true":  36.25,
+    "cost_per_serving":  2.28,
+    "cost_per_serving_true":  2.59,
+    "cost_pantry_add":  12.78,
+    "cost_first_run":  49.03,
+    "scaler":  {
+                   "cost":  "36.25",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Tenderloin",
+                                   "grams":  1746,
+                                   "buy":  "3.75 lb",
+                                   "bid":  "pork-tenderloin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Taco Seasoning",
+                                   "grams":  62,
+                                   "buy":  "7.75 tbsp",
+                                   "bid":  "taco-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "BBQ Sauce",
+                                   "grams":  274,
+                                   "buy":  "1 cups",
+                                   "bid":  "bbq-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  924,
+                                   "buy":  "2 lb",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  221,
+                                   "buy":  "2",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  788,
+                                   "buy":  "4.25 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "grams":  435,
+                                   "buy":  "15.25 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "grams":  46,
+                                   "buy":  "46 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "grams":  1848,
+                                   "buy":  "4.5 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "grams":  54,
+                                   "buy":  "6 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "grams":  116,
+                                   "buy":  "7.75 tbsp",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Red Onion",
+                                   "grams":  221,
+                                   "buy":  "2",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  22,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Grilled pork tenderloin burrito bowl meal prep: 571 calories and 39g protein at about $3.13 a bowl (at everyday cost). Taco-rubbed pork, broth rice, fresh salsa.",
+                 "keywords":  "pork tenderloin burrito bowl, pork meal prep, budget burrito bowl, cheap high protein dinner, tex-mex meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  3.13,
+                 "recipeIngredient":  [
+                                          "3.75 lb pork tenderloin",
+                                          "1 cup BBQ sauce",
+                                          "2 lb chicken broth",
+                                          "4.25 cups dry rice",
+                                          "2 yellow onions",
+                                          "15.25 oz shredded cheddar cheese",
+                                          "4.5 cans diced tomatoes",
+                                          "2 red onions",
+                                          "7.75 tbsp lime juice",
+                                          "46 tbsp fresh cilantro"
+                                      ],
+                 "steps":  [
+                               "Rub the tenderloins with taco seasoning and grill or roast to 145F; rest 10 minutes, dice, and toss with BBQ sauce.",
+                               "Simmer the rice in chicken broth with diced onion until tender.",
+                               "Stir drained diced tomatoes with jalapeno, red onion, lime juice, and cilantro for the salsa.",
+                               "Portion rice into 14 containers and top with pork, salsa, and cheddar."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Pork Tenderloin",
+                                  "grams":  1746
+                              },
+                              {
+                                  "item":  "Taco Seasoning",
+                                  "grams":  62
+                              },
+                              {
+                                  "item":  "BBQ Sauce",
+                                  "grams":  274
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  924
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  221
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  788
+                              },
+                              {
+                                  "item":  "Cheddar Cheese, Shredded",
+                                  "grams":  435
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  46
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  1848
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  54
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  116
+                              },
+                              {
+                                  "item":  "Red Onion",
+                                  "grams":  221
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  22
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

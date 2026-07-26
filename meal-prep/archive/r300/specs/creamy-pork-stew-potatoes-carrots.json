@@ -1,0 +1,361 @@
+{
+    "name":  "Creamy Pork Stew with Potatoes and Carrots",
+    "slug":  "creamy-pork-stew-potatoes-carrots",
+    "cuisine":  "American",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://thecozycook.com/pork-stew/",
+    "source_site":  "thecozycook.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified at 567 cal / 41g protein per serving over 6 servings - target profile with no adjustment. The source author explicitly bought 2.5 lbs of pork butt for $2.47, which is exactly the budget story the site tells. Stovetop or slow cooker, both scale. Different from the Dutch oven roast above (cubed stew in a cream broth, not a sliced roast). | HARVEST: ",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "OVERRIDE Pork Shoulder: \u0027Pork\u0027 header duplicates the \u00272 1/2 lbs pork butt\u0027 line; counted once"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  665,
+                 "protein":  38,
+                 "carbs":  32,
+                 "fat":  42,
+                 "cost_ps":  "4.87"
+             },
+    "intro_html":  "Cubed pork shoulder browned in flour, simmered soft with potatoes, carrots and celery, then finished with a pour of cream that turns the broth silky. This is the stew you make on a cold Sunday and thank yourself for on Thursday. It carries 38 grams of protein at about $4.87 a bowl (at everyday cost), and it tastes better on day two than it did on day one.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 0.75 tbsp (2 g)",
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 0.5 tbsp (2 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tbsp (38 g)",
+                                "\u003cstrong\u003ePork Shoulder (generic (USDA)):\u003c/strong\u003e 5.75 lb (2646 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 1.25 cups (153 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 5.75 tbsp (79 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 4 cartons (3780 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 7 tbsp (98 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (257 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 9.3 (569 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 7 (385 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5.5 tbsp (47 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1.5 tbsp (27 g)",
+                                "\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 0.75 tbsp (12 g)",
+                                "\u003cstrong\u003eHot Sauce (Frank\u0027s RedHot):\u003c/strong\u003e 0.75 tbsp (12 g)",
+                                "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 1.25 cups (278 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.11 oz (3 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 5 (1058 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.25 tbsp (9 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Shoulder, 5.75 lb: ~$20.83. \u003cstrong\u003eBuy 6 lbs: $21.42.\u003c/strong\u003e",
+                       "All-Purpose Flour, 1.25 cups: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 5.75 tbsp: ~$1.11. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 4 cartons: ~$5.07. \u003cstrong\u003ePantry staple; this batch alone uses about 5 32oz cartons.\u003c/strong\u003e",
+                       "Butter, 7 tbsp: ~$0.64. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Yellow Onion, 2.3: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 9.3: ~$1.20. \u003cstrong\u003eBuy 2 lbs: $1.91.\u003c/strong\u003e",
+                       "Celery, 7: ~$2.03. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Garlic, 5.5 tbsp: ~$0.68. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Worcestershire Sauce, 1.5 tbsp: ~$0.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Heavy Cream, 1.25 cups: ~$1.73. \u003cstrong\u003eBuy 1 pint: $2.94.\u003c/strong\u003e",
+                       "Potato, 5: ~$1.32. \u003cstrong\u003eBuy 3 lbs: $1.70.\u003c/strong\u003e",
+                       "Pantry seasonings (dried thyme, italian seasoning, salt, dijon mustard, hot sauce, bay leaves, black pepper): ~$1.30. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $36.80 across 14 servings, so roughly $2.63 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $43.33 across 14 servings, roughly $3.10 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $24.88 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $68.21. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.87 a bowl\u003c/strong\u003e (at everyday cost) for a cream finished pork stew with the vegetables and the starch already in the pot. There is no side dish to buy and no second pan to wash.",
+    "shop_smart":  [
+                       "\u003cstrong\u003ePork shoulder is the cheapest braising meat we track.\u003c/strong\u003e It is nearly the entire cost of this recipe, so buy it when the board shows it low and freeze what you do not use in two pound blocks.",
+                       "\u003cstrong\u003eHeavy cream is the one splurge line.\u003c/strong\u003e A pint carries the batch. If you want to shave the cost, half the cream still gives you a silky broth, just a lighter one.",
+                       "\u003cstrong\u003eBuy carrots and celery whole, not pre cut.\u003c/strong\u003e A bunch of celery and a two pound bag of carrots run a fraction of the bagged sticks and matchsticks, and ten minutes of knife work is the only difference.",
+                       "\u003cstrong\u003eFlour, thyme, bay leaves, mustard and hot sauce are already in your kitchen.\u003c/strong\u003e That entire flavor backbone shows up as a pantry line, not a shopping line."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cut the pork shoulder into bite sized cubes, pat them dry, and toss them with the flour, salt and black pepper until every piece is dusted.",
+                    "Heat the olive oil in a heavy pot and brown the pork in batches. Crowding the pan steams the meat instead of searing it, so give it room and take your time.",
+                    "Pull the pork out and drop the butter in, then cook the diced onion, carrots and celery until they soften and pick up the browned bits.",
+                    "Add the garlic, dried thyme and italian seasoning and stir until you can smell them, about one minute.",
+                    "Pour in the chicken broth along with the Worcestershire, dijon mustard, hot sauce and bay leaves, scraping the bottom of the pot clean.",
+                    "Return the pork, add the cubed potatoes, and simmer covered until the meat is tender and the potatoes give way to a fork.",
+                    "Fish out the bay leaves, turn the heat low, and stir in the heavy cream. Let it warm through without boiling so it stays smooth."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and ladle the exact amount into each container, stirring the pot between scoops so the meat does not all settle in the last few. Every bowl lands near 665 calories and 38 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://thecozycook.com/pork-stew/\" target=\"_blank\" rel=\"noopener\"\u003ethecozycook.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Cold weather stews for about $4.87 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  36.8,
+    "cost_batch_true":  43.33,
+    "cost_per_serving":  2.63,
+    "cost_per_serving_true":  3.1,
+    "cost_pantry_add":  24.88,
+    "cost_first_run":  68.21,
+    "scaler":  {
+                   "cost":  "43.33",
+                   "ing":  [
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  2,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "canon":  "Italian Seasoning",
+                                   "grams":  2,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  38,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Pork Shoulder",
+                                   "canon":  "Pork Shoulder",
+                                   "grams":  2646,
+                                   "buy":  "5.75 lb",
+                                   "bid":  "pork-shoulder",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  153,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  79,
+                                   "buy":  "5.75 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  3780,
+                                   "buy":  "4 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  98,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  257,
+                                   "buy":  "2.3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  569,
+                                   "buy":  "9.3",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "canon":  "Celery",
+                                   "grams":  385,
+                                   "buy":  "7",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  47,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "canon":  "Worcestershire Sauce",
+                                   "grams":  27,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "worcestershire",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Dijon Mustard",
+                                   "canon":  "Dijon Mustard",
+                                   "grams":  12,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "dijon-mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Hot Sauce",
+                                   "canon":  "Hot Sauce",
+                                   "grams":  12,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "hot-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Heavy Cream",
+                                   "canon":  "Heavy Cream",
+                                   "grams":  278,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "heavy-cream",
+                                   "gpu":  "29.800"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  3,
+                                   "buy":  "0.11 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  1058,
+                                   "buy":  "5",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  9,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Creamy braised pork shoulder stew with potatoes, carrots and celery, built for 14 servings. 665 calories, 38g protein, about $4.87 per serving (at everyday cost).",
+                 "keywords":  "creamy pork stew, pork shoulder stew, potatoes and carrots stew, budget stew meal prep, cheap pork dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT1H30M",
+                 "totalTime":  "PT1H55M",
+                 "costPerServing":  4.87,
+                 "recipeIngredient":  [
+                                          "5.75 lb pork shoulder",
+                                          "1.25 cups all-purpose flour",
+                                          "5.75 tbsp olive oil",
+                                          "7 tbsp butter",
+                                          "8.25 lb chicken broth",
+                                          "2.3 yellow onions",
+                                          "9.3 carrots",
+                                          "7 celery stalks",
+                                          "5.5 tbsp garlic",
+                                          "1.5 tbsp Worcestershire sauce",
+                                          "1.25 cups heavy cream",
+                                          "5 potatoes"
+                                      ],
+                 "steps":  [
+                               "Toss cubed pork shoulder with flour, salt and pepper, then brown it in olive oil in batches.",
+                               "Cook the onion, carrots and celery in butter until softened, then add garlic, thyme and italian seasoning.",
+                               "Deglaze with chicken broth and stir in Worcestershire, dijon, hot sauce and bay leaves.",
+                               "Return the pork, add the potatoes, and simmer covered until everything is tender.",
+                               "Remove the bay leaves and stir in the heavy cream over low heat."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Italian Seasoning",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  38
+                              },
+                              {
+                                  "item":  "Pork Shoulder",
+                                  "grams":  2646
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  153
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  79
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  3780
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  257
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  569
+                              },
+                              {
+                                  "item":  "Celery",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Worcestershire Sauce",
+                                  "grams":  27
+                              },
+                              {
+                                  "item":  "Dijon Mustard",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Hot Sauce",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Heavy Cream",
+                                  "grams":  278
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  1058
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  9
+                              }
+                          ]
+}

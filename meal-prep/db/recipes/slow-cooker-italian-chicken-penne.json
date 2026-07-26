@@ -1,0 +1,186 @@
+{
+    "name":  "Slow Cooker Italian Chicken Penne",
+    "slug":  "slow-cooker-italian-chicken-penne",
+    "cuisine":  "Italian",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  503,
+                 "protein":  55,
+                 "carbs":  49,
+                 "fat":  11,
+                 "cost_ps":  "3.01"
+             },
+    "intro_html":  "This is comfort food that works for your wallet and your goals at the same time. The slow cooker does all the heavy lifting while you go live your life, and coconut milk gives the sauce a creamy richness for pennies compared to heavy cream. You come home to shredded Italian chicken ready to toss with hearty protein penne.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2495 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (400 g)",
+                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 1 can (240 g)",
+                                "\u003cstrong\u003eSun-Dried Tomatoes:\u003c/strong\u003e 1 bag (84 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 jar (7 g)",
+                                "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 1 jar (3 g)",
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 1 jar (5 g)",
+                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 3 boxs (900 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 1 container (98 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (15 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (4 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 1/2 tsp (3 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.01 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy chicken breast in bulk.\u003c/strong\u003e The big family packs run far cheaper per pound than the small trays. Grab it when it dips under a couple dollars a pound and freeze what you are not cooking today.",
+                       "\u003cstrong\u003eSkip the pricey Italian seasoning jar.\u003c/strong\u003e If you already own oregano, basil, and parsley, mix your own. It is the same herbs for a fraction of the cost.",
+                       "\u003cstrong\u003eWatch the parmesan.\u003c/strong\u003e A wedge you grate yourself lasts longer and tastes stronger than the pre-shredded tubs, so a little goes a long way across all 14 servings."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot on a kitchen scale and write the number down. You will need it to portion evenly at the end.",
+                    "Lay the chicken breast in the bottom of the slow cooker.",
+                    "Pour the chicken broth and coconut milk over the top, then add the chopped sun-dried tomatoes, garlic powder, onion powder, and Italian seasoning.",
+                    "Cover and cook on low for 6 to 8 hours or on high for 3 to 4 hours, until the chicken pulls apart easily.",
+                    "Shred the chicken right in the pot with two forks and stir it back into all that sauce.",
+                    "Boil the protein penne until just tender, drain, and add it to your empty weighed mixing pot.",
+                    "Tip the shredded chicken and sauce over the pasta, add the grated parmesan, and stir until everything is coated and glossy."
+                ],
+    "portion_html":  "Weigh the full pot, subtract the empty pot number you wrote down, and divide the remaining weight by 14. That gives you the grams per container. Scoop each one to that number so every meal comes out even, and you land right around 55 grams of protein per serving.",
+    "credit_html":  "",
+    "upsell_html":  "Fourteen creamy Italian dinners cooked while you were busy, for a fraction of what one restaurant plate would cost. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  25.79,
+    "cost_batch_true":  29.8,
+    "cost_per_serving":  1.84,
+    "cost_per_serving_true":  2.13,
+    "cost_pantry_add":  12.85,
+    "cost_first_run":  42.65,
+    "scaler":  {
+                   "cost":  "29.80",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  2495,
+                                   "buy":  "6 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  400,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Coconut Milk",
+                                   "grams":  240,
+                                   "buy":  "1 can",
+                                   "bid":  "coconut-milk",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sun-Dried Tomatoes",
+                                   "grams":  84,
+                                   "buy":  "1 bag",
+                                   "bid":  "sun-dried-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "grams":  7,
+                                   "buy":  "1 jar",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Onion Powder",
+                                   "grams":  3,
+                                   "buy":  "1 jar",
+                                   "bid":  "onion-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "grams":  5,
+                                   "buy":  "1 jar",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Penne Pasta",
+                                   "grams":  900,
+                                   "buy":  "3 boxs",
+                                   "bid":  "penne-pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "grams":  98,
+                                   "buy":  "1 container",
+                                   "bid":  "parmesan-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  15,
+                                   "buy":  "1 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Pepper Flakes",
+                                   "grams":  2,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "red-pepper-flakes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "grams":  3,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Italian meal prep. Fourteen servings at about 503 calories and 55 grams of protein for roughly $3.01 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker italian chicken penne, budget dinner",
+                 "costPerServing":  3.01,
+                 "recipeIngredient":  [
+                                          "6 lb Boneless Skinless Chicken Breast",
+                                          "1 carton Chicken Broth",
+                                          "1 can Coconut Milk",
+                                          "1 bag Sun-Dried Tomatoes",
+                                          "1 jar Garlic Powder",
+                                          "1 jar Onion Powder"
+                                      ],
+                 "steps":  [
+                               "Weigh your empty mixing pot on a kitchen scale and write the number down. You will need it to portion evenly at the end.",
+                               "Lay the chicken breast in the bottom of the slow cooker.",
+                               "Pour the chicken broth and coconut milk over the top, then add the chopped sun-dried tomatoes, garlic powder, onion powder, and Italian seasoning.",
+                               "Cover and cook on low for 6 to 8 hours or on high for 3 to 4 hours, until the chicken pulls apart easily.",
+                               "Shred the chicken right in the pot with two forks and stir it back into all that sauce.",
+                               "Boil the protein penne until just tender, drain, and add it to your empty weighed mixing pot.",
+                               "Tip the shredded chicken and sauce over the pasta, add the grated parmesan, and stir until everything is coated and glossy."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

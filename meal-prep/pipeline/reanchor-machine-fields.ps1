@@ -9,8 +9,8 @@ $mp = Split-Path -Parent $here
 $man = Get-Content (Join-Path $here 'v2-perserving.json') -Raw | ConvertFrom-Json
 $bySlug=@{}; foreach($r in $man){ $bySlug[$r.slug]=$r }
 $done=0; $skip=0
-foreach($run in 'r100','r300'){
-  foreach($sf in (Get-ChildItem (Join-Path $mp "$run\specs\*.json") | Where-Object Name -ne '_index.json')){
+foreach($run in @('db')){
+  foreach($sf in (Get-ChildItem (Join-Path $mp "db\recipes\*.json"))){
     $slug = $sf.BaseName
     $e = $bySlug[$slug]; if(-not $e){ Write-Warning "no manifest for $slug"; $skip++; continue }
     $new = ('{0:0.00}' -f [double]$e.everyday_ps)

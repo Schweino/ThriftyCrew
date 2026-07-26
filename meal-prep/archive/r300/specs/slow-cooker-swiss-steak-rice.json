@@ -1,0 +1,266 @@
+{
+    "name":  "Slow Cooker Swiss Steak with Rice",
+    "slug":  "slow-cooker-swiss-steak-rice",
+    "cuisine":  "American",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.themagicalslowcooker.com/slow-cooker-swiss-steak/",
+    "source_site":  "themagicalslowcooker.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 400g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified at 340 cal / 35g protein for the beef and sauce at 8 servings; over rice it lands near 590 with 38g+ protein. Tomato-braised cheap cut, no cream, no cheese, so it costs almost nothing per serving. Distinct from every existing beef dish in the catalog. Confidence: high. | HARVEST: Rice is a serving suggestion, not in the source ingredient list.",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 400g (src scale)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  575,
+                 "protein":  34,
+                 "carbs":  52,
+                 "fat":  24,
+                 "cost_ps":  "4.39"
+             },
+    "intro_html":  "Swiss steak has nothing to do with Switzerland. The name comes from swissing, an old term for pounding tough meat until it gives up, and that is the whole idea here. Flour dredged beef braises in tomatoes, peppers, and onion until it cuts with a fork. No cream, no cheese, and not much fuss. Each bowl carries \u003cstrong\u003e34 grams of protein\u003c/strong\u003e and 575 calories for about \u003cstrong\u003e$4.39\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 4.25 lb (1984 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 13.5 tbsp (109 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (10 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 7 tbsp (98 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 2.25 cups (521 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 3.5 cans (1439 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 3.5 tbsp (60 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 (201 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 2 (210 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 tbsp (18 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Chuck Roast, 4.25 lb: ~$34.86. \u003cstrong\u003eBuy 5 lbs: $39.85.\u003c/strong\u003e",
+                       "All-Purpose Flour, 13.5 tbsp: ~$0.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Vegetable Oil, 7 tbsp: ~$0.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Beef Broth, 2.25 cups: ~$0.70. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Diced Tomatoes, 3.5 cans: ~$3.36. \u003cstrong\u003eBuy 4 cans: $3.84.\u003c/strong\u003e",
+                       "Worcestershire Sauce, 3.5 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2: ~$0.51. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Green Bell Peppers, 2: ~$1.50. \u003cstrong\u003eBuy 2 each: $1.72.\u003c/strong\u003e",
+                       "Garlic, 2 tbsp: ~$0.26. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.07. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $42.66 across 14 servings, so roughly $3.05 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $49.30 across 14 servings, roughly $3.52 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.21 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.51. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.39 a bowl\u003c/strong\u003e (at everyday cost). Canned tomatoes and a couple of bell peppers turn a modest chunk of chuck into fourteen dinners, which is the entire trick of tomato braises.",
+    "shop_smart":  [
+                       "Canned diced tomatoes are the sauce. Compare the store brand against the name brand by the price per ounce tag, because in a long braise the difference on the plate is nothing.",
+                       "Green bell peppers cost less than red, yellow, or orange, and in a braise the color cooks out anyway. Buy green here without a second thought.",
+                       "Flour is the thickener and you already own it. Dredging the beef before browning does double duty, giving you crust and gravy from one step.",
+                       "Chuck roast is right for this, but so is any tough, cheap cut your store marks down. That is the point of the technique."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cut the chuck roast into thick slabs or large cubes, season them with salt and black pepper, and dredge each piece in the flour.",
+                    "Brown the dredged beef in the vegetable oil in batches over medium high heat. Do not crowd the pan or the flour will go gummy instead of golden.",
+                    "Move the browned beef to the slow cooker and scatter the sliced onion, sliced bell peppers, and minced garlic over it.",
+                    "Pour in the diced tomatoes with their juice, the beef broth, and the Worcestershire sauce.",
+                    "Cover and cook on low for 7 hours, until the beef is fork tender and the sauce has thickened from the flour on the meat.",
+                    "Break the beef into large pieces in the sauce, then taste and correct the salt and pepper.",
+                    "Cook the rice separately and serve the beef and sauce over it."
+                ],
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of beef and sauce into each container, then add the same weight of rice to every one. Each bowl lands at \u003cstrong\u003e575 calories with 34 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/slow-cooker-swiss-steak/\" target=\"_blank\" rel=\"noopener\"\u003ethemagicalslowcooker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Swiss steak over rice for about $4.39 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  42.66,
+    "cost_batch_true":  49.3,
+    "cost_per_serving":  3.05,
+    "cost_per_serving_true":  3.52,
+    "cost_pantry_add":  12.21,
+    "cost_first_run":  61.51,
+    "scaler":  {
+                   "cost":  "49.30",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Chuck Roast",
+                                   "canon":  "Beef Chuck Roast",
+                                   "grams":  1984,
+                                   "buy":  "4.25 lb",
+                                   "bid":  "beef-chuck-roast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  109,
+                                   "buy":  "13.5 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  10,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  98,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  521,
+                                   "buy":  "2.25 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  1439,
+                                   "buy":  "3.5 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "canon":  "Worcestershire Sauce",
+                                   "grams":  60,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "worcestershire",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  201,
+                                   "buy":  "2",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  210,
+                                   "buy":  "2",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  18,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Slow cooker Swiss steak meal prep: flour dredged chuck roast braised in tomatoes, onion, and bell pepper, served over rice. 575 calories, 34g protein, about $4.39 per serving (at everyday cost).",
+                 "keywords":  "swiss steak, slow cooker swiss steak, tomato braised beef, beef and rice bowls, budget meal prep, chuck roast recipes",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT7H",
+                 "totalTime":  "PT7H20M",
+                 "costPerServing":  4.39,
+                 "recipeIngredient":  [
+                                          "4.25 lb beef chuck roast",
+                                          "13.5 tbsp all-purpose flour",
+                                          "7 tbsp vegetable oil",
+                                          "1.25 lb beef broth",
+                                          "3.5 cans diced tomatoes",
+                                          "3.5 tbsp worcestershire sauce",
+                                          "2 yellow onions",
+                                          "2 green bell peppers",
+                                          "2 tbsp garlic",
+                                          "3.75 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Cut the chuck into slabs, season, and dredge in flour.",
+                               "Brown the beef in oil in batches, then move it to the slow cooker.",
+                               "Add onion, bell pepper, garlic, diced tomatoes, broth, and Worcestershire.",
+                               "Cook on low 7 hours until fork tender and thickened.",
+                               "Cook the rice and portion beef, sauce, and rice into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Chuck Roast",
+                                  "grams":  1984
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  109
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  521
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  1439
+                              },
+                              {
+                                  "item":  "Worcestershire Sauce",
+                                  "grams":  60
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  201
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  18
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

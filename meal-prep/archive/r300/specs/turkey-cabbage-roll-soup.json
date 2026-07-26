@@ -1,0 +1,323 @@
+{
+    "name":  "Turkey Cabbage Roll Soup",
+    "slug":  "turkey-cabbage-roll-soup",
+    "cuisine":  "eastern-european",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://premeditatedleftovers.com/recipes-cooking-tips/cabbage-roll-soup-with-turkey/",
+    "source_site":  "premeditatedleftovers.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 400g (src scale)",
+                   "base +60% (Rice)",
+                   "portion factor 1.15"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Fully board-mapped and cabbage is one of the cheapest commodities we track. Verified 8 servings, but only 146 cal and 19g protein as written, which fails both gates outright, so our build needs roughly double meat and a real rice portion. Confidence: page high, our numbers are a rebuild not the source. NEAR-DUPE WATCH: Unstuffed Cabbage Roll Bowls (beef) is live. | HARVEST: No rice/salt line in the published list; transcribed as-is.",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 400g (src scale)",
+                         "TUNING: base +60% (Rice)",
+                         "TUNING: portion factor 1.15"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  572,
+                 "protein":  26,
+                 "carbs":  93,
+                 "fat":  8,
+                 "cost_ps":  "3.48"
+             },
+    "intro_html":  "Golabki, holubtsi, sarma. Every corner of Eastern Europe has a name for meat and rice rolled up in a cabbage leaf and baked in tomato. Every one of them takes an afternoon. This soup takes the same ingredients, skips the rolling entirely, and lets the cabbage go tender right in the pot. Grandma would have been fine with it. She had things to do too.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2 tbsp (27 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 (231 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 4 (221 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.25 tbsp (20 g)",
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 2.5 lb (1141 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3.6 (221 g)",
+                                "\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 0.6 (563 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 4 cans (1654 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2 cartons (1932 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)",
+                                "\u003cstrong\u003eFresh Basil:\u003c/strong\u003e 7.25 tbsp (11 g)",
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 0.75 tbsp (3 g)",
+                                "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 0.75 tbsp (2 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (23 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 7.75 cups dry (1445 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 2 tbsp: ~$0.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2: ~$0.58. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Celery, 4: ~$1.16. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Garlic, 2.25 tbsp: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 2.5 lb: ~$9.61. \u003cstrong\u003eBuy 3 lbs: $11.46.\u003c/strong\u003e",
+                       "Carrots, 3.6: ~$0.46. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Green Cabbage, 0.6: ~$1.06. \u003cstrong\u003eBuy 1 head: $1.69.\u003c/strong\u003e",
+                       "Diced Tomatoes, 4 cans: ~$3.86. \u003cstrong\u003eBuy 5 cans: $4.80.\u003c/strong\u003e",
+                       "Chicken Broth, 2 cartons: ~$2.59. \u003cstrong\u003ePantry staple; this batch alone uses about 3 32oz cartons.\u003c/strong\u003e",
+                       "Fresh Basil, 7.25 tbsp: ~$1.38. \u003cstrong\u003eBuy 1 0.5oz pack: $1.76.\u003c/strong\u003e",
+                       "Rice, 7.75 cups dry: ~$1.78. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (dried oregano, italian seasoning, dried thyme, black pepper, salt): ~$0.53. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $23.68 across 14 servings, so roughly $1.69 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $30.03 across 14 servings, roughly $2.14 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $18.67 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.70. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.48 a bowl\u003c/strong\u003e (at everyday cost). Cabbage is the most underrated vegetable in the store on a cost per pound basis, and here it is a headliner.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eCabbage is the cheapest filling vegetable you can buy.\u003c/strong\u003e One head is a couple dollars, keeps for weeks in the crisper, and cooks down into something that eats like a lot more than it cost.",
+                       "\u003cstrong\u003eCanned diced tomatoes carry this pot.\u003c/strong\u003e Watch for the case sale, buy a stack, and you have the base for this and half a dozen other recipes on the site.",
+                       "\u003cstrong\u003eGround turkey freezes flat.\u003c/strong\u003e Buy the larger pack, press it into one pound sheets in freezer bags, and it thaws in an hour instead of overnight.",
+                       "\u003cstrong\u003eCook the rice separately, always.\u003c/strong\u003e Rice simmered in the soup keeps drinking broth in the fridge and turns day four into paste. Cooked apart, it stays rice."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice separately per the package and set it aside covered.",
+                    "Brown the ground turkey in olive oil in your big pot over medium-high heat, breaking it up, until it is cooked through.",
+                    "Add the diced onion, celery and carrots and cook until they start to soften, then stir in the garlic for the last minute.",
+                    "Core and chop the cabbage into ribbons and pile it into the pot. It will look like too much. Give it five minutes and it will not be.",
+                    "Pour in the diced tomatoes with their juice and the chicken broth, add the dried oregano, Italian seasoning and dried thyme, and bring it to a simmer.",
+                    "Simmer 25 to 30 minutes until the cabbage is fully tender, then season with salt and black pepper and stir in the chopped fresh basil off the heat."
+                ],
+    "portion_html":  "Scoop the cooked rice into your 14 containers first, then set the soup pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and ladle that exact weight over the rice in each one. Every serving lands near 572 calories with 26 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://premeditatedleftovers.com/recipes-cooking-tips/cabbage-roll-soup-with-turkey/\" target=\"_blank\" rel=\"noopener\"\u003epremeditatedleftovers.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cem\u003eCabbage rolls without the rolling, for about $3.48 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "cost_batch":  23.68,
+    "cost_batch_true":  30.03,
+    "cost_per_serving":  1.69,
+    "cost_per_serving_true":  2.14,
+    "cost_pantry_add":  18.67,
+    "cost_first_run":  48.7,
+    "scaler":  {
+                   "cost":  "30.03",
+                   "ing":  [
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  27,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  231,
+                                   "buy":  "2",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "canon":  "Celery",
+                                   "grams":  221,
+                                   "buy":  "4",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  20,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1141,
+                                   "buy":  "2.5 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  221,
+                                   "buy":  "3.6",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Cabbage",
+                                   "canon":  "Green Cabbage",
+                                   "grams":  563,
+                                   "buy":  "0.6",
+                                   "bid":  "cabbage",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  1654,
+                                   "buy":  "4 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  1932,
+                                   "buy":  "2 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  4,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Basil",
+                                   "canon":  "Fresh Basil",
+                                   "grams":  11,
+                                   "buy":  "7.25 tbsp",
+                                   "bid":  "fresh-basil",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "canon":  "Italian Seasoning",
+                                   "grams":  3,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  2,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  23,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1445,
+                                   "buy":  "7.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Ground turkey, cabbage, tomato and rice simmered into a cabbage roll soup. A 14 serving Eastern European batch built for cheap meal prep.",
+                 "keywords":  "cabbage roll soup, unstuffed cabbage soup, ground turkey soup, budget meal prep, cheap dinner ideas, golabki soup",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT40M",
+                 "totalTime":  "PT1H",
+                 "costPerServing":  3.48,
+                 "recipeIngredient":  [
+                                          "93/7 Ground Turkey",
+                                          "Olive Oil",
+                                          "Yellow Onion",
+                                          "Celery",
+                                          "Carrots",
+                                          "Garlic",
+                                          "Green Cabbage",
+                                          "Diced Tomatoes",
+                                          "Chicken Broth",
+                                          "Fresh Basil",
+                                          "Rice"
+                                      ],
+                 "steps":  [
+                               "Cook the rice separately and set it aside.",
+                               "Brown the ground turkey in olive oil in a large pot.",
+                               "Add the onion, celery, carrots and garlic and cook until softened.",
+                               "Stir in the shredded cabbage, diced tomatoes, chicken broth and herbs.",
+                               "Simmer 25 to 30 minutes until the cabbage is tender, season, and serve over rice."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  27
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  231
+                              },
+                              {
+                                  "item":  "Celery",
+                                  "grams":  221
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1141
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  221
+                              },
+                              {
+                                  "item":  "Green Cabbage",
+                                  "grams":  563
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  1654
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  1932
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Fresh Basil",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Italian Seasoning",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  23
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1445
+                              }
+                          ]
+}

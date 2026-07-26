@@ -1,0 +1,200 @@
+{
+    "name":  "Slow Cooker Chicken Korma Rice Bowls",
+    "slug":  "slow-cooker-chicken-korma-rice-bowls",
+    "cuisine":  "Indian",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  584,
+                 "protein":  57,
+                 "carbs":  57,
+                 "fat":  13,
+                 "cost_ps":  "3.71"
+             },
+    "intro_html":  "Korma is the mild, creamy, slightly sweet curry that wins over just about everyone. Cashews and coconut milk make it feel indulgent while the numbers stay high protein and cheap per serving. One batch makes 14 servings.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3100 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (920 g)",
+                                "\u003cstrong\u003eCashews (generic):\u003c/strong\u003e 1 bag (130 g)",
+                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 1 can (200 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (360 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1 can (66 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (150 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1 bottle (14 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (12 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 3 tsp chopped (35 g)",
+                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 2 tsp (12 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tsp (6 g)",
+                                "\u003cstrong\u003eGround Turmeric (Great Value):\u003c/strong\u003e 1 tsp (6 g)",
+                                "\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 1 tsp (6 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (14 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.71 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "A little \u003cstrong\u003ehoney\u003c/strong\u003e gives korma its signature gentle sweetness, so skip any pricier specialty sweeteners.",
+                       "One \u003cstrong\u003ebag of cashews\u003c/strong\u003e does double duty as thickener and richness, which beats buying cream.",
+                       "Buy the \u003cstrong\u003ebulk chicken breast\u003c/strong\u003e to keep this rich bowl budget-friendly."
+                   ],
+    "make_it":  [
+                    "Add the chicken breast, chopped onion, and minced garlic to the crock.",
+                    "Stir in the tomato paste, coconut milk, chicken broth, and a spoonful of honey.",
+                    "Cover and cook on low for 6 to 8 hours until the chicken is tender.",
+                    "Shred the chicken and stir it back into the creamy sauce.",
+                    "Blend or crush the cashews and stir them in to thicken and enrich.",
+                    "Serve the korma over rice."
+                ],
+    "portion_html":  "Each of the 14 servings runs about 57g protein for roughly 584 calories, at around $2.08 a bowl.",
+    "credit_html":  "",
+    "upsell_html":  "Creamy, cozy, and crowd-pleasing, korma makes eating well all week feel like a treat. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  31.79,
+    "cost_batch_true":  37.72,
+    "cost_per_serving":  2.27,
+    "cost_per_serving_true":  2.69,
+    "cost_pantry_add":  15.58,
+    "cost_first_run":  53.3,
+    "scaler":  {
+                   "cost":  "37.72",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3100,
+                                   "buy":  "7 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  920,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cashews",
+                                   "grams":  130,
+                                   "buy":  "1 bag",
+                                   "bid":  "cashews",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Coconut Milk",
+                                   "grams":  200,
+                                   "buy":  "1 can",
+                                   "bid":  "coconut-milk",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  360,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "grams":  66,
+                                   "buy":  "1 can",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  150,
+                                   "buy":  "2 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "grams":  14,
+                                   "buy":  "1 bottle",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  12,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "grams":  35,
+                                   "buy":  "3 tsp chopped",
+                                   "bid":  "ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garam Masala",
+                                   "grams":  12,
+                                   "buy":  "2 tsp",
+                                   "bid":  "garam-masala",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  6,
+                                   "buy":  "1 tsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Turmeric",
+                                   "grams":  6,
+                                   "buy":  "1 tsp",
+                                   "bid":  "ground-turmeric",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cinnamon",
+                                   "grams":  6,
+                                   "buy":  "1 tsp",
+                                   "bid":  "ground-cinnamon",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "1 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Indian meal prep. Fourteen servings at about 584 calories and 57 grams of protein for roughly $3.71 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker chicken korma rice bowls, budget dinner",
+                 "costPerServing":  3.71,
+                 "recipeIngredient":  [
+                                          "7 lb Boneless Skinless Chicken Breast",
+                                          "1 lb Rice",
+                                          "1 bag Cashews",
+                                          "1 can Coconut Milk",
+                                          "1 carton Chicken Broth",
+                                          "1 can Tomato Paste"
+                                      ],
+                 "steps":  [
+                               "Add the chicken breast, chopped onion, and minced garlic to the crock.",
+                               "Stir in the tomato paste, coconut milk, chicken broth, and a spoonful of honey.",
+                               "Cover and cook on low for 6 to 8 hours until the chicken is tender.",
+                               "Shred the chicken and stir it back into the creamy sauce.",
+                               "Blend or crush the cashews and stir them in to thicken and enrich.",
+                               "Serve the korma over rice."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

@@ -1,0 +1,224 @@
+{
+    "name":  "Colombian Pork Loin with Blackberry Sauce",
+    "slug":  "colombian-pork-loin-blackberry-sauce",
+    "cuisine":  "Colombian",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.mycolombianrecipes.com/lomo-de-cerdo-con-salsa-de-moras-pork-loin-with-blackberry-sauce/",
+    "source_site":  "mycolombianrecipes.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "protein clamp 340-\u003e240 g/serving",
+                   "added Rice base 200g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Roast pork loin with a tart blackberry pan sauce; blackberries are a tracked board commodity so this becomes a genuinely cheap dish in berry season and a signal to members that the board drives the menu. Confidence note: source has no nutrition panel and serves 4, so est_cal is my estimate for loin plus rice. Nothing fruit-sauced exists in the catalog. | HARVEST: No nutrition data published. \"4 garlic loves minced\" is a typo in the source, transcribed verbatim.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: protein clamp 340-\u003e240 g/serving",
+                         "TUNING: added Rice base 200g (src scale)",
+                         "OVERRIDE Pork Loin: splitter lost \u0027about 3 lb.\u0027 from the item text; 3 lb roast (protein clamp will portion it)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  650,
+                 "protein":  55,
+                 "carbs":  74,
+                 "fat":  13,
+                 "cost_ps":  "3.35"
+             },
+    "intro_html":  "Lomo de cerdo con salsa de moras is a Colombian classic, and it is the rare fruit sauce that is genuinely tart instead of just sweet. Roasted garlic rubbed pork loin, sliced thin, under a blackberry sauce cooked down with lime and a little sugar, all over rice. Pork loin is one of the leanest cuts we track, so this plate carries 55 grams of protein for about $3.35 (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBlackberries:\u003c/strong\u003e 7 cups (1008 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (840 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 1.75 cups (350 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 3.5 tbsp (52 g)",
+                                "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 7.5 lb (3360 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2 tbsp (14 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Blackberries, 7 cups: ~$15.23. \u003cstrong\u003eBuy 6 6oz clamshells: $15.41.\u003c/strong\u003e",
+                       "Chicken Broth, 1 carton: ~$1.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sugar, 1.75 cups: ~$0.62. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lime Juice, 3.5 tbsp: ~$0.43. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pork Loin, 7.5 lb: ~$15.85. \u003cstrong\u003eBuy 8 lbs: $17.12.\u003c/strong\u003e",
+                       "Garlic, 8.25 tbsp: ~$1.01. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, salt): ~$0.65. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $35.78 across 14 servings, so roughly $2.56 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $37.37 across 14 servings, roughly $2.67 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.44 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.81. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.35 a bowl\u003c/strong\u003e (at everyday cost) for a roast pork dinner with a real fruit sauce on it. Make this in berry season and the cost drops further, because the blackberries are the single biggest line on the list.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eWatch the blackberries.\u003c/strong\u003e They are more than half the cost of this entire batch. In peak season the price falls hard, and this is the recipe to make when the board shows berries cheap.",
+                       "\u003cstrong\u003eFrozen blackberries work perfectly here.\u003c/strong\u003e The sauce gets cooked down and strained anyway, so nobody can tell. Frozen is usually the cheaper and steadier option out of season.",
+                       "\u003cstrong\u003ePork loin sells cheapest as a whole roast.\u003c/strong\u003e Buy the untrimmed loin rather than pre cut medallions and cut it yourself. The per pound gap is not small.",
+                       "\u003cstrong\u003eBuy garlic by the head.\u003c/strong\u003e This recipe uses a lot of it, and a couple of heads is still one of the cheapest lines on the list. Jarred garlic costs more and tastes like the jar."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Heat the oven to 375F. Pat the pork loin dry and rub it all over with minced garlic, salt and black pepper.",
+                    "Sear the loin in a hot pan on every side until it takes on color, then move it to a roasting pan.",
+                    "Roast until the center reaches 145F, then pull it out and let it rest at least ten minutes before you touch it. Cutting early dumps all the juice on the board.",
+                    "While the pork roasts, put the blackberries, sugar, lime juice and chicken broth in a saucepan and simmer until the berries collapse.",
+                    "Press the sauce through a strainer to catch the seeds, then return it to the pan and reduce until it coats a spoon.",
+                    "Cook the rice per the package so it is hot when everything else is ready.",
+                    "Slice the rested pork thin against the grain, then combine the rice, sliced pork and blackberry sauce in your big pot."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container, keeping the sliced pork evenly counted so the protein lands the same in every one. Every bowl comes in near 650 calories with a standout 55 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.mycolombianrecipes.com/lomo-de-cerdo-con-salsa-de-moras-pork-loin-with-blackberry-sauce/\" target=\"_blank\" rel=\"noopener\"\u003emycolombianrecipes.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Restaurant plates rebuilt for about $3.35 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  35.78,
+    "cost_batch_true":  37.37,
+    "cost_per_serving":  2.56,
+    "cost_per_serving_true":  2.67,
+    "cost_pantry_add":  15.44,
+    "cost_first_run":  52.81,
+    "scaler":  {
+                   "cost":  "37.37",
+                   "ing":  [
+                               {
+                                   "item":  "Blackberries",
+                                   "canon":  "Blackberries",
+                                   "grams":  1008,
+                                   "buy":  "7 cups",
+                                   "bid":  "blackberries",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  840,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  350,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "canon":  "Lime Juice",
+                                   "grams":  52,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Pork Loin",
+                                   "canon":  "Pork Loin",
+                                   "grams":  3360,
+                                   "buy":  "7.5 lb",
+                                   "bid":  "pork-loin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  14,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  70,
+                                   "buy":  "8.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Colombian roast pork loin with a tart blackberry pan sauce over rice, built for 14 servings. 650 calories, 55g protein, about $3.35 per serving (at everyday cost).",
+                 "keywords":  "colombian pork loin, lomo de cerdo con salsa de moras, blackberry sauce pork, high protein meal prep, roast pork rice bowls",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT1H",
+                 "totalTime":  "PT1H20M",
+                 "costPerServing":  3.35,
+                 "recipeIngredient":  [
+                                          "7.5 lb pork loin",
+                                          "7 cups blackberries",
+                                          "1.75 cups sugar",
+                                          "3.5 tbsp lime juice",
+                                          "1.75 lb chicken broth",
+                                          "8.25 tbsp garlic",
+                                          "3.75 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Rub the pork loin with minced garlic, salt and pepper, then sear it on all sides.",
+                               "Roast the loin until the center reaches 145F and let it rest before slicing.",
+                               "Simmer the blackberries with sugar, lime juice and chicken broth until they break down, then strain out the seeds.",
+                               "Reduce the strained sauce until it coats a spoon.",
+                               "Cook the rice, slice the pork thin, and combine with the blackberry sauce."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Blackberries",
+                                  "grams":  1008
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  840
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  350
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Pork Loin",
+                                  "grams":  3360
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

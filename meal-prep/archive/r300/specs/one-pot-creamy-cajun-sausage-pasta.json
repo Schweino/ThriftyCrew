@@ -1,0 +1,294 @@
+{
+    "name":  "One-Pot Creamy Cajun Sausage Pasta",
+    "slug":  "one-pot-creamy-cajun-sausage-pasta",
+    "cuisine":  "cajun",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://thestayathomechef.com/creamy-cajun-sausage-pasta/",
+    "source_site":  "thestayathomechef.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "protein +15% (Smoked Turkey Sausage)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 736 cal / 32g protein at the source, clears both bars as written. True one-pot: the pasta cooks in the sauce. Andouille has no board id but kielbasa plus cajun-seasoning (both tracked) is the standard swap. Distinct from the live Creamy Cajun Chicken Penne Skillet Bowls by protein and from Italian Sausage Penne by seasoning profile and smoked sausage; the selector should confirm it is comfortable with two creamy-Cajun pastas in the catalog. | HARVEST: ",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: protein +15% (Smoked Turkey Sausage)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  660,
+                 "protein":  25,
+                 "carbs":  78,
+                 "fat":  28,
+                 "cost_ps":  "3.88"
+             },
+    "intro_html":  "The pasta cooks in the sauce, which means every bit of starch that would normally go down the drain stays in the pot and thickens things instead. Smoked sausage, peppers, tomatoes and Cajun seasoning with cream and parmesan stirred in at the end. It lands at 25 grams of protein for about $3.88 a bowl (at everyday cost) and dirties exactly one pot.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2.25 tbsp (32 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (257 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2.3 (280 g)",
+                                "\u003cstrong\u003eSmoked Turkey Sausage (Butterball):\u003c/strong\u003e 2 lb (919 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.25 tbsp (20 g)",
+                                "\u003cstrong\u003eCajun Seasoning (Tony Chachere\u0027s):\u003c/strong\u003e 2.25 tbsp (21 g)",
+                                "\u003cstrong\u003eZiti Pasta (Great Value):\u003c/strong\u003e 37.25 oz dry (1058 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2.4 cartons (2240 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 4.7 cans (1918 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 4.5 tbsp (37 g)",
+                                "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 2.25 cups (555 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 7.5 oz (210 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 2.25 tbsp: ~$0.45. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2.3: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Red Bell Pepper, 2.3: ~$2.01. \u003cstrong\u003eBuy 3 each: $2.58.\u003c/strong\u003e",
+                       "Smoked Turkey Sausage, 2 lb: ~$8.20. \u003cstrong\u003eBuy 3 13oz ropes: $9.86.\u003c/strong\u003e",
+                       "Garlic, 2.25 tbsp: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Ziti Pasta, 37.25 oz dry: ~$2.26. \u003cstrong\u003eBuy 3 16oz boxes: $2.91.\u003c/strong\u003e",
+                       "Chicken Broth, 2.4 cartons: ~$3.01. \u003cstrong\u003ePantry staple; this batch alone uses about 3 32oz cartons.\u003c/strong\u003e",
+                       "Diced Tomatoes, 4.7 cans: ~$4.48. \u003cstrong\u003eBuy 5 cans: $4.80.\u003c/strong\u003e",
+                       "Cornstarch, 4.5 tbsp: ~$0.16. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Heavy Cream, 2.25 cups: ~$3.45. \u003cstrong\u003eBuy 2 pints: $5.87.\u003c/strong\u003e",
+                       "Parmesan Cheese, 7.5 oz: ~$2.57. \u003cstrong\u003eBuy 1 8oz tub: $2.78.\u003c/strong\u003e",
+                       "Pantry seasonings (cajun seasoning, salt, black pepper): ~$0.48. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $28.01 across 14 servings, so roughly $2.00 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $34.62 across 14 servings, roughly $2.47 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $19.64 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.26. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.88 a bowl\u003c/strong\u003e (at everyday cost) for a creamy Cajun pasta that cooks start to finish in a single pot. That is a weeknight dinner price on a Sunday afternoon schedule.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eSmoked sausage plus Cajun seasoning replaces andouille.\u003c/strong\u003e Real andouille carries a specialty price. Kielbasa style smoked sausage with a good Cajun blend gets you the same smoky heat for much less.",
+                       "\u003cstrong\u003eCanned diced tomatoes are the bulk of the sauce.\u003c/strong\u003e Buy store brand by the case when they go on sale. They keep for years and every third recipe on this site uses them.",
+                       "\u003cstrong\u003eCornstarch is the cheapest thickener there is.\u003c/strong\u003e A few tablespoons whisked into cold liquid does what a whole extra cup of cream would do.",
+                       "\u003cstrong\u003eGreen peppers instead of red will trim this cost.\u003c/strong\u003e Red bell peppers are the priciest produce on the list here and the Cajun seasoning is doing the flavor work anyway."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Slice the smoked sausage into coins, dice the onion and red bell pepper, and mince the garlic.",
+                    "Heat the olive oil in a large deep pot and brown the sausage coins until the edges take on color, then set them aside.",
+                    "Cook the onion and pepper in the sausage fat until they soften, then add the garlic and the Cajun seasoning and stir for a minute so the spices bloom.",
+                    "Pour in the chicken broth and the diced tomatoes and bring it to a boil, scraping the bottom clean.",
+                    "Stir in the dry pasta, drop it to a simmer, and cook uncovered while stirring often so nothing sticks. The pasta will drink most of the liquid.",
+                    "Whisk the cornstarch into a little cold water to make a slurry, then stir it into the pot and let it thicken for a minute.",
+                    "Turn the heat low, return the sausage, and stir in the heavy cream and parmesan until the sauce goes smooth."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container, stirring between scoops so the sausage stays even. Every bowl lands near 660 calories and 25 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://thestayathomechef.com/creamy-cajun-sausage-pasta/\" target=\"_blank\" rel=\"noopener\"\u003ethestayathomechef.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "One pot pastas for about $3.88 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  28.01,
+    "cost_batch_true":  34.62,
+    "cost_per_serving":  2,
+    "cost_per_serving_true":  2.47,
+    "cost_pantry_add":  19.64,
+    "cost_first_run":  54.26,
+    "scaler":  {
+                   "cost":  "34.62",
+                   "ing":  [
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  32,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  257,
+                                   "buy":  "2.3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "canon":  "Red Bell Pepper",
+                                   "grams":  280,
+                                   "buy":  "2.3",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Smoked Turkey Sausage",
+                                   "canon":  "Smoked Turkey Sausage",
+                                   "grams":  919,
+                                   "buy":  "2 lb",
+                                   "bid":  "smoked-turkey-sausage",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  20,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Cajun Seasoning",
+                                   "canon":  "Cajun Seasoning",
+                                   "grams":  21,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "cajun-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ziti Pasta",
+                                   "canon":  "Ziti Pasta",
+                                   "grams":  1058,
+                                   "buy":  "37.25 oz dry",
+                                   "bid":  "pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  2240,
+                                   "buy":  "2.4 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  1918,
+                                   "buy":  "4.7 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cornstarch",
+                                   "canon":  "Cornstarch",
+                                   "grams":  37,
+                                   "buy":  "4.5 tbsp",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Heavy Cream",
+                                   "canon":  "Heavy Cream",
+                                   "grams":  555,
+                                   "buy":  "2.25 cups",
+                                   "bid":  "heavy-cream",
+                                   "gpu":  "29.800"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "canon":  "Parmesan Cheese",
+                                   "grams":  210,
+                                   "buy":  "7.5 oz",
+                                   "bid":  "parmesan",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "One pot creamy Cajun pasta with smoked sausage, peppers and tomatoes, cooked start to finish in a single pot. 14 servings, 660 calories, 25g protein, about $3.88 each (at everyday cost).",
+                 "keywords":  "one pot cajun sausage pasta, creamy cajun pasta, smoked sausage pasta, one pot dinner, budget meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT45M",
+                 "costPerServing":  3.88,
+                 "recipeIngredient":  [
+                                          "2 lb smoked sausage",
+                                          "37.25 oz dry ziti pasta",
+                                          "4.7 cans diced tomatoes",
+                                          "5 lb chicken broth",
+                                          "2.25 cups heavy cream",
+                                          "7.5 oz parmesan cheese",
+                                          "2.3 red bell peppers",
+                                          "2.3 yellow onions",
+                                          "2.25 tbsp garlic",
+                                          "4.5 tbsp cornstarch",
+                                          "2.25 tbsp olive oil"
+                                      ],
+                 "steps":  [
+                               "Brown the sliced smoked sausage in olive oil and set it aside.",
+                               "Cook the onion and red pepper in the fat, then add the garlic and Cajun seasoning.",
+                               "Add the chicken broth and diced tomatoes and bring to a boil.",
+                               "Stir in the dry pasta and simmer uncovered, stirring often, until tender.",
+                               "Thicken with a cornstarch slurry, then return the sausage and stir in the cream and parmesan."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  32
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  257
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  280
+                              },
+                              {
+                                  "item":  "Smoked Turkey Sausage",
+                                  "grams":  919
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Cajun Seasoning",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Ziti Pasta",
+                                  "grams":  1058
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  2240
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  1918
+                              },
+                              {
+                                  "item":  "Cornstarch",
+                                  "grams":  37
+                              },
+                              {
+                                  "item":  "Heavy Cream",
+                                  "grams":  555
+                              },
+                              {
+                                  "item":  "Parmesan Cheese",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

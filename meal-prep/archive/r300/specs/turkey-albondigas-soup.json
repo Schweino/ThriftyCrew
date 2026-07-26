@@ -1,0 +1,354 @@
+{
+    "name":  "Turkey Albondigas Soup",
+    "slug":  "turkey-albondigas-soup",
+    "cuisine":  "mexican",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://amiraspantry.com/turkey-albondigas-soup-sopa-de-albondigas-recipe/",
+    "source_site":  "amiraspantry.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Potato)",
+                   "portion factor 1.4"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 6 servings, 380 cal, 30g protein, and every ingredient maps to the board. Rice-bound meatballs poach right in the pot, which batches well. No albondigas of any protein in the catalog. Needs a modest portion bump to clear 500 cal. | HARVEST: Meatballs are oven-baked first, then simmered in the soup pot.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Potato)",
+                         "TUNING: portion factor 1.4",
+                         "OVERRIDE Diced Tomatoes: WAVE-4: \u00272 Roma tomatoes\u0027 fresh, not 2 cans",
+                         "OVERRIDE Potato: WAVE-4: 1 lb potatoes for a 6-serving soup (source 1 cup was side-scale; keeps the 550 gate after the tomato fix)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  575,
+                 "protein":  33,
+                 "carbs":  71,
+                 "fat":  18,
+                 "cost_ps":  "4.09"
+             },
+    "intro_html":  "Sopa de albondigas is the Mexican meatball soup, and the trick that makes it different from every other meatball soup is the rice mixed right into the meat. It swells as the meatballs cook and gives them a soft, almost tender texture instead of a dense one. Around them go potatoes, carrots, celery, zucchini and a tomato broth thick with cilantro. It is a whole dinner in a bowl and it reheats better than most.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.25 lb (1482 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (33 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 3 large eggs (163 g)",
+                                "\u003cstrong\u003eBread Crumbs (generic):\u003c/strong\u003e 3.25 cups (353 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 0.5 cups dry (93 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 2.25 tbsp (7 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 2.25 tbsp (14 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 4.25 tbsp (75 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 6.5 tbsp (91 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 (229 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 6.5 (399 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 3 (165 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 12.4 (2639 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2 cans (817 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 26 tbsp (26 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 5 cartons (4704 g)",
+                                "\u003cstrong\u003eZucchini:\u003c/strong\u003e 10 (1921 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 3.25 lb: ~$12.49. \u003cstrong\u003eBuy 4 lbs: $15.29.\u003c/strong\u003e",
+                       "Garlic, 4 tbsp: ~$0.48. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Eggs, 3 large eggs: ~$0.39. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
+                       "Bread Crumbs, 3.25 cups: ~$1.01. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 0.5 cups dry: ~$0.11. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Vegetable Oil, 6.5 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2: ~$0.58. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 6.5: ~$0.84. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Celery, 3: ~$0.87. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Potato, 12.4: ~$3.30. \u003cstrong\u003eBuy 6 lbs: $3.41.\u003c/strong\u003e",
+                       "Diced Tomatoes, 2 cans: ~$1.91. \u003cstrong\u003eBuy 2 cans: $1.92.\u003c/strong\u003e",
+                       "Fresh Cilantro, 26 tbsp: ~$0.81. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Chicken Broth, 5 cartons: ~$6.32. \u003cstrong\u003ePantry staple; this batch alone uses about 6 32oz cartons.\u003c/strong\u003e",
+                       "Zucchini, 10: ~$6.44. \u003cstrong\u003eBuy 5 lbs: $7.60.\u003c/strong\u003e",
+                       "Pantry seasonings (dried oregano, ground cumin, salt, black pepper): ~$0.97. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $36.74 across 14 servings, so roughly $2.62 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $45.10 across 14 servings, roughly $3.22 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.20 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $57.30. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.09 a bowl\u003c/strong\u003e (at everyday cost). This is a vegetable heavy pot, and the zucchini and canned tomatoes are what push it up, not the meat.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eZucchini is a summer buy.\u003c/strong\u003e In season it is one of the cheapest vegetables on the shelf. Out of season it is one of the most expensive. Make this pot when the price is right and it drops a good bit.",
+                       "\u003cstrong\u003eBread crumbs are worth making, not buying.\u003c/strong\u003e Heels and stale slices, dried in a low oven and pulsed, cost you nothing and bind meatballs exactly the same way.",
+                       "\u003cstrong\u003eBuy potatoes and carrots in bags.\u003c/strong\u003e Loose produce is priced for people buying two. You are buying for 14 servings, so the bag price wins every time.",
+                       "\u003cstrong\u003eCanned diced tomatoes carry the broth.\u003c/strong\u003e Buy them by the case on sale. They keep for years and this pot goes through a stack of them."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Mix the ground turkey with the eggs, bread crumbs, uncooked rice, minced garlic, dried oregano, ground cumin, salt and black pepper, then roll it into meatballs about the size of a golf ball.",
+                    "Brown the meatballs on a sheet pan in a hot oven, around 400F for 15 minutes, so they hold together when they hit the broth.",
+                    "Heat the vegetable oil in your big pot and cook the diced onion until soft, then add the carrots and celery and give them a few minutes.",
+                    "Pour in the diced tomatoes with their juice and the chicken broth, bring to a simmer, and add the cubed potatoes.",
+                    "Slide the meatballs in gently and simmer 20 minutes, until the rice inside them has swelled and the potatoes are tender.",
+                    "Add the chopped zucchini and simmer just 5 more minutes so it stays firm, then stir in the chopped cilantro off the heat."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide by 14 and ladle that exact weight into each container, spreading the meatballs evenly so nobody gets a bowl of broth. Every serving lands near 575 calories with 33 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://amiraspantry.com/turkey-albondigas-soup-sopa-de-albondigas-recipe/\" target=\"_blank\" rel=\"noopener\"\u003eamiraspantry.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cem\u003eMexican meatball soup for about $4.09 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "cost_batch":  36.74,
+    "cost_batch_true":  45.1,
+    "cost_per_serving":  2.62,
+    "cost_per_serving_true":  3.22,
+    "cost_pantry_add":  12.2,
+    "cost_first_run":  57.3,
+    "scaler":  {
+                   "cost":  "45.10",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1482,
+                                   "buy":  "3.25 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  33,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "canon":  "Eggs",
+                                   "grams":  163,
+                                   "buy":  "3 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Bread Crumbs",
+                                   "canon":  "Bread Crumbs",
+                                   "grams":  353,
+                                   "buy":  "3.25 cups",
+                                   "bid":  "bread-crumbs",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  93,
+                                   "buy":  "0.5 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  7,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  14,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  75,
+                                   "buy":  "4.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  91,
+                                   "buy":  "6.5 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  229,
+                                   "buy":  "2",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  399,
+                                   "buy":  "6.5",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "canon":  "Celery",
+                                   "grams":  165,
+                                   "buy":  "3",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  2639,
+                                   "buy":  "12.4",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  817,
+                                   "buy":  "2 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  26,
+                                   "buy":  "26 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  4704,
+                                   "buy":  "5 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Zucchini",
+                                   "canon":  "Zucchini",
+                                   "grams":  1921,
+                                   "buy":  "10",
+                                   "bid":  "zucchini",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Rice-studded turkey meatballs simmered with potatoes, carrots, zucchini and cilantro in a tomato broth. A 14 serving sopa de albondigas for meal prep.",
+                 "keywords":  "turkey albondigas soup, sopa de albondigas, mexican meatball soup, budget meal prep, ground turkey recipe, cheap dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT35M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H20M",
+                 "costPerServing":  4.09,
+                 "recipeIngredient":  [
+                                          "93/7 Ground Turkey",
+                                          "Eggs",
+                                          "Bread Crumbs",
+                                          "Rice",
+                                          "Garlic",
+                                          "Vegetable Oil",
+                                          "Yellow Onion",
+                                          "Carrots",
+                                          "Celery",
+                                          "Potato",
+                                          "Diced Tomatoes",
+                                          "Chicken Broth",
+                                          "Zucchini"
+                                      ],
+                 "steps":  [
+                               "Mix the ground turkey with eggs, bread crumbs, uncooked rice, garlic and spices, then roll into meatballs.",
+                               "Bake the meatballs at 400F for about 15 minutes to set them.",
+                               "Cook the onion, carrots and celery in oil, then add the diced tomatoes and chicken broth.",
+                               "Add the cubed potatoes and the meatballs and simmer 20 minutes.",
+                               "Add the zucchini for the last 5 minutes and finish with fresh cilantro."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1482
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  33
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  163
+                              },
+                              {
+                                  "item":  "Bread Crumbs",
+                                  "grams":  353
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  93
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  75
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  91
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  229
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  399
+                              },
+                              {
+                                  "item":  "Celery",
+                                  "grams":  165
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  2639
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  817
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  26
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  4704
+                              },
+                              {
+                                  "item":  "Zucchini",
+                                  "grams":  1921
+                              }
+                          ]
+}

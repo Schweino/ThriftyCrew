@@ -1,0 +1,230 @@
+{
+    "name":  "Sheet Pan Pork Tenderloin with Potatoes and Green Beans",
+    "slug":  "sheet-pan-pork-tenderloin-potatoes-green-beans",
+    "cuisine":  "American",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.thisfarmgirlcooks.com/pork-tenderloin-sheet-pan-dinner/",
+    "source_site":  "thisfarmgirlcooks.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Potato)",
+                   "portion factor 1.3"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified at 400 cal / 40g protein per serving over 5 servings; adding a bit more potato brings it to 500+ with 40g protein intact. Every ingredient is board-tracked and pork-tenderloin is a tracked commodity. Sheet-pan format is the cleanest batch method we have. The live Grilled Pork Tenderloin Burrito Bowl is a completely different dish. | HARVEST: Source lists chili powder twice (1/2 tsp in the vegetable group and 1 tsp in the pork rub); both lines retained as published.",
+                         "SOURCE YIELD: 5 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Potato)",
+                         "TUNING: portion factor 1.3"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  566,
+                 "protein":  46,
+                 "carbs":  65,
+                 "fat":  14,
+                 "cost_ps":  "3.78"
+             },
+    "intro_html":  "Four ingredients, one pan, and a spice rub you already own. Pork tenderloin is the leanest cut on the pig and it cooks fast, so the potatoes get a head start in the oven and the tenderloin and green beans join them for the last stretch. Everything finishes at the same moment. This is the recipe to keep in your back pocket for the night you have no time and no patience.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eGreen Beans (generic):\u003c/strong\u003e 3.75 lb (1651 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 7.25 tbsp (98 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 21 (4448 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (22 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 5.5 lb (2477 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 2 tbsp (15 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1.25 tbsp (8 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 0.75 tbsp (6 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 0.5 tbsp (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Green Beans, 3.75 lb: ~$3.55. \u003cstrong\u003eBuy 5 12oz bags: $3.66.\u003c/strong\u003e",
+                       "Olive Oil, 7.25 tbsp: ~$1.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Potato, 21: ~$5.57. \u003cstrong\u003eBuy 10 lbs: $5.68.\u003c/strong\u003e",
+                       "Pork Tenderloin, 5.5 lb: ~$21.68. \u003cstrong\u003eBuy 6 lbs: $23.82.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, chili powder, ground cumin, garlic powder, paprika): ~$0.70. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $32.88 across 14 servings, so roughly $2.35 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.24 across 14 servings, roughly $2.52 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.73 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.97. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.78 a bowl\u003c/strong\u003e (at everyday cost) for a lean protein, a starch and a vegetable that all came off the same pan. The tenderloin is the entire cost and the rest is rounding.",
+    "shop_smart":  [
+                       "\u003cstrong\u003ePork tenderloin usually comes two to a package.\u003c/strong\u003e The two pack is nearly always cheaper per pound than a single, and the second one freezes for weeks with no loss.",
+                       "\u003cstrong\u003ePotatoes in the ten pound bag.\u003c/strong\u003e This pan takes a serious pile of them, and the bag price per pound is a fraction of what loose potatoes run.",
+                       "\u003cstrong\u003eFrozen green beans go straight on the pan.\u003c/strong\u003e No trimming, no washing, no spoiling in the crisper, and they cost less than fresh year round.",
+                       "\u003cstrong\u003eThe rub comes out of jars you already have.\u003c/strong\u003e Chili powder, cumin, garlic powder, paprika, salt and pepper. There is no marinade to buy and no packet to open."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Heat the oven to 425F and mix the salt, black pepper, chili powder, ground cumin, garlic powder and paprika into a rub.",
+                    "Cut the potatoes into even chunks, toss them with olive oil and part of the rub, and spread them on sheet pans in a single layer. Crowding is what turns roasted potatoes into steamed ones.",
+                    "Roast the potatoes alone for 20 minutes so they get a head start.",
+                    "Pat the pork tenderloins dry, coat them in olive oil and the rest of the rub, and push the potatoes aside to make room on the pans.",
+                    "Roast 15 minutes, then add the green beans tossed in the remaining olive oil and roast about 10 minutes more.",
+                    "Pull the pans when the tenderloin reaches 145F inside, then rest the meat 10 minutes before slicing so the juices stay in it."
+                ],
+    "portion_html":  "Divide the potatoes and green beans across your 14 containers, then set your mixing pot of sliced tenderloin on the scale, subtract the empty pot weight from Step 1, divide by 14, and add that exact weight to each. Every plate lands near 566 calories with 46 grams of protein for very little work.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.thisfarmgirlcooks.com/pork-tenderloin-sheet-pan-dinner/\" target=\"_blank\" rel=\"noopener\"\u003ethisfarmgirlcooks.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cem\u003eA whole sheet pan dinner for about $3.78 a plate (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "cost_batch":  32.88,
+    "cost_batch_true":  35.24,
+    "cost_per_serving":  2.35,
+    "cost_per_serving_true":  2.52,
+    "cost_pantry_add":  17.73,
+    "cost_first_run":  52.97,
+    "scaler":  {
+                   "cost":  "35.24",
+                   "ing":  [
+                               {
+                                   "item":  "Green Beans",
+                                   "canon":  "Green Beans",
+                                   "grams":  1651,
+                                   "buy":  "3.75 lb",
+                                   "bid":  "frozen-green-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  98,
+                                   "buy":  "7.25 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  4448,
+                                   "buy":  "21",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  22,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Pork Tenderloin",
+                                   "canon":  "Pork Tenderloin",
+                                   "grams":  2477,
+                                   "buy":  "5.5 lb",
+                                   "bid":  "pork-tenderloin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "canon":  "Chili Powder",
+                                   "grams":  15,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  8,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  6,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Spice rubbed pork tenderloin roasted on a sheet pan with potatoes and green beans. A 14 serving four ingredient dinner built for easy meal prep.",
+                 "keywords":  "sheet pan pork tenderloin, pork and potatoes, one pan dinner, easy pork recipe, budget meal prep, cheap dinner ideas",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H",
+                 "costPerServing":  3.78,
+                 "recipeIngredient":  [
+                                          "Pork Tenderloin",
+                                          "Potato",
+                                          "Green Beans",
+                                          "Olive Oil",
+                                          "Pantry seasonings (salt, black pepper, chili powder, ground cumin, garlic powder, paprika)"
+                                      ],
+                 "steps":  [
+                               "Heat the oven to 425F and mix the spice rub.",
+                               "Toss the cut potatoes with olive oil and rub, spread on sheet pans, and roast 20 minutes.",
+                               "Coat the pork tenderloins in oil and the rest of the rub and add them to the pans.",
+                               "Roast 15 minutes, add the green beans, and roast 10 minutes more.",
+                               "Pull at 145F inside and rest the pork 10 minutes before slicing."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Green Beans",
+                                  "grams":  1651
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  4448
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  22
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Pork Tenderloin",
+                                  "grams":  2477
+                              },
+                              {
+                                  "item":  "Chili Powder",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  4
+                              }
+                          ]
+}

@@ -1,0 +1,253 @@
+{
+    "name":  "Turkey Maqluba (Upside-Down Rice Bake)",
+    "slug":  "turkey-maqluba-upside-down-rice-bake",
+    "cuisine":  "palestinian",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://amiraspantry.com/maqlooba/",
+    "source_site":  "amiraspantry.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Rice)",
+                   "protein +30% (93/7 Ground Turkey)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: One-pot layered rice-and-meat bake, made as a tray rather than a flip for meal prep. Verified source: full recipe, 6 servings, and it explicitly names ground turkey as an option. Confidence note: source is 245 cal / 10g protein per serving as written, so our version needs roughly double the turkey to clear the 25g bar - flagging that the published numbers do NOT meet our threshold without reformulation. | HARVEST: Source uses ground beef, not turkey.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Rice)",
+                         "TUNING: protein +30% (93/7 Ground Turkey)",
+                         "OVERRIDE 93/7 Ground Beef: TITLE-PROTEIN SWAP + [BUMP x1.3]: turkey maqluba; source 263 g for 6 raised to 340 g for the 25 g floor",
+                         "OVERRIDE Rice: [BUMP x1.8 vs parsed 222 g] maqluba IS a rice cake; house 65-70 g dry/serving to carry the 550 gate without pf-maxing"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  605,
+                 "protein":  26,
+                 "carbs":  102,
+                 "fat":  8,
+                 "cost_ps":  "2.42"
+             },
+    "intro_html":  "Maqluba means upside down in Arabic, and the traditional finish is theater: you cover the pot with a platter, flip the whole thing over, and lift it off to reveal a standing cake of rice, meat and fried eggplant. Palestinian families have been doing this for centuries. For fourteen containers we build it as a tray instead of flipping it, and lose nothing but the applause. Each serving lands at 605 calories with \u003cstrong\u003e26 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.42\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 9 cups dry (1676 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 2.25 tbsp (33 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 3 tbsp (54 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 3 cups (700 g)",
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 2.25 lb (1063 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.5 (163 g)",
+                                "\u003cstrong\u003eGround Allspice (Great Value):\u003c/strong\u003e 0.07 oz (2 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 0.75 tbsp (12 g)",
+                                "\u003cstrong\u003eEggplant:\u003c/strong\u003e 2.3 (1050 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2.3 cans (959 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Rice, 9 cups dry: ~$2.07. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Butter, 2.25 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Chicken Broth, 3 cups: ~$0.94. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 2.25 lb: ~$8.96. \u003cstrong\u003eBuy 3 lbs: $11.46.\u003c/strong\u003e",
+                       "Yellow Onion, 1.5: ~$0.41. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Tomato Paste, 0.75 tbsp: ~$0.06. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "Eggplant, 2.3: ~$3.49. \u003cstrong\u003eBuy 2 each: $3.64.\u003c/strong\u003e",
+                       "Diced Tomatoes, 2.3 cans: ~$2.24. \u003cstrong\u003eBuy 3 cans: $2.88.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, ground allspice): ~$0.40. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $18.79 across 14 servings, so roughly $1.34 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $26.37 across 14 servings, roughly $1.88 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.53 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $33.90. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.42 a serving\u003c/strong\u003e (at everyday cost). Rice and eggplant cost almost nothing, allspice does the heavy lifting on flavor, and the turkey stretches further than you would expect across a rice bake this size.",
+    "shop_smart":  [
+                       "Eggplant is cheapest in late summer and it is the ingredient that makes this dish. Salt the slices and let them drain for 30 minutes so they absorb less oil, which saves you both calories and money.",
+                       "Rice from the largest bag is the cheapest food in this recipe by a distance, and this bake uses nine cups dry. Buy accordingly.",
+                       "Ground allspice is the single spice that defines maqluba. One jar lasts for years and it is worth having on the rack.",
+                       "Roast the eggplant on a sheet pan instead of frying it in oil. It costs you nothing extra, uses a fraction of the oil, and browns just as deeply."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Slice the eggplant into rounds about half an inch thick, salt them on both sides, and let them drain in a colander for 30 minutes, then pat them dry.",
+                    "Roast the eggplant slices on oiled sheet pans at 425F for 25 minutes, flipping once, until they are deeply browned and collapsed.",
+                    "Brown the ground turkey in a large pot, then add the diced onion and cook 5 minutes until soft.",
+                    "Stir in the tomato paste and the ground allspice, along with salt and black pepper, and cook two minutes until the paste darkens against the pot.",
+                    "Add the canned diced tomatoes and simmer 10 minutes until the mixture thickens and the liquid mostly cooks off.",
+                    "Rinse the rice until the water runs clear, then layer it into a large buttered baking dish: half the rice, the turkey mixture, the roasted eggplant, then the rest of the rice.",
+                    "Pour the hot chicken broth over the top, cover tightly with foil, and bake at 375F for 45 minutes, then rest 15 minutes covered before fluffing and portioning."
+                ],
+    "portion_html":  "Weigh the finished dish, subtract the empty dish weight, and divide by 14. Scoop from top to bottom so every container gets rice, meat, and eggplant instead of one layer only. Each serving comes to \u003cstrong\u003e605 calories\u003c/strong\u003e and 26 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://amiraspantry.com/maqlooba/\" target=\"_blank\" rel=\"noopener\"\u003eamiraspantry.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A budget-friendly rice bake for about $2.42 a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "cost_batch":  18.79,
+    "cost_batch_true":  26.37,
+    "cost_per_serving":  1.34,
+    "cost_per_serving_true":  1.88,
+    "cost_pantry_add":  7.53,
+    "cost_first_run":  33.9,
+    "scaler":  {
+                   "cost":  "26.37",
+                   "ing":  [
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1676,
+                                   "buy":  "9 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  33,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  54,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  700,
+                                   "buy":  "3 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1063,
+                                   "buy":  "2.25 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  163,
+                                   "buy":  "1.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ground Allspice",
+                                   "canon":  "Ground Allspice",
+                                   "grams":  2,
+                                   "buy":  "0.07 oz",
+                                   "bid":  "ground-allspice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  12,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Eggplant",
+                                   "canon":  "Eggplant",
+                                   "grams":  1050,
+                                   "buy":  "2.3",
+                                   "bid":  "eggplant",
+                                   "gpu":  "548.000"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  959,
+                                   "buy":  "2.3 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey maqluba meal prep: Palestinian upside-down rice bake with spiced turkey, roasted eggplant, and allspice. 605 calories, 26g protein, about $2.42 a serving (at everyday cost).",
+                 "keywords":  "maqluba, maqlooba, palestinian rice bake, upside down rice, eggplant rice casserole, budget meal prep, allspice rice",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT40M",
+                 "cookTime":  "PT1H15M",
+                 "totalTime":  "PT1H55M",
+                 "costPerServing":  2.42,
+                 "recipeIngredient":  [
+                                          "2.25 lb 93/7 ground turkey",
+                                          "9 cups dry rice",
+                                          "2.3 eggplants",
+                                          "2.3 cans diced tomatoes",
+                                          "1.5 lb chicken broth",
+                                          "1.5 yellow onions",
+                                          "0.75 tbsp tomato paste",
+                                          "2.25 tbsp butter"
+                                      ],
+                 "steps":  [
+                               "Salt sliced eggplant and drain 30 minutes, then roast at 425F for 25 minutes until deeply browned.",
+                               "Brown the ground turkey, add the onion, then the tomato paste and allspice and cook until the paste darkens.",
+                               "Add the diced tomatoes and simmer 10 minutes until thick.",
+                               "Layer rinsed rice, the turkey mixture, the roasted eggplant, and the rest of the rice into a buttered baking dish.",
+                               "Pour hot broth over, cover with foil, bake at 375F for 45 minutes, rest 15 minutes, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1676
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  33
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  54
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1063
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  163
+                              },
+                              {
+                                  "item":  "Ground Allspice",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Eggplant",
+                                  "grams":  1050
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  959
+                              }
+                          ]
+}

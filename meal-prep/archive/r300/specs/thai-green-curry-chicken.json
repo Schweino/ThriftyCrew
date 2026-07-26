@@ -1,0 +1,354 @@
+{
+    "name":  "Thai Green Curry Chicken",
+    "slug":  "thai-green-curry-chicken",
+    "cuisine":  "Thai",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.recipetineats.com/thai-green-curry/",
+    "source_site":  "recipetineats.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Page verified: full recipe, 4 servings. Source lists only 352 cal / 7g protein because it uses 350g chicken across 4 servings and excludes rice - our 14-serving build at 6 oz chicken per portion over rice lands ~610 cal / 40g. Live catalog has Thai red curry and Thai peanut but no green curry. Green curry paste has no board id (red-curry-paste is tracked). Confidence: high on the source, est_cal is OUR build not the source\u0027s. | HARVEST: Published protein of 7g is implausibly low for the chicken content; source nutrition appears to exclude the chicken or rice. Verify downstream.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "OVERRIDE Eggplant: \u00272 Japanese eggplants, SMALL\u0027 (~120 g each), not 450 g globes",
+                         "OVERRIDE Yellow Onion: \u0027Crispy fried Asian shallots\u0027 garnish, no qty",
+                         "OVERRIDE Red Curry Paste: choose-ONE lines: \u00274-6 tbsp paste OR 1 quantity homemade\u0027 - both were counting; one 80 g quantity",
+                         "OVERRIDE Boneless Skinless Chicken Thigh: WAVE-4 [BUMP x1.94]: source 12 oz thigh for 4; house 1.5 lb lands protein ~40 g as the spec note expects"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  711,
+                 "protein":  42,
+                 "carbs":  57,
+                 "fat":  32,
+                 "cost_ps":  "4.68"
+             },
+    "intro_html":  "Thai green curry is built the proper way here, which means the paste gets fried in the thick cream at the top of the coconut milk can until the oil breaks out and the kitchen smells like a Bangkok side street. That one step separates a real curry from a can of soup with chicken in it. Eggplant, snow peas and a fistful of basil go in at the end. Each bowl runs \u003cstrong\u003e711 calories and 42 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.68\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eRed Curry Paste (Thai Kitchen):\u003c/strong\u003e 10 oz (280 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 2.25 tbsp (14 g)",
+                                "\u003cstrong\u003eLemongrass Paste (Gourmet Garden (McCormick)):\u003c/strong\u003e 3.5 tbsp (52 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 7 tbsp (98 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (875 g)",
+                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 3.5 cans (1400 g)",
+                                "\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 2.25 tbsp (42 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 2.25 tbsp (29 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.25 tbsp (3 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 5.25 lb (2380 g)",
+                                "\u003cstrong\u003eEggplant:\u003c/strong\u003e 2 (840 g)",
+                                "\u003cstrong\u003eSnow Peas:\u003c/strong\u003e 11.75 oz (331 g)",
+                                "\u003cstrong\u003eFresh Basil:\u003c/strong\u003e 28.75 tbsp (43 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 3 tbsp (45 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 0.6 (70 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Red Curry Paste, 10 oz: ~$4.46. \u003cstrong\u003eBuy 3 4oz jars: $5.40.\u003c/strong\u003e",
+                       "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Ginger, 2.25 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Lemongrass Paste, 3.5 tbsp: ~$2.29. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Vegetable Oil, 7 tbsp: ~$0.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 1 carton: ~$1.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Coconut Milk, 3.5 cans: ~$6.95. \u003cstrong\u003eBuy 4 13.5oz cans: $7.94.\u003c/strong\u003e",
+                       "Fish Sauce, 2.25 tbsp: ~$0.40. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sugar, 2.25 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Thigh, 5.25 lb: ~$9.29. \u003cstrong\u003eBuy 6 lbs: $10.62.\u003c/strong\u003e",
+                       "Eggplant, 2: ~$2.79. \u003cstrong\u003eBuy 2 each: $3.64.\u003c/strong\u003e",
+                       "Snow Peas, 11.75 oz: ~$3.69. \u003cstrong\u003eBuy 2 8oz bags: $5.06.\u003c/strong\u003e",
+                       "Fresh Basil, 28.75 tbsp: ~$5.40. \u003cstrong\u003eBuy 4 0.5oz packs: $7.03.\u003c/strong\u003e",
+                       "Lime Juice, 3 tbsp: ~$0.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 0.6: ~$0.18. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.18. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $38.95 across 14 servings, so roughly $2.78 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $47.86 across 14 servings, roughly $3.42 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $23.62 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $71.48. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.68 a bowl\u003c/strong\u003e (at everyday cost). Coconut milk, fresh basil and curry paste are the three lines that set this price, and all three are exactly what makes it taste like the restaurant version instead of a shortcut.",
+    "shop_smart":  [
+                       "Curry paste is the flavor engine and it is worth buying the real thing. If your store carries green paste, grab it. If it only stocks red, the jars we track work fine and nobody at your table will file a complaint.",
+                       "Coconut milk is the biggest line. Buy full fat store brand cans, never light, and do not shake the can. You want the thick cream at the top for frying the paste, which is the whole technique.",
+                       "Fresh basil is expensive by weight no matter where you buy it. A pot of living basil from the produce section costs about what two clamshells do and keeps producing on a windowsill for weeks.",
+                       "Snow peas and eggplant go in at the very end. Buy them the day you cook, and if snow peas are priced like a luxury that week, frozen green beans slot right in without hurting anything."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Open the coconut milk cans without shaking them and spoon the thick cream off the top into your largest pot. Reserve the thin liquid underneath.",
+                    "Heat the pot over medium-high and cook that coconut cream with the vegetable oil for 3 to 5 minutes until it splits and you can see clear oil pooling.",
+                    "Add the curry paste, minced garlic, grated ginger and lemongrass paste and fry them in that oil for 2 to 3 minutes, stirring, until the paste darkens and smells sharp and fragrant. This is the step people skip and it is the one that matters.",
+                    "Add the chicken thighs cut into strips and turn them in the paste for 3 minutes, then pour in the reserved coconut liquid and the chicken broth.",
+                    "Add the cubed eggplant and simmer uncovered 15 to 20 minutes until the eggplant is soft and the sauce has reduced and thickened.",
+                    "Season with the fish sauce, sugar, salt and black pepper, then add the snow peas and cook 2 minutes so they stay bright and snappy.",
+                    "Kill the heat and stir in the lime juice, the fresh basil and the thin-sliced onion. Cook the rice separately and fold it in, or hold it in the containers underneath."
+                ],
+    "portion_html":  "Set the pot on the scale, subtract the empty-pot weight, and divide by 14. Same scoop, fourteen times. Each one carries \u003cstrong\u003e711 calories\u003c/strong\u003e, and reheat coconut curries at half power so the sauce stays emulsified instead of turning grainy.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.recipetineats.com/thai-green-curry/\" target=\"_blank\" rel=\"noopener\"\u003erecipetineats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Real Thai green curry, paste fried in coconut cream and all, for about $4.68 a bowl (at everyday cost). This is one of a few hundred recipes on the site. Members get every recipe in the Meal Prep section plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  38.95,
+    "cost_batch_true":  47.86,
+    "cost_per_serving":  2.78,
+    "cost_per_serving_true":  3.42,
+    "cost_pantry_add":  23.62,
+    "cost_first_run":  71.48,
+    "scaler":  {
+                   "cost":  "47.86",
+                   "ing":  [
+                               {
+                                   "item":  "Red Curry Paste",
+                                   "canon":  "Red Curry Paste",
+                                   "grams":  280,
+                                   "buy":  "10 oz",
+                                   "bid":  "red-curry-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  35,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  14,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Lemongrass Paste",
+                                   "canon":  "Lemongrass Paste",
+                                   "grams":  52,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "lemongrass-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  98,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  875,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Coconut Milk",
+                                   "canon":  "Coconut Milk",
+                                   "grams":  1400,
+                                   "buy":  "3.5 cans",
+                                   "bid":  "coconut-milk-canned",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Fish Sauce",
+                                   "canon":  "Fish Sauce",
+                                   "grams":  42,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "fish-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  29,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  3,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  2380,
+                                   "buy":  "5.25 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Eggplant",
+                                   "canon":  "Eggplant",
+                                   "grams":  840,
+                                   "buy":  "2",
+                                   "bid":  "eggplant",
+                                   "gpu":  "548.000"
+                               },
+                               {
+                                   "item":  "Snow Peas",
+                                   "canon":  "Snow Peas",
+                                   "grams":  331,
+                                   "buy":  "11.75 oz",
+                                   "bid":  "snow-peas",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Basil",
+                                   "canon":  "Fresh Basil",
+                                   "grams":  43,
+                                   "buy":  "28.75 tbsp",
+                                   "bid":  "fresh-basil",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "canon":  "Lime Juice",
+                                   "grams":  45,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  70,
+                                   "buy":  "0.6",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Thai green curry chicken with eggplant, snow peas and basil, built as 14 meal prep bowls over rice. 711 calories, 42g protein, about $4.68 a bowl (at everyday cost).",
+                 "keywords":  "thai green curry, chicken curry meal prep, coconut curry, thai curry paste, eggplant curry, budget thai food",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT35M",
+                 "totalTime":  "PT1H",
+                 "costPerServing":  4.68,
+                 "recipeIngredient":  [
+                                          "2.75 lb boneless skinless chicken thighs",
+                                          "3.5 cans coconut milk",
+                                          "10 oz thai curry paste",
+                                          "2 eggplants",
+                                          "5.25 cups snow peas",
+                                          "28.75 tbsp fresh basil",
+                                          "3.5 tbsp lemongrass paste",
+                                          "2.25 tbsp fish sauce",
+                                          "2 lb chicken broth",
+                                          "3.75 cups dry rice",
+                                          "3 tbsp lime juice"
+                                      ],
+                 "steps":  [
+                               "Spoon the thick cream off the coconut milk cans and fry it with oil until it splits and the oil pools.",
+                               "Fry the curry paste, garlic, ginger and lemongrass in that oil for 2 to 3 minutes until fragrant.",
+                               "Add the chicken, then the reserved coconut liquid, broth and cubed eggplant, and simmer 15 to 20 minutes.",
+                               "Season with fish sauce and sugar, add the snow peas, and cook 2 minutes.",
+                               "Finish off the heat with lime juice, basil and sliced onion, then portion into 14 containers with rice."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Red Curry Paste",
+                                  "grams":  280
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Lemongrass Paste",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  875
+                              },
+                              {
+                                  "item":  "Coconut Milk",
+                                  "grams":  1400
+                              },
+                              {
+                                  "item":  "Fish Sauce",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  29
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  2380
+                              },
+                              {
+                                  "item":  "Eggplant",
+                                  "grams":  840
+                              },
+                              {
+                                  "item":  "Snow Peas",
+                                  "grams":  331
+                              },
+                              {
+                                  "item":  "Fresh Basil",
+                                  "grams":  43
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  45
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

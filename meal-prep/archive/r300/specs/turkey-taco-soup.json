@@ -1,0 +1,276 @@
+{
+    "name":  "Turkey Taco Soup",
+    "slug":  "turkey-taco-soup",
+    "cuisine":  "tex-mex",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://ifoodreal.com/turkey-taco-soup/",
+    "source_site":  "ifoodreal.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 400g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 8 servings, 342 cal, 37g protein. Seven ingredients, all board-tracked, which makes it one of the cheapest builds here. NEAR-DUPE WATCH: Slow Cooker Turkey Chili Bowls is live and taco soup sits close to chili; the visible separators are corn, taco seasoning and the thinner broth. | HARVEST: ",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 400g (src scale)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  619,
+                 "protein":  35,
+                 "carbs":  76,
+                 "fat":  17,
+                 "cost_ps":  "3.04"
+             },
+    "intro_html":  "Taco soup is what happens when taco night gets practical. Ground turkey, kidney beans, sweet corn and a tomato base seasoned like a taco, thinned into something you can eat with a spoon and pack into containers. A little sour cream on top and a scoop of rice underneath turns it into a full plate. Seven main ingredients, one pot, and almost nothing on the receipt.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 5.2 cans (2231 g)",
+                                "\u003cstrong\u003eKidney Beans (generic):\u003c/strong\u003e 3.5 cans (892 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 2 cans (866 g)",
+                                "\u003cstrong\u003eTaco Seasoning (Great Value):\u003c/strong\u003e 3.5 tbsp (28 g)",
+                                "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 3.5 tbsp (25 g)",
+                                "\u003cstrong\u003eSugar-Free Maple Syrup (generic):\u003c/strong\u003e 1.75 tbsp (30 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (10 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 tbsp (7 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.8 cartons (1680 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 6 tbsp (84 g)",
+                                "\u003cstrong\u003eLight Sour Cream (generic):\u003c/strong\u003e 1.25 cups (300 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 3.5 lb: ~$13.38. \u003cstrong\u003eBuy 4 lbs: $15.29.\u003c/strong\u003e",
+                       "Tomato Sauce, 5.2 cans: ~$5.04. \u003cstrong\u003eBuy 6 15oz cans: $5.76.\u003c/strong\u003e",
+                       "Kidney Beans, 3.5 cans: ~$2.87. \u003cstrong\u003eBuy 4 cans: $3.29.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 2 cans: ~$1.58. \u003cstrong\u003eBuy 2 cans: $1.58.\u003c/strong\u003e",
+                       "Sugar-Free Maple Syrup, 1.75 tbsp: ~$0.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 1.8 cartons: ~$2.26. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Vegetable Oil, 6 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Light Sour Cream, 1.25 cups: ~$1.08. \u003cstrong\u003eBuy 1 16oz tub: $1.64.\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (taco seasoning, onion powder, salt, black pepper): ~$1.07. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $28.44 across 14 servings, so roughly $2.03 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.05 across 14 servings, roughly $2.29 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.53 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.58. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.04 a bowl\u003c/strong\u003e (at everyday cost) for a spiced, bean-loaded dinner with sour cream on top. Cans and rice are doing the work here, and cans and rice are cheap.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eCanned beans and canned corn are the whole base.\u003c/strong\u003e Watch the case price, buy deep when it drops, and you have the bones of this soup on the shelf for a year.",
+                       "\u003cstrong\u003eMake your own taco seasoning from pantry jars.\u003c/strong\u003e The little packets cost more per ounce than almost anything else in the store, and it is chili powder, cumin, onion powder and salt you already own.",
+                       "\u003cstrong\u003eTomato sauce, not salsa or diced tomatoes.\u003c/strong\u003e Plain tomato sauce is the cheapest tomato in the aisle and it gives this soup the smooth body it needs.",
+                       "\u003cstrong\u003eLight sour cream is a topping, not an ingredient.\u003c/strong\u003e Add it to each container at reheat time instead of stirring it into the pot, and it will not break or go watery in the fridge."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice separately per the package and set it aside covered.",
+                    "Brown the ground turkey in the vegetable oil in your big pot over medium-high heat, breaking it up until it is cooked through.",
+                    "Stir in the taco seasoning, onion powder, salt and black pepper and let them toast against the hot pan for a minute.",
+                    "Pour in the tomato sauce and the chicken broth and bring it to a simmer.",
+                    "Add the drained kidney beans and the drained sweet corn along with the touch of sugar-free maple syrup, which balances the acid in the tomato.",
+                    "Simmer 20 minutes so the flavors settle, then taste and adjust the salt. Keep the sour cream on the side."
+                ],
+    "portion_html":  "Spread the cooked rice into your 14 containers, then set the soup pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and ladle that exact weight over the rice. Every serving lands near 619 calories with 35 grams of protein once the sour cream goes on at reheat.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://ifoodreal.com/turkey-taco-soup/\" target=\"_blank\" rel=\"noopener\"\u003eifoodreal.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cem\u003eTaco night in a container for about $3.04 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "cost_batch":  28.44,
+    "cost_batch_true":  32.05,
+    "cost_per_serving":  2.03,
+    "cost_per_serving_true":  2.29,
+    "cost_pantry_add":  10.53,
+    "cost_first_run":  42.58,
+    "scaler":  {
+                   "cost":  "32.05",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Tomato Sauce",
+                                   "canon":  "Tomato Sauce",
+                                   "grams":  2231,
+                                   "buy":  "5.2 cans",
+                                   "bid":  "tomato-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Kidney Beans",
+                                   "canon":  "Kidney Beans",
+                                   "grams":  892,
+                                   "buy":  "3.5 cans",
+                                   "bid":  "kidney-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sweet Whole Kernel Corn",
+                                   "canon":  "Sweet Whole Kernel Corn",
+                                   "grams":  866,
+                                   "buy":  "2 cans",
+                                   "bid":  "canned-corn",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Taco Seasoning",
+                                   "canon":  "Taco Seasoning",
+                                   "grams":  28,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "taco-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Onion Powder",
+                                   "canon":  "Onion Powder",
+                                   "grams":  25,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "onion-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sugar-Free Maple Syrup",
+                                   "canon":  "Sugar-Free Maple Syrup",
+                                   "grams":  30,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "maple-syrup",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  10,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  1680,
+                                   "buy":  "1.8 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  84,
+                                   "buy":  "6 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Light Sour Cream",
+                                   "canon":  "Light Sour Cream",
+                                   "grams":  300,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "sour-cream",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Ground turkey, kidney beans and sweet corn in a taco-spiced tomato broth over rice. A 14 serving one pot soup built for cheap meal prep.",
+                 "keywords":  "turkey taco soup, taco soup recipe, ground turkey soup, budget meal prep, bean and corn soup, cheap dinner ideas",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT35M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  3.04,
+                 "recipeIngredient":  [
+                                          "93/7 Ground Turkey",
+                                          "Vegetable Oil",
+                                          "Tomato Sauce",
+                                          "Chicken Broth",
+                                          "Kidney Beans",
+                                          "Sweet Whole Kernel Corn",
+                                          "Sugar-Free Maple Syrup",
+                                          "Light Sour Cream",
+                                          "Rice"
+                                      ],
+                 "steps":  [
+                               "Cook the rice separately and set it aside.",
+                               "Brown the ground turkey in vegetable oil, then toast the taco seasoning in the pot.",
+                               "Add the tomato sauce and chicken broth and bring to a simmer.",
+                               "Stir in the drained kidney beans, corn and a touch of sugar-free maple syrup.",
+                               "Simmer 20 minutes, serve over rice, and top with light sour cream."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Tomato Sauce",
+                                  "grams":  2231
+                              },
+                              {
+                                  "item":  "Kidney Beans",
+                                  "grams":  892
+                              },
+                              {
+                                  "item":  "Sweet Whole Kernel Corn",
+                                  "grams":  866
+                              },
+                              {
+                                  "item":  "Taco Seasoning",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Onion Powder",
+                                  "grams":  25
+                              },
+                              {
+                                  "item":  "Sugar-Free Maple Syrup",
+                                  "grams":  30
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  1680
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Light Sour Cream",
+                                  "grams":  300
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

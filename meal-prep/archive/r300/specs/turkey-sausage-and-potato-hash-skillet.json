@@ -1,0 +1,239 @@
+{
+    "name":  "Turkey Sausage and Potato Hash Skillet",
+    "slug":  "turkey-sausage-and-potato-hash-skillet",
+    "cuisine":  "American",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.jennieo.com/recipes/brussel-sprout-turkey-sausage-and-potato-hash/",
+    "source_site":  "jennieo.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Potato)",
+                   "portion factor 1.55"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: One-pan hash, holds and reheats well. Source verified at 6 servings but light (220 cal / 19g) because it is portioned as a breakfast side; our dinner build doubles the turkey and adds eggs to reach ~520 cal / 35g. Confidence: est_cal is our build. | HARVEST: ",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Potato)",
+                         "TUNING: portion factor 1.55",
+                         "OVERRIDE Smoked Turkey Sausage: [BUMP x1.2] source 493 g for 6; house 600 g to clear 550 without pf-maxing"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  567,
+                 "protein":  28,
+                 "carbs":  64,
+                 "fat":  24,
+                 "cost_ps":  "4.10"
+             },
+    "intro_html":  "A hash is what you make when you want dinner to have crisp edges. Potatoes and Brussels sprouts roasted hard until they caramelize, smoked turkey sausage browned in the same pan, red pepper and onion softened into the whole thing. Each serving runs 567 calories with \u003cstrong\u003e28 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.10\u003c/strong\u003e (at everyday cost). It reheats better than most skillet dinners because the potatoes were cooked past the point of being fragile in the first place.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eSmoked Turkey Sausage (Butterball):\u003c/strong\u003e 4.75 lb (2170 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 7.25 tbsp (98 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 14 (2947 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (253 g)",
+                                "\u003cstrong\u003eBrussels Sprouts:\u003c/strong\u003e 3.5 lb (1641 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2 (217 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.75 cups (434 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (22 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 15.5 tbsp (93 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Smoked Turkey Sausage, 4.75 lb: ~$19.37. \u003cstrong\u003eBuy 6 13oz ropes: $19.71.\u003c/strong\u003e",
+                       "Olive Oil, 7.25 tbsp: ~$1.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Potato, 14: ~$3.69. \u003cstrong\u003eBuy 7 lbs: $3.98.\u003c/strong\u003e",
+                       "Yellow Onion, 2.3: ~$0.64. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Brussels Sprouts, 3.5 lb: ~$10.93. \u003cstrong\u003eBuy 4 lbs: $12.08.\u003c/strong\u003e",
+                       "Red Bell Pepper, 2: ~$1.56. \u003cstrong\u003eBuy 2 each: $1.72.\u003c/strong\u003e",
+                       "Chicken Broth, 1.75 cups: ~$0.58. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Onions, 15.5 tbsp: ~$1.11. \u003cstrong\u003eBuy 2 bunches: $2.14.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $39.49 across 14 servings, so roughly $2.82 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $42.96 across 14 servings, roughly $3.07 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.46 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $57.42. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.10 a serving\u003c/strong\u003e (at everyday cost). The smoked turkey sausage is most of that number, and it is the ingredient that makes the dish taste like something instead of just roasted vegetables.",
+    "shop_smart":  [
+                       "Buy potatoes in the big sack. This skillet works through most of a 7 lb bag and loose potatoes cost noticeably more per pound.",
+                       "Brussels sprouts drop to their lowest price in fall and winter, and frozen sprouts work here too since they are getting browned hard anyway. Compare the fresh pound price against the frozen bag.",
+                       "Smoked turkey sausage ropes freeze indefinitely in the original casing. Buy several when they cycle onto sale, because they are the cost driver in this recipe.",
+                       "Skip pre-cut potatoes and sprouts entirely. The convenience markup on trimmed vegetables is one of the steepest in the store and the knife work here is ten minutes."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Dice the potatoes into half inch cubes and halve the Brussels sprouts, then toss everything with the olive oil, salt, and black pepper.",
+                    "Spread the potatoes and sprouts across two sheet pans in a single layer. Crowding is the enemy of browning, and two pans is the difference between roasted and steamed.",
+                    "Roast at 425F for 30 to 35 minutes, flipping once, until the potatoes are crisp at the corners and the sprout leaves are dark and papery.",
+                    "While they roast, slice the smoked turkey sausage into coins and brown them in a large skillet over medium-high until both cut sides char.",
+                    "Add the diced onion and red bell pepper to the sausage and cook 6 to 8 minutes until they soften and pick up color.",
+                    "Pour the chicken broth into the skillet and scrape the bottom clean, letting it reduce down to almost nothing so the flavor stays in the pan rather than pooling.",
+                    "Fold the roasted potatoes and sprouts into the skillet, taste for salt, and finish with the sliced green onions off the heat."
+                ],
+    "portion_html":  "Set the pan on the scale, subtract the empty pan weight, and divide by 14. Stir the hash before each scoop so the sausage does not all end up in the first four containers. Every serving lands at \u003cstrong\u003e567 calories\u003c/strong\u003e and 28 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.jennieo.com/recipes/brussel-sprout-turkey-sausage-and-potato-hash/\" target=\"_blank\" rel=\"noopener\"\u003ejennieo.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A crisp-edged skillet dinner for about $4.10 a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "cost_batch":  39.49,
+    "cost_batch_true":  42.96,
+    "cost_per_serving":  2.82,
+    "cost_per_serving_true":  3.07,
+    "cost_pantry_add":  14.46,
+    "cost_first_run":  57.42,
+    "scaler":  {
+                   "cost":  "42.96",
+                   "ing":  [
+                               {
+                                   "item":  "Smoked Turkey Sausage",
+                                   "canon":  "Smoked Turkey Sausage",
+                                   "grams":  2170,
+                                   "buy":  "4.75 lb",
+                                   "bid":  "smoked-turkey-sausage",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  98,
+                                   "buy":  "7.25 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  2947,
+                                   "buy":  "14",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  253,
+                                   "buy":  "2.3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Brussels Sprouts",
+                                   "canon":  "Brussels Sprouts",
+                                   "grams":  1641,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "brussels-sprouts",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "canon":  "Red Bell Pepper",
+                                   "grams":  217,
+                                   "buy":  "2",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  434,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  22,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  93,
+                                   "buy":  "15.5 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey sausage and potato hash skillet meal prep: roasted potatoes and Brussels sprouts with browned smoked turkey sausage. 567 calories, 28g protein, about $4.10 a serving (at everyday cost).",
+                 "keywords":  "turkey sausage hash, potato hash skillet, brussels sprouts recipe, one pan turkey dinner, budget meal prep, high protein skillet",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT40M",
+                 "totalTime":  "PT1H5M",
+                 "costPerServing":  4.10,
+                 "recipeIngredient":  [
+                                          "4.75 lb smoked turkey sausage",
+                                          "14 potatoes",
+                                          "18.75 cups Brussels sprouts",
+                                          "2 red bell peppers",
+                                          "2.3 yellow onions",
+                                          "1 lb chicken broth",
+                                          "15.5 tbsp green onions",
+                                          "7.25 tbsp olive oil"
+                                      ],
+                 "steps":  [
+                               "Toss diced potatoes and halved Brussels sprouts with olive oil, salt, and pepper and spread across two sheet pans.",
+                               "Roast at 425F for 30 to 35 minutes, flipping once, until crisp and dark at the edges.",
+                               "Brown sliced turkey sausage coins in a large skillet, then cook the onion and red bell pepper with them.",
+                               "Deglaze with the chicken broth and reduce until nearly dry.",
+                               "Fold in the roasted vegetables, finish with green onions, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Smoked Turkey Sausage",
+                                  "grams":  2170
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  2947
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  253
+                              },
+                              {
+                                  "item":  "Brussels Sprouts",
+                                  "grams":  1641
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  217
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  434
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  22
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  93
+                              }
+                          ]
+}

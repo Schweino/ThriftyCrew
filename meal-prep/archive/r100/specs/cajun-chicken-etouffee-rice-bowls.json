@@ -1,0 +1,309 @@
+{
+    "name":  "Cajun Chicken Etouffee Rice Bowls",
+    "slug":  "cajun-chicken-etouffee-rice-bowls",
+    "cuisine":  "Cajun/Creole",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "https://www.africanbites.com/chicken-etouffee/",
+    "source_site":  "Immaculate Bites (africanbites.com)",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 200g (src scale)"
+               ],
+    "stat":  {
+                 "cal":  644,
+                 "protein":  51,
+                 "carbs":  53,
+                 "fat":  22,
+                 "cost_ps":  "3.82"
+             },
+    "intro_html":  "Etouffee means smothered, and that is exactly what happens here: chicken thighs buried in a roux-thickened Cajun gravy with the holy trinity of onion, celery, and bell pepper. Each bowl delivers a serious \u003cstrong\u003e51 grams of protein\u003c/strong\u003e at 644 calories for about \u003cstrong\u003e$3.82\u003c/strong\u003e (at everyday cost). The roux takes patience; everything else is a simmer.",
+    "ingredients_display": ["\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3175 g)","\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 7 tbsp (98 g)","\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 10.5 tbsp (84 g)","\u003cstrong\u003eButter (generic):\u003c/strong\u003e 7 tbsp (98 g)","\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 1.3 (161 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.7 (192 g)","\u003cstrong\u003eCelery:\u003c/strong\u003e 2 (118 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.25 tbsp (20 g)","\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)","\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 3.4 cans (1389 g)","\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0 oz (2 g)","\u003cstrong\u003eCajun Seasoning (Tony Chachere\u0027s):\u003c/strong\u003e 3.5 tbsp (32 g)","\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 3.5 tbsp (60 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 6.5 lb (2940 g)","\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 17.5 tbsp (105 g)","\u003cstrong\u003eHot Sauce (Frank\u0027s RedHot):\u003c/strong\u003e 1.25 tbsp (18 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Thigh, 7 lb: ~$12.39. \u003cstrong\u003eBuy 7 lbs: $12.39.\u003c/strong\u003e",
+                       "Vegetable Oil, 7 tbsp: ~$0.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "All-Purpose Flour, 10.5 tbsp: ~$0.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Butter, 7 tbsp: ~$0.63. \u003cstrong\u003eBuy 1 lb box: $2.92.\u003c/strong\u003e",
+                       "Green Bell Peppers, 1.3: ~$1.15. \u003cstrong\u003eBuy 2 eachs: $1.72.\u003c/strong\u003e",
+                       "Yellow Onion, 1.7: ~$0.48. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Celery, 2: ~$0.62. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Garlic, 2.25 tbsp: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Diced Tomatoes, 3.4 cans: ~$3.24. \u003cstrong\u003eBuy 4 cans: $3.84.\u003c/strong\u003e",
+                       "Worcestershire Sauce, 3.5 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 6.5 lb: ~$3.95. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Onions, 17.5 tbsp: ~$1.25. \u003cstrong\u003eBuy 2 bunchs: $2.14.\u003c/strong\u003e",
+                       "Hot Sauce, 1.25 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$1.04. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (dried thyme, bay leaves, cajun seasoning, salt, black pepper): ~$1.15. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.80 across 14 servings, so roughly $1.91 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $33.85 across 14 servings, roughly $2.42 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.83 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.68. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.82 a bowl\u003c/strong\u003e (at everyday cost) for chicken etouffee that a New Orleans restaurant would price at seven or eight times that, and you did not have to find parking in the Quarter.",
+    "shop_smart":  [
+                       "Seven pounds of boneless skinless chicken thighs is the backbone here, and the club pack price per pound keeps the protein cost per bowl down.",
+                       "The holy trinity of onion, celery, and bell pepper costs a couple dollars total. Buy whole heads and bunches, never the pre-chopped tubs at triple the price per ounce.",
+                       "Flour and oil make the roux for pennies. Restaurants charge you for the 20 minutes of stirring; at home, that labor is free and you can listen to a podcast."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Make the roux: heat the vegetable oil in your largest heavy pot over medium, whisk in the flour, and stir near-constantly for 10 to 15 minutes until it turns the color of peanut butter. Do not walk away; a burnt roux starts over.",
+                    "Add the butter, diced onion, celery, and green bell pepper and cook 5 to 6 minutes until softened. Add the garlic for 1 minute more.",
+                    "Gradually whisk in the chicken broth so the roux stays smooth, then add the Worcestershire, Cajun seasoning, thyme, bay leaves, and hot sauce.",
+                    "Add the chicken thighs, cut into large bite-size pieces, and bring to a gentle simmer.",
+                    "Simmer uncovered 25 to 30 minutes, stirring now and then, until the gravy thickens and the chicken reaches 165F. Pull the bay leaves and stir in most of the green onions.",
+                    "Meanwhile, cook 3.75 cups dry rice with water per package directions.",
+                    "Combine the rice and etouffee in your weighed pot, or portion rice first and ladle the etouffee over, your call. Finish with the remaining green onions."
+                ],
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight, and divide by 14. Ladle that weight into each of 14 containers, gravy and all. Every bowl lands at \u003cstrong\u003e644 calories and 51 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.africanbites.com/chicken-etouffee/\" target=\"_blank\" rel=\"noopener\"\u003eImmaculate Bites (africanbites.com)\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Hearty dinners for about $3.82 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  26.8,
+    "cost_batch_true":  33.85,
+    "cost_per_serving":  1.91,
+    "cost_per_serving_true":  2.42,
+    "cost_pantry_add":  16.83,
+    "cost_first_run":  50.68,
+    "scaler":  {
+                   "cost":  "33.85",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  3175,
+                                   "buy":  "7 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "grams":  98,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "grams":  84,
+                                   "buy":  "10.5 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "grams":  98,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "grams":  161,
+                                   "buy":  "1.3",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  192,
+                                   "buy":  "1.7",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "grams":  118,
+                                   "buy":  "2",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  20,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "grams":  4,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "grams":  1389,
+                                   "buy":  "3.4 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "grams":  2,
+                                   "buy":  "0 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cajun Seasoning",
+                                   "grams":  32,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "cajun-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "grams":  60,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "worcestershire",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  2940,
+                                   "buy":  "6.5 lb",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "grams":  105,
+                                   "buy":  "17.5 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Hot Sauce",
+                                   "grams":  18,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "hot-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Cajun chicken etouffee meal prep bowls: roux-thickened gravy, holy trinity, and rice. 644 calories and 51g protein for about $3.82 per serving (at everyday cost).",
+                 "keywords":  "chicken etouffee, cajun meal prep, etouffee rice bowls, budget meal prep, cajun chicken recipes, high protein bowls",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT55M",
+                 "totalTime":  "PT1H20M",
+                 "costPerServing":  3.82,
+                 "recipeIngredient":  [
+                                          "7 lb boneless skinless chicken thighs",
+                                          "6.5 lb chicken broth",
+                                          "3.75 cups dry rice",
+                                          "10.5 tbsp all-purpose flour",
+                                          "7 tbsp butter",
+                                          "1.7 yellow onions",
+                                          "1.3 green bell peppers"
+                                      ],
+                 "steps":  [
+                               "Stir oil and flour over medium heat 10 to 15 minutes into a peanut-butter-colored roux.",
+                               "Cook the onion, celery, and bell pepper in the roux with butter, then add garlic.",
+                               "Whisk in the broth gradually, then season with Worcestershire, Cajun seasoning, thyme, and hot sauce.",
+                               "Add the chicken and simmer 25 to 30 minutes until thickened and 165F.",
+                               "Cook the rice, combine with the etouffee and green onions, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  3175
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  161
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  192
+                              },
+                              {
+                                  "item":  "Celery",
+                                  "grams":  118
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  1389
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Cajun Seasoning",
+                                  "grams":  32
+                              },
+                              {
+                                  "item":  "Worcestershire Sauce",
+                                  "grams":  60
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  2940
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  105
+                              },
+                              {
+                                  "item":  "Hot Sauce",
+                                  "grams":  18
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

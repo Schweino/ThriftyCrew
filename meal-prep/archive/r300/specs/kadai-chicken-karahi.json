@@ -1,0 +1,346 @@
+{
+    "name":  "Kadai Chicken (Chicken Karahi)",
+    "slug":  "kadai-chicken-karahi",
+    "cuisine":  "Indian / Pakistani",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.indianhealthyrecipes.com/kadai-chicken/",
+    "source_site":  "indianhealthyrecipes.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 200g (src scale)",
+                   "base +20% (Rice)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Tomato-and-crushed-spice bhuna style curry, no cream or coconut, which separates it from every live Indian entry. Cooks down in one pan and holds well. Fennel seeds are the one spice with no board id. Confidence: MEDIUM - URL surfaced by search engine, page not individually fetched. | HARVEST: Final 7 lines are the kadai masala spice blend, ground fresh in the source.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 200g (src scale)",
+                         "TUNING: base +20% (Rice)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  566,
+                 "protein":  32,
+                 "carbs":  63,
+                 "fat":  19,
+                 "cost_ps":  "3.14"
+             },
+    "intro_html":  "Kadai chicken is named after the pan it is cooked in, a deep steel wok that gets ripping hot. The technique is bhuna: cook the tomato and spices down hard until the oil separates and the masala clings to the meat instead of swimming around it. No cream sauce to hide behind, no coconut milk. The spice blend is coarsely crushed, not powdered, so you get little bursts of coriander and chile as you eat. Each bowl comes in at \u003cstrong\u003e566 calories and 32 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.14\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 3.75 lb (1750 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 5 (551 g)",
+                                "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 2.5 cans (1050 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6.75 tbsp (57 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 0.75 cups (172 g)",
+                                "\u003cstrong\u003eDried Guajillo Chiles (generic (USDA)):\u003c/strong\u003e 1.5 oz (42 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 0.75 tbsp (4 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.75 tbsp (13 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 0.5 tbsp (5 g)",
+                                "\u003cstrong\u003eGround Turmeric (Great Value):\u003c/strong\u003e 0.25 tbsp (3 g)",
+                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 2.75 tbsp (16 g)",
+                                "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 0.75 cups (158 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 7 tbsp (7 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 1.3 (161 g)",
+                                "\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 5.25 tbsp (28 g)",
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 1.25 tbsp (5 g)",
+                                "\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 0.75 tbsp (5 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.5 cups dry (851 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Thigh, 3.75 lb: ~$6.83. \u003cstrong\u003eBuy 4 lbs: $7.08.\u003c/strong\u003e",
+                       "Yellow Onion, 5: ~$1.39. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Tomato Sauce, 2.5 cans: ~$2.37. \u003cstrong\u003eBuy 3 15oz cans: $2.88.\u003c/strong\u003e",
+                       "Garlic, 6.75 tbsp: ~$0.82. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Butter, 0.75 cups: ~$1.13. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Dried Guajillo Chiles, 1.5 oz: ~$2.59. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Heavy Cream, 0.75 cups: ~$0.98. \u003cstrong\u003eBuy 1 pint: $2.94.\u003c/strong\u003e",
+                       "Fresh Cilantro, 7 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Green Bell Peppers, 1.3: ~$1.15. \u003cstrong\u003eBuy 2 each: $1.72.\u003c/strong\u003e",
+                       "Rice, 4.5 cups dry: ~$1.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, salt, chili powder, ground turmeric, garam masala, ground coriander, italian seasoning, ground cinnamon): ~$2.44. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $20.97 across 14 servings, so roughly $1.50 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $28.89 across 14 servings, roughly $2.06 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.01 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.90. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.14 a bowl\u003c/strong\u003e (at everyday cost) for a restaurant-style curry with no shortcuts in it. Chicken and dried chiles are the two lines worth watching, and the chiles are a one-time buy that lasts a long while.",
+    "shop_smart":  [
+                       "Dried chiles are the second biggest line and the whole flavor of a kadai masala. Buy them in a bag from the Latin or international aisle rather than the spice rack, where the same chiles cost several times more per ounce, and store them in a sealed jar.",
+                       "Crush your kadai masala coarsely with the flat of a knife or a rolling pin instead of buying it ground. Coarse is the point, ground is a different dish, and you already own the tools.",
+                       "Tomato sauce in cans is cheaper and more consistent than fresh tomatoes for this, and it gets you to the oil-separating stage faster because there is less water to cook off.",
+                       "A half pint of heavy cream is all this recipe uses and it goes in at the very end. Buy the small carton, since the rest of a quart will go bad long before your next batch."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Make the kadai masala: toast the dried chiles and the ground coriander in a dry pan for a minute, then crush them coarsely with the ground cumin, garam masala, italian seasoning and ground cinnamon. Coarse, not powdered.",
+                    "Melt the butter in your largest heavy pan over medium-high and cook the sliced onion for 8 to 10 minutes until browned at the edges.",
+                    "Add the garlic and cook a minute, then add the tomato sauce, chili powder, ground turmeric and salt. Cook this down hard for 10 to 12 minutes, stirring, until the sauce darkens and you can see butter pooling at the edges. That separation is the whole technique.",
+                    "Add the chicken thighs cut into chunks and turn them in the masala. Cook uncovered 15 to 20 minutes, stirring often, until the chicken is cooked through and the sauce is clinging rather than pooling.",
+                    "Stir in most of the crushed kadai masala and the sliced green bell pepper and cook 4 more minutes, so the pepper stays crisp instead of collapsing.",
+                    "Turn off the heat and stir in the heavy cream and the chopped cilantro. Save a pinch of the crushed masala to scatter over the top.",
+                    "Cook the rice separately, let it steam covered for 10 minutes, and fold it into the pot so every serving gets curry and rice together."
+                ],
+    "portion_html":  "Set the pot on the scale, subtract the empty-pot weight, and divide by 14. Same number in every container. Each one carries \u003cstrong\u003e566 calories\u003c/strong\u003e, and because this sauce is thick rather than soupy, it does not turn the rice to mush by day four.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.indianhealthyrecipes.com/kadai-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eindianhealthyrecipes.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Kadai chicken with a hand-crushed masala for about $3.14 a bowl (at everyday cost). This is one of a few hundred recipes on the site. Members get every recipe in the Meal Prep section plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  20.97,
+    "cost_batch_true":  28.89,
+    "cost_per_serving":  1.5,
+    "cost_per_serving_true":  2.06,
+    "cost_pantry_add":  15.01,
+    "cost_first_run":  43.9,
+    "scaler":  {
+                   "cost":  "28.89",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  1750,
+                                   "buy":  "3.75 lb",
+                                   "bid":  "chicken-thighs",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  551,
+                                   "buy":  "5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Tomato Sauce",
+                                   "canon":  "Tomato Sauce",
+                                   "grams":  1050,
+                                   "buy":  "2.5 cans",
+                                   "bid":  "tomato-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  57,
+                                   "buy":  "6.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  172,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Dried Guajillo Chiles",
+                                   "canon":  "Dried Guajillo Chiles",
+                                   "grams":  42,
+                                   "buy":  "1.5 oz",
+                                   "bid":  "dried-guajillo-chiles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  4,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  13,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "canon":  "Chili Powder",
+                                   "grams":  5,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Turmeric",
+                                   "canon":  "Ground Turmeric",
+                                   "grams":  3,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "ground-turmeric",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garam Masala",
+                                   "canon":  "Garam Masala",
+                                   "grams":  16,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "garam-masala",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Heavy Cream",
+                                   "canon":  "Heavy Cream",
+                                   "grams":  158,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "heavy-cream",
+                                   "gpu":  "29.800"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  7,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  161,
+                                   "buy":  "1.3",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Ground Coriander",
+                                   "canon":  "Ground Coriander",
+                                   "grams":  28,
+                                   "buy":  "5.25 tbsp",
+                                   "bid":  "ground-coriander",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "canon":  "Italian Seasoning",
+                                   "grams":  5,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cinnamon",
+                                   "canon":  "Ground Cinnamon",
+                                   "grams":  5,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "ground-cinnamon",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  851,
+                                   "buy":  "4.5 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Kadai chicken (chicken karahi): a bhuna-style tomato curry with coarsely crushed spices and bell pepper, over rice. 14 bowls at 566 calories, 32g protein, about $3.14 (at everyday cost).",
+                 "keywords":  "kadai chicken, chicken karahi, indian chicken curry, bhuna curry, pakistani chicken recipe, budget indian meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M",
+                 "costPerServing":  3.14,
+                 "recipeIngredient":  [
+                                          "3.75 lb boneless skinless chicken thighs",
+                                          "2.5 cans tomato sauce",
+                                          "5 yellow onions",
+                                          "1.5 oz dried guajillo chiles",
+                                          "0.75 cups butter",
+                                          "0.75 cups heavy cream",
+                                          "6.75 tbsp garlic",
+                                          "1.3 green bell peppers",
+                                          "4.5 cups dry rice",
+                                          "7 tbsp fresh cilantro"
+                                      ],
+                 "steps":  [
+                               "Toast and coarsely crush the dried chiles with coriander, cumin, garam masala and cinnamon into a kadai masala.",
+                               "Brown the sliced onion in butter, add garlic, then cook the tomato sauce and ground spices down until the butter separates.",
+                               "Add the chunked chicken and cook uncovered 15 to 20 minutes until the sauce clings.",
+                               "Stir in the crushed masala and green bell pepper, cook 4 minutes, then finish off the heat with cream and cilantro.",
+                               "Fold in the cooked rice and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  1750
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  551
+                              },
+                              {
+                                  "item":  "Tomato Sauce",
+                                  "grams":  1050
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  57
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  172
+                              },
+                              {
+                                  "item":  "Dried Guajillo Chiles",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  13
+                              },
+                              {
+                                  "item":  "Chili Powder",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Ground Turmeric",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Garam Masala",
+                                  "grams":  16
+                              },
+                              {
+                                  "item":  "Heavy Cream",
+                                  "grams":  158
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  161
+                              },
+                              {
+                                  "item":  "Ground Coriander",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Italian Seasoning",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Ground Cinnamon",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  851
+                              }
+                          ]
+}

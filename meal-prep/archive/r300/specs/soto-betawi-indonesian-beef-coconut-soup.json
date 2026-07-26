@@ -1,0 +1,328 @@
+{
+    "name":  "Soto Betawi (Indonesian Beef and Coconut Soup)",
+    "slug":  "soto-betawi-indonesian-beef-coconut-soup",
+    "cuisine":  "Indonesian",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://tarasmulticulturaltable.com/soto-betawi-beef-coconut-soup/",
+    "source_site":  "tarasmulticulturaltable.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "protein clamp 300-\u003e240 g/serving",
+                   "base trimmed -66% (Potato)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: coconut-milk-canned and lemongrass-paste are already tracked, which is most of the flavor base. Served over rice it eats as a dinner. Confidence: page fetched and confirmed real, uses brisket (swap to chuck-roast); the source publishes no nutrition so calories are estimated. | HARVEST: No nutrition published. Spice-paste ingredients (shallots through ginger) are a separate source section.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: protein clamp 300-\u003e240 g/serving",
+                         "TUNING: base trimmed -66% (Potato)",
+                         "OVERRIDE Coconut Milk: RICH-DISH TRIM: 700 ml for 4 -\u003e 500 ml (125 ml/serving still reads soto betawi; brings dish under 900 with the protein clamp)",
+                         "OVERRIDE Diced Tomatoes: \u00273 tomatoes quartered\u0027 are fresh, not cans"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  885,
+                 "protein":  55,
+                 "carbs":  33,
+                 "fat":  57,
+                 "cost_ps":  "7.98"
+             },
+    "intro_html":  "Soto Betawi is Jakarta in a bowl: beef simmered until tender in a coconut and milk broth, built on a fried spice paste of shallot, garlic, cashew, and ginger, then brightened at the table with lime and green onion. It is a soup that eats like a dinner. Each bowl carries \u003cstrong\u003e55 grams of protein\u003c/strong\u003e and 885 calories for about \u003cstrong\u003e$7.98\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 7.5 lb (3360 g)",
+                                "\u003cstrong\u003eLemongrass Paste (Gourmet Garden (McCormick)):\u003c/strong\u003e 7 tbsp (105 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.25 oz (4 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 6.5 tbsp (98 g)",
+                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 4.4 cans (1750 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 2.75 cups (700 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 3.6 (762 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 3.8 cans (1575 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 17.5 tbsp (105 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 3.25 tbsp (22 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 6 tbsp (84 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 9 (980 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)",
+                                "\u003cstrong\u003eCashews (generic):\u003c/strong\u003e 1.25 tbsp (10 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 17.5 tbsp (105 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Chuck Roast, 7.5 lb: ~$59.04. \u003cstrong\u003eBuy 8 lbs: $63.76.\u003c/strong\u003e",
+                       "Lemongrass Paste, 7 tbsp: ~$4.62. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lime Juice, 6.5 tbsp: ~$0.82. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Coconut Milk, 4.4 cans: ~$8.68. \u003cstrong\u003eBuy 5 13.5oz cans: $9.92.\u003c/strong\u003e",
+                       "Milk, 2.75 cups: ~$0.56. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
+                       "Potato, 3.6: ~$0.95. \u003cstrong\u003eBuy 2 lbs: $1.14.\u003c/strong\u003e",
+                       "Diced Tomatoes, 3.8 cans: ~$3.68. \u003cstrong\u003eBuy 4 cans: $3.84.\u003c/strong\u003e",
+                       "Green Onions, 17.5 tbsp: ~$1.25. \u003cstrong\u003eBuy 2 bunches: $2.14.\u003c/strong\u003e",
+                       "Vegetable Oil, 6 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 9: ~$2.46. \u003cstrong\u003eBuy 3 lbs: $3.42.\u003c/strong\u003e",
+                       "Garlic, 8.25 tbsp: ~$1.01. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Cashews, 1.25 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 8oz can: $4.96.\u003c/strong\u003e",
+                       "Ginger, 17.5 tbsp: ~$0.92. \u003cstrong\u003eBuy 2 pieces: $1.75.\u003c/strong\u003e",
+                       "Pantry seasonings (bay leaves, black pepper, salt): ~$1.54. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $85.95 across 14 servings, so roughly $6.14 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $102.28 across 14 servings, roughly $7.31 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.41 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $117.69. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$7.98 a bowl\u003c/strong\u003e (at everyday cost), and the chuck roast plus the coconut milk explain almost all of it. Cook this one on a week when beef is moving, not a week when it is not.",
+    "shop_smart":  [
+                       "Canned coconut milk is the flavor and the body of this soup. The store brand cans work fine, but shake one before you buy it. If it sloshes thin, it has been watered down.",
+                       "Lemongrass paste in a tube lasts months in the fridge and costs less over time than fresh stalks you throw half of away. It is the one convenience item worth it here.",
+                       "Cashews are the traditional thickener in the spice paste. You only need a small handful, so buy the smallest container rather than the club size.",
+                       "Chuck roast is the correct cut for a long simmer. Brisket is what the source uses, and chuck gets to the same place for less money."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cut the chuck into bite sized pieces and simmer them in water with the lemongrass paste, bay leaves, and salt for about 90 minutes, until tender. Keep every bit of that broth.",
+                    "While the beef cooks, blend most of the onion with the garlic, cashews, and ginger into a smooth paste.",
+                    "Fry the paste in the vegetable oil over medium heat until it darkens and smells nutty rather than raw, about 8 to 10 minutes.",
+                    "Stir the fried paste into the beef pot, then add the coconut milk and the milk. Keep it at a bare simmer so the coconut milk does not break.",
+                    "Add the diced potato and simmer 15 to 20 minutes until it is soft but still holding its shape.",
+                    "Add the tomatoes near the end so they stay in pieces, then finish with the lime juice and a heavy hand of black pepper.",
+                    "Slice the green onions and the remaining onion thin for scattering over each bowl at serving."
+                ],
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Ladle that exact weight into each of 14 containers, making sure every one gets its share of beef and not just broth. Each bowl lands at \u003cstrong\u003e885 calories with 55 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://tarasmulticulturaltable.com/soto-betawi-beef-coconut-soup/\" target=\"_blank\" rel=\"noopener\"\u003etarasmulticulturaltable.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Indonesian beef soup for about $7.98 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  85.95,
+    "cost_batch_true":  102.28,
+    "cost_per_serving":  6.14,
+    "cost_per_serving_true":  7.31,
+    "cost_pantry_add":  15.41,
+    "cost_first_run":  117.69,
+    "scaler":  {
+                   "cost":  "102.28",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Chuck Roast",
+                                   "canon":  "Beef Chuck Roast",
+                                   "grams":  3360,
+                                   "buy":  "7.5 lb",
+                                   "bid":  "beef-chuck-roast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Lemongrass Paste",
+                                   "canon":  "Lemongrass Paste",
+                                   "grams":  105,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "lemongrass-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  4,
+                                   "buy":  "0.25 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "canon":  "Lime Juice",
+                                   "grams":  98,
+                                   "buy":  "6.5 tbsp",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Coconut Milk",
+                                   "canon":  "Coconut Milk",
+                                   "grams":  1750,
+                                   "buy":  "4.4 cans",
+                                   "bid":  "coconut-milk-canned",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  700,
+                                   "buy":  "2.75 cups",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  762,
+                                   "buy":  "3.6",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  1575,
+                                   "buy":  "3.8 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  105,
+                                   "buy":  "17.5 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  22,
+                                   "buy":  "3.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  84,
+                                   "buy":  "6 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  980,
+                                   "buy":  "9",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  70,
+                                   "buy":  "8.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Cashews",
+                                   "canon":  "Cashews",
+                                   "grams":  10,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "cashews",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  105,
+                                   "buy":  "17.5 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Soto Betawi meal prep: Indonesian beef simmered in a coconut and milk broth with a fried shallot, cashew, and ginger paste. 885 calories, 55g protein, about $7.98 per serving (at everyday cost).",
+                 "keywords":  "soto betawi, indonesian beef soup, coconut beef soup, jakarta soto, budget meal prep, indonesian recipes",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT2H15M",
+                 "totalTime":  "PT2H40M",
+                 "costPerServing":  7.98,
+                 "recipeIngredient":  [
+                                          "7.5 lb beef chuck roast",
+                                          "7 tbsp lemongrass paste",
+                                          "6.5 tbsp lime juice",
+                                          "4.4 cans coconut milk",
+                                          "2.75 cups milk",
+                                          "3.6 potatoes",
+                                          "3.8 cans diced tomatoes",
+                                          "17.5 tbsp green onions",
+                                          "6 tbsp vegetable oil",
+                                          "9 yellow onions",
+                                          "8.25 tbsp garlic",
+                                          "1.25 tbsp cashews",
+                                          "17.5 tbsp ginger"
+                                      ],
+                 "steps":  [
+                               "Simmer cubed chuck roast with lemongrass paste and bay leaves until tender, keeping the broth.",
+                               "Blend onion, garlic, cashews, and ginger into a spice paste and fry it until darkened.",
+                               "Stir the paste into the beef pot and add coconut milk and milk at a bare simmer.",
+                               "Add potatoes and cook until soft, then add tomatoes and lime juice.",
+                               "Top with green onion and sliced onion and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Chuck Roast",
+                                  "grams":  3360
+                              },
+                              {
+                                  "item":  "Lemongrass Paste",
+                                  "grams":  105
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "Coconut Milk",
+                                  "grams":  1750
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  762
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  1575
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  105
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  22
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  980
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Cashews",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  105
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              }
+                          ]
+}

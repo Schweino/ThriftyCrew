@@ -1,0 +1,281 @@
+{
+    "name":  "Persian Turkey Loobia Polo (Green Bean Rice)",
+    "slug":  "persian-turkey-loobia-polo",
+    "cuisine":  "persian",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.themediterraneandish.com/loobia-polo-persian-beef-and-green-bean-rice/",
+    "source_site":  "themediterraneandish.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +35% (Rice)",
+                   "protein +15% (93/7 Ground Turkey)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Layered spiced meat-and-green-bean rice, cooked in one pot and served scooped rather than flipped. Verified source: full recipe, 8 servings, 461 cal / 17.7g protein, and the source explicitly says to use ground turkey for a lighter version. Confidence note: needs a heavier turkey ratio than the source to reach 25g+. | HARVEST: Source uses ground beef or lamb; adapt to turkey.",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: base +35% (Rice)",
+                         "TUNING: protein +15% (93/7 Ground Turkey)",
+                         "OVERRIDE 93/7 Ground Beef: TITLE-PROTEIN SWAP: titled turkey; ground-\u003eground, grams kept (source beef was already 2x per r100-precedent bump upstream)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  592,
+                 "protein":  26,
+                 "carbs":  84,
+                 "fat":  15,
+                 "cost_ps":  "3.12"
+             },
+    "intro_html":  "Loobia polo is Persian layered rice: green beans and spiced meat folded through long grain rice with turmeric and a whisper of cinnamon, then steamed until the bottom turns golden. That golden bottom is called tahdig, and it is the reason Persian families argue at the dinner table. This one runs \u003cstrong\u003e592 calories and 26 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.12\u003c/strong\u003e (at everyday cost), which is less than the tip you would leave on a restaurant plate of it.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 7.5 cups dry (1367 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.4 (262 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 tbsp (18 g)",
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 2.75 lb (1232 g)",
+                                "\u003cstrong\u003eGround Turmeric (Great Value):\u003c/strong\u003e 0.5 tbsp (5 g)",
+                                "\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 1.25 tbsp (9 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1.75 tbsp (28 g)",
+                                "\u003cstrong\u003eGreen Beans (generic):\u003c/strong\u003e 1.75 lb (794 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.25 tbsp (42 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (2 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 1 (41 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 5.25 tbsp (74 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Rice, 7.5 cups dry: ~$1.69. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Olive Oil, 3.5 tbsp: ~$0.66. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2.4: ~$0.66. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 2 tbsp: ~$0.26. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 2.75 lb: ~$10.38. \u003cstrong\u003eBuy 3 lbs: $11.46.\u003c/strong\u003e",
+                       "Tomato Paste, 1.75 tbsp: ~$0.14. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "Green Beans, 1.75 lb: ~$1.71. \u003cstrong\u003eBuy 3 12oz bags: $2.19.\u003c/strong\u003e",
+                       "Lemon Juice, 1: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Vegetable Oil, 5.25 tbsp: ~$0.18. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (ground turmeric, ground cinnamon, salt, black pepper): ~$0.50. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $16.33 across 14 servings, so roughly $1.17 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $19.41 across 14 servings, roughly $1.39 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $24.20 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.61. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.12\u003c/strong\u003e a container (at everyday cost). Rice, green beans, and a couple pounds of turkey turn into fourteen dinners, and the priciest thing in the pot still costs less than a sandwich.",
+    "shop_smart":  [
+                       "Frozen green beans are the smart buy here, not fresh. They come trimmed and cut, they cost less per cup, and they hold their shape better through a long steam than fresh beans do.",
+                       "The ground turkey is more than half the batch cost. Watch for the 3 pound pack to go on sale and grab two, because turkey freezes hard and thaws just fine.",
+                       "Rice from the big bag is where this recipe gets its price. Seven and a half cups dry sounds like a mountain until you see what it costs.",
+                       "Turmeric and cinnamon are the whole spice bill and they are jars you probably already own. Buy them once and they carry twenty batches of Persian and Indian cooking after this one."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Rinse the rice until the water runs clear, then soak it in salted water for 30 minutes while you cook everything else. This is the step that makes the grains separate instead of clump.",
+                    "Dice the onion and cook it in the olive oil over medium heat until golden, about 10 minutes, then add the garlic and turmeric for one minute.",
+                    "Add the ground turkey and brown it, breaking it up as it goes, until it is cooked through to 165F. Stir in the tomato paste, cinnamon, salt, and pepper and cook two minutes more.",
+                    "Add the green beans, a splash of water, and the lemon juice, then cover and cook 10 minutes until the beans are tender and the pan is barely wet.",
+                    "Parboil the drained rice in a big pot of boiling salted water for 6 to 8 minutes, until the grains are soft outside and still firm in the middle, then drain.",
+                    "Film the bottom of a heavy pot with the vegetable oil, layer in the rice and the turkey and bean mixture in alternating scoops, poke a few steam holes through with a spoon handle, cover with a towel-wrapped lid, and steam on low for 40 minutes.",
+                    "Scoop the whole thing into your weighed pot, crust and all, and fold gently so every serving gets rice and meat both."
+                ],
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is your per-container gram target. Scoop it out with the crusty pieces spread around instead of hoarded in one container. Each portion lands at \u003cstrong\u003e592 calories and 26 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themediterraneandish.com/loobia-polo-persian-beef-and-green-bean-rice/\" target=\"_blank\" rel=\"noopener\"\u003ethemediterraneandish.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Persian layered rice for about \u003cstrong\u003e$3.12\u003c/strong\u003e a container (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  16.33,
+    "cost_batch_true":  19.41,
+    "cost_per_serving":  1.17,
+    "cost_per_serving_true":  1.39,
+    "cost_pantry_add":  24.2,
+    "cost_first_run":  43.61,
+    "scaler":  {
+                   "cost":  "19.41",
+                   "ing":  [
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1367,
+                                   "buy":  "7.5 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  47,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  262,
+                                   "buy":  "2.4",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  18,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1232,
+                                   "buy":  "2.75 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ground Turmeric",
+                                   "canon":  "Ground Turmeric",
+                                   "grams":  5,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "ground-turmeric",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cinnamon",
+                                   "canon":  "Ground Cinnamon",
+                                   "grams":  9,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "ground-cinnamon",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  28,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Beans",
+                                   "canon":  "Green Beans",
+                                   "grams":  794,
+                                   "buy":  "1.75 lb",
+                                   "bid":  "frozen-green-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  42,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lemon Juice",
+                                   "canon":  "Lemon Juice",
+                                   "grams":  41,
+                                   "buy":  "1",
+                                   "bid":  "lemon-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  74,
+                                   "buy":  "5.25 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Persian loobia polo meal prep: turmeric spiced turkey and green beans layered through steamed rice. 592 calories, 26g protein, about $3.12 a serving (at everyday cost).",
+                 "keywords":  "loobia polo, persian rice, green bean rice, turkey meal prep, budget meal prep, tahdig",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT1H5M",
+                 "totalTime":  "PT1H30M",
+                 "costPerServing":  3.12,
+                 "recipeIngredient":  [
+                                          "7.5 cups dry rice",
+                                          "2.75 lb 93/7 ground turkey",
+                                          "7.25 cups green beans",
+                                          "2.4 yellow onions",
+                                          "2 tbsp garlic",
+                                          "1.75 tbsp tomato paste",
+                                          "3.5 tbsp olive oil",
+                                          "5.25 tbsp vegetable oil",
+                                          "1 lemon worth of lemon juice"
+                                      ],
+                 "steps":  [
+                               "Rinse and soak the rice in salted water for 30 minutes.",
+                               "Cook the onion in olive oil until golden, add garlic and turmeric, then brown the ground turkey to 165F with tomato paste, cinnamon, salt, and pepper.",
+                               "Add the green beans and lemon juice, cover, and cook 10 minutes.",
+                               "Parboil the rice 6 to 8 minutes and drain.",
+                               "Layer rice and the turkey bean mixture over oil in a heavy pot and steam covered on low for 40 minutes.",
+                               "Fold together and portion by weight into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1367
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  262
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  18
+                              },
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1232
+                              },
+                              {
+                                  "item":  "Ground Turmeric",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Ground Cinnamon",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Green Beans",
+                                  "grams":  794
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Lemon Juice",
+                                  "grams":  41
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  74
+                              }
+                          ]
+}

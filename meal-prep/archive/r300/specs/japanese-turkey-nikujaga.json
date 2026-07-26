@@ -1,0 +1,272 @@
+{
+    "name":  "Japanese Turkey Nikujaga (Meat and Potato Stew)",
+    "slug":  "japanese-turkey-nikujaga",
+    "cuisine":  "japanese",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.chopstickchronicles.com/nikujaga/",
+    "source_site":  "chopstickchronicles.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Potato)",
+                   "portion factor 1.15"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Soy-mirin potato stew - a braise built entirely from cheap board staples (potatoes, carrots, onions). Verified source: full recipe, 4 servings, 361 cal / 16g protein. Confidence note: source uses sliced beef and is under our calorie floor, so ours is a turkey-forward reformulation served over rice. Distinct from every live stew in the catalog. | HARVEST: Source uses thinly sliced beef; adapt to ground turkey.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Potato)",
+                         "TUNING: portion factor 1.15",
+                         "OVERRIDE Beef Flank/Sirloin Steak: TITLE-PROTEIN SWAP + [BUMP x3.0]: source 150 g thin-sliced beef for 4; house 1 lb turkey breast strips for the protein floor (r100 Loobia Polo precedent)",
+                         "OVERRIDE Potato: source \u00275 small potatoes or 350g\u0027 parsed as 5 house-size potatoes (1065 g); source says 350 g - house doubles to 700 g to keep the potato-stew identity at dinner scale",
+                         "OVERRIDE Rice Noodles: \u0027100 g Konnyaku noodle\u0027 is shirataki (~0 cal) - counting it as rice-noodle macros falsifies the dish"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  561,
+                 "protein":  40,
+                 "carbs":  89,
+                 "fat":  4,
+                 "cost_ps":  "4.09"
+             },
+    "intro_html":  "Nikujaga is Japanese comfort food at its plainest and best: meat and potatoes simmered in soy, mirin, and a little sugar until the potatoes go soft enough to break with chopsticks. Every Japanese household makes it a slightly different way and every one of them is convinced theirs is correct. Ours leans turkey-forward so it works as a full container, at \u003cstrong\u003e561 calories and 40 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.09\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 4 lb (1811 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 24 (5060 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 2 (123 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.6 (282 g)",
+                                "\u003cstrong\u003eGreen Beans (generic):\u003c/strong\u003e 7.75 oz (221 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.3 cartons (1199 g)",
+                                "\u003cstrong\u003eMirin (Mizkan):\u003c/strong\u003e 1 cups (217 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 0.75 cups (151 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 cups (258 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 2 tbsp (28 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (23 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tbsp (5 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Turkey Breast, 4 lb: ~$19.22. \u003cstrong\u003eBuy 2 3lb frozen roasts: $28.88.\u003c/strong\u003e",
+                       "Potato, 24: ~$6.34. \u003cstrong\u003eBuy 12 lbs: $6.82.\u003c/strong\u003e",
+                       "Carrots, 2: ~$0.26. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Yellow Onion, 2.6: ~$0.71. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Green Beans, 7.75 oz: ~$0.48. \u003cstrong\u003eBuy 1 12oz bag: $0.73.\u003c/strong\u003e",
+                       "Chicken Broth, 1.3 cartons: ~$1.61. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Mirin, 1 cups: ~$1.91. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sugar, 0.75 cups: ~$0.27. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 1 cups: ~$0.98. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Vegetable Oil, 2 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.28. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $32.13 across 14 servings, so roughly $2.30 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $43.64 across 14 servings, roughly $3.12 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.68 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $57.32. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.09\u003c/strong\u003e a container (at everyday cost). Potatoes, onions, and carrots are the three cheapest things in the produce section, and this dish is built almost entirely out of them.",
+    "shop_smart":  [
+                       "Potatoes by the 12 pound bag are the cheapest starch in the store. This recipe uses a serious pile of them, so the bag price is the difference between cheap and very cheap.",
+                       "Turkey breast is the big line here. Frozen roasts run far below fresh cuts, and the deepest discounts land in the weeks right after the holidays.",
+                       "Mirin and soy sauce together cost very little for the batch and both bottles keep for a year. They are the entire seasoning, so there is no long spice list to buy into.",
+                       "This is a braise that gets better on day three, so it is one of the best uses of a Sunday afternoon in this whole library. Cheap ingredients plus time is the oldest trick in budget cooking."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cut the turkey breast into thin strips. Thin is important, because strips soak up the broth while chunks just sit in it.",
+                    "Peel the potatoes and cut them into large chunks, slice the carrots on a diagonal, and cut the onion into thick wedges.",
+                    "Heat the vegetable oil in a large heavy pot and sear the turkey strips until they lose their pink, then add the onion wedges and cook 3 minutes.",
+                    "Add the potatoes and carrots, then pour in the chicken broth, soy sauce, mirin, and sugar. The liquid should come most of the way up the vegetables but not drown them.",
+                    "Bring it to a simmer, then lay a round of parchment right on the surface and cover the pot. That paper lid is the Japanese trick that keeps everything basted without boiling the potatoes apart.",
+                    "Simmer on low for 25 to 30 minutes until the potatoes are fork tender and the turkey has reached 165F, shaking the pot instead of stirring so nothing breaks up.",
+                    "Add the green beans in the last 5 minutes, then let the pot sit off the heat for 15 minutes, which is when the potatoes actually drink up the broth."
+                ],
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is your per-container gram target. Scoop gently from the bottom so each container gets potato, carrot, and turkey along with a share of the broth. Every serving lands at \u003cstrong\u003e561 calories and 40 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.chopstickchronicles.com/nikujaga/\" target=\"_blank\" rel=\"noopener\"\u003echopstickchronicles.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Japanese meat and potato stew for about \u003cstrong\u003e$4.09\u003c/strong\u003e a container (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  32.13,
+    "cost_batch_true":  43.64,
+    "cost_per_serving":  2.3,
+    "cost_per_serving_true":  3.12,
+    "cost_pantry_add":  13.68,
+    "cost_first_run":  57.32,
+    "scaler":  {
+                   "cost":  "43.64",
+                   "ing":  [
+                               {
+                                   "item":  "Turkey Breast",
+                                   "canon":  "Turkey Breast",
+                                   "grams":  1811,
+                                   "buy":  "4 lb",
+                                   "bid":  "turkey-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  5060,
+                                   "buy":  "24",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  123,
+                                   "buy":  "2",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  282,
+                                   "buy":  "2.6",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Beans",
+                                   "canon":  "Green Beans",
+                                   "grams":  221,
+                                   "buy":  "7.75 oz",
+                                   "bid":  "frozen-green-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  1199,
+                                   "buy":  "1.3 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Mirin",
+                                   "canon":  "Mirin",
+                                   "grams":  217,
+                                   "buy":  "1 cups",
+                                   "bid":  "mirin",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  151,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  258,
+                                   "buy":  "1 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  28,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  23,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  5,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Japanese turkey nikujaga meal prep: potatoes, carrots, and turkey simmered in soy, mirin, and sugar. 561 calories, 40g protein, about $4.09 a serving (at everyday cost).",
+                 "keywords":  "nikujaga, japanese stew, meat and potato stew, turkey meal prep, budget meal prep, soy mirin braise",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H10M",
+                 "costPerServing":  4.09,
+                 "recipeIngredient":  [
+                                          "Turkey breast, cut into thin strips",
+                                          "24 potatoes",
+                                          "2 carrots",
+                                          "2.6 yellow onions",
+                                          "2 cups green beans",
+                                          "2.75 lb chicken broth",
+                                          "1 cup soy sauce",
+                                          "1 cup mirin",
+                                          "0.75 cups sugar",
+                                          "2 tbsp vegetable oil"
+                                      ],
+                 "steps":  [
+                               "Slice the turkey breast thin and cut the potatoes, carrots, and onion into chunks.",
+                               "Sear the turkey in vegetable oil, then add the onion wedges.",
+                               "Add potatoes and carrots with chicken broth, soy sauce, mirin, and sugar.",
+                               "Cover with a parchment lid and simmer 25 to 30 minutes until the potatoes are tender and the turkey reaches 165F.",
+                               "Add the green beans in the last 5 minutes and rest off the heat 15 minutes.",
+                               "Portion by weight into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Turkey Breast",
+                                  "grams":  1811
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  5060
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  123
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  282
+                              },
+                              {
+                                  "item":  "Green Beans",
+                                  "grams":  221
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  1199
+                              },
+                              {
+                                  "item":  "Mirin",
+                                  "grams":  217
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  151
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  258
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  23
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  5
+                              }
+                          ]
+}

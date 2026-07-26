@@ -1,0 +1,346 @@
+{
+    "name":  "Ghanaian Shoko (Beef and Spinach Stew)",
+    "slug":  "ghanaian-shoko-beef-spinach-stew",
+    "cuisine":  "Ghanaian",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.196flavors.com/ghana-shoko/",
+    "source_site":  "196flavors.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 300g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: West African beef is a real gap and this is a straightforward braise over rice. Spinach is tracked frozen and fresh. Confidence: page verified via site listing; calories estimated. | HARVEST: No nutrition published.",
+                         "SOURCE YIELD: 6 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 300g (src scale)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  690,
+                 "protein":  52,
+                 "carbs":  52,
+                 "fat":  28,
+                 "cost_ps":  "7.45"
+             },
+    "intro_html":  "Shoko is Ghanaian home cooking in one pot: beef braised in a fried tomato and pepper base, thickened with ground peanuts, and turned deep green with spinach at the end. It is rich without being heavy, and it reheats better on day three than it does on day one. Each bowl carries \u003cstrong\u003e52 grams of protein\u003c/strong\u003e and 690 calories for about \u003cstrong\u003e$7.45\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 7 lb (3175 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 4.7 (513 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2.6 cans (1058 g)",
+                                "\u003cstrong\u003ePeanuts (Great Value):\u003c/strong\u003e 4.75 tbsp (42 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5.5 tbsp (47 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 2.3 (280 g)",
+                                "\u003cstrong\u003eFrozen Chopped Spinach (generic):\u003c/strong\u003e 1.5 lb (662 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 11 tbsp (98 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 2.25 tbsp (14 g)",
+                                "\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 0.25 tbsp (2 g)",
+                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 0.25 tbsp (2 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 0.25 tbsp (2 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.75 tbsp (12 g)",
+                                "\u003cstrong\u003eFive-Spice Powder (McCormick Gourmet):\u003c/strong\u003e 0.5 tbsp (3 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 0.75 tbsp (10 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 2.25 cups (560 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.5 tbsp (47 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Chuck Roast, 7 lb: ~$55.79. \u003cstrong\u003eBuy 7 lbs: $55.79.\u003c/strong\u003e",
+                       "Yellow Onion, 4.7: ~$1.29. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Diced Tomatoes, 2.6 cans: ~$2.47. \u003cstrong\u003eBuy 3 cans: $2.88.\u003c/strong\u003e",
+                       "Peanuts, 4.75 tbsp: ~$0.24. \u003cstrong\u003eBuy 1 16oz jar: $2.58.\u003c/strong\u003e",
+                       "Garlic, 5.5 tbsp: ~$0.68. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Green Bell Peppers, 2.3: ~$2.01. \u003cstrong\u003eBuy 3 each: $2.58.\u003c/strong\u003e",
+                       "Frozen Chopped Spinach, 1.5 lb: ~$4.67. \u003cstrong\u003eBuy 3 10oz boxes: $6.01.\u003c/strong\u003e",
+                       "Jalapeno, 11 tbsp: ~$0.38. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Ginger, 2.25 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Beef Broth, 2.25 cups: ~$0.75. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (ground coriander, garam masala, ground cumin, black pepper, five-spice powder, brown sugar, salt): ~$1.44. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $70.70 across 14 servings, so roughly $5.05 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $78.96 across 14 servings, roughly $5.64 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $25.32 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $104.28. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$7.45 a bowl\u003c/strong\u003e (at everyday cost). The chuck roast is doing most of the damage to that number, so this is the recipe to cook the week beef goes on sale rather than the week it does not.",
+    "shop_smart":  [
+                       "Frozen chopped spinach beats fresh here by a mile. It is already cooked down, it costs a fraction per pound of usable greens, and this stew wants it wilted anyway.",
+                       "Canned diced tomatoes are the base. Store brand and name brand are the same tomatoes in most cases, so check the price per ounce tag and let the math pick.",
+                       "Peanuts are the traditional thickener. Buy plain roasted peanuts and grind them yourself in whatever you have, since ground peanut costs more per ounce for the same food.",
+                       "Chuck roast is the cut that belongs in a long braise. Do not upgrade it. A tender cut would cost more and fall apart worse."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cut the chuck into bite sized cubes, season with salt and pepper, and brown them hard in oil in batches. Set the beef aside.",
+                    "Blend the diced tomatoes, a large share of the onion, the bell peppers, jalapeno, garlic, and ginger into a rough puree.",
+                    "Cook the remaining chopped onion in the same pot until soft, then pour in the puree and fry it, stirring often, until it darkens and the raw tomato smell is gone.",
+                    "Grind the peanuts to a coarse meal and stir them in along with the coriander, cumin, and other pantry spices.",
+                    "Return the beef with the beef broth, cover, and simmer 60 to 90 minutes until the beef is fork tender and the sauce has tightened.",
+                    "Stir in the chopped spinach and cook 5 more minutes, just until it is fully wilted and folded through.",
+                    "Cook the rice separately, then taste the stew and correct the salt."
+                ],
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Scoop that weight of stew into each container and give every one the same weight of rice. Each bowl lands at \u003cstrong\u003e690 calories with 52 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.196flavors.com/ghana-shoko/\" target=\"_blank\" rel=\"noopener\"\u003e196flavors.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "West African braises for about $7.45 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  70.7,
+    "cost_batch_true":  78.96,
+    "cost_per_serving":  5.05,
+    "cost_per_serving_true":  5.64,
+    "cost_pantry_add":  25.32,
+    "cost_first_run":  104.28,
+    "scaler":  {
+                   "cost":  "78.96",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Chuck Roast",
+                                   "canon":  "Beef Chuck Roast",
+                                   "grams":  3175,
+                                   "buy":  "7 lb",
+                                   "bid":  "beef-chuck-roast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  513,
+                                   "buy":  "4.7",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  1058,
+                                   "buy":  "2.6 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Peanuts",
+                                   "canon":  "Peanuts",
+                                   "grams":  42,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "peanuts",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  47,
+                                   "buy":  "5.5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  280,
+                                   "buy":  "2.3",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Frozen Chopped Spinach",
+                                   "canon":  "Frozen Chopped Spinach",
+                                   "grams":  662,
+                                   "buy":  "1.5 lb",
+                                   "bid":  "spinach",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  98,
+                                   "buy":  "11 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  14,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ground Coriander",
+                                   "canon":  "Ground Coriander",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "ground-coriander",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garam Masala",
+                                   "canon":  "Garam Masala",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "garam-masala",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  12,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Five-Spice Powder",
+                                   "canon":  "Five-Spice Powder",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "five-spice-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "canon":  "Brown Sugar",
+                                   "grams":  10,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  560,
+                                   "buy":  "2.25 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  47,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Ghanaian shoko meal prep: beef braised in a fried tomato and pepper base with ground peanuts and spinach, over rice. 690 calories, 52g protein, about $7.45 per serving (at everyday cost).",
+                 "keywords":  "ghanaian shoko, west african beef stew, beef and spinach stew, peanut stew, budget meal prep, ghana recipes",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT1H30M",
+                 "totalTime":  "PT1H55M",
+                 "costPerServing":  7.45,
+                 "recipeIngredient":  [
+                                          "7 lb beef chuck roast",
+                                          "4.7 yellow onions",
+                                          "2.6 cans diced tomatoes",
+                                          "4.75 tbsp peanuts",
+                                          "5.5 tbsp garlic",
+                                          "2.3 green bell peppers",
+                                          "7.75 cups frozen chopped spinach",
+                                          "11 tbsp jalapeno",
+                                          "2.25 tbsp ginger",
+                                          "1.25 lb beef broth",
+                                          "3.75 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Brown cubed chuck roast in batches and set it aside.",
+                               "Blend tomatoes, onion, bell pepper, jalapeno, garlic, and ginger into a puree.",
+                               "Fry the puree in the pot until it darkens, then stir in ground peanuts and spices.",
+                               "Return the beef with broth and simmer 60 to 90 minutes until tender.",
+                               "Fold in the spinach, cook the rice, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Chuck Roast",
+                                  "grams":  3175
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  513
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  1058
+                              },
+                              {
+                                  "item":  "Peanuts",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  280
+                              },
+                              {
+                                  "item":  "Frozen Chopped Spinach",
+                                  "grams":  662
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Ground Coriander",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Garam Masala",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Five-Spice Powder",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Brown Sugar",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  560
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

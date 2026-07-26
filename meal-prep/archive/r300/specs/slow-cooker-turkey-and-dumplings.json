@@ -1,0 +1,304 @@
+{
+    "name":  "Slow Cooker Turkey and Dumplings",
+    "slug":  "slow-cooker-turkey-and-dumplings",
+    "cuisine":  "american",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.themagicalslowcooker.com/turkey-and-dumplings/",
+    "source_site":  "themagicalslowcooker.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 250g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Verified 5 servings, 697 cal, 62g protein, clears both gates with the biggest margin in the slice. Dumplings are dropped and cooked in the pot, so 14 servings is just a fuller crock. Nothing like it in the catalog at any protein. | HARVEST: Last five lines are the dumpling batter (source lists them in one continuous list).",
+                         "SOURCE YIELD: 5 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 250g (src scale)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  725,
+                 "protein":  57,
+                 "carbs":  91,
+                 "fat":  12,
+                 "cost_ps":  "4.47"
+             },
+    "intro_html":  "There are two kinds of dumplings in this world. Rolled and cut, which is a project, and dropped, which is a spoon and a bowl of batter. This one is dropped. The turkey and vegetables go into the slow cooker in the morning and do their thing all day. An hour before dinner you stir together flour, milk, butter and baking powder, drop spoonfuls onto the surface, put the lid back on, and let the steam do the rest. It is the most comfortable food in this entire section.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 5.5 lb (2540 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 4.3 cartons (4032 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 4 (420 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 8.4 (512 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 8.4 (462 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6.5 tbsp (56 g)",
+                                "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 2.75 tbsp (8 g)",
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 2.75 tbsp (12 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.5 tbsp (11 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 5.5 cups (700 g)",
+                                "\u003cstrong\u003eBaking Powder (generic (USDA)):\u003c/strong\u003e 1.5 oz (45 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (8 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 2.75 cups (686 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 0.75 cups (157 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Turkey Breast, 5.5 lb: ~$26.95. \u003cstrong\u003eBuy 2 3lb frozen roasts: $28.88.\u003c/strong\u003e",
+                       "Chicken Broth, 4.3 cartons: ~$5.41. \u003cstrong\u003ePantry staple; this batch alone uses about 5 32oz cartons.\u003c/strong\u003e",
+                       "Yellow Onion, 4: ~$1.06. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 8.4: ~$1.08. \u003cstrong\u003eBuy 2 lbs: $1.91.\u003c/strong\u003e",
+                       "Celery, 8.4: ~$2.43. \u003cstrong\u003eBuy 2 bunches: $4.74.\u003c/strong\u003e",
+                       "Garlic, 6.5 tbsp: ~$0.81. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "All-Purpose Flour, 5.5 cups: ~$0.66. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Milk, 2.75 cups: ~$0.55. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
+                       "Butter, 0.75 cups: ~$1.03. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (dried thyme, italian seasoning, black pepper, baking powder, salt): ~$1.86. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $42.70 across 14 servings, so roughly $3.05 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $52.61 across 14 servings, roughly $3.76 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.02 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $62.63. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.47 a bowl\u003c/strong\u003e (at everyday cost). The turkey breast is nearly all of it. The dumplings themselves, flour and milk and butter, cost almost nothing and turn the pot into a meal.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy a frozen turkey breast roast in season.\u003c/strong\u003e Around the holidays it hits its low for the year. Cook it, pull it, freeze it in bags, and dishes like this one get much cheaper for months.",
+                       "\u003cstrong\u003eFlour, milk, butter and baking powder is the whole dumpling.\u003c/strong\u003e There is no mix to buy and no biscuit tube needed. That is the cheapest carb you can put on top of a stew.",
+                       "\u003cstrong\u003eCarrots and celery in bags and bunches, not singles.\u003c/strong\u003e This pot goes through a lot of both, and loose produce is priced for a household of two.",
+                       "\u003cstrong\u003eLift the lid as little as you can.\u003c/strong\u003e Every peek dumps the steam the dumplings need to cook through, and that is a free mistake to avoid."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice separately per the package and set it aside. It goes under the stew in the containers.",
+                    "Put the diced onion, sliced carrots, sliced celery and minced garlic in the slow cooker with the chicken broth, dried thyme, Italian seasoning, salt and black pepper.",
+                    "Add the cooked turkey breast, put the lid on, and cook on low for 5 to 6 hours until the vegetables are tender and the broth tastes like a real stock.",
+                    "Whisk together the flour, baking powder and salt, then cut in the softened butter and stir in the milk until you have a thick, sticky batter.",
+                    "Turn the slow cooker to high, drop spoonfuls of the batter across the surface of the stew, and put the lid back on.",
+                    "Cook 45 to 60 minutes without lifting the lid, until a dumpling comes out clean on a toothpick and the stew has thickened underneath."
+                ],
+    "portion_html":  "Spread the cooked rice into your 14 containers, then set the crock on your scale, subtract the empty weight from Step 1, divide by 14, and portion that exact weight into each one, making sure everybody gets dumpling. Every serving lands near 725 calories with 57 grams of protein, which is one of the biggest protein numbers in this whole batch.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/turkey-and-dumplings/\" target=\"_blank\" rel=\"noopener\"\u003ethemagicalslowcooker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cem\u003eSlow cooker comfort food for about $4.47 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "cost_batch":  42.7,
+    "cost_batch_true":  52.61,
+    "cost_per_serving":  3.05,
+    "cost_per_serving_true":  3.76,
+    "cost_pantry_add":  10.02,
+    "cost_first_run":  62.63,
+    "scaler":  {
+                   "cost":  "52.61",
+                   "ing":  [
+                               {
+                                   "item":  "Turkey Breast",
+                                   "canon":  "Turkey Breast",
+                                   "grams":  2540,
+                                   "buy":  "5.5 lb",
+                                   "bid":  "turkey-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  4032,
+                                   "buy":  "4.3 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  420,
+                                   "buy":  "4",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  512,
+                                   "buy":  "8.4",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "canon":  "Celery",
+                                   "grams":  462,
+                                   "buy":  "8.4",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  56,
+                                   "buy":  "6.5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "canon":  "Dried Thyme",
+                                   "grams":  8,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "canon":  "Italian Seasoning",
+                                   "grams":  12,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  11,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  700,
+                                   "buy":  "5.5 cups",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Baking Powder",
+                                   "canon":  "Baking Powder",
+                                   "grams":  45,
+                                   "buy":  "1.5 oz",
+                                   "bid":  "baking-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  8,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  686,
+                                   "buy":  "2.75 cups",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  157,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey breast, carrots and celery slow cooked in broth under dropped flour and butter dumplings. A 14 serving comfort food batch for meal prep.",
+                 "keywords":  "slow cooker turkey and dumplings, turkey dumpling soup, crockpot comfort food, leftover turkey recipe, budget meal prep, cheap dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT6H",
+                 "totalTime":  "PT6H25M",
+                 "costPerServing":  4.47,
+                 "recipeIngredient":  [
+                                          "Turkey Breast",
+                                          "Chicken Broth",
+                                          "Yellow Onion",
+                                          "Carrots",
+                                          "Celery",
+                                          "Garlic",
+                                          "All-Purpose Flour",
+                                          "Milk",
+                                          "Butter",
+                                          "Rice"
+                                      ],
+                 "steps":  [
+                               "Cook the rice separately and set it aside.",
+                               "Add the onion, carrots, celery, garlic, chicken broth and herbs to the slow cooker.",
+                               "Add the turkey breast and cook on low 5 to 6 hours.",
+                               "Stir together flour, baking powder, butter and milk into a thick dumpling batter.",
+                               "Turn to high, drop spoonfuls of batter on the stew, and cook 45 to 60 minutes covered."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Turkey Breast",
+                                  "grams":  2540
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  4032
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  512
+                              },
+                              {
+                                  "item":  "Celery",
+                                  "grams":  462
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Dried Thyme",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Italian Seasoning",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Baking Powder",
+                                  "grams":  45
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  686
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  157
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

@@ -1,0 +1,339 @@
+{
+    "name":  "Pepper Steak with Rice",
+    "slug":  "pepper-steak-with-rice",
+    "cuisine":  "Chinese-American",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.chilipeppermadness.com/recipes/pepper-steak/",
+    "source_site":  "chilipeppermadness.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 200g (src scale)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Every single ingredient is board-tracked, no exceptions, which makes it one of the cleanest costings in the slice. Takeout staple with nothing comparable in the catalog (the live beef-and-pepper dishes are all Philly cheesesteak or unstuffed pepper formats). Sears in batches for 14 servings. Confidence: medium-high. | HARVEST: Rice for serving is not in the source ingredient list.",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 200g (src scale)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  577,
+                 "protein":  44,
+                 "carbs":  52,
+                 "fat":  20,
+                 "cost_ps":  "6.55"
+             },
+    "intro_html":  "Pepper steak is the takeout order that never disappoints and never quite justifies its price. Sliced steak, green and red peppers, onion, and a glossy soy and ginger sauce over rice. Made at home it takes about half an hour once the slicing is done, and every single ingredient in it is something you can buy at a normal grocery store. Each bowl runs 577 calories and \u003cstrong\u003e44 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$6.55 a serving\u003c/strong\u003e (at everyday cost).",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 5.25 lb (2381 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 cups (279 g)",
+                                "\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 0.75 cups (158 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 4.75 tbsp (63 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 3.5 tbsp (49 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3.5 (420 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3.5 (420 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 8.25 tbsp (74 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 3.5 tbsp (21 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 3.5 tbsp (28 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1.25 tbsp (24 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 1.25 tbsp (8 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2 tbsp (14 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Flank/Sirloin Steak, 5.25 lb: ~$46.30. \u003cstrong\u003eBuy 6 lbs: $52.92.\u003c/strong\u003e",
+                       "Soy Sauce, 1 cups: ~$1.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice Vinegar, 0.75 cups: ~$1.30. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sesame Oil, 4.75 tbsp: ~$1.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Vegetable Oil, 3.5 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Bell Peppers, 3.5: ~$3.01. \u003cstrong\u003eBuy 4 each: $3.44.\u003c/strong\u003e",
+                       "Red Bell Pepper, 3.5: ~$3.01. \u003cstrong\u003eBuy 4 each: $3.44.\u003c/strong\u003e",
+                       "Jalapeno, 8.25 tbsp: ~$0.29. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Yellow Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 8.25 tbsp: ~$1.01. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Ginger, 3.5 tbsp: ~$0.18. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
+                       "Cornstarch, 3.5 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Honey, 1.25 tbsp: ~$0.46. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (paprika, black pepper, salt): ~$0.77. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $60.78 across 14 servings, so roughly $4.34 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $70.74 across 14 servings, roughly $5.05 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $20.92 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $91.66. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$6.55 a bowl\u003c/strong\u003e (at everyday cost), which is roughly what the delivery fee alone costs on the app version. The steak is the entire expense here, so a sale on flank or sirloin swings this number more than anything else you can do.",
+    "shop_smart":  [
+                       "Flank and sirloin are both correct here and whichever is cheaper that week is the right answer. Slice against the grain and thin, and either one comes out tender.",
+                       "Bell peppers are the second biggest line. Green are cheaper than red almost every week, so if the budget is tight, run all green and the dish loses nothing but a little color.",
+                       "Cornstarch is the cheapest ingredient in the recipe and the most important one. It thickens the sauce into that glossy coat and it also velvets the beef if you toss the slices in a little before searing.",
+                       "Soy sauce, rice vinegar, sesame oil, and honey are all pantry bottles that last through many batches. Once they are on the shelf, the per-bowl cost of this sauce is close to zero."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Freeze the steak for about 30 minutes so it firms up, then slice it thin against the grain. Toss the slices with a spoonful of the cornstarch and a splash of the soy sauce and let them sit while you prep everything else.",
+                    "Start the rice.",
+                    "Whisk the rest of the soy sauce, rice vinegar, honey, sesame oil, and remaining cornstarch together with a little water. Having the sauce ready in a cup before you start is the whole secret to stir frying, because once the pan is hot there is no time to measure anything.",
+                    "Get a large skillet very hot with the vegetable oil and sear the beef in batches, about 90 seconds a side. Pull it out while it is still slightly underdone. It will finish in the sauce.",
+                    "Add the sliced peppers, onion, and jalapeno to the same pan and cook hard for 3 to 4 minutes. You want them blistered at the edges and still crisp in the middle, not soft.",
+                    "Add the garlic and ginger for 30 seconds, then pour in the sauce and let it bubble and thicken.",
+                    "Return the beef and any juices, toss everything together for a minute, and season with paprika, salt, and plenty of black pepper."
+                ],
+    "portion_html":  "Weigh the rice into the containers first, then set the skillet on the scale, subtract the empty weight you wrote down, and divide by 14. That gets an even share of steak into every bowl, which matters more here than in almost any other recipe because the peppers are easy to over-scoop. Each portion lands at \u003cstrong\u003e577 calories\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.chilipeppermadness.com/recipes/pepper-steak/\" target=\"_blank\" rel=\"noopener\"\u003echilipeppermadness.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Takeout pepper steak for about \u003cstrong\u003e$6.55 a bowl\u003c/strong\u003e (at everyday cost) and no delivery fee. Members get the whole Meal Prep library plus every money lesson, calculator, and tool on the site for $1 a month.",
+    "cost_batch":  60.78,
+    "cost_batch_true":  70.74,
+    "cost_per_serving":  4.34,
+    "cost_per_serving_true":  5.05,
+    "cost_pantry_add":  20.92,
+    "cost_first_run":  91.66,
+    "scaler":  {
+                   "cost":  "70.74",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Flank/Sirloin Steak",
+                                   "canon":  "Beef Flank/Sirloin Steak",
+                                   "grams":  2381,
+                                   "buy":  "5.25 lb",
+                                   "bid":  "sirloin-steak",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  279,
+                                   "buy":  "1 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Rice Vinegar",
+                                   "canon":  "Rice Vinegar",
+                                   "grams":  158,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "rice-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "canon":  "Sesame Oil",
+                                   "grams":  63,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  49,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  420,
+                                   "buy":  "3.5",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "canon":  "Red Bell Pepper",
+                                   "grams":  420,
+                                   "buy":  "3.5",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  74,
+                                   "buy":  "8.25 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  385,
+                                   "buy":  "3.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  70,
+                                   "buy":  "8.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  21,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cornstarch",
+                                   "canon":  "Cornstarch",
+                                   "grams":  28,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "canon":  "Honey",
+                                   "grams":  24,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  8,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  14,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Pepper steak with rice, sliced beef and bell peppers in a glossy soy ginger sauce, rebuilt for 14 meal prep servings at about $6.55 a bowl (at everyday cost).",
+                 "keywords":  "pepper steak, beef and pepper stir fry, chinese takeout at home, steak rice bowl, budget meal prep, high protein meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT25M",
+                 "totalTime":  "PT55M",
+                 "costPerServing":  6.55,
+                 "recipeIngredient":  [
+                                          "5.25 lb beef flank or sirloin steak",
+                                          "1 cup soy sauce",
+                                          "0.75 cups rice vinegar",
+                                          "4.75 tbsp sesame oil",
+                                          "3.5 tbsp vegetable oil",
+                                          "3.5 green bell peppers",
+                                          "3.5 red bell peppers",
+                                          "8.25 tbsp jalapeno",
+                                          "3.5 yellow onions",
+                                          "8.25 tbsp minced garlic",
+                                          "3.5 tbsp grated ginger",
+                                          "3.5 tbsp cornstarch and 1.25 tbsp honey",
+                                          "3.75 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Firm the steak in the freezer, slice thin against the grain, and toss with cornstarch and soy sauce.",
+                               "Cook the rice and whisk the sauce ingredients together before you heat the pan.",
+                               "Sear the beef in batches in a very hot skillet and set aside slightly underdone.",
+                               "Stir fry the peppers, onion, and jalapeno hard, then add garlic and ginger.",
+                               "Pour in the sauce, thicken, return the beef, and toss.",
+                               "Weigh rice and stir fry into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Flank/Sirloin Steak",
+                                  "grams":  2381
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  279
+                              },
+                              {
+                                  "item":  "Rice Vinegar",
+                                  "grams":  158
+                              },
+                              {
+                                  "item":  "Sesame Oil",
+                                  "grams":  63
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  49
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  74
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Cornstarch",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Honey",
+                                  "grams":  24
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
+                              }
+                          ]
+}

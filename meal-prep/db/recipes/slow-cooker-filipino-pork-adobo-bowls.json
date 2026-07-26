@@ -1,0 +1,152 @@
+{
+    "name":  "Slow Cooker Filipino Pork Adobo Bowls",
+    "slug":  "slow-cooker-filipino-pork-adobo-bowls",
+    "cuisine":  "Filipino",
+    "protein":  "pork",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  576,
+                 "protein":  54,
+                 "carbs":  55,
+                 "fat":  12,
+                 "cost_ps":  "2.09"
+             },
+    "intro_html":  "Filipino adobo is one of the great cheap dinners of the world, built on soy sauce, vinegar, and garlic. Lean pork loin slow cooks in that tangy sauce until tender, then goes over rice with green beans. At around $2.09 a serving (at everyday cost) with 54 grams of protein, this makes 14 bowls that punch way above their price.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 8 lb (3200 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (900 g)",
+                                "\u003cstrong\u003eGreen Beans (generic):\u003c/strong\u003e 2 bags (560 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 bottle (180 g)",
+                                "\u003cstrong\u003eWhite Vinegar (generic):\u003c/strong\u003e 1 bottle (120 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (40 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (120 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 3 dried bay leaves (3 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 6 ground peppercorns (3 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.09 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Adobo runs on pantry basics you likely already own. \u003cstrong\u003eLean on soy sauce and plain white vinegar\u003c/strong\u003e, two of the cheapest flavor makers in the store.",
+                       "Pork loin keeps this lean and affordable. \u003cstrong\u003eBuy the loin over pre-cut pork\u003c/strong\u003e and slice it yourself.",
+                       "Frozen green beans mean no waste and no chopping. \u003cstrong\u003eKeep a bag of frozen green beans ready\u003c/strong\u003e for busy nights."
+                   ],
+    "make_it":  [
+                    "Add the pork loin, sliced onion, and garlic to the slow cooker.",
+                    "Pour in the soy sauce and white vinegar and give it a stir.",
+                    "Cover and cook on low for 7 to 8 hours until the pork is tender.",
+                    "Shred or chunk the pork and stir it back into the tangy sauce.",
+                    "Steam the green beans until just tender and cook the rice.",
+                    "Spoon the pork over rice and serve the green beans alongside."
+                ],
+    "portion_html":  "Each of the 14 servings brings 54 grams of protein and 576 calories.",
+    "credit_html":  "",
+    "upsell_html":  "Proof that some of the best food in the world was built to be cheap in the first place. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  21.11,
+    "cost_batch_true":  24.23,
+    "cost_per_serving":  1.51,
+    "cost_per_serving_true":  1.73,
+    "cost_pantry_add":  6.43,
+    "cost_first_run":  30.66,
+    "scaler":  {
+                   "cost":  "24.23",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Loin",
+                                   "grams":  3200,
+                                   "buy":  "8 lb",
+                                   "bid":  "pork-loin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  900,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Beans",
+                                   "grams":  560,
+                                   "buy":  "2 bags",
+                                   "bid":  "frozen-green-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "grams":  180,
+                                   "buy":  "1 bottle",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "White Vinegar",
+                                   "grams":  120,
+                                   "buy":  "1 bottle",
+                                   "bid":  "white-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  40,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  120,
+                                   "buy":  "2 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "grams":  3,
+                                   "buy":  "3 dried bay leaves",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "6 ground peppercorns",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Filipino meal prep. Fourteen servings at about 576 calories and 54 grams of protein for roughly $2.09 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker filipino pork adobo bowls, budget dinner",
+                 "costPerServing":  2.09,
+                 "recipeIngredient":  [
+                                          "8 lb Pork Loin",
+                                          "1 lb Rice",
+                                          "2 bags Green Beans",
+                                          "1 bottle Soy Sauce",
+                                          "1 bottle White Vinegar",
+                                          "1 bulb Garlic"
+                                      ],
+                 "steps":  [
+                               "Add the pork loin, sliced onion, and garlic to the slow cooker.",
+                               "Pour in the soy sauce and white vinegar and give it a stir.",
+                               "Cover and cook on low for 7 to 8 hours until the pork is tender.",
+                               "Shred or chunk the pork and stir it back into the tangy sauce.",
+                               "Steam the green beans until just tender and cook the rice.",
+                               "Spoon the pork over rice and serve the green beans alongside."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

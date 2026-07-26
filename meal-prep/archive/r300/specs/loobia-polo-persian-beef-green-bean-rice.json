@@ -1,0 +1,280 @@
+{
+    "name":  "Loobia Polo (Persian Beef and Green Bean Rice)",
+    "slug":  "loobia-polo-persian-beef-green-bean-rice",
+    "cuisine":  "Persian",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.themediterraneandish.com/loobia-polo-persian-beef-and-green-bean-rice/",
+    "source_site":  "themediterraneandish.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +40% (Rice)",
+                   "protein +30% (93/7 Ground Beef)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: One-pot layered rice, fully board-mapped, and Persian beef is missing from the catalog. Verified numbers: source lists 461 cal and 17.7g protein per serving, so our version needs the beef raised from 1 lb to roughly 2 lb per 8 servings to hit the 25g protein bar. Flagging that explicitly rather than passing the source figure along. | HARVEST: Published figures are 461.1 cal and 17.7 g protein.",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: base +40% (Rice)",
+                         "TUNING: protein +30% (93/7 Ground Beef)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  590,
+                 "protein":  26,
+                 "carbs":  87,
+                 "fat":  14,
+                 "cost_ps":  "3.72"
+             },
+    "intro_html":  "Loobia polo is Persian layered rice, and the layering is not decoration. Rice gets parboiled, drained, and then steamed in a pot over a base of oil until the bottom forms tahdig, the crackly golden crust that Iranian families fight over at the table. Beef, green beans, tomato, turmeric, and cinnamon go through the middle. The cinnamon is the part that surprises people. It is not sweet here, it just makes everything taste rounder. Fourteen containers of this is one pot and one steam.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 7.75 cups dry (1435 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.4 (262 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 tbsp (18 g)",
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 2.25 lb (1064 g)",
+                                "\u003cstrong\u003eGround Turmeric (Great Value):\u003c/strong\u003e 0.5 tbsp (5 g)",
+                                "\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 1.25 tbsp (9 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1.75 tbsp (28 g)",
+                                "\u003cstrong\u003eGreen Beans (generic):\u003c/strong\u003e 1.75 lb (794 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.25 tbsp (42 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (2 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 1 (41 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 5.25 tbsp (74 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Rice, 7.75 cups dry: ~$1.77. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Olive Oil, 3.5 tbsp: ~$0.66. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2.4: ~$0.66. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 2 tbsp: ~$0.26. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "93/7 Ground Beef, 2.25 lb: ~$15.56. \u003cstrong\u003eBuy 3 lbs: $19.90.\u003c/strong\u003e",
+                       "Tomato Paste, 1.75 tbsp: ~$0.14. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "Green Beans, 1.75 lb: ~$1.71. \u003cstrong\u003eBuy 3 12oz bags: $2.19.\u003c/strong\u003e",
+                       "Lemon Juice, 1: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Vegetable Oil, 5.25 tbsp: ~$0.18. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (ground turmeric, ground cinnamon, salt, black pepper): ~$0.50. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $21.59 across 14 servings, so roughly $1.54 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $27.93 across 14 servings, roughly $2.00 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $24.12 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.05. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.72 a bowl\u003c/strong\u003e (at everyday cost) for a Persian layered rice dish that looks and tastes like it took considerably more effort than it did.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eRice and green beans are the volume, and both are cheap.\u003c/strong\u003e That is why this stays easy on the budget despite having real beef in it.",
+                       "\u003cstrong\u003eFrozen green beans beat fresh here.\u003c/strong\u003e They get simmered into the beef anyway, so the snap does not matter, and the bag price per pound is far lower.",
+                       "\u003cstrong\u003eTurmeric and cinnamon are pennies per batch.\u003c/strong\u003e Persian cooking gets its depth from spices you already own rather than from expensive ingredients.",
+                       "\u003cstrong\u003eDo not skip the tahdig step even though it is optional.\u003c/strong\u003e The oil in the bottom of the pot costs nothing and it turns a good rice dish into the one people ask you to make again."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Rinse the rice until the water runs clear, then parboil it in heavily salted water until the grains are soft outside and still firm in the center, and drain it.",
+                    "Heat the olive oil in a pan and cook the diced yellow onion until golden, then add the garlic and cook until fragrant.",
+                    "Add the ground beef, break it up, and cook until browned with no pink remaining.",
+                    "Stir in the tomato paste, ground turmeric, ground cinnamon, salt, and black pepper and cook for a minute so the paste darkens.",
+                    "Add the green beans and a splash of water, cover, and simmer until the beans are tender and the mixture is thick rather than wet.",
+                    "Pour the vegetable oil into the bottom of a large heavy pot, then layer the parboiled rice and the beef mixture in alternating layers, mounding the rice toward the center.",
+                    "Cover the lid with a clean towel, steam over the lowest heat until the rice is fluffy and a crust has formed on the bottom, then finish with the lemon juice."
+                ],
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight from Step 1, and divide by 14. Stir the layers together gently before weighing so every container gets rice and beef instead of one or the other, and break the crust into pieces and share it out. Every serving comes in at \u003cstrong\u003e590 calories with 26 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themediterraneandish.com/loobia-polo-persian-beef-and-green-bean-rice/\" target=\"_blank\" rel=\"noopener\"\u003ethemediterraneandish.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Layered Persian dinners for about $3.72 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  21.59,
+    "cost_batch_true":  27.93,
+    "cost_per_serving":  1.54,
+    "cost_per_serving_true":  2,
+    "cost_pantry_add":  24.12,
+    "cost_first_run":  52.05,
+    "scaler":  {
+                   "cost":  "27.93",
+                   "ing":  [
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1435,
+                                   "buy":  "7.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  47,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  262,
+                                   "buy":  "2.4",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  18,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "canon":  "93/7 Ground Beef",
+                                   "grams":  1064,
+                                   "buy":  "2.25 lb",
+                                   "bid":  "ground-beef-8020",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ground Turmeric",
+                                   "canon":  "Ground Turmeric",
+                                   "grams":  5,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "ground-turmeric",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cinnamon",
+                                   "canon":  "Ground Cinnamon",
+                                   "grams":  9,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "ground-cinnamon",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  28,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Beans",
+                                   "canon":  "Green Beans",
+                                   "grams":  794,
+                                   "buy":  "1.75 lb",
+                                   "bid":  "frozen-green-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  42,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lemon Juice",
+                                   "canon":  "Lemon Juice",
+                                   "grams":  41,
+                                   "buy":  "1",
+                                   "bid":  "lemon-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  74,
+                                   "buy":  "5.25 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Persian loobia polo rebuilt for 14-serving meal prep: layered rice steamed over spiced beef and green beans with a crisp bottom crust. 590 calories, 26g protein, about $3.72 per serving (at everyday cost).",
+                 "keywords":  "loobia polo, persian beef and green bean rice, tahdig, persian layered rice, iranian meal prep, budget beef rice dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT60M",
+                 "totalTime":  "PT85M",
+                 "costPerServing":  3.72,
+                 "recipeIngredient":  [
+                                          "2.25 lb 93/7 ground beef",
+                                          "7.75 cups dry rice",
+                                          "7.25 cups green beans",
+                                          "2.4 yellow onions",
+                                          "1.75 tbsp tomato paste",
+                                          "2 tbsp garlic",
+                                          "3.5 tbsp olive oil",
+                                          "5.25 tbsp vegetable oil",
+                                          "1 lemon worth of lemon juice"
+                                      ],
+                 "steps":  [
+                               "Rinse and parboil the rice in salted water until soft outside and firm inside, then drain.",
+                               "Cook the onion until golden, add garlic, then brown the ground beef.",
+                               "Stir in tomato paste, turmeric, and cinnamon and cook until the paste darkens.",
+                               "Add the green beans and simmer covered until tender and thick.",
+                               "Layer rice and beef in a heavy pot over a base of oil.",
+                               "Steam covered on low until a bottom crust forms, finish with lemon juice, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1435
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  262
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  18
+                              },
+                              {
+                                  "item":  "93/7 Ground Beef",
+                                  "grams":  1064
+                              },
+                              {
+                                  "item":  "Ground Turmeric",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Ground Cinnamon",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Green Beans",
+                                  "grams":  794
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Lemon Juice",
+                                  "grams":  41
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  74
+                              }
+                          ]
+}

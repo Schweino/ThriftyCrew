@@ -1,0 +1,186 @@
+{
+    "name":  "Cheesy Zucchini Beef and Rice Skillet",
+    "slug":  "cheesy-zucchini-beef-rice-skillet",
+    "cuisine":  "Mexican",
+    "protein":  "beef",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  512,
+                 "protein":  39,
+                 "carbs":  65,
+                 "fat":  9,
+                 "cost_ps":  "3.73"
+             },
+    "intro_html":  "This is a cozy, cheesy skillet that stretches four pounds of beef across 14 hearty dinners. Taco seasoned beef, soft zucchini, and melty cheddar come together over rice for a meal that tastes like comfort food but eats like a budget win. One pan, big batch, and a fridge full of dinners waiting for you.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 4 lb (1814 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (193 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 4 peppers (476 g)",
+                                "\u003cstrong\u003eZucchini:\u003c/strong\u003e 3 zucchinis (500 g)",
+                                "\u003cstrong\u003eTaco Seasoning (Great Value):\u003c/strong\u003e 1 packet (35 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2 cans (822 g)",
+                                "\u003cstrong\u003eFat Free Cheddar (Great Value):\u003c/strong\u003e 1 bag (196 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1000 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 2 tbsp canola oil (40 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 cloves (30 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 2 cups (720 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (10 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (2 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.73 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eWatch for markdowns on lean ground beef.\u003c/strong\u003e Buy it when it hits a low price per pound, then brown and freeze what you are not using today. Browned beef freezes great and thaws fast for the next batch.",
+                       "\u003cstrong\u003eSkip the seasoning packet and mix your own.\u003c/strong\u003e Chili powder, cumin, garlic powder, and paprika from your pantry cost pennies per batch compared to the little envelopes, and you control the salt.",
+                       "\u003cstrong\u003eZucchini is cheapest in summer, so buy it in season.\u003c/strong\u003e When it is not, frozen zucchini or an extra can of tomatoes fills the same role. Store brand canned tomatoes and cheese save you real money here too."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot on a kitchen scale and write the number down. You will need it to portion evenly at the end.",
+                    "Rinse the rice and cook it according to the package. Set it aside to steam while you build the skillet.",
+                    "Heat a large skillet over medium high heat with a little olive oil. Add the lean ground beef and brown it, breaking it apart as it cooks until there is no more pink.",
+                    "Stir in the diced yellow onion and green bell peppers with a pinch of salt. Cook 2 to 3 minutes until they start to soften.",
+                    "Add the diced zucchini, the taco seasoning, and the canned diced tomatoes with their juice. Stir it all together so the seasoning coats everything.",
+                    "Let it simmer 5 to 7 minutes until the zucchini is tender. If it looks dry or starts to stick, splash in a quarter cup of water.",
+                    "Turn off the heat and stir in the fat free cheddar until it melts into the mix. Serve over the cooked rice, or fold the rice right into the skillet."
+                ],
+    "portion_html":  "Once everything is combined, weigh the full pot again and subtract the empty pot weight you noted at the start. Divide that total by 14 to find the target weight per container, then scoop and check each one on the scale. Even portions keep every dinner satisfying and your macros honest.",
+    "credit_html":  "",
+    "upsell_html":  "Fourteen filling dinners out of one skillet, every one warm, cheesy, and easy on the wallet. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  42.25,
+    "cost_batch_true":  44.76,
+    "cost_per_serving":  3.02,
+    "cost_per_serving_true":  3.2,
+    "cost_pantry_add":  11.52,
+    "cost_first_run":  56.28,
+    "scaler":  {
+                   "cost":  "44.76",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "grams":  1814,
+                                   "buy":  "4 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  193,
+                                   "buy":  "2 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "grams":  476,
+                                   "buy":  "4 peppers",
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Zucchini",
+                                   "grams":  500,
+                                   "buy":  "3 zucchinis",
+                                   "bid":  "zucchini",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Taco Seasoning",
+                                   "grams":  35,
+                                   "buy":  "1 packet",
+                                   "bid":  "taco-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "grams":  822,
+                                   "buy":  "2 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fat Free Cheddar",
+                                   "grams":  196,
+                                   "buy":  "1 bag",
+                                   "bid":  "fat-free-cheddar",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  1000,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "grams":  40,
+                                   "buy":  "2 tbsp canola oil",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  30,
+                                   "buy":  "4 cloves",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "grams":  720,
+                                   "buy":  "2 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  10,
+                                   "buy":  "1 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "to taste",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 512 calories and 39 grams of protein for roughly $3.73 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, cheesy zucchini beef and rice skillet, budget dinner",
+                 "costPerServing":  3.73,
+                 "recipeIngredient":  [
+                                          "4 lb 93/7 Ground Beef",
+                                          "2 onions Yellow Onion",
+                                          "4 peppers Green Bell Peppers",
+                                          "3 zucchinis Zucchini",
+                                          "1 packet Taco Seasoning",
+                                          "2 cans Diced Tomatoes"
+                                      ],
+                 "steps":  [
+                               "Weigh your empty mixing pot on a kitchen scale and write the number down. You will need it to portion evenly at the end.",
+                               "Rinse the rice and cook it according to the package. Set it aside to steam while you build the skillet.",
+                               "Heat a large skillet over medium high heat with a little olive oil. Add the lean ground beef and brown it, breaking it apart as it cooks until there is no more pink.",
+                               "Stir in the diced yellow onion and green bell peppers with a pinch of salt. Cook 2 to 3 minutes until they start to soften.",
+                               "Add the diced zucchini, the taco seasoning, and the canned diced tomatoes with their juice. Stir it all together so the seasoning coats everything.",
+                               "Let it simmer 5 to 7 minutes until the zucchini is tender. If it looks dry or starts to stick, splash in a quarter cup of water.",
+                               "Turn off the heat and stir in the fat free cheddar until it melts into the mix. Serve over the cooked rice, or fold the rice right into the skillet."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

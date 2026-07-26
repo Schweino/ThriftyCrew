@@ -1,0 +1,292 @@
+{
+    "name":  "Vietnamese Turkey Banh Mi Bowls",
+    "slug":  "vietnamese-turkey-banh-mi-bowls",
+    "cuisine":  "Vietnamese",
+    "protein":  "ground turkey",
+    "visibility":  "paid",
+    "source_url":  "https://thishealthytable.com/blog/turkey-banh-mi-bowl/",
+    "source_site":  "This Healthy Table",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  674,
+                 "protein":  29,
+                 "carbs":  62,
+                 "fat":  33,
+                 "cost_ps":  "5.00"
+             },
+    "intro_html":  "All the good parts of a banh mi, the tangy pickled vegetables, the sriracha mayo, the savory meat, moved off the baguette and onto rice. Each bowl brings \u003cstrong\u003e29 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$5.00\u003c/strong\u003e (at everyday cost), and nothing goes soggy in the fridge.",
+    "ingredients_display": ["\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.5 cups dry (648 g)","\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 7 (427 g)","\u003cstrong\u003eCucumber:\u003c/strong\u003e 10.5 (3150 g)","\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 7 tbsp (105 g)","\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 7 tbsp (88 g)","\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 0.5 cups (126 g)","\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 14 tbsp (84 g)","\u003cstrong\u003eLemongrass Paste (Gourmet Garden (McCormick)):\u003c/strong\u003e 5.5 oz (158 g)","\u003cstrong\u003eSriracha (Huy Fong Foods):\u003c/strong\u003e 5.5 oz (158 g)","\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 3.5 tbsp (49 g)","\u003cstrong\u003eFresh Basil:\u003c/strong\u003e 28 tbsp (42 g)","\u003cstrong\u003eLime Juice:\u003c/strong\u003e 7 tbsp (105 g)","\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.5 lb (1588 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)","\u003cstrong\u003eMayonnaise (Great Value):\u003c/strong\u003e 1.75 cups (364 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Rice, 3.5 cups dry: ~$0.96. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Carrots, 7: ~$1.06. \u003cstrong\u003eBuy 1 lb: $1.13.\u003c/strong\u003e",
+                       "Cucumber, 10.5: ~$7.98. \u003cstrong\u003eBuy 11 eachs: $8.36.\u003c/strong\u003e",
+                       "Rice Vinegar, 7 tbsp: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sugar, 7 tbsp: ~$0.16. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fish Sauce, 0.5 cups: ~$1.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Onions, 14 tbsp: ~$1.00. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
+                       "Lemongrass Paste, 5.5 oz: ~$6.67. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sriracha, 5.5 oz: ~$0.69. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Vegetable Oil, 3.5 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lime Juice, 7 tbsp: ~$0.88. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 3.5 lb: ~$19.12. \u003cstrong\u003eBuy 4 lbs: $21.84.\u003c/strong\u003e",
+                       "Garlic, 8.25 tbsp: ~$1.01. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Mayonnaise, 1.75 cups: ~$1.27. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (fresh basil, salt, black pepper): ~$5.47. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $48.46 across 14 servings, so roughly $3.46 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $51.84 across 14 servings, roughly $3.70 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $26.61 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $78.45. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$5.00 a bowl\u003c/strong\u003e (at everyday cost) for banh mi bowls with pickled veg and sriracha mayo. Sandwich shops charge $13 for a banh mi-inspired bowl half this size. The mayo alone is doing premium work here.",
+    "shop_smart":  [
+                       "Ground turkey handles the protein at about $12.71 for 3.5 pounds, cheaper than the grilled pork a banh mi shop would use and it soaks up the lemongrass and fish sauce just as well.",
+                       "Cucumbers and carrots are your volume for about $6 combined. Quick-pickling them in vinegar and sugar makes cheap produce taste like a specialty condiment.",
+                       "Sriracha and rice vinegar are one-bottle buys. This batch uses maybe $1.50 of each, and both keep practically forever in the pantry."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice per the package and set it aside.",
+                    "Quick-pickle the vegetables: shred the carrots and slice a third of the cucumbers thin, then toss with the rice vinegar and sugar. Let them sit at least 20 minutes, stirring once or twice.",
+                    "Make the sriracha mayo: stir about two thirds of the sriracha into the mayonnaise with half the lime juice.",
+                    "Heat the vegetable oil in a large skillet over high heat. Brown the ground turkey, breaking it up, then add the garlic, lemongrass paste, and remaining sriracha, and cook until the turkey reaches 165F.",
+                    "Stir the fish sauce and remaining lime juice into the turkey and let it sizzle 1 more minute.",
+                    "Slice the remaining cucumbers fresh.",
+                    "Build bowls: rice, lemongrass turkey, pickled veg, fresh cucumber, green onions, and a drizzle of sriracha mayo. Pack extra mayo separately if you like it cold."
+                ],
+    "portion_html":  "Weigh the rice and turkey together, subtract the empty pot weight you wrote down, and divide by 14, then split the pickles, cucumber, and mayo evenly. Each bowl lands at about 674 calories with 29 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://thishealthytable.com/blog/turkey-banh-mi-bowl/\" target=\"_blank\" rel=\"noopener\"\u003eThis Healthy Table\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Hearty dinners for about $5.00 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  48.46,
+    "cost_batch_true":  51.84,
+    "cost_per_serving":  3.46,
+    "cost_per_serving_true":  3.7,
+    "cost_pantry_add":  26.61,
+    "cost_first_run":  78.45,
+    "scaler":  {
+                   "cost":  "51.84",
+                   "ing":  [
+                               {
+                                   "item":  "Rice",
+                                   "grams":  648,
+                                   "buy":  "3.5 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "grams":  427,
+                                   "buy":  "7",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cucumber",
+                                   "grams":  3150,
+                                   "buy":  "10.5",
+                                   "bid":  "cucumbers",
+                                   "gpu":  "300.000"
+                               },
+                               {
+                                   "item":  "Rice Vinegar",
+                                   "grams":  105,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "rice-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "grams":  88,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Fish Sauce",
+                                   "grams":  126,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "fish-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "grams":  84,
+                                   "buy":  "14 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Lemongrass Paste",
+                                   "grams":  158,
+                                   "buy":  "5.5 oz",
+                                   "bid":  "lemongrass-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sriracha",
+                                   "grams":  158,
+                                   "buy":  "5.5 oz",
+                                   "bid":  "hot-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "grams":  49,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Fresh Basil",
+                                   "grams":  42,
+                                   "buy":  "28 tbsp",
+                                   "bid":  "fresh-basil",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "grams":  105,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  70,
+                                   "buy":  "8.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Mayonnaise",
+                                   "grams":  364,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "mayonnaise",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Turkey banh mi bowl meal prep: 14 bowls, 674 calories and 29g protein each, about $5.00 a serving (at everyday cost). Lemongrass turkey, pickled veg, and sriracha mayo.",
+                 "keywords":  "banh mi bowl, turkey banh mi, vietnamese meal prep, sriracha mayo, pickled vegetables, ground turkey recipe",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT25M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  5.00,
+                 "recipeIngredient":  [
+                                          "3.5 lb 93/7 ground turkey",
+                                          "3.5 cups dry rice",
+                                          "7 carrots",
+                                          "10.5 cucumbers",
+                                          "7 tbsp rice vinegar",
+                                          "7 tbsp sugar",
+                                          "0.5 cup fish sauce",
+                                          "5.5 oz lemongrass paste",
+                                          "5.5 oz sriracha",
+                                          "1.75 cups mayonnaise",
+                                          "8.25 tbsp garlic",
+                                          "7 tbsp lime juice"
+                                      ],
+                 "steps":  [
+                               "Cook the rice and quick-pickle shredded carrots and sliced cucumber in vinegar and sugar.",
+                               "Stir sriracha and lime into the mayonnaise.",
+                               "Brown ground turkey with garlic, lemongrass paste, and sriracha to 165F.",
+                               "Finish the turkey with fish sauce and lime juice.",
+                               "Assemble bowls with rice, turkey, pickles, fresh cucumber, and sriracha mayo, then portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Rice",
+                                  "grams":  648
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  427
+                              },
+                              {
+                                  "item":  "Cucumber",
+                                  "grams":  3150
+                              },
+                              {
+                                  "item":  "Rice Vinegar",
+                                  "grams":  105
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  88
+                              },
+                              {
+                                  "item":  "Fish Sauce",
+                                  "grams":  126
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Lemongrass Paste",
+                                  "grams":  158
+                              },
+                              {
+                                  "item":  "Sriracha",
+                                  "grams":  158
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  49
+                              },
+                              {
+                                  "item":  "Fresh Basil",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  105
+                              },
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Mayonnaise",
+                                  "grams":  364
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

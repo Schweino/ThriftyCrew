@@ -1,0 +1,206 @@
+{
+    "name":  "Turkey Sloppy Joe Bowls",
+    "slug":  "turkey-sloppy-joe-bowls",
+    "cuisine":  "American",
+    "protein":  "turkey",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  681,
+                 "protein":  46,
+                 "carbs":  56,
+                 "fat":  29,
+                 "cost_ps":  "5.48"
+             },
+    "intro_html":  "The messy sandwich you grew up on, turned into a tidy bowl over crispy potatoes. Each serving carries 46 grams of protein for about $5.48 (at everyday cost). Fourteen servings means the whole family or the whole week is handled.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 7 lb (3160 g)",
+                                "\u003cstrong\u003eFries (Great Value):\u003c/strong\u003e 4 bags (3051 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 3 cans (400 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 2 peppers (240 g)",
+                                "\u003cstrong\u003eShredded Carrots:\u003c/strong\u003e 1 bag (170 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1 bottle (42 g)",
+                                "\u003cstrong\u003eHoney Dijon Mustard (Great Value):\u003c/strong\u003e 1 bottle (40 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2 tsp (28 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 cloves (1 tbsp) (45 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 3/4 cup (540 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 tbsp (or 2 tbsp coconut aminos) (90 g)",
+                                "\u003cstrong\u003eApple Cider Vinegar (Great Value):\u003c/strong\u003e 1 tbsp (45 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/2-1 tsp (12 g)",
+                                "\u003cstrong\u003eSmoked Paprika (Great Value):\u003c/strong\u003e 1/2 tsp (4 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$5.48 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "The \u003cstrong\u003e7 lb ground turkey pack\u003c/strong\u003e keeps your protein cost down, so buy the big size.",
+                       "Buy \u003cstrong\u003efrozen fries by the bag\u003c/strong\u003e for the base. They are cheaper and last longer than fresh potatoes you cut yourself.",
+                       "Honey and Dijon are \u003cstrong\u003eone-bottle buys that last for months\u003c/strong\u003e, so the cost per batch is basically nothing."
+                   ],
+    "make_it":  [
+                    "Bake the fries according to the bag while you get the meat going.",
+                    "Brown the ground turkey in a large skillet, then add the chopped onion, peppers, and shredded carrots.",
+                    "Stir in the tomato paste, honey, and honey Dijon mustard to build that sweet-tangy sloppy joe sauce.",
+                    "Add a splash of water if it gets too thick and simmer until the veggies are tender.",
+                    "Spoon the sloppy joe mix right over the baked fries and dig in."
+                ],
+    "portion_html":  "Each of the 14 bowls delivers 46 grams of protein and about 681 calories.",
+    "credit_html":  "",
+    "upsell_html":  "It is nostalgic, it is filling, and it will make you the hero of the lunch line. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  50.67,
+    "cost_batch_true":  56.42,
+    "cost_per_serving":  3.62,
+    "cost_per_serving_true":  4.03,
+    "cost_pantry_add":  25.68,
+    "cost_first_run":  82.1,
+    "scaler":  {
+                   "cost":  "56.42",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "grams":  3160,
+                                   "buy":  "7 lb",
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Fries",
+                                   "grams":  3051,
+                                   "buy":  "4 bags",
+                                   "bid":  "fries",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "grams":  400,
+                                   "buy":  "3 cans",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  300,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "grams":  240,
+                                   "buy":  "2 peppers",
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Shredded Carrots",
+                                   "grams":  170,
+                                   "buy":  "1 bag",
+                                   "bid":  "shredded-carrots",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "grams":  42,
+                                   "buy":  "1 bottle",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Honey Dijon Mustard",
+                                   "grams":  40,
+                                   "buy":  "1 bottle",
+                                   "bid":  "honey-dijon-mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  28,
+                                   "buy":  "2 tsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  45,
+                                   "buy":  "3 cloves (1 tbsp)",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  540,
+                                   "buy":  "3/4 cup",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "grams":  90,
+                                   "buy":  "1 tbsp (or 2 tbsp coconut aminos)",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Apple Cider Vinegar",
+                                   "grams":  45,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "apple-cider-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  12,
+                                   "buy":  "1/2-1 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Smoked Paprika",
+                                   "grams":  4,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "smoked-paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 681 calories and 46 grams of protein for roughly $5.48 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, turkey sloppy joe bowls, budget dinner",
+                 "costPerServing":  5.48,
+                 "recipeIngredient":  [
+                                          "7 lb 93/7 Ground Turkey",
+                                          "4 bags Fries",
+                                          "3 cans Tomato Paste",
+                                          "3 onions Yellow Onion",
+                                          "2 peppers Green Bell Peppers",
+                                          "1 bag Shredded Carrots"
+                                      ],
+                 "steps":  [
+                               "Bake the fries according to the bag while you get the meat going.",
+                               "Brown the ground turkey in a large skillet, then add the chopped onion, peppers, and shredded carrots.",
+                               "Stir in the tomato paste, honey, and honey Dijon mustard to build that sweet-tangy sloppy joe sauce.",
+                               "Add a splash of water if it gets too thick and simmer until the veggies are tender.",
+                               "Spoon the sloppy joe mix right over the baked fries and dig in."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}
