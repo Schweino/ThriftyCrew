@@ -1,0 +1,7 @@
+{
+  "readme": "Label-price name folds: raw label-capture item names matching 'match' (regex) fold to the canonical 'to' name before price lookup. Was hardcoded in the cost engine (2026-07-26 estate-audit item); add new folds HERE, never in the engine.",
+  "folds": [
+    { "match": "^Pasta Shells", "to": "Pasta Shells" },
+    { "match": "^Chili Crisp",  "to": "Chili Crisp" }
+  ]
+}

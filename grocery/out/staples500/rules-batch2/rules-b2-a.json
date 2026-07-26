@@ -1,0 +1,531 @@
+[
+  {
+    "id": "nectarines",
+    "label": "Nectarines",
+    "unit": "lb",
+    "include": [
+      "nectarines?\\b"
+    ],
+    "exclude": [
+      "\\bcups?\\b",
+      "yogurt",
+      "\\bcanned\\b",
+      "\\bfrozen\\b",
+      "\\bdried\\b"
+    ],
+    "search_term": "nectarines",
+    "note": "'nectarine' is a specific produce word; peaches (existing) cannot match it and its include 'peach(es)?' cannot match nectarine names. Global excludes already block juice/canned/frozen; cups excluded for fruit-cup SKUs."
+  },
+  {
+    "id": "apricots",
+    "label": "Apricots",
+    "unit": "lb",
+    "include": [
+      "apricots?\\b"
+    ],
+    "exclude": [
+      "\\bdried\\b",
+      "turkish",
+      "preserves?",
+      "\\bjam\\b",
+      "\\bjelly\\b",
+      "nectar",
+      "halves",
+      "syrup",
+      "\\bcups?\\b",
+      "\\bfrozen\\b",
+      "\\bcanned\\b"
+    ],
+    "search_term": "fresh apricots",
+    "note": "Fresh only. Apricot preserves route to the existing jelly commodity first (include: preserves/jam/jelly) but preserves/jam/jelly excluded here anyway. 'nectar' excluded explicitly (apricot nectar is NOT covered by the global juice token). 'turkish' catches dried Turkish apricots whose names omit 'dried'. Canned halves blocked via halves/syrup."
+  },
+  {
+    "id": "pomegranates",
+    "label": "Pomegranate",
+    "unit": "each",
+    "include": [
+      "pomegranates?\\b"
+    ],
+    "exclude": [
+      "arils?",
+      "\\bseeds?\\b",
+      "molasses",
+      "\\bjuice\\b",
+      "\\btea\\b",
+      "dressing",
+      "vinaigrette",
+      "\\bdried\\b",
+      "\\bcups?\\b"
+    ],
+    "search_term": "pomegranate",
+    "note": "Whole fruit only per notes: excludes arils/seeds cups (POM Poms), juice (also globally blocked), molasses (existing pomegranate-molasses commodity sits earlier in the array AND is excluded here), tea/dressing/dried. 'POM Wonderful Pomegranate' (whole fruit) matches via the bare noun."
+  },
+  {
+    "id": "papaya",
+    "label": "Papaya",
+    "unit": "each",
+    "include": [
+      "papayas?\\b"
+    ],
+    "exclude": [
+      "\\bdried\\b",
+      "spears?",
+      "nectar",
+      "chunks?",
+      "\\bcups?\\b",
+      "enzyme",
+      "supplement",
+      "extract",
+      "\\bfrozen\\b"
+    ],
+    "search_term": "papaya",
+    "note": "Whole fresh papaya (Maradol/Solo/Red). Excludes dried spears, nectar (not covered by global juice token), fresh-cut chunks/cups convenience SKUs, and papaya-enzyme supplements. 'Dole Yellow Chayote'-style variety prefixes still match the bare noun."
+  },
+  {
+    "id": "fresh-cranberries",
+    "label": "Fresh Cranberries",
+    "unit": "oz",
+    "include": [
+      "cranberr(?:y|ies)\\b"
+    ],
+    "exclude": [
+      "\\bdried\\b",
+      "craisins?",
+      "jellied",
+      "\\bsauce\\b",
+      "\\bjuice\\b",
+      "cocktail",
+      "trail",
+      "chocolate",
+      "yogurt",
+      "almond",
+      "\\bbread\\b",
+      "\\bbagels?\\b",
+      "cookie",
+      "relish",
+      "\\bfrozen\\b",
+      "\\bcans?\\b"
+    ],
+    "search_term": "fresh cranberries",
+    "note": "Bare 'cranberry/cranberries' with heavy excludes, per the don't-require-fresh lesson ('Cranberries, 12 oz'). Existing cranberry-juice and cranberry-sauce sit earlier in the array and grab their own names anyway; dried/Craisins excluded so they fall through to the dried-cranberries rule later in this same batch. Bread/bagel/cookie excluded (not in the global list)."
+  },
+  {
+    "id": "plantains",
+    "label": "Plantains",
+    "unit": "each",
+    "include": [
+      "plantains?\\b"
+    ],
+    "exclude": [
+      "chips?",
+      "\\bdried\\b",
+      "\\bfrozen\\b",
+      "tostones"
+    ],
+    "search_term": "plantains",
+    "note": "'plantain' shares no token with the existing bananas commodity (include: 'banana'), so no hijack either direction. Chips/tostones/fried snacks excluded; frozen sweet plantains blocked by the frozen token (also global)."
+  },
+  {
+    "id": "coconut",
+    "label": "Whole Coconut",
+    "unit": "each",
+    "include": [
+      "whole\\s+coconuts?\\b",
+      "young\\s+coconuts?\\b",
+      "coconuts?\\b"
+    ],
+    "exclude": [
+      "\\bmilk\\b",
+      "\\bcream\\b",
+      "\\bwater\\b",
+      "\\boil\\b",
+      "shredded",
+      "flaked?s?\\b",
+      "chips?",
+      "\\bdried\\b",
+      "sweetened",
+      "toasted",
+      "macaroons?",
+      "cookies?",
+      "\\bcandy\\b",
+      "granola",
+      "yogurt",
+      "\\brum\\b",
+      "extract",
+      "\\bflour\\b",
+      "\\bsugar\\b",
+      "\\bbutter\\b",
+      "shrimp",
+      "aminos",
+      "\\bbars?\\b",
+      "\\bpie\\b",
+      "donut",
+      "lotion",
+      "shampoo",
+      "conditioner",
+      "body\\s+wash",
+      "\\bsoap\\b"
+    ],
+    "search_term": "whole coconut",
+    "note": "Bare 'coconut' + a bananas-style defensive exclude wall: coconut appears in dozens of wrong-class products (milk/cream/water/oil/shredded/flaked/macaroons/candy/toiletries). Existing coconut-oil and coconut-milk-canned sit earlier in the array AND their tokens are excluded here. Cookies/granola/bars excluded explicitly (not all are in the global list)."
+  },
+  {
+    "id": "medjool-dates",
+    "label": "Medjool Dates",
+    "unit": "oz",
+    "include": [
+      "medjool\\s+dates?",
+      "\\bmedjool\\b",
+      "pitted\\s+dates?",
+      "whole\\s+dates?",
+      "deglet\\s+noor"
+    ],
+    "exclude": [
+      "\\bsyrup\\b",
+      "\\bpaste\\b",
+      "\\brolls?\\b",
+      "\\bbars?\\b",
+      "\\bfilled\\b",
+      "chopped",
+      "\\bdiced\\b",
+      "\\bfig\\b",
+      "coconut\\s+date",
+      "\\bsugar\\b"
+    ],
+    "search_term": "medjool dates",
+    "note": "Bare 'dates' deliberately NOT included (matches 'sell by date'-style tokens and date-nut bakery items); anchored to medjool / pitted dates / whole dates / Deglet Noor per the candidate notes. Date syrup/paste/rolls/bars and fig products excluded; 'date sugar' blocked."
+  },
+  {
+    "id": "dried-cranberries",
+    "label": "Dried Cranberries",
+    "unit": "oz",
+    "include": [
+      "dried\\s+cranberr(?:y|ies)",
+      "craisins?\\b"
+    ],
+    "exclude": [
+      "\\bfresh\\b",
+      "\\bsauce\\b",
+      "\\bjuice\\b",
+      "trail",
+      "chocolate",
+      "yogurt",
+      "granola",
+      "\\bmix\\b"
+    ],
+    "search_term": "dried cranberries",
+    "note": "Requires 'dried cranberries' or the Craisins brand, so fresh bags can never match. COLLISION FIX REQUIRED upstream: existing raisins include 'raisins?' has no word boundary and matches the substring inside 'Craisins' - raisins must add exclude 'craisins?' or these products never reach this rule (see collisions-a.md). Flavored/infused varieties mostly blocked by the global 'flavored' token; trail mix by global 'mix'."
+  },
+  {
+    "id": "prunes",
+    "label": "Prunes / Dried Plums",
+    "unit": "oz",
+    "include": [
+      "prunes?\\b",
+      "dried\\s+plums?\\b"
+    ],
+    "exclude": [
+      "\\bjuice\\b",
+      "\\bbaby\\b",
+      "yogurt"
+    ],
+    "search_term": "prunes",
+    "note": "Existing plums commodity ('\\bplums?\\b') already excludes 'dried', verified, so 'Sunsweet Dried Plums' falls through cleanly to this rule. Prune juice blocked here and by the global juice token; Gerber/baby prunes blocked by the global baby-food tokens."
+  },
+  {
+    "id": "shallots",
+    "label": "Shallots",
+    "unit": "lb",
+    "include": [
+      "shallots?\\b"
+    ],
+    "exclude": [
+      "fried",
+      "crispy",
+      "\\bdried\\b",
+      "\\bjar\\b",
+      "minced"
+    ],
+    "search_term": "shallots",
+    "note": "'shallot' shares no token with onions ('\\bonion', 'vidalia') or green-onions ('green onions'/'scallions'), verified both directions. Fried/crispy shallot toppings and jarred minced shallots excluded."
+  },
+  {
+    "id": "yukon-gold-potatoes",
+    "label": "Yellow / Yukon Gold Potatoes",
+    "unit": "lb",
+    "include": [
+      "yukon\\s+gold",
+      "yellow\\s+potato(?:es)?\\b",
+      "gold(?:en)?\\s+potato(?:es)?\\b"
+    ],
+    "exclude": [
+      "sweet\\s+potato",
+      "\\bbaby\\b",
+      "petite",
+      "honey\\s+gold",
+      "medley",
+      "fingerling",
+      "creamer\\s+potato",
+      "instant",
+      "mashed",
+      "russet",
+      "\\bsalad\\b",
+      "\\bfrozen\\b"
+    ],
+    "search_term": "yukon gold potatoes",
+    "note": "Anchored to yukon gold / yellow potatoes / gold(en) potatoes; cannot collide with russet-potatoes ('russet') or red-potatoes ('red potato') tokens. Baby/petite/Honey Gold/creamer/fingerling specialty packs excluded per notes, plus instant/mashed (existing instant-mashed-potatoes) and medleys."
+  },
+  {
+    "id": "mini-sweet-peppers",
+    "label": "Mini Sweet Peppers",
+    "unit": "oz",
+    "include": [
+      "mini\\s+sweet\\s+peppers?",
+      "sweet\\s+mini\\s+peppers?",
+      "mini\\s+peppers?\\b"
+    ],
+    "exclude": [
+      "\\bbell\\b",
+      "pickled",
+      "\\bjar\\b",
+      "stuffed"
+    ],
+    "search_term": "mini sweet peppers",
+    "note": "Existing bell-peppers already excludes 'mini\\s+sweet' (verified), so bagged minis fall through to this rule. '\\bbell\\b' excluded here so a 'Mini Bell Peppers' SKU stays with bell-peppers rather than being contested. 'Sweet SnackING Peppers' does NOT trip the global '\\bsnack\\b' token (no word boundary before -ing), so no relax_global needed."
+  },
+  {
+    "id": "serrano-peppers",
+    "label": "Serrano Peppers",
+    "unit": "lb",
+    "include": [
+      "serranos?\\b"
+    ],
+    "exclude": [
+      "pickled",
+      "\\bjar\\b",
+      "salsa",
+      "\\bdried\\b",
+      "powder",
+      "\\bcanned\\b"
+    ],
+    "search_term": "serrano peppers",
+    "note": "'serrano' is specific; jalapenos (existing) cannot match it. Salsa excluded explicitly (salsa is NOT in the global exclude list; the existing salsa commodity would usually match first, but belt-and-suspenders). Hot sauce names hit the global '\\bsauce\\b' token."
+  },
+  {
+    "id": "anaheim-peppers",
+    "label": "Anaheim Peppers",
+    "unit": "lb",
+    "include": [
+      "anaheims?\\b"
+    ],
+    "exclude": [
+      "\\bdried\\b",
+      "\\bdiced\\b",
+      "chopped",
+      "\\bjar\\b",
+      "salsa",
+      "\\bcanned\\b"
+    ],
+    "search_term": "anaheim peppers",
+    "note": "Anchored to 'anaheim' only. 'hatch' deliberately OMITTED: Hatch is a canned-goods brand and fresh Hatch chiles are named 'Hatch Green Chile', which the existing canned-green-chilies commodity (bare 'green chil(e|i)es' include) would contest - see collisions-a.md for the exclude proposed on canned-green-chilies. Diced/chopped tokens block the canned forms."
+  },
+  {
+    "id": "habanero-peppers",
+    "label": "Habanero Peppers",
+    "unit": "lb",
+    "include": [
+      "habaneros?\\b"
+    ],
+    "exclude": [
+      "salsa",
+      "cheese",
+      "\\bjack\\b",
+      "mango",
+      "\\bbbq\\b",
+      "wings?",
+      "seasoning",
+      "\\bjelly\\b",
+      "\\bjam\\b",
+      "pickled",
+      "\\bdried\\b",
+      "powder",
+      "chips?",
+      "jerky",
+      "ranch",
+      "\\bsalami\\b"
+    ],
+    "search_term": "habanero peppers",
+    "note": "'habanero' appears in a huge family of flavored products (mango-habanero everything, habanero jack cheese, jerky, chips); this list plus the global flavored/sauce/snack tokens strips them. Habanero jelly would otherwise be contested by the existing jelly commodity anyway."
+  },
+  {
+    "id": "beets",
+    "label": "Beets (fresh)",
+    "unit": "lb",
+    "include": [
+      "fresh\\s+beets?\\b",
+      "red\\s+beets?\\b",
+      "golden\\s+beets?\\b",
+      "organic\\s+beets?\\b",
+      "bunch(?:ed)?\\s+beets?\\b",
+      "beets?,?\\s+bunch",
+      "loose\\s+beets?\\b"
+    ],
+    "exclude": [
+      "pickled",
+      "sliced",
+      "\\bdiced\\b",
+      "\\bcut\\b",
+      "harvard",
+      "\\bjar\\b",
+      "\\bjuice\\b",
+      "powder",
+      "chips?",
+      "cooked",
+      "steamed",
+      "vacuum",
+      "beet\\s+greens"
+    ],
+    "search_term": "fresh beets",
+    "note": "BOUNDARY EXCEPTION to the never-require-fresh lesson: existing canned-beets owns bare '\\bbeets?\\b' and sits earlier in the array, so this rule anchors to the produce-style name forms (red/golden/organic/bunched/loose/fresh beets) instead. canned-beets needs bunch/red/golden excludes added or it keeps stealing those names - see collisions-a.md. A product titled ONLY 'Beets' is irreducibly ambiguous and stays with canned-beets. Cooked vacuum-packed (Love Beets) blocked via cooked/steamed/vacuum."
+  },
+  {
+    "id": "turnips",
+    "label": "Turnips",
+    "unit": "lb",
+    "include": [
+      "turnips?\\b",
+      "turnip\\s+roots?"
+    ],
+    "exclude": [
+      "greens?\\b",
+      "rutabagas?",
+      "mashed",
+      "\\bfrozen\\b",
+      "\\bcanned\\b"
+    ],
+    "search_term": "turnips",
+    "note": "BOUNDARY with turnip-greens (also in this batch, later in this same file): 'greens?\\b' excluded here so 'Turnip Greens' falls through to the turnip-greens rule under first-match-wins. Keep this rule ORDERED BEFORE turnip-greens on merge. Rutabaga mixes excluded."
+  },
+  {
+    "id": "parsnips",
+    "label": "Parsnips",
+    "unit": "lb",
+    "include": [
+      "parsnips?\\b"
+    ],
+    "exclude": [
+      "medley",
+      "\\bblend\\b",
+      "chips?",
+      "\\bfrozen\\b"
+    ],
+    "search_term": "parsnips",
+    "note": "'parsnip' is specific; carrots ('\\bcarrots?\\b') cannot match it, and a 'Carrots & Parsnips' medley pack is blocked by the medley/blend excludes (carrots would also contest it first and carrots excludes medley)."
+  },
+  {
+    "id": "rutabagas",
+    "label": "Rutabagas",
+    "unit": "lb",
+    "include": [
+      "rutabagas?\\b"
+    ],
+    "exclude": [
+      "turnips?\\b",
+      "mashed",
+      "medley",
+      "\\bfrozen\\b"
+    ],
+    "search_term": "rutabaga",
+    "note": "'rutabaga' is specific. Mutual exclusion with turnips (this batch): each excludes the other's token so a combined 'Turnips & Rutabagas' bin listing matches neither rather than being hijacked by whichever comes first."
+  },
+  {
+    "id": "leeks",
+    "label": "Leeks",
+    "unit": "each",
+    "include": [
+      "leeks?\\b"
+    ],
+    "exclude": [
+      "\\bdried\\b",
+      "\\bblend\\b",
+      "\\bsoup\\b",
+      "\\bmix\\b"
+    ],
+    "search_term": "leeks",
+    "note": "'leek' shares no token with green-onions ('green onions'/'scallions'), verified both directions. Dried leek soup mix is double-blocked (soup and mix are also global tokens)."
+  },
+  {
+    "id": "collard-greens",
+    "label": "Collard Greens (bunch)",
+    "unit": "each",
+    "include": [
+      "collard\\s+greens?",
+      "collards?\\b"
+    ],
+    "exclude": [
+      "\\bkale\\b",
+      "\\bblend\\b",
+      "mustard",
+      "turnip",
+      "mixed\\s+greens",
+      "allens?\\b",
+      "margaret\\s+holmes",
+      "sylvia'?s",
+      "\\bcanned\\b",
+      "\\bfrozen\\b"
+    ],
+    "search_term": "collard greens",
+    "note": "Fresh bunch or bagged cut fresh collards (acceptable per notes; Glory FRESH bags still match - only the canned-brand names Allens/Margaret Holmes/Sylvia's are brand-excluded, since a canned 'Collard Greens 14 oz' title often omits the word 'canned'). Glory's canned line says 'Seasoned', which the global 'seasoned' token blocks. Kale (existing) shares no token."
+  },
+  {
+    "id": "mustard-greens",
+    "label": "Mustard Greens (bunch)",
+    "unit": "each",
+    "include": [
+      "mustard\\s+greens?"
+    ],
+    "exclude": [
+      "allens?\\b",
+      "margaret\\s+holmes",
+      "\\bblend\\b",
+      "\\bseeds?\\b",
+      "\\bcanned\\b",
+      "\\bfrozen\\b"
+    ],
+    "search_term": "mustard greens",
+    "note": "Full phrase 'mustard greens' required, so the condiment can never match this rule. VERIFIED SAFE the other direction: the existing mustard commodity ('\\bmustard\\b') already carries a 'greens' exclude, so bunches fall through correctly - no commodities.json change needed. Canned brands (Allens/Margaret Holmes) brand-excluded; 'seasoned' canned lines hit the global token."
+  },
+  {
+    "id": "turnip-greens",
+    "label": "Turnip Greens (bunch)",
+    "unit": "each",
+    "include": [
+      "turnip\\s+greens?"
+    ],
+    "exclude": [
+      "allens?\\b",
+      "margaret\\s+holmes",
+      "\\bdiced\\b",
+      "\\bblend\\b",
+      "\\bcanned\\b",
+      "\\bfrozen\\b"
+    ],
+    "search_term": "turnip greens",
+    "note": "Full phrase required. Reaches here only because the turnips rule (earlier in this file) excludes 'greens?\\b' - keep that ordering on merge. '\\bdiced\\b' blocks canned 'Turnip Greens with Diced Turnips' whose title omits 'canned'; Allens/Margaret Holmes brand-excluded for the same reason."
+  },
+  {
+    "id": "swiss-chard",
+    "label": "Swiss Chard (bunch)",
+    "unit": "each",
+    "include": [
+      "\\bchard\\b"
+    ],
+    "exclude": [
+      "\\bblend\\b",
+      "\\bmix\\b",
+      "salad\\s+kit"
+    ],
+    "search_term": "swiss chard",
+    "note": "Bare 'chard' covers Swiss, rainbow, red and green chard bunches. Kale (existing) excludes '\\bblend\\b', so a 'Kale & Chard Blend' falls out of kale - the blend exclude here stops this rule from picking it up instead. Spinach/kale share no token with 'chard'."
+  }
+]

@@ -1,0 +1,93 @@
+{
+  "readme": "CANONICAL store registry (2026-07-26, estate-audit item #5). One row per store the board tracks. Scripts that need the full store list read THIS file (sorted by 'order'); audit-store-registry.ps1 scans live scripts daily and flags any hardcoded list that names >=3 stores but not all of them (the publish-store-guide/publish-deals-page Fareway-drift class). Add a new store HERE FIRST, then run audit-store-registry.ps1 to find every site the change must reach. 'allowed_subsets' documents lines that legitimately name only some stores.",
+  "stores": [
+    {
+      "name": "Hy-Vee",
+      "order": 1,
+      "regular_prefix": "hyvee",
+      "urlkey": "hyvee",
+      "ad_cycle": "weekly",
+      "capture": "server (Flipp SFML digital-flyers API) + browser price verification",
+      "price_mode": "in-store",
+      "notes": "server pull via pull-grocery-ads.ps1"
+    },
+    {
+      "name": "Aldi",
+      "order": 2,
+      "regular_prefix": "aldi",
+      "urlkey": "aldi",
+      "ad_cycle": "weekly",
+      "capture": "server (Flipp flyerkit JSON) + Instacart storefront for shelf prices",
+      "price_mode": "in-store (Instacart serves marked-up DELIVERY prices by default - mode_verified required, audit-price-mode.ps1 guards)",
+      "notes": "server pull via pull-grocery-ads.ps1"
+    },
+    {
+      "name": "Family Fare",
+      "order": 3,
+      "regular_prefix": "family-fare",
+      "urlkey": "familyfare",
+      "urlkey_aliases": ["ff"],
+      "ad_cycle": "weekly",
+      "capture": "server (Freshop circular API + pull-regular-familyfare.ps1)",
+      "price_mode": "in-store",
+      "notes": "only store whose sale-fallback gaps self-heal headless (research-everyday.ps1)"
+    },
+    {
+      "name": "Fareway",
+      "order": 4,
+      "regular_prefix": "fareway",
+      "urlkey": "fareway",
+      "deals_glob": "out/fareway/fareway-deals-*.json",
+      "ad_cycle": "weekly",
+      "capture": "browser (Instacart storefront)",
+      "price_mode": "in-store (Instacart delivery-price trap - mode_verified required)",
+      "notes": "was silently missing from the store-guide (07-12..07-26) and both publish gates - the drift that motivated this registry"
+    },
+    {
+      "name": "Baker's",
+      "order": 5,
+      "regular_prefix": "bakers",
+      "urlkey": "bakers",
+      "deals_glob": "out/bakers/bakers-deals-*.json",
+      "ad_cycle": "weekly (flips Wednesday)",
+      "capture": "headless (sanctioned Kroger API, locationId 61500319; daily 6:00 via SMP Bakers Daily Scan)",
+      "price_mode": "in-store",
+      "notes": "current+promo daily; links refresh by UPC"
+    },
+    {
+      "name": "Sam's Club",
+      "order": 6,
+      "regular_prefix": "sams",
+      "urlkey": "sams",
+      "deals_glob": "out/sams/sams-deals-*.json",
+      "ad_cycle": "none (national/club everyday pricing)",
+      "capture": "browser, CAPTCHA-walled -> PARTIAL SLICES; compare-deals unions every capture in its 14-day window, freshest-per-commodity wins",
+      "price_mode": "in-store (club 68137 preferred over national)",
+      "membership": true,
+      "notes": "unit-price feed - ingest ONLY via build-sams-deals.ps1 (linePrice AND unitPrice) or recover-sams-quarantine.ps1; never write bare per-unit rows"
+    },
+    {
+      "name": "Walmart",
+      "order": 7,
+      "regular_prefix": "walmart",
+      "urlkey": "walmart",
+      "ad_cycle": "none (everyday pricing)",
+      "capture": "browser (priceInfo.priceDetails.priceLines)",
+      "price_mode": "in-store",
+      "everyday_only": true,
+      "notes": "no ad cycle -> partial daily refreshes UNION with recent captures (EVERYDAY_ONLY_STORES in compare-deals) or the board collapses"
+    }
+  ],
+  "allowed_subsets": [
+    { "file": "audit-sale-fallback.ps1", "contains": "$browser = @(", "reason": "deliberately excludes Family Fare - the only store whose gaps self-heal headless" },
+    { "file": "compare-deals.ps1", "contains": "$EVERYDAY_ONLY_STORES", "reason": "walmart is the only store with no ad cycle whose partial pulls must union" },
+    { "file": "check-ad-cycles.ps1", "contains": "The daily server-side grocery pull", "reason": "alert body names only the three server-pull stores" },
+    { "file": "local-watchdog.ps1", "contains": "server stores Hy-Vee/Aldi/Family Fare", "reason": "comment-in-string: names only the server-pull stores" },
+    { "file": "build-deals-page.ps1", "contains": "neither posts everyday brand prices online", "reason": "site copy for the everyday-brand section, which by design excludes Aldi/Fareway" },
+    { "file": "check-ad-cycles.ps1", "contains": "The weekly Wednesday grocery browser refresh did not run", "reason": "alert body names only the browser-refresh stores" },
+    { "file": "import-browser-batch.ps1", "contains": "switch ($Store)", "reason": "store->prefix switch whose 'default' arm covers the unnamed stores" },
+    { "file": "sync-browser-links.ps1", "contains": "$hostOf = @{", "reason": "operates only on the 3 stores with direct product-URL hosts" },
+    { "file": "sync-browser-links.ps1", "contains": "$regGlob = @{", "reason": "operates only on the 3 stores with direct product-URL hosts" },
+    { "file": "sync-browser-links.ps1", "contains": "foreach ($store in @('Walmart'", "reason": "operates only on the 3 stores with direct product-URL hosts" }
+  ]
+}

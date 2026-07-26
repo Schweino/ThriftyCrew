@@ -1,0 +1,54 @@
+﻿{
+    "store":  "Family Fare",
+    "week_of":  "2026-07-26",
+    "price_type":  "everyday",
+    "price_mode":  "in-store",
+    "deal_count":  4,
+    "primed_batch":  "2026-07-26",
+    "deals":  [
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Yellow Nectarines",
+                      "ad_price":  "$4.29",
+                      "size":  "lb",
+                      "regular":  4.29,
+                      "current_price":  4.29,
+                      "source_ad":  "everyday shelf price (batch primer)",
+                      "as_of":  "2026-07-26",
+                      "base_price":  4.29
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Sparkling Ice Sparkling Water, Zero Sugar, Peach Nectarine 17 Fl Oz",
+                      "ad_price":  "$1.39",
+                      "size":  "17 oz",
+                      "regular":  1.39,
+                      "current_price":  1.39,
+                      "source_ad":  "everyday shelf price (batch primer)",
+                      "as_of":  "2026-07-26",
+                      "base_price":  1.39
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "White Nectarine",
+                      "ad_price":  "$3.99",
+                      "size":  "lb",
+                      "regular":  3.99,
+                      "current_price":  3.99,
+                      "source_ad":  "everyday shelf price (batch primer)",
+                      "as_of":  "2026-07-26",
+                      "base_price":  3.99
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Waterloo Raspberry Nectarine Sparkling Water 8 Ea",
+                      "ad_price":  "$4.99",
+                      "size":  "8 ea",
+                      "regular":  4.99,
+                      "current_price":  4.99,
+                      "source_ad":  "everyday shelf price (batch primer)",
+                      "as_of":  "2026-07-26",
+                      "base_price":  4.99
+                  }
+              ]
+}

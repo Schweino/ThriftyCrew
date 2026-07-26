@@ -293,6 +293,15 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         & powershell @ccArgs | ForEach-Object { Log ('category-coverage: ' + $_) }
         if ($LASTEXITCODE -eq 2) { $summary += 'REVIEW    a commodity is in no category (renders in no filter) - see out\category-coverage-report.json; publish will HOLD until it is filed into a category' }
       } catch { Log ('category-coverage guard threw: ' + $_.Exception.Message) }
+      # ---- STORE-REGISTRY GUARD (2026-07-26): a hardcoded store list drifting from stores.json (the
+      # publish-store-guide/publish-deals-page Fareway class - a store silently missing from ONE surface).
+      # Advisory: alerts + summary, board still ships (drift is a surface bug, not a data bug).
+      try {
+        $srArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-store-registry.ps1'))
+        if (-not $NoAlert) { $srArgs += '-Alert' }
+        & powershell @srArgs | ForEach-Object { Log ('store-registry: ' + $_) }
+        if ($LASTEXITCODE -eq 2) { $summary += 'REVIEW    store-registry drift: a hardcoded store list disagrees with stores.json - fix the script or document the subset in stores.json allowed_subsets' }
+      } catch { Log ('store-registry guard threw: ' + $_.Exception.Message) }
       # ---- SALE-FALLBACK GUARD: an on-sale cell with NO everyday item to revert to VANISHES when the sale ends.
       # audit-sale-fallback flags them; FF self-heals daily (researched above), browser-store gaps go to
       # research-worklist.json for the weekly agent to research the next-cheapest everyday item. De-duped alert.

@@ -3,7 +3,7 @@
     "new_board":  "comparison-2026-07-26.json",
     "prev_board":  "comparison-2026-07-25.json",
     "rows_was":  450,
-    "rows_now":  450,
+    "rows_now":  481,
     "thresholds":  {
                        "max_drop_cells":  15,
                        "max_drop_pct":  10
@@ -21,18 +21,18 @@
                    {
                        "store":  "Baker\u0027s",
                        "was":  423,
-                       "now":  424,
-                       "drop":  -1,
-                       "pct":  -0.2,
+                       "now":  431,
+                       "drop":  -8,
+                       "pct":  -1.9,
                        "regression":  false,
                        "acked":  false
                    },
                    {
                        "store":  "Family Fare",
                        "was":  251,
-                       "now":  247,
-                       "drop":  4,
-                       "pct":  1.6,
+                       "now":  256,
+                       "drop":  -5,
+                       "pct":  -2,
                        "regression":  false,
                        "acked":  false
                    },
@@ -48,27 +48,27 @@
                    {
                        "store":  "Hy-Vee",
                        "was":  426,
-                       "now":  426,
-                       "drop":  0,
-                       "pct":  0,
+                       "now":  453,
+                       "drop":  -27,
+                       "pct":  -6.3,
                        "regression":  false,
                        "acked":  false
                    },
                    {
                        "store":  "Sam\u0027s Club",
                        "was":  301,
-                       "now":  301,
-                       "drop":  0,
-                       "pct":  0,
+                       "now":  334,
+                       "drop":  -33,
+                       "pct":  -11,
                        "regression":  false,
                        "acked":  false
                    },
                    {
                        "store":  "Walmart",
                        "was":  423,
-                       "now":  423,
-                       "drop":  0,
-                       "pct":  0,
+                       "now":  426,
+                       "drop":  -3,
+                       "pct":  -0.7,
                        "regression":  false,
                        "acked":  false
                    }

@@ -24,7 +24,9 @@ if (-not $CompareFile) {
 $doc = Get-Content $CompareFile -Raw | ConvertFrom-Json
 
 # ---- COVERAGE GATE: never publish a degraded matrix (a store that dropped out, or a thin board) ----
-$stores = @('Hy-Vee','Aldi','Family Fare',"Baker's","Sam's Club",'Walmart')
+# registry-driven (2026-07-26): this gate never checked Fareway (the same drift that hid it from the
+# guide itself 07-12..07-26) - the list now comes from stores.json (audit-store-registry.ps1 verifies)
+$stores = @((Get-Content (Join-Path $root 'stores.json') -Raw | ConvertFrom-Json).stores | Sort-Object { [int]$_.order } | ForEach-Object { [string]$_.name })
 $perStore = @{}; foreach ($s in $stores) { $perStore[$s] = 0 }
 foreach ($r in $doc.comparison) { foreach ($st in $r.stores) { $k = [string]$st.store; if ($perStore.ContainsKey($k)) { $perStore[$k]++ } } }
 $commCount = @($doc.comparison).Count

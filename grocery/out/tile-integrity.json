@@ -1,13 +1,13 @@
 ﻿{
-    "generated":  "2026-07-26 13:42",
+    "generated":  "2026-07-26 16:01",
     "board":  "comparison-2026-07-26.json",
-    "total_tiles":  2516,
+    "total_tiles":  2595,
     "violations":  263,
     "by_store":  {
                      "Walmart":  {
-                                     "coverage":  69,
-                                     "tiles":  423,
-                                     "violations":  69
+                                     "coverage":  70,
+                                     "tiles":  426,
+                                     "violations":  70
                                  },
                      "Fareway":  {
                                      "coverage":  76,
@@ -15,19 +15,19 @@
                                      "violations":  76
                                  },
                      "Family Fare":  {
-                                         "coverage":  17,
-                                         "tiles":  247,
-                                         "violations":  18
+                                         "coverage":  15,
+                                         "tiles":  256,
+                                         "violations":  16
                                      },
                      "Hy-Vee":  {
                                     "coverage":  42,
-                                    "tiles":  426,
+                                    "tiles":  453,
                                     "violations":  43
                                 },
                      "Sam\u0027s Club":  {
-                                             "coverage":  36,
-                                             "tiles":  301,
-                                             "violations":  36
+                                             "coverage":  37,
+                                             "tiles":  334,
+                                             "violations":  37
                                          },
                      "Aldi":  {
                                   "coverage":  18,
@@ -36,19 +36,11 @@
                               },
                      "Baker\u0027s":  {
                                           "coverage":  3,
-                                          "tiles":  424,
+                                          "tiles":  431,
                                           "violations":  3
                                       }
                  },
     "rows":  [
-                 {
-                     "id":  "ground-beef-8020",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Fresh 80% Lean Ground Beef, Angus Value Pack",
-                     "link":  ""
-                 },
                  {
                      "id":  "ground-beef-93-7",
                      "store":  "Aldi",
@@ -287,6 +279,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Great Value Reduced Sodium Brown Gravy Mix, 0.87 oz Packet",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "caesar-salad-kit",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fresh Express Caesar Supreme Salad Kit 10.5 Oz",
                      "link":  ""
                  },
                  {
@@ -1386,6 +1386,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "lime-juice",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Great Value Lime 100% Juice, 15 fl oz (Shelf Stable)",
+                     "link":  ""
+                 },
+                 {
                      "id":  "limes",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
@@ -1802,14 +1810,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "rye-bread",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Fresh \u0026 Finest Pumpernickel Rye Bread",
-                     "link":  ""
-                 },
-                 {
                      "id":  "salsa",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -1850,22 +1850,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "smoked-turkey-sausage",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Eckrich Skinless Turkey Smoked Sausage 12 Oz",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "snow-peas",
-                     "store":  "Walmart",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Marketside Fresh Sugar Snap Peas, 8 oz",
-                     "link":  ""
-                 },
-                 {
                      "id":  "soda",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
@@ -1903,6 +1887,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Fareway Cornbread Stuffing Mix",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "sugar-snap-peas",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Marketside Fresh Sugar Snap Peas, 8 oz",
                      "link":  ""
                  },
                  {
@@ -2103,6 +2095,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "ParExcellence Premium Long Grain Rice",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "whole-chicken",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Member\u0027s Mark Organic Whole Chickens, Case, priced per pound",
                      "link":  ""
                  },
                  {

@@ -1,0 +1,525 @@
+[
+  {
+    "id": "bok-choy",
+    "label": "Bok Choy",
+    "unit": "lb",
+    "include": [
+      "bok[\\s-]?choy",
+      "pak\\s+choi"
+    ],
+    "exclude": [
+      "kimchi",
+      "\\bsalad\\b",
+      "\\bblend\\b",
+      "stir[\\s-]?fry",
+      "\\bfrozen\\b",
+      "\\bdried\\b"
+    ],
+    "search_term": "bok choy",
+    "note": "Covers 'bok choy' / 'bok-choy' / 'pak choi'. Baby bok choy matches the same token and is wanted per the candidate notes. Napa cabbage never carries a bok-choy token; frozen stir-fry blends excluded (global frozen also blocks). No existing commodity matches these tokens."
+  },
+  {
+    "id": "butternut-squash",
+    "label": "Butternut Squash",
+    "unit": "lb",
+    "include": [
+      "butternut\\s+squash"
+    ],
+    "exclude": [
+      "\\bcubed?\\b",
+      "\\bcut\\b",
+      "\\bdiced\\b",
+      "chunks?",
+      "spirals?",
+      "noodles?",
+      "ravioli",
+      "risotto",
+      "pur[eé]e",
+      "\\bsoup\\b",
+      "\\bfrozen\\b"
+    ],
+    "search_term": "butternut squash",
+    "note": "Whole squash only: candidate notes exclude the pre-cut cubed convenience SKU, so cubed/cut/diced/chunks/spirals/noodles all excluded. Soup and frozen are global-blocked anyway; kept locally for clarity. Zucchini's include (zucchini | yellow squash) cannot touch this phrase."
+  },
+  {
+    "id": "acorn-squash",
+    "label": "Acorn Squash",
+    "unit": "lb",
+    "include": [
+      "acorn\\s+squash"
+    ],
+    "exclude": [
+      "\\bcut\\b",
+      "\\bhalved\\b",
+      "\\bfrozen\\b"
+    ],
+    "search_term": "acorn squash",
+    "note": "Full phrase 'acorn squash' cannot collide with butternut/spaghetti (separate candidates) or zucchini/yellow squash (existing). Per-each store pricing normalized to lb downstream."
+  },
+  {
+    "id": "spaghetti-squash",
+    "label": "Spaghetti Squash",
+    "unit": "lb",
+    "include": [
+      "spaghetti\\s+squash"
+    ],
+    "exclude": [
+      "noodles?",
+      "\\bcut\\b",
+      "cubed",
+      "spirals?",
+      "\\bfrozen\\b"
+    ],
+    "search_term": "spaghetti squash",
+    "note": "HIJACK FLAG: existing 'pasta' includes bare 'spaghetti', which substring-matches 'Spaghetti Squash', and pasta's excludes have no squash token - pasta steals every spaghetti squash today. Fix in collisions-b.md (add \\bsquash\\b to pasta exclude). This rule requires the full 'spaghetti squash' phrase so it can never steal pasta; spaghetti sauce / SpaghettiOs lack the word squash."
+  },
+  {
+    "id": "sugar-snap-peas",
+    "label": "Sugar Snap Peas",
+    "unit": "oz",
+    "include": [
+      "sugar\\s+snap\\s+peas?"
+    ],
+    "exclude": [
+      "snow\\s+peas?",
+      "harvest\\s+snaps",
+      "\\bcrisps?\\b",
+      "\\bcrunch\\b",
+      "wasabi",
+      "\\bdried\\b",
+      "\\broasted\\b",
+      "\\bsplit\\b",
+      "\\bshelled\\b",
+      "stir[\\s-]?fry",
+      "\\bfrozen\\b",
+      "\\bplant\\b",
+      "\\bseeds?\\s+packet\\b"
+    ],
+    "search_term": "sugar snap peas",
+    "note": "HIJACK FLAG (blocking): existing 'snow-peas' explicitly includes 'sugar\\s+snap\\s+peas' AND '\\bsnap\\s+peas', so it first-match-steals every sugar snap product; this commodity gets nothing until snow-peas adds a 'sugar\\s+snap' exclude (see collisions-b.md). Excludes mirror snow-peas' own snack-crisp guards. Frozen sugar snaps and canned/frozen peas cannot enter (global + phrase)."
+  },
+  {
+    "id": "spring-mix",
+    "label": "Spring Mix Salad Greens",
+    "unit": "oz",
+    "include": [
+      "spring\\s+mix",
+      "spring\\s+blend",
+      "50\\s*/\\s*50"
+    ],
+    "exclude": [
+      "\\bkit\\b",
+      "caesar",
+      "dressing",
+      "crouton"
+    ],
+    "relax_global": [
+      "\\bmix\\b(?!\\s*(?:&|and)\\s*match)"
+    ],
+    "search_term": "spring mix",
+    "note": "RELAX_GLOBAL required: the product name 'Spring Mix' trips the global '\\bmix\\b(?!\\s*(?:&|and)\\s*match)' token; relaxed exactly that token. '50/50' covers the spinach + spring mix blend - but existing 'spinach' (bare include) currently first-match-steals any 50/50 title containing the word spinach; fix in collisions-b.md. Kits with dressing excluded; spinach-only and arugula-only packs cannot match these phrases."
+  },
+  {
+    "id": "arugula",
+    "label": "Arugula",
+    "unit": "oz",
+    "include": [
+      "arugula"
+    ],
+    "exclude": [
+      "spring\\s+mix",
+      "\\bblend\\b",
+      "50\\s*/\\s*50",
+      "\\bkit\\b",
+      "spinach",
+      "salad\\s+mix",
+      "pizza",
+      "pesto"
+    ],
+    "search_term": "baby arugula",
+    "note": "Arugula-only packs per the candidate: blends/spring-mix/50-50/kits excluded so multi-green products route to spring-mix instead. 'spinach' excluded because arugula-spinach duo packs belong to neither pure item (and existing spinach would first-match them anyway). Pizza/pesto guard prepared foods that name arugula."
+  },
+  {
+    "id": "garden-salad",
+    "label": "Garden Salad Blend (bagged)",
+    "unit": "oz",
+    "include": [
+      "garden\\s+salad",
+      "classic\\s+salad",
+      "classic\\s+iceberg\\s+salad",
+      "iceberg\\s+garden"
+    ],
+    "exclude": [
+      "caesar",
+      "dressing",
+      "crouton",
+      "\\bkit\\b",
+      "chopped\\s+salad",
+      "\\bpasta\\b",
+      "macaroni",
+      "potato",
+      "chicken",
+      "\\bdeli\\b"
+    ],
+    "relax_global": [
+      "\\bmix\\b(?!\\s*(?:&|and)\\s*match)"
+    ],
+    "search_term": "garden salad bag",
+    "note": "RELAX_GLOBAL required: common titles like 'Classic/Garden Salad Mix' trip the global mix token. HIJACK FLAG: existing 'lettuce' includes \\biceberg\\b and none of its excludes (kit/blend/shredded/chopped/salad mix) hit 'Classic Iceberg Salad' bags - lettuce steals them; fix in collisions-b.md. pasta/macaroni/potato excludes stop deli 'garden pasta/potato salad' tubs; kits with dressing route to the kit item."
+  },
+  {
+    "id": "caesar-salad-kit",
+    "label": "Caesar Salad Kit",
+    "unit": "oz",
+    "include": [
+      "caesar\\b.{0,20}salad\\s+kit",
+      "caesar\\s+kit",
+      "complete\\s+caesar"
+    ],
+    "exclude": [
+      "chicken",
+      "\\bbowl\\b",
+      "\\bwrap\\b"
+    ],
+    "relax_global": [
+      "\\bkit\\b"
+    ],
+    "search_term": "caesar salad kit",
+    "note": "RELAX_GLOBAL required: every product title carries 'kit', a global-excluded token; relaxed exactly '\\bkit\\b'. Includes demand the word caesar, so other-flavor chopped-salad kits stay out per the candidate. Bottled caesar dressing lacks 'kit'/'complete caesar' and existing caesar-dressing already excludes kit both ways - no collision. 'chicken'/'bowl' block prepared caesar meals."
+  },
+  {
+    "id": "coleslaw-mix",
+    "label": "Coleslaw Mix",
+    "unit": "oz",
+    "include": [
+      "coleslaw\\s+mix",
+      "cole\\s+slaw\\s+mix",
+      "\\bslaw\\s+mix\\b",
+      "shredded\\s+(?:coleslaw|slaw)",
+      "angel\\s+hair\\s+coleslaw",
+      "tri[\\s-]?colou?r\\s+(?:coleslaw|slaw)"
+    ],
+    "exclude": [
+      "dressing",
+      "broccoli",
+      "\\bdeli\\b",
+      "\\bkit\\b",
+      "prepared"
+    ],
+    "relax_global": [
+      "\\bmix\\b(?!\\s*(?:&|and)\\s*match)"
+    ],
+    "search_term": "coleslaw mix",
+    "note": "RELAX_GLOBAL required: 'Coleslaw Mix' trips the global mix token. Prepared deli coleslaw tubs are titled without 'mix'/'shredded' so they cannot match; dressing bottles excluded; broccoli slaw excluded per candidate. Existing 'cabbage' excludes slaw/shredded and 'sauerkraut' excludes slaw, so neither steals from nor loses to this rule."
+  },
+  {
+    "id": "fresh-stir-fry-blend",
+    "label": "Stir-Fry Vegetable Blend (fresh)",
+    "unit": "oz",
+    "include": [
+      "stir[\\s-]?fry\\s+(?:vegetables?|veggies?|blend|mix|medley)",
+      "vegetable\\s+stir[\\s-]?fry"
+    ],
+    "exclude": [
+      "\\bfrozen\\b",
+      "noodle",
+      "\\bsauce\\b",
+      "\\bkit\\b",
+      "chicken",
+      "\\bbeef\\b",
+      "shrimp",
+      "\\bpork\\b",
+      "\\brice\\b",
+      "\\bcanned\\b"
+    ],
+    "relax_global": [
+      "\\bmix\\b(?!\\s*(?:&|and)\\s*match)"
+    ],
+    "search_term": "fresh stir fry vegetables",
+    "note": "CRITICAL: '\\bfrozen\\b' excluded locally AND globally - frozen stir-fry bags are a different item (existing frozen-vegetables relaxes frozen for itself but its includes don't cover stir-fry, so no overlap either way). RELAX_GLOBAL for the mix token because some produce blends are titled 'Stir Fry Mix'. Meat-word and noodle/sauce/kit excludes keep meal kits out. Titles naming water chestnuts get dropped by the global \\bwater\\b token - accepted, conservative."
+  },
+  {
+    "id": "bean-sprouts",
+    "label": "Fresh Bean Sprouts",
+    "unit": "oz",
+    "include": [
+      "bean\\s+sprouts?",
+      "mung\\s+bean\\s+sprouts?"
+    ],
+    "exclude": [
+      "brussels?",
+      "alfalfa",
+      "la\\s+choy",
+      "\\bcanned\\b",
+      "sprouted"
+    ],
+    "search_term": "fresh bean sprouts",
+    "note": "Requires the full 'bean sprout(s)' phrase, so Brussels sprouts (existing brussels-sprouts includes 'brussels? sprouts?' and cannot match 'bean sprouts') and broccoli sprouts are out by construction; brussels/alfalfa excluded belt-and-suspenders. 'la choy' blocks the canned brand whose title may omit the word canned; 'sprouted' blocks sprouted-grain bread."
+  },
+  {
+    "id": "broccolini",
+    "label": "Broccolini / Baby Broccoli",
+    "unit": "each",
+    "include": [
+      "broccolini",
+      "baby\\s+broccoli",
+      "broccolette"
+    ],
+    "exclude": [
+      "\\bfrozen\\b",
+      "\\bslaw\\b",
+      "\\bsteam\\b"
+    ],
+    "search_term": "broccolini",
+    "note": "HIJACK FLAG: existing 'broccoli' includes unanchored 'broccoli', which substring-matches 'broccolini' and phrase-matches 'baby broccoli' - broccoli steals every broccolini product today; fix in collisions-b.md. This rule cannot steal back: plain broccoli crowns/bunches contain none of these tokens."
+  },
+  {
+    "id": "fennel",
+    "label": "Fennel Bulb",
+    "unit": "each",
+    "include": [
+      "fennel\\s+bulb",
+      "fresh\\s+fennel",
+      "^fennel$",
+      "^fennel\\s*,"
+    ],
+    "exclude": [
+      "\\bseeds?\\b",
+      "\\bground\\b",
+      "pollen",
+      "\\btea\\b",
+      "sausage",
+      "salami",
+      "\\bplant\\b"
+    ],
+    "search_term": "fennel bulb",
+    "note": "Existing 'ground-fennel' (fennel seed/ground fennel) already excludes \\bbulb\\b and 'fresh fennel' - clean mutual boundary. Bare-title produce ('Fennel' / 'Fennel, each') caught by the start-anchored patterns without opening the door to 'fennel seed' spice jars; seed/ground/pollen/tea excluded anyway. Anise NOT used as a token (star anise is a spice)."
+  },
+  {
+    "id": "chayote",
+    "label": "Chayote Squash",
+    "unit": "each",
+    "include": [
+      "chayote"
+    ],
+    "exclude": [
+      "\\bfrozen\\b",
+      "\\bdried\\b"
+    ],
+    "search_term": "chayote",
+    "note": "'chayote' is a unique produce word; no existing commodity references it and zucchini's 'yellow squash' include cannot match it. Minimal excludes suffice on top of the global prepared-food wall."
+  },
+  {
+    "id": "yuca-root",
+    "label": "Yuca / Cassava Root",
+    "unit": "lb",
+    "include": [
+      "\\byuca\\b",
+      "yucc?a\\s+root",
+      "\\bcassava\\b"
+    ],
+    "exclude": [
+      "flour",
+      "starch",
+      "chips?",
+      "\\bfrozen\\b",
+      "\\btaro\\b",
+      "\\bbread\\b",
+      "\\bdried\\b",
+      "pearls?",
+      "fries"
+    ],
+    "search_term": "yuca root",
+    "note": "Both spellings covered ('yuca' and 'yucca root'); bare '\\byucca\\b' avoided (garden-plant listings). Cassava flour/starch/chips and tapioca 'pearls' excluded; frozen yuca and yuca fries excluded. No existing commodity carries any of these tokens."
+  },
+  {
+    "id": "jicama",
+    "label": "Jicama",
+    "unit": "lb",
+    "include": [
+      "jicama"
+    ],
+    "exclude": [
+      "sticks?",
+      "chips?",
+      "\\bslaw\\b",
+      "\\bwraps?\\b"
+    ],
+    "search_term": "jicama",
+    "note": "Whole root only: pre-cut sticks (usually chile-lime seasoned; 'seasoned' is also global-blocked), jicama chips, slaw, and jicama tortilla-wraps excluded. Unique word, no existing-commodity overlap."
+  },
+  {
+    "id": "okra",
+    "label": "Fresh Okra",
+    "unit": "lb",
+    "include": [
+      "\\bokra\\b"
+    ],
+    "exclude": [
+      "pickled",
+      "breaded",
+      "\\bfrozen\\b",
+      "\\bcanned\\b",
+      "tomato(?:es)?",
+      "gumbo"
+    ],
+    "search_term": "fresh okra",
+    "note": "Per lesson: does NOT require the word 'fresh' (stores title it plain 'Okra'). Frozen breaded/cut okra, pickled jars, canned okra & tomatoes, and gumbo blends excluded (frozen/canned/breaded are also global). No existing commodity matches 'okra'."
+  },
+  {
+    "id": "artichokes",
+    "label": "Artichokes (fresh, whole)",
+    "unit": "each",
+    "include": [
+      "\\bartichokes?\\b"
+    ],
+    "exclude": [
+      "hearts?",
+      "quarters?",
+      "marinated",
+      "jarred",
+      "spinach",
+      "\\bdip\\b",
+      "\\bfrozen\\b",
+      "\\bcanned\\b",
+      "antipasto",
+      "bruschetta",
+      "\\bsalad\\b",
+      "\\bpasta\\b"
+    ],
+    "search_term": "fresh artichokes",
+    "note": "Candidate notes: hearts are NOT wanted here - existing 'artichoke-hearts' owns canned/jarred/marinated hearts and sits earlier in the file (first-match protects it), plus hearts/quarters/marinated/jarred excluded here explicitly. 'fresh' not required in include (stores title plain 'Artichoke'). artichoke-hearts already excludes \\bfresh\\b + \\bfrozen\\b so a title like 'Fresh Artichoke' can't be stolen; a bare 'Artichoke Hearts' title is include-blocked here both by order and exclude."
+  },
+  {
+    "id": "rhubarb",
+    "label": "Fresh Rhubarb",
+    "unit": "lb",
+    "include": [
+      "rhubarb"
+    ],
+    "exclude": [
+      "strawberry",
+      "\\bpie\\b",
+      "\\bjam\\b",
+      "jelly",
+      "preserves",
+      "yogurt",
+      "\\bcrisp\\b",
+      "\\bfrozen\\b"
+    ],
+    "search_term": "fresh rhubarb",
+    "note": "Per lesson: 'fresh' not required in include. 'strawberry' excluded because virtually every processed rhubarb product is strawberry-rhubarb (pie/jam/yogurt); plain fresh stalks are titled 'Rhubarb'. Frozen rhubarb excluded (also global). No existing commodity overlap."
+  },
+  {
+    "id": "pie-pumpkins",
+    "label": "Pie Pumpkins",
+    "unit": "each",
+    "include": [
+      "pie\\s+pumpkins?",
+      "sugar\\s+pumpkins?",
+      "baking\\s+pumpkins?"
+    ],
+    "exclude": [
+      "\\bcanned\\b",
+      "pur[eé]e",
+      "\\bfilling\\b",
+      "spice",
+      "seeds?",
+      "carving",
+      "jack[\\s-]?o'?[\\s-]?lantern",
+      "100%"
+    ],
+    "search_term": "pie pumpkin",
+    "note": "Adjacent phrases 'pie pumpkin'/'sugar pumpkin'/'baking pumpkin' only - 'pumpkin pie mix/filling' is reversed word order and cannot match, and existing canned-pumpkin (100%/pure/puree/solid-pack anchored, excludes \\bpie\\b) is disjoint in both directions. Carving/jack-o-lantern pumpkins and pumpkin-spice products excluded."
+  },
+  {
+    "id": "fresh-parsley",
+    "label": "Fresh Parsley (bunch)",
+    "unit": "each",
+    "include": [
+      "fresh\\s+parsley",
+      "italian\\s+parsley",
+      "curly\\s+parsley",
+      "flat[\\s-]?leaf\\s+parsley",
+      "parsley\\s+bunch"
+    ],
+    "exclude": [
+      "\\bdried\\b",
+      "flakes?",
+      "seasoning",
+      "dehydrated",
+      "\\bplant\\b",
+      "\\bground\\b",
+      "cilantro"
+    ],
+    "search_term": "fresh parsley bunch",
+    "note": "HIJACK FLAG: existing 'dried-parsley' includes bare 'parsley' and only excludes fresh/bunch/plant/living/curly-bunch - titles like 'Italian Parsley' or 'Flat Leaf Parsley' (no 'fresh', no 'bunch') are stolen by the spice item today; fix in collisions-b.md. This rule cannot steal dried products: spice jars are titled 'Parsley Flakes'/'Parsley' and match none of these phrases; dried/flakes excluded regardless. 'cilantro' guards combo two-bunch packs."
+  },
+  {
+    "id": "fresh-dill",
+    "label": "Fresh Dill",
+    "unit": "oz",
+    "include": [
+      "fresh\\s+dill",
+      "dill\\s+(?:bunch|clamshell|sprigs?)"
+    ],
+    "exclude": [
+      "pickles?",
+      "pickled",
+      "relish",
+      "\\bdip\\b",
+      "\\bdried\\b",
+      "\\bseeds?\\b",
+      "seasoning",
+      "havarti",
+      "ranch",
+      "\\bsauce\\b"
+    ],
+    "search_term": "fresh dill",
+    "note": "CRITICAL boundary: existing 'pickles' includes 'dill spears'/'pickle(s)' - my includes require fresh/bunch/clamshell/sprig context so no pickle jar can enter, and pickles?/pickled excluded anyway. HIJACK FLAG: existing 'dried-dill' includes 'dill weed' with NO fresh/bunch excludes, so a fresh bunch titled 'Fresh Dill Weed'/'Dill Weed' is stolen by the spice item today; fix in collisions-b.md ('fresh dill weed' matches my 'fresh dill' include once dried-dill excludes fresh). Havarti (dill cheese) and dill dip/ranch guarded."
+  },
+  {
+    "id": "fresh-rosemary",
+    "label": "Fresh Rosemary",
+    "unit": "oz",
+    "include": [
+      "fresh\\s+rosemary",
+      "rosemary\\s+(?:clamshell|bunch|sprigs?)"
+    ],
+    "exclude": [
+      "\\bdried\\b",
+      "\\bground\\b",
+      "seasoning",
+      "crackers?",
+      "\\bbread\\b",
+      "focaccia",
+      "\\boil\\b",
+      "extract",
+      "scented",
+      "\\bcandle\\b",
+      "\\bplant\\b",
+      "\\bsoap\\b"
+    ],
+    "search_term": "fresh rosemary",
+    "note": "No dried-rosemary commodity exists, so there is no hijack partner - but a spice jar titled just 'Rosemary' must not enter here, hence includes are anchored on fresh/clamshell/bunch/sprig and dried/ground/seasoning excluded. RISK (accepted, conservative): a fresh pack titled bare 'Rosemary 0.75 oz' will be missed until real store titles are captured. Scented/candle/soap/oil block the toiletry aisle."
+  },
+  {
+    "id": "fresh-thyme",
+    "label": "Fresh Thyme",
+    "unit": "oz",
+    "include": [
+      "fresh\\s+thyme",
+      "thyme\\s+(?:clamshell|bunch|sprigs?)"
+    ],
+    "exclude": [
+      "\\bdried\\b",
+      "\\bground\\b",
+      "seasoning",
+      "extract",
+      "\\bplant\\b",
+      "\\btea\\b"
+    ],
+    "search_term": "fresh thyme",
+    "note": "HIJACK FLAG: existing 'dried-thyme' includes bare '\\bthyme\\b' (excludes only fresh/plant/living/seeds), so a produce clamshell titled 'Thyme 0.75 oz' or 'Organic Thyme' is stolen by the spice item today; fix in collisions-b.md. Includes anchored fresh/clamshell/bunch/sprig so this rule can never steal a spice jar; bare-'Thyme' titles remain ambiguous either way and stay with dried-thyme (accepted, conservative)."
+  }
+]

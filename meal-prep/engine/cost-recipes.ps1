@@ -80,10 +80,13 @@ function SizeToGrams([string]$s){
   return $null
 }
 $labels=@{}
+# name folds live in db\label-folds.json (data, not code - 2026-07-26)
+$labelFolds = @()
+$lfFile = Join-Path $db 'label-folds.json'
+if(Test-Path $lfFile){ $labelFolds = @((Get-Content $lfFile -Raw | ConvertFrom-Json).folds) }
 foreach($r in (Get-Content (Join-Path $db 'label-prices.json') -Raw | ConvertFrom-Json)){
   $nm = $r.item
-  if($nm -match '^Pasta Shells'){ $nm='Pasta Shells' }
-  if($nm -match '^Chili Crisp'){ $nm='Chili Crisp' }
+  foreach($fold in $labelFolds){ if($nm -match [string]$fold.match){ $nm = [string]$fold.to; break } }
   if($null -eq $r.package_price_usd -or $r.package_price_usd -le 0){ continue }
   $g = SizeToGrams ([string]$r.package_size)
   if(-not $g){ continue }

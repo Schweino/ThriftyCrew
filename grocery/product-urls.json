@@ -136,6 +136,16 @@
                                                              "name":  "JENNIE-O Fresh Lean Ground Turkey 93/7, 3 lb"
                                                          }
                                          },
+                  "acorn-squash":  {
+                                       "commodity":  "Acorn Squash",
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/37453/acorn-squash",
+                                                      "name":  "Acorn Squash",
+                                                      "price":  "$2.01",
+                                                      "size":  "1.35 lbs ($1.49/lb)",
+                                                      "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                  }
+                                   },
                   "air-freshener":  {
                                         "commodity":  "air-freshener",
                                         "Aldi":  {
@@ -488,6 +498,29 @@
                                                         "board_pu":  4.83
                                                     }
                                     },
+                  "anaheim-peppers":  {
+                                          "commodity":  "Anaheim Peppers",
+                                          "Baker\u0027s":  {
+                                                               "url":  "https://www.bakersplus.com/p/fresh-anaheim-peppers/0000000004677",
+                                                               "name":  "Fresh Anaheim Peppers",
+                                                               "price":  "$2.99",
+                                                               "size":  "lb",
+                                                               "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                           },
+                                          "Family Fare":  {
+                                                              "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/anaheim_peppers_green_and_red/p/12543",
+                                                              "name":  "Anaheim Peppers (Green And Red)",
+                                                              "price":  "$4.49",
+                                                              "size":  "lb"
+                                                          },
+                                          "Hy-Vee":  {
+                                                         "url":  "https://www.hy-vee.com/aisles-online/p/37372/anaheim-peppers",
+                                                         "name":  "Anaheim Peppers",
+                                                         "price":  "$1.25",
+                                                         "size":  "0.25 lbs ($4.99/lb)",
+                                                         "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                     }
+                                      },
                   "apple":  {
                                 "commodity":  "Apple",
                                 "Aldi":  {
@@ -755,6 +788,16 @@
                                                      "board_pu":  0.187
                                                  }
                                  },
+                  "apricots":  {
+                                   "commodity":  "Apricots",
+                                   "Hy-Vee":  {
+                                                  "url":  "https://www.hy-vee.com/aisles-online/p/3045182/hy-vee-apricots",
+                                                  "name":  "Hy-Vee Apricots",
+                                                  "price":  "$9.99",
+                                                  "size":  "12 oz",
+                                                  "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                              }
+                               },
                   "artichoke-hearts":  {
                                            "commodity":  "Artichoke Hearts (canned/jarred)",
                                            "Baker\u0027s":  {
@@ -796,6 +839,16 @@
                                                            "board_pu":  0.1609
                                                        }
                                        },
+                  "arugula":  {
+                                  "commodity":  "Arugula",
+                                  "Hy-Vee":  {
+                                                 "url":  "https://www.hy-vee.com/aisles-online/p/2783192/organicgirl-baby-arugula",
+                                                 "name":  "organicgirl Baby Arugula",
+                                                 "price":  "$3.99",
+                                                 "size":  "5 oz",
+                                                 "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                             }
+                              },
                   "asparagus":  {
                                     "commodity":  "asparagus",
                                     "Aldi":  {
@@ -1830,6 +1883,15 @@
                                                    "verified":  "2026-07-26 Hy-Vee search API (storeId 1465)"
                                                }
                                 },
+                  "beets":  {
+                                "commodity":  "Beets (fresh)",
+                                "Family Fare":  {
+                                                    "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/other_vegetables/fresh_red_beets_organic/p/7781927",
+                                                    "name":  "Fresh Red Beets, Organic",
+                                                    "price":  "$3.99",
+                                                    "size":  "12 oz"
+                                                }
+                            },
                   "bell-peppers":  {
                                        "commodity":  "bell-peppers",
                                        "Aldi":  {
@@ -2188,6 +2250,16 @@
                                                     "board_pu":  0.165
                                                 }
                                 },
+                  "bok-choy":  {
+                                   "commodity":  "Bok Choy",
+                                   "Hy-Vee":  {
+                                                  "url":  "https://www.hy-vee.com/aisles-online/p/37343/bok-choy",
+                                                  "name":  "Bok Choy",
+                                                  "price":  "$5.39",
+                                                  "size":  "1.35 lbs ($3.99/lb)",
+                                                  "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                              }
+                               },
                   "boneless-skinless-chicken-thigh":  {
                                                           "commodity":  "Boneless Skinless Chicken Thigh",
                                                           "Aldi":  {
@@ -3003,6 +3075,13 @@
                              },
                   "buttermilk":  {
                                      "commodity":  "buttermilk",
+                                     "Baker\u0027s":  {
+                                                          "url":  "https://www.bakersplus.com/p/kroger-cultured-1-lowfat-buttermilk-half-gallon/0001111042701",
+                                                          "price":  "19.97",
+                                                          "size":  "1/2 gal",
+                                                          "name":  "Kroger Cultured 1% Lowfat Buttermilk Half Gallon",
+                                                          "verified":  "2026-07-26 price-pull self-capture"
+                                                      },
                                      "Fareway":  {
                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2798593-kemps-buttermilk-16-fl-oz",
                                                      "price":  1.49,
@@ -3023,15 +3102,18 @@
                                                      "board_pu":  0.0609,
                                                      "price":  1.95,
                                                      "size":  "32 fl oz"
-                                                 },
-                                     "Baker\u0027s":  {
-                                                          "url":  "https://www.bakersplus.com/p/kroger-cultured-1-lowfat-buttermilk-half-gallon/0001111042701",
-                                                          "price":  "19.97",
-                                                          "size":  "1/2 gal",
-                                                          "name":  "Kroger Cultured 1% Lowfat Buttermilk Half Gallon",
-                                                          "verified":  "2026-07-26 price-pull self-capture"
-                                                      }
+                                                 }
                                  },
+                  "butternut-squash":  {
+                                           "commodity":  "Butternut Squash",
+                                           "Hy-Vee":  {
+                                                          "url":  "https://www.hy-vee.com/aisles-online/p/8845/butternut-squash",
+                                                          "name":  "Butternut Squash",
+                                                          "price":  "$3.73",
+                                                          "size":  "2.5 lbs ($1.49/lb)",
+                                                          "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                      }
+                                       },
                   "cabbage":  {
                                   "commodity":  "cabbage",
                                   "Aldi":  {
@@ -3110,6 +3192,23 @@
                                                           "board_pu":  0.125
                                                       }
                                       },
+                  "caesar-salad-kit":  {
+                                           "commodity":  "Caesar Salad Kit",
+                                           "Hy-Vee":  {
+                                                          "url":  "https://www.hy-vee.com/aisles-online/p/21264/dole-ultimate-caesar-premium-salad-kit-11-3oz",
+                                                          "name":  "Dole Ultimate Caesar Premium Salad Kit, 11.3oz",
+                                                          "price":  "$4.49",
+                                                          "size":  "11.3 oz",
+                                                          "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                      },
+                                           "Sam\u0027s Club":  {
+                                                                   "url":  "https://www.samsclub.com/ip/18862860321",
+                                                                   "name":  "Taylor Farms Ultimate Caesar Salad Kit, 16.9 oz.",
+                                                                   "price":  "$3.94",
+                                                                   "size":  "16.9 oz",
+                                                                   "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                               }
+                                       },
                   "cajun-seasoning":  {
                                           "commodity":  "Cajun / Creole Seasoning",
                                           "Baker\u0027s":  {
@@ -6023,6 +6122,16 @@
                                                       "board_pu":  0.3431
                                                   }
                                   },
+                  "collard-greens":  {
+                                         "commodity":  "Collard Greens (bunch)",
+                                         "Hy-Vee":  {
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/8815/collard-greens",
+                                                        "name":  "Collard Greens",
+                                                        "price":  "$1.99",
+                                                        "size":  "1 ct",
+                                                        "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                    }
+                                     },
                   "condensed-french-onion-soup":  {
                                                       "commodity":  "Condensed French Onion Soup",
                                                       "Baker\u0027s":  {
@@ -7830,6 +7939,23 @@
                                                               "board_pu":  1.0624
                                                           }
                                   },
+                  "dried-cranberries":  {
+                                            "commodity":  "Dried Cranberries",
+                                            "Baker\u0027s":  {
+                                                                 "url":  "https://www.bakersplus.com/p/ocean-spray-craisins-original-dried-cranberries-dried-fruit/0003120000159",
+                                                                 "name":  "Ocean Spray Craisins Original Dried Cranberries - Dried Fruit",
+                                                                 "price":  "$2.50",
+                                                                 "size":  "6.000 oz",
+                                                                 "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                             },
+                                            "Hy-Vee":  {
+                                                           "url":  "https://www.hy-vee.com/aisles-online/p/387023/ocean-spray-craisins-original-dried-cranberries-dried-fruit",
+                                                           "name":  "Ocean Spray® Craisins® Original Dried Cranberries, Dried Fruit",
+                                                           "price":  "$6.97",
+                                                           "size":  "24 oz",
+                                                           "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                       }
+                                        },
                   "dried-dill":  {
                                      "commodity":  "Dill Weed (dried)",
                                      "Baker\u0027s":  {
@@ -8935,6 +9061,16 @@
                                                          "recipe_pu":  0.93
                                                      }
                                      },
+                  "fresh-dill":  {
+                                     "commodity":  "Fresh Dill",
+                                     "Hy-Vee":  {
+                                                    "url":  "https://www.hy-vee.com/aisles-online/p/276428/johnson-family-farm-fresh-dill",
+                                                    "name":  "Johnson Family Farm Fresh Dill",
+                                                    "price":  "$2.99",
+                                                    "size":  "0.75 oz",
+                                                    "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                }
+                                 },
                   "fresh-ginger":  {
                                        "commodity":  "fresh-ginger",
                                        "Aldi":  {
@@ -9045,6 +9181,46 @@
                                                     "verified":  "2026-07-26 Hy-Vee search API (storeId 1465)"
                                                 }
                                  },
+                  "fresh-parsley":  {
+                                        "commodity":  "Fresh Parsley (bunch)",
+                                        "Hy-Vee":  {
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/37370/fresh-curly-parsley",
+                                                       "name":  "Fresh Curly Parsley",
+                                                       "price":  "$0.99",
+                                                       "size":  "1 ct",
+                                                       "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                   }
+                                    },
+                  "fresh-rosemary":  {
+                                         "commodity":  "Fresh Rosemary",
+                                         "Hy-Vee":  {
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/332701/johnson-family-farm-fresh-rosemary",
+                                                        "name":  "Johnson Family Farm Fresh Rosemary",
+                                                        "price":  "$2.99",
+                                                        "size":  "0.75 oz",
+                                                        "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                    }
+                                     },
+                  "fresh-stir-fry-blend":  {
+                                               "commodity":  "Stir-Fry Vegetable Blend (fresh)",
+                                               "Hy-Vee":  {
+                                                              "url":  "https://www.hy-vee.com/aisles-online/p/4249169/bud-by-dole-12oz-vegetable-stir-fry",
+                                                              "name":  "Bud by Dole 12oz Vegetable Stir Fry",
+                                                              "price":  "$3.49",
+                                                              "size":  "12 oz",
+                                                              "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                          }
+                                           },
+                  "fresh-thyme":  {
+                                      "commodity":  "Fresh Thyme",
+                                      "Hy-Vee":  {
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/332702/johnson-family-farm-fresh-thyme",
+                                                     "name":  "Johnson Family Farm Fresh Thyme",
+                                                     "price":  "$2.99",
+                                                     "size":  "0.75 oz",
+                                                     "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                 }
+                                  },
                   "fries":  {
                                 "commodity":  "Fries",
                                 "Aldi":  {
@@ -9996,6 +10172,23 @@
                                                       "board_pu":  3.5235,
                                                       "recipe_pu":  3.5235
                                                   }
+                                   },
+                  "garden-salad":  {
+                                       "commodity":  "Garden Salad Blend (bagged)",
+                                       "Sam\u0027s Club":  {
+                                                               "url":  "https://www.samsclub.com/ip/13741712824",
+                                                               "name":  "Garden Salad, 2 lbs.",
+                                                               "price":  "$2.66",
+                                                               "size":  "2 lb",
+                                                               "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                           },
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/13893730",
+                                                       "name":  "Marketside Classic Iceberg Salad, 24 oz Bag (Fresh)",
+                                                       "price":  "$3.78",
+                                                       "size":  "24 oz",
+                                                       "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                   }
                                    },
                   "garlic":  {
                                  "commodity":  "Garlic (Bulb)",
@@ -10959,6 +11152,12 @@
                                                                 "size":  "3 pk 16 oz",
                                                                 "verified":  "2026-07-26"
                                                             },
+                                           "Family Fare":  {
+                                                               "url":  "https://www.shopfamilyfare.com/shop/meat/beef/ground/fresh_80_lean_ground_beef_angus_value_pack/p/1564405684713030538",
+                                                               "price":  7.99,
+                                                               "size":  "lb",
+                                                               "name":  "Fresh 80% Lean Ground Beef, Angus Value Pack"
+                                                           },
                                            "Fareway":  {
                                                            "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84389124-80-lean-20-fat-ground-beef-10lb-tube",
                                                            "price":  5.99,
@@ -11421,6 +11620,22 @@
                                                                   "recipe_pu":  0.399
                                                               }
                                       },
+                  "habanero-peppers":  {
+                                           "commodity":  "Habanero Peppers",
+                                           "Family Fare":  {
+                                                               "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mexican_sauces/pace_hot_honey_habanero_sweet_and_spicy_16_000_oz/p/1764405684715310148",
+                                                               "name":  "Pace® Hot Honey Habanero, Sweet And Spicy 16.000 Oz",
+                                                               "price":  "$3.39",
+                                                               "size":  "16.000 oz"
+                                                           },
+                                           "Sam\u0027s Club":  {
+                                                                   "url":  "https://www.samsclub.com/ip/13576766399",
+                                                                   "name":  "Nate\u0027s Honey 100% Pure Hot Honey with Habanero Chili Peppers, 24 oz.",
+                                                                   "price":  "$11.48",
+                                                                   "size":  "24 oz",
+                                                                   "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                               }
+                                       },
                   "half-and-half":  {
                                         "commodity":  "Half and Half",
                                         "Aldi":  {
@@ -11431,6 +11646,13 @@
                                                      "board_pu":  0.0778,
                                                      "recipe_pu":  0.0859
                                                  },
+                                        "Baker\u0027s":  {
+                                                             "url":  "https://www.bakersplus.com/p/kroger-half-and-half-half-gallon/0001111050074",
+                                                             "price":  "19.97",
+                                                             "size":  "1/2 gal",
+                                                             "name":  "Kroger Half and Half Half Gallon",
+                                                             "verified":  "2026-07-26 price-pull self-capture"
+                                                         },
                                         "Family Fare":  {
                                                             "url":  "https://www.shopfamilyfare.com/shop/dairy/cream_half_half/our_family_half_and_half_16_fl_oz/p/7081137",
                                                             "price":  2.19,
@@ -11471,14 +11693,7 @@
                                                         "name":  "Great Value Half \u0026 Half",
                                                         "board_pu":  0.08,
                                                         "recipe_pu":  0.078
-                                                    },
-                                        "Baker\u0027s":  {
-                                                             "url":  "https://www.bakersplus.com/p/kroger-half-and-half-half-gallon/0001111050074",
-                                                             "price":  "19.97",
-                                                             "size":  "1/2 gal",
-                                                             "name":  "Kroger Half and Half Half Gallon",
-                                                             "verified":  "2026-07-26 price-pull self-capture"
-                                                         }
+                                                    }
                                     },
                   "hamburger-buns":  {
                                          "commodity":  "hamburger-buns",
@@ -12916,6 +13131,16 @@
                                                          "recipe_pu":  0.497
                                                      }
                                      },
+                  "jicama":  {
+                                 "commodity":  "Jicama",
+                                 "Hy-Vee":  {
+                                                "url":  "https://www.hy-vee.com/aisles-online/p/37358/jicama",
+                                                "name":  "Jicama",
+                                                "price":  "$2.79",
+                                                "size":  "1.4 lbs ($1.99/lb)",
+                                                "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                            }
+                             },
                   "jumbo-pasta-shells":  {
                                              "commodity":  "Jumbo Pasta Shells / Manicotti",
                                              "Baker\u0027s":  {
@@ -13280,6 +13505,22 @@
                                                        "board_pu":  0.2138
                                                    }
                                    },
+                  "leeks":  {
+                                "commodity":  "Leeks",
+                                "Family Fare":  {
+                                                    "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/regular_leeks/p/12525",
+                                                    "name":  "Regular Leeks",
+                                                    "price":  "$3.99",
+                                                    "size":  "1 ea"
+                                                },
+                                "Hy-Vee":  {
+                                               "url":  "https://www.hy-vee.com/aisles-online/p/37359/leeks",
+                                               "name":  "Leeks",
+                                               "price":  "$4.99",
+                                               "size":  "1 ct",
+                                               "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                           }
+                            },
                   "lemonade":  {
                                    "commodity":  "lemonade",
                                    "Aldi":  {
@@ -13545,10 +13786,10 @@
                                                           "verified":  "2026-07-26"
                                                       },
                                      "Family Fare":  {
-                                                         "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mayonnaise_sandwich_spreads/mc_cormick_mayonesa_mayonnaise_with_lime_juice_28_fl_oz/p/2371458",
-                                                         "name":  "Mc Cormick Mayonesa (Mayonnaise) With Lime Juice 28 Fl Oz",
-                                                         "price":  "8.29",
-                                                         "size":  "28 fl oz"
+                                                         "url":  "https://www.shopfamilyfare.com/shop/beverages/fruit_vegetable_beverages/concord_foods_lime_juice_from_concentrate_4_5_fl_oz/p/29465",
+                                                         "name":  "Concord Foods Lime Juice From Concentrate 4.5 Fl Oz",
+                                                         "price":  "$1.79",
+                                                         "size":  "4.5 oz"
                                                      },
                                      "Fareway":  {
                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2722879-realime-100-lime-juice-15-fl-oz",
@@ -13572,15 +13813,7 @@
                                                              "size":  "56 fl oz",
                                                              "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
                                                              "board_pu":  0.2086
-                                                         },
-                                     "Walmart":  {
-                                                     "url":  "https://www.walmart.com/ip/10308991",
-                                                     "name":  "McCormick Mayonesa (Mayonnaise) With Lime Juice, 28.0 fl oz Jar",
-                                                     "price":  "7.44",
-                                                     "size":  "28 fl oz",
-                                                     "verified":  "2026-07-23 DERIVED from the price row (same record the board priced)",
-                                                     "board_pu":  0.2657
-                                                 }
+                                                         }
                                  },
                   "limes":  {
                                 "commodity":  "Limes",
@@ -14005,6 +14238,23 @@
                                                      "board_pu":  0.099
                                                  }
                                  },
+                  "medjool-dates":  {
+                                        "commodity":  "Medjool Dates",
+                                        "Hy-Vee":  {
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/3796284/joolies-whole-medjool-dates",
+                                                       "name":  "Joolies Whole Medjool Dates",
+                                                       "price":  "$7.99",
+                                                       "size":  "12 oz",
+                                                       "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                   },
+                                        "Walmart":  {
+                                                        "url":  "https://www.walmart.com/ip/508140158",
+                                                        "name":  "Natural Delights Pitted Medjool Dates 8oz Pouch",
+                                                        "price":  "$4.88",
+                                                        "size":  "8 oz",
+                                                        "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                    }
+                                    },
                   "microwave-popcorn":  {
                                             "commodity":  "microwave-popcorn",
                                             "Aldi":  {
@@ -14149,6 +14399,16 @@
                                                         "board_pu":  0.405
                                                     }
                                     },
+                  "mini-sweet-peppers":  {
+                                             "commodity":  "Mini Sweet Peppers",
+                                             "Hy-Vee":  {
+                                                            "url":  "https://www.hy-vee.com/aisles-online/p/3541868/sunset-lollipeppers-seedless-mini-sweet-peppers-1lb",
+                                                            "name":  "SUNSET LolliPeppers Seedless Mini Sweet Peppers, 1lb",
+                                                            "price":  "$4.99",
+                                                            "size":  "1 lb",
+                                                            "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                        }
+                                         },
                   "miracle-whip":  {
                                        "commodity":  "Miracle Whip (Salad Dressing Spread)",
                                        "Aldi":  {
@@ -14481,6 +14741,29 @@
                                                   "board_pu":  0.05
                                               }
                               },
+                  "nectarines":  {
+                                     "commodity":  "Nectarines",
+                                     "Baker\u0027s":  {
+                                                          "url":  "https://www.bakersplus.com/p/organic-yellow-nectarine/0000000094036",
+                                                          "name":  "Organic Yellow Nectarine",
+                                                          "price":  "$4.99",
+                                                          "size":  "lb",
+                                                          "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                      },
+                                     "Family Fare":  {
+                                                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/other_fruits/white_nectarine/p/12399",
+                                                         "name":  "White Nectarine",
+                                                         "price":  "$3.99",
+                                                         "size":  "lb"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "url":  "https://www.hy-vee.com/aisles-online/p/8698/yellow-flesh-nectarines",
+                                                    "name":  "Yellow Flesh Nectarines",
+                                                    "price":  "$1.64",
+                                                    "size":  "0.55 lbs ($2.99/lb)",
+                                                    "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                }
+                                 },
                   "oatmeal":  {
                                   "commodity":  "oatmeal",
                                   "Aldi":  {
@@ -15329,6 +15612,16 @@
                                                           "recipe_pu":  0.343
                                                       }
                                       },
+                  "parsnips":  {
+                                   "commodity":  "Parsnips",
+                                   "Hy-Vee":  {
+                                                  "url":  "https://www.hy-vee.com/aisles-online/p/93656/valley-brand-parsnips",
+                                                  "name":  "Valley Brand Parsnips",
+                                                  "price":  "$3.98",
+                                                  "size":  "20 oz",
+                                                  "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                              }
+                               },
                   "pasta":  {
                                 "commodity":  "pasta",
                                 "Aldi":  {
@@ -16082,6 +16375,16 @@
                                                       "board_pu":  0.0871
                                                   }
                                   },
+                  "plantains":  {
+                                    "commodity":  "Plantains",
+                                    "Baker\u0027s":  {
+                                                         "url":  "https://www.bakersplus.com/p/fresh-plantain-single/0000000004235",
+                                                         "name":  "Fresh Plantain - Single",
+                                                         "price":  "$0.75",
+                                                         "size":  "1 ct",
+                                                         "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                     }
+                                },
                   "plastic-wrap":  {
                                        "commodity":  "plastic-wrap",
                                        "Aldi":  {
@@ -16815,6 +17118,22 @@
                                                            "recipe_pu":  0.209
                                                        }
                                        },
+                  "prunes":  {
+                                 "commodity":  "Prunes / Dried Plums",
+                                 "Family Fare":  {
+                                                     "url":  "https://www.shopfamilyfare.com/shop/pantry/snacks/dried_fruit/our_family_prunes_pitted_16_oz/p/1564405684689268182",
+                                                     "name":  "Our Family Prunes, Pitted 16 Oz",
+                                                     "price":  "$7.69",
+                                                     "size":  "16 oz"
+                                                 },
+                                 "Hy-Vee":  {
+                                                "url":  "https://www.hy-vee.com/aisles-online/p/1829501/sunsweet-amazin-prunes-pitted-prunes-bite-size-16-oz",
+                                                "name":  "Sunsweet Amazin Prunes Pitted Prunes Bite Size 16 oz",
+                                                "price":  "$7.99",
+                                                "size":  "16 oz",
+                                                "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                            }
+                             },
                   "pudding-cups":  {
                                        "commodity":  "pudding-cups",
                                        "Aldi":  {
@@ -18005,6 +18324,12 @@
                                                          "size":  "24 oz",
                                                          "verified":  "2026-07-26"
                                                      },
+                                    "Family Fare":  {
+                                                        "url":  "https://www.shopfamilyfare.com/shop/bakery/fresh_baked_breads/fresh_finest_pumpernickel_rye_bread/p/1564405684713022830",
+                                                        "name":  "Fresh \u0026 Finest Pumpernickel Rye Bread",
+                                                        "price":  "$4.59",
+                                                        "size":  "15 oz"
+                                                    },
                                     "Hy-Vee":  {
                                                    "url":  "https://www.hy-vee.com/aisles-online/p/73342/bakery-fresh-marble-rye-bread",
                                                    "name":  "Bakery Fresh Marble Rye Bread",
@@ -18388,6 +18713,29 @@
                                                                "recipe_pu":  0.111
                                                            }
                                            },
+                  "serrano-peppers":  {
+                                          "commodity":  "Serrano Peppers",
+                                          "Baker\u0027s":  {
+                                                               "url":  "https://www.bakersplus.com/p/fresh-green-serrano-peppers/0000000004709",
+                                                               "name":  "Fresh Green Serrano Peppers",
+                                                               "price":  "$4.99",
+                                                               "size":  "lb",
+                                                               "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                           },
+                                          "Family Fare":  {
+                                                              "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/serrano_peppers_capsicums/p/5865",
+                                                              "name":  "Serrano Peppers (Capsicums)",
+                                                              "price":  "$2.99",
+                                                              "size":  "lb"
+                                                          },
+                                          "Hy-Vee":  {
+                                                         "url":  "https://www.hy-vee.com/aisles-online/p/37444/green-serrano-peppers",
+                                                         "name":  "Green Serrano Peppers",
+                                                         "price":  "$0.25",
+                                                         "size":  "0.05 lbs ($4.99/lb)",
+                                                         "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                     }
+                                      },
                   "sesame-oil":  {
                                      "commodity":  "Sesame Oil (toasted)",
                                      "Baker\u0027s":  {
@@ -18420,6 +18768,23 @@
                                                     "recipe_pu":  0.7
                                                 }
                                  },
+                  "shallots":  {
+                                   "commodity":  "Shallots",
+                                   "Baker\u0027s":  {
+                                                        "url":  "https://www.bakersplus.com/p/shallots/0000000004662",
+                                                        "name":  "Shallots",
+                                                        "price":  "$3.99",
+                                                        "size":  "lb",
+                                                        "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                    },
+                                   "Hy-Vee":  {
+                                                  "url":  "https://www.hy-vee.com/aisles-online/p/37367/shallots",
+                                                  "name":  "Shallots",
+                                                  "price":  "$0.6",
+                                                  "size":  "0.15 lbs ($3.99/lb)",
+                                                  "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                              }
+                               },
                   "shampoo":  {
                                   "commodity":  "shampoo",
                                   "Aldi":  {
@@ -18882,6 +19247,12 @@
                                                                      "size":  "13 oz",
                                                                      "verified":  "2026-07-26"
                                                                  },
+                                                "Family Fare":  {
+                                                                    "url":  "https://www.shopfamilyfare.com/shop/meat/sausage/smoked/eckrich_skinless_turkey_smoked_sausage_12_oz/p/20954",
+                                                                    "name":  "Eckrich Skinless Turkey Smoked Sausage 12 Oz",
+                                                                    "price":  "$3.99",
+                                                                    "size":  "12 oz"
+                                                                },
                                                 "Hy-Vee":  {
                                                                "url":  "https://www.hy-vee.com/aisles-online/p/65406/johnsonville-smoked-turkey-sausage-6-count-13-5-oz",
                                                                "price":  4.99,
@@ -18907,10 +19278,10 @@
                                                          "verified":  "2026-07-26"
                                                      },
                                     "Hy-Vee":  {
-                                                   "url":  "https://www.hy-vee.com/aisles-online/p/2925931/premium-sugar-snap-peas",
-                                                   "name":  "Premium Sugar Snap Peas",
-                                                   "price":  "2.69",
-                                                   "size":  "12 oz",
+                                                   "url":  "https://www.hy-vee.com/aisles-online/p/361644/mann-s-snow-peas-6-oz",
+                                                   "name":  "Mann\u0027s Snow Peas 6 oz",
+                                                   "price":  "$2.99",
+                                                   "size":  "6 oz",
                                                    "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
                                                }
                                 },
@@ -19067,6 +19438,16 @@
                                                     "recipe_pu":  0.112
                                                 }
                                 },
+                  "spaghetti-squash":  {
+                                           "commodity":  "Spaghetti Squash",
+                                           "Hy-Vee":  {
+                                                          "url":  "https://www.hy-vee.com/aisles-online/p/8849/spaghetti-squash",
+                                                          "name":  "Spaghetti Squash",
+                                                          "price":  "$3.58",
+                                                          "size":  "2.4 lbs ($1.49/lb)",
+                                                          "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                      }
+                                       },
                   "sparkling-water":  {
                                           "commodity":  "sparkling-water",
                                           "Aldi":  {
@@ -19260,6 +19641,22 @@
                                                         "board_pu":  0.0485
                                                     }
                                     },
+                  "spring-mix":  {
+                                     "commodity":  "Spring Mix Salad Greens",
+                                     "Family Fare":  {
+                                                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/salad_mixes_kits/fresh_express_salad_spring_mix_10_oz/p/268916",
+                                                         "name":  "Fresh Express Salad, Spring Mix 10 Oz",
+                                                         "price":  "$4.99",
+                                                         "size":  "10 oz"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "url":  "https://www.hy-vee.com/aisles-online/p/4234846/organicgirl-50-50-blend",
+                                                    "name":  "organicgirl 50/50 Blend",
+                                                    "price":  "$6",
+                                                    "size":  "16 oz",
+                                                    "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                }
+                                 },
                   "sriracha":  {
                                    "commodity":  "Sriracha",
                                    "Baker\u0027s":  {
@@ -19653,6 +20050,23 @@
                                                                 "verified":  "2026-07-20 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                             }
                                              },
+                  "sugar-snap-peas":  {
+                                          "commodity":  "Sugar Snap Peas",
+                                          "Baker\u0027s":  {
+                                                               "url":  "https://www.bakersplus.com/p/kroger-sugar-snap-peas/0001111079554",
+                                                               "name":  "Kroger Sugar Snap Peas",
+                                                               "price":  "$6.49",
+                                                               "size":  "16 oz",
+                                                               "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                           },
+                                          "Hy-Vee":  {
+                                                         "url":  "https://www.hy-vee.com/aisles-online/p/2925931/premium-sugar-snap-peas",
+                                                         "name":  "Premium Sugar Snap Peas",
+                                                         "price":  "$2.69",
+                                                         "size":  "12 oz",
+                                                         "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                     }
+                                      },
                   "sun-dried-tomatoes":  {
                                              "commodity":  "Sun-Dried Tomatoes",
                                              "Baker\u0027s":  {
@@ -20467,10 +20881,10 @@
                                                         "board_pu":  1.49
                                                     },
                                    "Family Fare":  {
-                                                       "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/tomatoes/fresh_roma_tomatoes/p/12447",
-                                                       "price":  2.99,
+                                                       "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/tomatoes/fresh_tomatoes_hot_house/p/2311734",
+                                                       "price":  3.49,
                                                        "size":  "lb",
-                                                       "name":  "Fresh Roma Tomatoes"
+                                                       "name":  "Fresh Tomatoes, Hot House"
                                                    },
                                    "Hy-Vee":  {
                                                   "url":  "https://www.hy-vee.com/aisles-online/p/8657/roma-tomatoes",
@@ -21741,6 +22155,30 @@
                                                  "board_pu":  0.0825
                                              }
                              },
+                  "yukon-gold-potatoes":  {
+                                              "commodity":  "Yellow / Yukon Gold Potatoes",
+                                              "Baker\u0027s":  {
+                                                                   "url":  "https://www.bakersplus.com/p/kroger-gold-potatoes/0001111091871",
+                                                                   "name":  "Kroger Gold Potatoes",
+                                                                   "price":  "$7.09",
+                                                                   "size":  "5 lb",
+                                                                   "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                               },
+                                              "Hy-Vee":  {
+                                                             "url":  "https://www.hy-vee.com/aisles-online/p/86415/b-size-gold-potatoes",
+                                                             "name":  "B-Size Gold Potatoes",
+                                                             "price":  "$0.19",
+                                                             "size":  "0.15 lbs ($1.29/lb)",
+                                                             "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                         },
+                                              "Walmart":  {
+                                                              "url":  "https://www.walmart.com/ip/42700530",
+                                                              "name":  "Yellow Potatoes Whole Fresh, 3lb Bag",
+                                                              "price":  "$4.96",
+                                                              "size":  "3 lb",
+                                                              "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
+                                                          }
+                                          },
                   "zero-sugar-soda":  {
                                           "commodity":  "Zero-Sugar Soda",
                                           "Aldi":  {

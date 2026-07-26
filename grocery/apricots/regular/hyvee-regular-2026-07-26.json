@@ -1,0 +1,58 @@
+﻿{
+    "store":  "Hy-Vee",
+    "week_of":  "2026-07-26",
+    "price_type":  "everyday",
+    "price_mode":  "in-store",
+    "deal_count":  4,
+    "primed_batch":  "2026-07-26",
+    "deals":  [
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Yellow Flesh Nectarines",
+                      "ad_price":  "$1.64",
+                      "size":  "0.55 lbs ($2.99/lb)",
+                      "regular":  1.64,
+                      "current_price":  1.64,
+                      "source_ad":  "Aisles Online search current price (batch primer, storeId 1465, Omaha #01)",
+                      "as_of":  "2026-07-26",
+                      "product_id":  8698,
+                      "link_url":  "https://www.hy-vee.com/aisles-online/p/8698/yellow-flesh-nectarines"
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "White Nectarines",
+                      "ad_price":  "$1.8",
+                      "size":  "0.45 lbs ($3.99/lb)",
+                      "regular":  1.8,
+                      "current_price":  1.8,
+                      "source_ad":  "Aisles Online search current price (batch primer, storeId 1465, Omaha #01)",
+                      "as_of":  "2026-07-26",
+                      "product_id":  8463,
+                      "link_url":  "https://www.hy-vee.com/aisles-online/p/8463/white-nectarines"
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Sparkling Ice, Peach Nectarine Flavored Sparkling Water, Zero Sugar",
+                      "ad_price":  "$1",
+                      "size":  "17 fl oz",
+                      "regular":  1,
+                      "current_price":  1,
+                      "source_ad":  "Aisles Online search current price (batch primer, storeId 1465, Omaha #01)",
+                      "as_of":  "2026-07-26",
+                      "product_id":  129686,
+                      "link_url":  "https://www.hy-vee.com/aisles-online/p/129686/sparkling-ice-peach-nectarine-flavored-sparkling-water-zero-sugar"
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Waterloo Raspberry Nectarine Sparkling Water - 12pk / 12 fl Oz Cans",
+                      "ad_price":  "$6.49",
+                      "size":  "12 fl oz",
+                      "regular":  6.49,
+                      "current_price":  6.49,
+                      "source_ad":  "Aisles Online search current price (batch primer, storeId 1465, Omaha #01)",
+                      "as_of":  "2026-07-26",
+                      "product_id":  3881280,
+                      "link_url":  "https://www.hy-vee.com/aisles-online/p/3881280/waterloo-raspberry-nectarine-sparkling-water-12pk-12-fl-oz-cans"
+                  }
+              ]
+}

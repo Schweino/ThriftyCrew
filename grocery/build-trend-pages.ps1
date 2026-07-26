@@ -319,7 +319,7 @@ foreach ($c in $data.commodities) {
 
   # footer links + tracking line
   [void]$sb.AppendLine('<p class="tp-links"><a href="/omaha-grocery-prices/?ref=trend">See the full live Omaha price board</a> &middot; <a href="/omaha-price-tracker/?ref=trend">All tracked staples</a></p>')
-  [void]$sb.AppendLine('<p class="tp-foot">Tracked weekly across Hy-Vee, Baker&#39;s, Family Fare, Aldi, Sam&#39;s Club and Walmart in Omaha since June 2026. This page updates every week.</p>')
+  [void]$sb.AppendLine('<p class="tp-foot">Tracked weekly across Hy-Vee, Baker&#39;s, Family Fare, Fareway, Aldi, Sam&#39;s Club and Walmart in Omaha since June 2026. This page updates every week.</p>')
   [void]$sb.Append('</div>')
 
   $outPath = Join-Path $OutDir ($c.id + '.html')

@@ -28,7 +28,9 @@ if (-not $CompareFile) {
 $doc = Get-Content $CompareFile -Raw | ConvertFrom-Json
 
 # ---- COVERAGE GATE: never publish a degraded matrix (a store that dropped out, or a thin board) ----
-$stores = @('Hy-Vee','Aldi','Family Fare',"Baker's","Sam's Club",'Walmart')
+# registry-driven (2026-07-26): this gate silently omitted Fareway for two weeks - the store list now
+# comes from stores.json so a store added there is gated here automatically (audit-store-registry.ps1 verifies)
+$stores = @((Get-Content (Join-Path $root 'stores.json') -Raw | ConvertFrom-Json).stores | Sort-Object { [int]$_.order } | ForEach-Object { [string]$_.name })
 $perStore = @{}; foreach ($s in $stores) { $perStore[$s] = 0 }
 foreach ($r in $doc.comparison) { foreach ($st in $r.stores) { $k = [string]$st.store; if ($perStore.ContainsKey($k)) { $perStore[$k]++ } } }
 $commCount = @($doc.comparison).Count
@@ -134,9 +136,9 @@ $pubArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'publish-resou
   '-Title',"Omaha's Cheapest Groceries This Week",
   '-Slug',$slug,
   '-HtmlFile',$embed,
-  '-Excerpt',"Every grocery staple, compared across six Omaha stores and ranked cheapest to priciest. Updated weekly.",
+  '-Excerpt',"Every grocery staple, compared across seven Omaha stores and ranked cheapest to priciest. Updated weekly.",
   '-MetaTitle',"Omaha's Cheapest Groceries This Week | Thrifty Crew",
-  '-MetaDesc',"See the cheapest Omaha store for milk, eggs, chicken, produce and more this week. 29 staples compared across Aldi, Walmart, Hy-Vee, Baker's, Sam's Club and Family Fare.",
+  '-MetaDesc',"See the cheapest Omaha store for milk, eggs, chicken, produce and more this week. Hundreds of staples compared across Aldi, Walmart, Hy-Vee, Baker's, Fareway, Sam's Club and Family Fare.",
   '-Visibility',$vis)
 if ($Draft) { $pubArgs += '-Draft' }
 & powershell @pubArgs
