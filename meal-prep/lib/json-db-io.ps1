@@ -96,3 +96,41 @@ function Remove-RecipeRow {
     [System.IO.File]::WriteAllText($DbPath, $new)
     return @($parsed.recipes).Count
 }
+
+# Set-RecipeVisibility: patch the "visibility" field of one-or-many recipe rows IN PLACE, key-scoped by
+# slug, without re-serializing the file. rotate-free-dinners.ps1 used to round-trip the ENTIRE
+# recipes-db.json (3.9 MB now, ~11.5 MB at 1500 recipes) through ConvertTo-Json -Depth 8 just to flip
+# ~40 visibility flags - slow, and the estate's own "never round-trip big JSON" rule (Depth 8 silently
+# truncates deeper nesting; a full re-serialize risks unicode mojibake in recipe prose). This edits ONLY
+# the visibility values of the named rows via the same brace-match Remove-RecipeRow uses, leaving 99.6%
+# of the bytes untouched. $Map = @{ slug = 'public'|'paid'; ... }. Parse-verifies. Returns rows changed.
+function Set-RecipeVisibility {
+    param(
+        [Parameter(Mandatory)][string]$DbPath,
+        [Parameter(Mandatory)][hashtable]$Map
+    )
+    $raw = [System.IO.File]::ReadAllText($DbPath)
+    $changed = 0
+    foreach ($slug in $Map.Keys) {
+        $vis = [string]$Map[$slug]
+        if ($vis -ne 'public' -and $vis -ne 'paid') { throw "Set-RecipeVisibility: bad visibility '$vis' for $slug" }
+        $anchor = '"' + $slug + '"'
+        $si = $raw.IndexOf($anchor)
+        if ($si -lt 0) { continue }   # slug not in db - skip (not fatal; the rotation may free a slug the index lacks)
+        if ($raw.IndexOf($anchor, $si + 1) -ge 0) { throw "Set-RecipeVisibility: slug not unique: $slug" }
+        $depth = 0; $objStart = -1
+        for ($i = $si; $i -ge 0; $i--) { $ch = $raw[$i]; if ($ch -eq '}') { $depth++ } elseif ($ch -eq '{') { if ($depth -eq 0) { $objStart = $i; break } else { $depth-- } } }
+        $depth = 0; $objEnd = -1
+        for ($i = $si; $i -lt $raw.Length; $i++) { $ch = $raw[$i]; if ($ch -eq '{') { $depth++ } elseif ($ch -eq '}') { if ($depth -eq 0) { $objEnd = $i; break } else { $depth-- } } }
+        if ($objStart -lt 0 -or $objEnd -lt 0) { throw "Set-RecipeVisibility: brace match failed for $slug" }
+        $seg = $raw.Substring($objStart, $objEnd - $objStart + 1)
+        if (($seg -split '"slug"').Count -ne 2) { throw "Set-RecipeVisibility: segment spans !=1 slug for $slug (abort)" }
+        $newSeg = [regex]::Replace($seg, '"visibility"\s*:\s*"(?:public|paid)"', ('"visibility":"' + $vis + '"'), 1)
+        if ($newSeg -eq $seg) { continue }   # already the target value (or no visibility field) - no-op
+        $raw = $raw.Substring(0, $objStart) + $newSeg + $raw.Substring($objEnd + 1)
+        $changed++
+    }
+    $null = $raw | ConvertFrom-Json   # verify the whole file still parses before writing
+    [System.IO.File]::WriteAllText($DbPath, $raw)
+    return $changed
+}

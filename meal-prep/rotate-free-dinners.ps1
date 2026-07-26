@@ -29,6 +29,7 @@ $stateFile = Join-Path $root 'free-rotation.json'
 $adminKey = if ($env:GHOST_ADMIN_KEY) { $env:GHOST_ADMIN_KEY } elseif (Test-Path (Join-Path $root '.ghostkey')) { (Get-Content (Join-Path $root '.ghostkey') -Raw).Trim() } else { throw 'Ghost admin key missing' }
 $apiUrl = 'https://map-to-success.ghost.io'
 . (Join-Path $PSScriptRoot '..\lib\ghost-lib.ps1')   # 2026-07-26: single Ghost helper (was one of 50+ inline copies)
+. (Join-Path $PSScriptRoot 'lib\json-db-io.ps1')     # Set-RecipeVisibility: key-scoped patch (no whole-file round-trip)
 function New-GhostJWT { Get-GhostJWT -Key $adminKey }
 
 # ---------------------------------------------------------------- compute this week's target set
@@ -88,10 +89,9 @@ function Set-PostVisibility([string]$slug, [string]$vis) {
   return 'flipped-to-' + $vis
 }
 
-$dbBySlug = @{}
-foreach ($r in $dbDoc.recipes) { $dbBySlug[[string]$r.slug] = $r }
 $targetSlugs = @($target | ForEach-Object { $_.slug })
 $flips = 0; $errors = 0
+$visChanges = @{}   # slug -> 'public'|'paid' for the rows the rotation flipped; patched key-scoped below
 
 # revert: only slugs THIS system freed that are not in the new set
 if ($state) {
@@ -100,7 +100,7 @@ if ($state) {
       try {
         $res = Set-PostVisibility ([string]$old.slug) 'paid'
         Write-Output ('  REVERT ' + $old.slug + ' -> ' + $res); $flips++
-        if ($dbBySlug.ContainsKey([string]$old.slug)) { $dbBySlug[[string]$old.slug].visibility = 'paid' }
+        $visChanges[[string]$old.slug] = 'paid'
       } catch { Write-Output ('  REVERT FAILED ' + $old.slug + ': ' + $_.Exception.Message); $errors++ }
       Start-Sleep -Milliseconds 300
     }
@@ -111,7 +111,7 @@ foreach ($t in $target) {
   try {
     $res = Set-PostVisibility ($t.slug) 'public'
     Write-Output ('  FREE   ' + $t.slug + ' -> ' + $res); $flips++
-    if ($dbBySlug.ContainsKey($t.slug)) { $dbBySlug[$t.slug].visibility = 'public' }
+    $visChanges[[string]$t.slug] = 'public'
   } catch { Write-Output ('  FREE FAILED ' + $t.slug + ': ' + $_.Exception.Message); $errors++ }
   Start-Sleep -Milliseconds 300
 }
@@ -122,7 +122,7 @@ foreach ($t in $target) {
   week_of = $boardWeek; rotated_at = (Get-Date).ToString('s')
   free = $target
 } | ConvertTo-Json -Depth 4 | Set-Content $stateFile -Encoding UTF8
-$dbDoc | ConvertTo-Json -Depth 8 | Set-Content (Join-Path $root 'recipes-db.json') -Encoding UTF8
+if ($visChanges.Count) { $nvis = Set-RecipeVisibility -DbPath (Join-Path $root 'recipes-db.json') -Map $visChanges; Write-Output ("  recipes-db: patched $nvis visibility field(s) key-scoped (no whole-file round-trip)") }
 [pscustomobject]@{
   week_of = $boardWeek; updated = (Get-Date).ToString('s')
   note = 'This week free because they are the cheapest dinners per protein on the live Omaha board. They revert to members-only when prices re-rank.'
