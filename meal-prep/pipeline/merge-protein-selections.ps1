@@ -13,16 +13,24 @@ param([Parameter(Mandatory)][string]$RunDir)
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot '..\lib\json-db-io.ps1')
 
-$proteins = @('turkey','pork','beef','chicken')
+# Derive the protein set from the files ACTUALLY present (2026-07-26): the hardcoded 4-array silently
+# skipped any run that included vegetarian/seafood/a new protein class (recipe-sourcer allows them). One
+# selected-<protein>.json per parallel selector; the protein is the filename suffix.
+$selFiles = @(Get-ChildItem (Join-Path $RunDir 'selected-*.json') -ErrorAction SilentlyContinue | Sort-Object Name)
+if (-not $selFiles.Count) { throw "merge-protein-selections: no selected-*.json in $RunDir (did the parallel selectors write their output?)" }
 $all = New-Object System.Collections.Generic.List[object]
 $cutAll = New-Object System.Collections.Generic.List[object]
-foreach ($p in $proteins) {
-    $f = Join-Path $RunDir ("selected-$p.json")
-    if (-not (Test-Path $f)) { Write-Warning "missing $f - skipping $p"; continue }
-    $sel = Get-Content $f -Raw -Encoding utf8 | ConvertFrom-Json
+foreach ($f in $selFiles) {
+    $p = $f.BaseName -replace '^selected-',''
+    $sel = Get-Content $f.FullName -Raw -Encoding utf8 | ConvertFrom-Json
+    # HARD FAIL on a malformed selector file rather than silently merging nothing (the schema-drift bug):
+    # the selector contract is { selected:[...], rejected_dupes|cut:[...], ... }.
+    if (-not ($sel.PSObject.Properties.Name -contains 'selected')) { throw "merge-protein-selections: $($f.Name) has no 'selected' array - selector output is malformed (expected {selected, rejected_dupes})" }
+    # accept either field name for the cut list (selector def says rejected_dupes; older files used cut).
+    $cut = if ($sel.PSObject.Properties.Name -contains 'rejected_dupes') { $sel.rejected_dupes } elseif ($sel.PSObject.Properties.Name -contains 'cut') { $sel.cut } else { @() }
     foreach ($r in @($sel.selected)) { $all.Add($r) }
-    foreach ($r in @($sel.cut)) { $cutAll.Add($r) }
-    Write-Output ("$p : {0} selected, {1} cut" -f @($sel.selected).Count, @($sel.cut).Count)
+    foreach ($r in @($cut) | Where-Object { $_ }) { $cutAll.Add($r) }
+    Write-Output ("$p : {0} selected, {1} cut" -f @($sel.selected).Count, @($cut | Where-Object { $_ }).Count)
 }
 
 # dish-key for twin detection: strip the protein words + common filler, normalize
