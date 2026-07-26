@@ -1,0 +1,93 @@
+{
+  "selected": [
+    {
+      "name": "Peruvian Lomo Saltado",
+      "slug": "peruvian-lomo-saltado",
+      "protein": "beef",
+      "cuisine": "Peruvian",
+      "source_url": "https://www.sipandfeast.com/lomo-saltado/",
+      "est_cal": 565,
+      "main_ingredients": ["Beef Flank/Sirloin Steak", "Soy Sauce", "Aji Amarillo Paste", "Red Wine Vinegar", "Red Onion", "Red Bell Pepper", "Diced Tomatoes", "Garlic", "Green Onions", "Fries", "Rice", "Baking Soda"],
+      "unmapped_flags": [],
+      "why": "Peru's national dish - a Chinese-Peruvian beef stir-fry served OVER french fries and rice. Both fries and Aji Amarillo Paste are board-tracked, and no lomo saltado exists in the catalog. Source publishes 565 cal/48.5g protein as served - clears the dinner gate outright. Batch skillet. HIGH confidence.",
+      "capture": {
+        "source_servings": 4,
+        "ingredients": [
+          "1 1/2 pounds flank steak sliced into 3-inch long thin strips against the grain",
+          "2 tablespoons soy sauce",
+          "1/2 teaspoon baking soda",
+          "3 tablespoons soy sauce",
+          "1 tablespoon Aji amarillo paste",
+          "1 1/2 tablespoons red wine vinegar",
+          "5 tablespoons neutral oil",
+          "1 medium red onion chopped into large wedge pieces",
+          "1 large yellow pepper sliced",
+          "4 large plum tomatoes quartered",
+          "8 cloves garlic minced",
+          "5 green onions sliced into 1-inch pieces",
+          "1/4 cup chopped cilantro",
+          "French fries and rice for serving"
+        ],
+        "nutrition": {"cal": 565, "protein_g": 48},
+        "method": "skillet"
+      }
+    },
+    {
+      "name": "Filipino Beef Mechado",
+      "slug": "filipino-beef-mechado",
+      "protein": "beef",
+      "cuisine": "Filipino",
+      "source_url": "https://panlasangpinoy.com/filipino-pinoy-food-tomato-sauce-beef-mechado-recipe/",
+      "est_cal": 560,
+      "main_ingredients": ["Beef Chuck Roast", "Tomato Sauce", "Soy Sauce", "Potato", "Carrots", "Green Bell Peppers", "Yellow Onion", "Garlic", "Lemon Juice", "Bay Leaves", "Rice"],
+      "unmapped_flags": [],
+      "why": "Filipino tomato-soy beef braise - distinct from the catalog Filipino Beef Caldereta (no liver spread; brighter tomato-citrus). Beef chuck, tomato sauce, soy, potato all board-tracked; carrots/bell pepper are common tracked additions. Source 361 cal/31g is meat+potato+sauce; over rice ~560. HIGH confidence on protein, MED on gate.",
+      "capture": {
+        "source_servings": 6,
+        "ingredients": [
+          "3 cloves garlic, crushed",
+          "1 large onion, sliced",
+          "2 lbs beef chuck, cubed",
+          "8 oz tomato sauce",
+          "1 cup water",
+          "3 tbsp cooking oil",
+          "1 slice lemon with rind",
+          "1 large potato, sliced",
+          "1/4 cup soy sauce",
+          "1/2 tsp ground black pepper",
+          "2 bay leaves",
+          "Salt to taste"
+        ],
+        "nutrition": {"cal": 361, "protein_g": 31},
+        "method": "soup pot"
+      }
+    }
+  ],
+  "cut": [
+    {
+      "slug": "mississippi-pot-roast",
+      "reason": "Catalog dupe of live 'Mississippi Pot Roast Bowls' (slug mississippi-pot-roast-bowls). Identical dish: beef chuck roast + ranch seasoning + gravy mix + pepperoncini + butter, slow-cooker, shredded over starch. Same protein/sauce/starch/method - dead duplicate."
+    },
+    {
+      "slug": "cuban-ropa-vieja",
+      "reason": "Catalog dupe of live 'Ropa Vieja Rice Bowls' (slug ropa-vieja-rice-bowls, cuisine Cuban). Same dish: flank/sirloin shredded beef in tomato-pepper-olive braise served over rice. Protein/sauce/starch/method all match."
+    },
+    {
+      "slug": "beef-chile-colorado",
+      "reason": "Catalog dupe of live 'Slow Cooker Chile Colorado Bowls' (slug chile-colorado-bowls, cuisine Mexican). Same dish: beef chuck braised in a pure guajillo/ancho/arbol dried-chile puree, no beans, over rice. Candidate's 'why' defended against the wrong catalog entry (Beef Chili Rice Bowls) and missed the existing Chile Colorado. Protein/sauce/starch/method all match."
+    }
+  ],
+  "borderline": [
+    {
+      "slug": "peruvian-lomo-saltado",
+      "reason": "Protein-twin of live 'Peruvian Pollo Saltado' (chicken). Same saltado stir-fry template: aji amarillo + soy + red wine vinegar, onion/tomato, served over fries + rice, skillet method; differs only in protein (beef vs chicken). Kept because Lomo Saltado is the canonical namesake beef dish and adds a beef entry to the Peruvian slice, but flagged for audit as a same-template, different-protein near-twin already in the catalog."
+    },
+    {
+      "slug": "filipino-beef-mechado",
+      "reason": "Shares beef chuck + tomato braise + potato/bell-pepper profile with live 'Filipino Beef Caldereta.' Distinguished by a soy-sauce + lemon-citrus, no-liver-spread/no-cheese sauce character (Caldereta here is the loaded liver/cheese/olive version), and they are canonically separate named Filipino dishes. Kept as a distinct regional take but flagged for audit."
+    }
+  ],
+  "shortfall": {
+    "beef": "Proof run, target up to 5 distinct. 2 selected of 5 candidates; 3 killed as hard catalog duplicates. No padding - genuine distinct beef dishes were only 2 (both borderline). More sourcing needed if a full 5-beef batch is required."
+  }
+}

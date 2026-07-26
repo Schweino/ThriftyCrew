@@ -1,0 +1,881 @@
+﻿[
+    {
+        "proposed_name":  "Thai Basil Ground Turkey (Pad Krapow)",
+        "slug":  "thai-basil-turkey-pad-krapow",
+        "protein":  "turkey",
+        "cuisine":  "Thai",
+        "format":  "skillet",
+        "source_url":  "https://rockinmeals.com/2020-1-22-thai-basil-turkey-pad-krapow-gn9kn/",
+        "source_site":  "rockinmeals.com",
+        "source_servings":  4,
+        "scale_factor":  3.675,
+        "portion_factor":  1.05,
+        "tuning":  [
+                       "base +60% (Rice)",
+                       "portion factor 1.05"
+                   ],
+        "ingredients":  [
+                            {
+                                "item":  "93/7 Ground Turkey",
+                                "grams":  1667,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Fresh Basil",
+                                "grams":  221,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Yellow Onion",
+                                "grams":  809,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Jalapeno",
+                                "grams":  129,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Garlic",
+                                "grams":  74,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Chicken Broth",
+                                "grams":  221,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Fish Sauce",
+                                "grams":  0,
+                                "flags":  [
+                                              "bare count w/o each density"
+                                          ]
+                            },
+                            {
+                                "item":  "Soy Sauce",
+                                "grams":  59,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Oyster Sauce",
+                                "grams":  66,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Sugar",
+                                "grams":  0,
+                                "flags":  [
+                                              "bare count w/o each density"
+                                          ]
+                            },
+                            {
+                                "item":  "Rice",
+                                "grams":  1320,
+                                "flags":  [
+                                              "serve-default+qty-from-item"
+                                          ]
+                            },
+                            {
+                                "item":  "Eggs",
+                                "grams":  0,
+                                "flags":  [
+                                              "TO-TASTE zero (minor item)+qty-from-item"
+                                          ]
+                            },
+                            {
+                                "item":  "Salt",
+                                "grams":  21,
+                                "flags":  [
+                                              "auto-staple"
+                                          ]
+                            },
+                            {
+                                "item":  "Black Pepper",
+                                "grams":  4,
+                                "flags":  [
+                                              "auto-staple"
+                                          ]
+                            }
+                        ],
+        "per_serving":  {
+                            "calories":  566,
+                            "carbs_g":  83.3,
+                            "fat_g":  8.6,
+                            "protein_g":  31.3
+                        },
+        "missing_db_items":  [
+
+                             ],
+        "gate_550":  true,
+        "gate_gap":  0
+    },
+    {
+        "proposed_name":  "Turkey Afritada",
+        "slug":  "turkey-afritada",
+        "protein":  "turkey",
+        "cuisine":  "Filipino",
+        "format":  "soup pot",
+        "source_url":  "https://itsforkandspoon.com/easy-turkey-afritada-recipe-filipino-tomato-braised-turkey/",
+        "source_site":  "itsforkandspoon.com",
+        "source_servings":  4,
+        "scale_factor":  3.5,
+        "portion_factor":  1,
+        "tuning":  [
+
+                   ],
+        "ingredients":  [
+                            {
+                                "item":  "Vegetable Oil",
+                                "grams":  42,
+                                "flags":  [
+                                              "no-qty-\u003eserve-default"
+                                          ]
+                            },
+                            {
+                                "item":  "Garlic",
+                                "grams":  52,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Yellow Onion",
+                                "grams":  402,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Green Bell Peppers",
+                                "grams":  420,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Diced Tomatoes",
+                                "grams":  2877,
+                                "flags":  [
+                                              "bare-count-\u003ecan assumed"
+                                          ]
+                            },
+                            {
+                                "item":  "Fish Sauce",
+                                "grams":  63,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Turkey Breast",
+                                "grams":  3175,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Tomato Sauce",
+                                "grams":  858,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Chicken Broth",
+                                "grams":  1260,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Bay Leaves",
+                                "grams":  4,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Tomato Paste",
+                                "grams":  112,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Sugar",
+                                "grams":  88,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Oyster Sauce",
+                                "grams":  63,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Potato",
+                                "grams":  4473,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Carrots",
+                                "grams":  427,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Frozen Green Peas",
+                                "grams":  234,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Black Pepper",
+                                "grams":  14,
+                                "flags":  [
+                                              "qty-from-item"
+                                          ]
+                            },
+                            {
+                                "item":  "Salt",
+                                "grams":  20,
+                                "flags":  [
+                                              "auto-staple"
+                                          ]
+                            }
+                        ],
+        "per_serving":  {
+                            "calories":  686,
+                            "carbs_g":  89.9,
+                            "fat_g":  7,
+                            "protein_g":  65.8
+                        },
+        "missing_db_items":  [
+
+                             ],
+        "gate_550":  true,
+        "gate_gap":  0
+    },
+    {
+        "proposed_name":  "West African Turkey Peanut Stew (Mafe-Style)",
+        "slug":  "west-african-turkey-peanut-stew",
+        "protein":  "turkey",
+        "cuisine":  "West African",
+        "format":  "soup pot",
+        "source_url":  "https://www.culinary-cool.com/african-inspired-turkey-and-peanut-stew/",
+        "source_site":  "culinary-cool.com",
+        "source_servings":  6,
+        "scale_factor":  2.3333,
+        "portion_factor":  1,
+        "tuning":  [
+                       "oil clamp 150-\u003e18 g/serving"
+                   ],
+        "ingredients":  [
+                            {
+                                "item":  "Vegetable Oil",
+                                "grams":  252,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Yellow Onion",
+                                "grams":  268,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Garlic",
+                                "grams":  40,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Ginger",
+                                "grams":  14,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Chili Powder",
+                                "grams":  6,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Smoked Paprika",
+                                "grams":  5,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Red Pepper Flakes",
+                                "grams":  0,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Red Bell Pepper",
+                                "grams":  215,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Sweet Potatoes",
+                                "grams":  303,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Diced Tomatoes",
+                                "grams":  1857,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Peanut Butter",
+                                "grams":  301,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Black Pepper",
+                                "grams":  1068,
+                                "flags":  [
+                                              "qty-from-item"
+                                          ]
+                            },
+                            {
+                                "item":  "Chickpeas",
+                                "grams":  929,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Frozen Chopped Spinach",
+                                "grams":  397,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Fresh Cilantro",
+                                "grams":  25,
+                                "flags":  [
+                                              "serve-default+qty-from-item"
+                                          ]
+                            },
+                            {
+                                "item":  "Salt",
+                                "grams":  20,
+                                "flags":  [
+                                              "auto-staple"
+                                          ]
+                            }
+                        ],
+        "per_serving":  {
+                            "calories":  642,
+                            "carbs_g":  67.1,
+                            "fat_g":  30.7,
+                            "protein_g":  13.3
+                        },
+        "missing_db_items":  [
+
+                             ],
+        "gate_550":  true,
+        "gate_gap":  0
+    },
+    {
+        "proposed_name":  "Turkey Mole Rice Bowls",
+        "slug":  "turkey-mole-rice-bowls",
+        "protein":  "turkey",
+        "cuisine":  "Mexican",
+        "format":  "skillet",
+        "source_url":  "https://inmamamaggieskitchen.com/easy-turkey-mole/",
+        "source_site":  "inmamamaggieskitchen.com",
+        "source_servings":  4,
+        "scale_factor":  4.9,
+        "portion_factor":  1.4,
+        "tuning":  [
+                       "added Rice base 200g (src scale)",
+                       "base +60% (Rice)",
+                       "portion factor 1.4"
+                   ],
+        "ingredients":  [
+                            {
+                                "item":  "Mole Paste",
+                                "grams":  0,
+                                "flags":  [
+                                              "bare count w/o each density"
+                                          ]
+                            },
+                            {
+                                "item":  "Chicken Broth",
+                                "grams":  26,
+                                "flags":  [
+                                              "default tsp"
+                                          ]
+                            },
+                            {
+                                "item":  "Cocoa Powder",
+                                "grams":  0,
+                                "flags":  [
+                                              "bare count w/o each density"
+                                          ]
+                            },
+                            {
+                                "item":  "Turkey Breast",
+                                "grams":  1372,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Salt",
+                                "grams":  28,
+                                "flags":  [
+                                              "auto-staple"
+                                          ]
+                            },
+                            {
+                                "item":  "Black Pepper",
+                                "grams":  6,
+                                "flags":  [
+                                              "auto-staple"
+                                          ]
+                            },
+                            {
+                                "item":  "Rice",
+                                "grams":  1761,
+                                "flags":  [
+                                              "tuner-added-base"
+                                          ]
+                            }
+                        ],
+        "per_serving":  {
+                            "calories":  566,
+                            "carbs_g":  98.4,
+                            "fat_g":  1.5,
+                            "protein_g":  33.3
+                        },
+        "missing_db_items":  [
+
+                             ],
+        "gate_550":  true,
+        "gate_gap":  0
+    },
+    {
+        "proposed_name":  "Turkey Jollof Rice",
+        "slug":  "turkey-jollof-rice",
+        "protein":  "turkey",
+        "cuisine":  "West African",
+        "format":  "skillet",
+        "source_url":  "https://cheflolaskitchen.com/jollof-rice/",
+        "source_site":  "cheflolaskitchen.com",
+        "source_servings":  8,
+        "scale_factor":  1.75,
+        "portion_factor":  1,
+        "tuning":  [
+
+                   ],
+        "ingredients":  [
+                            {
+                                "item":  "Red Bell Pepper",
+                                "grams":  630,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Diced Tomatoes",
+                                "grams":  2476,
+                                "flags":  [
+                                              "bare-count-\u003ecan assumed"
+                                          ]
+                            },
+                            {
+                                "item":  "Yellow Onion",
+                                "grams":  578,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Jalapeno",
+                                "grams":  49,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Vegetable Oil",
+                                "grams":  191,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Tomato Paste",
+                                "grams":  112,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Garlic",
+                                "grams":  35,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Ginger",
+                                "grams":  10,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Bay Leaves",
+                                "grams":  2,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Dried Thyme",
+                                "grams":  5,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Curry Powder",
+                                "grams":  11,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Salt",
+                                "grams":  10,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Black Pepper",
+                                "grams":  7,
+                                "flags":  [
+                                              "qty-from-item"
+                                          ]
+                            },
+                            {
+                                "item":  "Chicken Broth",
+                                "grams":  1498,
+                                "flags":  [
+                                              "default tbsp"
+                                          ]
+                            },
+                            {
+                                "item":  "Rice",
+                                "grams":  1295,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Butter",
+                                "grams":  49,
+                                "flags":  [
+
+                                          ]
+                            }
+                        ],
+        "per_serving":  {
+                            "calories":  564,
+                            "carbs_g":  90.1,
+                            "fat_g":  16.8,
+                            "protein_g":  10.8
+                        },
+        "missing_db_items":  [
+
+                             ],
+        "gate_550":  true,
+        "gate_gap":  0
+    },
+    {
+        "proposed_name":  "Peruvian Lomo Saltado",
+        "slug":  "peruvian-lomo-saltado",
+        "protein":  "beef",
+        "cuisine":  "Peruvian",
+        "format":  "skillet",
+        "source_url":  "https://www.sipandfeast.com/lomo-saltado/",
+        "source_site":  "sipandfeast.com",
+        "source_servings":  4,
+        "scale_factor":  3.5,
+        "portion_factor":  1,
+        "tuning":  [
+                       "base was 0g -\u003e set house default (Fries)"
+                   ],
+        "ingredients":  [
+                            {
+                                "item":  "Beef Flank/Sirloin Steak",
+                                "grams":  2381,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Soy Sauce",
+                                "grams":  280,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Baking Soda",
+                                "grams":  9,
+                                "flags":  [
+                                              "default tsp"
+                                          ]
+                            },
+                            {
+                                "item":  "Aji Amarillo Paste",
+                                "grams":  56,
+                                "flags":  [
+                                              "default tbsp"
+                                          ]
+                            },
+                            {
+                                "item":  "Red Wine Vinegar",
+                                "grams":  79,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Vegetable Oil",
+                                "grams":  245,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Red Onion",
+                                "grams":  385,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Red Bell Pepper",
+                                "grams":  420,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Diced Tomatoes",
+                                "grams":  2548,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Garlic",
+                                "grams":  140,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Green Onions",
+                                "grams":  262,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Fresh Cilantro",
+                                "grams":  14,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Fries",
+                                "grams":  700,
+                                "flags":  [
+                                              "TO-TASTE zero (minor item)+qty-from-item"
+                                          ]
+                            },
+                            {
+                                "item":  "Salt",
+                                "grams":  20,
+                                "flags":  [
+                                              "auto-staple"
+                                          ]
+                            },
+                            {
+                                "item":  "Black Pepper",
+                                "grams":  4,
+                                "flags":  [
+                                              "auto-staple"
+                                          ]
+                            }
+                        ],
+        "per_serving":  {
+                            "calories":  570,
+                            "carbs_g":  27.8,
+                            "fat_g":  32.6,
+                            "protein_g":  42.4
+                        },
+        "missing_db_items":  [
+
+                             ],
+        "gate_550":  true,
+        "gate_gap":  0
+    },
+    {
+        "proposed_name":  "Filipino Beef Mechado",
+        "slug":  "filipino-beef-mechado",
+        "protein":  "beef",
+        "cuisine":  "Filipino",
+        "format":  "soup pot",
+        "source_url":  "https://panlasangpinoy.com/filipino-pinoy-food-tomato-sauce-beef-mechado-recipe/",
+        "source_site":  "panlasangpinoy.com",
+        "source_servings":  6,
+        "scale_factor":  3.15,
+        "portion_factor":  1.35,
+        "tuning":  [
+                       "base +60% (Potato)",
+                       "portion factor 1.35"
+                   ],
+        "ingredients":  [
+                            {
+                                "item":  "Garlic",
+                                "grams":  47,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Yellow Onion",
+                                "grams":  473,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Beef Chuck Roast",
+                                "grams":  2858,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Tomato Sauce",
+                                "grams":  714,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Vegetable Oil",
+                                "grams":  132,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Lemon Juice",
+                                "grams":  0,
+                                "flags":  [
+                                              "no slice size"
+                                          ]
+                            },
+                            {
+                                "item":  "Potato",
+                                "grams":  1204,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Soy Sauce",
+                                "grams":  201,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Black Pepper",
+                                "grams":  4,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Bay Leaves",
+                                "grams":  4,
+                                "flags":  [
+
+                                          ]
+                            },
+                            {
+                                "item":  "Salt",
+                                "grams":  63,
+                                "flags":  [
+                                              "qty-from-item"
+                                          ]
+                            }
+                        ],
+        "per_serving":  {
+                            "calories":  577,
+                            "carbs_g":  23.5,
+                            "fat_g":  33.5,
+                            "protein_g":  44.2
+                        },
+        "missing_db_items":  [
+
+                             ],
+        "gate_550":  true,
+        "gate_gap":  0
+    }
+]

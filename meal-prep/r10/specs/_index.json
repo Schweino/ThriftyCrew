@@ -1,0 +1,79 @@
+﻿[
+    {
+        "slug":  "thai-basil-turkey-pad-krapow",
+        "name":  "Thai Basil Ground Turkey (Pad Krapow)",
+        "protein":  "turkey",
+        "cuisine":  "Thai",
+        "cal":  566,
+        "protein_g":  31,
+        "cost":  3.45,
+        "cost_true":  3.68,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "turkey-afritada",
+        "name":  "Turkey Afritada",
+        "protein":  "turkey",
+        "cuisine":  "Filipino",
+        "cal":  686,
+        "protein_g":  66,
+        "cost":  1.81,
+        "cost_true":  1.92,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "west-african-turkey-peanut-stew",
+        "name":  "West African Turkey Peanut Stew (Mafe-Style)",
+        "protein":  "turkey",
+        "cuisine":  "West African",
+        "cal":  642,
+        "protein_g":  13,
+        "cost":  4.39,
+        "cost_true":  4.74,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "turkey-mole-rice-bowls",
+        "name":  "Turkey Mole Rice Bowls",
+        "protein":  "turkey",
+        "cuisine":  "Mexican",
+        "cal":  566,
+        "protein_g":  33,
+        "cost":  0.18,
+        "cost_true":  0.18,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "turkey-jollof-rice",
+        "name":  "Turkey Jollof Rice",
+        "protein":  "turkey",
+        "cuisine":  "West African",
+        "cal":  564,
+        "protein_g":  11,
+        "cost":  1.34,
+        "cost_true":  1.9,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "peruvian-lomo-saltado",
+        "name":  "Peruvian Lomo Saltado",
+        "protein":  "beef",
+        "cuisine":  "Peruvian",
+        "cal":  570,
+        "protein_g":  42,
+        "cost":  1.44,
+        "cost_true":  1.71,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "filipino-beef-mechado",
+        "name":  "Filipino Beef Mechado",
+        "protein":  "beef",
+        "cuisine":  "Filipino",
+        "cal":  577,
+        "protein_g":  44,
+        "cost":  4.09,
+        "cost_true":  4.63,
+        "manual_balance":  false
+    }
+]

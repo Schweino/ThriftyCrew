@@ -15,11 +15,13 @@
 # diff; edit that file with targeted text ops or the registration scripts (standing rule).
 function Save-JsonArray {
     param(
-        [Parameter(Mandatory)][AllowEmptyCollection()]$Array,
+        # AllowNull too: an empty PS pipeline assigns $null (not @()), so a run with zero new items
+        # (every ingredient already board-tracked) would otherwise crash here. Treat null as empty.
+        [Parameter(Mandatory)][AllowNull()][AllowEmptyCollection()]$Array,
         [Parameter(Mandatory)][string]$Path,
         [int]$Depth = 8
     )
-    $items = @($Array)
+    $items = if ($null -eq $Array) { @() } else { @($Array) }
     if ($items.Count -eq 0) {
         [System.IO.File]::WriteAllText($Path, "[]`n", (New-Object System.Text.UTF8Encoding($false)))
         return 0

@@ -1,0 +1,144 @@
+﻿{
+    "name":  "Turkey Mole Rice Bowls",
+    "slug":  "turkey-mole-rice-bowls",
+    "cuisine":  "Mexican",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://inmamamaggieskitchen.com/easy-turkey-mole/",
+    "source_site":  "inmamamaggieskitchen.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 200g (src scale)",
+                   "base +60% (Rice)",
+                   "portion factor 1.4"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Puts the board tracked Mole Paste to work - no mole dish exists in the 513-recipe catalog. Turkey simmered in jarred mole over rice, topped with sesame. Board note: source Mexican chocolate tablet maps to tracked Cocoa Powder (+sugar); mole paste already contains chocolate. Protein form is shredded/pieces (turkey breast tracked) - can rebuild with ground turkey. LOW confidence on macros: source 72 cal/11g is the SAUCE only; a full bowl is ~550 cal, 30g+ protein. | HARVEST: ",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: added Rice base 200g (src scale)",
+                         "TUNING: base +60% (Rice)",
+                         "TUNING: portion factor 1.4"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  566,
+                 "protein":  33,
+                 "carbs":  98,
+                 "fat":  2,
+                 "cost_ps":  "0.18"
+             },
+    "intro_html":  "",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 0.11 cups (26 g)",
+                                "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 3 lb (1372 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 9.5 cups dry (1761 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Chicken Broth, 0.11 cups: ~$0.03. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 9.5 cups dry: ~$2.17. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.33. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $2.53 across 14 servings, so roughly $0.18 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $2.53 across 14 servings, roughly $0.18 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.65 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $9.18. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "",
+    "shop_smart":  [
+
+                   ],
+    "make_it":  [
+
+                ],
+    "portion_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://inmamamaggieskitchen.com/easy-turkey-mole/\" target=\"_blank\" rel=\"noopener\"\u003einmamamaggieskitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "",
+    "cost_batch":  2.53,
+    "cost_batch_true":  2.53,
+    "cost_per_serving":  0.18,
+    "cost_per_serving_true":  0.18,
+    "cost_pantry_add":  6.65,
+    "cost_first_run":  9.18,
+    "scaler":  {
+                   "cost":  "2.53",
+                   "ing":  [
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  26,
+                                   "buy":  "0.11 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Turkey Breast",
+                                   "canon":  "Turkey Breast",
+                                   "grams":  1372,
+                                   "buy":  "3 lb"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  28,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  6,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1761,
+                                   "buy":  "9.5 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "",
+                 "keywords":  "",
+                 "image":  "",
+                 "prepTime":  "",
+                 "cookTime":  "",
+                 "totalTime":  "",
+                 "costPerServing":  0.18,
+                 "recipeIngredient":  [
+
+                                      ],
+                 "steps":  [
+
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  26
+                              },
+                              {
+                                  "item":  "Turkey Breast",
+                                  "grams":  1372
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1761
+                              }
+                          ]
+}

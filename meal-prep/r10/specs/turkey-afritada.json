@@ -1,0 +1,319 @@
+﻿{
+    "name":  "Turkey Afritada",
+    "slug":  "turkey-afritada",
+    "cuisine":  "Filipino",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://itsforkandspoon.com/easy-turkey-afritada-recipe-filipino-tomato-braised-turkey/",
+    "source_site":  "itsforkandspoon.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Filipino tomato-braised turkey with potato/carrot/peas - hearty stew-over-rice with no analog in the catalog. Uses turkey breast (board-tracked) not ground; very high protein (2 lb turkey over 4 servings). Source has no macros; est ~520 cal over rice. Board note: turkey stock maps to Chicken Broth; roma tomatoes to Diced Tomatoes. | HARVEST: ",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14."
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  686,
+                 "protein":  66,
+                 "carbs":  90,
+                 "fat":  7,
+                 "cost_ps":  "1.81"
+             },
+    "intro_html":  "",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 3 tbsp (42 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6 tbsp (52 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.7 (402 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3.5 (420 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 7 cans (2877 g)",
+                                "\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 3.5 tbsp (63 g)",
+                                "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 7 lb (3175 g)",
+                                "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 2 cans (858 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.3 cartons (1260 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 7 tbsp (112 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 7 tbsp (88 g)",
+                                "\u003cstrong\u003eOyster Sauce (Lee Kum Kee):\u003c/strong\u003e 3.5 tbsp (63 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 21 (4473 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 7 (427 g)",
+                                "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 8.25 oz (234 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Vegetable Oil, 3 tbsp: ~$0.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 6 tbsp: ~$0.75. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Yellow Onion, 3.7: ~$1.01. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Green Bell Peppers, 3.5: ~$3.01. \u003cstrong\u003eBuy 4 each: $3.44.\u003c/strong\u003e",
+                       "Diced Tomatoes, 7 cans: ~$6.72. \u003cstrong\u003eBuy 7 cans: $6.72.\u003c/strong\u003e",
+                       "Fish Sauce, 3.5 tbsp: ~$0.61. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Tomato Sauce, 2 cans: ~$1.94. \u003cstrong\u003eBuy 2 15oz cans: $1.94.\u003c/strong\u003e",
+                       "Chicken Broth, 1.3 cartons: ~$1.69. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Tomato Paste, 7 tbsp: ~$0.57. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "Sugar, 7 tbsp: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Oyster Sauce, 3.5 tbsp: ~$0.55. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Potato, 21: ~$5.60. \u003cstrong\u003eBuy 10 lbs: $5.68.\u003c/strong\u003e",
+                       "Carrots, 7: ~$0.90. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Frozen Green Peas, 8.25 oz: ~$0.51. \u003cstrong\u003eBuy 1 12oz bag: $0.73.\u003c/strong\u003e",
+                       "Pantry seasonings (bay leaves, black pepper, salt): ~$1.21. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $25.32 across 14 servings, so roughly $1.81 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $26.92 across 14 servings, roughly $1.92 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.21 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.13. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "",
+    "shop_smart":  [
+
+                   ],
+    "make_it":  [
+
+                ],
+    "portion_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://itsforkandspoon.com/easy-turkey-afritada-recipe-filipino-tomato-braised-turkey/\" target=\"_blank\" rel=\"noopener\"\u003eitsforkandspoon.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "",
+    "cost_batch":  25.32,
+    "cost_batch_true":  26.92,
+    "cost_per_serving":  1.81,
+    "cost_per_serving_true":  1.92,
+    "cost_pantry_add":  15.21,
+    "cost_first_run":  42.13,
+    "scaler":  {
+                   "cost":  "26.92",
+                   "ing":  [
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  42,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  52,
+                                   "buy":  "6 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  402,
+                                   "buy":  "3.7",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  420,
+                                   "buy":  "3.5",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  2877,
+                                   "buy":  "7 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fish Sauce",
+                                   "canon":  "Fish Sauce",
+                                   "grams":  63,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "fish-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Turkey Breast",
+                                   "canon":  "Turkey Breast",
+                                   "grams":  3175,
+                                   "buy":  "7 lb"
+                               },
+                               {
+                                   "item":  "Tomato Sauce",
+                                   "canon":  "Tomato Sauce",
+                                   "grams":  858,
+                                   "buy":  "2 cans",
+                                   "bid":  "tomato-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  1260,
+                                   "buy":  "1.3 cartons",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  4,
+                                   "buy":  "0.25 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  112,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  88,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Oyster Sauce",
+                                   "canon":  "Oyster Sauce",
+                                   "grams":  63,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "oyster-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  4473,
+                                   "buy":  "21",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  427,
+                                   "buy":  "7",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Frozen Green Peas",
+                                   "canon":  "Frozen Green Peas",
+                                   "grams":  234,
+                                   "buy":  "8.25 oz",
+                                   "bid":  "frozen-peas",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  14,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "",
+                 "keywords":  "",
+                 "image":  "",
+                 "prepTime":  "",
+                 "cookTime":  "",
+                 "totalTime":  "",
+                 "costPerServing":  1.81,
+                 "recipeIngredient":  [
+
+                                      ],
+                 "steps":  [
+
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  402
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  2877
+                              },
+                              {
+                                  "item":  "Fish Sauce",
+                                  "grams":  63
+                              },
+                              {
+                                  "item":  "Turkey Breast",
+                                  "grams":  3175
+                              },
+                              {
+                                  "item":  "Tomato Sauce",
+                                  "grams":  858
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  1260
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  112
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  88
+                              },
+                              {
+                                  "item":  "Oyster Sauce",
+                                  "grams":  63
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  4473
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  427
+                              },
+                              {
+                                  "item":  "Frozen Green Peas",
+                                  "grams":  234
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              }
+                          ]
+}

@@ -1,0 +1,229 @@
+﻿{
+    "name":  "Thai Basil Ground Turkey (Pad Krapow)",
+    "slug":  "thai-basil-turkey-pad-krapow",
+    "cuisine":  "Thai",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://rockinmeals.com/2020-1-22-thai-basil-turkey-pad-krapow-gn9kn/",
+    "source_site":  "rockinmeals.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Rice)",
+                   "portion factor 1.05"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Iconic Thai holy-basil stir-fry, genuinely ground-turkey, loose-cooked over jasmine rice with a fried/jammy egg. Fills a Thai gap; distinct from the catalog Thai Basil Beef with Coconut Rice (no coconut, uses fish/oyster/soy over plain rice). Source has no macros; est 510 cal / ~30g protein per bowl - LOW confidence on numbers, HIGH on ingredients. | HARVEST: ",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Rice)",
+                         "TUNING: portion factor 1.05"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  566,
+                 "protein":  31,
+                 "carbs":  83,
+                 "fat":  9,
+                 "cost_ps":  "3.45"
+             },
+    "intro_html":  "",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.75 lb (1667 g)",
+                                "\u003cstrong\u003eFresh Basil:\u003c/strong\u003e 9.25 cups (221 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 7.4 (809 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 4.5 oz (129 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.75 tbsp (74 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 cups (221 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 3.75 tbsp (59 g)",
+                                "\u003cstrong\u003eOyster Sauce (Lee Kum Kee):\u003c/strong\u003e 3.75 tbsp (66 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 7.25 cups dry (1320 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 3.75 lb: ~$14.04. \u003cstrong\u003eBuy 4 lbs: $15.29.\u003c/strong\u003e",
+                       "Fresh Basil, 9.25 cups: ~$27.75. \u003cstrong\u003eBuy 16 0.5oz packs: $28.13.\u003c/strong\u003e",
+                       "Yellow Onion, 7.4: ~$2.03. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Jalapeno, 4.5 oz: ~$0.50. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Garlic, 8.75 tbsp: ~$1.07. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Chicken Broth, 1 cups: ~$0.30. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 3.75 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Oyster Sauce, 3.75 tbsp: ~$0.58. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 7.25 cups dry: ~$1.63. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $48.35 across 14 servings, so roughly $3.45 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $51.57 across 14 servings, roughly $3.68 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.13 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.70. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "",
+    "shop_smart":  [
+
+                   ],
+    "make_it":  [
+
+                ],
+    "portion_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://rockinmeals.com/2020-1-22-thai-basil-turkey-pad-krapow-gn9kn/\" target=\"_blank\" rel=\"noopener\"\u003erockinmeals.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "",
+    "cost_batch":  48.35,
+    "cost_batch_true":  51.57,
+    "cost_per_serving":  3.45,
+    "cost_per_serving_true":  3.68,
+    "cost_pantry_add":  10.13,
+    "cost_first_run":  61.7,
+    "scaler":  {
+                   "cost":  "51.57",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1667,
+                                   "buy":  "3.75 lb",
+                                   "bid":  "ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Fresh Basil",
+                                   "canon":  "Fresh Basil",
+                                   "grams":  221,
+                                   "buy":  "9.25 cups",
+                                   "bid":  "fresh-basil",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  809,
+                                   "buy":  "7.4",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  129,
+                                   "buy":  "4.5 oz",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  74,
+                                   "buy":  "8.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  221,
+                                   "buy":  "1 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  59,
+                                   "buy":  "3.75 tbsp",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Oyster Sauce",
+                                   "canon":  "Oyster Sauce",
+                                   "grams":  66,
+                                   "buy":  "3.75 tbsp",
+                                   "bid":  "oyster-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1320,
+                                   "buy":  "7.25 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  21,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "",
+                 "keywords":  "",
+                 "image":  "",
+                 "prepTime":  "",
+                 "cookTime":  "",
+                 "totalTime":  "",
+                 "costPerServing":  3.45,
+                 "recipeIngredient":  [
+
+                                      ],
+                 "steps":  [
+
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1667
+                              },
+                              {
+                                  "item":  "Fresh Basil",
+                                  "grams":  221
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  809
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  129
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  74
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  221
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  59
+                              },
+                              {
+                                  "item":  "Oyster Sauce",
+                                  "grams":  66
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1320
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

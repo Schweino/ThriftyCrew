@@ -1,0 +1,153 @@
+{
+  "slice": "beef",
+  "candidates": [
+    {
+      "name": "Mississippi Pot Roast",
+      "slug": "mississippi-pot-roast",
+      "protein": "beef",
+      "cuisine": "American",
+      "source_url": "https://www.spendwithpennies.com/mississippi-pot-roast/",
+      "est_cal": 650,
+      "main_ingredients": ["Beef Chuck Roast", "Ranch Seasoning Mix", "Brown Gravy Mix", "Pepperoncini", "Butter", "Potato"],
+      "unmapped_flags": [],
+      "why": "The internet-famous 5-ingredient slow-cooker roast - every component is board-tracked and it shreds/weigh-and-divides perfectly over mashed potatoes. No pot-roast-of-this-style in the catalog. Board note: source au jus gravy mix maps to tracked Brown Gravy Mix (Onion Soup Mix also works). Source 481 cal/44g is the meat+jus; over mashed potato ~650 cal. HIGH confidence.",
+      "capture": {
+        "source_servings": 8,
+        "ingredients": [
+          "4 to 5 pound beef chuck roast",
+          "1 ounce ranch seasoning mix (about 2 tablespoons)",
+          "1 ounce au jus gravy mix (low sodium)",
+          "6 pepperoncini peppers plus 1/2 cup juice",
+          "1/4 cup butter"
+        ],
+        "nutrition": {"cal": 481, "protein_g": 44},
+        "method": "slow cooker"
+      }
+    },
+    {
+      "name": "Cuban Ropa Vieja",
+      "slug": "cuban-ropa-vieja",
+      "protein": "beef",
+      "cuisine": "Cuban",
+      "source_url": "https://www.chilipeppermadness.com/chili-pepper-recipes/beef/ropa-vieja-cuban-shredded-beef/",
+      "est_cal": 520,
+      "main_ingredients": ["Beef Flank/Sirloin Steak", "Diced Tomatoes", "Green Bell Peppers", "Roasted Red Peppers", "Olives", "Yellow Onion", "Garlic", "Beef Broth", "Ground Cumin", "Dried Oregano", "Rice", "Seasoned Black Beans"],
+      "unmapped_flags": [],
+      "why": "Cuban shredded-beef braise (tomato/pepper/olive) - a Latin classic with no analog in the catalog; flank steak, olives, pimientos (Roasted Red Peppers) and diced tomatoes are all board-tracked. Board note: the 1/4 cup dry white wine/sherry deglaze is optional (omit or use tracked Red Wine). Source 246 cal/26g is meat+sauce; over rice and black beans ~520. MED confidence on gate (needs the starch).",
+      "capture": {
+        "source_servings": 8,
+        "ingredients": [
+          "2 pounds flank steak",
+          "3 tablespoons vegetable oil",
+          "1 large onion, chopped",
+          "1 bell pepper, sliced (red or green)",
+          "4 cloves garlic, chopped",
+          "1/4 cup sherry (or white wine)",
+          "14 ounce diced tomatoes with juices (canned)",
+          "1 cup beef broth",
+          "3 bay leaves",
+          "Salt and pepper to taste",
+          "1/2 cup chopped olives",
+          "1/2 cup chopped pimientos (jarred)",
+          "Fresh chopped cilantro or parsley, lime juice/wedges, extra olives and pimientos for garnish"
+        ],
+        "nutrition": {"cal": 246, "protein_g": 26},
+        "method": "soup pot"
+      }
+    },
+    {
+      "name": "Peruvian Lomo Saltado",
+      "slug": "peruvian-lomo-saltado",
+      "protein": "beef",
+      "cuisine": "Peruvian",
+      "source_url": "https://www.sipandfeast.com/lomo-saltado/",
+      "est_cal": 565,
+      "main_ingredients": ["Beef Flank/Sirloin Steak", "Soy Sauce", "Aji Amarillo Paste", "Red Wine Vinegar", "Red Onion", "Red Bell Pepper", "Diced Tomatoes", "Garlic", "Green Onions", "Fries", "Rice", "Baking Soda"],
+      "unmapped_flags": [],
+      "why": "Peru's national dish - a Chinese-Peruvian beef stir-fry served OVER french fries and rice. Both fries and Aji Amarillo Paste are board-tracked, and no lomo saltado exists in the catalog. Source publishes 565 cal/48.5g protein as served - clears the dinner gate outright. Batch skillet. HIGH confidence.",
+      "capture": {
+        "source_servings": 4,
+        "ingredients": [
+          "1 1/2 pounds flank steak sliced into 3-inch long thin strips against the grain",
+          "2 tablespoons soy sauce",
+          "1/2 teaspoon baking soda",
+          "3 tablespoons soy sauce",
+          "1 tablespoon Aji amarillo paste",
+          "1 1/2 tablespoons red wine vinegar",
+          "5 tablespoons neutral oil",
+          "1 medium red onion chopped into large wedge pieces",
+          "1 large yellow pepper sliced",
+          "4 large plum tomatoes quartered",
+          "8 cloves garlic minced",
+          "5 green onions sliced into 1-inch pieces",
+          "1/4 cup chopped cilantro",
+          "French fries and rice for serving"
+        ],
+        "nutrition": {"cal": 565, "protein_g": 48},
+        "method": "skillet"
+      }
+    },
+    {
+      "name": "Filipino Beef Mechado",
+      "slug": "filipino-beef-mechado",
+      "protein": "beef",
+      "cuisine": "Filipino",
+      "source_url": "https://panlasangpinoy.com/filipino-pinoy-food-tomato-sauce-beef-mechado-recipe/",
+      "est_cal": 560,
+      "main_ingredients": ["Beef Chuck Roast", "Tomato Sauce", "Soy Sauce", "Potato", "Carrots", "Green Bell Peppers", "Yellow Onion", "Garlic", "Lemon Juice", "Bay Leaves", "Rice"],
+      "unmapped_flags": [],
+      "why": "Filipino tomato-soy beef braise - distinct from the catalog Filipino Beef Caldereta (no liver spread; brighter tomato-citrus). Beef chuck, tomato sauce, soy, potato all board-tracked; carrots/bell pepper are common tracked additions. Source 361 cal/31g is meat+potato+sauce; over rice ~560. HIGH confidence on protein, MED on gate.",
+      "capture": {
+        "source_servings": 6,
+        "ingredients": [
+          "3 cloves garlic, crushed",
+          "1 large onion, sliced",
+          "2 lbs beef chuck, cubed",
+          "8 oz tomato sauce",
+          "1 cup water",
+          "3 tbsp cooking oil",
+          "1 slice lemon with rind",
+          "1 large potato, sliced",
+          "1/4 cup soy sauce",
+          "1/2 tsp ground black pepper",
+          "2 bay leaves",
+          "Salt to taste"
+        ],
+        "nutrition": {"cal": 361, "protein_g": 31},
+        "method": "soup pot"
+      }
+    },
+    {
+      "name": "Beef Chile Colorado",
+      "slug": "beef-chile-colorado",
+      "protein": "beef",
+      "cuisine": "Mexican",
+      "source_url": "https://www.isabeleats.com/chile-colorado-recipe/",
+      "est_cal": 530,
+      "main_ingredients": ["Beef Chuck Roast", "Dried Guajillo Chiles", "Dried Ancho Chiles", "Dried Arbol Chiles", "Yellow Onion", "Garlic", "Ground Cumin", "Dried Oregano", "Beef Broth", "All-Purpose Flour", "Rice"],
+      "unmapped_flags": [],
+      "why": "Authentic Mexican dried-chile beef braise - distinct from the catalog Beef Chili Rice Bowls (that is a chili-powder-and-beans chili; this is a pure guajillo/ancho/arbol chile-puree stew, no beans). All three dried chiles are board-tracked. Source 328 cal/37g is meat+sauce; over rice/beans ~530. HIGH confidence on protein, MED on gate.",
+      "capture": {
+        "source_servings": 6,
+        "ingredients": [
+          "8 guajillo chiles, stemmed and seeded",
+          "2 ancho chiles, stemmed and seeded",
+          "1 arbol chile, stemmed",
+          "1/2 yellow onion",
+          "1 teaspoon dried oregano",
+          "1 1/2 teaspoon kosher salt, divided, plus more to taste",
+          "1 clove garlic",
+          "1/2 teaspoon ground cumin",
+          "2 pounds beef stew meat, like chuck shoulder or roast, cut into 1/2-inch chunks",
+          "2 tablespoons all-purpose flour",
+          "1/4 teaspoon freshly ground black pepper",
+          "2 tablespoons olive oil",
+          "2 1/2 cups beef broth",
+          "1 bay leaf"
+        ],
+        "nutrition": {"cal": 328, "protein_g": 37},
+        "method": "soup pot"
+      }
+    }
+  ]
+}

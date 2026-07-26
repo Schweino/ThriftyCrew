@@ -1,0 +1,273 @@
+﻿{
+    "name":  "Peruvian Lomo Saltado",
+    "slug":  "peruvian-lomo-saltado",
+    "cuisine":  "Peruvian",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.sipandfeast.com/lomo-saltado/",
+    "source_site":  "sipandfeast.com",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base was 0g -\u003e set house default (Fries)"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Peru\u0027s national dish - a Chinese-Peruvian beef stir-fry served OVER french fries and rice. Both fries and Aji Amarillo Paste are board-tracked, and no lomo saltado exists in the catalog. Source publishes 565 cal/48.5g protein as served - clears the dinner gate outright. Batch skillet. HIGH confidence. | HARVEST: ",
+                         "SOURCE YIELD: 4 servings, rebuilt to 14.",
+                         "TUNING: base was 0g -\u003e set house default (Fries)"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  570,
+                 "protein":  42,
+                 "carbs":  28,
+                 "fat":  33,
+                 "cost_ps":  "1.44"
+             },
+    "intro_html":  "",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 5.25 lb (2381 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 cups (280 g)",
+                                "\u003cstrong\u003eAji Amarillo Paste (Goya (Yellow Hot Pepper Paste)):\u003c/strong\u003e 2 oz (56 g)",
+                                "\u003cstrong\u003eRed Wine Vinegar (generic):\u003c/strong\u003e 5.25 tbsp (79 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1 cups (245 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 3.5 (385 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3.5 (420 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 6.2 cans (2548 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 cups (140 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 5.25 cups (262 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 14 tbsp (14 g)",
+                                "\u003cstrong\u003eFries (Great Value):\u003c/strong\u003e 24.75 oz (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Soy Sauce, 1 cups: ~$1.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Red Wine Vinegar, 5.25 tbsp: ~$0.47. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Vegetable Oil, 1 cups: ~$0.60. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Red Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Red Bell Pepper, 3.5: ~$3.01. \u003cstrong\u003eBuy 4 each: $3.44.\u003c/strong\u003e",
+                       "Diced Tomatoes, 6.2 cans: ~$5.95. \u003cstrong\u003eBuy 7 cans: $6.72.\u003c/strong\u003e",
+                       "Garlic, 1 cups: ~$2.02. \u003cstrong\u003eBuy 4 heads: $2.30.\u003c/strong\u003e",
+                       "Green Onions, 5.25 cups: ~$3.11. \u003cstrong\u003eBuy 3 bunches: $3.21.\u003c/strong\u003e",
+                       "Fresh Cilantro, 14 tbsp: ~$0.44. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Fries, 24.75 oz: ~$2.27. \u003cstrong\u003eBuy 1 32oz bag: $2.94.\u003c/strong\u003e",
+                       "Pantry seasonings (baking soda, salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $20.13 across 14 servings, so roughly $1.44 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $23.89 across 14 servings, roughly $1.71 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.34 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $34.23. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "",
+    "shop_smart":  [
+
+                   ],
+    "make_it":  [
+
+                ],
+    "portion_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.sipandfeast.com/lomo-saltado/\" target=\"_blank\" rel=\"noopener\"\u003esipandfeast.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "",
+    "cost_batch":  20.13,
+    "cost_batch_true":  23.89,
+    "cost_per_serving":  1.44,
+    "cost_per_serving_true":  1.71,
+    "cost_pantry_add":  10.34,
+    "cost_first_run":  34.23,
+    "scaler":  {
+                   "cost":  "23.89",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Flank/Sirloin Steak",
+                                   "canon":  "Beef Flank/Sirloin Steak",
+                                   "grams":  2381,
+                                   "buy":  "5.25 lb"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  280,
+                                   "buy":  "1 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Baking Soda",
+                                   "canon":  "Baking Soda",
+                                   "grams":  9,
+                                   "buy":  "0.25 oz"
+                               },
+                               {
+                                   "item":  "Aji Amarillo Paste",
+                                   "canon":  "Aji Amarillo Paste",
+                                   "grams":  56,
+                                   "buy":  "2 oz"
+                               },
+                               {
+                                   "item":  "Red Wine Vinegar",
+                                   "canon":  "Red Wine Vinegar",
+                                   "grams":  79,
+                                   "buy":  "5.25 tbsp",
+                                   "bid":  "red-wine-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  245,
+                                   "buy":  "1 cups",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Red Onion",
+                                   "canon":  "Red Onion",
+                                   "grams":  385,
+                                   "buy":  "3.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "canon":  "Red Bell Pepper",
+                                   "grams":  420,
+                                   "buy":  "3.5",
+                                   "bid":  "bell-peppers",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  2548,
+                                   "buy":  "6.2 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  140,
+                                   "buy":  "1 cups",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  262,
+                                   "buy":  "5.25 cups",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  14,
+                                   "buy":  "14 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Fries",
+                                   "canon":  "Fries",
+                                   "grams":  700,
+                                   "buy":  "24.75 oz",
+                                   "bid":  "fries",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "",
+                 "keywords":  "",
+                 "image":  "",
+                 "prepTime":  "",
+                 "cookTime":  "",
+                 "totalTime":  "",
+                 "costPerServing":  1.44,
+                 "recipeIngredient":  [
+
+                                      ],
+                 "steps":  [
+
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Beef Flank/Sirloin Steak",
+                                  "grams":  2381
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  280
+                              },
+                              {
+                                  "item":  "Baking Soda",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Aji Amarillo Paste",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Red Wine Vinegar",
+                                  "grams":  79
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  245
+                              },
+                              {
+                                  "item":  "Red Onion",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  2548
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  262
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Fries",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

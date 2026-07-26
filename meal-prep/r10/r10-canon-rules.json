@@ -1,0 +1,9 @@
+{
+  "readme": "r10-local canon additions, loaded BEFORE the standing base (more specific wins). Each rule is [regex(IgnoreCase), canonical-DB-item]. Surfaced by the r10 proof run as UNMAPPED: 4 ingredients from the 7 selected turkey/beef recipes that the standing canon didn't cover. All map to existing board commodities. 'turkey stock'->Chicken Broth is the catalog's standard poultry-stock proxy; 'lemon with rind'->Lemon Juice (board has no whole-lemon commodity). Promote into canon-rules-standing.json after this run settles.",
+  "rules": [
+    ["\\bpatis\\b", "Fish Sauce"],
+    ["oil for the pan|oil for frying|^oil$", "Vegetable Oil"],
+    ["lemon with rind|whole lemon|lemon halves", "Lemon Juice"],
+    ["turkey stock|chicken stock", "Chicken Broth"]
+  ]
+}
