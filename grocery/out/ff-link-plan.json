@@ -1,16 +1,6 @@
 ﻿{
     "resolved":  [
-                     {
-                         "id":  "zucchini",
-                         "fault":  "PRICE-DRIFT",
-                         "board":  "Yellow Zucchini/Yellow Squash",
-                         "board_pu":  1.99,
-                         "name":  "Yellow Zucchini/Yellow Squash",
-                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/squashes/yellow_zucchini_yellow_squash/p/2311283",
-                         "price":  "$1.99",
-                         "size":  "lb",
-                         "score":  1
-                     }
+
                  ],
     "refused":  [
                     {
@@ -74,7 +64,7 @@
                         "why":  "match found but per-unit disagrees: board $1.99 vs link $2.49 (20.1%)"
                     }
                 ],
-    "worked":  16,
-    "generated":  "2026-07-27 06:21",
+    "worked":  15,
+    "generated":  "2026-07-27 07:15",
     "board":  "comparison-2026-07-26.json"
 }

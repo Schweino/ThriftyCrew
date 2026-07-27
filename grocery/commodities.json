@@ -2018,7 +2018,8 @@
                         "fruit\\s+pops?",
                         "ice\\s+bars?",
                         "\\bhelados\\b",
-                        "\\boutshine\\b"
+                        "\\boutshine\\b",
+                        "shallots?\\b"
                     ]
     },
     {
@@ -10529,7 +10530,8 @@
                         "fruit\\s+pops?",
                         "ice\\s+bars?",
                         "\\bhelados\\b",
-                        "\\boutshine\\b"
+                        "\\boutshine\\b",
+                        "\\b\\d+(?:\\.\\d+)?\\s*oz\\.?\\s*,?\\s*\\d+\\s*ct\\b"
                     ]
     },
     {
@@ -13382,7 +13384,8 @@
         "band_min":  0.1,
         "band_max":  0.6,
         "relax_global":  [
-                             "\\bcanned\\b"
+                             "\\bcanned\\b",
+                             "\\bwater\\b"
                          ],
         "include":  [
                         "canned\\s+chicken",
@@ -21851,7 +21854,8 @@
         "band_max":  3,
         "relax_global":  [
                              "\\bfrozen\\b",
-                             "\\bmeal\\b"
+                             "\\bmeal\\b",
+                             "muffin"
                          ],
         "include":  [
                         "breakfast\\s+sandwich",
@@ -26050,7 +26054,8 @@
                         "\\bsunscreen\\b"
                     ],
         "relax_global":  [
-                             "\\bsauce\\b"
+                             "\\bsauce\\b",
+                             "\\bcanned\\b"
                          ]
     },
     {
@@ -31594,7 +31599,10 @@
                         "hand\\s+soap",
                         "body\\s+spray",
                         "\\bsunscreen\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bbake\\b"
+                         ]
     },
     {
         "id":  "cheese-tortellini",
