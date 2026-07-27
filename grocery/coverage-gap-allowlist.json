@@ -555,6 +555,188 @@
                       "commodity":  "whipped-cream",
                       "store":  "Aldi",
                       "why":  "DIFFERENT PRODUCT (1.1x below band): \"Friendly Farms Whipped TOPPING\" is a Cool-Whip style topping, not dairy whipped cream - which is exactly why it is cheaper per oz. Not evidence Aldi lacks whipped cream. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "doubanjiang",
+                      "store":  "Hy-Vee",
+                      "why":  "FALSE FUZZY-MATCH (reviewed 2026-07-27, triage): the coverage-gap audit loosens the include \"chili\\s+bean\\s+sauce\" (correct for real doubanjiang / Lee Kum Kee chili bean sauce) into \"chili.Mrs. Grimes Original Chili Beans in Chili Sauce 15 ozbean.Mrs. Grimes Original Chili Beans in Chili Sauce 15 ozsauce\", which spuriously matches American canned CHILI BEANS (\"Mrs. Grimes Original Chili Beans in Chili Sauce 15 oz\"). This mainstream Omaha store does not carry real doubanjiang (fermented broad-bean chili paste), so its only match is chili beans. Board is unaffected (doubanjiang has no cell). Delete if the store starts stocking real doubanjiang."
+                  },
+                  {
+                      "commodity":  "doubanjiang",
+                      "store":  "Fareway",
+                      "why":  "FALSE FUZZY-MATCH (reviewed 2026-07-27, triage): the coverage-gap audit loosens the include \"chili\\s+bean\\s+sauce\" (correct for real doubanjiang / Lee Kum Kee chili bean sauce) into \"chili.Mrs. Grimes Original Chili Beans in Chili Saucebean.Mrs. Grimes Original Chili Beans in Chili Saucesauce\", which spuriously matches American canned CHILI BEANS (\"Mrs. Grimes Original Chili Beans in Chili Sauce\"). This mainstream Omaha store does not carry real doubanjiang (fermented broad-bean chili paste), so its only match is chili beans. Board is unaffected (doubanjiang has no cell). Delete if the store starts stocking real doubanjiang."
+                  },
+                  {
+                      "commodity":  "doubanjiang",
+                      "store":  "Baker\u0027s",
+                      "why":  "FALSE FUZZY-MATCH (reviewed 2026-07-27, triage): the coverage-gap audit loosens the include \"chili\\s+bean\\s+sauce\" (correct for real doubanjiang / Lee Kum Kee chili bean sauce) into \"chili.Kroger Mixed Chili Beans in Mild Sauce 15.5 ozbean.Kroger Mixed Chili Beans in Mild Sauce 15.5 ozsauce\", which spuriously matches American canned CHILI BEANS (\"Kroger Mixed Chili Beans in Mild Sauce 15.5 oz\"). This mainstream Omaha store does not carry real doubanjiang (fermented broad-bean chili paste), so its only match is chili beans. Board is unaffected (doubanjiang has no cell). Delete if the store starts stocking real doubanjiang."
+                  },
+                  {
+                      "commodity":  "doubanjiang",
+                      "store":  "Walmart",
+                      "why":  "FALSE FUZZY-MATCH (reviewed 2026-07-27, triage): the coverage-gap audit loosens the include \"chili\\s+bean\\s+sauce\" (correct for real doubanjiang / Lee Kum Kee chili bean sauce) into \"chili.Bush\u0027s Chili Beans, Canned Red Beans in Mild Chili Sauce, 16bean.Bush\u0027s Chili Beans, Canned Red Beans in Mild Chili Sauce, 16sauce\", which spuriously matches American canned CHILI BEANS (\"Bush\u0027s Chili Beans, Canned Red Beans in Mild Chili Sauce, 16\"). This mainstream Omaha store does not carry real doubanjiang (fermented broad-bean chili paste), so its only match is chili beans. Board is unaffected (doubanjiang has no cell). Delete if the store starts stocking real doubanjiang."
+                  },
+                  {
+                      "commodity":  "jalapenos",
+                      "store":  "Family Fare",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Famous Dave\u0027s Medium Jalapeno Corn Bread Mix 15 Oz\" - a corn bread MIX, not fresh jalapenos. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                  },
+                  {
+                      "commodity":  "egg-whites",
+                      "store":  "Family Fare",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Jimmy Dean Delights Croissant Breakfast Sandwiches With Turkey Sausage, Egg White, And Cheese, Frozen 4 Ct\" - a frozen breakfast sandwich that contains egg white, not a carton of egg whites. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                  },
+                  {
+                      "commodity":  "chocolate-milk",
+                      "store":  "Family Fare",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"M\u0026M\u0027s Chocolate Candies, Milk Chocolate 3.1 Oz\" - candy, not chocolate milk. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                  },
+                  {
+                      "commodity":  "pickles",
+                      "store":  "Family Fare",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Barrel O\u0027 Fun Dill Pickle Potato Chips 7 Oz\" - potato chips, not pickles. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                  },
+                  {
+                      "commodity":  "sponges",
+                      "store":  "Baker\u0027s",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Popsicle SpongeBob SquarePants Frozen Confection Bars, 6 Ct\" - frozen popsicles - matched on \"SpongeBob\", not cleaning sponges. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                  },
+                  {
+                      "commodity":  "cake-mix",
+                      "store":  "Baker\u0027s",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Kodiak Chip Power Cakes Flapjack and Waffle Mix Chocolate Chip\" - pancake/waffle mix, not cake mix. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                  },
+                  {
+                      "commodity":  "tater-tots",
+                      "store":  "Baker\u0027s",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Kroger Frozen Corn on the Cob Tots Super Sweet\" - corn tots, not potato tater tots. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                  },
+                  {
+                      "commodity":  "poblano-peppers",
+                      "store":  "Family Fare",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Del Monte Whole Kernel Southwest Style Corn With Poblano \u0026 Red Peppers 15.25 Oz\" - canned corn seasoned with poblano, not fresh poblano peppers. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                  },
+                  {
+                      "commodity":  "nectarines",
+                      "store":  "Aldi",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Plums or Nectarines\" - an either/or ad - the price cannot be attributed to nectarines specifically without guessing. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                  },
+                  {
+                      "commodity":  "pomegranates",
+                      "store":  "Hy-Vee",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Master Of Mixes Grenadine Syrup Cherry \u0026 Pomegranate\" - grenadine syrup, not fresh pomegranates. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                  },
+                  {
+                      "commodity":  "pomegranates",
+                      "store":  "Family Fare",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Brookside Pomegranate Flavor Dark Chocolate 7 Oz\" - chocolate candy, not fresh pomegranates. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                  },
+                  {
+                      "commodity":  "papaya",
+                      "store":  "Hy-Vee",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Dole Tropical Fruit, Pineapple \u0026 Papaya, No Sugar Added\" - canned tropical fruit cups, not fresh papaya. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                  },
+                  {
+                      "commodity":  "papaya",
+                      "store":  "Family Fare",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Dole Trop Frt Jce Pnapple \u0026 Papaya\" - juice, not fresh papaya. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                  },
+                  {
+                      "commodity":  "papaya",
+                      "store":  "Baker\u0027s",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Dole Pineapple \u0026 Papaya Tropical Fruit 15.25 oz\" - canned tropical fruit, not fresh papaya. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                  },
+                  {
+                      "commodity":  "fresh-cranberries",
+                      "store":  "Hy-Vee",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Fresh Gourmet Cranberries \u0026 Glazed Walnuts\" - a bagged salad topper, not fresh cranberries. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                  },
+                  {
+                      "commodity":  "coconut",
+                      "store":  "Hy-Vee",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Nutpods Half \u0026 Half Alternative, Almond + Coconut, Dairy-Free\" - a dairy-free coffee creamer, not coconut. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                  },
+                  {
+                      "commodity":  "coconut",
+                      "store":  "Aldi",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Barissimo Coconut Creme or Cinnamon Roll Creamer\" - a coffee creamer, not coconut. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                  },
+                  {
+                      "commodity":  "coconut",
+                      "store":  "Baker\u0027s",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"nutpods Non Dairy Half \u0026 Half Alternative made with Almonds and Coconuts\" - a dairy-free coffee creamer, not coconut. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                  },
+                  {
+                      "commodity":  "habanero-peppers",
+                      "store":  "Hy-Vee",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"ROTEL Hot Diced Tomatoes With Habaneros, 10 oz.\" - canned diced tomatoes, not fresh habanero peppers. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                  },
+                  {
+                      "commodity":  "habanero-peppers",
+                      "store":  "Baker\u0027s",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"ROTEL Hot Diced Tomatoes with Habaneros\" - canned diced tomatoes, not fresh habanero peppers. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                  },
+                  {
+                      "commodity":  "sugar-snap-peas",
+                      "store":  "Family Fare",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Birds Eye Broccoli, Carrots, Sugar Snap Peas \u0026 Water Chestnuts 10.8 Oz\" - a frozen mixed-vegetable blend, not a bag of sugar snap peas. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                  },
+                  {
+                      "commodity":  "spring-mix",
+                      "store":  "Walmart",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Great Value 50/50 Tomato Ketchup, 19.5 oz\" - ketchup - matched on \"50/50\", not a spring salad mix. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                  },
+                  {
+                      "commodity":  "artichokes",
+                      "store":  "Hy-Vee",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Gustare Vita Grilled Artichokes\" - jarred marinated artichokes, not fresh artichokes priced per each. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                  },
+                  {
+                      "commodity":  "fresh-dill",
+                      "store":  "Baker\u0027s",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Fresh Gourmet Crispy Dillies\" - a crunchy salad topper, not fresh dill herb. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                  },
+                  {
+                      "commodity":  "cantaloupe",
+                      "store":  "Fareway",
+                      "reviewed":  "2026-07-27",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-27): the commodity is priced per EACH, but Fareway switched this item to a weight basis - engine saw \"Cantaloupe Melon\" at price_text=[$0.88] size_text=[lb] in fareway-regular-2026-07-23 (it was [$1.49] size_text=[each] on 07-15). There is no honest per-each without guessing a melon\u0027s weight, so the cell correctly vanished. This is also the cause of its cell-drop warning. Delete this entry if Fareway goes back to per-each."
+                  },
+                  {
+                      "commodity":  "honeydew",
+                      "store":  "Fareway",
+                      "reviewed":  "2026-07-27",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-27): the commodity is priced per EACH, but Fareway switched this item to a weight basis - engine saw \"Honeydew Melon\" at price_text=[$0.88] size_text=[lb] in fareway-regular-2026-07-23 (it was [$1.49] size_text=[each] on 07-15). There is no honest per-each without guessing a melon\u0027s weight, so the cell correctly vanished. This is also the cause of its cell-drop warning. Delete this entry if Fareway goes back to per-each."
+                  },
+                  {
+                      "commodity":  "rotisserie-chicken",
+                      "store":  "Baker\u0027s",
+                      "reviewed":  "2026-07-27",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-27): the commodity is priced per EACH, but the Kroger API row now carries a weight instead of a count - engine saw \"Simple Truth Fresh Hot Roasted Whole Rotisserie Chicken\" at price_text=[$8.99] size_text=[2 lb] in bakers-regular-2026-07-27 (it was size_text=[1 ct] on 07-18). The engine refuses to convert lb to each. This is also the cause of its cell-drop warning. Revisit if per-each handling for whole birds is added."
                   }
               ]
 }

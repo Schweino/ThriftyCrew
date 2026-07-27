@@ -1,6 +1,6 @@
 ﻿{
-    "generated":  "2026-07-26 15:49",
-    "gap_count":  57,
+    "generated":  "2026-07-27 07:03",
+    "gap_count":  51,
     "gaps":  [
                  {
                      "commodity":  "bread",
@@ -133,29 +133,14 @@
                      "candidate":  "Eggplant"
                  },
                  {
-                     "commodity":  "doubanjiang",
-                     "store":  "Hy-Vee",
-                     "candidate":  "Mrs. Grimes Original Chili Beans in Chili Sauce 15 oz"
-                 },
-                 {
-                     "commodity":  "doubanjiang",
-                     "store":  "Fareway",
-                     "candidate":  "Mrs. Grimes Original Chili Beans in Chili Sauce"
-                 },
-                 {
-                     "commodity":  "doubanjiang",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Kroger® Mixed Chili Beans in Mild Sauce 15.5 oz"
-                 },
-                 {
-                     "commodity":  "doubanjiang",
-                     "store":  "Walmart",
-                     "candidate":  "Bush\u0027s Chili Beans, Canned Red Beans in Mild Chili Sauce, 16"
-                 },
-                 {
                      "commodity":  "nectarines",
                      "store":  "Aldi",
                      "candidate":  "Plums or Nectarines"
+                 },
+                 {
+                     "commodity":  "nectarines",
+                     "store":  "Fareway",
+                     "candidate":  "California White or Yellow Flesh Nectarines"
                  },
                  {
                      "commodity":  "pomegranates",
@@ -166,11 +151,6 @@
                      "commodity":  "pomegranates",
                      "store":  "Family Fare",
                      "candidate":  "Brookside Pomegranate Flavor Dark Chocolate 7 Oz"
-                 },
-                 {
-                     "commodity":  "pomegranates",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "EOS Pomegranate Raspberry Shave Cream"
                  },
                  {
                      "commodity":  "papaya",
@@ -218,11 +198,6 @@
                      "candidate":  "nutpods Non Dairy Half \u0026 Half Alternative made with Almonds and Coconuts"
                  },
                  {
-                     "commodity":  "prunes",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Mariani Pitted Prunes"
-                 },
-                 {
                      "commodity":  "shallots",
                      "store":  "Family Fare",
                      "candidate":  "Shallots Onions"
@@ -241,16 +216,6 @@
                      "commodity":  "beets",
                      "store":  "Hy-Vee",
                      "candidate":  "Green Top Beets Bunch"
-                 },
-                 {
-                     "commodity":  "beets",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Serenity Kids Free Range Chicken \u0026 Thyme with Organic Parsnip \u0026 Beet Pouch, 3.5oz"
-                 },
-                 {
-                     "commodity":  "parsnips",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Serenity Kids Free Range Chicken \u0026 Thyme with Organic Parsnip \u0026 Beet Pouch, 3.5oz"
                  },
                  {
                      "commodity":  "leeks",
@@ -278,14 +243,19 @@
                      "candidate":  "Mann\u0027s Broccolini"
                  },
                  {
+                     "commodity":  "chayote",
+                     "store":  "Baker\u0027s",
+                     "candidate":  "Chayote Squash"
+                 },
+                 {
                      "commodity":  "artichokes",
                      "store":  "Hy-Vee",
                      "candidate":  "Gustare Vita Grilled Artichokes"
                  },
                  {
-                     "commodity":  "artichokes",
+                     "commodity":  "fresh-dill",
                      "store":  "Baker\u0027s",
-                     "candidate":  "Cento Artichokes in Brine"
+                     "candidate":  "Fresh Gourmet Crispy Dillies"
                  }
              ]
 }
