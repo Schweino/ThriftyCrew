@@ -87,7 +87,10 @@ else { Say '  ok    pu-lib per-unit engine self-check' }
 # test must never block the board by crashing.
 foreach ($st in @(
   @{ label='partial-pull union (compare-deals)';       file='compare-deals.ps1' },
-  @{ label='multipack reject + pricing (walmart-deals)'; file='build-walmart-deals.ps1' }
+  @{ label='multipack reject + pricing (walmart-deals)'; file='build-walmart-deals.ps1' },
+  # 2026-07-27: Walmart's own unit price backed out a 10 fl oz size for a bottle its page calls 6.8 fl oz,
+  # so we published fish sauce 32% under the real shelf price. The name now wins when the two disagree.
+  @{ label='name-size vs Walmart unit price (walmart-batch)'; file='import-walmart-batch.ps1' }
 )) {
   try {
     $stPath = Join-Path $root $st.file

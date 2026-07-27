@@ -295,6 +295,7 @@
                                                 "per_store":  {
                                                                   "Sam\u0027s Club":  6.17,
                                                                   "Walmart":  6.97,
+                                                                  "Fareway":  7.49,
                                                                   "Aldi":  7.49,
                                                                   "Hy-Vee":  8.99,
                                                                   "Family Fare":  9.29
@@ -393,7 +394,9 @@
                                                 "cheapest_price":  1.4889,
                                                 "cheapest_store":  "Hy-Vee",
                                                 "per_store":  {
-                                                                  "Hy-Vee":  1.4889
+                                                                  "Hy-Vee":  1.4889,
+                                                                  "Baker\u0027s":  1.49,
+                                                                  "Fareway":  1.49
                                                               }
                                             }
                                         ]
@@ -1247,7 +1250,7 @@
                                                 "cheapest_store":  "Walmart",
                                                 "per_store":  {
                                                                   "Walmart":  1.06,
-                                                                  "Baker\u0027s":  1.9867,
+                                                                  "Baker\u0027s":  2.089,
                                                                   "Fareway":  3.1868,
                                                                   "Family Fare":  3.3167,
                                                                   "Hy-Vee":  4.3435
@@ -1801,6 +1804,7 @@
                                                 "per_store":  {
                                                                   "Baker\u0027s":  2.99,
                                                                   "Family Fare":  4.49,
+                                                                  "Fareway":  4.99,
                                                                   "Hy-Vee":  5
                                                               }
                                             }
@@ -2636,16 +2640,18 @@
                             "label":  "Apricots",
                             "unit":  "lb",
                             "record_low":  {
-                                               "price":  13.32,
-                                               "store":  "Hy-Vee",
+                                               "price":  2.995,
+                                               "store":  "Baker\u0027s",
                                                "week_of":  "2026-07-26"
                                            },
                             "history":  [
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  13.32,
-                                                "cheapest_store":  "Hy-Vee",
+                                                "cheapest_price":  2.995,
+                                                "cheapest_store":  "Baker\u0027s",
                                                 "per_store":  {
+                                                                  "Baker\u0027s":  2.995,
+                                                                  "Fareway":  3.99,
                                                                   "Hy-Vee":  13.32
                                                               }
                                             }
@@ -2778,20 +2784,43 @@
                                         ]
                         },
                         {
-                            "id":  "arugula",
-                            "label":  "Arugula",
-                            "unit":  "oz",
+                            "id":  "artichokes",
+                            "label":  "Artichokes (fresh, whole)",
+                            "unit":  "each",
                             "record_low":  {
-                                               "price":  0.798,
-                                               "store":  "Hy-Vee",
+                                               "price":  3.49,
+                                               "store":  "Baker\u0027s",
                                                "week_of":  "2026-07-26"
                                            },
                             "history":  [
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  0.798,
-                                                "cheapest_store":  "Hy-Vee",
+                                                "cheapest_price":  3.49,
+                                                "cheapest_store":  "Baker\u0027s",
                                                 "per_store":  {
+                                                                  "Baker\u0027s":  3.49,
+                                                                  "Fareway":  3.99
+                                                              }
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "arugula",
+                            "label":  "Arugula",
+                            "unit":  "oz",
+                            "record_low":  {
+                                               "price":  0.696,
+                                               "store":  "Fareway",
+                                               "week_of":  "2026-07-26"
+                                           },
+                            "history":  [
+                                            {
+                                                "week_of":  "2026-07-26",
+                                                "cheapest_price":  0.696,
+                                                "cheapest_store":  "Fareway",
+                                                "per_store":  {
+                                                                  "Fareway":  0.696,
+                                                                  "Baker\u0027s":  0.698,
                                                                   "Hy-Vee":  0.798
                                                               }
                                             }
@@ -4210,7 +4239,7 @@
                                                 "per_store":  {
                                                                   "Walmart":  3.96,
                                                                   "Hy-Vee":  3.97,
-                                                                  "Baker\u0027s":  3.99,
+                                                                  "Baker\u0027s":  3.9867,
                                                                   "Aldi":  3.99,
                                                                   "Sam\u0027s Club":  3.992,
                                                                   "Fareway":  4.99,
@@ -6363,8 +6392,8 @@
                                                                   "Sam\u0027s Club":  0.07,
                                                                   "Aldi":  0.0939,
                                                                   "Baker\u0027s":  0.1061,
-                                                                  "Fareway":  0.1068,
                                                                   "Walmart":  0.1239,
+                                                                  "Fareway":  0.1243,
                                                                   "Hy-Vee":  0.1267,
                                                                   "Family Fare":  0.1439
                                                               }
@@ -6747,16 +6776,17 @@
                             "label":  "Beets (fresh)",
                             "unit":  "lb",
                             "record_low":  {
-                                               "price":  5.32,
-                                               "store":  "Family Fare",
+                                               "price":  2.49,
+                                               "store":  "Baker\u0027s",
                                                "week_of":  "2026-07-26"
                                            },
                             "history":  [
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  5.32,
-                                                "cheapest_store":  "Family Fare",
+                                                "cheapest_price":  2.49,
+                                                "cheapest_store":  "Baker\u0027s",
                                                 "per_store":  {
+                                                                  "Baker\u0027s":  2.49,
                                                                   "Family Fare":  5.32
                                                               }
                                             }
@@ -7510,8 +7540,8 @@
                                                                   "Sam\u0027s Club":  0.3706,
                                                                   "Baker\u0027s":  0.4167,
                                                                   "Walmart":  0.4283,
-                                                                  "Hy-Vee":  0.4983,
-                                                                  "Fareway":  0.6467
+                                                                  "Fareway":  0.48,
+                                                                  "Hy-Vee":  0.4983
                                                               }
                                             }
                                         ]
@@ -8082,9 +8112,9 @@
                                                 "per_store":  {
                                                                   "Family Fare":  0.1786,
                                                                   "Aldi":  0.2312,
+                                                                  "Fareway":  0.2571,
                                                                   "Sam\u0027s Club":  0.2594,
                                                                   "Baker\u0027s":  0.2772,
-                                                                  "Fareway":  0.3123,
                                                                   "Hy-Vee":  0.4455,
                                                                   "Walmart":  0.48
                                                               }
@@ -8449,16 +8479,17 @@
                             "label":  "Bok Choy",
                             "unit":  "lb",
                             "record_low":  {
-                                               "price":  3.9926,
-                                               "store":  "Hy-Vee",
+                                               "price":  2.49,
+                                               "store":  "Baker\u0027s",
                                                "week_of":  "2026-07-26"
                                            },
                             "history":  [
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  3.9926,
-                                                "cheapest_store":  "Hy-Vee",
+                                                "cheapest_price":  2.49,
+                                                "cheapest_store":  "Baker\u0027s",
                                                 "per_store":  {
+                                                                  "Baker\u0027s":  2.49,
                                                                   "Hy-Vee":  3.9926
                                                               }
                                             }
@@ -8732,10 +8763,10 @@
                                                                   "Baker\u0027s":  1.99,
                                                                   "Aldi":  2.29,
                                                                   "Sam\u0027s Club":  2.48,
+                                                                  "Fareway":  2.99,
                                                                   "Family Fare":  2.99,
                                                                   "Walmart":  3.27,
-                                                                  "Hy-Vee":  3.99,
-                                                                  "Fareway":  3.99
+                                                                  "Hy-Vee":  3.99
                                                               }
                                             }
                                         ]
@@ -9214,7 +9245,7 @@
                                                                   "Aldi":  2.4842,
                                                                   "Walmart":  2.5011,
                                                                   "Baker\u0027s":  3.5467,
-                                                                  "Fareway":  5.0442,
+                                                                  "Fareway":  4.88,
                                                                   "Hy-Vee":  5.0442
                                                               }
                                             }
@@ -10248,6 +10279,26 @@
                                         ]
                         },
                         {
+                            "id":  "broccolini",
+                            "label":  "Broccolini / Baby Broccoli",
+                            "unit":  "each",
+                            "record_low":  {
+                                               "price":  3.99,
+                                               "store":  "Baker\u0027s",
+                                               "week_of":  "2026-07-26"
+                                           },
+                            "history":  [
+                                            {
+                                                "week_of":  "2026-07-26",
+                                                "cheapest_price":  3.99,
+                                                "cheapest_store":  "Baker\u0027s",
+                                                "per_store":  {
+                                                                  "Baker\u0027s":  3.99
+                                                              }
+                                            }
+                                        ]
+                        },
+                        {
                             "id":  "brown-gravy-mix",
                             "label":  "Brown Gravy Mix (dry packet)",
                             "unit":  "oz",
@@ -10265,7 +10316,8 @@
                                                                   "Walmart":  0.5333,
                                                                   "Baker\u0027s":  0.5431,
                                                                   "Family Fare":  0.6782,
-                                                                  "Hy-Vee":  0.7236
+                                                                  "Hy-Vee":  0.7236,
+                                                                  "Fareway":  1.1264
                                                               }
                                             }
                                         ]
@@ -11225,11 +11277,11 @@
                                                 "cheapest_store":  "Sam\u0027s Club",
                                                 "per_store":  {
                                                                   "Sam\u0027s Club":  2.74,
-                                                                  "Fareway":  2.77,
                                                                   "Aldi":  2.89,
                                                                   "Walmart":  2.976,
                                                                   "Hy-Vee":  2.99,
                                                                   "Baker\u0027s":  3.245,
+                                                                  "Fareway":  3.48,
                                                                   "Family Fare":  5.39
                                                               }
                                             }
@@ -11384,16 +11436,18 @@
                             "label":  "Butternut Squash",
                             "unit":  "lb",
                             "record_low":  {
-                                               "price":  1.492,
-                                               "store":  "Hy-Vee",
+                                               "price":  1.49,
+                                               "store":  "Fareway",
                                                "week_of":  "2026-07-26"
                                            },
                             "history":  [
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  1.492,
-                                                "cheapest_store":  "Hy-Vee",
+                                                "cheapest_price":  1.49,
+                                                "cheapest_store":  "Fareway",
                                                 "per_store":  {
+                                                                  "Fareway":  1.49,
+                                                                  "Baker\u0027s":  1.49,
                                                                   "Hy-Vee":  1.492
                                                               }
                                             }
@@ -11708,6 +11762,8 @@
                                                 "cheapest_store":  "Sam\u0027s Club",
                                                 "per_store":  {
                                                                   "Sam\u0027s Club":  0.2331,
+                                                                  "Fareway":  0.2646,
+                                                                  "Baker\u0027s":  0.266,
                                                                   "Hy-Vee":  0.3973,
                                                                   "Family Fare":  0.4467
                                                               }
@@ -13493,8 +13549,8 @@
                                                 "per_store":  {
                                                                   "Walmart":  0.093,
                                                                   "Hy-Vee":  0.097,
-                                                                  "Fareway":  0.0984,
-                                                                  "Baker\u0027s":  0.1097
+                                                                  "Baker\u0027s":  0.1097,
+                                                                  "Fareway":  0.1147
                                                               }
                                             }
                                         ]
@@ -14614,7 +14670,7 @@
                                                 "per_store":  {
                                                                   "Hy-Vee":  0.0959,
                                                                   "Walmart":  0.0959,
-                                                                  "Fareway":  0.1,
+                                                                  "Fareway":  0.1227,
                                                                   "Sam\u0027s Club":  0.1248,
                                                                   "Baker\u0027s":  0.1303
                                                               }
@@ -16154,16 +16210,17 @@
                             "label":  "Caraway Seeds",
                             "unit":  "oz",
                             "record_low":  {
-                                               "price":  4.3148,
-                                               "store":  "Hy-Vee",
+                                               "price":  3.3222,
+                                               "store":  "Fareway",
                                                "week_of":  "2026-07-26"
                                            },
                             "history":  [
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  4.3148,
-                                                "cheapest_store":  "Hy-Vee",
+                                                "cheapest_price":  3.3222,
+                                                "cheapest_store":  "Fareway",
                                                 "per_store":  {
+                                                                  "Fareway":  3.3222,
                                                                   "Hy-Vee":  4.3148,
                                                                   "Family Fare":  5.1
                                                               }
@@ -16719,7 +16776,7 @@
                                                 "cheapest_store":  "Hy-Vee",
                                                 "per_store":  {
                                                                   "Hy-Vee":  0.2796,
-                                                                  "Baker\u0027s":  0.3645,
+                                                                  "Baker\u0027s":  0.2995,
                                                                   "Fareway":  0.398,
                                                                   "Walmart":  0.406,
                                                                   "Aldi":  0.4421,
@@ -17885,17 +17942,17 @@
                             "label":  "Cherry / Grape Tomatoes",
                             "unit":  "oz",
                             "record_low":  {
-                                               "price":  0.2136,
+                                               "price":  0.1779,
                                                "store":  "Baker\u0027s",
                                                "week_of":  "2026-07-26"
                                            },
                             "history":  [
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  0.2136,
+                                                "cheapest_price":  0.1779,
                                                 "cheapest_store":  "Baker\u0027s",
                                                 "per_store":  {
-                                                                  "Baker\u0027s":  0.2136,
+                                                                  "Baker\u0027s":  0.1779,
                                                                   "Sam\u0027s Club":  0.3112,
                                                                   "Family Fare":  0.329,
                                                                   "Fareway":  0.3325,
@@ -18101,7 +18158,7 @@
                                                                   "Aldi":  0.0391,
                                                                   "Walmart":  0.0397,
                                                                   "Sam\u0027s Club":  0.0416,
-                                                                  "Baker\u0027s":  0.0477,
+                                                                  "Baker\u0027s":  0.0497,
                                                                   "Family Fare":  0.0528,
                                                                   "Fareway":  0.0575,
                                                                   "Hy-Vee":  0.0588
@@ -19357,9 +19414,9 @@
                                                                   "Aldi":  0.396,
                                                                   "Hy-Vee":  0.4545,
                                                                   "Sam\u0027s Club":  0.499,
+                                                                  "Fareway":  0.4994,
                                                                   "Family Fare":  0.6145,
-                                                                  "Baker\u0027s":  0.6313,
-                                                                  "Fareway":  0.672
+                                                                  "Baker\u0027s":  0.6313
                                                               }
                                             }
                                         ]
@@ -20107,7 +20164,7 @@
                                                                   "Sam\u0027s Club":  6.64,
                                                                   "Walmart":  7.97,
                                                                   "Aldi":  7.99,
-                                                                  "Fareway":  8.88,
+                                                                  "Fareway":  8.99,
                                                                   "Hy-Vee":  8.99,
                                                                   "Baker\u0027s":  10.99,
                                                                   "Family Fare":  10.99
@@ -21917,15 +21974,36 @@
                                             },
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  0.3125,
-                                                "cheapest_store":  "Aldi",
+                                                "cheapest_price":  0.2666,
+                                                "cheapest_store":  "Baker\u0027s",
                                                 "per_store":  {
+                                                                  "Baker\u0027s":  0.2666,
                                                                   "Aldi":  0.3125,
                                                                   "Sam\u0027s Club":  0.3298,
                                                                   "Walmart":  0.3431,
-                                                                  "Baker\u0027s":  0.3644,
                                                                   "Hy-Vee":  0.949,
                                                                   "Fareway":  0.999
+                                                              }
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "coleslaw-mix",
+                            "label":  "Coleslaw Mix",
+                            "unit":  "oz",
+                            "record_low":  {
+                                               "price":  0.1636,
+                                               "store":  "Baker\u0027s",
+                                               "week_of":  "2026-07-26"
+                                           },
+                            "history":  [
+                                            {
+                                                "week_of":  "2026-07-26",
+                                                "cheapest_price":  0.1636,
+                                                "cheapest_store":  "Baker\u0027s",
+                                                "per_store":  {
+                                                                  "Baker\u0027s":  0.1636,
+                                                                  "Fareway":  0.5294
                                                               }
                                             }
                                         ]
@@ -21945,7 +22023,8 @@
                                                 "cheapest_price":  1.99,
                                                 "cheapest_store":  "Hy-Vee",
                                                 "per_store":  {
-                                                                  "Hy-Vee":  1.99
+                                                                  "Hy-Vee":  1.99,
+                                                                  "Baker\u0027s":  1.99
                                                               }
                                             }
                                         ]
@@ -22460,16 +22539,17 @@
                             "label":  "Corn Chips (Fritos class)",
                             "unit":  "oz",
                             "record_low":  {
-                                               "price":  0.2041,
-                                               "store":  "Baker\u0027s",
+                                               "price":  0.1862,
+                                               "store":  "Fareway",
                                                "week_of":  "2026-07-26"
                                            },
                             "history":  [
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  0.2041,
-                                                "cheapest_store":  "Baker\u0027s",
+                                                "cheapest_price":  0.1862,
+                                                "cheapest_store":  "Fareway",
                                                 "per_store":  {
+                                                                  "Fareway":  0.1862,
                                                                   "Baker\u0027s":  0.2041,
                                                                   "Family Fare":  0.2554,
                                                                   "Hy-Vee":  0.299
@@ -25726,6 +25806,7 @@
                                                                   "Walmart":  0.31,
                                                                   "Baker\u0027s":  0.3125,
                                                                   "Hy-Vee":  0.3738,
+                                                                  "Fareway":  0.3744,
                                                                   "Family Fare":  0.3931
                                                               }
                                             }
@@ -25867,12 +25948,12 @@
                                                 "cheapest_store":  "Family Fare",
                                                 "per_store":  {
                                                                   "Family Fare":  0.0683,
-                                                                  "Baker\u0027s":  0.069,
                                                                   "Fareway":  0.0786,
                                                                   "Hy-Vee":  0.0821,
                                                                   "Aldi":  0.095,
                                                                   "Walmart":  0.0971,
-                                                                  "Sam\u0027s Club":  0.0998
+                                                                  "Sam\u0027s Club":  0.0998,
+                                                                  "Baker\u0027s":  0.1
                                                               }
                                             }
                                         ]
@@ -26020,9 +26101,9 @@
                                                 "per_store":  {
                                                                   "Aldi":  0.1242,
                                                                   "Walmart":  0.1433,
-                                                                  "Fareway":  0.1567,
                                                                   "Baker\u0027s":  0.1575,
-                                                                  "Hy-Vee":  0.2075
+                                                                  "Hy-Vee":  0.2075,
+                                                                  "Fareway":  0.2492
                                                               }
                                             }
                                         ]
@@ -26331,7 +26412,7 @@
                                                                   "Aldi":  0.2042,
                                                                   "Walmart":  0.2233,
                                                                   "Baker\u0027s":  0.2742,
-                                                                  "Fareway":  0.3325
+                                                                  "Fareway":  0.4158
                                                               }
                                             }
                                         ]
@@ -26872,12 +26953,12 @@
                                                 "cheapest_store":  "Sam\u0027s Club",
                                                 "per_store":  {
                                                                   "Sam\u0027s Club":  0.1362,
-                                                                  "Fareway":  0.147,
                                                                   "Hy-Vee":  0.1832,
                                                                   "Aldi":  0.1883,
                                                                   "Baker\u0027s":  0.2421,
                                                                   "Family Fare":  0.2788,
-                                                                  "Walmart":  0.4025
+                                                                  "Walmart":  0.4025,
+                                                                  "Fareway":  0.4056
                                                               }
                                             }
                                         ]
@@ -27541,7 +27622,7 @@
                                                 "cheapest_store":  "Sam\u0027s Club",
                                                 "per_store":  {
                                                                   "Sam\u0027s Club":  0.0749,
-                                                                  "Baker\u0027s":  0.2596,
+                                                                  "Baker\u0027s":  0.1121,
                                                                   "Walmart":  0.2756,
                                                                   "Fareway":  0.2778,
                                                                   "Aldi":  0.5255,
@@ -27891,18 +27972,19 @@
                             "label":  "Dried Cranberries",
                             "unit":  "oz",
                             "record_low":  {
-                                               "price":  0.2904,
-                                               "store":  "Hy-Vee",
+                                               "price":  0.2591,
+                                               "store":  "Baker\u0027s",
                                                "week_of":  "2026-07-26"
                                            },
                             "history":  [
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  0.2904,
-                                                "cheapest_store":  "Hy-Vee",
+                                                "cheapest_price":  0.2591,
+                                                "cheapest_store":  "Baker\u0027s",
                                                 "per_store":  {
+                                                                  "Baker\u0027s":  0.2591,
                                                                   "Hy-Vee":  0.2904,
-                                                                  "Baker\u0027s":  0.4167
+                                                                  "Fareway":  0.2912
                                                               }
                                             }
                                         ]
@@ -28273,7 +28355,8 @@
                                                 "per_store":  {
                                                                   "Baker\u0027s":  1.69,
                                                                   "Walmart":  1.82,
-                                                                  "Family Fare":  1.99
+                                                                  "Family Fare":  1.99,
+                                                                  "Fareway":  1.99
                                                               }
                                             }
                                         ]
@@ -28750,7 +28833,7 @@
                                                                   "Baker\u0027s":  0.2983,
                                                                   "Hy-Vee":  0.3317,
                                                                   "Sam\u0027s Club":  0.4483,
-                                                                  "Fareway":  0.4983
+                                                                  "Fareway":  0.48
                                                               }
                                             }
                                         ]
@@ -29433,6 +29516,7 @@
                                                 "per_store":  {
                                                                   "Family Fare":  0.6232,
                                                                   "Baker\u0027s":  2.6959,
+                                                                  "Fareway":  3.5176,
                                                                   "Hy-Vee":  4.6941
                                                               }
                                             }
@@ -29736,10 +29820,10 @@
                                             },
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  0.284,
+                                                "cheapest_price":  0.4176,
                                                 "cheapest_store":  "Walmart",
                                                 "per_store":  {
-                                                                  "Walmart":  0.284,
+                                                                  "Walmart":  0.4176,
                                                                   "Hy-Vee":  0.5209,
                                                                   "Fareway":  0.6271,
                                                                   "Family Fare":  0.9271,
@@ -30432,6 +30516,26 @@
                                         ]
                         },
                         {
+                            "id":  "okra",
+                            "label":  "Fresh Okra",
+                            "unit":  "lb",
+                            "record_low":  {
+                                               "price":  4.8,
+                                               "store":  "Baker\u0027s",
+                                               "week_of":  "2026-07-26"
+                                           },
+                            "history":  [
+                                            {
+                                                "week_of":  "2026-07-26",
+                                                "cheapest_price":  4.8,
+                                                "cheapest_store":  "Baker\u0027s",
+                                                "per_store":  {
+                                                                  "Baker\u0027s":  4.8
+                                                              }
+                                            }
+                                        ]
+                        },
+                        {
                             "id":  "fresh-parsley",
                             "label":  "Fresh Parsley (bunch)",
                             "unit":  "each",
@@ -30446,7 +30550,29 @@
                                                 "cheapest_price":  0.99,
                                                 "cheapest_store":  "Hy-Vee",
                                                 "per_store":  {
-                                                                  "Hy-Vee":  0.99
+                                                                  "Hy-Vee":  0.99,
+                                                                  "Fareway":  1.49
+                                                              }
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "rhubarb",
+                            "label":  "Fresh Rhubarb",
+                            "unit":  "lb",
+                            "record_low":  {
+                                               "price":  3.99,
+                                               "store":  "Fareway",
+                                               "week_of":  "2026-07-26"
+                                           },
+                            "history":  [
+                                            {
+                                                "week_of":  "2026-07-26",
+                                                "cheapest_price":  3.99,
+                                                "cheapest_store":  "Fareway",
+                                                "per_store":  {
+                                                                  "Fareway":  3.99,
+                                                                  "Baker\u0027s":  3.99
                                                               }
                                             }
                                         ]
@@ -30466,7 +30592,8 @@
                                                 "cheapest_price":  3.9867,
                                                 "cheapest_store":  "Hy-Vee",
                                                 "per_store":  {
-                                                                  "Hy-Vee":  3.9867
+                                                                  "Hy-Vee":  3.9867,
+                                                                  "Fareway":  3.9867
                                                               }
                                             }
                                         ]
@@ -30988,8 +31115,8 @@
                                                                   "Walmart":  0.09,
                                                                   "Aldi":  0.0958,
                                                                   "Sam\u0027s Club":  0.0994,
+                                                                  "Fareway":  0.1238,
                                                                   "Baker\u0027s":  0.125,
-                                                                  "Fareway":  0.1344,
                                                                   "Family Fare":  0.1492
                                                               }
                                             }
@@ -31132,7 +31259,7 @@
                                                 "cheapest_store":  "Aldi",
                                                 "per_store":  {
                                                                   "Aldi":  0.4738,
-                                                                  "Baker\u0027s":  0.6862,
+                                                                  "Baker\u0027s":  0.6244,
                                                                   "Walmart":  1,
                                                                   "Fareway":  1.67
                                                               }
@@ -31488,10 +31615,10 @@
                                                 "cheapest_store":  "Walmart",
                                                 "per_store":  {
                                                                   "Walmart":  0.0612,
+                                                                  "Fareway":  0.0808,
                                                                   "Aldi":  0.0808,
                                                                   "Hy-Vee":  0.0817,
                                                                   "Baker\u0027s":  0.0915,
-                                                                  "Fareway":  0.12,
                                                                   "Family Fare":  0.125
                                                               }
                                             }
@@ -32370,9 +32497,9 @@
                             "label":  "Frozen Mixed Vegetables",
                             "unit":  "oz",
                             "record_low":  {
-                                               "price":  0.0817,
-                                               "store":  "Hy-Vee",
-                                               "week_of":  "2026-07-14"
+                                               "price":  0.0808,
+                                               "store":  "Fareway",
+                                               "week_of":  "2026-07-26"
                                            },
                             "history":  [
                                             {
@@ -32530,12 +32657,12 @@
                                             },
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  0.0817,
-                                                "cheapest_store":  "Hy-Vee",
+                                                "cheapest_price":  0.0808,
+                                                "cheapest_store":  "Fareway",
                                                 "per_store":  {
+                                                                  "Fareway":  0.0808,
                                                                   "Hy-Vee":  0.0817,
                                                                   "Aldi":  0.0817,
-                                                                  "Fareway":  0.0919,
                                                                   "Family Fare":  0.0996,
                                                                   "Baker\u0027s":  0.0997,
                                                                   "Walmart":  0.127
@@ -32723,10 +32850,10 @@
                                                 "cheapest_store":  "Walmart",
                                                 "per_store":  {
                                                                   "Walmart":  0.0612,
+                                                                  "Fareway":  0.0808,
                                                                   "Aldi":  0.0808,
                                                                   "Hy-Vee":  0.0817,
                                                                   "Baker\u0027s":  0.0915,
-                                                                  "Fareway":  0.0919,
                                                                   "Family Fare":  0.1158
                                                               }
                                             }
@@ -33879,7 +34006,9 @@
                                                 "cheapest_store":  "Sam\u0027s Club",
                                                 "per_store":  {
                                                                   "Sam\u0027s Club":  0.0831,
-                                                                  "Walmart":  0.1575
+                                                                  "Walmart":  0.1575,
+                                                                  "Baker\u0027s":  0.1662,
+                                                                  "Fareway":  0.2075
                                                               }
                                             }
                                         ]
@@ -34884,7 +35013,8 @@
                                                 "per_store":  {
                                                                   "Family Fare":  0.2211,
                                                                   "Baker\u0027s":  0.2492,
-                                                                  "Hy-Vee":  0.4056
+                                                                  "Hy-Vee":  0.4056,
+                                                                  "Fareway":  0.6738
                                                               }
                                             }
                                         ]
@@ -36486,10 +36616,10 @@
                                                 "per_store":  {
                                                                   "Aldi":  1.69,
                                                                   "Walmart":  1.8711,
-                                                                  "Fareway":  1.99,
                                                                   "Sam\u0027s Club":  1.995,
                                                                   "Baker\u0027s":  1.9967,
                                                                   "Hy-Vee":  2.49,
+                                                                  "Fareway":  2.88,
                                                                   "Family Fare":  2.99
                                                               }
                                             }
@@ -37655,10 +37785,10 @@
                                                 "per_store":  {
                                                                   "Sam\u0027s Club":  2.98,
                                                                   "Baker\u0027s":  2.99,
-                                                                  "Fareway":  2.99,
                                                                   "Aldi":  3.29,
                                                                   "Walmart":  3.41,
                                                                   "Hy-Vee":  3.99,
+                                                                  "Fareway":  3.99,
                                                                   "Family Fare":  4.49
                                                               }
                                             }
@@ -38134,27 +38264,6 @@
                                                                   "Baker\u0027s":  1.9559,
                                                                   "Fareway":  2.937,
                                                                   "Hy-Vee":  2.937
-                                                              }
-                                            }
-                                        ]
-                        },
-                        {
-                            "id":  "habanero-peppers",
-                            "label":  "Habanero Peppers",
-                            "unit":  "lb",
-                            "record_low":  {
-                                               "price":  3.39,
-                                               "store":  "Family Fare",
-                                               "week_of":  "2026-07-26"
-                                           },
-                            "history":  [
-                                            {
-                                                "week_of":  "2026-07-26",
-                                                "cheapest_price":  3.39,
-                                                "cheapest_store":  "Family Fare",
-                                                "per_store":  {
-                                                                  "Family Fare":  3.39,
-                                                                  "Sam\u0027s Club":  7.6533
                                                               }
                                             }
                                         ]
@@ -40132,9 +40241,10 @@
                                             },
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  4.46,
-                                                "cheapest_store":  "Walmart",
+                                                "cheapest_price":  1.49,
+                                                "cheapest_store":  "Fareway",
                                                 "per_store":  {
+                                                                  "Fareway":  1.49,
                                                                   "Walmart":  4.46,
                                                                   "Baker\u0027s":  4.99,
                                                                   "Hy-Vee":  4.99
@@ -42401,9 +42511,9 @@
                                                                   "Sam\u0027s Club":  1.1467,
                                                                   "Hy-Vee":  1.25,
                                                                   "Aldi":  1.32,
+                                                                  "Fareway":  1.3317,
                                                                   "Family Fare":  1.352,
-                                                                  "Baker\u0027s":  2.0833,
-                                                                  "Fareway":  3.1067
+                                                                  "Baker\u0027s":  2.0833
                                                               }
                                             }
                                         ]
@@ -43008,6 +43118,7 @@
                                                 "cheapest_store":  "Baker\u0027s",
                                                 "per_store":  {
                                                                   "Baker\u0027s":  0.2369,
+                                                                  "Fareway":  0.2492,
                                                                   "Hy-Vee":  0.4238
                                                               }
                                             }
@@ -44637,7 +44748,7 @@
                                                                   "Sam\u0027s Club":  0.1498,
                                                                   "Walmart":  0.2138,
                                                                   "Aldi":  0.2331,
-                                                                  "Baker\u0027s":  0.245,
+                                                                  "Baker\u0027s":  0.2496,
                                                                   "Family Fare":  0.2974,
                                                                   "Hy-Vee":  0.3206,
                                                                   "Fareway":  0.4983
@@ -46915,7 +47026,7 @@
                                                                   "Fareway":  0.1731,
                                                                   "Walmart":  0.1856,
                                                                   "Hy-Vee":  0.1869,
-                                                                  "Baker\u0027s":  0.2252
+                                                                  "Baker\u0027s":  0.1992
                                                               }
                                             }
                                         ]
@@ -46925,16 +47036,18 @@
                             "label":  "Medjool Dates",
                             "unit":  "oz",
                             "record_low":  {
-                                               "price":  0.61,
-                                               "store":  "Walmart",
+                                               "price":  0.4059,
+                                               "store":  "Baker\u0027s",
                                                "week_of":  "2026-07-26"
                                            },
                             "history":  [
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  0.61,
-                                                "cheapest_store":  "Walmart",
+                                                "cheapest_price":  0.4059,
+                                                "cheapest_store":  "Baker\u0027s",
                                                 "per_store":  {
+                                                                  "Baker\u0027s":  0.4059,
+                                                                  "Fareway":  0.5825,
                                                                   "Walmart":  0.61,
                                                                   "Hy-Vee":  0.6658
                                                               }
@@ -47532,7 +47645,7 @@
                                                                   "Sam\u0027s Club":  0.1183,
                                                                   "Hy-Vee":  0.2809,
                                                                   "Walmart":  0.405,
-                                                                  "Baker\u0027s":  0.5253,
+                                                                  "Baker\u0027s":  0.5612,
                                                                   "Family Fare":  0.6988,
                                                                   "Fareway":  1.4975
                                                               }
@@ -47544,16 +47657,18 @@
                             "label":  "Mini Sweet Peppers",
                             "unit":  "oz",
                             "record_low":  {
-                                               "price":  0.3119,
-                                               "store":  "Hy-Vee",
+                                               "price":  0.1875,
+                                               "store":  "Baker\u0027s",
                                                "week_of":  "2026-07-26"
                                            },
                             "history":  [
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  0.3119,
-                                                "cheapest_store":  "Hy-Vee",
+                                                "cheapest_price":  0.1875,
+                                                "cheapest_store":  "Baker\u0027s",
                                                 "per_store":  {
+                                                                  "Baker\u0027s":  0.1875,
+                                                                  "Fareway":  0.2494,
                                                                   "Hy-Vee":  0.3119
                                                               }
                                             }
@@ -47670,14 +47785,14 @@
                                             },
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  0.6244,
-                                                "cheapest_store":  "Family Fare",
+                                                "cheapest_price":  0.5321,
+                                                "cheapest_store":  "Baker\u0027s",
                                                 "per_store":  {
+                                                                  "Baker\u0027s":  0.5321,
                                                                   "Family Fare":  0.6244,
                                                                   "Walmart":  3.56,
-                                                                  "Hy-Vee":  3.9867,
                                                                   "Fareway":  3.9867,
-                                                                  "Baker\u0027s":  4.98
+                                                                  "Hy-Vee":  3.9867
                                                               }
                                             }
                                         ]
@@ -48613,23 +48728,44 @@
                                         ]
                         },
                         {
-                            "id":  "nectarines",
-                            "label":  "Nectarines",
-                            "unit":  "lb",
+                            "id":  "mustard-greens",
+                            "label":  "Mustard Greens (bunch)",
+                            "unit":  "each",
                             "record_low":  {
-                                               "price":  2.9818,
-                                               "store":  "Hy-Vee",
+                                               "price":  1.99,
+                                               "store":  "Baker\u0027s",
                                                "week_of":  "2026-07-26"
                                            },
                             "history":  [
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  2.9818,
-                                                "cheapest_store":  "Hy-Vee",
+                                                "cheapest_price":  1.99,
+                                                "cheapest_store":  "Baker\u0027s",
                                                 "per_store":  {
+                                                                  "Baker\u0027s":  1.99
+                                                              }
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "nectarines",
+                            "label":  "Nectarines",
+                            "unit":  "lb",
+                            "record_low":  {
+                                               "price":  2.88,
+                                               "store":  "Fareway",
+                                               "week_of":  "2026-07-26"
+                                           },
+                            "history":  [
+                                            {
+                                                "week_of":  "2026-07-26",
+                                                "cheapest_price":  2.88,
+                                                "cheapest_store":  "Fareway",
+                                                "per_store":  {
+                                                                  "Fareway":  2.88,
                                                                   "Hy-Vee":  2.9818,
-                                                                  "Family Fare":  3.99,
-                                                                  "Baker\u0027s":  4.99
+                                                                  "Baker\u0027s":  2.995,
+                                                                  "Family Fare":  3.99
                                                               }
                                             }
                                         ]
@@ -49325,7 +49461,7 @@
                                                 "per_store":  {
                                                                   "Family Fare":  0.2068,
                                                                   "Sam\u0027s Club":  0.2808,
-                                                                  "Fareway":  0.2956,
+                                                                  "Fareway":  0.295,
                                                                   "Baker\u0027s":  0.3381,
                                                                   "Aldi":  0.3426,
                                                                   "Walmart":  0.3942,
@@ -51927,16 +52063,17 @@
                             "label":  "Parsnips",
                             "unit":  "lb",
                             "record_low":  {
-                                               "price":  3.184,
-                                               "store":  "Hy-Vee",
+                                               "price":  2.99,
+                                               "store":  "Baker\u0027s",
                                                "week_of":  "2026-07-26"
                                            },
                             "history":  [
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  3.184,
-                                                "cheapest_store":  "Hy-Vee",
+                                                "cheapest_price":  2.99,
+                                                "cheapest_store":  "Baker\u0027s",
                                                 "per_store":  {
+                                                                  "Baker\u0027s":  2.99,
                                                                   "Hy-Vee":  3.184
                                                               }
                                             }
@@ -53239,8 +53376,8 @@
                                                 "cheapest_store":  "Aldi",
                                                 "per_store":  {
                                                                   "Aldi":  1.2633,
-                                                                  "Fareway":  1.6,
                                                                   "Sam\u0027s Club":  1.7325,
+                                                                  "Fareway":  1.77,
                                                                   "Hy-Vee":  1.88,
                                                                   "Walmart":  2.48,
                                                                   "Baker\u0027s":  2.5075
@@ -53423,8 +53560,8 @@
                                                                   "Aldi":  0.4056,
                                                                   "Walmart":  0.4733,
                                                                   "Baker\u0027s":  0.4869,
-                                                                  "Fareway":  0.5471,
                                                                   "Hy-Vee":  0.5817,
+                                                                  "Fareway":  0.5948,
                                                                   "Family Fare":  0.9975
                                                               }
                                             }
@@ -54831,6 +54968,27 @@
                                         ]
                         },
                         {
+                            "id":  "pomegranates",
+                            "label":  "Pomegranate",
+                            "unit":  "each",
+                            "record_low":  {
+                                               "price":  2.99,
+                                               "store":  "Fareway",
+                                               "week_of":  "2026-07-26"
+                                           },
+                            "history":  [
+                                            {
+                                                "week_of":  "2026-07-26",
+                                                "cheapest_price":  2.99,
+                                                "cheapest_store":  "Fareway",
+                                                "per_store":  {
+                                                                  "Fareway":  2.99,
+                                                                  "Baker\u0027s":  4.99
+                                                              }
+                                            }
+                                        ]
+                        },
+                        {
                             "id":  "pomegranate-molasses",
                             "label":  "Pomegranate Molasses",
                             "unit":  "floz",
@@ -55194,9 +55352,9 @@
                             "label":  "Pork Chops",
                             "unit":  "lb",
                             "record_low":  {
-                                               "price":  2.49,
-                                               "store":  "Family Fare",
-                                               "week_of":  "2026-07-12"
+                                               "price":  1.99,
+                                               "store":  "Fareway",
+                                               "week_of":  "2026-07-26"
                                            },
                             "history":  [
                                             {
@@ -55455,16 +55613,16 @@
                                             },
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  2.52,
-                                                "cheapest_store":  "Sam\u0027s Club",
+                                                "cheapest_price":  1.99,
+                                                "cheapest_store":  "Fareway",
                                                 "per_store":  {
+                                                                  "Fareway":  1.99,
                                                                   "Sam\u0027s Club":  2.52,
                                                                   "Aldi":  2.69,
                                                                   "Family Fare":  2.995,
                                                                   "Walmart":  3.27,
                                                                   "Hy-Vee":  3.96,
-                                                                  "Baker\u0027s":  3.99,
-                                                                  "Fareway":  3.99
+                                                                  "Baker\u0027s":  3.99
                                                               }
                                             }
                                         ]
@@ -55642,13 +55800,13 @@
                                             },
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  1.88,
-                                                "cheapest_store":  "Fareway",
+                                                "cheapest_price":  1.98,
+                                                "cheapest_store":  "Sam\u0027s Club",
                                                 "per_store":  {
-                                                                  "Fareway":  1.88,
                                                                   "Sam\u0027s Club":  1.98,
                                                                   "Baker\u0027s":  1.99,
                                                                   "Hy-Vee":  1.99,
+                                                                  "Fareway":  2.99,
                                                                   "Aldi":  2.99,
                                                                   "Walmart":  3.57
                                                               }
@@ -56832,16 +56990,18 @@
                             "label":  "Prunes / Dried Plums",
                             "unit":  "oz",
                             "record_low":  {
-                                               "price":  0.4806,
-                                               "store":  "Family Fare",
+                                               "price":  0.3744,
+                                               "store":  "Baker\u0027s",
                                                "week_of":  "2026-07-26"
                                            },
                             "history":  [
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  0.4806,
-                                                "cheapest_store":  "Family Fare",
+                                                "cheapest_price":  0.3744,
+                                                "cheapest_store":  "Baker\u0027s",
                                                 "per_store":  {
+                                                                  "Baker\u0027s":  0.3744,
+                                                                  "Fareway":  0.4162,
                                                                   "Family Fare":  0.4806,
                                                                   "Hy-Vee":  0.4994
                                                               }
@@ -58228,10 +58388,10 @@
                                                 "per_store":  {
                                                                   "Baker\u0027s":  0.3159,
                                                                   "Aldi":  0.4483,
+                                                                  "Fareway":  0.48,
                                                                   "Walmart":  0.495,
                                                                   "Hy-Vee":  0.4983,
-                                                                  "Sam\u0027s Club":  0.5517,
-                                                                  "Fareway":  0.5733
+                                                                  "Sam\u0027s Club":  0.5517
                                                               }
                                             }
                                         ]
@@ -58422,6 +58582,7 @@
                                                                   "Baker\u0027s":  1.33,
                                                                   "Walmart":  1.34,
                                                                   "Hy-Vee":  1.5059,
+                                                                  "Fareway":  1.69,
                                                                   "Family Fare":  1.99
                                                               }
                                             }
@@ -58790,7 +58951,7 @@
                                                                   "Aldi":  0.798,
                                                                   "Sam\u0027s Club":  0.865,
                                                                   "Hy-Vee":  1.29,
-                                                                  "Fareway":  1.33,
+                                                                  "Fareway":  1.2933,
                                                                   "Walmart":  1.34,
                                                                   "Baker\u0027s":  1.538
                                                               }
@@ -59817,6 +59978,7 @@
                                                 "cheapest_store":  "Baker\u0027s",
                                                 "per_store":  {
                                                                   "Baker\u0027s":  0.183,
+                                                                  "Fareway":  0.1872,
                                                                   "Family Fare":  0.1872,
                                                                   "Hy-Vee":  0.2341
                                                               }
@@ -60275,6 +60437,26 @@
                                         ]
                         },
                         {
+                            "id":  "rutabagas",
+                            "label":  "Rutabagas",
+                            "unit":  "lb",
+                            "record_low":  {
+                                               "price":  1.99,
+                                               "store":  "Baker\u0027s",
+                                               "week_of":  "2026-07-26"
+                                           },
+                            "history":  [
+                                            {
+                                                "week_of":  "2026-07-26",
+                                                "cheapest_price":  1.99,
+                                                "cheapest_store":  "Baker\u0027s",
+                                                "per_store":  {
+                                                                  "Baker\u0027s":  1.99
+                                                              }
+                                            }
+                                        ]
+                        },
+                        {
                             "id":  "rye-bread",
                             "label":  "Rye Bread (loaf)",
                             "unit":  "oz",
@@ -60292,6 +60474,7 @@
                                                                   "Walmart":  0.1029,
                                                                   "Baker\u0027s":  0.1454,
                                                                   "Hy-Vee":  0.2495,
+                                                                  "Fareway":  0.2772,
                                                                   "Family Fare":  0.306
                                                               }
                                             }
@@ -61185,6 +61368,7 @@
                                                 "cheapest_store":  "Family Fare",
                                                 "per_store":  {
                                                                   "Family Fare":  2.99,
+                                                                  "Fareway":  4.99,
                                                                   "Baker\u0027s":  4.99,
                                                                   "Hy-Vee":  5
                                                               }
@@ -61322,7 +61506,7 @@
                                                                   "Walmart":  0.6214,
                                                                   "Baker\u0027s":  0.6653,
                                                                   "Hy-Vee":  0.7047,
-                                                                  "Fareway":  0.798,
+                                                                  "Fareway":  0.7887,
                                                                   "Family Fare":  1.078
                                                               }
                                             }
@@ -61495,7 +61679,8 @@
                                                 "cheapest_store":  "Baker\u0027s",
                                                 "per_store":  {
                                                                   "Baker\u0027s":  3.99,
-                                                                  "Hy-Vee":  4
+                                                                  "Hy-Vee":  4,
+                                                                  "Fareway":  13.28
                                                               }
                                             }
                                         ]
@@ -61829,8 +62014,8 @@
                                                 "cheapest_store":  "Walmart",
                                                 "per_store":  {
                                                                   "Walmart":  0.197,
+                                                                  "Fareway":  0.2718,
                                                                   "Baker\u0027s":  0.279,
-                                                                  "Fareway":  0.299,
                                                                   "Hy-Vee":  0.3131,
                                                                   "Sam\u0027s Club":  0.3361
                                                               }
@@ -62868,8 +63053,8 @@
                                                                   "Sam\u0027s Club":  0.1521,
                                                                   "Walmart":  0.1533,
                                                                   "Aldi":  0.1542,
-                                                                  "Fareway":  0.1567,
                                                                   "Baker\u0027s":  0.1967,
+                                                                  "Fareway":  0.2067,
                                                                   "Hy-Vee":  0.2492,
                                                                   "Family Fare":  0.3744
                                                               }
@@ -63037,7 +63222,8 @@
                                                 "cheapest_price":  0.4983,
                                                 "cheapest_store":  "Hy-Vee",
                                                 "per_store":  {
-                                                                  "Hy-Vee":  0.4983
+                                                                  "Hy-Vee":  0.4983,
+                                                                  "Fareway":  0.665
                                                               }
                                             }
                                         ]
@@ -63713,16 +63899,18 @@
                             "label":  "Spaghetti Squash",
                             "unit":  "lb",
                             "record_low":  {
-                                               "price":  1.4917,
-                                               "store":  "Hy-Vee",
+                                               "price":  1.49,
+                                               "store":  "Fareway",
                                                "week_of":  "2026-07-26"
                                            },
                             "history":  [
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  1.4917,
-                                                "cheapest_store":  "Hy-Vee",
+                                                "cheapest_price":  1.49,
+                                                "cheapest_store":  "Fareway",
                                                 "per_store":  {
+                                                                  "Fareway":  1.49,
+                                                                  "Baker\u0027s":  1.49,
                                                                   "Hy-Vee":  1.4917
                                                               }
                                             }
@@ -64274,10 +64462,10 @@
                                                 "per_store":  {
                                                                   "Sam\u0027s Club":  0.0333,
                                                                   "Family Fare":  0.0357,
-                                                                  "Baker\u0027s":  0.0485,
                                                                   "Walmart":  0.0485,
+                                                                  "Baker\u0027s":  0.0485,
                                                                   "Aldi":  0.0493,
-                                                                  "Fareway":  0.0504,
+                                                                  "Fareway":  0.053,
                                                                   "Hy-Vee":  0.053
                                                               }
                                             }
@@ -64288,18 +64476,20 @@
                             "label":  "Spring Mix Salad Greens",
                             "unit":  "oz",
                             "record_low":  {
-                                               "price":  0.375,
-                                               "store":  "Hy-Vee",
+                                               "price":  0.3125,
+                                               "store":  "Baker\u0027s",
                                                "week_of":  "2026-07-26"
                                            },
                             "history":  [
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  0.375,
-                                                "cheapest_store":  "Hy-Vee",
+                                                "cheapest_price":  0.3125,
+                                                "cheapest_store":  "Baker\u0027s",
                                                 "per_store":  {
+                                                                  "Baker\u0027s":  0.3125,
                                                                   "Hy-Vee":  0.375,
-                                                                  "Family Fare":  0.499
+                                                                  "Family Fare":  0.499,
+                                                                  "Fareway":  0.544
                                                               }
                                             }
                                         ]
@@ -64692,7 +64882,7 @@
                                                                   "Sam\u0027s Club":  0.1106,
                                                                   "Aldi":  0.1181,
                                                                   "Walmart":  0.1475,
-                                                                  "Fareway":  0.1869,
+                                                                  "Fareway":  0.18,
                                                                   "Family Fare":  0.2494,
                                                                   "Hy-Vee":  0.2494
                                                               }
@@ -65070,7 +65260,8 @@
                                                 "per_store":  {
                                                                   "Hy-Vee":  0.2242,
                                                                   "Walmart":  0.3162,
-                                                                  "Baker\u0027s":  0.4056
+                                                                  "Baker\u0027s":  0.4056,
+                                                                  "Fareway":  0.4988
                                                               }
                                             }
                                         ]
@@ -67391,7 +67582,7 @@
                                                 "cheapest_store":  "Walmart",
                                                 "per_store":  {
                                                                   "Walmart":  0.0218,
-                                                                  "Baker\u0027s":  0.0329,
+                                                                  "Baker\u0027s":  0.0359,
                                                                   "Sam\u0027s Club":  0.0376,
                                                                   "Hy-Vee":  0.0449,
                                                                   "Fareway":  0.0598
@@ -68627,7 +68818,7 @@
                                                 "cheapest_store":  "Family Fare",
                                                 "per_store":  {
                                                                   "Family Fare":  1.99,
-                                                                  "Fareway":  2.3846,
+                                                                  "Fareway":  2.49,
                                                                   "Sam\u0027s Club":  2.96,
                                                                   "Baker\u0027s":  2.99,
                                                                   "Walmart":  3.68,
@@ -70606,19 +70797,60 @@
                             "label":  "Turkey Breast (raw)",
                             "unit":  "lb",
                             "record_low":  {
-                                               "price":  4.8133,
-                                               "store":  "Walmart",
+                                               "price":  2.99,
+                                               "store":  "Fareway",
                                                "week_of":  "2026-07-26"
                                            },
                             "history":  [
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  4.8133,
-                                                "cheapest_store":  "Walmart",
+                                                "cheapest_price":  2.99,
+                                                "cheapest_store":  "Fareway",
                                                 "per_store":  {
+                                                                  "Fareway":  2.99,
                                                                   "Walmart":  4.8133,
                                                                   "Baker\u0027s":  4.9967,
                                                                   "Hy-Vee":  6.66
+                                                              }
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "turnip-greens",
+                            "label":  "Turnip Greens (bunch)",
+                            "unit":  "each",
+                            "record_low":  {
+                                               "price":  1.99,
+                                               "store":  "Baker\u0027s",
+                                               "week_of":  "2026-07-26"
+                                           },
+                            "history":  [
+                                            {
+                                                "week_of":  "2026-07-26",
+                                                "cheapest_price":  1.99,
+                                                "cheapest_store":  "Baker\u0027s",
+                                                "per_store":  {
+                                                                  "Baker\u0027s":  1.99
+                                                              }
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "turnips",
+                            "label":  "Turnips",
+                            "unit":  "lb",
+                            "record_low":  {
+                                               "price":  2.99,
+                                               "store":  "Baker\u0027s",
+                                               "week_of":  "2026-07-26"
+                                           },
+                            "history":  [
+                                            {
+                                                "week_of":  "2026-07-26",
+                                                "cheapest_price":  2.99,
+                                                "cheapest_store":  "Baker\u0027s",
+                                                "per_store":  {
+                                                                  "Baker\u0027s":  2.99
                                                               }
                                             }
                                         ]
@@ -72072,6 +72304,26 @@
                                         ]
                         },
                         {
+                            "id":  "coconut",
+                            "label":  "Whole Coconut",
+                            "unit":  "each",
+                            "record_low":  {
+                                               "price":  3.99,
+                                               "store":  "Fareway",
+                                               "week_of":  "2026-07-26"
+                                           },
+                            "history":  [
+                                            {
+                                                "week_of":  "2026-07-26",
+                                                "cheapest_price":  3.99,
+                                                "cheapest_store":  "Fareway",
+                                                "per_store":  {
+                                                                  "Fareway":  3.99
+                                                              }
+                                            }
+                                        ]
+                        },
+                        {
                             "id":  "watermelon",
                             "label":  "Whole Watermelon",
                             "unit":  "each",
@@ -72353,16 +72605,17 @@
                             "label":  "Wild Rice",
                             "unit":  "oz",
                             "record_low":  {
-                                               "price":  0.6869,
-                                               "store":  "Hy-Vee",
+                                               "price":  0.2327,
+                                               "store":  "Fareway",
                                                "week_of":  "2026-07-26"
                                            },
                             "history":  [
                                             {
                                                 "week_of":  "2026-07-26",
-                                                "cheapest_price":  0.6869,
-                                                "cheapest_store":  "Hy-Vee",
+                                                "cheapest_price":  0.2327,
+                                                "cheapest_store":  "Fareway",
                                                 "per_store":  {
+                                                                  "Fareway":  0.2327,
                                                                   "Hy-Vee":  0.6869
                                                               }
                                             }
@@ -73454,9 +73707,9 @@
                                                                   "Walmart":  0.0825,
                                                                   "Aldi":  0.0872,
                                                                   "Baker\u0027s":  0.0934,
+                                                                  "Fareway":  0.1091,
                                                                   "Hy-Vee":  0.1317,
                                                                   "Family Fare":  0.1483,
-                                                                  "Fareway":  0.1562,
                                                                   "Sam\u0027s Club":  0.2163
                                                               }
                                             }
@@ -81436,6 +81689,27 @@
                                                 "cheapest_store":  "Family Fare",
                                                 "per_store":  {
                                                                   "Family Fare":  1.0257
+                                                              }
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "habanero-peppers",
+                            "label":  "Habanero Peppers",
+                            "unit":  "lb",
+                            "record_low":  {
+                                               "price":  3.39,
+                                               "store":  "Family Fare",
+                                               "week_of":  "2026-07-26"
+                                           },
+                            "history":  [
+                                            {
+                                                "week_of":  "2026-07-26",
+                                                "cheapest_price":  3.39,
+                                                "cheapest_store":  "Family Fare",
+                                                "per_store":  {
+                                                                  "Family Fare":  3.39,
+                                                                  "Sam\u0027s Club":  7.6533
                                                               }
                                             }
                                         ]

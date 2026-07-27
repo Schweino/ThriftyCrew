@@ -1,8 +1,8 @@
 ﻿{
-    "generated":  "2026-07-26 16:01",
+    "generated":  "2026-07-27 07:02",
     "board":  "comparison-2026-07-26.json",
-    "total_tiles":  2595,
-    "violations":  263,
+    "total_tiles":  2617,
+    "violations":  273,
     "by_store":  {
                      "Walmart":  {
                                      "coverage":  70,
@@ -10,23 +10,23 @@
                                      "violations":  70
                                  },
                      "Fareway":  {
-                                     "coverage":  76,
-                                     "tiles":  395,
-                                     "violations":  76
+                                     "coverage":  78,
+                                     "tiles":  396,
+                                     "violations":  78
                                  },
                      "Family Fare":  {
                                          "coverage":  15,
-                                         "tiles":  256,
-                                         "violations":  16
+                                         "tiles":  255,
+                                         "violations":  15
                                      },
                      "Hy-Vee":  {
-                                    "coverage":  42,
+                                    "coverage":  43,
                                     "tiles":  453,
                                     "violations":  43
                                 },
                      "Sam\u0027s Club":  {
                                              "coverage":  37,
-                                             "tiles":  334,
+                                             "tiles":  333,
                                              "violations":  37
                                          },
                      "Aldi":  {
@@ -35,9 +35,9 @@
                                   "violations":  18
                               },
                      "Baker\u0027s":  {
-                                          "coverage":  3,
-                                          "tiles":  431,
-                                          "violations":  3
+                                          "coverage":  12,
+                                          "tiles":  454,
+                                          "violations":  12
                                       }
                  },
     "rows":  [
@@ -71,6 +71,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Great Value Ground Allspice, 2 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "almond-milk",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Simple Truth Dairy Free Unsweetened Vanilla Almond Milk Half Gallon",
                      "link":  ""
                  },
                  {
@@ -110,7 +118,7 @@
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Pampers Baby Wipes",
+                     "board":  "Comforts Fragrance Free Baby Wipes",
                      "link":  ""
                  },
                  {
@@ -126,7 +134,7 @@
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Van Camp\u0027s Pork and Beans",
+                     "board":  "Saucy Spoon Applewood Smoked Bacon Baked Beans 28 oz",
                      "link":  ""
                  },
                  {
@@ -211,18 +219,18 @@
                  },
                  {
                      "id":  "chicken-breast",
-                     "store":  "Hy-Vee",
+                     "store":  "Fareway",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Hy-Vee fresh boneless skinless chicken breasts, 100% natural, value pack No antibiotics ever., $3.99 lb.",
+                     "board":  "All-Natural Boneless Skinless Chicken Breast",
                      "link":  ""
                  },
                  {
                      "id":  "chicken-breast",
-                     "store":  "Fareway",
+                     "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Boneless Skinless Chicken Breast",
+                     "board":  "Hy-Vee fresh boneless skinless chicken breasts, 100% natural, value pack No antibiotics ever., $3.99 lb.",
                      "link":  ""
                  },
                  {
@@ -279,6 +287,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Great Value Reduced Sodium Brown Gravy Mix, 0.87 oz Packet",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "buttermilk",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Cultured 1% Lowfat Buttermilk Half Gallon",
                      "link":  ""
                  },
                  {
@@ -598,7 +614,7 @@
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger Classic Blend Ground Coffee",
+                     "board":  "Kroger Original Medium Roast Ground Coffee",
                      "link":  ""
                  },
                  {
@@ -786,6 +802,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "dishwasher-detergent",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Cascade Complete Action Pacs Dishwasher Detergent Fresh",
+                     "link":  ""
+                 },
+                 {
                      "id":  "disinfectant-spray",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -846,7 +870,7 @@
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Fareway Pre-Split Original English Muffins",
+                     "board":  "Thomas\u0027 English Muffins",
                      "link":  ""
                  },
                  {
@@ -1106,6 +1130,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "grapes",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fresh California Seedless Red Grapes",
+                     "link":  ""
+                 },
+                 {
                      "id":  "grits",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -1143,6 +1175,22 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Badia Ground Turmeric, 16 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "half-and-half",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Half and Half Half Gallon",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "deli-ham",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Frick\u0027s Applewood Smoked Sliced Ham",
                      "link":  ""
                  },
                  {
@@ -1279,6 +1327,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Fairbury Fully Cooked Skinless, Red Hot Dogs, Vacuum Sealed, Refrigerated, Plastic Pouch, 32 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ice-cream",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger 1883 Vanilla Ice Cream Party Pail BIG DEAL!",
                      "link":  ""
                  },
                  {
@@ -1498,6 +1554,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "nectarines",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "California White or Yellow Flesh Nectarines",
+                     "link":  ""
+                 },
+                 {
                      "id":  "ground-nutmeg",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -1646,7 +1710,7 @@
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Center Cut Pork Chops",
+                     "board":  "All-Natural Iowa Pork Chops",
                      "link":  ""
                  },
                  {
@@ -1724,10 +1788,10 @@
                  {
                      "id":  "red-onion",
                      "store":  "Hy-Vee",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $1.5059 vs link $1.28  (17.6% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Sweet Red Onions",
-                     "link":  "Sweet Red Onions"
+                     "link":  ""
                  },
                  {
                      "id":  "red-pepper-flakes",
@@ -1871,6 +1935,22 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Clear Frost Sparkling Water, Black Cherry",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "sports-drinks",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Gatorade Frost Thirst Quencher, Glacier Freeze",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "sports-drinks",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Gatorade Orange Sports Drink Multipack Bottles",
                      "link":  ""
                  },
                  {
@@ -2018,6 +2098,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "tomatoes",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fresh On the Vine Red Tomatoes by the Bunch (4-5 tomatoes per bunch)",
+                     "link":  ""
+                 },
+                 {
                      "id":  "tortillas",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -2136,16 +2224,8 @@
                      "detail":  "priced tile with no See-item link",
                      "board":  "GoGo Squeez Yogurtz Strawberry and Strawberry Banana, 3 oz., 20 ct.",
                      "link":  ""
-                 },
-                 {
-                     "id":  "zucchini",
-                     "store":  "Family Fare",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $1.99 vs link $2.29  (13.1% off)",
-                     "board":  "Yellow Zucchini/Yellow Squash",
-                     "link":  "Zucchini Squash"
                  }
              ],
     "accuracy_violations":  0,
-    "coverage_violations":  261
+    "coverage_violations":  273
 }

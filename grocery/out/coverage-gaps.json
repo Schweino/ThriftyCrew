@@ -1,21 +1,11 @@
 ﻿{
-    "generated":  "2026-07-27 07:03",
-    "gap_count":  51,
+    "generated":  "2026-07-27 07:12",
+    "gap_count":  25,
     "gaps":  [
                  {
                      "commodity":  "bread",
                      "store":  "Family Fare",
                      "candidate":  "Our Family White Sandwich Bread"
-                 },
-                 {
-                     "commodity":  "cantaloupe",
-                     "store":  "Fareway",
-                     "candidate":  "Cantaloupe Melon"
-                 },
-                 {
-                     "commodity":  "honeydew",
-                     "store":  "Fareway",
-                     "candidate":  "Honeydew Melon"
                  },
                  {
                      "commodity":  "pineapple",
@@ -28,19 +18,9 @@
                      "candidate":  "Cauliflower"
                  },
                  {
-                     "commodity":  "jalapenos",
-                     "store":  "Family Fare",
-                     "candidate":  "Famous Dave\u0027s Medium Jalapeno Corn Bread Mix 15 Oz"
-                 },
-                 {
                      "commodity":  "pork-tenderloin",
                      "store":  "Baker\u0027s",
                      "candidate":  "Kroger Fresh Natural Pork Tenderloin"
-                 },
-                 {
-                     "commodity":  "rotisserie-chicken",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Simple Truth Fresh Hot Roasted Whole Rotisserie Chicken"
                  },
                  {
                      "commodity":  "canned-chicken",
@@ -48,29 +28,9 @@
                      "candidate":  "Swanson White Premium Chunk Canned Chicken Breast In Water"
                  },
                  {
-                     "commodity":  "egg-whites",
-                     "store":  "Family Fare",
-                     "candidate":  "Jimmy Dean Delights Croissant Breakfast Sandwiches With Turkey Sausage, Egg White, And Cheese, Frozen 4 Ct"
-                 },
-                 {
-                     "commodity":  "chocolate-milk",
-                     "store":  "Family Fare",
-                     "candidate":  "M\u0026M\u0027s Chocolate Candies, Milk Chocolate 3.1 Oz"
-                 },
-                 {
-                     "commodity":  "cake-mix",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Kodiak Chip Power Cakes Flapjack and Waffle Mix Chocolate Chip"
-                 },
-                 {
                      "commodity":  "brownie-mix",
                      "store":  "Baker\u0027s",
                      "candidate":  "Duncan Hines Family Size Chewy Fudge Brownie Mix"
-                 },
-                 {
-                     "commodity":  "pickles",
-                     "store":  "Family Fare",
-                     "candidate":  "Barrel O\u0027 Fun Dill Pickle Potato Chips 7 Oz"
                  },
                  {
                      "commodity":  "breakfast-sandwiches",
@@ -78,19 +38,9 @@
                      "candidate":  "Hy-Vee Sausage, Egg, \u0026 Cheese Muffin Breakfast Sandwiches"
                  },
                  {
-                     "commodity":  "tater-tots",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Kroger Frozen Corn on the Cob Tots Super Sweet"
-                 },
-                 {
                      "commodity":  "garlic-bread",
                      "store":  "Hy-Vee",
                      "candidate":  "Hy-Vee garlic bread, SAVE! .50, $2.98 PERKS PRICES, NON-MEMBER PRICE $3.48"
-                 },
-                 {
-                     "commodity":  "sponges",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Popsicle SpongeBob SquarePants Frozen Confection Bars, 6 Ct"
                  },
                  {
                      "commodity":  "mouthwash",
@@ -123,56 +73,11 @@
                      "candidate":  "Bake House Creations Jumbo Flaky Biscuits"
                  },
                  {
-                     "commodity":  "poblano-peppers",
-                     "store":  "Family Fare",
-                     "candidate":  "Del Monte Whole Kernel Southwest Style Corn With Poblano \u0026 Red Peppers 15.25 Oz"
-                 },
-                 {
                      "commodity":  "eggplant",
                      "store":  "Hy-Vee",
                      "candidate":  "Eggplant"
                  },
                  {
-                     "commodity":  "nectarines",
-                     "store":  "Aldi",
-                     "candidate":  "Plums or Nectarines"
-                 },
-                 {
-                     "commodity":  "nectarines",
-                     "store":  "Fareway",
-                     "candidate":  "California White or Yellow Flesh Nectarines"
-                 },
-                 {
-                     "commodity":  "pomegranates",
-                     "store":  "Hy-Vee",
-                     "candidate":  "Master Of Mixes Grenadine Syrup\r\nCherry \u0026 Pomegranate"
-                 },
-                 {
-                     "commodity":  "pomegranates",
-                     "store":  "Family Fare",
-                     "candidate":  "Brookside Pomegranate Flavor Dark Chocolate 7 Oz"
-                 },
-                 {
-                     "commodity":  "papaya",
-                     "store":  "Hy-Vee",
-                     "candidate":  "Dole Tropical Fruit, Pineapple \u0026 Papaya, No Sugar Added"
-                 },
-                 {
-                     "commodity":  "papaya",
-                     "store":  "Family Fare",
-                     "candidate":  "Dole Trop Frt Jce Pnapple \u0026 Papaya"
-                 },
-                 {
-                     "commodity":  "papaya",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Dole Pineapple \u0026 Papaya Tropical Fruit 15.25 oz"
-                 },
-                 {
-                     "commodity":  "fresh-cranberries",
-                     "store":  "Hy-Vee",
-                     "candidate":  "Fresh Gourmet Cranberries \u0026 Glazed Walnuts"
-                 },
-                 {
                      "commodity":  "plantains",
                      "store":  "Hy-Vee",
                      "candidate":  "Plantains"
@@ -181,36 +86,11 @@
                      "commodity":  "plantains",
                      "store":  "Family Fare",
                      "candidate":  "Plantains"
-                 },
-                 {
-                     "commodity":  "coconut",
-                     "store":  "Hy-Vee",
-                     "candidate":  "Nutpods Half \u0026 Half Alternative, Almond + Coconut, Dairy-Free\r\n"
-                 },
-                 {
-                     "commodity":  "coconut",
-                     "store":  "Aldi",
-                     "candidate":  "Barissimo Coconut Crème or Cinnamon Roll Creamer"
-                 },
-                 {
-                     "commodity":  "coconut",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "nutpods Non Dairy Half \u0026 Half Alternative made with Almonds and Coconuts"
                  },
                  {
                      "commodity":  "shallots",
                      "store":  "Family Fare",
                      "candidate":  "Shallots Onions"
-                 },
-                 {
-                     "commodity":  "habanero-peppers",
-                     "store":  "Hy-Vee",
-                     "candidate":  "ROTEL Hot Diced Tomatoes With Habaneros, 10 oz."
-                 },
-                 {
-                     "commodity":  "habanero-peppers",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "ROTEL Hot Diced Tomatoes with Habaneros"
                  },
                  {
                      "commodity":  "beets",
@@ -228,14 +108,9 @@
                      "candidate":  "Collard Greens"
                  },
                  {
-                     "commodity":  "sugar-snap-peas",
-                     "store":  "Family Fare",
-                     "candidate":  "Birds Eye Broccoli, Carrots, Sugar Snap Peas \u0026 Water Chestnuts 10.8 Oz"
-                 },
-                 {
-                     "commodity":  "spring-mix",
-                     "store":  "Walmart",
-                     "candidate":  "Great Value 50/50 Tomato Ketchup, 19.5 oz"
+                     "commodity":  "mustard-greens",
+                     "store":  "Fareway",
+                     "candidate":  "Glory Foods Seasoned Southern Style Mustard Greens"
                  },
                  {
                      "commodity":  "broccolini",
@@ -248,14 +123,9 @@
                      "candidate":  "Chayote Squash"
                  },
                  {
-                     "commodity":  "artichokes",
-                     "store":  "Hy-Vee",
-                     "candidate":  "Gustare Vita Grilled Artichokes"
-                 },
-                 {
-                     "commodity":  "fresh-dill",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Fresh Gourmet Crispy Dillies"
+                     "commodity":  "fresh-thyme",
+                     "store":  "Fareway",
+                     "candidate":  "Crazy Fresh Thyme"
                  }
              ]
 }

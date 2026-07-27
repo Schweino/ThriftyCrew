@@ -7,7 +7,7 @@
   NOTE: store is Bellevue 68123 (Omaha metro, Brad OK'd 2026-07-15 - Walmart zone-prices are uniform across the
   metro). Usage: .\import-walmart-batch.ps1 ; then compare-deals -> diff-board -> vet.
 #>
-param([string]$Raw = 'out\staples500\walmart-batch1-raw.txt')
+param([string]$Raw = 'out\staples500\walmart-batch1-raw.txt', [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 $today = (Get-Date).ToString('yyyy-MM-dd')
@@ -30,6 +30,76 @@ function Parse-WMSize([string]$unitStr, [double]$total) {
   return ("$qty $u")
 }
 
+# Walmart's own unit price is occasionally WRONG, and backing the size out of it then ships a wrong
+# per-unit price (2026-07-27: "Kikkoman Gluten-Free Fish Sauce, 6.8 fl oz" was listed at 28.4 c/fl oz,
+# which backs out to 10 fl oz - the store page itself says 6.8 fl oz, so we published $0.284/fl oz
+# instead of $0.418, understating by 32%). The product NAME is the seller's stated pack size and beat
+# the computed unit price every time we checked, so when the two disagree the NAME wins.
+function Parse-NameSize([string]$name) {
+  if (-not $name) { return $null }
+  # packs legitimately multiply the stated unit size - no clean single-unit claim to trust
+  if ($name -match '(?i)\b\d+\s*(ct|count|pk|packs?)\b' -or $name -match '(?i)\b(twin|multi|variety|value)\s*pack\b') { return $null }
+  # weight RANGES ("1.0 - 3.0 lb") state no single size
+  if ($name -match '(?i)\d[\d.]*\s*-\s*\d[\d.]*\s*(fl\s*oz|floz|oz|lbs?)\b') { return $null }
+  # nutrition text ("16g Protein Per Serving", "4oz 112g") is not a pack size
+  $clean = $name -replace '(?i)\d+\s*g\b[^,]*?protein[^,]*', '' -replace '(?i)\bper\s+serving\b', ''
+  $ms = [regex]::Matches($clean, '(?i)(\d+(?:\.\d+)?)\s*(fl\s*oz|floz|oz|lbs?)\b')
+  if ($ms.Count -eq 0) { return $null }
+  $m = $ms[$ms.Count - 1]          # the size conventionally trails the name
+  $qty = [double]$m.Groups[1].Value
+  if ($qty -le 0) { return $null }
+  $raw = ($m.Groups[2].Value.ToLower() -replace '\s+', '')
+  $u = 'oz'; if ($raw -match '^fl') { $u = 'fl oz' } elseif ($raw -match '^lb') { $u = 'lb' }
+  return ("$qty $u")
+}
+
+function Resolve-WMSize([string]$name, [string]$unitStr, [double]$total, [System.Collections.ArrayList]$log) {
+  $backed = Parse-WMSize $unitStr $total
+  $named  = Parse-NameSize $name
+  if (-not $backed) { return $null }
+  if (-not $named)  { return $backed }
+  $pb = [regex]::Match($backed, '^([\d.]+)\s+(.+)$'); $pn = [regex]::Match($named, '^([\d.]+)\s+(.+)$')
+  if (-not ($pb.Success -and $pn.Success)) { return $backed }
+  # only compare like with like: volume (fl oz) and weight (oz/lb) are not interchangeable
+  $famB = $(if ($pb.Groups[2].Value -eq 'fl oz') { 'vol' } else { 'wt' })
+  $famN = $(if ($pn.Groups[2].Value -eq 'fl oz') { 'vol' } else { 'wt' })
+  if ($famB -ne $famN) { return $backed }
+  $ozB = [double]$pb.Groups[1].Value; if ($pb.Groups[2].Value -eq 'lb') { $ozB *= 16 }
+  $ozN = [double]$pn.Groups[1].Value; if ($pn.Groups[2].Value -eq 'lb') { $ozN *= 16 }
+  if ($ozB -le 0 -or $ozN -le 0) { return $backed }
+  if ([math]::Abs($ozN / $ozB - 1) -le 0.10) { return $backed }
+  [void]$log.Add(("{0}  Walmart unit price backs out to [{1}] but the name states [{2}] - using the name ({3:N4} -> {4:N4} per unit)" -f `
+      $name, $backed, $named, ($total / $ozB), ($total / $ozN)))
+  return $named
+}
+
+if ($SelfTest) {
+  # Pure computation, no I/O. Locks the 2026-07-27 fish-sauce incident and the false positives that a
+  # naive "name always wins" rule would create.
+  $cases = @(
+    # name,                                                        unitStr,      total, expected size
+    @{ n='Kikkoman Gluten-Free Fish Sauce, 6.8 fl oz Glass Bottle'; u='28.4 c/fl oz'; t=2.84;  e='6.8 fl oz'  }, # THE bug: unit price backs out to 10 fl oz
+    @{ n='Thai Kitchen Gluten Free Premium Fish Sauce, 6.76 fl oz'; u='70.0 c/fl oz'; t=4.76;  e='6.8 fl oz'  }, # agree (within 10%) -> keep backed-out
+    @{ n='Great Value Lasagna Pasta, 16 oz';                        u='11.5 c/oz';   t=1.84;  e='16 oz'      }, # agree
+    @{ n='Armour Corned Beef Hash, 16g Protein Per Serving, 14 oz'; u='19.4 c/oz';   t=2.72;  e='14 oz'      }, # nutrition grams must not be read as a size
+    @{ n='Sanderson Farms Whole Chicken, 11.0 - 12.2 lb';           u='$1.32/lb';    t=15.27; e='11.6 lb'    }, # a weight RANGE states no single size
+    @{ n='Great Value Sweet Cream Salted Butter Twin Pack, 16 oz';  u='$2.98/lb';    t=5.96;  e='2 lb'       }, # pack marker -> name size is per-unit, not pack
+    @{ n='(4 pack) Skinner Thin Spaghetti Pasta, 12-Ounce Bag';     u='9.9 c/oz';    t=4.75;  e='48 oz'      }, # pack marker
+    @{ n='Mina Harissa Spicy Moroccan Red Pepper Sauce, 10 Fl oz';  u='49.8 c/fl oz';t=4.98;  e='10 fl oz'   }  # agree
+  )
+  $bad = 0; $log = New-Object System.Collections.ArrayList
+  foreach ($c in $cases) {
+    $got = Resolve-WMSize $c.n $c.u ([double]$c.t) $log
+    if ("$got" -ne $c.e) { $bad++; Write-Output ("  FAIL  [{0}] expected [{1}] got [{2}]" -f $c.n, $c.e, $got) }
+  }
+  # a volume unit price must never be overridden by a weight name size (and vice versa)
+  $g = Resolve-WMSize 'Some Sauce, 32 oz Jar' '10.0 c/fl oz' 6.40 $log
+  if ("$g" -ne '64 fl oz') { $bad++; Write-Output ("  FAIL  cross-family override: expected [64 fl oz] got [$g]") }
+  if ($bad -gt 0) { Write-Output ("import-walmart-batch self-test: $bad case(s) FAILED"); exit 1 }
+  Write-Output ("import-walmart-batch self-test: all " + ($cases.Count + 1) + " cases pass")
+  exit 0
+}
+
 # Raw row format (~~-delimited): name~~linePrice~~unitPrice~~usItemId[~~sellerName~~fulfillmentType]
 # The last two fields are OPTIONAL and were added 2026-07-26 after the R300 run had to hand-verify ~30
 # sellers: a 3P MARKETPLACE listing is NOT a Bellevue shelf price and violates the in-store rule (a
@@ -41,6 +111,7 @@ $lines = Get-Content (Join-Path $root $Raw)
 $rows = New-Object System.Collections.ArrayList
 $ids = @{}
 $dropped3P = New-Object System.Collections.ArrayList
+$sizeOverrides = New-Object System.Collections.ArrayList
 $noSellerData = 0
 foreach ($ln in $lines) {
   if (-not ($ln -match "`t")) { continue }
@@ -62,7 +133,7 @@ foreach ($ln in $lines) {
         [void]$dropped3P.Add(("{0}  [seller={1}, fulfill={2}]" -f $nm, $seller, $fulfill)); continue
       }
     } else { $noSellerData++ }
-    $size = Parse-WMSize $unitStr $price
+    $size = Resolve-WMSize $nm $unitStr $price $sizeOverrides
     if (-not $size) { continue }
     [void]$rows.Add([ordered]@{ store = 'Walmart'; item = $nm; ad_price = ('$' + $price); size = $size; regular = $price; current_price = $price; source_ad = 'Walmart Bellevue 68123 shelf price (batch capture)'; as_of = $today })
     if ($itemId) { $ids[$nm] = $itemId }
@@ -70,6 +141,7 @@ foreach ($ln in $lines) {
 }
 if ($dropped3P.Count -gt 0) { Write-Output ("Walmart: DROPPED {0} third-party/marketplace row(s) (in-store rule):" -f $dropped3P.Count); $dropped3P | ForEach-Object { Write-Output ('  - ' + $_) } }
 if ($noSellerData -gt 0) { Write-Warning ("Walmart: {0} row(s) had no seller/fulfillment field - marketplace filter could NOT run on them. Re-capture with the 6-field reducer to close this." -f $noSellerData) }
+if ($sizeOverrides.Count -gt 0) { Write-Output ("Walmart: {0} row(s) where the name size beat Walmart's own unit price:" -f $sizeOverrides.Count); $sizeOverrides | ForEach-Object { Write-Output ('  - ' + $_) } }
 
 # ADD-only merge into today's walmart-regular
 $prefix = 'walmart-regular'

@@ -265,7 +265,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         if ($cg -and [int]$cg.gap_count -gt 0) {
           $cgSig = (@($cg.gaps | ForEach-Object { $_.commodity + '|' + $_.store } | Sort-Object) -join ';')
           $cgF = Join-Path $OutDir 'coverage-gap-alert.sig'
-          $cgPrev = if (Test-Path $cgF) { (Get-Content $cgF -Raw).Trim() } else { '' }
+          $cgPrev = if (Test-Path $cgF) { ([string](Get-Content $cgF -Raw)).Trim() } else { '' }
           $cgList = (@($cg.gaps | ForEach-Object { $_.commodity + ' @ ' + $_.store }) -join '; ')
           Log ("coverage-gaps: $($cg.gap_count) store(s) carry an item but are off the board - $cgList")
           $summary += "REVIEW    coverage gaps: $($cg.gap_count) store(s) dropped despite carrying the item - see coverage-gaps.json"
@@ -311,7 +311,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         if ($sf -and [int]$sf.gap_count -gt 0) {
           $sfSig = (@($sf.gaps | ForEach-Object { $_.commodity + '|' + $_.store } | Sort-Object) -join ';')
           $sfF = Join-Path $OutDir 'sale-fallback-alert.sig'
-          $sfPrev = if (Test-Path $sfF) { (Get-Content $sfF -Raw).Trim() } else { '' }
+          $sfPrev = if (Test-Path $sfF) { ([string](Get-Content $sfF -Raw)).Trim() } else { '' }
           $sfList = (@($sf.gaps | ForEach-Object { $_.commodity + ' @ ' + $_.store }) -join '; ')
           Log ("sale-fallback: $($sf.gap_count) on-sale cell(s) with no everyday fallback - $sfList")
           $summary += "REVIEW    sale-fallback: $($sf.gap_count) on-sale cell(s) would vanish when the sale ends - see sale-fallback-gaps.json"
@@ -347,14 +347,14 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # but nothing read it. Alert on a NEW flag-set (signature de-dup so a persistent flag does not spam).
       try {
         $cfFile = Join-Path (Split-Path $root -Parent) 'meal-prep\db\cost-flags.txt'
-        $cf = if (Test-Path $cfFile) { (Get-Content $cfFile -Raw).Trim() } else { '' }
+        $cf = if (Test-Path $cfFile) { ([string](Get-Content $cfFile -Raw)).Trim() } else { '' }
         if ($cf) {
           $cfLines = @($cf -split "`n" | Where-Object { $_.Trim() })
           Log ("cost-flags: $($cfLines.Count) unpriced recipe line(s) - a recipe is priced too cheap; see db\cost-flags.txt")
           $summary += "REVIEW    cost-flags: $($cfLines.Count) unpriced recipe line(s) - a bid lost its price; recipe reads too cheap (db\cost-flags.txt)"
           $cfSig = [BitConverter]::ToString([Security.Cryptography.MD5]::Create().ComputeHash([Text.Encoding]::UTF8.GetBytes(($cfLines | Sort-Object) -join ';'))) -replace '-',''
           $cfSigF = Join-Path $OutDir 'cost-flags-alert.sig'
-          $cfPrev = if (Test-Path $cfSigF) { (Get-Content $cfSigF -Raw).Trim() } else { '' }
+          $cfPrev = if (Test-Path $cfSigF) { ([string](Get-Content $cfSigF -Raw)).Trim() } else { '' }
           if ($cfSig -ne $cfPrev -and (-not $NoAlert)) {
             try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Recipe pricing: $($cfLines.Count) unpriced ingredient line(s)" -Body ("engine\cost-recipes.ps1 could not price some recipe ingredient lines this run - each dropped line makes that recipe's cost read LOWER than reality (usually a bid pointing at a renamed/removed board commodity). Fix the bid in db\ingredients.json or register the commodity. Lines: " + (($cfLines | Select-Object -First 15) -join ' | ')) | Out-Null; if ($LASTEXITCODE -eq 0) { Set-Content $cfSigF -Value $cfSig -Encoding ASCII } } catch {}
           }
@@ -446,7 +446,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       } catch { Log ('prune-bad-links threw: ' + $_.Exception.Message) }
       $sigAfter = BoardSignature
       $sigFile  = Join-Path $OutDir 'published-board.sig'
-      $prevPub  = if (Test-Path $sigFile) { (Get-Content $sigFile -Raw).Trim() } else { '' }
+      $prevPub  = if (Test-Path $sigFile) { ([string](Get-Content $sigFile -Raw)).Trim() } else { '' }
       # republish when the price/type/ad-window signature moved OR a new ad window flipped (belt-and-suspenders)
       $boardChanged = ($sigAfter -ne $sigBefore) -or ($sigAfter -ne $prevPub) -or (@($flips).Count -gt 0)
       if (@($flips).Count -gt 0) { Log ("downstream refreshed after flips: " + ($flips -join ',')) }
@@ -464,7 +464,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         $flagSig = (($flagParts | Sort-Object) -join ';')
         Log ("REVIEW FLAGS: " + $flagParts.Count + " -> " + (($flagParts | Select-Object -First 4) -join ' ; '))
         $summary += ("REVIEW    $($flagParts.Count) price flag(s) need eyes (sanity/multibuy) - see guards-/flagged- json")
-        $prevFsig = if (Test-Path $fsigFile) { (Get-Content $fsigFile -Raw).Trim() } else { '' }
+        $prevFsig = if (Test-Path $fsigFile) { ([string](Get-Content $fsigFile -Raw)).Trim() } else { '' }
         if ($flagSig -ne $prevFsig -and -not $NoAlert) {
           $body = "The daily grocery check flagged $($flagParts.Count) price(s) to review on $asofS (these still published; verify they are real):`n`n" + (($flagParts) -join "`n") + "`n`nSee guards-*.json / flagged-*.json in $OutDir ."
           # only record the sig when the email actually SENT (send-alert exits 1 on failure); UTF8 so a
@@ -625,7 +625,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
               # breach used to hash to '' and could never de-dup properly)
               $driftSig = if ($cr) { (@(@($cr.mismatch) + @($cr.no_link) | Where-Object { $_ } | ForEach-Object { $_.id + '|' + $_.store } | Sort-Object -Unique) -join ';') } else { '' }
               $csigF = Join-Path $OutDir 'consistency-alert.sig'
-              $prevSig = if (Test-Path $csigF) { (Get-Content $csigF -Raw).Trim() } else { '' }
+              $prevSig = if (Test-Path $csigF) { ([string](Get-Content $csigF -Raw)).Trim() } else { '' }
               Log ("consistency STILL breached after repair - no-link=$nl (browser-store price drift, needs re-pull)")
               $summary += "REVIEW    board-link drift: $nl chips show a name not a link - see consistency-report.json"
               if ($driftSig -ne $prevSig -and (-not $NoAlert)) {
@@ -650,7 +650,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
             $scList = if ($sc) { (@($sc.violations | ForEach-Object { $_.commodity + ' [missing: ' + $_.missing + ']' }) -join '; ') } else { '?' }
             $scSig  = if ($sc) { (@($sc.violations | ForEach-Object { $_.commodity + '|' + $_.missing } | Sort-Object) -join ';') } else { '' }
             $scF = Join-Path $OutDir 'store-coverage-alert.sig'
-            $scPrev = if (Test-Path $scF) { (Get-Content $scF -Raw).Trim() } else { '' }
+            $scPrev = if (Test-Path $scF) { ([string](Get-Content $scF -Raw)).Trim() } else { '' }
             Log ("store-coverage FAIL: $($sc.violations.Count) commodity(ies) missing a store tile - $scList")
             $summary += "REVIEW    store-coverage: $($sc.violations.Count) commodity(ies) not showing all 7 stores - see store-coverage-report.json"
             if ($scSig -ne $scPrev -and (-not $NoAlert)) {

@@ -3,7 +3,7 @@
     "new_board":  "comparison-2026-07-26.json",
     "prev_board":  "comparison-2026-07-25.json",
     "rows_was":  450,
-    "rows_now":  481,
+    "rows_now":  490,
     "thresholds":  {
                        "max_drop_cells":  15,
                        "max_drop_pct":  10
@@ -21,27 +21,27 @@
                    {
                        "store":  "Baker\u0027s",
                        "was":  423,
-                       "now":  431,
-                       "drop":  -8,
-                       "pct":  -1.9,
+                       "now":  454,
+                       "drop":  -31,
+                       "pct":  -7.3,
                        "regression":  false,
                        "acked":  false
                    },
                    {
                        "store":  "Family Fare",
                        "was":  251,
-                       "now":  256,
-                       "drop":  -5,
-                       "pct":  -2,
+                       "now":  255,
+                       "drop":  -4,
+                       "pct":  -1.6,
                        "regression":  false,
                        "acked":  false
                    },
                    {
                        "store":  "Fareway",
                        "was":  395,
-                       "now":  395,
-                       "drop":  0,
-                       "pct":  0,
+                       "now":  396,
+                       "drop":  -1,
+                       "pct":  -0.3,
                        "regression":  false,
                        "acked":  false
                    },
@@ -57,9 +57,9 @@
                    {
                        "store":  "Sam\u0027s Club",
                        "was":  301,
-                       "now":  334,
-                       "drop":  -33,
-                       "pct":  -11,
+                       "now":  333,
+                       "drop":  -32,
+                       "pct":  -10.6,
                        "regression":  false,
                        "acked":  false
                    },
