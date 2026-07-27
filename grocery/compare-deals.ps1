@@ -54,6 +54,15 @@ if (Test-Path $bandsFile) { $bDoc = Get-Content $bandsFile -Raw | ConvertFrom-Js
 # lb), so the staple's per-lb band would wrongly reject every per-oz match.
 foreach ($c in $commodities) { if ($c.PSObject.Properties['band_min']) { $BANDS[[string]$c.id] = [pscustomobject]@{ min=[double]$c.band_min; max=[double]$c.band_max } } }
 function Test-Band($id, $up) { if (-not $BANDS.ContainsKey($id)) { return $true }; $b = $BANDS[$id]; return ([double]$up -ge [double]$b.min -and [double]$up -le [double]$b.max) }
+# UNIVERSAL IMPLAUSIBILITY FLOOR (2026-07-27, overhaul-1): only 29 of 503 commodities carry a hand-tuned
+# band, so 474 have NO low-end floor - a dropped decimal / unit-confusion parse ships unchecked (the
+# $0.0023/oz grits price that sat live for days was exactly this, on a band-less commodity). These per-unit
+# floors are ~1/4 of the cheapest REAL staple observed in each unit (oz salt $0.0304, floz vinegar $0.0234,
+# lb litter $0.2796, gal milk $2.99, dozen eggs $1.426), so no real cell is at risk but any decimal-drop is
+# caught. 'each' is deliberately unfloored (a 500-ct swab box is legitimately ~$0.004 each). Units absent
+# from this table are simply not floored (no false blocks on exotic units).
+$FLOOR = @{ oz=0.008; floz=0.006; lb=0.07; gallon=0.75; dozen=0.35 }
+function Test-Floor($unit, $up) { $u=[string]$unit; if (-not $FLOOR.ContainsKey($u)) { return $true }; return ([double]$up -ge [double]$FLOOR[$u]) }
 # bulk / non-single-unit heuristic on a size string (so the winner line can flag "10 lb pack" etc.)
 function Test-Bulk([string]$size, [string]$name) {
   $t = (("" + $size + " " + $name)).ToLower()
@@ -433,6 +442,13 @@ if ($SelfTest) {
   if ($o.Count -eq 1 -and $o[0] -eq 'walmart-regular-2026-07-23') { Write-Output 'ok    stale-beyond-window Walmart capture excluded' }
   else { Write-Output "FAIL  union age window not enforced (would load ancient prices)"; $script:fail++ }
 
+  # --- 15: universal implausibility floor (the band-less dropped-decimal backstop) --------------------------
+  # a decimal-drop below the per-unit floor is dropped; a real cheap staple and the exempt 'each' unit survive.
+  if (-not (Test-Floor 'oz' 0.0023))  { Write-Output 'ok    floor drops $0.0023/oz decimal-drop (the grits bug)' } else { Write-Output 'FAIL  floor let a $0.0023/oz price through'; $script:fail++ }
+  if (Test-Floor 'oz' 0.0304)         { Write-Output 'ok    floor keeps real $0.0304/oz salt' } else { Write-Output 'FAIL  floor wrongly dropped real salt'; $script:fail++ }
+  if (-not (Test-Floor 'lb' 0.03))    { Write-Output 'ok    floor drops $0.03/lb decimal-drop' } else { Write-Output 'FAIL  floor let a $0.03/lb price through'; $script:fail++ }
+  if (Test-Floor 'each' 0.0043)       { Write-Output "ok    'each' exempt (500-ct swab box legitimately sub-cent)" } else { Write-Output "FAIL  'each' should be unfloored"; $script:fail++ }
+
   Write-Output ('-'*54)
   if ($script:fail -eq 0) { Write-Output 'SELF-TEST PASS  (all multibuy / BOGO cases correct)'; exit 0 }
   else { Write-Output ("SELF-TEST FAIL: $script:fail case(s)"); exit 1 }
@@ -666,6 +682,11 @@ foreach ($d in $deals) {
         $mbUnpriced.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; price_text=$d.price_text; regular=$d.regular; size_text=$d.size_text; reason=("priced but OUT-OF-BAND (`$$uprice outside $($bn.min)-$($bn.max)) - likely a bad multibuy size/regular parse, review capture") })
       }
       $uprice = $null; $basis = 'OUT-OF-BAND'   # bad parse -> drop from ranking
+    }
+    elseif (-not (Test-Floor $c.unit $uprice)) {
+      # in-band (or band-less) but below the universal per-unit floor -> a dropped-decimal / unit error.
+      $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=("floor>=$($FLOOR[[string]$c.unit])"); price_text=$d.price_text; size_text=$d.size_text })
+      $uprice = $null; $basis = 'IMPLAUSIBLE-LOW'   # drop from ranking; board still ships via runner-up
     }
   }
   # SAFETY NET: a recognized multibuy that came back UNPRICED means the capture is incomplete
