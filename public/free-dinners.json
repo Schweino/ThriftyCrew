@@ -1,6 +1,6 @@
 ﻿{
-    "week_of":  "2026-07-26",
-    "updated":  "2026-07-26T19:32:00",
+    "week_of":  "2026-07-27",
+    "updated":  "2026-07-27T09:11:32",
     "note":  "This week free because they are the cheapest dinners per protein on the live Omaha board. They revert to members-only when prices re-rank.",
     "free":  [
                  {
@@ -39,46 +39,46 @@
                      "per_serving":  1.85
                  },
                  {
-                     "slug":  "haluski-and-kielbasa-cabbage-noodles",
+                     "slug":  "turkey-huevos-rancheros-rice-bowls",
                      "protein":  "turkey",
                      "rank":  1,
+                     "name":  "Turkey Huevos Rancheros Rice Bowls",
+                     "per_serving":  1.83
+                 },
+                 {
+                     "slug":  "haluski-and-kielbasa-cabbage-noodles",
+                     "protein":  "turkey",
+                     "rank":  2,
                      "name":  "Haluski and Kielbasa (Cabbage and Egg Noodles)",
                      "per_serving":  1.94
                  },
                  {
-                     "slug":  "red-beans-turkey-sausage-and-rice",
-                     "protein":  "turkey",
-                     "rank":  2,
-                     "name":  "Red Beans, Turkey Sausage and Rice",
-                     "per_serving":  2.08
-                 },
-                 {
-                     "slug":  "turkey-maqluba-upside-down-rice-bake",
+                     "slug":  "turkey-biscuit-pot-pie-casserole",
                      "protein":  "turkey",
                      "rank":  3,
-                     "name":  "Turkey Maqluba (Upside-Down Rice Bake)",
-                     "per_serving":  2.11
+                     "name":  "Turkey Biscuit Pot Pie Casserole",
+                     "per_serving":  1.94
                  },
                  {
-                     "slug":  "turkey-huevos-rancheros-rice-bowls",
+                     "slug":  "scalloped-potato-turkey-casserole",
                      "protein":  "turkey",
                      "rank":  4,
-                     "name":  "Turkey Huevos Rancheros Rice Bowls",
-                     "per_serving":  2.22
+                     "name":  "Scalloped Potato Turkey Casserole",
+                     "per_serving":  1.99
                  },
                  {
-                     "slug":  "fasolka-po-bretonsku-polish-beans-kielbasa",
+                     "slug":  "red-beans-turkey-sausage-and-rice",
                      "protein":  "turkey",
                      "rank":  5,
-                     "name":  "Fasolka po Bretonsku (Polish Baked Beans with Kielbasa)",
-                     "per_serving":  2.23
+                     "name":  "Red Beans, Turkey Sausage and Rice",
+                     "per_serving":  2.08
                  },
                  {
                      "slug":  "youvarlakia-avgolemono-greek-meatball-bowls",
                      "protein":  "beef",
                      "rank":  1,
                      "name":  "Youvarlakia Avgolemono (Greek Beef and Rice Meatballs in Lemon Sauce)",
-                     "per_serving":  2.32
+                     "per_serving":  2.31
                  },
                  {
                      "slug":  "lebanese-hashweh",
@@ -106,7 +106,7 @@
                      "protein":  "beef",
                      "rank":  5,
                      "name":  "Mediterranean Beef Hummus Bowls",
-                     "per_serving":  2.52
+                     "per_serving":  2.5
                  },
                  {
                      "slug":  "bratwurst-sauerkraut-potatoes-bake",
@@ -130,18 +130,18 @@
                      "per_serving":  1.63
                  },
                  {
-                     "slug":  "vietnamese-thit-kho-braised-pork-and-eggs",
-                     "protein":  "pork",
-                     "rank":  4,
-                     "name":  "Vietnamese Thit Kho Braised Pork and Eggs",
-                     "per_serving":  1.65
-                 },
-                 {
                      "slug":  "slow-cooker-filipino-pork-adobo-bowls",
                      "protein":  "pork",
-                     "rank":  5,
+                     "rank":  4,
                      "name":  "Slow Cooker Filipino Pork Adobo Bowls",
                      "per_serving":  1.74
+                 },
+                 {
+                     "slug":  "slow-cooker-pork-sauerkraut-apples",
+                     "protein":  "pork",
+                     "rank":  5,
+                     "name":  "Slow Cooker Pork and Sauerkraut with Apples and Potatoes",
+                     "per_serving":  1.76
                  }
              ]
 }
