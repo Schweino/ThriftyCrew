@@ -577,7 +577,7 @@ foreach ($c in $cats) {
       $isBest = ($i -eq 0)
       $cls = 'pg-chip'; if ($isBest) { $cls += ' is-best' }
       $notes = @()
-      if ($s.membership) { $notes += 'membership' }
+      if ($s.membership) { $notes += $(if ([string]$s.member_label) { [string]$s.member_label } else { 'membership' }) }
       if ($s.bulk) { $notes += 'bulk' }
       $typeTag = if ([string]$s.type -eq 'sale') { "<span class='pg-tag pg-tag-sale'>sale</span>" } else { "<span class='pg-tag'>everyday</span>" }
       [void]$cb.Append("<div class='" + $cls + "' data-store=`"" + (HtmlEnc ([string]$s.store)) + "`" data-pu='" + ('{0:F4}' -f [double]$s.per_unit) + "'>")

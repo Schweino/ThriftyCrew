@@ -227,6 +227,15 @@ function Get-ItemPrice([string]$priceText, [string]$nameText, $regular) {
   $pereach = ($pForEach -match '(?i)(per\s*ea|/\s*ea|\bea\.?\b|\beach\b|per\s*ct|/\s*ct)')
   $reg = $null; if ($regular -ne $null -and "$regular" -ne '') { try { $reg = [double]$regular } catch {} }
 
+  # Hy-Vee PERKS (member-only) dual price: "...$2.98 PERKS PRICES, NON-MEMBER PRICE $3.48". Brad's call (c):
+  # publish the PERKS price (the lower, member price) and let the caller flag the cell membership-gated. This
+  # MUST run before the cents and plain-dollar branches below, or a "SAVE! 50c" savings gets read as the price
+  # and the LAST dollar in the string is the NON-MEMBER price - both wrong. Grab the $ right before "PERKS PRICE".
+  $mkPerks = [regex]::Match($p, '(?i)\$\s*(\d+(?:\.\d{1,2})?)\s*perks\s*price')
+  if ($mkPerks.Success) {
+    return @{ per_item = [double]$mkPerks.Groups[1].Value; kind=@{perlb=$perlb;pereach=$pereach}; note='' }
+  }
+
   # BOGO: buy N get K free
   $m = [regex]::Match($p, '(?i)buy\s*(\d+)\s*,?\s*get\s*(\d+)\s*(?:of\s*equal[^,]*)?free')
   if ($m.Success -and $reg) {
@@ -315,7 +324,9 @@ function Get-UnitPrice($deal, $cat) {
   if ($unit -eq 'each') {
     $pk = Get-PackCount $deal.price_text; if (-not $pk) { $pk = Get-PackCount $deal.size_text }; if (-not $pk) { $pk = Get-PackCount $deal.name }
     if ($plain -and $pk)  { return @{ unit_price=($pr.per_item/$pk); basis="per-$pk-pack"; note=$pr.note } }
-    if ((-not $plain) -or ($deal.size_text -match '(?i)^\s*(1\s*)?(ct|count|ea|each)\.?\s*$')) { return @{ unit_price=$pr.per_item; basis='per-each'; note=$pr.note } }
+    # A Hy-Vee PERKS ad price is a single retail unit; with no pack count it prices per-each (a pack count above
+    # still divides). Scoped to the Perks pattern so the general "bare package, unknown count -> drop" guard holds.
+    if ((-not $plain) -or ($deal.size_text -match '(?i)^\s*(1\s*)?(ct|count|ea|each)\.?\s*$') -or ([string]$deal.price_text -match '(?i)perks\s*price')) { return @{ unit_price=$pr.per_item; basis='per-each'; note=$pr.note } }
     return $null   # bare package price with unknown count -> not confident, drop
   }
   return $null
@@ -390,6 +401,17 @@ if ($SelfTest) {
   $mixTok = '(?i)\bmix\b(?!\s*(?:&|and)\s*match)'
   if ('tyson chicken thighs, mix & match buy 1 get 2 free' -notmatch $mixTok) { Write-Output "ok    'mix & match' not excluded" } else { Write-Output "FAIL  'mix & match' wrongly excluded"; $script:fail++ }
   if ('grape drink mix' -match $mixTok) { Write-Output "ok    'drink mix' still excluded" } else { Write-Output "FAIL  'drink mix' no longer excluded"; $script:fail++ }
+
+  # --- 11b: Hy-Vee PERKS dual price -> publish the PERKS (member) price, never the non-member or the savings ---
+  # garlic bread: "$2.98 PERKS PRICES, NON-MEMBER PRICE $3.48" -> 2.98 (not 3.48; a Perks each-item with no pack prices per-each)
+  _Near 'Hy-Vee Perks each ($2.98)'   (Get-UnitPrice (_D 'Hy-Vee garlic bread, SAVE! .50, $2.98 PERKS PRICES, NON-MEMBER PRICE $3.48' 'Hy-Vee garlic bread, SAVE! .50, $2.98 PERKS PRICES, NON-MEMBER PRICE $3.48' $null $null) (_C 'each')).unit_price 2.98 0.001
+  # cauliflower with a "SAVE! 50c" savings must NOT be read as 0.50 -> 3.49
+  _Near 'Hy-Vee Perks vs cents-save'  (Get-UnitPrice (_D ([char]0x201C+'Bud by Dole cauliflower, SAVE! 50'+[char]0x00A2+', $3.49 PERKS PRICES. NON-MEMBER PRICE $3.99') 'Bud by Dole cauliflower' $null $null) (_C 'each')).unit_price 3.49 0.001
+  # bare "$1 PERKS" (no decimal) -> 1.00
+  _Near 'Hy-Vee Perks whole-dollar'   (Get-UnitPrice (_D 'Larabar protein bars, $1 PERKS PRICES. NON-MEMBER PRICE $1.25' 'Larabar protein bars, $1 PERKS PRICES. NON-MEMBER PRICE $1.25' $null $null) (_C 'each')).unit_price 1.00 0.001
+  # membership detection (the flag the board uses to gate the nomem column) fires on the Perks pattern, not on plain rows
+  if ('Hy-Vee garlic bread, $2.98 PERKS PRICES, NON-MEMBER PRICE $3.48' -match '(?i)perks\s*price') { Write-Output 'ok    Perks membership flag detected' } else { Write-Output 'FAIL  Perks membership flag NOT detected'; $script:fail++ }
+  if ('Hy-Vee milk $2.98' -notmatch '(?i)perks\s*price') { Write-Output 'ok    plain Hy-Vee row not flagged membership' } else { Write-Output 'FAIL  plain row wrongly flagged membership'; $script:fail++ }
 
   # --- 12-14: partial-pull coverage (reproduces the 2026-07-23 Walmart flood) -----------------------------
   # A throttled Walmart pull returns ~50 of 410 commodities. Under newest-file-wins that partial REPLACED the
@@ -653,9 +675,14 @@ foreach ($d in $deals) {
            else { 'has regular but no unit basis - add the pack size (e.g. "12 pk 12 fl oz"), or "lb" for a per-pound item' }
     $mbUnpriced.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; price_text=$d.price_text; regular=$d.regular; size_text=$d.size_text; reason=$why })
   }
+  # PER-CELL membership (not whole-store): a Hy-Vee row whose price is the PERKS member price is membership-gated
+  # just like a Sam's Club cell, so it is excluded from the "cheapest without membership" column. Hy-Vee's regular
+  # (non-Perks) prices stay no-membership. Label is Brad's exact wording.
+  $perks = ([string]$d.price_text -match '(?i)perks\s*price')
+  $memLabel = if ($perks) { 'Perks membership required' } elseif (Test-Membership $d.store) { 'membership' } else { '' }
   $matched.Add([pscustomobject]@{
     id=$c.id; label=$c.label; unit=$c.unit; store=$d.store; name=$d.name; price_type=$d.price_type;
-    price_text=$d.price_text; size_text=$d.size_text; regular=$d.regular; bulk=(Test-Bulk $d.size_text $d.name); membership=(Test-Membership $d.store);
+    price_text=$d.price_text; size_text=$d.size_text; regular=$d.regular; bulk=(Test-Bulk $d.size_text $d.name); membership=((Test-Membership $d.store) -or $perks); member_label=$memLabel;
     # Carry the SOURCE through to the page. Without it build-deals-page cannot tell an ad-backed sale from a
     # one-off price snapshot, so it stamped every sale chip with the store's ad-cycle end date - dressing an
     # undated Aisles Online markdown up as "Sale thru Jul 19". A date we invented is worse than no date.
@@ -705,7 +732,7 @@ foreach ($g in ($matched | Where-Object { $_.unit_price -ne $null } | Group-Obje
     nomem_store = $(if($nm.Count){$nm[0].store}else{$null})
     nomem_price = $(if($nm.Count){$nm[0].unit_price}else{$null})
     nomem_type  = $(if($nm.Count){$nm[0].price_type}else{$null})
-    stores = @($ranked | ForEach-Object { [pscustomobject]@{ store=$_.store; per_unit=$_.unit_price; unit=$f.unit; type=$_.price_type; bulk=$_.bulk; membership=$_.membership; item=$_.name; ad=$_.price_text; size=$_.size_text; basis=$_.basis; note=$_.note; source_ad=$_.source_ad } })
+    stores = @($ranked | ForEach-Object { [pscustomobject]@{ store=$_.store; per_unit=$_.unit_price; unit=$f.unit; type=$_.price_type; bulk=$_.bulk; membership=$_.membership; member_label=$_.member_label; item=$_.name; ad=$_.price_text; size=$_.size_text; basis=$_.basis; note=$_.note; source_ad=$_.source_ad } })
   })
 }
 $report = @($report | Sort-Object commodity)

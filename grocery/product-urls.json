@@ -992,14 +992,6 @@
                                                    "size":  "each",
                                                    "name":  "Hass Avocado"
                                                },
-                                   "Hy-Vee":  {
-                                                  "url":  "https://www.hy-vee.com/aisles-online/p/37190/hass-avocados",
-                                                  "name":  "Hass Avocados",
-                                                  "board_pu":  1.33,
-                                                  "price":  1.3333,
-                                                  "size":  "bag",
-                                                  "verified":  "2026-07-16 Hy-Vee GraphQL (storeId 1465, current shelf price)"
-                                              },
                                    "Sam\u0027s Club":  {
                                                            "url":  "https://www.samsclub.com/ip/13586650560",
                                                            "name":  "Avocados, 5 ct.",
@@ -3838,14 +3830,6 @@
                                                            "size":  "20 oz",
                                                            "name":  "Dole Pineapple Chunks"
                                                        },
-                                           "Hy-Vee":  {
-                                                          "url":  "https://www.hy-vee.com/aisles-online/p/2970344/that-s-smart-pineapple-chunks",
-                                                          "price":  1.62,
-                                                          "size":  "20 oz",
-                                                          "name":  "That\u0027s Smart! Pineapple Chunks",
-                                                          "verified":  "2026-07-15 Hy-Vee search API (storeId 1465)",
-                                                          "board_pu":  0.081
-                                                      },
                                            "Sam\u0027s Club":  {
                                                                    "url":  "https://www.samsclub.com/ip/13608108237",
                                                                    "name":  "Dole Tropical Gold Pineapple Chunks, 15.25 oz., 6 pk.",
@@ -6886,13 +6870,6 @@
                                                            "size":  "16 oz",
                                                            "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)"
                                                        },
-                                       "Hy-Vee":  {
-                                                      "url":  "https://www.hy-vee.com/aisles-online/p/23914/hy-vee-cream-cheese",
-                                                      "price":  2.49,
-                                                      "size":  "8 oz",
-                                                      "name":  "Hy-Vee Cream Cheese",
-                                                      "board_pu":  0.3113
-                                                  },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/13865569340",
                                                                "name":  "Member\u0027s Mark Cream Cheese Brick, 48 oz.",
@@ -9554,14 +9531,6 @@
                                                        "size":  "32 oz",
                                                        "name":  "Fareway Crinkle Fries"
                                                    },
-                                       "Hy-Vee":  {
-                                                      "url":  "https://www.hy-vee.com/aisles-online/p/4097587/hy-vee-crinkle-cut-fries",
-                                                      "name":  "Hy-Vee Crinkle Cut Fries",
-                                                      "price":  10.99,
-                                                      "size":  "5 lb",
-                                                      "verified":  "2026-07-20 DERIVED from the price row (same record the board priced)",
-                                                      "board_pu":  0.1374
-                                                  },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/13621707320",
                                                                "name":  "Ore-Ida Crispy Crinkles French Fries, Frozen 8 lbs.",
@@ -10027,13 +9996,6 @@
                                                      "size":  "each",
                                                      "name":  "Dole Mandarin Oranges, in 100% Fruit Juice"
                                                  },
-                                     "Hy-Vee":  {
-                                                    "url":  "https://www.hy-vee.com/aisles-online/p/2845855/hy-vee-mandarin-oranges-in-100-juice-4-4-oz-bowls",
-                                                    "price":  2.78,
-                                                    "size":  "4 pk 4 oz",
-                                                    "name":  "Hy-Vee Mandarin Oranges in 100% Juice 4-4 oz Bowls",
-                                                    "board_pu":  0.695
-                                                },
                                      "Sam\u0027s Club":  {
                                                              "url":  "https://www.samsclub.com/ip/19396807392",
                                                              "name":  "Member\u0027s Mark Diced Peach Cups, 4 oz., 24 ct.",
@@ -11524,14 +11486,6 @@
                                                         "size":  "16 oz",
                                                         "name":  "Fareway Ground Turkey"
                                                     },
-                                        "Hy-Vee":  {
-                                                       "url":  "https://www.hy-vee.com/aisles-online/p/147908/jennie-o-ground-turkey-85-lean-15-fat",
-                                                       "price":  4.69,
-                                                       "size":  "lb",
-                                                       "name":  "Jennie-O Ground Turkey 85% Lean 15% Fat",
-                                                       "verified":  "2026-07-16 Hy-Vee search API (storeId 1465)",
-                                                       "board_pu":  4.69
-                                                   },
                                         "Sam\u0027s Club":  {
                                                                 "url":  "https://www.samsclub.com/ip/13730411236",
                                                                 "name":  "Jennie-O Lean Ground Turkey, Case ( 20 lbs.)",
