@@ -23028,7 +23028,8 @@
         "include":  [
                         "mouthwash",
                         "mouth\\s+rinse",
-                        "listerine"
+                        "listerine",
+                        "oral\\s+rinse"
                     ],
         "exclude":  [
                         "\\bkids\\b",
@@ -32476,7 +32477,11 @@
                         "fruit\\s+pops?",
                         "ice\\s+bars?",
                         "\\bhelados\\b",
-                        "\\boutshine\\b"
+                        "\\boutshine\\b",
+                        "oral\\s+rinse",
+                        "\\btherabreath\\b",
+                        "\\bbiotene\\b",
+                        "\\bbreath\\b"
                     ]
     },
     {
