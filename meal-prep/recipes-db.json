@@ -1476,7 +1476,7 @@
                     {
                         "name":  "Slow Cooker Salsa Chicken Burrito Bowl",
                         "slug":  "slow-cooker-salsa-chicken-bowl",
-                        "visibility":  "paid",
+                        "visibility":"public",
                         "cuisine":  "Mexican",
                         "method":  "slow cooker",
                         "servings":  14,
@@ -7175,7 +7175,7 @@
                     {
                         "name":  "Slow Cooker Kalua Pork Bowls",
                         "slug":  "slow-cooker-kalua-pork-bowls",
-                        "visibility":  "public",
+                        "visibility":"public",
                         "cuisine":  "Hawaiian",
                         "method":  "slow cooker",
                         "servings":  14,
@@ -8493,7 +8493,7 @@
                     {
                         "name":  "Slow Cooker Filipino Pork Adobo Bowls",
                         "slug":  "slow-cooker-filipino-pork-adobo-bowls",
-                        "visibility":  "public",
+                        "visibility":"public",
                         "cuisine":  "Filipino",
                         "method":  "slow cooker",
                         "servings":  14,
@@ -21442,7 +21442,7 @@
                     {
                         "name":  "Lebanese Hashweh (Spiced Beef and Rice)",
                         "slug":  "lebanese-hashweh",
-                        "visibility":  "public",
+                        "visibility":"public",
                         "cuisine":  "Middle Eastern",
                         "servings":  14,
                         "ingredients":  [
@@ -21922,7 +21922,7 @@
                     {
                         "name":  "Mediterranean Beef Hummus Bowls",
                         "slug":  "mediterranean-beef-hummus-bowls",
-                        "visibility":  "public",
+                        "visibility":"public",
                         "cuisine":  "Mediterranean",
                         "servings":  14,
                         "ingredients":  [
@@ -22194,7 +22194,7 @@
                     {
                         "name":  "Million Dollar Baked Spaghetti",
                         "slug":  "million-dollar-baked-spaghetti",
-                        "visibility":  "public",
+                        "visibility":"paid",
                         "cuisine":  "American",
                         "servings":  14,
                         "ingredients":  [
@@ -23170,7 +23170,7 @@
                     {
                         "name":  "Poppy Seed Chicken and Rice Casserole",
                         "slug":  "poppy-seed-chicken-and-rice-casserole",
-                        "visibility":  "paid",
+                        "visibility":"public",
                         "cuisine":  "American Southern",
                         "servings":  14,
                         "ingredients":  [
@@ -28044,7 +28044,7 @@
                     {
                         "name":  "Slow Cooker Beef and Potato Au Gratin Casserole",
                         "slug":  "beef-potato-au-gratin-casserole",
-                        "visibility":  "public",
+                        "visibility":"public",
                         "cuisine":  "American",
                         "servings":  14,
                         "ingredients":  [
@@ -28749,7 +28749,7 @@
                     {
                         "name":  "Bistek Tagalog (Filipino Beef and Onions over Rice)",
                         "slug":  "bistek-tagalog-filipino-beef-onion-rice",
-                        "visibility":  "paid",
+                        "visibility":"public",
                         "cuisine":  "Filipino",
                         "servings":  14,
                         "ingredients":  [
@@ -28844,7 +28844,7 @@
                     {
                         "name":  "Bratwurst and Sauerkraut with Potatoes",
                         "slug":  "bratwurst-sauerkraut-potatoes-bake",
-                        "visibility":  "public",
+                        "visibility":"public",
                         "cuisine":  "german",
                         "servings":  14,
                         "ingredients":  [
@@ -30469,7 +30469,7 @@
                     {
                         "name":  "Chicken with 40 Cloves of Garlic",
                         "slug":  "chicken-40-cloves-garlic",
-                        "visibility":  "public",
+                        "visibility":"paid",
                         "cuisine":  "French",
                         "servings":  14,
                         "ingredients":  [
@@ -30692,7 +30692,7 @@
                     {
                         "name":  "Chicken Bulgogi Rice Bowls",
                         "slug":  "chicken-bulgogi-rice-bowls",
-                        "visibility":  "public",
+                        "visibility":"public",
                         "cuisine":  "Korean",
                         "servings":  14,
                         "ingredients":  [
@@ -31050,7 +31050,7 @@
                     {
                         "name":  "Chicken Fried Rice",
                         "slug":  "chicken-fried-rice-skillet",
-                        "visibility":  "paid",
+                        "visibility":"public",
                         "cuisine":  "Chinese",
                         "servings":  14,
                         "ingredients":  [
@@ -33678,7 +33678,7 @@
                     {
                         "name":  "Claypot Chicken and Mushroom Rice",
                         "slug":  "claypot-chicken-mushroom-rice",
-                        "visibility":  "public",
+                        "visibility":"public",
                         "cuisine":  "Chinese",
                         "servings":  14,
                         "ingredients":  [
@@ -36360,7 +36360,7 @@
                     {
                         "name":  "Fasolka po Bretonsku (Polish Baked Beans with Kielbasa)",
                         "slug":  "fasolka-po-bretonsku-polish-beans-kielbasa",
-                        "visibility":  "paid",
+                        "visibility":"public",
                         "cuisine":  "polish",
                         "servings":  14,
                         "ingredients":  [
@@ -39499,7 +39499,7 @@
                     {
                         "name":  "Haluski and Kielbasa (Cabbage and Egg Noodles)",
                         "slug":  "haluski-and-kielbasa-cabbage-noodles",
-                        "visibility":  "public",
+                        "visibility":"public",
                         "cuisine":  "polish",
                         "servings":  14,
                         "ingredients":  [
@@ -45766,7 +45766,7 @@
                     {
                         "name":  "Nigerian Chicken Suya Bowls",
                         "slug":  "nigerian-chicken-suya-bowls",
-                        "visibility":  "public",
+                        "visibility":"paid",
                         "cuisine":  "West African / Nigerian",
                         "servings":  14,
                         "ingredients":  [
@@ -46507,7 +46507,7 @@
                     {
                         "name":  "Orecchiette with Italian Sausage and Broccoli",
                         "slug":  "orecchiette-italian-sausage-broccoli",
-                        "visibility":  "public",
+                        "visibility":"public",
                         "cuisine":  "italian",
                         "servings":  14,
                         "ingredients":  [
@@ -50060,7 +50060,7 @@
                     {
                         "name":  "Red Beans, Turkey Sausage and Rice",
                         "slug":  "red-beans-turkey-sausage-and-rice",
-                        "visibility":  "public",
+                        "visibility":"public",
                         "cuisine":  "Cajun",
                         "servings":  14,
                         "ingredients":  [
@@ -56235,7 +56235,7 @@
                     {
                         "name":  "Turkey Alfredo Rotini Bake",
                         "slug":  "turkey-alfredo-rotini-bake",
-                        "visibility":  "public",
+                        "visibility":"paid",
                         "cuisine":  "italian-american",
                         "servings":  14,
                         "ingredients":  [
@@ -57710,7 +57710,7 @@
                     {
                         "name":  "Turkey Egg Roll in a Bowl over Rice",
                         "slug":  "turkey-egg-roll-in-a-bowl-over-rice",
-                        "visibility":  "public",
+                        "visibility":"paid",
                         "cuisine":  "chinese-american",
                         "servings":  14,
                         "ingredients":  [
@@ -57948,7 +57948,7 @@
                     {
                         "name":  "Turkey Huevos Rancheros Rice Bowls",
                         "slug":  "turkey-huevos-rancheros-rice-bowls",
-                        "visibility":  "paid",
+                        "visibility":"public",
                         "cuisine":  "Tex-Mex",
                         "servings":  14,
                         "ingredients":  [
@@ -58623,7 +58623,7 @@
                     {
                         "name":  "Turkey Maqluba (Upside-Down Rice Bake)",
                         "slug":  "turkey-maqluba-upside-down-rice-bake",
-                        "visibility":  "public",
+                        "visibility":"public",
                         "cuisine":  "palestinian",
                         "servings":  14,
                         "ingredients":  [
@@ -63336,7 +63336,7 @@
                     {
                         "name":  "Vietnamese Ginger Chicken (Ga Kho Gung)",
                         "slug":  "vietnamese-ginger-chicken-ga-kho-gung",
-                        "visibility":  "public",
+                        "visibility":"paid",
                         "cuisine":  "Vietnamese",
                         "servings":  14,
                         "ingredients":  [
@@ -63587,7 +63587,7 @@
                     {
                         "name":  "Vietnamese Thit Kho Braised Pork and Eggs",
                         "slug":  "vietnamese-thit-kho-braised-pork-and-eggs",
-                        "visibility":  "public",
+                        "visibility":"public",
                         "cuisine":  "Vietnamese",
                         "servings":  14,
                         "ingredients":  [
@@ -64102,7 +64102,7 @@
                     {
                         "name":  "Youvarlakia Avgolemono (Greek Beef and Rice Meatballs in Lemon Sauce)",
                         "slug":  "youvarlakia-avgolemono-greek-meatball-bowls",
-                        "visibility":  "public",
+                        "visibility":"public",
                         "cuisine":  "Greek",
                         "servings":  14,
                         "ingredients":  [
