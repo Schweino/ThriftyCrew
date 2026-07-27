@@ -100,3 +100,6 @@ site-backups/*
 /meal-prep/db/published-hashes.json
 /meal-prep/pipeline/catalog-digest.json
 *.bak-*
+
+# compute-v2 downloads the public feed here as a cache
+/meal-prep/scratch-smpfeed.json

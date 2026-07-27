@@ -29,6 +29,7 @@ $regenRx = @(
   'meal-prep/db/built/',                # rebuilt cards
   'meal-prep/pipeline/v2-perserving', 'meal-prep/pipeline/catalog-digest',
   'meal-prep/ingredient-map\.json', 'meal-prep/dinner-data\.js', 'meal-prep/protein-data',
+  'meal-prep/scratch-smpfeed\.json',   # compute-v2's cached download of the public feed
   'meal-prep/recipes-db\.json',         # rotation/index writes (visibility flips)
   'meal-prep/free-rotation\.json',
   'public/',                            # Cloudflare-served, cloud-committed
