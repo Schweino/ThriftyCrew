@@ -737,6 +737,114 @@
                       "store":  "Baker\u0027s",
                       "reviewed":  "2026-07-27",
                       "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-27): the commodity is priced per EACH, but the Kroger API row now carries a weight instead of a count - engine saw \"Simple Truth Fresh Hot Roasted Whole Rotisserie Chicken\" at price_text=[$8.99] size_text=[2 lb] in bakers-regular-2026-07-27 (it was size_text=[1 ct] on 07-18). The engine refuses to convert lb to each. This is also the cause of its cell-drop warning. Revisit if per-each handling for whole birds is added."
+                  },
+                  {
+                      "commodity":  "plantains",
+                      "store":  "Hy-Vee",
+                      "reviewed":  "2026-07-27",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-27): the commodity is priced per EACH, but this store sells it on a weight basis - engine saw \"Plantains\" at price_text=[$0.97] size_text=[0.65 lbs ($1.49/lb)]. Converting would mean inventing a each-count, so the engine correctly refuses and the cell stays off the board. Delete this entry if the store starts publishing a usable count."
+                  },
+                  {
+                      "commodity":  "plantains",
+                      "store":  "Family Fare",
+                      "reviewed":  "2026-07-27",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-27): the commodity is priced per EACH, but this store sells it on a weight basis - engine saw \"Plantains\" at price_text=[$1.99] size_text=[lb]. Converting would mean inventing a each-count, so the engine correctly refuses and the cell stays off the board. Delete this entry if the store starts publishing a usable count."
+                  },
+                  {
+                      "commodity":  "collard-greens",
+                      "store":  "Family Fare",
+                      "reviewed":  "2026-07-27",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-27): the commodity is priced per EACH, but this store sells it on a weight basis - engine saw \"Collard Greens\" at price_text=[$1.79] size_text=[lb]. Converting would mean inventing a each-count, so the engine correctly refuses and the cell stays off the board. Delete this entry if the store starts publishing a usable count."
+                  },
+                  {
+                      "commodity":  "chayote",
+                      "store":  "Baker\u0027s",
+                      "reviewed":  "2026-07-27",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-27): the commodity is priced per EACH, but this store sells it on a weight basis - engine saw \"Chayote Squash\" at price_text=[$2.99] size_text=[lb]. Converting would mean inventing a each-count, so the engine correctly refuses and the cell stays off the board. Delete this entry if the store starts publishing a usable count."
+                  },
+                  {
+                      "commodity":  "broccolini",
+                      "store":  "Hy-Vee",
+                      "reviewed":  "2026-07-27",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-27): the commodity is priced per EACH, but this store sells it on a weight basis - engine saw \"Mann\u0027s Broccolini\" at price_text=[$3.99] size_text=[6 oz]. Converting would mean inventing a each-count, so the engine correctly refuses and the cell stays off the board. Delete this entry if the store starts publishing a usable count."
+                  },
+                  {
+                      "commodity":  "eggplant",
+                      "store":  "Hy-Vee",
+                      "reviewed":  "2026-07-27",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-27): the commodity is priced per EACH, but this store sells it on a weight basis - engine saw \"Eggplant\" at price_text=[$2.99] size_text=[1.2 lbs ($2.99/lb)]. Converting would mean inventing a each-count, so the engine correctly refuses and the cell stays off the board. Delete this entry if the store starts publishing a usable count."
+                  },
+                  {
+                      "commodity":  "leeks",
+                      "store":  "Baker\u0027s",
+                      "reviewed":  "2026-07-27",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-27): the commodity is priced per EACH, but this store sells it on a weight basis - engine saw \"Organic Leeks-Order by the Bunch (2-3 leeks per bunch)\" at price_text=[$2.99] size_text=[lb]. Converting would mean inventing a each-count, so the engine correctly refuses and the cell stays off the board. Delete this entry if the store starts publishing a usable count. The name states 2-3 leeks per bunch, so even the bunch count is a range - genuinely unknowable."
+                  },
+                  {
+                      "commodity":  "beets",
+                      "store":  "Hy-Vee",
+                      "reviewed":  "2026-07-27",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-27): the commodity is priced per LB, but this store sells it on a count basis - engine saw \"Green Top Beets Bunch\" at price_text=[$3.99] size_text=[1 ct]. Converting would mean inventing a pound-weight for a bunch, so the engine correctly refuses and the cell stays off the board. Delete this entry if the store starts publishing a usable weight."
+                  },
+                  {
+                      "commodity":  "fresh-thyme",
+                      "store":  "Fareway",
+                      "reviewed":  "2026-07-27",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-27): the commodity is priced per OZ, but this store sells it on a count basis - engine saw \"Crazy Fresh Thyme\" at price_text=[$2.99] size_text=[1 each]. Converting would mean inventing a package weight, so the engine correctly refuses and the cell stays off the board. Delete this entry if the store starts publishing a usable weight."
+                  },
+                  {
+                      "commodity":  "onion-soup-mix",
+                      "store":  "Fareway",
+                      "reviewed":  "2026-07-27",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-27): the commodity is priced per OZ, but this store sells it on a count basis - engine saw \"Fareway Onion Soup Mix\" at price_text=[$1.28] size_text=[2 each]. Converting would mean inventing a package weight, so the engine correctly refuses and the cell stays off the board. Delete this entry if the store starts publishing a usable weight."
+                  },
+                  {
+                      "commodity":  "brownie-mix",
+                      "store":  "Baker\u0027s",
+                      "reviewed":  "2026-07-27",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-27): the commodity is priced per EACH, but this store sells it on a weight basis - engine saw \"Duncan Hines Family Size Chewy Fudge Brownie Mix\" at price_text=[$2.49] size_text=[18.300 oz]. Converting would mean inventing a box-count, so the engine correctly refuses and the cell stays off the board. Delete this entry if the store starts publishing a usable count."
+                  },
+                  {
+                      "commodity":  "bread",
+                      "store":  "Family Fare",
+                      "reviewed":  "2026-07-27",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-27): the commodity is priced per EACH, but this store sells it on a weight basis - engine saw \"White Bread Our Family\" at price_text=[$2.19] size_text=[20 oz]. Converting would mean inventing a loaf-count, so the engine correctly refuses and the cell stays off the board. Delete this entry if the store starts publishing a usable count."
+                  },
+                  {
+                      "commodity":  "bread",
+                      "store":  "Baker\u0027s",
+                      "reviewed":  "2026-07-27",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-27): the commodity is priced per EACH, but this store sells it on a weight basis - engine saw \"Kroger White Bread\" at price_text=[$1.99] size_text=[20 oz]. Converting would mean inventing a loaf-count, so the engine correctly refuses and the cell stays off the board. Delete this entry if the store starts publishing a usable count."
+                  },
+                  {
+                      "commodity":  "frozen-pizza",
+                      "store":  "Baker\u0027s",
+                      "reviewed":  "2026-07-27",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-27): the commodity is priced per EACH, but this store sells it on a weight basis - engine saw \"Private Selection Hot Honey Pepperoni and Feta Thin Crust Frozen Pizza\" at price_text=[$8.99] size_text=[16.7 oz]. Converting would mean inventing a pizza-count, so the engine correctly refuses and the cell stays off the board. Delete this entry if the store starts publishing a usable count."
+                  },
+                  {
+                      "commodity":  "mouthwash",
+                      "store":  "Family Fare",
+                      "reviewed":  "2026-07-27",
+                      "why":  "OUT-OF-BAND (reviewed 2026-07-27): Family Fare\u0027s only two matching products are SPECIALTY dry-mouth rinses - \"Biotene Dry Mouth Fresh Mint Oral Rinse 16 Fl Oz\" and \"Thera Breath Deep Clean Fresh Mint Oral Rinse 16 Fl Oz\", both $9.99/16 fl oz = $0.62/fl oz against the commodity\u0027s 0.05-0.40 band. That is 3.5x an everyday mouthwash, so the price band correctly filtered them rather than letting a specialty rinse set the store\u0027s \"mouthwash\" price. Baker\u0027s carries the same TheraBreath line and was filtered identically, but still shows a cell because it also stocks a comparable everyday product. Delete this entry if Family Fare starts stocking an ordinary mouthwash."
+                  },
+                  {
+                      "commodity":  "mustard-greens",
+                      "store":  "Fareway",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only Fareway match is \"Glory Foods Seasoned Southern Style Mustard Greens\", CANNED pre-seasoned greens, which the global \u0027seasoned\u0027 token correctly blocks - the commodity is fresh mustard greens sold by the bunch. Correct block, not a rule bug."
+                  },
+                  {
+                      "commodity":  "pineapple",
+                      "store":  "Baker\u0027s",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only current Baker\u0027s match is \"Pineapple, Strawberry \u0026 Kiwi Bowl Fresh Cut In Store Daily\" - a mixed fresh-cut fruit bowl, not a whole pineapple. Its price cannot be attributed to pineapple. Delete this entry if Baker\u0027s re-lists whole pineapple."
+                  },
+                  {
+                      "commodity":  "cauliflower",
+                      "store":  "Baker\u0027s",
+                      "reviewed":  "2026-07-27",
+                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only current Baker\u0027s match is \"Kevin\u0027s Natural Foods Parmesan Basil Chicken with Cauliflower Pasta 24 oz\", a prepared meal. Baker\u0027s fresh cauliflower is absent from the newest complete Kroger API pull, so there is genuinely nothing to price. Delete this entry if fresh cauliflower returns to the pull."
                   }
               ]
 }

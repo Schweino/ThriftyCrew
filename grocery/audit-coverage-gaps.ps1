@@ -28,9 +28,27 @@ function AddP([string]$store,[string]$name) { if (-not $store -or -not $name) { 
 # weekly ads (flat .deals with {store,item})
 $adsF = Get-ChildItem (Join-Path $OutDir 'ads-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
 if ($adsF) { foreach ($d in (Get-Content $adsF.FullName -Raw | ConvertFrom-Json).deals) { AddP ([string]$d.store) ([string]$d.item) } }
-# everyday shelf files (per store; store on the doc or the deal)
+# Everyday shelf files (per store; store on the doc or the deal). NEWEST PER STORE ONLY, and only
+# within the same 14-day window the engine itself honours (2026-07-27). Reading EVERY regular file
+# ever written - which this did - manufactures false gaps two ways: a product the store has since
+# DELISTED still counts as carried (Baker's does a complete daily API pull, so absence from the
+# newest file is real), and a file past the freshness cliff counts at all (a Family Fare row from
+# 21 days ago). Both then read as "the store carries it but a too-strict regex dropped it", which
+# is the opposite of what happened. Every other source below already takes -First 1.
+$regNewest = @{}
 foreach ($rf in (Get-ChildItem (Join-Path $OutDir 'regular\*.json') -ErrorAction SilentlyContinue)) {
-  try { $doc = Get-Content $rf.FullName -Raw | ConvertFrom-Json } catch { continue }
+  $m = [regex]::Match($rf.BaseName, '^(.+)-regular-(\d{4}-\d{2}-\d{2})$')
+  if (-not $m.Success) { continue }                     # stray file: guard 12 owns that failure
+  $pfx = $m.Groups[1].Value; $stamp = $m.Groups[2].Value
+  if (-not $regNewest.ContainsKey($pfx) -or $stamp -gt $regNewest[$pfx].stamp) {
+    $regNewest[$pfx] = [pscustomobject]@{ stamp = $stamp; file = $rf }
+  }
+}
+$freshFloor = (Get-Date).AddDays(-14).ToString('yyyy-MM-dd')
+foreach ($k in $regNewest.Keys) {
+  $entry = $regNewest[$k]
+  if ($entry.stamp -lt $freshFloor) { continue }        # past the cliff: the engine would not price it either
+  try { $doc = Get-Content $entry.file.FullName -Raw | ConvertFrom-Json } catch { continue }
   foreach ($d in $doc.deals) { $s = if ($doc.store) { [string]$doc.store } else { [string]$d.store }; AddP $s ([string]$d.item); if ($d.name) { AddP $s ([string]$d.name) } }
 }
 # browser-store deal files
