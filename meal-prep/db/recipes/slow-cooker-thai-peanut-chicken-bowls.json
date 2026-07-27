@@ -15,9 +15,9 @@
                  "protein":  63,
                  "carbs":  52,
                  "fat":  15,
-                 "cost_ps":  "3.42"
+                 "cost_ps":  "3.47"
              },
-    "intro_html":  "Peanut sauce makes almost anything taste like a treat, and this Thai-inspired bowl is no exception. It brings 63 grams of protein and a creamy coconut-peanut sauce for about $3.42 a serving (at everyday cost). Fourteen servings from one pot means you can eat like this all week and still come out ahead.",
+    "intro_html":  "Peanut sauce makes almost anything taste like a treat, and this Thai-inspired bowl is no exception. It brings 63 grams of protein and a creamy coconut-peanut sauce for about $3.47 a serving (at everyday cost). Fourteen servings from one pot means you can eat like this all week and still come out ahead.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3400 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (800 g)",
@@ -31,7 +31,7 @@
                                 "\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 2 tbsp (70 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$3.42 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.47 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "That jar of peanut butter powers the whole sauce for under a dollar\u0027s worth, so \u003cstrong\u003ethe pantry staple you already own\u003c/strong\u003e is doing the heavy lifting.",
                        "Canned coconut milk is far cheaper than the carton kind and keeps for a year, so \u003cstrong\u003ebuy a few cans at once\u003c/strong\u003e.",
@@ -67,15 +67,15 @@
                                    "item":  "Rice",
                                    "grams":  800,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Red Bell Pepper",
                                    "grams":  600,
                                    "buy":  "5 peppers",
-                                   "bid":  "red-bell-pepper",
-                                   "gpu":  "120.000"
+                                   "bid":"red-bell-pepper",
+                                   "gpu":120
                                },
                                {
                                    "item":  "Peanut Butter",
@@ -88,8 +88,8 @@
                                    "item":  "Coconut Milk",
                                    "grams":  180,
                                    "buy":  "1 can",
-                                   "bid":  "coconut-milk",
-                                   "gpu":  "29.570"
+                                   "bid":"coconut-milk-canned",
+                                   "gpu":29.57
                                },
                                {
                                    "item":  "Chicken Broth",
@@ -129,9 +129,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Thai meal prep. Fourteen servings at about 603 calories and 63 grams of protein for roughly $3.42 each (at everyday cost).",
+                 "description":  "A high-protein Thai meal prep. Fourteen servings at about 603 calories and 63 grams of protein for roughly $3.47 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker thai peanut chicken bowls, budget dinner",
-                 "costPerServing":  3.42,
+                 "costPerServing":  3.47,
                  "recipeIngredient":  [
                                           "8 lb Boneless Skinless Chicken Breast",
                                           "1 lb Rice",

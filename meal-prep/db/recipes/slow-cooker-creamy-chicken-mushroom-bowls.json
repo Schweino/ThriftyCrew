@@ -15,9 +15,9 @@
                  "protein":  63,
                  "carbs":  55,
                  "fat":  9,
-                 "cost_ps":  "3.50"
+                 "cost_ps":  "3.61"
              },
-    "intro_html":  "Creamy chicken and mushrooms is the kind of stick-to-your-ribs meal that usually comes from a can of soup and a lot of sodium. This slow cooker version does it from scratch, landing at 63 grams of protein for about $3.50 a serving (at everyday cost). Fourteen servings means the good stuff feeds you all week for the price of one restaurant plate.",
+    "intro_html":  "Creamy chicken and mushrooms is the kind of stick-to-your-ribs meal that usually comes from a can of soup and a lot of sodium. This slow cooker version does it from scratch, landing at 63 grams of protein for about $3.61 a serving (at everyday cost). Fourteen servings means the good stuff feeds you all week for the price of one restaurant plate.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3300 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (900 g)",
@@ -32,7 +32,7 @@
                                 "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 2 tsp (25 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$3.50 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.61 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Whole white mushrooms are usually cheaper than pre-sliced, so \u003cstrong\u003ebuy them whole and slice them yourself\u003c/strong\u003e in two minutes.",
                        "Greek yogurt plus a little cream cheese replaces cans of condensed soup, so \u003cstrong\u003eskip the canned soup aisle\u003c/strong\u003e and cut the sodium too.",
@@ -68,15 +68,15 @@
                                    "item":  "Rice",
                                    "grams":  900,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "White Mushrooms",
                                    "grams":  900,
                                    "buy":  "4 packages",
-                                   "bid":  "white-mushrooms",
-                                   "gpu":  "28.350"
+                                   "bid":"mushrooms",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Chicken Broth",
@@ -89,15 +89,15 @@
                                    "item":  "1/3 Fat Cream Cheese",
                                    "grams":  168,
                                    "buy":  "1 block",
-                                   "bid":  "1-3-fat-cream-cheese",
-                                   "gpu":  "28.350"
+                                   "bid":"1-3-fat-cream-cheese",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Greek Yogurt",
                                    "grams":  340,
                                    "buy":  "1 tub",
-                                   "bid":  "greek-yogurt",
-                                   "gpu":  "28.350"
+                                   "bid":"greek-yogurt",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Garlic Powder",
@@ -131,15 +131,15 @@
                                    "item":  "Worcestershire Sauce",
                                    "grams":  25,
                                    "buy":  "2 tsp",
-                                   "bid":  "worcestershire-sauce",
-                                   "gpu":  "29.570"
+                                   "bid":"worcestershire",
+                                   "gpu":29.57
                                }
                            ]
                },
     "head":  {
-                 "description":  "A high-protein American meal prep. Fourteen servings at about 568 calories and 63 grams of protein for roughly $3.50 each (at everyday cost).",
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 568 calories and 63 grams of protein for roughly $3.61 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker creamy chicken and mushroom bowls, budget dinner",
-                 "costPerServing":  3.50,
+                 "costPerServing":  3.61,
                  "recipeIngredient":  [
                                           "8 lb Boneless Skinless Chicken Breast",
                                           "1 lb Rice",

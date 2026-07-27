@@ -27,9 +27,9 @@
                  "protein":  39,
                  "carbs":  64,
                  "fat":  18,
-                 "cost_ps":  "4.21"
+                 "cost_ps":  "4.31"
              },
-    "intro_html":  "This is the good part of Thanksgiving without the four days of preparation or the relatives. Turkey and peas in a poultry-seasoned gravy, stuffing baked golden across the top, all of it in one pan on a random Tuesday. Each serving lands at 575 calories with \u003cstrong\u003e39 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.21\u003c/strong\u003e (at everyday cost). Boxed stuffing mix is one of the cheapest carbohydrates in the store, and it never once pretended otherwise.",
+    "intro_html":  "This is the good part of Thanksgiving without the four days of preparation or the relatives. Turkey and peas in a poultry-seasoned gravy, stuffing baked golden across the top, all of it in one pan on a random Tuesday. Each serving lands at 575 calories with \u003cstrong\u003e39 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.31\u003c/strong\u003e (at everyday cost). Boxed stuffing mix is one of the cheapest carbohydrates in the store, and it never once pretended otherwise.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 5.75 tbsp (76 g)",
                                 "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 5.5 tbsp (78 g)",
@@ -65,7 +65,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $35.79 across 14 servings, roughly $2.56 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $23.21 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.00. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.21 a serving\u003c/strong\u003e (at everyday cost) for a plate that tastes like a holiday. The stuffing mix and the frozen peas are doing the budget work while the turkey does the protein work.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.31 a serving\u003c/strong\u003e (at everyday cost) for a plate that tastes like a holiday. The stuffing mix and the frozen peas are doing the budget work while the turkey does the protein work.",
     "shop_smart":  [
                        "Stuffing mix goes on deep discount every November and keeps in the box for a year or more. Buy a stack then and you are cooking this dish at a fraction of the price all spring.",
                        "A frozen turkey breast roast is the cheapest way into this recipe outside the holidays. Roast one on a Sunday, dice it, and you have the protein for two batches.",
@@ -84,7 +84,7 @@
                 ],
     "portion_html":  "Set the pan on the scale, subtract the empty pan weight, and divide by 14. Weigh each square into its container instead of guessing, since the stuffing layer makes the portions look bigger than they are. Every serving comes to \u003cstrong\u003e575 calories\u003c/strong\u003e and 39 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thefoodiephysician.com/turkey-and-stuffing-casserole/\" target=\"_blank\" rel=\"noopener\"\u003ethefoodiephysician.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Thanksgiving dinner on a weeknight budget, about $4.21 a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "upsell_html":  "Thanksgiving dinner on a weeknight budget, about $4.31 a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
     "cost_batch":  25.81,
     "cost_batch_true":  35.79,
     "cost_per_serving":  1.84,
@@ -115,8 +115,8 @@
                                    "canon":  "All-Purpose Flour",
                                    "grams":  87,
                                    "buy":  "11 tbsp",
-                                   "bid":  "flour",
-                                   "gpu":  "453.592"
+                                   "bid":"flour",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Chicken Broth",
@@ -187,16 +187,16 @@
                                    "canon":  "Greek Yogurt",
                                    "grams":  343,
                                    "buy":  "1.5 cups",
-                                   "bid":  "yogurt",
-                                   "gpu":  "28.350"
+                                   "bid":"greek-yogurt",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Cheddar Cheese, Shredded",
                                    "canon":  "Cheddar Cheese, Shredded",
                                    "grams":  158,
                                    "buy":  "5.5 oz",
-                                   "bid":  "shredded-cheese",
-                                   "gpu":  "28.350"
+                                   "bid":"cheddar-cheese-shredded",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Turkey Breast",
@@ -211,8 +211,8 @@
                                    "canon":  "Frozen Green Peas",
                                    "grams":  1126,
                                    "buy":  "2.5 lb",
-                                   "bid":  "frozen-peas",
-                                   "gpu":  "28.350"
+                                   "bid":"frozen-peas",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Stuffing Mix",
@@ -225,13 +225,13 @@
                            ]
                },
     "head":  {
-                 "description":  "Turkey and stuffing casserole meal prep: turkey and peas in poultry gravy under a golden stuffing crust. 575 calories, 39g protein, about $4.21 a serving (at everyday cost).",
+                 "description":  "Turkey and stuffing casserole meal prep: turkey and peas in poultry gravy under a golden stuffing crust. 575 calories, 39g protein, about $4.31 a serving (at everyday cost).",
                  "keywords":  "turkey and stuffing casserole, leftover turkey recipes, thanksgiving casserole, turkey meal prep, budget casserole, stove top stuffing bake",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",
                  "cookTime":  "PT35M",
                  "totalTime":  "PT55M",
-                 "costPerServing":  4.21,
+                 "costPerServing":  4.31,
                  "recipeIngredient":  [
                                           "8.5 cups diced cooked turkey breast",
                                           "15 cups prepared stuffing mix",

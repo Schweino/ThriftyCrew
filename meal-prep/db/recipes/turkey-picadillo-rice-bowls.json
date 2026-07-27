@@ -15,9 +15,9 @@
                  "protein":  47,
                  "carbs":  46,
                  "fat":  16,
-                 "cost_ps":  "2.89"
+                 "cost_ps":  "3.26"
              },
-    "intro_html":  "A savory Cuban-style turkey simmer with a little sweet-and-savory magic in every bite. At about $2.89 a serving (at everyday cost) with 47 grams of protein, this is a hearty, satisfying bowl. One skillet, 14 servings, done.",
+    "intro_html":  "A savory Cuban-style turkey simmer with a little sweet-and-savory magic in every bite. At about $3.26 a serving (at everyday cost) with 47 grams of protein, this is a hearty, satisfying bowl. One skillet, 14 servings, done.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 7 lb (3100 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (700 g)",
@@ -32,7 +32,7 @@
                                 "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 2 small (2 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$2.89 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.26 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "The \u003cstrong\u003e7 lb ground turkey pack\u003c/strong\u003e is the smart buy and keeps the cost per serving down.",
                        "Canned \u003cstrong\u003ediced tomatoes and tomato paste\u003c/strong\u003e in the store brand do the heavy lifting for pennies.",
@@ -61,15 +61,15 @@
                                    "item":  "93/7 Ground Turkey",
                                    "grams":  3100,
                                    "buy":  "7 lb",
-                                   "bid":  "93-7-ground-turkey",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-turkey",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  700,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Diced Tomatoes",
@@ -89,8 +89,8 @@
                                    "item":  "Green Bell Peppers",
                                    "grams":  360,
                                    "buy":  "3 peppers",
-                                   "bid":  "green-bell-pepper",
-                                   "gpu":  "120.000"
+                                   "bid":"green-bell-pepper",
+                                   "gpu":120
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -137,9 +137,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Cuban meal prep. Fourteen servings at about 552 calories and 47 grams of protein for roughly $2.89 each (at everyday cost).",
+                 "description":  "A high-protein Cuban meal prep. Fourteen servings at about 552 calories and 47 grams of protein for roughly $3.26 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, turkey picadillo rice bowls, budget dinner",
-                 "costPerServing":  2.89,
+                 "costPerServing":  3.26,
                  "recipeIngredient":  [
                                           "7 lb 93/7 Ground Turkey",
                                           "1 lb Rice",

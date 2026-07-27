@@ -78,8 +78,8 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  529,
                                    "buy":  "1.25 lb",
-                                   "bid":  "ground-beef-8020",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-beef",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -99,8 +99,8 @@
                                    "item":  "Marinara Sauce",
                                    "grams":  1588,
                                    "buy":  "6.25 cups",
-                                   "bid":  "pasta-sauce",
-                                   "gpu":  "28.350"
+                                   "bid":"marinara-sauce",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Tomato Paste",
@@ -141,22 +141,22 @@
                                    "item":  "Reduced Fat Mozzarella",
                                    "grams":  659,
                                    "buy":  "23.25 oz",
-                                   "bid":  "shredded-cheese",
-                                   "gpu":  "28.350"
+                                   "bid":"reduced-fat-mozzarella",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Ricotta Cheese",
                                    "grams":  992,
                                    "buy":  "35 oz",
-                                   "bid":  "cottage-cheese",
-                                   "gpu":  "28.350"
+                                   "bid":"ricotta",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Parmesan Cheese",
                                    "grams":  105,
                                    "buy":  "3.75 oz",
-                                   "bid":  "parmesan",
-                                   "gpu":  "28.350"
+                                   "bid":"parmesan",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Eggs",

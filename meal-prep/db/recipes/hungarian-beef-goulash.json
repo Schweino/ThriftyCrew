@@ -154,8 +154,8 @@
                                    "canon":  "Green Bell Peppers",
                                    "grams":  672,
                                    "buy":  "5.6",
-                                   "bid":  "bell-peppers",
-                                   "gpu":  "120.000"
+                                   "bid":"green-bell-pepper",
+                                   "gpu":120
                                },
                                {
                                    "item":  "Diced Tomatoes",
@@ -202,16 +202,16 @@
                                    "canon":  "Carrots",
                                    "grams":  342,
                                    "buy":  "5.6",
-                                   "bid":  "carrots",
-                                   "gpu":  "453.592"
+                                   "bid":"carrots",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Potato",
                                    "canon":  "Potato",
                                    "grams":  1193,
                                    "buy":  "5.6",
-                                   "bid":  "russet-potatoes",
-                                   "gpu":  "453.592"
+                                   "bid":"russet-potatoes",
+                                   "gpu":453.592
                                }
                            ]
                },

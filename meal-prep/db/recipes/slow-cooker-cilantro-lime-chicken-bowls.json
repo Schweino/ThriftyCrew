@@ -15,7 +15,7 @@
                  "protein":  57,
                  "carbs":  53,
                  "fat":  15,
-                 "cost_ps":  "4.15"
+                 "cost_ps":  "4.09"
              },
     "intro_html":  "Bright, zesty, and just a touch sweet, cilantro lime chicken never gets boring even when you eat it all week. It is high protein, cheap per serving, and the lime keeps every bowl tasting fresh. One batch makes 14 servings.",
     "ingredients_display":  [
@@ -31,7 +31,7 @@
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (10 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$4.15 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.09 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Bottled \u003cstrong\u003elime juice\u003c/strong\u003e costs a fraction of fresh limes and works perfectly in a slow cooker.",
                        "A little \u003cstrong\u003ehoney\u003c/strong\u003e goes a long way here, so one bottle carries you through many batches.",
@@ -68,15 +68,15 @@
                                    "item":  "Rice",
                                    "grams":  780,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  400,
                                    "buy":  "2 bags",
-                                   "bid":  "frozen-broccoli-florets",
-                                   "gpu":  "28.350"
+                                   "bid":"frozen-broccoli-florets",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Olive Oil",
@@ -103,8 +103,8 @@
                                    "item":  "Fresh Cilantro",
                                    "grams":  120,
                                    "buy":  "2 cups packed",
-                                   "bid":  "fresh-cilantro",
-                                   "gpu":  "57.000"
+                                   "bid":"cilantro",
+                                   "gpu":57
                                },
                                {
                                    "item":  "Garlic",
@@ -130,9 +130,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 578 calories and 57 grams of protein for roughly $4.15 each (at everyday cost).",
+                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 578 calories and 57 grams of protein for roughly $4.09 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker cilantro lime chicken bowls, budget dinner",
-                 "costPerServing":  4.15,
+                 "costPerServing":  4.09,
                  "recipeIngredient":  [
                                           "8 lb Boneless Skinless Chicken Breast",
                                           "1 lb Rice",

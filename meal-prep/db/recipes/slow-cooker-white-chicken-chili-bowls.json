@@ -80,8 +80,8 @@
                                    "item":  "Coconut Milk",
                                    "grams":  750,
                                    "buy":  "2 cans",
-                                   "bid":  "coconut-milk",
-                                   "gpu":  "29.570"
+                                   "bid":"coconut-milk-canned",
+                                   "gpu":29.57
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -94,15 +94,15 @@
                                    "item":  "Green Bell Peppers",
                                    "grams":  300,
                                    "buy":  "3 peppers",
-                                   "bid":  "green-bell-pepper",
-                                   "gpu":  "120.000"
+                                   "bid":"green-bell-pepper",
+                                   "gpu":120
                                },
                                {
                                    "item":  "Jalapeno",
                                    "grams":  30,
                                    "buy":  "1 jalapeno",
-                                   "bid":  "jalapeno",
-                                   "gpu":  "453.592"
+                                   "bid":"jalapenos",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Garlic",
@@ -164,8 +164,8 @@
                                    "item":  "Fresh Cilantro",
                                    "grams":  28,
                                    "buy":  "1 bunch",
-                                   "bid":  "fresh-cilantro",
-                                   "gpu":  "57.000"
+                                   "bid":"cilantro",
+                                   "gpu":57
                                }
                            ]
                },

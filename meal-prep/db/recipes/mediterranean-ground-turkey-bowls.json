@@ -15,9 +15,9 @@
                  "protein":  51,
                  "carbs":  45,
                  "fat":  18,
-                 "cost_ps":  "4.42"
+                 "cost_ps":  "4.88"
              },
-    "intro_html":  "Bright, fresh, and creamy, these bowls bring a little Mediterranean sunshine to your meal prep. You get 51 grams of protein per serving for about $4.42 (at everyday cost), which is a great price for eating this well. One skillet makes 14 servings.",
+    "intro_html":  "Bright, fresh, and creamy, these bowls bring a little Mediterranean sunshine to your meal prep. You get 51 grams of protein per serving for about $4.88 (at everyday cost), which is a great price for eating this well. One skillet makes 14 servings.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 7 lb (3100 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (700 g)",
@@ -36,7 +36,7 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 tsp cracked (2 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$4.42 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.88 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "The \u003cstrong\u003e7 lb ground turkey pack\u003c/strong\u003e keeps your cost per serving low, so buy the big size.",
                        "A \u003cstrong\u003etub of plain Greek yogurt\u003c/strong\u003e doubles as your creamy topping and a protein boost, so buy it instead of pricey tzatziki.",
@@ -65,15 +65,15 @@
                                    "item":  "93/7 Ground Turkey",
                                    "grams":  3100,
                                    "buy":  "7 lb",
-                                   "bid":  "93-7-ground-turkey",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-turkey",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  700,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Zucchini",
@@ -93,8 +93,8 @@
                                    "item":  "Greek Yogurt",
                                    "grams":  680,
                                    "buy":  "1 tub",
-                                   "bid":  "greek-yogurt",
-                                   "gpu":  "28.350"
+                                   "bid":"greek-yogurt",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -114,8 +114,8 @@
                                    "item":  "Cucumber",
                                    "grams":  1050,
                                    "buy":  "1 cucumber",
-                                   "bid":  "cucumber",
-                                   "gpu":  "300.000"
+                                   "bid":"cucumbers",
+                                   "gpu":300
                                },
                                {
                                    "item":  "Garlic",
@@ -169,9 +169,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Mediterranean meal prep. Fourteen servings at about 581 calories and 51 grams of protein for roughly $4.42 each (at everyday cost).",
+                 "description":  "A high-protein Mediterranean meal prep. Fourteen servings at about 581 calories and 51 grams of protein for roughly $4.88 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, mediterranean ground turkey bowls, budget dinner",
-                 "costPerServing":  4.42,
+                 "costPerServing":  4.88,
                  "recipeIngredient":  [
                                           "7 lb 93/7 Ground Turkey",
                                           "1 lb Rice",

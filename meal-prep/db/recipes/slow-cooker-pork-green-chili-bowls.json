@@ -15,9 +15,9 @@
                  "protein":  55,
                  "carbs":  46,
                  "fat":  13,
-                 "cost_ps":  "4.16"
+                 "cost_ps":  "4.23"
              },
-    "intro_html":  "New Mexican green chili is all about that tangy, roasted pepper kick, and the slow cooker makes it effortless. Served over rice with 55 grams of protein a bowl, it comes in at about $4.16 a serving (at everyday cost). Fourteen servings means a big pot of chili ready to spoon out all week long.",
+    "intro_html":  "New Mexican green chili is all about that tangy, roasted pepper kick, and the slow cooker makes it effortless. Served over rice with 55 grams of protein a bowl, it comes in at about $4.23 a serving (at everyday cost). Fourteen servings means a big pot of chili ready to spoon out all week long.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 8 lb (3500 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (700 g)",
@@ -39,7 +39,7 @@
                                 "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1 lime (45 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$4.16 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.23 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  "Canned diced green chiles give you all the roasted pepper flavor without any roasting or peeling. Stock up when they go on sale.\nA jar of salsa verde rounds out the sauce so you do not need extra spices. One jar covers the whole batch.\nPork loin keeps this cheap. It is the reason this bowl stays easy on the budget, so buy the big loin when it hits a sale.",
     "make_it":  [
                     "Set the pork loin in the slow cooker with the chopped onion.",
@@ -72,22 +72,22 @@
                                    "item":  "Rice",
                                    "grams":  700,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Diced Green Chiles",
                                    "grams":  760,
                                    "buy":  "7 cans",
-                                   "bid":  "diced-green-chiles",
-                                   "gpu":  "28.350"
+                                   "bid":"canned-green-chilies",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Salsa Verde",
                                    "grams":  450,
                                    "buy":  "1 jar",
-                                   "bid":  "salsa-verde",
-                                   "gpu":  "28.350"
+                                   "bid":"salsa-verde",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -114,8 +114,8 @@
                                    "item":  "Jalapeno",
                                    "grams":  45,
                                    "buy":  "1-2",
-                                   "bid":  "jalapeno",
-                                   "gpu":  "453.592"
+                                   "bid":"jalapenos",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Garlic",
@@ -149,8 +149,8 @@
                                    "item":  "Smoked Paprika",
                                    "grams":  3,
                                    "buy":  "1/2 tsp",
-                                   "bid":  "smoked-paprika",
-                                   "gpu":  "28.350"
+                                   "bid":"smoked-paprika",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Cayenne Pepper",
@@ -177,8 +177,8 @@
                                    "item":  "All-Purpose Flour",
                                    "grams":  60,
                                    "buy":  "1/4 cup",
-                                   "bid":  "all-purpose-flour",
-                                   "gpu":  "28.350"
+                                   "bid":"flour",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Lime Juice",
@@ -190,9 +190,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein New Mexican meal prep. Fourteen servings at about 558 calories and 55 grams of protein for roughly $4.16 each (at everyday cost).",
+                 "description":  "A high-protein New Mexican meal prep. Fourteen servings at about 558 calories and 55 grams of protein for roughly $4.23 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker pork green chili bowls, budget dinner",
-                 "costPerServing":  4.16,
+                 "costPerServing":  4.23,
                  "recipeIngredient":  [
                                           "8 lb Pork Loin",
                                           "1 lb Rice",

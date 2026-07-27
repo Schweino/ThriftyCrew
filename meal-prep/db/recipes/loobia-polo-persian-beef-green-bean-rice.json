@@ -26,7 +26,7 @@
                  "protein":  26,
                  "carbs":  87,
                  "fat":  14,
-                 "cost_ps":  "3.72"
+                 "cost_ps":  "3.79"
              },
     "intro_html":  "Loobia polo is Persian layered rice, and the layering is not decoration. Rice gets parboiled, drained, and then steamed in a pot over a base of oil until the bottom forms tahdig, the crackly golden crust that Iranian families fight over at the table. Beef, green beans, tomato, turmeric, and cinnamon go through the middle. The cinnamon is the part that surprises people. It is not sweet here, it just makes everything taste rounder. Fourteen containers of this is one pot and one steam.",
     "ingredients_display":  [
@@ -60,7 +60,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $27.93 across 14 servings, roughly $2.00 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $24.12 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.05. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.72 a bowl\u003c/strong\u003e (at everyday cost) for a Persian layered rice dish that looks and tastes like it took considerably more effort than it did.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.79 a bowl\u003c/strong\u003e (at everyday cost) for a Persian layered rice dish that looks and tastes like it took considerably more effort than it did.",
     "shop_smart":  [
                        "\u003cstrong\u003eRice and green beans are the volume, and both are cheap.\u003c/strong\u003e That is why this stays easy on the budget despite having real beef in it.",
                        "\u003cstrong\u003eFrozen green beans beat fresh here.\u003c/strong\u003e They get simmered into the beef anyway, so the snap does not matter, and the bag price per pound is far lower.",
@@ -79,7 +79,7 @@
                 ],
     "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight from Step 1, and divide by 14. Stir the layers together gently before weighing so every container gets rice and beef instead of one or the other, and break the crust into pieces and share it out. Every serving comes in at \u003cstrong\u003e590 calories with 26 grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themediterraneandish.com/loobia-polo-persian-beef-and-green-bean-rice/\" target=\"_blank\" rel=\"noopener\"\u003ethemediterraneandish.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Layered Persian dinners for about $3.72 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Layered Persian dinners for about $3.79 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  21.59,
     "cost_batch_true":  27.93,
     "cost_per_serving":  1.54,
@@ -94,8 +94,8 @@
                                    "canon":  "Rice",
                                    "grams":  1435,
                                    "buy":  "7.75 cups dry",
-                                   "bid":  "rice",
-                                   "gpu":  "453.592"
+                                   "bid":"rice",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Olive Oil",
@@ -126,8 +126,8 @@
                                    "canon":  "93/7 Ground Beef",
                                    "grams":  1064,
                                    "buy":  "2.25 lb",
-                                   "bid":  "ground-beef-8020",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-beef",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Ground Turmeric",
@@ -196,13 +196,13 @@
                            ]
                },
     "head":  {
-                 "description":  "Persian loobia polo rebuilt for 14-serving meal prep: layered rice steamed over spiced beef and green beans with a crisp bottom crust. 590 calories, 26g protein, about $3.72 per serving (at everyday cost).",
+                 "description":  "Persian loobia polo rebuilt for 14-serving meal prep: layered rice steamed over spiced beef and green beans with a crisp bottom crust. 590 calories, 26g protein, about $3.79 per serving (at everyday cost).",
                  "keywords":  "loobia polo, persian beef and green bean rice, tahdig, persian layered rice, iranian meal prep, budget beef rice dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",
                  "cookTime":  "PT60M",
                  "totalTime":  "PT85M",
-                 "costPerServing":  3.72,
+                 "costPerServing":  3.79,
                  "recipeIngredient":  [
                                           "2.25 lb 93/7 ground beef",
                                           "7.75 cups dry rice",

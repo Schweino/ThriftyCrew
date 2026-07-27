@@ -26,9 +26,9 @@
                  "protein":  39,
                  "carbs":  65,
                  "fat":  14,
-                 "cost_ps":  "2.56"
+                 "cost_ps":  "3.19"
              },
-    "intro_html":  "Ga kho gung is a kho, which is the Vietnamese family of caramel braises where sugar gets cooked dark and then chicken simmers down in it until the sauce is thick and glossy and clings to everything. What sets this one apart is the sheer volume of fresh ginger, sliced thin and cooked until it turns from sharp to sweet. It is traditionally a clay pot dish and it scales into a Dutch oven without complaint. Each bowl runs \u003cstrong\u003e562 calories and 39 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.56\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Ga kho gung is a kho, which is the Vietnamese family of caramel braises where sugar gets cooked dark and then chicken simmers down in it until the sauce is thick and glossy and clings to everything. What sets this one apart is the sheer volume of fresh ginger, sliced thin and cooked until it turns from sharp to sweet. It is traditionally a clay pot dish and it scales into a Dutch oven without complaint. Each bowl runs \u003cstrong\u003e562 calories and 39 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.19\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 5.25 lb (2333 g)",
                                 "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 4.75 tbsp (98 g)",
@@ -58,7 +58,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $17.86 across 14 servings, roughly $1.28 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $18.05 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $35.91. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.56 a bowl\u003c/strong\u003e (at everyday cost) for one of the better flavor-per-dollar ratios on this site. Chicken is most of the cost and the rest is honey, ginger and two bottles of sauce you already own.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.19 a bowl\u003c/strong\u003e (at everyday cost) for one of the better flavor-per-dollar ratios on this site. Chicken is most of the cost and the rest is honey, ginger and two bottles of sauce you already own.",
     "shop_smart":  [
                        "Fresh ginger is the whole personality of this dish and you need a real amount of it. Buy a full hand rather than a knob, use what you need, and freeze the rest, since frozen ginger grates easily and lasts for months.",
                        "Honey is the second largest line. Store brand honey performs identically in a hot braise, so save the good jar for tea and use the cheap one here.",
@@ -77,7 +77,7 @@
                 ],
     "portion_html":  "Put the pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. Fourteen containers, same number in each. Each one carries \u003cstrong\u003e562 calories\u003c/strong\u003e, and caramel braises like this one reheat beautifully because the sauce protects the meat.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.wokandkin.com/honey-glazed-ginger-chicken/\" target=\"_blank\" rel=\"noopener\"\u003ewokandkin.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Vietnamese ginger chicken over rice for about $2.56 a bowl (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "upsell_html":  "Vietnamese ginger chicken over rice for about $3.19 a bowl (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
     "cost_batch":  15.36,
     "cost_batch_true":  17.86,
     "cost_per_serving":  1.1,
@@ -92,8 +92,8 @@
                                    "canon":  "Boneless Skinless Chicken Thigh",
                                    "grams":  2333,
                                    "buy":  "5.25 lb",
-                                   "bid":  "chicken-thighs",
-                                   "gpu":  "453.592"
+                                   "bid":"boneless-skinless-chicken-thigh",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Honey",
@@ -116,8 +116,8 @@
                                    "canon":  "Ginger",
                                    "grams":  117,
                                    "buy":  "19.5 tbsp",
-                                   "bid":  "fresh-ginger",
-                                   "gpu":  "453.592"
+                                   "bid":"fresh-ginger",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Oyster Sauce",
@@ -172,19 +172,19 @@
                                    "canon":  "Rice",
                                    "grams":  985,
                                    "buy":  "5.25 cups dry",
-                                   "bid":  "rice",
-                                   "gpu":  "453.592"
+                                   "bid":"rice",
+                                   "gpu":453.592
                                }
                            ]
                },
     "head":  {
-                 "description":  "Vietnamese ginger chicken (ga kho gung): thighs caramel braised with honey, fish sauce and a mountain of fresh ginger, over rice. 14 bowls at 562 calories, 39g protein, about $2.56 (at everyday cost).",
+                 "description":  "Vietnamese ginger chicken (ga kho gung): thighs caramel braised with honey, fish sauce and a mountain of fresh ginger, over rice. 14 bowls at 562 calories, 39g protein, about $3.19 (at everyday cost).",
                  "keywords":  "ga kho gung, vietnamese ginger chicken, caramel braised chicken, vietnamese meal prep, honey ginger chicken, budget chicken thighs",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M",
-                 "costPerServing":  2.56,
+                 "costPerServing":  3.19,
                  "recipeIngredient":  [
                                           "5.25 lb boneless skinless chicken thighs",
                                           "19.5 tbsp fresh ginger",

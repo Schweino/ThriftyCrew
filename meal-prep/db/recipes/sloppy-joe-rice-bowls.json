@@ -15,9 +15,9 @@
                  "protein":  45,
                  "carbs":  70,
                  "fat":  13,
-                 "cost_ps":  "5.11"
+                 "cost_ps":  "5.26"
              },
-    "intro_html":  "The messy sandwich you loved as a kid, grown up into a high-protein rice bowl. Each serving brings 45 grams of protein for about $5.11 (at everyday cost) and the batch makes 14. Same tangy, savory sloppy joe flavor, now built to fuel you instead of just fill you.",
+    "intro_html":  "The messy sandwich you loved as a kid, grown up into a high-protein rice bowl. Each serving brings 45 grams of protein for about $5.26 (at everyday cost) and the batch makes 14. Same tangy, savory sloppy joe flavor, now built to fuel you instead of just fill you.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2450 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1050 g)",
@@ -35,7 +35,7 @@
                                 "\u003cstrong\u003eApple Cider Vinegar (Great Value):\u003c/strong\u003e 1 tbsp (30 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$5.11 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$5.26 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "The sauce is \u003cstrong\u003eketchup, tomato paste, and mustard\u003c/strong\u003e you likely already have, so skip the pricey sloppy joe seasoning packets.",
                        "\u003cstrong\u003eGreen bell peppers\u003c/strong\u003e are the budget pick and give you that classic sloppy joe bite.",
@@ -64,22 +64,22 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2450,
                                    "buy":  "6 lb",
-                                   "bid":  "93-7-ground-beef",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-beef",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  1050,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Green Bell Peppers",
                                    "grams":  400,
                                    "buy":  "4 peppers",
-                                   "bid":  "green-bell-pepper",
-                                   "gpu":  "120.000"
+                                   "bid":"green-bell-pepper",
+                                   "gpu":120
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -161,9 +161,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein American meal prep. Fourteen servings at about 584 calories and 45 grams of protein for roughly $5.11 each (at everyday cost).",
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 584 calories and 45 grams of protein for roughly $5.26 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, sloppy joe rice bowls, budget dinner",
-                 "costPerServing":  5.11,
+                 "costPerServing":  5.26,
                  "recipeIngredient":  [
                                           "6 lb 93/7 Ground Beef",
                                           "1 lb Rice",

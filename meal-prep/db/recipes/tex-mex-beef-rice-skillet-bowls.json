@@ -15,9 +15,9 @@
                  "protein":  52,
                  "carbs":  48,
                  "fat":  18,
-                 "cost_ps":  "4.22"
+                 "cost_ps":  "4.59"
              },
-    "intro_html":  "A loaded Tex-Mex skillet where beef, beans, corn, and rice all cook down together into one easy bowl. You get 52 grams of protein per serving for about $4.22 a plate (at everyday cost). It makes 14 servings, so batch it and forget it.",
+    "intro_html":  "A loaded Tex-Mex skillet where beef, beans, corn, and rice all cook down together into one easy bowl. You get 52 grams of protein per serving for about $4.59 a plate (at everyday cost). It makes 14 servings, so batch it and forget it.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2730 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (587 g)",
@@ -33,7 +33,7 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$4.22 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.59 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Lean on \u003cstrong\u003edry rice by the bag\u003c/strong\u003e at about a dollar-fifty a pound to bulk this out for almost nothing.",
                        "Canned beans, corn, and tomatoes are all cheaper in the \u003cstrong\u003estore-brand cans\u003c/strong\u003e, so build your cart there.",
@@ -62,29 +62,29 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2730,
                                    "buy":  "6 lb",
-                                   "bid":  "93-7-ground-beef",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-beef",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  587,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Seasoned Black Beans",
                                    "grams":  780,
                                    "buy":  "2 cans",
-                                   "bid":  "seasoned-black-beans",
-                                   "gpu":  "28.350"
+                                   "bid":"seasoned-black-beans",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "grams":  375,
                                    "buy":  "2 cans",
-                                   "bid":  "canned-sweet-corn",
-                                   "gpu":  "210.000"
+                                   "bid":"canned-corn",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Diced Tomatoes",
@@ -97,8 +97,8 @@
                                    "item":  "Cheddar Cheese, Shredded",
                                    "grams":  168,
                                    "buy":  "1 bag",
-                                   "bid":  "cheddar-cheese-shredded",
-                                   "gpu":  "28.350"
+                                   "bid":"cheddar-cheese-shredded",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Paprika",
@@ -145,9 +145,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Tex-Mex meal prep. Fourteen servings at about 576 calories and 52 grams of protein for roughly $4.22 each (at everyday cost).",
+                 "description":  "A high-protein Tex-Mex meal prep. Fourteen servings at about 576 calories and 52 grams of protein for roughly $4.59 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, tex-mex beef and rice skillet bowls, budget dinner",
-                 "costPerServing":  4.22,
+                 "costPerServing":  4.59,
                  "recipeIngredient":  [
                                           "6 lb 93/7 Ground Beef",
                                           "1 lb Rice",

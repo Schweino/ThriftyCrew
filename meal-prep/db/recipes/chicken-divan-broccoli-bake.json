@@ -26,9 +26,9 @@
                  "protein":  34,
                  "carbs":  64,
                  "fat":  18,
-                 "cost_ps":  "3.06"
+                 "cost_ps":  "2.91"
              },
-    "intro_html":  "Chicken Divan started life at a fancy New York hotel and got adopted by every church potluck in America, which is usually a sign a dish is genuinely good. Chicken and broccoli under a cheddar and sour cream sauce, topped with buttered bread crumbs and baked until it bubbles at the edges. You mix it cold, put it in the oven, and walk away. Each serving lands at 566 calories and \u003cstrong\u003e34 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.06 a serving\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Chicken Divan started life at a fancy New York hotel and got adopted by every church potluck in America, which is usually a sign a dish is genuinely good. Chicken and broccoli under a cheddar and sour cream sauce, topped with buttered bread crumbs and baked until it bubbles at the edges. You mix it cold, put it in the oven, and walk away. Each serving lands at 566 calories and \u003cstrong\u003e34 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.91 a serving\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 3.5 lb (1588 g)",
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 2.25 lb (980 g)",
@@ -61,7 +61,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $32.51 across 14 servings, roughly $2.32 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $10.30 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.81. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.06 a serving\u003c/strong\u003e (at everyday cost) for a casserole that feeds a crowd. Broccoli is the biggest line, and it is also what keeps this from being just another cheese and chicken bake.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.91 a serving\u003c/strong\u003e (at everyday cost) for a casserole that feeds a crowd. Broccoli is the biggest line, and it is also what keeps this from being just another cheese and chicken bake.",
     "shop_smart":  [
                        "Frozen broccoli florets cost less than fresh, are already trimmed, and hold their texture better in a casserole than fresh does. Thaw and drain them well, because the water they release is the number one cause of a soupy divan.",
                        "Buy block cheddar and shred it yourself when it beats the bag on price. The block also melts smoother, since bagged shreds are coated with starch to keep them separate.",
@@ -80,7 +80,7 @@
                 ],
     "portion_html":  "Weigh the rice into each container first, then score the bake into 14 even squares and lift one into each. Set the dish on the scale and subtract the empty weight if you want to check your squares are honest. Every portion lands at \u003cstrong\u003e566 calories\u003c/strong\u003e. Reheat uncovered so the crumb topping crisps back up.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.spendwithpennies.com/quick-simple-chicken-broccoli-divan/\" target=\"_blank\" rel=\"noopener\"\u003espendwithpennies.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "A church potluck classic for about \u003cstrong\u003e$3.06 a serving\u003c/strong\u003e (at everyday cost). Members get the whole Meal Prep library, every money lesson, and all the site calculators and tools for $1 a month.",
+    "upsell_html":  "A church potluck classic for about \u003cstrong\u003e$2.91 a serving\u003c/strong\u003e (at everyday cost). Members get the whole Meal Prep library, every money lesson, and all the site calculators and tools for $1 a month.",
     "cost_batch":  22.4,
     "cost_batch_true":  32.51,
     "cost_per_serving":  1.6,
@@ -95,8 +95,8 @@
                                    "canon":  "Broccoli Florets",
                                    "grams":  1588,
                                    "buy":  "3.5 lb",
-                                   "bid":  "broccoli",
-                                   "gpu":  "453.592"
+                                   "bid":"frozen-broccoli-florets",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -111,8 +111,8 @@
                                    "canon":  "Cheddar Cheese, Shredded",
                                    "grams":  396,
                                    "buy":  "14 oz",
-                                   "bid":  "shredded-cheese",
-                                   "gpu":  "28.350"
+                                   "bid":"cheddar-cheese-shredded",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Cream of Mushroom Soup",
@@ -127,8 +127,8 @@
                                    "canon":  "Light Sour Cream",
                                    "grams":  358,
                                    "buy":  "1.5 cups",
-                                   "bid":  "sour-cream",
-                                   "gpu":  "28.350"
+                                   "bid":"sour-cream",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Milk",
@@ -199,19 +199,19 @@
                                    "canon":  "Rice",
                                    "grams":  851,
                                    "buy":  "4.5 cups dry",
-                                   "bid":  "rice",
-                                   "gpu":  "453.592"
+                                   "bid":"rice",
+                                   "gpu":453.592
                                }
                            ]
                },
     "head":  {
-                 "description":  "Chicken Divan, a broccoli and cheddar chicken bake with a buttered crumb topping over rice, rebuilt for 14 meal prep servings at about $3.06 a serving (at everyday cost).",
+                 "description":  "Chicken Divan, a broccoli and cheddar chicken bake with a buttered crumb topping over rice, rebuilt for 14 meal prep servings at about $2.91 a serving (at everyday cost).",
                  "keywords":  "chicken divan, broccoli cheese chicken bake, chicken broccoli casserole, budget casserole, cheap meal prep, make ahead dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",
                  "cookTime":  "PT35M",
                  "totalTime":  "PT1H",
-                 "costPerServing":  3.06,
+                 "costPerServing":  2.91,
                  "recipeIngredient":  [
                                           "2.25 lb boneless skinless chicken breast",
                                           "18.75 cups broccoli florets",

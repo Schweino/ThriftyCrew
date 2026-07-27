@@ -15,9 +15,9 @@
                  "protein":  34,
                  "carbs":  78,
                  "fat":  12,
-                 "cost_ps":  "4.04"
+                 "cost_ps":  "4.14"
              },
-    "intro_html":  "Keema is the Indian answer to weeknight ground beef: curried, gingery, studded with peas, and simmered until the spices soak all the way in. Each bowl delivers \u003cstrong\u003e34 grams of protein\u003c/strong\u003e and 567 calories for about \u003cstrong\u003e$4.04\u003c/strong\u003e (at everyday cost). It also freezes better than almost anything else we make.",
+    "intro_html":  "Keema is the Indian answer to weeknight ground beef: curried, gingery, studded with peas, and simmered until the spices soak all the way in. Each bowl delivers \u003cstrong\u003e34 grams of protein\u003c/strong\u003e and 567 calories for about \u003cstrong\u003e$4.14\u003c/strong\u003e (at everyday cost). It also freezes better than almost anything else we make.",
     "ingredients_display": ["\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 6 tbsp (52 g)","\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 3.5 tbsp (21 g)","\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1588 g)","\u003cstrong\u003eCurry Powder (generic):\u003c/strong\u003e 2.25 tbsp (14 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)","\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 19 tbsp (19 g)","\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (7 g)","\u003cstrong\u003eGround Turmeric (Great Value):\u003c/strong\u003e 0.5 tbsp (5 g)","\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 7 tbsp (112 g)","\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 3.5 cups (469 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 6.5 cups dry (1198 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -35,7 +35,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $35.71 across 14 servings, roughly $2.55 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $17.08 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.79. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.04 a bowl\u003c/strong\u003e (at everyday cost) for a curry that Indian takeout would charge you six or seven times as much for, rice extra.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.14 a bowl\u003c/strong\u003e (at everyday cost) for a curry that Indian takeout would charge you six or seven times as much for, rice extra.",
     "shop_smart":  ["The ground beef is about 70 percent of this batch\u0027s cost. Buy the 4 lb pack for the lower per-pound price and freeze the extra half pound toward your next batch.","Curry powder, cumin, and turmeric come from jars you already keep on hand, pennies worth per batch. Skip the pre-made simmer sauce jars; they charge you for spices you already own.","Frozen peas are the budget hero here: cheaper than canned per ounce, better color, and the bag keeps for months."],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
@@ -49,7 +49,7 @@
                 ],
     "portion_html":  "Weigh the full pot, subtract the empty-pot weight, and divide by 14. Scoop that gram target into 14 containers and dinner is settled for two weeks of workdays. Each bowl carries \u003cstrong\u003e567 calories and 34 grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://feelgoodfoodie.net/recipe/keema-curry-ground-beef-and-peas/\" target=\"_blank\" rel=\"noopener\"\u003eFeel Good Foodie\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $4.04 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about $4.14 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  29.37,
     "cost_batch_true":  35.71,
     "cost_per_serving":  2.1,
@@ -84,15 +84,15 @@
                                    "item":  "Ginger",
                                    "grams":  21,
                                    "buy":  "3.5 tbsp",
-                                   "bid":  "fresh-ginger",
-                                   "gpu":  "453.592"
+                                   "bid":"fresh-ginger",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "93/7 Ground Beef",
                                    "grams":  1588,
                                    "buy":  "3.5 lb",
-                                   "bid":  "ground-beef-8020",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-beef",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Curry Powder",
@@ -112,8 +112,8 @@
                                    "item":  "Fresh Cilantro",
                                    "grams":  19,
                                    "buy":  "19 tbsp",
-                                   "bid":  "cilantro",
-                                   "gpu":  "57.000"
+                                   "bid":"cilantro",
+                                   "gpu":57
                                },
                                {
                                    "item":  "Ground Cumin",
@@ -140,15 +140,15 @@
                                    "item":  "Frozen Green Peas",
                                    "grams":  469,
                                    "buy":  "3.5 cups",
-                                   "bid":  "frozen-peas",
-                                   "gpu":  "28.350"
+                                   "bid":"frozen-peas",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  1198,
                                    "buy":  "6.5 cups dry",
-                                   "bid":  "rice",
-                                   "gpu":  "453.592"
+                                   "bid":"rice",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Black Pepper",
@@ -160,13 +160,13 @@
                            ]
                },
     "head":  {
-                 "description":  "Indian beef keema curry meal prep bowls with peas, ginger, and cilantro over rice. 567 calories and 34g protein per serving at about $4.04 a bowl (at everyday cost).",
+                 "description":  "Indian beef keema curry meal prep bowls with peas, ginger, and cilantro over rice. 567 calories and 34g protein per serving at about $4.14 a bowl (at everyday cost).",
                  "keywords":  "beef keema, keema curry, ground beef curry, indian meal prep, budget meal prep, curry rice bowls",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",
                  "cookTime":  "PT35M",
                  "totalTime":  "PT50M",
-                 "costPerServing":  4.04,
+                 "costPerServing":  4.14,
                  "recipeIngredient":  [
                                           "3.5 lb 93/7 ground beef",
                                           "6.5 cups dry rice",

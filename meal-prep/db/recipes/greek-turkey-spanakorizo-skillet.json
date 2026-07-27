@@ -27,9 +27,9 @@
                  "protein":  34,
                  "carbs":  56,
                  "fat":  22,
-                 "cost_ps":  "4.30"
+                 "cost_ps":  "4.07"
              },
-    "intro_html":  "Spanakorizo is Greek spinach rice, lemony and green and usually meatless. We brown turkey into the base and turn a side dish into a full dinner, then finish it with mint, dill, and crumbled feta. One skillet, one pot to wash, and \u003cstrong\u003e575 calories with 34 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.30\u003c/strong\u003e a bowl (at everyday cost).",
+    "intro_html":  "Spanakorizo is Greek spinach rice, lemony and green and usually meatless. We brown turkey into the base and turn a side dish into a full dinner, then finish it with mint, dill, and crumbled feta. One skillet, one pot to wash, and \u003cstrong\u003e575 calories with 34 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.07\u003c/strong\u003e a bowl (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.5 cups dry (852 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 0.75 cups (139 g)",
@@ -62,7 +62,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $43.48 across 14 servings, roughly $3.11 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $16.67 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $60.15. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.30\u003c/strong\u003e a bowl (at everyday cost). Half of that is the turkey and most of the rest is spinach, which means you are paying for food and not for packaging.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.07\u003c/strong\u003e a bowl (at everyday cost). Half of that is the turkey and most of the rest is spinach, which means you are paying for food and not for packaging.",
     "shop_smart":  [
                        "Frozen chopped spinach is the second biggest line on this list, so it is the one worth chasing on sale. Fresh spinach would cost several times more for the same cooked volume, since it collapses to almost nothing.",
                        "Feta by the tub is cheaper per ounce than the crumbled cups near the salad bar, and it keeps for weeks in its brine. Crumble it yourself and pocket the difference.",
@@ -81,7 +81,7 @@
                 ],
     "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is your per-container gram target. Scoop it out and crumble the feta over the top of each one, since feta stirred into hot rice disappears and feta on top does not. Each bowl lands at \u003cstrong\u003e575 calories and 34 grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themediterraneandish.com/spanakorizo-greek-spinach-rice/\" target=\"_blank\" rel=\"noopener\"\u003ethemediterraneandish.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Greek spinach rice with real meat in it for about \u003cstrong\u003e$4.30\u003c/strong\u003e a bowl (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Greek spinach rice with real meat in it for about \u003cstrong\u003e$4.07\u003c/strong\u003e a bowl (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  36.33,
     "cost_batch_true":  43.48,
     "cost_per_serving":  2.6,
@@ -96,8 +96,8 @@
                                    "canon":  "Rice",
                                    "grams":  852,
                                    "buy":  "4.5 cups dry",
-                                   "bid":  "rice",
-                                   "gpu":  "453.592"
+                                   "bid":"rice",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Olive Oil",
@@ -120,8 +120,8 @@
                                    "canon":  "Frozen Chopped Spinach",
                                    "grams":  1164,
                                    "buy":  "2.5 lb",
-                                   "bid":  "spinach",
-                                   "gpu":  "28.350"
+                                   "bid":"frozen-chopped-spinach",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Lemon Juice",
@@ -184,27 +184,27 @@
                                    "canon":  "Feta Cheese",
                                    "grams":  220,
                                    "buy":  "7.75 oz",
-                                   "bid":  "feta",
-                                   "gpu":  "28.350"
+                                   "bid":"feta",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "93/7 Ground Turkey",
                                    "canon":  "93/7 Ground Turkey",
                                    "grams":  1745,
                                    "buy":  "3.75 lb",
-                                   "bid":  "ground-turkey",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-turkey",
+                                   "gpu":453.592
                                }
                            ]
                },
     "head":  {
-                 "description":  "Greek turkey spanakorizo skillet meal prep: lemony spinach rice with browned turkey, mint, dill, and feta. 575 calories, 34g protein, about $4.30 a bowl (at everyday cost).",
+                 "description":  "Greek turkey spanakorizo skillet meal prep: lemony spinach rice with browned turkey, mint, dill, and feta. 575 calories, 34g protein, about $4.07 a bowl (at everyday cost).",
                  "keywords":  "spanakorizo, greek spinach rice, turkey meal prep, budget meal prep, one skillet dinner, feta rice bowl",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",
                  "cookTime":  "PT40M",
                  "totalTime":  "PT55M",
-                 "costPerServing":  4.30,
+                 "costPerServing":  4.07,
                  "recipeIngredient":  [
                                           "3.75 lb 93/7 ground turkey",
                                           "4.5 cups dry rice",

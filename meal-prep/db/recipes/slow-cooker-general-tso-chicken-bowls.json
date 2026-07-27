@@ -15,9 +15,9 @@
                  "protein":  57,
                  "carbs":  67,
                  "fat":  6,
-                 "cost_ps":  "3.75"
+                 "cost_ps":  "3.69"
              },
-    "intro_html":  "That takeout craving hits, and the app is right there in your pocket ready to charge you fifteen bucks. This slow cooker General Tso\u0027s beats it on every front, packing 57 grams of protein into a bowl that costs about $3.75 (at everyday cost). One batch makes 14 servings, so you get a week and a half of dinners for less than a single delivery order.",
+    "intro_html":  "That takeout craving hits, and the app is right there in your pocket ready to charge you fifteen bucks. This slow cooker General Tso\u0027s beats it on every front, packing 57 grams of protein into a bowl that costs about $3.69 (at everyday cost). One batch makes 14 servings, so you get a week and a half of dinners for less than a single delivery order.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3100 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (900 g)",
@@ -33,7 +33,7 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$3.75 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.69 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  ["Chicken breast is the whole game here, so \u003cstrong\u003ebuy the big family pack\u003c/strong\u003e when it goes on sale and freeze what you don\u0027t cook this week.","Hoisin and cornstarch last months in the pantry, so \u003cstrong\u003ebuy them once and forget them\u003c/strong\u003e. You\u0027ll use a splash across a dozen recipes.","Frozen broccoli florets are cheaper than fresh and never go bad on you, so \u003cstrong\u003ekeep two bags in the freezer\u003c/strong\u003e and skip the wilted-crown guilt."],
     "make_it":  [
                     "Add the chicken breast, hoisin, soy sauce, brown sugar, and minced garlic to the slow cooker and give it a stir.",
@@ -65,8 +65,8 @@
                                    "item":  "Rice",
                                    "grams":  900,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Hoisin Sauce",
@@ -107,8 +107,8 @@
                                    "item":  "Broccoli Florets",
                                    "grams":  550,
                                    "buy":  "2 bags",
-                                   "bid":  "frozen-broccoli-florets",
-                                   "gpu":  "28.350"
+                                   "bid":"frozen-broccoli-florets",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Rice Vinegar",
@@ -141,9 +141,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Chinese meal prep. Fourteen servings at about 567 calories and 57 grams of protein for roughly $3.75 each (at everyday cost).",
+                 "description":  "A high-protein Chinese meal prep. Fourteen servings at about 567 calories and 57 grams of protein for roughly $3.69 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker general tso\u0027s chicken bowls, budget dinner",
-                 "costPerServing":  3.75,
+                 "costPerServing":  3.69,
                  "recipeIngredient":  [
                                           "7 lb Boneless Skinless Chicken Breast",
                                           "1 lb Rice",

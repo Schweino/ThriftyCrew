@@ -15,7 +15,7 @@
                  "protein":  58,
                  "carbs":  59,
                  "fat":  9,
-                 "cost_ps":  "3.00"
+                 "cost_ps":  "2.94"
              },
     "intro_html":  "Tinga is smoky, a little spicy, and tastes like you fussed over it, even though you did not. This chipotle-and-tomato chicken is high in protein and comes in cheap per serving, which is exactly what you want from a meal prep. One batch makes 14 servings.",
     "ingredients_display":  [
@@ -32,7 +32,7 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$3.00 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.94 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "One \u003cstrong\u003ecan of chipotle in adobo\u003c/strong\u003e flavors the whole batch, so you only need the one and the rest of your spice budget stays put.",
                        "Reach for the \u003cstrong\u003evalue pack chicken breast\u003c/strong\u003e to knock the per pound cost way down.",
@@ -69,8 +69,8 @@
                                    "item":  "Rice",
                                    "grams":  940,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Diced Tomatoes",
@@ -90,22 +90,22 @@
                                    "item":  "Broccoli Florets",
                                    "grams":  400,
                                    "buy":  "2 bags",
-                                   "bid":  "frozen-broccoli-florets",
-                                   "gpu":  "28.350"
+                                   "bid":"frozen-broccoli-florets",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Chipotle in Adobo",
                                    "grams":  90,
                                    "buy":  "1 can",
-                                   "bid":  "chipotle-in-adobo",
-                                   "gpu":  "28.350"
+                                   "bid":"chipotle-adobo",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Cheddar Cheese, Shredded",
                                    "grams":  112,
                                    "buy":  "1 bag",
-                                   "bid":  "cheddar-cheese-shredded",
-                                   "gpu":  "28.350"
+                                   "bid":"cheddar-cheese-shredded",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Garlic",
@@ -138,9 +138,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 560 calories and 58 grams of protein for roughly $3.00 each (at everyday cost).",
+                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 560 calories and 58 grams of protein for roughly $2.94 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker chicken tinga bowls, budget dinner",
-                 "costPerServing":  3.00,
+                 "costPerServing":  2.94,
                  "recipeIngredient":  [
                                           "7 lb Boneless Skinless Chicken Breast",
                                           "1 lb Rice",

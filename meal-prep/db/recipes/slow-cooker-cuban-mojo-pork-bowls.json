@@ -15,9 +15,9 @@
                  "protein":  60,
                  "carbs":  55,
                  "fat":  9,
-                 "cost_ps":  "4.04"
+                 "cost_ps":  "4.33"
              },
-    "intro_html":  "Orange, lime, and garlic give this pork that classic Cuban mojo punch, and it comes together with almost no hands-on time. Served over seasoned black beans, each bowl carries a big 60 grams of protein for about $4.04 (at everyday cost). Fourteen servings means your fridge is stocked and your wallet barely notices.",
+    "intro_html":  "Orange, lime, and garlic give this pork that classic Cuban mojo punch, and it comes together with almost no hands-on time. Served over seasoned black beans, each bowl carries a big 60 grams of protein for about $4.33 (at everyday cost). Fourteen servings means your fridge is stocked and your wallet barely notices.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 8 lb (3400 g)",
                                 "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 3 cans (1200 g)",
@@ -34,7 +34,7 @@
                                 "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 1 tbsp (18 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$4.04 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.33 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Canned \u003cstrong\u003eseasoned black beans save you the spices\u003c/strong\u003e and the soak time. They come pre-flavored, so you get more taste for less work.",
                        "A small carton of orange juice is plenty. You only need a splash, so \u003cstrong\u003euse the rest for breakfast\u003c/strong\u003e instead of letting it go to waste.",
@@ -71,15 +71,15 @@
                                    "item":  "Seasoned Black Beans",
                                    "grams":  1200,
                                    "buy":  "3 cans",
-                                   "bid":  "seasoned-black-beans",
-                                   "gpu":  "28.350"
+                                   "bid":"seasoned-black-beans",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  640,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Orange Juice",
@@ -120,8 +120,8 @@
                                    "item":  "Fresh Cilantro",
                                    "grams":  35,
                                    "buy":  "1 cup chopped",
-                                   "bid":  "fresh-cilantro",
-                                   "gpu":  "57.000"
+                                   "bid":"cilantro",
+                                   "gpu":57
                                },
                                {
                                    "item":  "Fresh Mint",
@@ -154,9 +154,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Cuban meal prep. Fourteen servings at about 565 calories and 60 grams of protein for roughly $4.04 each (at everyday cost).",
+                 "description":  "A high-protein Cuban meal prep. Fourteen servings at about 565 calories and 60 grams of protein for roughly $4.33 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker cuban mojo pork bowls, budget dinner",
-                 "costPerServing":  4.04,
+                 "costPerServing":  4.33,
                  "recipeIngredient":  [
                                           "8 lb Pork Tenderloin",
                                           "3 cans Seasoned Black Beans",

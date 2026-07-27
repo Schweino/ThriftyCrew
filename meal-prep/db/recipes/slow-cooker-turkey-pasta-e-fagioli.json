@@ -26,9 +26,9 @@
                  "protein":  47,
                  "carbs":  47,
                  "fat":  20,
-                 "cost_ps":  "4.24"
+                 "cost_ps":  "4.50"
              },
-    "intro_html":  "Pasta e fagioli means pasta and beans, which tells you everything about where this soup came from. It was poor food before it was restaurant food, built to fill people up out of a pantry. The slow cooker version asks for fifteen minutes in the morning and hands you dinner at six. Each bowl carries \u003cstrong\u003e563 calories and 47 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.24\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Pasta e fagioli means pasta and beans, which tells you everything about where this soup came from. It was poor food before it was restaurant food, built to fill people up out of a pantry. The slow cooker version asks for fifteen minutes in the morning and hands you dinner at six. Each bowl carries \u003cstrong\u003e563 calories and 47 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.50\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 4.5 lb (2064 g)",
                                 "\u003cstrong\u003eZucchini:\u003c/strong\u003e 4.6 (892 g)",
@@ -60,7 +60,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $42.78 across 14 servings, roughly $3.06 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $16.59 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.37. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.24\u003c/strong\u003e a bowl (at everyday cost), and 47 grams of protein in it. That is a genuinely high protein number for a soup and it comes out of a crock pot you set and forgot.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.50\u003c/strong\u003e a bowl (at everyday cost), and 47 grams of protein in it. That is a genuinely high protein number for a soup and it comes out of a crock pot you set and forgot.",
     "shop_smart":  [
                        "Cannellini beans are the reason the protein number is so high without the cost following it up. Beans are the most underrated line item in any grocery budget.",
                        "The turkey is nearly half this batch. Buy the 5 pound pack, brown all of it, and freeze half already cooked if this batch does not need it.",
@@ -79,7 +79,7 @@
                 ],
     "portion_html":  "Set the pot of drained pasta on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the pasta in each container. Ladle the soup evenly over all 14, stirring the pot between scoops so the beans and turkey do not settle, then grate the parmesan over the top. Each bowl lands at \u003cstrong\u003e563 calories and 47 grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://easygfrecipes.com/pasta-fagioli-soup-plus-turkey-crock-pot-recipe/\" target=\"_blank\" rel=\"noopener\"\u003eeasygfrecipes.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "A crock pot soup for about \u003cstrong\u003e$4.24\u003c/strong\u003e a bowl (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "A crock pot soup for about \u003cstrong\u003e$4.50\u003c/strong\u003e a bowl (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  38.79,
     "cost_batch_true":  42.78,
     "cost_per_serving":  2.77,
@@ -94,8 +94,8 @@
                                    "canon":  "93/7 Ground Turkey",
                                    "grams":  2064,
                                    "buy":  "4.5 lb",
-                                   "bid":  "ground-turkey",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-turkey",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Zucchini",
@@ -174,8 +174,8 @@
                                    "canon":  "Parmesan Cheese",
                                    "grams":  205,
                                    "buy":  "7.25 oz",
-                                   "bid":  "parmesan",
-                                   "gpu":  "28.350"
+                                   "bid":"parmesan",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Salt",
@@ -196,13 +196,13 @@
                            ]
                },
     "head":  {
-                 "description":  "Slow cooker turkey pasta e fagioli: ground turkey, cannellini beans, tomatoes, and small shells in a crock pot soup. 563 calories, 47g protein, about $4.24 a bowl (at everyday cost).",
+                 "description":  "Slow cooker turkey pasta e fagioli: ground turkey, cannellini beans, tomatoes, and small shells in a crock pot soup. 563 calories, 47g protein, about $4.50 a bowl (at everyday cost).",
                  "keywords":  "pasta e fagioli, slow cooker soup, turkey bean soup, budget meal prep, crockpot dinner, high protein soup",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",
                  "cookTime":  "PT6H",
                  "totalTime":  "PT6H20M",
-                 "costPerServing":  4.24,
+                 "costPerServing":  4.50,
                  "recipeIngredient":  [
                                           "4.5 lb 93/7 ground turkey",
                                           "13 oz dry pasta shells",

@@ -24,9 +24,9 @@
                  "protein":  57,
                  "carbs":  54,
                  "fat":  15,
-                 "cost_ps":  "2.91"
+                 "cost_ps":  "3.74"
              },
-    "intro_html":  "Every Haitian kitchen keeps a jar of epis in the fridge. It is a green marinade of cilantro, garlic, bell pepper, citrus and vinegar, and it goes into almost everything, starting with this. Chicken gets washed in citrus, marinated in epis overnight, browned, then braised down in a tomato sauce until the meat gives up. Over rice, each bowl runs \u003cstrong\u003e605 calories and 57 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.91\u003c/strong\u003e (at everyday cost). That protein number is one of the highest in this whole batch.",
+    "intro_html":  "Every Haitian kitchen keeps a jar of epis in the fridge. It is a green marinade of cilantro, garlic, bell pepper, citrus and vinegar, and it goes into almost everything, starting with this. Chicken gets washed in citrus, marinated in epis overnight, browned, then braised down in a tomato sauce until the meat gives up. Over rice, each bowl runs \u003cstrong\u003e605 calories and 57 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.74\u003c/strong\u003e (at everyday cost). That protein number is one of the highest in this whole batch.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 7.75 lb (3500 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)",
@@ -59,7 +59,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $30.31 across 14 servings, roughly $2.16 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $10.40 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $40.71. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.91 a bowl\u003c/strong\u003e (at everyday cost) for one of the most protein-dense dinners on this site. Chicken is the dominant line and the epis that flavors it is built from produce off the cheap end of the department.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.74 a bowl\u003c/strong\u003e (at everyday cost) for one of the most protein-dense dinners on this site. Chicken is the dominant line and the epis that flavors it is built from produce off the cheap end of the department.",
     "shop_smart":  [
                        "Make a double batch of epis while the blender is already dirty. Cilantro, garlic, bell pepper and citrus blended together freeze beautifully in an ice cube tray, and having it on hand turns a lot of plain weeknight chicken into something worth eating.",
                        "Bottled lemon juice is the practical choice here. This recipe uses a real volume of it for both the citrus wash and the marinade, and buying that many fresh lemons would cost several times more.",
@@ -78,7 +78,7 @@
                 ],
     "portion_html":  "Put the pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. Same amount in all fourteen containers. Each one carries \u003cstrong\u003e605 calories\u003c/strong\u003e, and I would hold the peanuts back and add them at reheat time so they stay crunchy instead of going soft in the sauce.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.savorythoughts.com/poulet-en-sauce-recipe/\" target=\"_blank\" rel=\"noopener\"\u003esavorythoughts.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Haitian poulet en sauce with real epis for about $2.91 a bowl (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "upsell_html":  "Haitian poulet en sauce with real epis for about $3.74 a bowl (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
     "cost_batch":  26.28,
     "cost_batch_true":  30.31,
     "cost_per_serving":  1.88,
@@ -93,8 +93,8 @@
                                    "canon":  "Boneless Skinless Chicken Thigh",
                                    "grams":  3500,
                                    "buy":  "7.75 lb",
-                                   "bid":  "chicken-thighs",
-                                   "gpu":  "453.592"
+                                   "bid":"boneless-skinless-chicken-thigh",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Salt",
@@ -109,8 +109,8 @@
                                    "canon":  "Fresh Cilantro",
                                    "grams":  28,
                                    "buy":  "28 tbsp",
-                                   "bid":  "cilantro",
-                                   "gpu":  "57.000"
+                                   "bid":"cilantro",
+                                   "gpu":57
                                },
                                {
                                    "item":  "Peanuts",
@@ -149,8 +149,8 @@
                                    "canon":  "Green Bell Peppers",
                                    "grams":  420,
                                    "buy":  "3.5",
-                                   "bid":  "bell-peppers",
-                                   "gpu":  "120.000"
+                                   "bid":"green-bell-pepper",
+                                   "gpu":120
                                },
                                {
                                    "item":  "Dried Thyme",
@@ -189,19 +189,19 @@
                                    "canon":  "Rice",
                                    "grams":  700,
                                    "buy":  "3.75 cups dry",
-                                   "bid":  "rice",
-                                   "gpu":  "453.592"
+                                   "bid":"rice",
+                                   "gpu":453.592
                                }
                            ]
                },
     "head":  {
-                 "description":  "Haitian poulet en sauce: chicken marinated in epis and braised in tomato, served over rice. 14 meal prep bowls at 605 calories, 57g protein, about $2.91 each (at everyday cost).",
+                 "description":  "Haitian poulet en sauce: chicken marinated in epis and braised in tomato, served over rice. 14 meal prep bowls at 605 calories, 57g protein, about $3.74 each (at everyday cost).",
                  "keywords":  "poulet en sauce, haitian chicken, epis marinade, haitian stewed chicken, caribbean meal prep, high protein chicken bowls",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT30M",
                  "cookTime":  "PT50M",
                  "totalTime":  "PT1H20M",
-                 "costPerServing":  2.91,
+                 "costPerServing":  3.74,
                  "recipeIngredient":  [
                                           "7.75 lb boneless skinless chicken thighs",
                                           "28 tbsp fresh cilantro",

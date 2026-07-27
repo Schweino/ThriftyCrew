@@ -16,9 +16,9 @@
                  "protein":  25,
                  "carbs":  76,
                  "fat":  17,
-                 "cost_ps":  "2.87"
+                 "cost_ps":  "2.95"
              },
-    "intro_html":  "Hashweh is the Lebanese answer to comfort food: cinnamon and allspice scented beef folded into buttery rice with toasted noodles. Simple ingredients, big warm flavor. Each bowl brings \u003cstrong\u003e25 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.87\u003c/strong\u003e (at everyday cost), and the whole thing cooks in one pot with about six real ingredients.",
+    "intro_html":  "Hashweh is the Lebanese answer to comfort food: cinnamon and allspice scented beef folded into buttery rice with toasted noodles. Simple ingredients, big warm flavor. Each bowl brings \u003cstrong\u003e25 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.95\u003c/strong\u003e (at everyday cost), and the whole thing cooks in one pot with about six real ingredients.",
     "ingredients_display": ["\u003cstrong\u003eButter (generic):\u003c/strong\u003e 0.75 cups (198 g)","\u003cstrong\u003eSpaghetti (Great Value):\u003c/strong\u003e 4.25 oz dry (117 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 6.25 cups dry (1163 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.75 tbsp (14 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tbsp (5 g)","\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 3.75 lb (1680 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (257 g)","\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 2.5 lb (1111 g)","\u003cstrong\u003eGround Allspice (Great Value):\u003c/strong\u003e 2.75 oz (75 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -33,7 +33,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $30.91 across 14 servings, roughly $2.21 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $7.45 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.36. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.87 a bowl\u003c/strong\u003e (at everyday cost) for a dish a Middle Eastern restaurant would plate for $14. This is a genuinely cheap full dinner, and nobody eating it would ever guess.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.95 a bowl\u003c/strong\u003e (at everyday cost) for a dish a Middle Eastern restaurant would plate for $14. This is a genuinely cheap full dinner, and nobody eating it would ever guess.",
     "shop_smart":  [
                        "Rice bought in the big bag runs about a third the price of the small boxes. This recipe uses 6.25 cups dry, and the big bag still keeps going for future batches.",
                        "The ground beef is over half the batch cost, so watch the weekly board. When 93/7 dips on sale, this gets even cheaper.",
@@ -50,7 +50,7 @@
                 ],
     "portion_html":  "Weigh the full pot, subtract the empty pot number you wrote down in step 1, and divide by 14. Scoop that weight into each container and you get 14 even bowls at 577 calories and 25 grams of protein apiece.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://silkroadrecipes.com/lebanese-vermicelli-rice-hashweh/\" target=\"_blank\" rel=\"noopener\"\u003eSilk Road Recipes\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $2.87 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about $2.95 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  24.58,
     "cost_batch_true":  30.91,
     "cost_per_serving":  1.76,
@@ -78,8 +78,8 @@
                                    "item":  "Rice",
                                    "grams":  1163,
                                    "buy":  "6.25 cups dry",
-                                   "bid":  "rice",
-                                   "gpu":  "453.592"
+                                   "bid":"rice",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Salt",
@@ -120,8 +120,8 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  1111,
                                    "buy":  "2.5 lb",
-                                   "bid":  "ground-beef-8020",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-beef",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Ground Allspice",
@@ -133,13 +133,13 @@
                            ]
                },
     "head":  {
-                 "description":  "Lebanese hashweh meal prep: 577 calories and 25g protein at about $2.87 a bowl (at everyday cost). Cinnamon and allspice beef with buttery rice, 14 one-pot servings.",
+                 "description":  "Lebanese hashweh meal prep: 577 calories and 25g protein at about $2.95 a bowl (at everyday cost). Cinnamon and allspice beef with buttery rice, 14 one-pot servings.",
                  "keywords":  "lebanese hashweh recipe, spiced beef and rice, middle eastern meal prep, budget one pot dinner, cheap ground beef recipe, hashweh rice",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT10M",
                  "cookTime":  "PT35M",
                  "totalTime":  "PT45M",
-                 "costPerServing":  2.87,
+                 "costPerServing":  2.95,
                  "recipeIngredient":  [
                                           "2.5 lb 93/7 ground beef",
                                           "6.25 cups dry rice",

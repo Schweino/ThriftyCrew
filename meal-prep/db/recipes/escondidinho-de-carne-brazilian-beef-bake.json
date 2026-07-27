@@ -26,7 +26,7 @@
                  "protein":  38,
                  "carbs":  51,
                  "fat":  24,
-                 "cost_ps":  "4.45"
+                 "cost_ps":  "4.60"
              },
     "intro_html":  "Escondidinho means little hidden thing, and the hidden thing is the meat. Seasoned beef goes on the bottom, creamy mashed potato goes over it like a blanket, cheese goes on top, and it bakes until the whole surface blisters. Brazil makes this with catupiry, a soft tangy cheese that does not exist here, so cream cheese is the standard stand-in and it works. Cilantro through the beef is what keeps it from tasting like a British shepherd\u0027s pie with a tan.",
     "ingredients_display":  [
@@ -64,7 +64,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $46.46 across 14 servings, roughly $3.32 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $15.87 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $62.33. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.45 a bowl\u003c/strong\u003e (at everyday cost) for a Brazilian bake with a cheese-blistered mashed potato lid.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.60 a bowl\u003c/strong\u003e (at everyday cost) for a Brazilian bake with a cheese-blistered mashed potato lid.",
     "shop_smart":  [
                        "\u003cstrong\u003ePotatoes are the cheapest thing in this dish and they are half of it.\u003c/strong\u003e Buy the big bag and store them cool and dark, and the mash layer costs next to nothing.",
                        "\u003cstrong\u003eCream cheese replaces catupiry and is a fraction of the price of imported cheese.\u003c/strong\u003e Buy the store brand bricks, which behave identically once melted into a mash.",
@@ -83,7 +83,7 @@
                 ],
     "portion_html":  "Weigh the whole baking dish, subtract the empty dish weight, and divide by 14. Cut to that weight so the beef layer gets divided as evenly as the potato does. Every serving comes in at \u003cstrong\u003e570 calories with 38 grams of protein\u003c/strong\u003e. Let it rest fifteen minutes so the layers hold together when you lift them out.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://easybrazilianfood.com/brazilian-dutch-oven-shepherds-pie-escondidinho/\" target=\"_blank\" rel=\"noopener\"\u003eeasybrazilianfood.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Cheesy, layered dinners for about $4.45 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Cheesy, layered dinners for about $4.60 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  33.2,
     "cost_batch_true":  46.46,
     "cost_per_serving":  2.37,
@@ -98,8 +98,8 @@
                                    "canon":  "Potato",
                                    "grams":  3422,
                                    "buy":  "16",
-                                   "bid":  "russet-potatoes",
-                                   "gpu":  "453.592"
+                                   "bid":"russet-potatoes",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Salt",
@@ -130,8 +130,8 @@
                                    "canon":  "Parmesan Cheese",
                                    "grams":  63,
                                    "buy":  "2.25 oz",
-                                   "bid":  "parmesan",
-                                   "gpu":  "28.350"
+                                   "bid":"parmesan",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Black Pepper",
@@ -154,8 +154,8 @@
                                    "canon":  "93/7 Ground Beef",
                                    "grams":  1270,
                                    "buy":  "2.75 lb",
-                                   "bid":  "ground-beef-8020",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-beef",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Olive Oil",
@@ -178,16 +178,16 @@
                                    "canon":  "1/3 Fat Cream Cheese",
                                    "grams":  487,
                                    "buy":  "17.25 oz",
-                                   "bid":  "cream-cheese",
-                                   "gpu":  "28.350"
+                                   "bid":"1-3-fat-cream-cheese",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Fresh Cilantro",
                                    "canon":  "Fresh Cilantro",
                                    "grams":  6,
                                    "buy":  "6 tbsp",
-                                   "bid":  "cilantro",
-                                   "gpu":  "57.000"
+                                   "bid":"cilantro",
+                                   "gpu":57
                                },
                                {
                                    "item":  "Chili Powder",
@@ -210,19 +210,19 @@
                                    "canon":  "Reduced Fat Mozzarella",
                                    "grams":  314,
                                    "buy":  "11 oz",
-                                   "bid":  "shredded-cheese",
-                                   "gpu":  "28.350"
+                                   "bid":"reduced-fat-mozzarella",
+                                   "gpu":28.3495
                                }
                            ]
                },
     "head":  {
-                 "description":  "Brazilian escondidinho de carne rebuilt for 14-serving meal prep: creamy beef under a mashed potato and mozzarella lid. 570 calories, 38g protein, about $4.45 per serving (at everyday cost).",
+                 "description":  "Brazilian escondidinho de carne rebuilt for 14-serving meal prep: creamy beef under a mashed potato and mozzarella lid. 570 calories, 38g protein, about $4.60 per serving (at everyday cost).",
                  "keywords":  "escondidinho de carne, brazilian beef and potato bake, brazilian shepherds pie, cream cheese beef bake, brazilian meal prep, cheesy casserole",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",
                  "cookTime":  "PT50M",
                  "totalTime":  "PT75M",
-                 "costPerServing":  4.45,
+                 "costPerServing":  4.60,
                  "recipeIngredient":  [
                                           "2.75 lb 93/7 ground beef",
                                           "16 potatoes",

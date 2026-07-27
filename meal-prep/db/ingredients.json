@@ -6,7 +6,7 @@
   },
   {
       "item":  "1/3 Fat Cream Cheese",
-      "bid":  "cream-cheese",
+      "bid":  "1-3-fat-cream-cheese",
       "gpu":  28.3495,
       "unit":  "oz",
       "board":  "recipe",
@@ -15,7 +15,7 @@
   },
   {
       "item":  "93/7 Ground Beef",
-      "bid":  "ground-beef-8020",
+      "bid":  "93-7-ground-beef",
       "gpu":  453.592,
       "unit":  "lb",
       "board":  "recipe",
@@ -24,7 +24,7 @@
   },
   {
       "item":  "93/7 Ground Turkey",
-      "bid":  "ground-turkey",
+      "bid":  "93-7-ground-turkey",
       "gpu":  453.592,
       "unit":  "lb",
       "board":  "recipe",
@@ -271,7 +271,7 @@
   },
   {
       "item":  "Boneless Skinless Chicken Thigh",
-      "bid":  "chicken-thighs",
+      "bid":  "boneless-skinless-chicken-thigh",
       "gpu":  453.592,
       "unit":  "lb",
       "board":  "recipe",
@@ -298,9 +298,9 @@
   },
   {
       "item":  "Broccoli Florets",
-      "bid":  "broccoli",
-      "gpu":  453.592,
-      "unit":  "lb",
+      "bid":  "frozen-broccoli-florets",
+      "gpu":  28.3495,
+      "unit":  "oz",
       "board":  "recipe",
       "buy_pkg_g":  340,
       "buy_pkg_label":  "12oz bag"
@@ -334,7 +334,7 @@
   },
   {
       "item":  "Buffalo Wing Sauce",
-      "bid":  "hot-sauce",
+      "bid":  "buffalo-wing-sauce",
       "gpu":  29.57,
       "unit":  "floz",
       "board":  "recipe",
@@ -459,7 +459,7 @@
   },
   {
       "item":  "Cheddar Cheese, Shredded",
-      "bid":  "shredded-cheese",
+      "bid":  "cheddar-cheese-shredded",
       "gpu":  28.3495,
       "unit":  "oz",
       "board":  "recipe",
@@ -948,7 +948,7 @@
   },
   {
       "item":  "Frozen Chopped Spinach",
-      "bid":  "spinach",
+      "bid":  "frozen-chopped-spinach",
       "gpu":  28.3495,
       "unit":  "oz",
       "board":  "recipe",
@@ -1045,7 +1045,7 @@
   },
   {
       "item":  "Golden Raisins",
-      "bid":  "raisins",
+      "bid":  "golden-raisins",
       "gpu":  28.3495,
       "unit":  "oz",
       "board":  "recipe",
@@ -1060,7 +1060,7 @@
   },
   {
       "item":  "Greek Yogurt",
-      "bid":  "yogurt",
+      "bid":  "greek-yogurt",
       "gpu":  28.3495,
       "unit":  "oz",
       "board":  "recipe",
@@ -1087,7 +1087,7 @@
   },
   {
       "item":  "Green Bell Peppers",
-      "bid":  "bell-peppers",
+      "bid":  "green-bell-pepper",
       "gpu":  120,
       "unit":  "each",
       "board":  "recipe",
@@ -1493,7 +1493,7 @@
   },
   {
       "item":  "Marinara Sauce",
-      "bid":  "pasta-sauce",
+      "bid":  "marinara-sauce",
       "gpu":  28.3495,
       "unit":  "oz",
       "board":  "recipe",
@@ -1694,7 +1694,7 @@
   },
   {
       "item":  "Penne Pasta",
-      "bid":  "pasta",
+      "bid":  "penne-pasta",
       "gpu":  28.3495,
       "unit":  "oz",
       "board":  "recipe",
@@ -1873,7 +1873,7 @@
   },
   {
       "item":  "Red Bell Pepper",
-      "bid":  "bell-peppers",
+      "bid":  "red-bell-pepper",
       "gpu":  120,
       "unit":  "each",
       "board":  "recipe",
@@ -1925,7 +1925,7 @@
   },
   {
       "item":  "Reduced Fat Mozzarella",
-      "bid":  "shredded-cheese",
+      "bid":  "reduced-fat-mozzarella",
       "gpu":  28.3495,
       "unit":  "oz",
       "board":  "recipe",
@@ -2015,7 +2015,7 @@
   },
   {
       "item":  "Salsa Verde",
-      "bid":  "salsa",
+      "bid":  "salsa-verde",
       "gpu":  28.3495,
       "unit":  "oz",
       "board":  "recipe",
@@ -2059,7 +2059,7 @@
   },
   {
       "item":  "Seasoned Black Beans",
-      "bid":  "canned-black-beans",
+      "bid":  "seasoned-black-beans",
       "gpu":  28.3495,
       "unit":  "oz",
       "board":  "recipe",
@@ -2096,7 +2096,7 @@
   },
   {
       "item":  "Smoked Paprika",
-      "bid":  "paprika",
+      "bid":  "smoked-paprika",
       "gpu":  28.3495,
       "unit":  "oz",
       "board":  "recipe",
@@ -2150,7 +2150,7 @@
   },
   {
       "item":  "Sriracha",
-      "bid":  "hot-sauce",
+      "bid":  "sriracha",
       "gpu":  29.57,
       "unit":  "floz",
       "board":  "recipe",
@@ -2178,9 +2178,9 @@
   },
   {
       "item":  "Sugar-Free Maple Syrup",
-      "bid":  "maple-syrup",
-      "gpu":  29.57,
-      "unit":  "floz",
+      "bid":  "sugar-free-maple-syrup",
+      "gpu":  28.3495,
+      "unit":  "oz",
       "board":  "recipe",
       "pantry_pkg_g":  355,
       "pantry_pkg_label":  "12floz bottle",
@@ -2471,5 +2471,12 @@
       "board":  "recipe",
       "buy_pkg_g":  453.592,
       "buy_pkg_label":  "lb"
+  },
+  {
+      "item":  "Korean glass noodles (dangmyeon)",
+      "bid":  "rice-noodles",
+      "gpu":  28.3495,
+      "unit":  "oz",
+      "board":  "recipe"
   }
 ]

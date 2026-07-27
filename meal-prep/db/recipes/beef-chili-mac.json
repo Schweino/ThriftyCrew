@@ -15,9 +15,9 @@
                  "protein":  53,
                  "carbs":  62,
                  "fat":  17,
-                 "cost_ps":  "4.57"
+                 "cost_ps":  "4.75"
              },
-    "intro_html":  "Chili and macaroni in one skillet, the way it should be. This crowd-pleaser stacks 53 grams of protein per bowl for about $4.57 (at everyday cost) and makes 14 servings. It is warm, filling, and cheap enough that you will wonder why you ever bought the boxed version.",
+    "intro_html":  "Chili and macaroni in one skillet, the way it should be. This crowd-pleaser stacks 53 grams of protein per bowl for about $4.75 (at everyday cost) and makes 14 servings. It is warm, filling, and cheap enough that you will wonder why you ever bought the boxed version.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2230 g)",
                                 "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 3 boxs (969 g)",
@@ -35,7 +35,7 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$4.57 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.75 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "A \u003cstrong\u003ecan of kidney beans\u003c/strong\u003e adds protein and fiber for about a dollar, making it one of the best-value stretchers in the recipe.",
                        "Buy \u003cstrong\u003echili powder and cumin in bulk jars\u003c/strong\u003e. They cost pennies per meal and last months, unlike the pricey single-use seasoning packets.",
@@ -64,15 +64,15 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2230,
                                    "buy":  "5 lb",
-                                   "bid":  "93-7-ground-beef",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-beef",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Penne Pasta",
                                    "grams":  969,
                                    "buy":  "3 boxs",
-                                   "bid":  "penne-pasta",
-                                   "gpu":  "28.350"
+                                   "bid":"penne-pasta",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -113,8 +113,8 @@
                                    "item":  "Cheddar Cheese, Shredded",
                                    "grams":  160,
                                    "buy":  "1 bag",
-                                   "bid":  "cheddar-cheese-shredded",
-                                   "gpu":  "28.350"
+                                   "bid":"cheddar-cheese-shredded",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Chili Powder",
@@ -161,9 +161,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein American meal prep. Fourteen servings at about 596 calories and 53 grams of protein for roughly $4.57 each (at everyday cost).",
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 596 calories and 53 grams of protein for roughly $4.75 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, beef chili mac, budget dinner",
-                 "costPerServing":  4.57,
+                 "costPerServing":  4.75,
                  "recipeIngredient":  [
                                           "5 lb 93/7 Ground Beef",
                                           "3 boxs Penne Pasta",

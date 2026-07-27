@@ -27,7 +27,7 @@
                  "protein":  34,
                  "carbs":  73,
                  "fat":  14,
-                 "cost_ps":  "3.78"
+                 "cost_ps":  "3.99"
              },
     "intro_html":  "Stuffed peppers taste great and take forever. You hollow, you par-cook, you stuff, you bake, and then you do it 14 more times. This soup skips every one of those steps and keeps the flavor. Ground turkey, bell peppers, tomato, rice and a savory beef broth base, finished with parmesan. Same dinner, a third of the work.",
     "ingredients_display":  [
@@ -66,7 +66,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $33.20 across 14 servings, roughly $2.37 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $19.71 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.91. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.78 a bowl\u003c/strong\u003e (at everyday cost). Canned tomatoes and rice keep the base almost free, so nearly every dollar in this pot went to the turkey where it belongs.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.99 a bowl\u003c/strong\u003e (at everyday cost). Canned tomatoes and rice keep the base almost free, so nearly every dollar in this pot went to the turkey where it belongs.",
     "shop_smart":  [
                        "\u003cstrong\u003eGreen bell peppers are the cheap ones.\u003c/strong\u003e Red, yellow and orange peppers are the same vegetable further along and they cost two or three times as much. Green is the right call here.",
                        "\u003cstrong\u003eCanned diced tomatoes and tomato sauce are the base.\u003c/strong\u003e Buy them by the case when they hit a sale price. They keep for years and they show up in half the recipes on this site.",
@@ -84,7 +84,7 @@
                 ],
     "portion_html":  "Scoop the cooked rice into your 14 containers first, then set the full soup pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and ladle that exact weight over the rice. Every serving lands near 581 calories with 34 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://tasteandsee.com/stuffed-pepper-soup-with-ground-turkey/\" target=\"_blank\" rel=\"noopener\"\u003etasteandsee.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "\u003cem\u003eAll the stuffed pepper flavor, none of the stuffing, for about $3.78 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "upsell_html":  "\u003cem\u003eAll the stuffed pepper flavor, none of the stuffing, for about $3.99 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
     "cost_batch":  28.4,
     "cost_batch_true":  33.2,
     "cost_per_serving":  2.03,
@@ -107,8 +107,8 @@
                                    "canon":  "93/7 Ground Turkey",
                                    "grams":  1588,
                                    "buy":  "3.5 lb",
-                                   "bid":  "ground-turkey",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-turkey",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Salt",
@@ -171,8 +171,8 @@
                                    "canon":  "Green Bell Peppers",
                                    "grams":  210,
                                    "buy":  "2",
-                                   "bid":  "bell-peppers",
-                                   "gpu":  "120.000"
+                                   "bid":"green-bell-pepper",
+                                   "gpu":120
                                },
                                {
                                    "item":  "Beef Broth",
@@ -203,24 +203,24 @@
                                    "canon":  "Worcestershire Sauce",
                                    "grams":  60,
                                    "buy":  "3.5 tbsp",
-                                   "bid":  "worcestershire",
-                                   "gpu":  "29.570"
+                                   "bid":"worcestershire",
+                                   "gpu":29.57
                                },
                                {
                                    "item":  "Rice",
                                    "canon":  "Rice",
                                    "grams":  1069,
                                    "buy":  "5.75 cups dry",
-                                   "bid":  "rice",
-                                   "gpu":  "453.592"
+                                   "bid":"rice",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Parmesan Cheese",
                                    "canon":  "Parmesan Cheese",
                                    "grams":  150,
                                    "buy":  "5.25 oz",
-                                   "bid":  "parmesan",
-                                   "gpu":  "28.350"
+                                   "bid":"parmesan",
+                                   "gpu":28.3495
                                }
                            ]
                },
@@ -231,7 +231,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT40M",
                  "totalTime":  "PT1H",
-                 "costPerServing":  3.78,
+                 "costPerServing":  3.99,
                  "recipeIngredient":  [
                                           "93/7 Ground Turkey",
                                           "Olive Oil",

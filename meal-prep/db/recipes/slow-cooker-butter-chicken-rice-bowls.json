@@ -15,9 +15,9 @@
                  "protein":  57,
                  "carbs":  62,
                  "fat":  11,
-                 "cost_ps":  "4.78"
+                 "cost_ps":  "4.87"
              },
-    "intro_html":  "Butter chicken is rich, golden, and downright luxurious, yet this batch clocks in at about $4.78 a bowl (at everyday cost). It is creamy, high in protein, and a rich one to keep in the rotation. One batch makes 14 servings.",
+    "intro_html":  "Butter chicken is rich, golden, and downright luxurious, yet this batch clocks in at about $4.87 a bowl (at everyday cost). It is creamy, high in protein, and a rich one to keep in the rotation. One batch makes 14 servings.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3000 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (980 g)",
@@ -40,7 +40,7 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$4.78 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.87 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Stir in \u003cstrong\u003eGreek yogurt and milk\u003c/strong\u003e instead of heavy cream to get the richness for a lower cost.",
                        "You only need a \u003cstrong\u003elittle butter\u003c/strong\u003e for the flavor, so one box lasts across several batches.",
@@ -77,8 +77,8 @@
                                    "item":  "Rice",
                                    "grams":  980,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Tomato Sauce",
@@ -112,8 +112,8 @@
                                    "item":  "Greek Yogurt",
                                    "grams":  200,
                                    "buy":  "1 tub",
-                                   "bid":  "greek-yogurt",
-                                   "gpu":  "28.350"
+                                   "bid":"greek-yogurt",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Garlic",
@@ -133,8 +133,8 @@
                                    "item":  "Ginger",
                                    "grams":  35,
                                    "buy":  "1 tbsp minced",
-                                   "bid":  "ginger",
-                                   "gpu":  "453.592"
+                                   "bid":"fresh-ginger",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Garam Masala",
@@ -202,9 +202,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Indian meal prep. Fourteen servings at about 592 calories and 57 grams of protein for roughly $4.78 each (at everyday cost).",
+                 "description":  "A high-protein Indian meal prep. Fourteen servings at about 592 calories and 57 grams of protein for roughly $4.87 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker butter chicken rice bowls, budget dinner",
-                 "costPerServing":  4.78,
+                 "costPerServing":  4.87,
                  "recipeIngredient":  [
                                           "7 lb Boneless Skinless Chicken Breast",
                                           "1 lb Rice",

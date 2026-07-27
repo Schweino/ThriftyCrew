@@ -15,9 +15,9 @@
                  "protein":  50,
                  "carbs":  64,
                  "fat":  17,
-                 "cost_ps":  "4.53"
+                 "cost_ps":  "4.59"
              },
-    "intro_html":  "Gochujang gives these Korean ground beef bowls a deep, savory heat that tastes like you fussed for hours. Lean beef browns and simmers in a spicy sweet sauce, then goes over rice with broccoli. It runs a bit higher at around $4.53 a serving (at everyday cost), but you still get a big 50 grams of protein across 14 bowls.",
+    "intro_html":  "Gochujang gives these Korean ground beef bowls a deep, savory heat that tastes like you fussed for hours. Lean beef browns and simmers in a spicy sweet sauce, then goes over rice with broccoli. It runs a bit higher at around $4.59 a serving (at everyday cost), but you still get a big 50 grams of protein across 14 bowls.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2680 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (861 g)",
@@ -31,7 +31,7 @@
                                 "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1 tsp (8 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$4.53 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.59 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "A tub of gochujang seasons batch after batch. \u003cstrong\u003eBuy one tub of gochujang\u003c/strong\u003e and it will carry you through months of meals.",
                        "Sesame oil is strong, so a little goes a long way. \u003cstrong\u003eOne small bottle of sesame oil\u003c/strong\u003e lasts a very long time.",
@@ -61,22 +61,22 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2680,
                                    "buy":  "6 lb",
-                                   "bid":  "93-7-ground-beef",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-beef",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  861,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  1000,
                                    "buy":  "3 bags",
-                                   "bid":  "frozen-broccoli-florets",
-                                   "gpu":  "28.350"
+                                   "bid":"frozen-broccoli-florets",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Gochujang",
@@ -130,9 +130,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Korean meal prep. Fourteen servings at about 615 calories and 50 grams of protein for roughly $4.53 each (at everyday cost).",
+                 "description":  "A high-protein Korean meal prep. Fourteen servings at about 615 calories and 50 grams of protein for roughly $4.59 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, korean ground beef rice bowls, budget dinner",
-                 "costPerServing":  4.53,
+                 "costPerServing":  4.59,
                  "recipeIngredient":  [
                                           "6 lb 93/7 Ground Beef",
                                           "1 lb Rice",

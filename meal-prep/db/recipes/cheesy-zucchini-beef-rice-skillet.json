@@ -15,7 +15,7 @@
                  "protein":  39,
                  "carbs":  65,
                  "fat":  9,
-                 "cost_ps":  "3.73"
+                 "cost_ps":  "3.82"
              },
     "intro_html":  "This is a cozy, cheesy skillet that stretches four pounds of beef across 14 hearty dinners. Taco seasoned beef, soft zucchini, and melty cheddar come together over rice for a meal that tastes like comfort food but eats like a budget win. One pan, big batch, and a fridge full of dinners waiting for you.",
     "ingredients_display":  [
@@ -34,7 +34,7 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (2 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$3.73 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.82 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "\u003cstrong\u003eWatch for markdowns on lean ground beef.\u003c/strong\u003e Buy it when it hits a low price per pound, then brown and freeze what you are not using today. Browned beef freezes great and thaws fast for the next batch.",
                        "\u003cstrong\u003eSkip the seasoning packet and mix your own.\u003c/strong\u003e Chili powder, cumin, garlic powder, and paprika from your pantry cost pennies per batch compared to the little envelopes, and you control the salt.",
@@ -65,8 +65,8 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  1814,
                                    "buy":  "4 lb",
-                                   "bid":  "93-7-ground-beef",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-beef",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -79,8 +79,8 @@
                                    "item":  "Green Bell Peppers",
                                    "grams":  476,
                                    "buy":  "4 peppers",
-                                   "bid":  "green-bell-pepper",
-                                   "gpu":  "120.000"
+                                   "bid":"green-bell-pepper",
+                                   "gpu":120
                                },
                                {
                                    "item":  "Zucchini",
@@ -114,8 +114,8 @@
                                    "item":  "Rice",
                                    "grams":  1000,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Vegetable Oil",
@@ -155,9 +155,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 512 calories and 39 grams of protein for roughly $3.73 each (at everyday cost).",
+                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 512 calories and 39 grams of protein for roughly $3.82 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, cheesy zucchini beef and rice skillet, budget dinner",
-                 "costPerServing":  3.73,
+                 "costPerServing":  3.82,
                  "recipeIngredient":  [
                                           "4 lb 93/7 Ground Beef",
                                           "2 onions Yellow Onion",

@@ -15,7 +15,7 @@
                  "protein":  52,
                  "carbs":  58,
                  "fat":  10,
-                 "cost_ps":  "3.46"
+                 "cost_ps":  "4.23"
              },
     "intro_html":  "Chile verde is that tangy, green, slow-simmered chicken that makes people ask for your recipe. Thighs keep it juicy, tomatillos and green chiles do the heavy lifting on flavor, and it stays high protein and cheap per serving. One batch makes 14 servings.",
     "ingredients_display":  [
@@ -37,7 +37,7 @@
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (240 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$3.46 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.23 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Go with \u003cstrong\u003eboneless skinless thighs\u003c/strong\u003e here. They are cheaper than breast and stay tender through a long cook.",
                        "Fresh \u003cstrong\u003etomatillos\u003c/strong\u003e are usually cents on the dollar in season, so buy them when they are cheap.",
@@ -67,15 +67,15 @@
                                    "item":  "Boneless Skinless Chicken Thigh",
                                    "grams":  3200,
                                    "buy":  "8 lb",
-                                   "bid":  "boneless-skinless-chicken-thigh",
-                                   "gpu":  "453.592"
+                                   "bid":"boneless-skinless-chicken-thigh",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  900,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Tomatillos",
@@ -95,15 +95,15 @@
                                    "item":  "Diced Green Chiles",
                                    "grams":  200,
                                    "buy":  "2 cans",
-                                   "bid":  "diced-green-chiles",
-                                   "gpu":  "28.350"
+                                   "bid":"canned-green-chilies",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  400,
                                    "buy":  "2 bags",
-                                   "bid":  "frozen-broccoli-florets",
-                                   "gpu":  "28.350"
+                                   "bid":"frozen-broccoli-florets",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Poblano Peppers",
@@ -116,8 +116,8 @@
                                    "item":  "Jalapeno",
                                    "grams":  30,
                                    "buy":  "1 jalapeno",
-                                   "bid":  "jalapeno",
-                                   "gpu":  "453.592"
+                                   "bid":"jalapenos",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Garlic",
@@ -130,8 +130,8 @@
                                    "item":  "Fresh Cilantro",
                                    "grams":  28,
                                    "buy":  "1 bunch",
-                                   "bid":  "fresh-cilantro",
-                                   "gpu":  "57.000"
+                                   "bid":"cilantro",
+                                   "gpu":57
                                },
                                {
                                    "item":  "Lime Juice",
@@ -178,9 +178,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 557 calories and 52 grams of protein for roughly $3.46 each (at everyday cost).",
+                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 557 calories and 52 grams of protein for roughly $4.23 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker chicken chile verde bowls, budget dinner",
-                 "costPerServing":  3.46,
+                 "costPerServing":  4.23,
                  "recipeIngredient":  [
                                           "8 lb Boneless Skinless Chicken Thigh",
                                           "1 lb Rice",

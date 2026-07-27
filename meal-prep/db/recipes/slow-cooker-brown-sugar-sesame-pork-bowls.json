@@ -15,9 +15,9 @@
                  "protein":  55,
                  "carbs":  57,
                  "fat":  15,
-                 "cost_ps":  "3.87"
+                 "cost_ps":  "3.75"
              },
-    "intro_html":  "Brown sugar and sesame give this pork a sweet, nutty glaze that tastes like you fussed over it, when really the slow cooker did all the work. Each bowl carries 55 grams of protein over rice and broccoli for just $3.87 (at everyday cost). Fourteen servings at that price keeps the whole week easy on your budget.",
+    "intro_html":  "Brown sugar and sesame give this pork a sweet, nutty glaze that tastes like you fussed over it, when really the slow cooker did all the work. Each bowl carries 55 grams of protein over rice and broccoli for just $3.75 (at everyday cost). Fourteen servings at that price keeps the whole week easy on your budget.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 8 lb (3200 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (750 g)",
@@ -33,7 +33,7 @@
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (18 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$3.87 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.75 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  "Brown sugar and soy sauce make a glaze for almost nothing. A bag of brown sugar lasts for months and you use just a little each time.\nToasted sesame seeds are a small touch that makes the bowl look finished. One jar goes a long way, so buy it once.\nLean on pork loin to keep this bowl easy on the grocery budget. Watch for the whole loins on sale and cut your own pieces.",
     "make_it":  [
                     "Rub the pork loin with a little olive oil and set it in the slow cooker with the sliced onion.",
@@ -66,15 +66,15 @@
                                    "item":  "Rice",
                                    "grams":  750,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  1200,
                                    "buy":  "4 bags",
-                                   "bid":  "frozen-broccoli-florets",
-                                   "gpu":  "28.350"
+                                   "bid":"frozen-broccoli-florets",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Brown Sugar",
@@ -142,9 +142,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Asian meal prep. Fourteen servings at about 607 calories and 55 grams of protein for roughly $3.87 each (at everyday cost).",
+                 "description":  "A high-protein Asian meal prep. Fourteen servings at about 607 calories and 55 grams of protein for roughly $3.75 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker brown sugar sesame pork bowls, budget dinner",
-                 "costPerServing":  3.87,
+                 "costPerServing":  3.75,
                  "recipeIngredient":  [
                                           "8 lb Pork Loin",
                                           "1 lb Rice",

@@ -26,9 +26,9 @@
                  "protein":  32,
                  "carbs":  70,
                  "fat":  15,
-                 "cost_ps":  "3.63"
+                 "cost_ps":  "3.84"
              },
-    "intro_html":  "San choy bow is the Cantonese mince that usually gets scooped into lettuce cups at the start of a meal. Turned onto rice it becomes an actual dinner, and it keeps every good thing about the original: oyster sauce depth, crunchy celery and carrot, peanuts on top. Each bowl runs \u003cstrong\u003e564 calories and 32 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.63\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "San choy bow is the Cantonese mince that usually gets scooped into lettuce cups at the start of a meal. Turned onto rice it becomes an actual dinner, and it keeps every good thing about the original: oyster sauce depth, crunchy celery and carrot, peanuts on top. Each bowl runs \u003cstrong\u003e564 calories and 32 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.84\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eOyster Sauce (Lee Kum Kee):\u003c/strong\u003e 1 cups (252 g)",
                                 "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.5 cups (140 g)",
@@ -70,7 +70,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $34.14 across 14 servings, roughly $2.44 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $16.71 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.85. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.63\u003c/strong\u003e a bowl (at everyday cost). Restaurants charge appetizer prices for four small lettuce cups of this. You are getting fourteen dinners for what two of those cost.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.84\u003c/strong\u003e a bowl (at everyday cost). Restaurants charge appetizer prices for four small lettuce cups of this. You are getting fourteen dinners for what two of those cost.",
     "shop_smart":  [
                        "Oyster sauce is the flavor engine here and one bottle covers this batch four times over. It is the single best value bottle in the Asian aisle, so buy it once and stop buying stir-fry sauce packets forever.",
                        "Celery and carrot together cost very little and they add the crunch that keeps this from being just a bowl of meat. Cheap vegetables doing structural work is the whole budget cooking playbook.",
@@ -89,7 +89,7 @@
                 ],
     "portion_html":  "Set the pot of rice on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the rice bed for each container. Divide the mince evenly across all 14, then scatter the chopped peanuts and remaining green onion on top so they stay crunchy instead of going soft in the sauce. Each bowl lands at \u003cstrong\u003e564 calories and 32 grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.sugarsaltmagic.com/turkey-san-choy-bow/\" target=\"_blank\" rel=\"noopener\"\u003esugarsaltmagic.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Cantonese san choy bow for about \u003cstrong\u003e$3.63\u003c/strong\u003e a bowl (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Cantonese san choy bow for about \u003cstrong\u003e$3.84\u003c/strong\u003e a bowl (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  27.22,
     "cost_batch_true":  34.14,
     "cost_per_serving":  1.94,
@@ -176,40 +176,40 @@
                                    "canon":  "Ginger",
                                    "grams":  21,
                                    "buy":  "3.5 tbsp",
-                                   "bid":  "fresh-ginger",
-                                   "gpu":  "453.592"
+                                   "bid":"fresh-ginger",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "93/7 Ground Turkey",
                                    "canon":  "93/7 Ground Turkey",
                                    "grams":  1750,
                                    "buy":  "3.75 lb",
-                                   "bid":  "ground-turkey",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-turkey",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "White Mushrooms",
                                    "canon":  "White Mushrooms",
                                    "grams":  122,
                                    "buy":  "4.25 oz",
-                                   "bid":  "mushrooms",
-                                   "gpu":  "28.350"
+                                   "bid":"mushrooms",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Carrots",
                                    "canon":  "Carrots",
                                    "grams":  214,
                                    "buy":  "3.5",
-                                   "bid":  "carrots",
-                                   "gpu":  "453.592"
+                                   "bid":"carrots",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Jalapeno",
                                    "canon":  "Jalapeno",
                                    "grams":  49,
                                    "buy":  "5.5 tbsp",
-                                   "bid":  "jalapenos",
-                                   "gpu":  "453.592"
+                                   "bid":"jalapenos",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Salt",
@@ -232,19 +232,19 @@
                                    "canon":  "Rice",
                                    "grams":  985,
                                    "buy":  "5.25 cups dry",
-                                   "bid":  "rice",
-                                   "gpu":  "453.592"
+                                   "bid":"rice",
+                                   "gpu":453.592
                                }
                            ]
                },
     "head":  {
-                 "description":  "Turkey san choy bow rice bowls: Cantonese oyster sauce turkey mince with celery, carrot, and peanuts over rice. 564 calories, 32g protein, about $3.63 a bowl (at everyday cost).",
+                 "description":  "Turkey san choy bow rice bowls: Cantonese oyster sauce turkey mince with celery, carrot, and peanuts over rice. 564 calories, 32g protein, about $3.84 a bowl (at everyday cost).",
                  "keywords":  "san choy bow, cantonese mince, turkey meal prep, budget meal prep, oyster sauce turkey, asian rice bowl",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",
                  "cookTime":  "PT25M",
                  "totalTime":  "PT45M",
-                 "costPerServing":  3.63,
+                 "costPerServing":  3.84,
                  "recipeIngredient":  [
                                           "3.75 lb 93/7 ground turkey",
                                           "1 cup oyster sauce",

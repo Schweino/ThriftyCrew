@@ -26,9 +26,9 @@
                  "protein":  35,
                  "carbs":  67,
                  "fat":  18,
-                 "cost_ps":  "3.59"
+                 "cost_ps":  "3.80"
              },
-    "intro_html":  "Shepherd\u0027s pie is what happens when a pound of ground meat and a sack of potatoes decide to become dinner together. Seasoned turkey and peas on the bottom, a thick blanket of real mashed potatoes on top, parmesan browned across the whole surface. Each serving carries \u003cstrong\u003e35 grams of protein\u003c/strong\u003e and 569 calories for about \u003cstrong\u003e$3.59\u003c/strong\u003e (at everyday cost). The potatoes are doing most of the heavy lifting on that price, and they are not shy about it.",
+    "intro_html":  "Shepherd\u0027s pie is what happens when a pound of ground meat and a sack of potatoes decide to become dinner together. Seasoned turkey and peas on the bottom, a thick blanket of real mashed potatoes on top, parmesan browned across the whole surface. Each serving carries \u003cstrong\u003e35 grams of protein\u003c/strong\u003e and 569 calories for about \u003cstrong\u003e$3.80\u003c/strong\u003e (at everyday cost). The potatoes are doing most of the heavy lifting on that price, and they are not shy about it.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (46 g)",
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.5 lb (1535 g)",
@@ -58,7 +58,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $31.84 across 14 servings, roughly $2.27 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $18.49 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.33. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.59 a serving\u003c/strong\u003e (at everyday cost) for a pan that eats like a Sunday dinner. Potatoes are the cheapest filling starch in the store, and this recipe leans on them without apology.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.80 a serving\u003c/strong\u003e (at everyday cost) for a pan that eats like a Sunday dinner. Potatoes are the cheapest filling starch in the store, and this recipe leans on them without apology.",
     "shop_smart":  [
                        "Buy potatoes in the big sack, not loose by the each. This batch runs through most of a 9 lb bag, so the bulk price is not going to waste sitting in your pantry.",
                        "93/7 ground turkey is the engine of this dish. The per-pound price drops as the pack size climbs, and turkey freezes clean, so buy the bigger pack and split it.",
@@ -77,7 +77,7 @@
                 ],
     "portion_html":  "Set the whole pan on the scale, subtract the empty pan weight, and divide by 14. Cut and weigh that number into each container so nobody gets the short square. Every serving lands at \u003cstrong\u003e569 calories and 35 grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://masonfit.com/ground-turkey-shepherds-pie/\" target=\"_blank\" rel=\"noopener\"\u003emasonfit.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "A full plate of meat and potatoes for about $3.59 a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the whole library of money lessons, calculators, and tools, for $1 a month.",
+    "upsell_html":  "A full plate of meat and potatoes for about $3.80 a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the whole library of money lessons, calculators, and tools, for $1 a month.",
     "cost_batch":  26.13,
     "cost_batch_true":  31.84,
     "cost_per_serving":  1.87,
@@ -100,8 +100,8 @@
                                    "canon":  "93/7 Ground Turkey",
                                    "grams":  1535,
                                    "buy":  "3.5 lb",
-                                   "bid":  "ground-turkey",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-turkey",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -164,35 +164,35 @@
                                    "canon":  "Frozen Green Peas",
                                    "grams":  1151,
                                    "buy":  "2.5 lb",
-                                   "bid":  "frozen-peas",
-                                   "gpu":  "28.350"
+                                   "bid":"frozen-peas",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Potato",
                                    "canon":  "Potato",
                                    "grams":  3646,
                                    "buy":  "17",
-                                   "bid":  "russet-potatoes",
-                                   "gpu":  "453.592"
+                                   "bid":"russet-potatoes",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Parmesan Cheese",
                                    "canon":  "Parmesan Cheese",
                                    "grams":  96,
                                    "buy":  "3.5 oz",
-                                   "bid":  "parmesan",
-                                   "gpu":  "28.350"
+                                   "bid":"parmesan",
+                                   "gpu":28.3495
                                }
                            ]
                },
     "head":  {
-                 "description":  "Ground turkey shepherd\u0027s pie meal prep: seasoned turkey and peas under real mashed potatoes with parmesan. 569 calories, 35g protein, about $3.59 a serving (at everyday cost).",
+                 "description":  "Ground turkey shepherd\u0027s pie meal prep: seasoned turkey and peas under real mashed potatoes with parmesan. 569 calories, 35g protein, about $3.80 a serving (at everyday cost).",
                  "keywords":  "ground turkey shepherds pie, turkey meal prep, budget casserole, mashed potato casserole, high protein dinner, 9x13 bake, cheap turkey recipes",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",
                  "cookTime":  "PT50M",
                  "totalTime":  "PT1H15M",
-                 "costPerServing":  3.59,
+                 "costPerServing":  3.80,
                  "recipeIngredient":  [
                                           "3.5 lb 93/7 ground turkey",
                                           "17 potatoes",

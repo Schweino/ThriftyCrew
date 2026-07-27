@@ -15,9 +15,9 @@
                  "protein":  42,
                  "carbs":  68,
                  "fat":  13,
-                 "cost_ps":  "4.68"
+                 "cost_ps":  "4.84"
              },
-    "intro_html":  "Cuban picadillo is a beautiful mix of savory and sweet, with olives and golden raisins playing off cumin-spiced beef. It browns and simmers in one skillet, then goes over rice for an easy meal-prep bowl. This one runs around $4.68 a serving (at everyday cost) with 42 grams of protein and makes 14 bowls.",
+    "intro_html":  "Cuban picadillo is a beautiful mix of savory and sweet, with olives and golden raisins playing off cumin-spiced beef. It browns and simmers in one skillet, then goes over rice for an easy meal-prep bowl. This one runs around $4.84 a serving (at everyday cost) with 42 grams of protein and makes 14 bowls.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2330 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (946 g)",
@@ -35,7 +35,7 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 teaspoon (2 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$4.68 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.84 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "The olives and raisins are what make picadillo special for very little money. \u003cstrong\u003eA single jar of olives and one bag of raisins\u003c/strong\u003e carry the whole batch.",
                        "Store-brand tomato sauce works perfectly here. \u003cstrong\u003eBuy the cheapest canned tomato sauce\u003c/strong\u003e and save the difference.",
@@ -65,22 +65,22 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2330,
                                    "buy":  "6 lb",
-                                   "bid":  "93-7-ground-beef",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-beef",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  946,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Green Bell Peppers",
                                    "grams":  340,
                                    "buy":  "3 peppers",
-                                   "bid":  "green-bell-pepper",
-                                   "gpu":  "120.000"
+                                   "bid":"green-bell-pepper",
+                                   "gpu":120
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -100,15 +100,15 @@
                                    "item":  "Olives",
                                    "grams":  120,
                                    "buy":  "1 jar",
-                                   "bid":  "olives",
-                                   "gpu":  "28.350"
+                                   "bid":"green-olives",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Golden Raisins",
                                    "grams":  120,
                                    "buy":  "1 bag",
-                                   "bid":  "golden-raisins",
-                                   "gpu":  "28.350"
+                                   "bid":"golden-raisins",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Ground Cumin",
@@ -162,9 +162,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Cuban meal prep. Fourteen servings at about 565 calories and 42 grams of protein for roughly $4.68 each (at everyday cost).",
+                 "description":  "A high-protein Cuban meal prep. Fourteen servings at about 565 calories and 42 grams of protein for roughly $4.84 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, cuban beef picadillo rice bowls, budget dinner",
-                 "costPerServing":  4.68,
+                 "costPerServing":  4.84,
                  "recipeIngredient":  [
                                           "6 lb 93/7 Ground Beef",
                                           "1 lb Rice",

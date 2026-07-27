@@ -15,9 +15,9 @@
                  "protein":  51,
                  "carbs":  61,
                  "fat":  20,
-                 "cost_ps":  "3.50"
+                 "cost_ps":  "4.10"
              },
-    "intro_html":  "All the saucy, cheesy comfort of enchiladas with zero rolling and zero oven fuss. Each bowl brings 51 grams of protein for about $3.50 a serving (at everyday cost). Fourteen servings out of one skillet keeps the whole week covered.",
+    "intro_html":  "All the saucy, cheesy comfort of enchiladas with zero rolling and zero oven fuss. Each bowl brings 51 grams of protein for about $4.10 a serving (at everyday cost). Fourteen servings out of one skillet keeps the whole week covered.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 7 lb (3000 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (750 g)",
@@ -33,7 +33,7 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/8 tsp (1 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$3.50 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.10 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Buy the \u003cstrong\u003e7 lb ground turkey pack\u003c/strong\u003e and let the cheap beans and rice do the stretching.",
                        "Canned \u003cstrong\u003eenchilada sauce in the store brand\u003c/strong\u003e saves money over the name brands and tastes just as good in the pan.",
@@ -62,15 +62,15 @@
                                    "item":  "93/7 Ground Turkey",
                                    "grams":  3000,
                                    "buy":  "7 lb",
-                                   "bid":  "93-7-ground-turkey",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-turkey",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  750,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Enchilada Sauce",
@@ -83,29 +83,29 @@
                                    "item":  "Seasoned Black Beans",
                                    "grams":  900,
                                    "buy":  "3 cans",
-                                   "bid":  "seasoned-black-beans",
-                                   "gpu":  "28.350"
+                                   "bid":"seasoned-black-beans",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "grams":  500,
                                    "buy":  "2 cans",
-                                   "bid":  "canned-sweet-corn",
-                                   "gpu":  "210.000"
+                                   "bid":"canned-corn",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Chipotle in Adobo",
                                    "grams":  60,
                                    "buy":  "1 can",
-                                   "bid":  "chipotle-in-adobo",
-                                   "gpu":  "28.350"
+                                   "bid":"chipotle-adobo",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Cheddar Cheese, Shredded",
                                    "grams":  168,
                                    "buy":  "1 bag",
-                                   "bid":  "cheddar-cheese-shredded",
-                                   "gpu":  "28.350"
+                                   "bid":"cheddar-cheese-shredded",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -145,9 +145,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Tex-Mex meal prep. Fourteen servings at about 671 calories and 51 grams of protein for roughly $3.50 each (at everyday cost).",
+                 "description":  "A high-protein Tex-Mex meal prep. Fourteen servings at about 671 calories and 51 grams of protein for roughly $4.10 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, ground turkey enchilada skillet bowls, budget dinner",
-                 "costPerServing":  3.50,
+                 "costPerServing":  4.10,
                  "recipeIngredient":  [
                                           "7 lb 93/7 Ground Turkey",
                                           "1 lb Rice",

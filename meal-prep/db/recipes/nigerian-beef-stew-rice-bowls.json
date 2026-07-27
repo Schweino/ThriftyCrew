@@ -157,16 +157,16 @@
                                    "canon":  "Green Bell Peppers",
                                    "grams":  420,
                                    "buy":  "3.5",
-                                   "bid":  "bell-peppers",
-                                   "gpu":  "120.000"
+                                   "bid":"green-bell-pepper",
+                                   "gpu":120
                                },
                                {
                                    "item":  "Jalapeno",
                                    "canon":  "Jalapeno",
                                    "grams":  49,
                                    "buy":  "5.5 tbsp",
-                                   "bid":  "jalapenos",
-                                   "gpu":  "453.592"
+                                   "bid":"jalapenos",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Diced Tomatoes",
@@ -189,8 +189,8 @@
                                    "canon":  "Ginger",
                                    "grams":  13,
                                    "buy":  "2.25 tbsp",
-                                   "bid":  "fresh-ginger",
-                                   "gpu":  "453.592"
+                                   "bid":"fresh-ginger",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Vegetable Oil",
@@ -237,8 +237,8 @@
                                    "canon":  "Rice",
                                    "grams":  700,
                                    "buy":  "3.75 cups dry",
-                                   "bid":  "rice",
-                                   "gpu":  "453.592"
+                                   "bid":"rice",
+                                   "gpu":453.592
                                }
                            ]
                },

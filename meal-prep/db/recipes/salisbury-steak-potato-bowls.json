@@ -15,9 +15,9 @@
                  "protein":  42,
                  "carbs":  67,
                  "fat":  12,
-                 "cost_ps":  "4.21"
+                 "cost_ps":  "4.34"
              },
-    "intro_html":  "This is old-fashioned comfort food done lean and cheap. Ground beef patties simmer in a mushroom and onion gravy, all spooned over potatoes for a stick-to-your-ribs bowl. It runs around $4.21 a serving (at everyday cost) with 42 grams of protein and makes 14 hearty servings.",
+    "intro_html":  "This is old-fashioned comfort food done lean and cheap. Ground beef patties simmer in a mushroom and onion gravy, all spooned over potatoes for a stick-to-your-ribs bowl. It runs around $4.34 a serving (at everyday cost) with 42 grams of protein and makes 14 hearty servings.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2170 g)",
                                 "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 11 lb (4562 g)",
@@ -35,7 +35,7 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$4.21 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.34 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Bread crumbs stretch the beef and cost almost nothing. \u003cstrong\u003eA single container of bread crumbs\u003c/strong\u003e makes many batches of patties.",
                        "Mushrooms add meaty flavor cheaply, especially on sale. \u003cstrong\u003eBuy whole mushrooms and slice them yourself\u003c/strong\u003e instead of paying for pre-sliced.",
@@ -65,22 +65,22 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2170,
                                    "buy":  "5 lb",
-                                   "bid":  "93-7-ground-beef",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-beef",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Potato",
                                    "grams":  4562,
                                    "buy":  "11 lb",
-                                   "bid":  "potato",
-                                   "gpu":  "453.592"
+                                   "bid":"russet-potatoes",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "White Mushrooms",
                                    "grams":  430,
                                    "buy":  "2 packages",
-                                   "bid":  "white-mushrooms",
-                                   "gpu":  "28.350"
+                                   "bid":"mushrooms",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -114,8 +114,8 @@
                                    "item":  "Worcestershire Sauce",
                                    "grams":  25,
                                    "buy":  "1 tsp (patties) + 1/2 tsp (gravy)",
-                                   "bid":  "worcestershire-sauce",
-                                   "gpu":  "29.570"
+                                   "bid":"worcestershire",
+                                   "gpu":29.57
                                },
                                {
                                    "item":  "Ketchup",
@@ -162,9 +162,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein American meal prep. Fourteen servings at about 538 calories and 42 grams of protein for roughly $4.21 each (at everyday cost).",
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 538 calories and 42 grams of protein for roughly $4.34 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, salisbury steak and potato bowls, budget dinner",
-                 "costPerServing":  4.21,
+                 "costPerServing":  4.34,
                  "recipeIngredient":  [
                                           "5 lb 93/7 Ground Beef",
                                           "11 lb Potato",

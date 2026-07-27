@@ -27,7 +27,7 @@
                  "protein":  28,
                  "carbs":  90,
                  "fat":  10,
-                 "cost_ps":  "3.37"
+                 "cost_ps":  "3.44"
              },
     "intro_html":  "Mexican albondigas are not Italian meatballs with different seasoning. They are softer, bound with bread soaked in milk, and they finish by simmering directly in the sauce rather than getting browned to a crust first. That means they drink up the chipotle sauce from the inside out. The sauce itself is blended tomatoes and chipotles in adobo, smoky and just hot enough to notice. Everything goes over rice, and the whole thing cooks in one pot after the meatballs are rolled.",
     "ingredients_display":  [
@@ -65,7 +65,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $36.92 across 14 servings, roughly $2.64 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $10.24 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.16. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.37 a bowl\u003c/strong\u003e (at everyday cost) for meatballs in a smoky chipotle sauce, which is what a single order costs on the appetizer menu.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.44 a bowl\u003c/strong\u003e (at everyday cost) for meatballs in a smoky chipotle sauce, which is what a single order costs on the appetizer menu.",
     "shop_smart":  [
                        "\u003cstrong\u003eBread and milk stretch the beef, and that is on purpose.\u003c/strong\u003e The soaked bread panade is traditional, it keeps the meatballs tender, and it means less beef per serving without anyone noticing.",
                        "\u003cstrong\u003eOne can of chipotles in adobo lasts a long time.\u003c/strong\u003e Freeze the leftovers in a covered ice cube tray and pull out one cube at a time for future batches.",
@@ -84,7 +84,7 @@
                 ],
     "portion_html":  "Weigh the rice pot and the meatball pot separately, subtracting the empty-pot weight from Step 1, and divide each by 14. Count the meatballs out evenly first, then even the containers up with sauce by weight. Every bowl lands near \u003cstrong\u003e584 calories with 28 grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.mexicoinmykitchen.com/chipotle-sauce-meatballs-albondigas/\" target=\"_blank\" rel=\"noopener\"\u003emexicoinmykitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Smoky, saucy dinners for about $3.37 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Smoky, saucy dinners for about $3.44 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  25.16,
     "cost_batch_true":  36.92,
     "cost_per_serving":  1.8,
@@ -115,8 +115,8 @@
                                    "canon":  "93/7 Ground Beef",
                                    "grams":  1111,
                                    "buy":  "2.5 lb",
-                                   "bid":  "ground-beef-8020",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-beef",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Eggs",
@@ -171,8 +171,8 @@
                                    "canon":  "Chipotle in Adobo",
                                    "grams":  66,
                                    "buy":  "4 tbsp",
-                                   "bid":  "chipotle-adobo",
-                                   "gpu":  "28.350"
+                                   "bid":"chipotle-adobo",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Chicken Broth",
@@ -187,16 +187,16 @@
                                    "canon":  "Fresh Cilantro",
                                    "grams":  26,
                                    "buy":  "26 tbsp",
-                                   "bid":  "cilantro",
-                                   "gpu":  "57.000"
+                                   "bid":"cilantro",
+                                   "gpu":57
                                },
                                {
                                    "item":  "Rice",
                                    "canon":  "Rice",
                                    "grams":  1452,
                                    "buy":  "7.75 cups dry",
-                                   "bid":  "rice",
-                                   "gpu":  "453.592"
+                                   "bid":"rice",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Salt",
@@ -209,13 +209,13 @@
                            ]
                },
     "head":  {
-                 "description":  "Albondigas en chipotle rebuilt for 14-serving meal prep: tender Mexican meatballs simmered in smoky chipotle tomato sauce over rice. 584 calories, 28g protein, about $3.37 per serving (at everyday cost).",
+                 "description":  "Albondigas en chipotle rebuilt for 14-serving meal prep: tender Mexican meatballs simmered in smoky chipotle tomato sauce over rice. 584 calories, 28g protein, about $3.44 per serving (at everyday cost).",
                  "keywords":  "albondigas en chipotle, mexican meatballs, chipotle tomato sauce, mexican meal prep, budget beef dinner, meatball rice bowls",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT30M",
                  "cookTime":  "PT40M",
                  "totalTime":  "PT70M",
-                 "costPerServing":  3.37,
+                 "costPerServing":  3.44,
                  "recipeIngredient":  [
                                           "2.5 lb 93/7 ground beef",
                                           "2.25 oz sandwich bread",

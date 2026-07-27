@@ -28,9 +28,9 @@
                  "protein":  41,
                  "carbs":  61,
                  "fat":  19,
-                 "cost_ps":  "4.15"
+                 "cost_ps":  "4.46"
              },
-    "intro_html":  "Kibbeh is the national dish of Lebanon and it comes in a dozen forms. The tray version, kibbeh bil sanieh, is the one built for feeding a crowd: a bulgur and meat shell on the bottom, a spiced meat filling in the middle, another shell on top, scored into diamonds before it bakes. Warm allspice runs through the whole thing. Each serving carries \u003cstrong\u003e41 grams of protein\u003c/strong\u003e and 576 calories for about \u003cstrong\u003e$4.15\u003c/strong\u003e (at everyday cost), and it cuts into portions like it was designed for meal prep, because in a sense it was.",
+    "intro_html":  "Kibbeh is the national dish of Lebanon and it comes in a dozen forms. The tray version, kibbeh bil sanieh, is the one built for feeding a crowd: a bulgur and meat shell on the bottom, a spiced meat filling in the middle, another shell on top, scored into diamonds before it bakes. Warm allspice runs through the whole thing. Each serving carries \u003cstrong\u003e41 grams of protein\u003c/strong\u003e and 576 calories for about \u003cstrong\u003e$4.46\u003c/strong\u003e (at everyday cost), and it cuts into portions like it was designed for meal prep, because in a sense it was.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 5 tbsp (69 g)",
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 5 lb (2302 g)",
@@ -54,7 +54,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $42.19 across 14 servings, roughly $3.01 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $15.86 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $58.05. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.15 a serving\u003c/strong\u003e (at everyday cost). Five pounds of turkey is the cost of this dish; the bulgur, onions, and spices together come to very little. Bulgur is one of the most underused cheap grains in an American grocery store.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.46 a serving\u003c/strong\u003e (at everyday cost). Five pounds of turkey is the cost of this dish; the bulgur, onions, and spices together come to very little. Bulgur is one of the most underused cheap grains in an American grocery store.",
     "shop_smart":  [
                        "Bulgur is sold cheapest in international grocery stores and in the bulk aisle, often at half the price of the small boxes in the rice section. Fine grind is what you want for the shell layers.",
                        "Onions are doing enormous work here at seven of them. Buy them by the bag rather than loose, since bagged onions run well under the each price.",
@@ -73,7 +73,7 @@
                 ],
     "portion_html":  "Weigh the pan, subtract the empty pan weight, and divide by 14. The scored diamonds give you a natural cutting guide, but weigh them anyway since the corner pieces always run small. Each serving comes to \u003cstrong\u003e576 calories\u003c/strong\u003e and 41 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://feelgoodfoodie.net/recipe/baked-kibbeh/\" target=\"_blank\" rel=\"noopener\"\u003efeelgoodfoodie.net\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "A Lebanese classic built for a crowd, about $4.15 a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "upsell_html":  "A Lebanese classic built for a crowd, about $4.46 a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
     "cost_batch":  36.33,
     "cost_batch_true":  42.19,
     "cost_per_serving":  2.6,
@@ -96,8 +96,8 @@
                                    "canon":  "93/7 Ground Turkey",
                                    "grams":  2302,
                                    "buy":  "5 lb",
-                                   "bid":  "ground-turkey",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-turkey",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -156,13 +156,13 @@
                            ]
                },
     "head":  {
-                 "description":  "Baked turkey kibbeh casserole meal prep: layered bulgur and turkey shell with a spiced allspice filling, scored and baked. 576 calories, 41g protein, about $4.15 a serving (at everyday cost).",
+                 "description":  "Baked turkey kibbeh casserole meal prep: layered bulgur and turkey shell with a spiced allspice filling, scored and baked. 576 calories, 41g protein, about $4.46 a serving (at everyday cost).",
                  "keywords":  "baked kibbeh, kibbeh bil sanieh, lebanese casserole, bulgur wheat recipes, ground turkey middle eastern, high protein meal prep",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT40M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H25M",
-                 "costPerServing":  4.15,
+                 "costPerServing":  4.46,
                  "recipeIngredient":  [
                                           "5 lb 93/7 ground turkey",
                                           "6.75 cups bulgur wheat",

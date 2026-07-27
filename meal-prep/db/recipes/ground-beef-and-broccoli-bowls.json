@@ -15,9 +15,9 @@
                  "protein":  45,
                  "carbs":  71,
                  "fat":  14,
-                 "cost_ps":  "4.60"
+                 "cost_ps":  "4.57"
              },
-    "intro_html":  "Takeout beef and broccoli, made at home for a fraction of the delivery bill. This skillet stacks 45 grams of protein over rice for about $4.60 a bowl (at everyday cost) and makes 14 servings. Same savory, garlicky, gingery flavor you order out, minus the tip and the wait.",
+    "intro_html":  "Takeout beef and broccoli, made at home for a fraction of the delivery bill. This skillet stacks 45 grams of protein over rice for about $4.57 a bowl (at everyday cost) and makes 14 servings. Same savory, garlicky, gingery flavor you order out, minus the tip and the wait.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2240 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (981 g)",
@@ -34,7 +34,7 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$4.60 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.57 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "A \u003cstrong\u003ebag of frozen broccoli florets\u003c/strong\u003e costs less than fresh, never wilts in the fridge, and steams in minutes.",
                        "The sauce is just \u003cstrong\u003esoy sauce, broth, and pantry staples\u003c/strong\u003e, so skip the bottled stir-fry sauces that charge you double for the same thing.",
@@ -63,22 +63,22 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2240,
                                    "buy":  "5 lb",
-                                   "bid":  "93-7-ground-beef",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-beef",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  981,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  1500,
                                    "buy":  "5 bags",
-                                   "bid":  "frozen-broccoli-florets",
-                                   "gpu":  "28.350"
+                                   "bid":"frozen-broccoli-florets",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -133,8 +133,8 @@
                                    "item":  "Ginger",
                                    "grams":  15,
                                    "buy":  "1 root",
-                                   "bid":  "ginger",
-                                   "gpu":  "453.592"
+                                   "bid":"fresh-ginger",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Salt",
@@ -153,9 +153,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Chinese meal prep. Fourteen servings at about 596 calories and 45 grams of protein for roughly $4.60 each (at everyday cost).",
+                 "description":  "A high-protein Chinese meal prep. Fourteen servings at about 596 calories and 45 grams of protein for roughly $4.57 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, ground beef and broccoli bowls, budget dinner",
-                 "costPerServing":  4.60,
+                 "costPerServing":  4.57,
                  "recipeIngredient":  [
                                           "5 lb 93/7 Ground Beef",
                                           "1 lb Rice",

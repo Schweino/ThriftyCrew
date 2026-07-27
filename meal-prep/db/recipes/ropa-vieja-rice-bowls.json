@@ -185,16 +185,16 @@
                                    "canon":  "Green Bell Peppers",
                                    "grams":  420,
                                    "buy":  "3.5",
-                                   "bid":  "bell-peppers",
-                                   "gpu":  "120.000"
+                                   "bid":"green-bell-pepper",
+                                   "gpu":120
                                },
                                {
                                    "item":  "Olives",
                                    "canon":  "Olives",
                                    "grams":  236,
                                    "buy":  "1.75 cups",
-                                   "bid":  "green-olives",
-                                   "gpu":  "28.350"
+                                   "bid":"green-olives",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Garlic",
@@ -209,8 +209,8 @@
                                    "canon":  "Rice",
                                    "grams":  893,
                                    "buy":  "4.75 cups dry",
-                                   "bid":  "rice",
-                                   "gpu":  "453.592"
+                                   "bid":"rice",
+                                   "gpu":453.592
                                }
                            ]
                },

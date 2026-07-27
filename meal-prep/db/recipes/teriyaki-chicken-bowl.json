@@ -15,7 +15,7 @@
                  "protein":  49,
                  "carbs":  59,
                  "fat":  7,
-                 "cost_ps":  "3.03"
+                 "cost_ps":  "2.97"
              },
     "intro_html":  "This is a takeout favorite made at home for a fraction of the cost, and it batches beautifully into 14 dinners. Chicken breast, tender broccoli, and sweet carrots get tossed in teriyaki sauce and spooned over rice. It reheats like a champ, so future you gets a hot dinner with zero effort.",
     "ingredients_display":  [
@@ -27,7 +27,7 @@
                                 "\u003cstrong\u003eShredded Carrots:\u003c/strong\u003e 1 lb (200 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$3.03 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.97 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "\u003cstrong\u003eBuy the big pack of chicken breast.\u003c/strong\u003e The family size or bulk tray almost always beats the small packs per pound. Trim and dice it all at once, and freeze half if you are not cooking it right away.",
                        "\u003cstrong\u003eGrab a jarred teriyaki sauce on sale, or make your own.\u003c/strong\u003e Store brand teriyaki is usually a dollar or two cheaper than the name brand and tastes just as good in a stir fry. Watch for two for one deals and stock up.",
@@ -79,15 +79,15 @@
                                    "item":  "Rice",
                                    "grams":  900,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  595,
                                    "buy":  "2 bags",
-                                   "bid":  "frozen-broccoli-florets",
-                                   "gpu":  "28.350"
+                                   "bid":"frozen-broccoli-florets",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Shredded Carrots",
@@ -99,9 +99,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Asian meal prep. Fourteen servings at about 519 calories and 49 grams of protein for roughly $3.03 each (at everyday cost).",
+                 "description":  "A high-protein Asian meal prep. Fourteen servings at about 519 calories and 49 grams of protein for roughly $2.97 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, teriyaki chicken and rice bowl, budget dinner",
-                 "costPerServing":  3.03,
+                 "costPerServing":  2.97,
                  "recipeIngredient":  [
                                           "6 lb Boneless Skinless Chicken Breast",
                                           "2 bottles Teriyaki Sauce",

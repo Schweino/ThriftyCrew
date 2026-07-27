@@ -15,9 +15,9 @@
                  "protein":  46,
                  "carbs":  66,
                  "fat":  15,
-                 "cost_ps":  "4.42"
+                 "cost_ps":  "4.57"
              },
-    "intro_html":  "Fried rice built on ground beef, which is cheaper than takeout and loaded with more protein. Each bowl carries 46 grams for about $4.42 (at everyday cost), and the pan makes 14 servings. This is the perfect home for leftover rice, and it beats the delivery version every time.",
+    "intro_html":  "Fried rice built on ground beef, which is cheaper than takeout and loaded with more protein. Each bowl carries 46 grams for about $4.57 (at everyday cost), and the pan makes 14 servings. This is the perfect home for leftover rice, and it beats the delivery version every time.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2450 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1020 g)",
@@ -34,7 +34,7 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (6 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$4.42 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.57 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Use \u003cstrong\u003eday-old cold rice\u003c/strong\u003e if you can. It fries up firmer and cheaper than any restaurant version and keeps this recipe from going gummy.",
                        "A \u003cstrong\u003ebag of frozen peas and carrots\u003c/strong\u003e costs next to nothing, never spoils, and cooks straight from the freezer.",
@@ -63,29 +63,29 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2450,
                                    "buy":  "6 lb",
-                                   "bid":  "93-7-ground-beef",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-beef",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  1020,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Frozen Green Peas",
                                    "grams":  400,
                                    "buy":  "2 bags",
-                                   "bid":  "frozen-green-peas",
-                                   "gpu":  "28.350"
+                                   "bid":"frozen-peas",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Carrots",
                                    "grams":  300,
                                    "buy":  "1 lb",
-                                   "bid":  "shredded-carrots",
-                                   "gpu":  "28.350"
+                                   "bid":"carrots",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -119,8 +119,8 @@
                                    "item":  "Ginger",
                                    "grams":  12,
                                    "buy":  "1 root",
-                                   "bid":  "ginger",
-                                   "gpu":  "453.592"
+                                   "bid":"fresh-ginger",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Eggs",
@@ -153,9 +153,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Asian meal prep. Fourteen servings at about 593 calories and 46 grams of protein for roughly $4.42 each (at everyday cost).",
+                 "description":  "A high-protein Asian meal prep. Fourteen servings at about 593 calories and 46 grams of protein for roughly $4.57 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, ground beef fried rice bowls, budget dinner",
-                 "costPerServing":  4.42,
+                 "costPerServing":  4.57,
                  "recipeIngredient":  [
                                           "6 lb 93/7 Ground Beef",
                                           "1 lb Rice",

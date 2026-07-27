@@ -15,7 +15,7 @@
                  "protein":  55,
                  "carbs":  49,
                  "fat":  11,
-                 "cost_ps":  "3.01"
+                 "cost_ps":  "3.05"
              },
     "intro_html":  "This is comfort food that works for your wallet and your goals at the same time. The slow cooker does all the heavy lifting while you go live your life, and coconut milk gives the sauce a creamy richness for pennies compared to heavy cream. You come home to shredded Italian chicken ready to toss with hearty protein penne.",
     "ingredients_display":  [
@@ -34,7 +34,7 @@
                                 "\u003cstrong\u003ePaprika:\u003c/strong\u003e 1/2 tsp (3 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$3.01 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.05 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "\u003cstrong\u003eBuy chicken breast in bulk.\u003c/strong\u003e The big family packs run far cheaper per pound than the small trays. Grab it when it dips under a couple dollars a pound and freeze what you are not cooking today.",
                        "\u003cstrong\u003eSkip the pricey Italian seasoning jar.\u003c/strong\u003e If you already own oregano, basil, and parsley, mix your own. It is the same herbs for a fraction of the cost.",
@@ -79,8 +79,8 @@
                                    "item":  "Coconut Milk",
                                    "grams":  240,
                                    "buy":  "1 can",
-                                   "bid":  "coconut-milk",
-                                   "gpu":  "29.570"
+                                   "bid":"coconut-milk-canned",
+                                   "gpu":29.57
                                },
                                {
                                    "item":  "Sun-Dried Tomatoes",
@@ -114,15 +114,15 @@
                                    "item":  "Penne Pasta",
                                    "grams":  900,
                                    "buy":  "3 boxs",
-                                   "bid":  "penne-pasta",
-                                   "gpu":  "28.350"
+                                   "bid":"penne-pasta",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Parmesan Cheese",
                                    "grams":  98,
                                    "buy":  "1 container",
-                                   "bid":  "parmesan-cheese",
-                                   "gpu":  "28.350"
+                                   "bid":"parmesan",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Salt",
@@ -155,9 +155,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Italian meal prep. Fourteen servings at about 503 calories and 55 grams of protein for roughly $3.01 each (at everyday cost).",
+                 "description":  "A high-protein Italian meal prep. Fourteen servings at about 503 calories and 55 grams of protein for roughly $3.05 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker italian chicken penne, budget dinner",
-                 "costPerServing":  3.01,
+                 "costPerServing":  3.05,
                  "recipeIngredient":  [
                                           "6 lb Boneless Skinless Chicken Breast",
                                           "1 carton Chicken Broth",

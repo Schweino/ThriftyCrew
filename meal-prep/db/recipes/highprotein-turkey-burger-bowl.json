@@ -16,9 +16,9 @@
                  "protein":  38,
                  "carbs":  48,
                  "fat":  24,
-                 "cost_ps":  "4.30"
+                 "cost_ps":  "4.60"
              },
-    "intro_html":  "Everything you like about a cheeseburger and fries, deconstructed into a bowl: seasoned turkey, roasted potatoes, crunchy cabbage, cheddar, pickles, and a tangy burger sauce. Each one packs \u003cstrong\u003e38 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.30\u003c/strong\u003e (at everyday cost). Drive-thru flavor without the drive-thru math.",
+    "intro_html":  "Everything you like about a cheeseburger and fries, deconstructed into a bowl: seasoned turkey, roasted potatoes, crunchy cabbage, cheddar, pickles, and a tangy burger sauce. Each one packs \u003cstrong\u003e38 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.60\u003c/strong\u003e (at everyday cost). Drive-thru flavor without the drive-thru math.",
     "ingredients_display": ["\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 13 (2812 g)","\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.75 lb (1667 g)","\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1.25 tbsp (21 g)","\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1.25 tbsp (11 g)","\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 1.25 tbsp (9 g)","\u003cstrong\u003ePaprika:\u003c/strong\u003e 0.5 tbsp (4 g)","\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1.75 cups (450 g)","\u003cstrong\u003eMayonnaise (Great Value):\u003c/strong\u003e 7.5 tbsp (96 g)","\u003cstrong\u003eKetchup (generic):\u003c/strong\u003e 3.75 tbsp (62 g)","\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 5.5 tbsp (83 g)","\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1.25 tbsp (26 g)","\u003cstrong\u003eApple Cider Vinegar (Great Value):\u003c/strong\u003e 1.25 tbsp (18 g)","\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 7.25 cups (514 g)","\u003cstrong\u003eCherry Tomatoes:\u003c/strong\u003e 3.75 cups (548 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 (211 g)","\u003cstrong\u003eDill Pickles (Great Value):\u003c/strong\u003e 4 (263 g)","\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 14.75 oz (415 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -40,7 +40,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $39.04 across 14 servings, roughly $2.79 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $20.42 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.46. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.30 a bowl\u003c/strong\u003e (at everyday cost) for what a burger joint charges $14 once fries and a drink sneak on the receipt. Same craving, under a third of the damage.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.60 a bowl\u003c/strong\u003e (at everyday cost) for what a burger joint charges $14 once fries and a drink sneak on the receipt. Same craving, under a third of the damage.",
     "shop_smart":  ["Potatoes remain the best calorie deal in the store: a single bag covers the 13 you need, and the 7 lb size leaves extras for breakfast.","The burger sauce leans on Greek yogurt instead of straight mayo, which cuts cost and fat while quietly adding protein.","Cherry tomatoes are the priciest produce line here. If the clamshells are not on sale, chopped roma tomatoes save you a fair bit and nobody complains."],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
@@ -53,7 +53,7 @@
                 ],
     "portion_html":  "Weigh the skillet of turkey and the pan of potatoes, subtract the empty pot number, and divide each by 14 so every container gets an even share. Each bowl comes out to about 565 calories and 38 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thebalancednutritionist.com/turkey-burger-bowl/\" target=\"_blank\" rel=\"noopener\"\u003eThe Balanced Nutritionist\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $4.30 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about $4.60 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  33.78,
     "cost_batch_true":  39.04,
     "cost_per_serving":  2.41,
@@ -67,22 +67,22 @@
                                    "item":  "Potato",
                                    "grams":  2812,
                                    "buy":  "13",
-                                   "bid":  "russet-potatoes",
-                                   "gpu":  "453.592"
+                                   "bid":"russet-potatoes",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "93/7 Ground Turkey",
                                    "grams":  1667,
                                    "buy":  "3.75 lb",
-                                   "bid":  "ground-turkey",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-turkey",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Worcestershire Sauce",
                                    "grams":  21,
                                    "buy":  "1.25 tbsp",
-                                   "bid":  "worcestershire",
-                                   "gpu":  "29.570"
+                                   "bid":"worcestershire",
+                                   "gpu":29.57
                                },
                                {
                                    "item":  "Garlic Powder",
@@ -109,8 +109,8 @@
                                    "item":  "Greek Yogurt",
                                    "grams":  450,
                                    "buy":  "1.75 cups",
-                                   "bid":  "yogurt",
-                                   "gpu":  "28.350"
+                                   "bid":"greek-yogurt",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Mayonnaise",
@@ -151,15 +151,15 @@
                                    "item":  "Green Cabbage",
                                    "grams":  514,
                                    "buy":  "7.25 cups",
-                                   "bid":  "cabbage",
-                                   "gpu":  "453.592"
+                                   "bid":"cabbage",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Cherry Tomatoes",
                                    "grams":  548,
                                    "buy":  "3.75 cups",
-                                   "bid":  "tomatoes",
-                                   "gpu":  "453.592"
+                                   "bid":"cherry-tomatoes",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -179,8 +179,8 @@
                                    "item":  "Cheddar Cheese, Shredded",
                                    "grams":  415,
                                    "buy":  "14.75 oz",
-                                   "bid":  "shredded-cheese",
-                                   "gpu":  "28.350"
+                                   "bid":"cheddar-cheese-shredded",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Salt",
@@ -199,13 +199,13 @@
                            ]
                },
     "head":  {
-                 "description":  "High-protein turkey burger bowl meal prep: 565 calories and 38g protein at about $4.30 a bowl (at everyday cost). Roasted potatoes, seasoned turkey, burger sauce.",
+                 "description":  "High-protein turkey burger bowl meal prep: 565 calories and 38g protein at about $4.60 a bowl (at everyday cost). Roasted potatoes, seasoned turkey, burger sauce.",
                  "keywords":  "turkey burger bowl, high protein meal prep, burger bowl recipe, budget meal prep, cheap healthy dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",
                  "cookTime":  "PT35M",
                  "totalTime":  "PT60M",
-                 "costPerServing":  4.30,
+                 "costPerServing":  4.60,
                  "recipeIngredient":  [
                                           "3.75 lb 93/7 ground turkey",
                                           "13 potatoes",

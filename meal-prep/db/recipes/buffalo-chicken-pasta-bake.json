@@ -15,9 +15,9 @@
                  "protein":  41,
                  "carbs":  64,
                  "fat":  21,
-                 "cost_ps":  "2.75"
+                 "cost_ps":  "2.74"
              },
-    "intro_html":  "Buffalo wings and mac and cheese had a baby, and it costs about \u003cstrong\u003e$2.75 a bowl\u003c/strong\u003e (at everyday cost). Ziti in a creamy ranch and cream cheese sauce with a proper buffalo kick, loaded with \u003cstrong\u003e41 grams of protein\u003c/strong\u003e at 606 calories per serving. Game-day flavor, Tuesday-lunch logistics.",
+    "intro_html":  "Buffalo wings and mac and cheese had a baby, and it costs about \u003cstrong\u003e$2.74 a bowl\u003c/strong\u003e (at everyday cost). Ziti in a creamy ranch and cream cheese sauce with a proper buffalo kick, loaded with \u003cstrong\u003e41 grams of protein\u003c/strong\u003e at 606 calories per serving. Game-day flavor, Tuesday-lunch logistics.",
     "ingredients_display": ["\u003cstrong\u003eZiti Pasta (Great Value):\u003c/strong\u003e 35 oz dry (992 g)","\u003cstrong\u003eButter (generic):\u003c/strong\u003e 7 tbsp (98 g)","\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 7 tbsp (56 g)","\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 7 cups (1715 g)","\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 21 oz (595 g)","\u003cstrong\u003eRanch Seasoning Mix (Hidden Valley):\u003c/strong\u003e 3.5 tbsp (24 g)","\u003cstrong\u003eBuffalo Wing Sauce (Frank\u0027s RedHot):\u003c/strong\u003e 0.75 cups (214 g)","\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 2.25 lb (980 g)","\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 10.5 oz (297 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -35,7 +35,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $25.56 across 14 servings, roughly $1.83 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $7.43 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $32.99. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.75 a bowl\u003c/strong\u003e (at everyday cost) for buffalo chicken pasta that a wing joint would charge several times as much for, and they would still skimp on the sauce.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.74 a bowl\u003c/strong\u003e (at everyday cost) for buffalo chicken pasta that a wing joint would charge several times as much for, and they would still skimp on the sauce.",
     "shop_smart":  [
                        "Chicken breast at the 3 lb size beats the small trays on price per pound, and this recipe only needs 2.25 lb, so the extra goes to the freezer.",
                        "One-third fat cream cheese costs the same as full fat, melts smoother into a sauce, and trims the calories. Buy the store-brand bricks, not the tubs; bricks are cheaper per ounce.",
@@ -52,7 +52,7 @@
                 ],
     "portion_html":  "Weigh the full pot, subtract the empty-pot weight, and divide by 14. Scoop even portions into 14 containers; the sauce keeps it creamy through a week of reheats. Each bowl checks in at \u003cstrong\u003e606 calories and 41 grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://easychickenrecipes.com/buffalo-chicken-baked-ziti/\" target=\"_blank\" rel=\"noopener\"\u003eEasy Chicken Recipes\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $2.75 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about $2.74 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  17.04,
     "cost_batch_true":  25.56,
     "cost_per_serving":  1.22,
@@ -80,8 +80,8 @@
                                    "item":  "All-Purpose Flour",
                                    "grams":  56,
                                    "buy":  "7 tbsp",
-                                   "bid":  "flour",
-                                   "gpu":  "453.592"
+                                   "bid":"flour",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Milk",
@@ -94,8 +94,8 @@
                                    "item":  "1/3 Fat Cream Cheese",
                                    "grams":  595,
                                    "buy":  "21 oz",
-                                   "bid":  "cream-cheese",
-                                   "gpu":  "28.350"
+                                   "bid":"1-3-fat-cream-cheese",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Ranch Seasoning Mix",
@@ -108,8 +108,8 @@
                                    "item":  "Buffalo Wing Sauce",
                                    "grams":  214,
                                    "buy":  "0.75 cups",
-                                   "bid":  "hot-sauce",
-                                   "gpu":  "29.570"
+                                   "bid":"buffalo-wing-sauce",
+                                   "gpu":29.57
                                },
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -122,8 +122,8 @@
                                    "item":  "Reduced Fat Mozzarella",
                                    "grams":  297,
                                    "buy":  "10.5 oz",
-                                   "bid":  "shredded-cheese",
-                                   "gpu":  "28.350"
+                                   "bid":"reduced-fat-mozzarella",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Salt",
@@ -142,13 +142,13 @@
                            ]
                },
     "head":  {
-                 "description":  "Buffalo chicken pasta bake meal prep with creamy ranch cream cheese sauce and mozzarella. 606 calories, 41g protein, about $2.75 per serving (at everyday cost).",
+                 "description":  "Buffalo chicken pasta bake meal prep with creamy ranch cream cheese sauce and mozzarella. 606 calories, 41g protein, about $2.74 per serving (at everyday cost).",
                  "keywords":  "buffalo chicken pasta, buffalo chicken bake, chicken pasta meal prep, budget meal prep, high protein pasta, ranch pasta bake",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M",
-                 "costPerServing":  2.75,
+                 "costPerServing":  2.74,
                  "recipeIngredient":  [
                                           "2.25 lb boneless skinless chicken breast",
                                           "35 oz dry ziti pasta",

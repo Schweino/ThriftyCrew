@@ -25,7 +25,7 @@
                  "protein":  27,
                  "carbs":  58,
                  "fat":  25,
-                 "cost_ps":  "4.89"
+                 "cost_ps":  "4.63"
              },
     "intro_html":  "Pillowy potato gnocchi in a cream soup loaded with turkey breast, spinach and a proper carrot, celery and onion base. This is the soup people order at the chain restaurant and then talk about for a week. Made at home in one pot, it comes in for less than the tip you would leave on that meal, and you get 14 of them.",
     "ingredients_display":  [
@@ -63,7 +63,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $52.54 across 14 servings, roughly $3.75 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $15.98 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $68.52. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.89 a bowl\u003c/strong\u003e (at everyday cost) for a cream soup with real turkey and real gnocchi in it. That is restaurant food at grocery store math.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.63 a bowl\u003c/strong\u003e (at everyday cost) for a cream soup with real turkey and real gnocchi in it. That is restaurant food at grocery store math.",
     "shop_smart":  [
                        "\u003cstrong\u003eShelf-stable gnocchi is the cheap kind.\u003c/strong\u003e It lives in the pasta aisle, not the refrigerated case, it keeps for months, and it cooks in about three minutes right in the broth.",
                        "\u003cstrong\u003eBuy a frozen turkey breast roast and portion it.\u003c/strong\u003e Turkey breast is at its cheapest around the holidays. Cook one, pull it, and freeze it in bags for soups like this one.",
@@ -81,7 +81,7 @@
                 ],
     "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide what is left by 14 and ladle that exact weight into each container. Every bowl lands near 565 calories with 27 grams of protein. Reheat gently, because gnocchi and cream both prefer low and slow.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://dashfordinner.com/creamy-turkey-gnocchi-soup/\" target=\"_blank\" rel=\"noopener\"\u003edashfordinner.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "\u003cem\u003eChain restaurant soup for about $4.89 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "upsell_html":  "\u003cem\u003eChain restaurant soup for about $4.63 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
     "cost_batch":  39.1,
     "cost_batch_true":  52.54,
     "cost_per_serving":  2.79,
@@ -128,8 +128,8 @@
                                    "canon":  "Carrots",
                                    "grams":  214,
                                    "buy":  "3.5",
-                                   "bid":  "carrots",
-                                   "gpu":  "453.592"
+                                   "bid":"carrots",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Chicken Broth",
@@ -200,8 +200,8 @@
                                    "canon":  "Frozen Chopped Spinach",
                                    "grams":  595,
                                    "buy":  "1.25 lb",
-                                   "bid":  "spinach",
-                                   "gpu":  "28.350"
+                                   "bid":"frozen-chopped-spinach",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Salt",
@@ -220,7 +220,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT35M",
                  "totalTime":  "PT55M",
-                 "costPerServing":  4.89,
+                 "costPerServing":  4.63,
                  "recipeIngredient":  [
                                           "Olive Oil",
                                           "Yellow Onion",

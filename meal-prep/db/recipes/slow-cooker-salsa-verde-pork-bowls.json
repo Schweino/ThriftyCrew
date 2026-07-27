@@ -15,9 +15,9 @@
                  "protein":  55,
                  "carbs":  62,
                  "fat":  9,
-                 "cost_ps":  "3.68"
+                 "cost_ps":  "3.73"
              },
-    "intro_html":  "Salsa verde does the heavy lifting here, so you get bright, tangy pork with almost no effort. It stacks up 55 grams of protein per bowl over rice and corn, all for right around $3.68 a serving (at everyday cost). Fourteen servings from one batch is a whole lot of lunch for the money.",
+    "intro_html":  "Salsa verde does the heavy lifting here, so you get bright, tangy pork with almost no effort. It stacks up 55 grams of protein per bowl over rice and corn, all for right around $3.73 a serving (at everyday cost). Fourteen servings from one batch is a whole lot of lunch for the money.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 8 lb (3300 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (940 g)",
@@ -31,7 +31,7 @@
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/4 tsp kosher salt (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$3.68 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.73 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  ["Pork tenderloin runs lean and clean, but watch the tag. If the per-pound price is steep, \u003cstrong\u003echeck for pork loin instead\u003c/strong\u003e and save real money on the same batch.","A single \u003cstrong\u003ejar of salsa verde does most of the seasoning\u003c/strong\u003e, so you skip buying a handful of separate spices.","Buy \u003cstrong\u003elime juice in a bottle\u003c/strong\u003e rather than fresh limes for batch cooking. It keeps in the fridge and you only use a splash."],
     "make_it":  [
                     "Set the pork tenderloin in the slow cooker.",
@@ -64,29 +64,29 @@
                                    "item":  "Rice",
                                    "grams":  940,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Salsa Verde",
                                    "grams":  450,
                                    "buy":  "1 jar",
-                                   "bid":  "salsa-verde",
-                                   "gpu":  "28.350"
+                                   "bid":"salsa-verde",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Diced Green Chiles",
                                    "grams":  120,
                                    "buy":  "2 cans",
-                                   "bid":  "diced-green-chiles",
-                                   "gpu":  "28.350"
+                                   "bid":"canned-green-chilies",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "grams":  750,
                                    "buy":  "3 cans",
-                                   "bid":  "canned-sweet-corn",
-                                   "gpu":  "210.000"
+                                   "bid":"canned-corn",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Chicken Broth",
@@ -126,9 +126,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 579 calories and 55 grams of protein for roughly $3.68 each (at everyday cost).",
+                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 579 calories and 55 grams of protein for roughly $3.73 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker salsa verde pork bowls, budget dinner",
-                 "costPerServing":  3.68,
+                 "costPerServing":  3.73,
                  "recipeIngredient":  [
                                           "8 lb Pork Tenderloin",
                                           "1 lb Rice",

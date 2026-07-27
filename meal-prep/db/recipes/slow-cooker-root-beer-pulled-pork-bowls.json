@@ -15,9 +15,9 @@
                  "protein":  59,
                  "carbs":  61,
                  "fat":  9,
-                 "cost_ps":  "3.91"
+                 "cost_ps":  "3.93"
              },
-    "intro_html":  "Yes, root beer, and yes, it works. Zero-sugar soda and sugar-free barbecue sauce keep this pulled pork lean while the slow cooker turns tenderloin into fork-tender shreds. It goes over potatoes with a little cabbage on the side, runs around $3.91 a serving (at everyday cost), and packs 59 grams of protein across 14 bowls.",
+    "intro_html":  "Yes, root beer, and yes, it works. Zero-sugar soda and sugar-free barbecue sauce keep this pulled pork lean while the slow cooker turns tenderloin into fork-tender shreds. It goes over potatoes with a little cabbage on the side, runs around $3.93 a serving (at everyday cost), and packs 59 grams of protein across 14 bowls.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 8 lb (3400 g)",
                                 "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 10 lb (4300 g)",
@@ -33,7 +33,7 @@
                                 "\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e 1/4-1/2 teaspoon (2 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$3.91 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.93 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Sugar-free barbecue sauce cuts the sugar without cutting flavor. \u003cstrong\u003eGrab the sugar-free bottle\u003c/strong\u003e and nobody will know the difference.",
                        "Zero-sugar soda is often cheaper by the store brand. \u003cstrong\u003eBuy the generic diet soda\u003c/strong\u003e instead of the name brand for the same result.",
@@ -70,8 +70,8 @@
                                    "item":  "Potato",
                                    "grams":  4300,
                                    "buy":  "10 lb",
-                                   "bid":  "potato",
-                                   "gpu":  "453.592"
+                                   "bid":"russet-potatoes",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -105,15 +105,15 @@
                                    "item":  "Green Cabbage",
                                    "grams":  500,
                                    "buy":  "2 lb",
-                                   "bid":  "green-cabbage",
-                                   "gpu":  "453.592"
+                                   "bid":"cabbage",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Smoked Paprika",
                                    "grams":  20,
                                    "buy":  "2 tablespoons",
-                                   "bid":  "smoked-paprika",
-                                   "gpu":  "28.350"
+                                   "bid":"smoked-paprika",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Ground Cumin",
@@ -146,9 +146,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein American meal prep. Fourteen servings at about 560 calories and 59 grams of protein for roughly $3.91 each (at everyday cost).",
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 560 calories and 59 grams of protein for roughly $3.93 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker root beer pulled pork bowls, budget dinner",
-                 "costPerServing":  3.91,
+                 "costPerServing":  3.93,
                  "recipeIngredient":  [
                                           "8 lb Pork Tenderloin",
                                           "10 lb Potato",

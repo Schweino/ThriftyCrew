@@ -15,9 +15,9 @@
                  "protein":  42,
                  "carbs":  62,
                  "fat":  41,
-                 "cost_ps":  "4.54"
+                 "cost_ps":  "4.75"
              },
-    "intro_html":  "Gnocchi simmered in a creamy tomato sauce with browned turkey, then blanketed in melted mozzarella. This is the rich one: 795 calories with \u003cstrong\u003e42 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.54 a bowl\u003c/strong\u003e (at everyday cost). The gnocchi cooks right in the sauce, so all that starch thickens dinner instead of going down the drain.",
+    "intro_html":  "Gnocchi simmered in a creamy tomato sauce with browned turkey, then blanketed in melted mozzarella. This is the rich one: 795 calories with \u003cstrong\u003e42 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.75 a bowl\u003c/strong\u003e (at everyday cost). The gnocchi cooks right in the sauce, so all that starch thickens dinner instead of going down the drain.",
     "ingredients_display": ["\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.75 lb (1750 g)","\u003cstrong\u003ePotato Gnocchi (Great Value):\u003c/strong\u003e 61.75 oz dry (1750 g)","\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 2 cans (875 g)","\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 3.75 cups (875 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 lb (420 g)","\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 3.75 oz (105 g)","\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 7 tbsp (112 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)","\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)","\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 0.25 tbsp (1 g)","\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 18.5 oz (525 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -37,7 +37,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $54.96 across 14 servings, roughly $3.93 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $13.21 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $68.17. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.54 a bowl\u003c/strong\u003e (at everyday cost) for creamy tomato gnocchi with turkey and melted mozzarella. Baked gnocchi at an Italian restaurant runs $15 to $18, and theirs stops at one plate.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.75 a bowl\u003c/strong\u003e (at everyday cost) for creamy tomato gnocchi with turkey and melted mozzarella. Baked gnocchi at an Italian restaurant runs $15 to $18, and theirs stops at one plate.",
     "shop_smart":  ["Ground turkey at 93/7 gives you 3.75 pounds of lean protein for the batch. It routinely undercuts lean ground beef by a good margin per pound.","Shelf-stable gnocchi packs are the shortcut: they cover the batch and there is no pasta pot to boil since they cook right in the sauce.","Canned tomato sauce, a bit of paste, and heavy cream build a vodka-sauce-style base for a fraction of what a jarred rosa sauce charges."],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
@@ -51,7 +51,7 @@
                 ],
     "portion_html":  "Weigh the finished pot, subtract the empty pot weight you wrote down, and divide by 14. Scale that into each container. Each bowl lands at about 795 calories with 42 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.dontgobaconmyheart.co.uk/ground-turkey-gnocchi/\" target=\"_blank\" rel=\"noopener\"\u003eDon\u0027t Go Bacon My Heart\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $4.54 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about $4.75 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  47.94,
     "cost_batch_true":  54.96,
     "cost_per_serving":  3.42,
@@ -65,8 +65,8 @@
                                    "item":  "93/7 Ground Turkey",
                                    "grams":  1750,
                                    "buy":  "3.75 lb",
-                                   "bid":  "ground-turkey",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-turkey",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Potato Gnocchi",
@@ -100,8 +100,8 @@
                                    "item":  "Parmesan Cheese",
                                    "grams":  105,
                                    "buy":  "3.75 oz",
-                                   "bid":  "parmesan",
-                                   "gpu":  "28.350"
+                                   "bid":"parmesan",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Tomato Paste",
@@ -142,8 +142,8 @@
                                    "item":  "Reduced Fat Mozzarella",
                                    "grams":  525,
                                    "buy":  "18.5 oz",
-                                   "bid":  "shredded-cheese",
-                                   "gpu":  "28.350"
+                                   "bid":"reduced-fat-mozzarella",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Salt",
@@ -162,13 +162,13 @@
                            ]
                },
     "head":  {
-                 "description":  "Creamy tomato ground turkey gnocchi topped with melted mozzarella. 14 meal prep bowls at 795 calories and 42g protein each, about $4.54 each (at everyday cost).",
+                 "description":  "Creamy tomato ground turkey gnocchi topped with melted mozzarella. 14 meal prep bowls at 795 calories and 42g protein each, about $4.75 each (at everyday cost).",
                  "keywords":  "turkey gnocchi, creamy tomato gnocchi, gnocchi meal prep, ground turkey recipes, budget meal prep, one pot dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT10M",
                  "cookTime":  "PT35M",
                  "totalTime":  "PT45M",
-                 "costPerServing":  4.54,
+                 "costPerServing":  4.75,
                  "recipeIngredient":  [
                                           "3.75 lb 93/7 ground turkey",
                                           "61.75 oz potato gnocchi",

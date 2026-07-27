@@ -97,8 +97,8 @@
                                    "canon":  "Hickory Smoked Bacon",
                                    "grams":  168,
                                    "buy":  "0.25 lb",
-                                   "bid":  "bacon",
-                                   "gpu":  "453.592"
+                                   "bid":"bacon",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -113,8 +113,8 @@
                                    "canon":  "Green Bell Peppers",
                                    "grams":  420,
                                    "buy":  "3.5",
-                                   "bid":  "bell-peppers",
-                                   "gpu":  "120.000"
+                                   "bid":"green-bell-pepper",
+                                   "gpu":120
                                },
                                {
                                    "item":  "Garlic",
@@ -201,16 +201,16 @@
                                    "canon":  "Light Sour Cream",
                                    "grams":  300,
                                    "buy":  "1.25 cups",
-                                   "bid":  "sour-cream",
-                                   "gpu":  "28.350"
+                                   "bid":"sour-cream",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Rice",
                                    "canon":  "Rice",
                                    "grams":  700,
                                    "buy":  "3.75 cups dry",
-                                   "bid":  "rice",
-                                   "gpu":  "453.592"
+                                   "bid":"rice",
+                                   "gpu":453.592
                                }
                            ]
                },

@@ -15,9 +15,9 @@
                  "protein":  49,
                  "carbs":  59,
                  "fat":  14,
-                 "cost_ps":  "4.81"
+                 "cost_ps":  "4.95"
              },
-    "intro_html":  "All the cozy flavor of cabbage rolls without the fussy rolling and stuffing. Each bowl brings 49 grams of protein and costs about $4.81 a serving (at everyday cost). One skillet, 14 servings, and none of the babysitting.",
+    "intro_html":  "All the cozy flavor of cabbage rolls without the fussy rolling and stuffing. Each bowl brings 49 grams of protein and costs about $4.95 a serving (at everyday cost). One skillet, 14 servings, and none of the babysitting.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2710 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (808 g)",
@@ -33,7 +33,7 @@
                                 "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1/2 tsp (3 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$4.81 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.95 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Buy the \u003cstrong\u003e6 lb ground beef value pack\u003c/strong\u003e and let the cheap cabbage do the rest of the stretching.",
                        "A \u003cstrong\u003ewhole head of green cabbage runs under a dollar a pound\u003c/strong\u003e and shreds down to a huge pile, so it is one of the best deals in the store.",
@@ -62,22 +62,22 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2710,
                                    "buy":  "6 lb",
-                                   "bid":  "93-7-ground-beef",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-beef",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  808,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Green Cabbage",
                                    "grams":  1400,
                                    "buy":  "4 lb",
-                                   "bid":  "green-cabbage",
-                                   "gpu":  "453.592"
+                                   "bid":"cabbage",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Crushed Tomatoes",
@@ -145,9 +145,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Eastern European meal prep. Fourteen servings at about 560 calories and 49 grams of protein for roughly $4.81 each (at everyday cost).",
+                 "description":  "A high-protein Eastern European meal prep. Fourteen servings at about 560 calories and 49 grams of protein for roughly $4.95 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, unstuffed cabbage roll bowls, budget dinner",
-                 "costPerServing":  4.81,
+                 "costPerServing":  4.95,
                  "recipeIngredient":  [
                                           "6 lb 93/7 Ground Beef",
                                           "1 lb Rice",

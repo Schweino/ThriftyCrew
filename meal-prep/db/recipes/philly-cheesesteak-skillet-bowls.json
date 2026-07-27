@@ -15,9 +15,9 @@
                  "protein":  41,
                  "carbs":  71,
                  "fat":  13,
-                 "cost_ps":  "4.41"
+                 "cost_ps":  "4.54"
              },
-    "intro_html":  "This one takes the sandwich you love and drops the roll, so you keep all the flavor and skip the carb crash. It packs 41 grams of protein per bowl and lands around $4.41 a serving (at everyday cost), which is a steal for something that tastes like a diner splurge. One skillet, 14 servings, no hoagie required.",
+    "intro_html":  "This one takes the sandwich you love and drops the roll, so you keep all the flavor and skip the carb crash. It packs 41 grams of protein per bowl and lands around $4.54 a serving (at everyday cost), which is a steal for something that tastes like a diner splurge. One skillet, 14 servings, no hoagie required.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (1960 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1188 g)",
@@ -32,7 +32,7 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (6 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$4.41 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.54 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Buy the \u003cstrong\u003e93/7 ground beef in the 5 lb value pack\u003c/strong\u003e instead of the little trays. The per-pound price drops and it is the biggest line on your bill.",
                        "Grab \u003cstrong\u003ewhole mushrooms and slice them yourself\u003c/strong\u003e. Pre-sliced costs more and goes slimy faster.",
@@ -61,29 +61,29 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  1960,
                                    "buy":  "5 lb",
-                                   "bid":  "93-7-ground-beef",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-beef",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  1188,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "White Mushrooms",
                                    "grams":  368,
                                    "buy":  "2 packages",
-                                   "bid":  "white-mushrooms",
-                                   "gpu":  "28.350"
+                                   "bid":"mushrooms",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Green Bell Peppers",
                                    "grams":  307,
                                    "buy":  "3 peppers",
-                                   "bid":  "green-bell-pepper",
-                                   "gpu":  "120.000"
+                                   "bid":"green-bell-pepper",
+                                   "gpu":120
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -137,9 +137,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein American meal prep. Fourteen servings at about 579 calories and 41 grams of protein for roughly $4.41 each (at everyday cost).",
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 579 calories and 41 grams of protein for roughly $4.54 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, ground beef philly cheesesteak bowls, budget dinner",
-                 "costPerServing":  4.41,
+                 "costPerServing":  4.54,
                  "recipeIngredient":  [
                                           "5 lb 93/7 Ground Beef",
                                           "1 lb Rice",

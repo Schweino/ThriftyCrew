@@ -24,9 +24,9 @@
                  "protein":  30,
                  "carbs":  74,
                  "fat":  15,
-                 "cost_ps":  "3.68"
+                 "cost_ps":  "4.09"
              },
-    "intro_html":  "Pad krapow is the dish Thai people actually eat on a Tuesday. Chicken and chile and garlic hit a screaming hot pan, a sauce of oyster and soy goes in, and then an absurd amount of basil gets folded through at the last second so it wilts but never cooks. Five minutes of cooking, a lifetime of craving it afterward. Over rice, each bowl runs \u003cstrong\u003e572 calories and 30 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.68\u003c/strong\u003e (at everyday cost). That price is higher than it looks like it should be, and I will show you exactly why.",
+    "intro_html":  "Pad krapow is the dish Thai people actually eat on a Tuesday. Chicken and chile and garlic hit a screaming hot pan, a sauce of oyster and soy goes in, and then an absurd amount of basil gets folded through at the last second so it wilts but never cooks. Five minutes of cooking, a lifetime of craving it afterward. Over rice, each bowl runs \u003cstrong\u003e572 calories and 30 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.09\u003c/strong\u003e (at everyday cost). That price is higher than it looks like it should be, and I will show you exactly why.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1575 g)",
                                 "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 17.5 tbsp (105 g)",
@@ -58,7 +58,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $36.36 across 14 servings, roughly $2.60 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $15.10 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.46. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.68 a bowl\u003c/strong\u003e (at everyday cost), and here is the honest accounting: the basil costs more than the chicken. Seven cups of fresh basil is what makes this pad krapow rather than a generic stir fry, so it is worth the money, but it is the line to attack if you want this cheaper.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.09 a bowl\u003c/strong\u003e (at everyday cost), and here is the honest accounting: the basil costs more than the chicken. Seven cups of fresh basil is what makes this pad krapow rather than a generic stir fry, so it is worth the money, but it is the line to attack if you want this cheaper.",
     "shop_smart":  [
                        "Basil is the largest line in this batch, larger than the meat. Buy a living basil plant from the produce section instead of clamshells and you will pay a fraction of the price, or grow one on a windowsill and this recipe becomes one of the cheapest things you make all month.",
                        "Thai holy basil is the traditional leaf and Italian sweet basil is the one your store stocks. Either one works. Do not pay a premium for a specialty basil shipped in from three states away.",
@@ -77,7 +77,7 @@
                 ],
     "portion_html":  "Set the pot on the scale, subtract the empty-pot weight, and divide by 14. Same number in every container. Each one carries \u003cstrong\u003e572 calories\u003c/strong\u003e, and if you want it to taste freshly made on day four, stir a few torn basil leaves in after reheating.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.recipetineats.com/thai-basil-chicken-stir-fry/\" target=\"_blank\" rel=\"noopener\"\u003erecipetineats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Thai basil chicken over rice for about $3.68 a bowl (at everyday cost), with a clear plan for making it cheaper. This is one of a few hundred recipes here. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "upsell_html":  "Thai basil chicken over rice for about $4.09 a bowl (at everyday cost), with a clear plan for making it cheaper. This is one of a few hundred recipes here. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
     "cost_batch":  33.02,
     "cost_batch_true":  36.36,
     "cost_per_serving":  2.36,
@@ -92,8 +92,8 @@
                                    "canon":  "Boneless Skinless Chicken Thigh",
                                    "grams":  1575,
                                    "buy":  "3.5 lb",
-                                   "bid":  "chicken-thighs",
-                                   "gpu":  "453.592"
+                                   "bid":"boneless-skinless-chicken-thigh",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Green Onions",
@@ -124,8 +124,8 @@
                                    "canon":  "Jalapeno",
                                    "grams":  98,
                                    "buy":  "11 tbsp",
-                                   "bid":  "jalapenos",
-                                   "gpu":  "453.592"
+                                   "bid":"jalapenos",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Vegetable Oil",
@@ -164,8 +164,8 @@
                                    "canon":  "Rice",
                                    "grams":  1197,
                                    "buy":  "6.5 cups dry",
-                                   "bid":  "rice",
-                                   "gpu":  "453.592"
+                                   "bid":"rice",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Salt",
@@ -186,13 +186,13 @@
                            ]
                },
     "head":  {
-                 "description":  "Thai basil chicken (pad krapow): a fast, garlicky chile stir fry finished with a mountain of basil, over rice. 14 bowls at 572 calories, 30g protein, about $3.68 each (at everyday cost).",
+                 "description":  "Thai basil chicken (pad krapow): a fast, garlicky chile stir fry finished with a mountain of basil, over rice. 14 bowls at 572 calories, 30g protein, about $4.09 each (at everyday cost).",
                  "keywords":  "pad krapow, thai basil chicken, basil stir fry, thai meal prep, chicken stir fry rice bowls, budget thai recipe",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",
                  "cookTime":  "PT25M",
                  "totalTime":  "PT40M",
-                 "costPerServing":  3.68,
+                 "costPerServing":  4.09,
                  "recipeIngredient":  [
                                           "3.5 lb boneless skinless chicken thighs",
                                           "7 cups fresh basil",

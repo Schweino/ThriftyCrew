@@ -15,9 +15,9 @@
                  "protein":  44,
                  "carbs":  56,
                  "fat":  29,
-                 "cost_ps":  "3.72"
+                 "cost_ps":  "3.95"
              },
-    "intro_html":  "Buffalo wings without the wing prices, and a whole lot more protein per bite. This skillet packs 44 grams of protein into a bowl that lands at about $3.72 (at everyday cost). Fourteen servings out of one pan means lunch is handled for the better part of two weeks.",
+    "intro_html":  "Buffalo wings without the wing prices, and a whole lot more protein per bite. This skillet packs 44 grams of protein into a bowl that lands at about $3.95 (at everyday cost). Fourteen servings out of one pan means lunch is handled for the better part of two weeks.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 6 lb (2710 g)",
                                 "\u003cstrong\u003eFries (Great Value):\u003c/strong\u003e 4 bags (3579 g)",
@@ -30,7 +30,7 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 tsp ground (8 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$3.72 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.95 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  ["Buy the store-brand frozen fries. They cook up the same as the name brand and save you real money across four bags.","One bottle of buffalo sauce covers the whole batch, so skip the fancy small-batch stuff and grab the standard wing sauce.","Fat-free cheddar melts fine on hot food, so use it here and save the block cheese for another recipe."],
     "make_it":  [
                     "Brown 6 pounds of 93/7 ground turkey with a chopped yellow onion until no pink is left.",
@@ -55,8 +55,8 @@
                                    "item":  "93/7 Ground Turkey",
                                    "grams":  2710,
                                    "buy":  "6 lb",
-                                   "bid":  "93-7-ground-turkey",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-turkey",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Fries",
@@ -69,8 +69,8 @@
                                    "item":  "Buffalo Wing Sauce",
                                    "grams":  210,
                                    "buy":  "1 bottle",
-                                   "bid":  "buffalo-wing-sauce",
-                                   "gpu":  "29.570"
+                                   "bid":"buffalo-wing-sauce",
+                                   "gpu":29.57
                                },
                                {
                                    "item":  "Shredded Carrots",
@@ -117,9 +117,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein American meal prep. Fourteen servings at about 661 calories and 44 grams of protein for roughly $3.72 each (at everyday cost).",
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 661 calories and 44 grams of protein for roughly $3.95 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, buffalo turkey and potato bowls, budget dinner",
-                 "costPerServing":  3.72,
+                 "costPerServing":  3.95,
                  "recipeIngredient":  [
                                           "6 lb 93/7 Ground Turkey",
                                           "4 bags Fries",

@@ -27,9 +27,9 @@
                  "protein":  34,
                  "carbs":  70,
                  "fat":  15,
-                 "cost_ps":  "6.10"
+                 "cost_ps":  "6.12"
              },
-    "intro_html":  "Grilled carne asada does not batch. You cannot sear fourteen servings to order on a Sunday afternoon and have any of it left good by Wednesday. The slow cooker version solves that: the same citrus, garlic, and ancho marinade, but braised until it shreds instead of grilled until it chars. Each bowl carries \u003cstrong\u003e34 grams of protein\u003c/strong\u003e and 565 calories for about \u003cstrong\u003e$6.10\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Grilled carne asada does not batch. You cannot sear fourteen servings to order on a Sunday afternoon and have any of it left good by Wednesday. The slow cooker version solves that: the same citrus, garlic, and ancho marinade, but braised until it shreds instead of grilled until it chars. Each bowl carries \u003cstrong\u003e34 grams of protein\u003c/strong\u003e and 565 calories for about \u003cstrong\u003e$6.12\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 3.5 lb (1588 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)",
@@ -74,7 +74,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $52.21 across 14 servings, roughly $3.73 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $39.16 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $91.37. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$6.10 a bowl\u003c/strong\u003e (at everyday cost). Three kinds of pepper, two kinds of citrus, and a cheap steak, which is a much better trade than it sounds like on paper.",
+    "cost_closing_html":  "About \u003cstrong\u003e$6.12 a bowl\u003c/strong\u003e (at everyday cost). Three kinds of pepper, two kinds of citrus, and a cheap steak, which is a much better trade than it sounds like on paper.",
     "shop_smart":  [
                        "Bottled lime and lemon juice work fine in a long braise. The acid is doing structural work here, not sitting on top as a fresh squeeze.",
                        "Green bell peppers cost less than red. Buy at least one red for color if you want the bowls to look good, and make the rest green.",
@@ -93,7 +93,7 @@
                 ],
     "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of shredded beef and peppers over the same weight of rice in each of 14 containers, with the sour cream packed separately. Each bowl lands at \u003cstrong\u003e565 calories with 34 grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/carne-asada/\" target=\"_blank\" rel=\"noopener\"\u003ethemagicalslowcooker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Carne asada bowls for about $6.10 a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Carne asada bowls for about $6.12 a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  43.52,
     "cost_batch_true":  52.21,
     "cost_per_serving":  3.11,
@@ -156,8 +156,8 @@
                                    "canon":  "Jalapeno",
                                    "grams":  49,
                                    "buy":  "5.5 tbsp",
-                                   "bid":  "jalapenos",
-                                   "gpu":  "453.592"
+                                   "bid":"jalapenos",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -172,24 +172,24 @@
                                    "canon":  "Green Bell Peppers",
                                    "grams":  210,
                                    "buy":  "2",
-                                   "bid":  "bell-peppers",
-                                   "gpu":  "120.000"
+                                   "bid":"green-bell-pepper",
+                                   "gpu":120
                                },
                                {
                                    "item":  "Red Bell Pepper",
                                    "canon":  "Red Bell Pepper",
                                    "grams":  210,
                                    "buy":  "2",
-                                   "bid":  "bell-peppers",
-                                   "gpu":  "120.000"
+                                   "bid":"red-bell-pepper",
+                                   "gpu":120
                                },
                                {
                                    "item":  "Fresh Cilantro",
                                    "canon":  "Fresh Cilantro",
                                    "grams":  24,
                                    "buy":  "24 tbsp",
-                                   "bid":  "cilantro",
-                                   "gpu":  "57.000"
+                                   "bid":"cilantro",
+                                   "gpu":57
                                },
                                {
                                    "item":  "Dried Ancho Chiles",
@@ -252,27 +252,27 @@
                                    "canon":  "Light Sour Cream",
                                    "grams":  402,
                                    "buy":  "1.75 cups",
-                                   "bid":  "sour-cream",
-                                   "gpu":  "28.350"
+                                   "bid":"sour-cream",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Rice",
                                    "canon":  "Rice",
                                    "grams":  1086,
                                    "buy":  "5.75 cups dry",
-                                   "bid":  "rice",
-                                   "gpu":  "453.592"
+                                   "bid":"rice",
+                                   "gpu":453.592
                                }
                            ]
                },
     "head":  {
-                 "description":  "Slow cooker carne asada rice bowls meal prep: sirloin braised in a citrus, garlic, and ancho chile marinade with peppers and onions over rice. 565 calories, 34g protein, about $6.10 per serving (at everyday cost).",
+                 "description":  "Slow cooker carne asada rice bowls meal prep: sirloin braised in a citrus, garlic, and ancho chile marinade with peppers and onions over rice. 565 calories, 34g protein, about $6.12 per serving (at everyday cost).",
                  "keywords":  "slow cooker carne asada, shredded carne asada, citrus marinated beef, mexican rice bowls, budget meal prep, mexican recipes",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",
                  "cookTime":  "PT7H",
                  "totalTime":  "PT7H25M",
-                 "costPerServing":  6.10,
+                 "costPerServing":  6.12,
                  "recipeIngredient":  [
                                           "3.5 lb beef flank or sirloin steak",
                                           "1 oz dried ancho chiles",

@@ -16,9 +16,9 @@
                  "protein":  27,
                  "carbs":  39,
                  "fat":  34,
-                 "cost_ps":  "3.39"
+                 "cost_ps":  "3.47"
              },
-    "intro_html":  "The John Wayne casserole is a biscuit-bottomed Tex-Mex stack: taco-seasoned beef, green chiles, a creamy sour cream and mayo layer, and a blanket of cheddar. It eats like a potluck legend because it is one. Each serving carries \u003cstrong\u003e27 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.39\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "The John Wayne casserole is a biscuit-bottomed Tex-Mex stack: taco-seasoned beef, green chiles, a creamy sour cream and mayo layer, and a blanket of cheddar. It eats like a potluck legend because it is one. Each serving carries \u003cstrong\u003e27 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.47\u003c/strong\u003e (at everyday cost).",
     "ingredients_display": ["\u003cstrong\u003eRefrigerated Biscuits (Pillsbury):\u003c/strong\u003e 17.5 (1017 g)","\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 2.5 lb (1111 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.3 (141 g)","\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 0.5 cups (56 g)","\u003cstrong\u003eTaco Seasoning (Great Value):\u003c/strong\u003e 4.25 tbsp (34 g)","\u003cstrong\u003eDiced Green Chiles (Old El Paso):\u003c/strong\u003e 1.2 cans (139 g)","\u003cstrong\u003eDiced Tomatoes \u0026 Green Chilies (Great Value (Ro-Tel style)):\u003c/strong\u003e 1.2 cans (347 g)","\u003cstrong\u003eLight Sour Cream (generic):\u003c/strong\u003e 1 cups (211 g)","\u003cstrong\u003eMayonnaise (Great Value):\u003c/strong\u003e 1 cups (191 g)","\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 12.25 oz (346 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -36,7 +36,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $37.82 across 14 servings, roughly $2.70 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $8.11 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.93. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.39 a bowl\u003c/strong\u003e (at everyday cost) for a loaded Tex-Mex casserole that a casual restaurant would happily charge you $12 a plate for.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.47 a bowl\u003c/strong\u003e (at everyday cost) for a loaded Tex-Mex casserole that a casual restaurant would happily charge you $12 a plate for.",
     "shop_smart":  [
                        "Refrigerated biscuits are the swing item here. Store-brand tubes often run a dollar less than Pillsbury per can, and inside a casserole you will never taste the difference.",
                        "Ground beef in the 3 pound family pack beats the small tray on price per pound. Use 2.5 pounds here and freeze the rest for taco night.",
@@ -53,7 +53,7 @@
                 ],
     "portion_html":  "Weigh your pot of finished beef filling before assembly, subtract the empty pot number from step 1, and split it evenly as you build. After baking, cut the casserole into 14 squares and box them up. Each serving comes in at 578 calories and 27 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://therecipecritic.com/john-wayne-casserole/\" target=\"_blank\" rel=\"noopener\"\u003eThe Recipe Critic\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $3.39 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about $3.47 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  28.83,
     "cost_batch_true":  37.82,
     "cost_per_serving":  2.06,
@@ -74,8 +74,8 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  1111,
                                    "buy":  "2.5 lb",
-                                   "bid":  "ground-beef-8020",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-beef",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -88,8 +88,8 @@
                                    "item":  "Green Bell Peppers",
                                    "grams":  56,
                                    "buy":  "0.5 cups",
-                                   "bid":  "bell-peppers",
-                                   "gpu":  "120.000"
+                                   "bid":"green-bell-pepper",
+                                   "gpu":120
                                },
                                {
                                    "item":  "Taco Seasoning",
@@ -102,8 +102,8 @@
                                    "item":  "Diced Green Chiles",
                                    "grams":  139,
                                    "buy":  "1.2 cans",
-                                   "bid":  "canned-green-chilies",
-                                   "gpu":  "28.350"
+                                   "bid":"canned-green-chilies",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Diced Tomatoes \u0026 Green Chilies",
@@ -116,8 +116,8 @@
                                    "item":  "Light Sour Cream",
                                    "grams":  211,
                                    "buy":  "1 cups",
-                                   "bid":  "sour-cream",
-                                   "gpu":  "28.350"
+                                   "bid":"sour-cream",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Mayonnaise",
@@ -130,8 +130,8 @@
                                    "item":  "Cheddar Cheese, Shredded",
                                    "grams":  346,
                                    "buy":  "12.25 oz",
-                                   "bid":  "shredded-cheese",
-                                   "gpu":  "28.350"
+                                   "bid":"cheddar-cheese-shredded",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Salt",
@@ -150,13 +150,13 @@
                            ]
                },
     "head":  {
-                 "description":  "John Wayne casserole meal prep: 578 calories and 27g protein per serving at about $3.39 a bowl (at everyday cost). Biscuit crust, taco beef, and a creamy cheddar topping.",
+                 "description":  "John Wayne casserole meal prep: 578 calories and 27g protein per serving at about $3.47 a bowl (at everyday cost). Biscuit crust, taco beef, and a creamy cheddar topping.",
                  "keywords":  "john wayne casserole, biscuit taco casserole, tex-mex casserole, budget ground beef dinner, meal prep casserole, cheap family dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",
                  "cookTime":  "PT35M",
                  "totalTime":  "PT55M",
-                 "costPerServing":  3.39,
+                 "costPerServing":  3.47,
                  "recipeIngredient":  [
                                           "17.5 refrigerated biscuits",
                                           "2.5 lb 93/7 ground beef",

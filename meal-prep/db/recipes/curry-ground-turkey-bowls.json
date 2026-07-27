@@ -15,9 +15,9 @@
                  "protein":  51,
                  "carbs":  44,
                  "fat":  20,
-                 "cost_ps":  "3.93"
+                 "cost_ps":  "4.34"
              },
-    "intro_html":  "A warm, cozy curry that fills the kitchen with good smells and your fridge with easy lunches. Each bowl carries 51 grams of protein for about $3.93 a serving (at everyday cost). One skillet, 14 servings, and plenty of flavor.",
+    "intro_html":  "A warm, cozy curry that fills the kitchen with good smells and your fridge with easy lunches. Each bowl carries 51 grams of protein for about $4.34 a serving (at everyday cost). One skillet, 14 servings, and plenty of flavor.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 8 lb (3400 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (700 g)",
@@ -33,7 +33,7 @@
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 tsp EVOO (16 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$3.93 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.34 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Grab the \u003cstrong\u003e8 lb ground turkey pack\u003c/strong\u003e for the lowest price on the biggest ingredient.",
                        "A \u003cstrong\u003esingle can of coconut milk\u003c/strong\u003e gives you that rich, creamy sauce for about two bucks, so it is worth the splurge.",
@@ -62,15 +62,15 @@
                                    "item":  "93/7 Ground Turkey",
                                    "grams":  3400,
                                    "buy":  "8 lb",
-                                   "bid":  "93-7-ground-turkey",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-turkey",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  700,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Diced Tomatoes",
@@ -83,8 +83,8 @@
                                    "item":  "Coconut Milk",
                                    "grams":  200,
                                    "buy":  "1 can",
-                                   "bid":  "coconut-milk",
-                                   "gpu":  "29.570"
+                                   "bid":"coconut-milk-canned",
+                                   "gpu":29.57
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -145,9 +145,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Indian meal prep. Fourteen servings at about 600 calories and 51 grams of protein for roughly $3.93 each (at everyday cost).",
+                 "description":  "A high-protein Indian meal prep. Fourteen servings at about 600 calories and 51 grams of protein for roughly $4.34 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, curry ground turkey bowls, budget dinner",
-                 "costPerServing":  3.93,
+                 "costPerServing":  4.34,
                  "recipeIngredient":  [
                                           "8 lb 93/7 Ground Turkey",
                                           "1 lb Rice",

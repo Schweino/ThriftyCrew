@@ -15,9 +15,9 @@
                  "protein":  63,
                  "carbs":  57,
                  "fat":  8,
-                 "cost_ps":  "4.17"
+                 "cost_ps":  "3.95"
              },
-    "intro_html":  "Mongolian chicken has that sweet, garlicky, deeply savory sauce that makes rice disappear fast. The slow cooker version gives you all of it with 63 grams of protein per bowl for around $4.17 a serving (at everyday cost). One batch is 14 servings, so you\u0027re set for lunches and dinners without touching a restaurant menu.",
+    "intro_html":  "Mongolian chicken has that sweet, garlicky, deeply savory sauce that makes rice disappear fast. The slow cooker version gives you all of it with 63 grams of protein per bowl for around $3.95 a serving (at everyday cost). One batch is 14 servings, so you\u0027re set for lunches and dinners without touching a restaurant menu.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3400 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (800 g)",
@@ -33,7 +33,7 @@
                                 "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 1 tbsp (28 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$4.17 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.95 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Sesame oil looks pricey per bottle, but you use a splash, so \u003cstrong\u003eone bottle lasts most of a year\u003c/strong\u003e and pennies out per meal.",
                        "Brown sugar and soy sauce are pantry cheap, so \u003cstrong\u003ekeep them stocked\u003c/strong\u003e and this sauce comes together on autopilot.",
@@ -69,15 +69,15 @@
                                    "item":  "Rice",
                                    "grams":  800,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  1200,
                                    "buy":  "4 bags",
-                                   "bid":  "frozen-broccoli-florets",
-                                   "gpu":  "28.350"
+                                   "bid":"frozen-broccoli-florets",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Soy Sauce",
@@ -125,15 +125,15 @@
                                    "item":  "Ginger",
                                    "grams":  7,
                                    "buy":  "1 tsp grated",
-                                   "bid":  "ginger",
-                                   "gpu":  "453.592"
+                                   "bid":"fresh-ginger",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Sriracha",
                                    "grams":  25,
                                    "buy":  "1-2 tsp",
-                                   "bid":  "sriracha",
-                                   "gpu":  "29.570"
+                                   "bid":"sriracha",
+                                   "gpu":29.57
                                },
                                {
                                    "item":  "Cornstarch",
@@ -145,9 +145,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Chinese meal prep. Fourteen servings at about 564 calories and 63 grams of protein for roughly $4.17 each (at everyday cost).",
+                 "description":  "A high-protein Chinese meal prep. Fourteen servings at about 564 calories and 63 grams of protein for roughly $3.95 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker mongolian chicken bowls, budget dinner",
-                 "costPerServing":  4.17,
+                 "costPerServing":  3.95,
                  "recipeIngredient":  [
                                           "8 lb Boneless Skinless Chicken Breast",
                                           "1 lb Rice",

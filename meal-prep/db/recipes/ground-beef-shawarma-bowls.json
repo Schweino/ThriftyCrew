@@ -15,9 +15,9 @@
                  "protein":  48,
                  "carbs":  68,
                  "fat":  13,
-                 "cost_ps":  "3.72"
+                 "cost_ps":  "3.96"
              },
-    "intro_html":  "Warm, spiced shawarma flavor over rice with a cool yogurt drizzle, all made at home for cheap. Each serving delivers 48 grams of protein for about $3.72 (at everyday cost) and the batch makes 14 bowls. That is a spice-shop of flavor for less than the price of a single street-cart wrap.",
+    "intro_html":  "Warm, spiced shawarma flavor over rice with a cool yogurt drizzle, all made at home for cheap. Each serving delivers 48 grams of protein for about $3.96 (at everyday cost) and the batch makes 14 bowls. That is a spice-shop of flavor for less than the price of a single street-cart wrap.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2450 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1120 g)",
@@ -31,7 +31,7 @@
                                 "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 jar (6 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$3.72 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.96 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Build the shawarma spice from \u003cstrong\u003ecumin, paprika, and garlic powder\u003c/strong\u003e in your rack instead of paying up for a pre-mixed shawarma blend.",
                        "A \u003cstrong\u003etub of plain greek yogurt\u003c/strong\u003e gives you the classic cool sauce and adds protein for pennies per serving.",
@@ -60,15 +60,15 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2450,
                                    "buy":  "6 lb",
-                                   "bid":  "93-7-ground-beef",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-beef",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  1120,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -81,8 +81,8 @@
                                    "item":  "Greek Yogurt",
                                    "grams":  500,
                                    "buy":  "1 tub",
-                                   "bid":  "greek-yogurt",
-                                   "gpu":  "28.350"
+                                   "bid":"greek-yogurt",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Diced Tomatoes",
@@ -129,9 +129,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Middle Eastern meal prep. Fourteen servings at about 595 calories and 48 grams of protein for roughly $3.72 each (at everyday cost).",
+                 "description":  "A high-protein Middle Eastern meal prep. Fourteen servings at about 595 calories and 48 grams of protein for roughly $3.96 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, ground beef shawarma bowls, budget dinner",
-                 "costPerServing":  3.72,
+                 "costPerServing":  3.96,
                  "recipeIngredient":  [
                                           "6 lb 93/7 Ground Beef",
                                           "1 lb Rice",

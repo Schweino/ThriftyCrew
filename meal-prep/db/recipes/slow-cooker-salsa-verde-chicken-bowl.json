@@ -15,7 +15,7 @@
                  "protein":  53,
                  "carbs":  66,
                  "fat":  5,
-                 "cost_ps":  "3.21"
+                 "cost_ps":  "3.54"
              },
     "intro_html":  "This is a week of burrito-bowl dinners done the easy way, bright salsa verde chicken slow-cooked until it falls apart, piled over rice with black beans, corn, and cheddar. It is loaded with lean protein and a squeeze of lime keeps it tasting fresh instead of heavy. A build-your-own bowl at the burrito chain costs you $11 or more each time, and this makes the same thing for a fraction of that per serving.",
     "ingredients_display":  [
@@ -34,7 +34,7 @@
                                 "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1/8 tsp (3 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$3.21 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.54 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "\u003cstrong\u003eBuy the big family pack of chicken breast.\u003c/strong\u003e The per-pound price drops on the larger size, and this recipe puts every ounce to use.",
                        "\u003cstrong\u003eStick with jarred salsa verde and canned beans and corn.\u003c/strong\u003e Canned beans cost a fraction of dried once you factor in the cooking, and a good jarred salsa verde does all the flavor work for you.",
@@ -72,8 +72,8 @@
                                    "item":  "Salsa Verde",
                                    "grams":  900,
                                    "buy":  "2 jars",
-                                   "bid":  "salsa-verde",
-                                   "gpu":  "28.350"
+                                   "bid":"salsa-verde",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Ground Cumin",
@@ -93,22 +93,22 @@
                                    "item":  "Rice",
                                    "grams":  800,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Seasoned Black Beans",
                                    "grams":  910,
                                    "buy":  "4 cans",
-                                   "bid":  "seasoned-black-beans",
-                                   "gpu":  "28.350"
+                                   "bid":"seasoned-black-beans",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "grams":  420,
                                    "buy":  "2 cans",
-                                   "bid":  "canned-sweet-corn",
-                                   "gpu":  "210.000"
+                                   "bid":"canned-corn",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Fat Free Cheddar",
@@ -155,9 +155,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 543 calories and 53 grams of protein for roughly $3.21 each (at everyday cost).",
+                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 543 calories and 53 grams of protein for roughly $3.54 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, salsa verde chicken burrito bowl, budget dinner",
-                 "costPerServing":  3.21,
+                 "costPerServing":  3.54,
                  "recipeIngredient":  [
                                           "6 lb Boneless Skinless Chicken Breast",
                                           "2 jars Salsa Verde",

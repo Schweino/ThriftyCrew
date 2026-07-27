@@ -26,7 +26,7 @@
                  "protein":  32,
                  "carbs":  76,
                  "fat":  14,
-                 "cost_ps":  "3.14"
+                 "cost_ps":  "3.24"
              },
     "intro_html":  "Minchet abish is the Ethiopian ground beef stew, and the secret is patience with the onions. You cook a mountain of them down slowly in spiced butter until they collapse into a jammy base, and that base is the sauce. No thickener, no flour, just onions that gave up. Then berbere goes in, which is the Ethiopian spice blend built on chilies, fenugreek, and warm spices, and the whole pot turns brick red. It is traditionally scooped up with injera. Over rice it works just as well and it portions a lot cleaner.",
     "ingredients_display":  [
@@ -53,7 +53,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $36.80 across 14 servings, roughly $2.63 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $7.19 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.99. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.14 a bowl\u003c/strong\u003e (at everyday cost) for an Ethiopian stew made from a short list of ingredients and one very good spice blend.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.24 a bowl\u003c/strong\u003e (at everyday cost) for an Ethiopian stew made from a short list of ingredients and one very good spice blend.",
     "shop_smart":  [
                        "\u003cstrong\u003eThis recipe has six things in it.\u003c/strong\u003e Beef, butter, onions, garlic, tomatoes, and rice. When the list is that short, the beef price is the whole game, so buy it marked down and freeze.",
                        "\u003cstrong\u003eBerbere is worth buying real.\u003c/strong\u003e One jar seasons this pot many times and there is no substitute that gets you close. It is the reason this tastes Ethiopian.",
@@ -72,7 +72,7 @@
                 ],
     "portion_html":  "Weigh the rice pot and the stew pot separately, subtracting the empty-pot weight from Step 1, and divide each by 14. Even rice base, even ladle of stew. Every bowl lands near \u003cstrong\u003e574 calories with 32 grams of protein\u003c/strong\u003e. Berbere gets stronger overnight, so day three will have more heat than day one.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://twosleevers.com/ethiopian-beef-stew/\" target=\"_blank\" rel=\"noopener\"\u003etwosleevers.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Boldly spiced dinners for about $3.14 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Boldly spiced dinners for about $3.24 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  29.96,
     "cost_batch_true":  36.8,
     "cost_per_serving":  2.14,
@@ -127,8 +127,8 @@
                                    "canon":  "93/7 Ground Beef",
                                    "grams":  1588,
                                    "buy":  "3.5 lb",
-                                   "bid":  "ground-beef-8020",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-beef",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Diced Tomatoes",
@@ -151,19 +151,19 @@
                                    "canon":  "Rice",
                                    "grams":  1258,
                                    "buy":  "6.75 cups dry",
-                                   "bid":  "rice",
-                                   "gpu":  "453.592"
+                                   "bid":"rice",
+                                   "gpu":453.592
                                }
                            ]
                },
     "head":  {
-                 "description":  "Ethiopian minchet abish rebuilt for 14-serving meal prep: berbere-spiced ground beef in slow-cooked onion sauce over rice. 574 calories, 32g protein, about $3.14 per serving (at everyday cost).",
+                 "description":  "Ethiopian minchet abish rebuilt for 14-serving meal prep: berbere-spiced ground beef in slow-cooked onion sauce over rice. 574 calories, 32g protein, about $3.24 per serving (at everyday cost).",
                  "keywords":  "minchet abish, ethiopian beef stew, berbere ground beef, ethiopian meal prep, spiced beef bowls, budget global dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",
                  "cookTime":  "PT55M",
                  "totalTime":  "PT75M",
-                 "costPerServing":  3.14,
+                 "costPerServing":  3.24,
                  "recipeIngredient":  [
                                           "3.5 lb 93/7 ground beef",
                                           "3.5 yellow onions",

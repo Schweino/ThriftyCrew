@@ -15,7 +15,7 @@
                  "protein":  36,
                  "carbs":  47,
                  "fat":  17,
-                 "cost_ps":  "3.40"
+                 "cost_ps":  "3.52"
              },
     "intro_html":  "If you have ever wanted that tangy, peppery Italian beef without the sandwich shop price, this is your recipe. One chuck roast and a jar of pepperoncini turn into fourteen hearty rice bowls with a little kick. Set it in the morning and dinner is basically finished by the time you are.",
     "ingredients_display":  [
@@ -32,7 +32,7 @@
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/2 tsp (8 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$3.40 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.52 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "\u003cstrong\u003eWatch for chuck roast markdowns.\u003c/strong\u003e This cut is your cheapest path to fourteen filling dinners. Buy it when the price drops and freeze it until slow cooker day.",
                        "\u003cstrong\u003eOne jar of pepperoncini does the heavy lifting.\u003c/strong\u003e The peppers and their juice are the whole flavor of this dish, and a jar is cheap and keeps forever in the fridge.",
@@ -105,29 +105,29 @@
                                    "item":  "Rice",
                                    "grams":  650,
                                    "buy":  "1 lb",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":"jasmine-rice",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Seasoned Black Beans",
                                    "grams":  455,
                                    "buy":  "2 cans",
-                                   "bid":  "seasoned-black-beans",
-                                   "gpu":  "28.350"
+                                   "bid":"seasoned-black-beans",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Green Bell Peppers",
                                    "grams":  476,
                                    "buy":  "4 peppers",
-                                   "bid":  "green-bell-pepper",
-                                   "gpu":  "120.000"
+                                   "bid":"green-bell-pepper",
+                                   "gpu":120
                                },
                                {
                                    "item":  "Reduced Fat Mozzarella",
                                    "grams":  196,
                                    "buy":  "1 bag",
-                                   "bid":  "reduced-fat-mozzarella",
-                                   "gpu":  "28.350"
+                                   "bid":"reduced-fat-mozzarella",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Salt",
@@ -139,9 +139,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Italian meal prep. Fourteen servings at about 504 calories and 36 grams of protein for roughly $3.40 each (at everyday cost).",
+                 "description":  "A high-protein Italian meal prep. Fourteen servings at about 504 calories and 36 grams of protein for roughly $3.52 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker italian beef rice bowl, budget dinner",
-                 "costPerServing":  3.40,
+                 "costPerServing":  3.52,
                  "recipeIngredient":  [
                                           "4 lb Beef Chuck Roast",
                                           "1 jar Pepperoncini",

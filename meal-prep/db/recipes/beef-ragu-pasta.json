@@ -15,9 +15,9 @@
                  "protein":  55,
                  "carbs":  65,
                  "fat":  16,
-                 "cost_ps":  "4.72"
+                 "cost_ps":  "4.92"
              },
-    "intro_html":  "A good beef ragu is the kind of meal that tastes expensive and cooks for almost nothing. Lean ground beef simmers with carrots, onion, and crushed tomatoes into a rich sauce, then tosses with penne and a little parmesan. It runs around $4.72 a serving (at everyday cost) with 55 grams of protein and makes 14 bowls.",
+    "intro_html":  "A good beef ragu is the kind of meal that tastes expensive and cooks for almost nothing. Lean ground beef simmers with carrots, onion, and crushed tomatoes into a rich sauce, then tosses with penne and a little parmesan. It runs around $4.92 a serving (at everyday cost) with 55 grams of protein and makes 14 bowls.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2450 g)",
                                 "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 3 boxs (1080 g)",
@@ -35,7 +35,7 @@
                                 "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 1 tsp (9 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$4.72 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.92 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Store-brand canned tomatoes make a sauce every bit as good as the name brands. \u003cstrong\u003eBuy the cheapest crushed tomatoes and tomato paste\u003c/strong\u003e and save the money.",
                        "A wedge of parmesan grated at home costs less and tastes better than the pre-grated stuff. \u003cstrong\u003eBuy a block of parmesan and grate it yourself\u003c/strong\u003e.",
@@ -65,15 +65,15 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2450,
                                    "buy":  "6 lb",
-                                   "bid":  "93-7-ground-beef",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-beef",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Penne Pasta",
                                    "grams":  1080,
                                    "buy":  "3 boxs",
-                                   "bid":  "penne-pasta",
-                                   "gpu":  "28.350"
+                                   "bid":"penne-pasta",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -86,8 +86,8 @@
                                    "item":  "Carrots",
                                    "grams":  200,
                                    "buy":  "1 lb",
-                                   "bid":  "shredded-carrots",
-                                   "gpu":  "28.350"
+                                   "bid":"carrots",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Crushed Tomatoes",
@@ -114,8 +114,8 @@
                                    "item":  "Parmesan Cheese",
                                    "grams":  80,
                                    "buy":  "1 container",
-                                   "bid":  "parmesan-cheese",
-                                   "gpu":  "28.350"
+                                   "bid":"parmesan",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Garlic",
@@ -162,9 +162,9 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Italian meal prep. Fourteen servings at about 603 calories and 55 grams of protein for roughly $4.72 each (at everyday cost).",
+                 "description":  "A high-protein Italian meal prep. Fourteen servings at about 603 calories and 55 grams of protein for roughly $4.92 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, simple beef ragu pasta, budget dinner",
-                 "costPerServing":  4.72,
+                 "costPerServing":  4.92,
                  "recipeIngredient":  [
                                           "6 lb 93/7 Ground Beef",
                                           "3 boxs Penne Pasta",

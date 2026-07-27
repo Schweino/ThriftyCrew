@@ -24,9 +24,9 @@
                  "protein":  42,
                  "carbs":  44,
                  "fat":  31,
-                 "cost_ps":  "4.81"
+                 "cost_ps":  "4.86"
              },
-    "intro_html":  "Tetrazzini sounds Italian, but it was invented in San Francisco and named after an opera singer, which makes it about as American as a casserole gets. Spaghetti and turkey bound in a mushroom cream sauce, covered in mozzarella and parmesan, baked until the top blisters. Each serving carries \u003cstrong\u003e42 grams of protein\u003c/strong\u003e and 621 calories for about \u003cstrong\u003e$4.81\u003c/strong\u003e (at everyday cost). That is a restaurant pasta plate for less than the tip.",
+    "intro_html":  "Tetrazzini sounds Italian, but it was invented in San Francisco and named after an opera singer, which makes it about as American as a casserole gets. Spaghetti and turkey bound in a mushroom cream sauce, covered in mozzarella and parmesan, baked until the top blisters. Each serving carries \u003cstrong\u003e42 grams of protein\u003c/strong\u003e and 621 calories for about \u003cstrong\u003e$4.86\u003c/strong\u003e (at everyday cost). That is a restaurant pasta plate for less than the tip.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eSpaghetti (Great Value):\u003c/strong\u003e 21 oz dry (595 g)",
                                 "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 5.25 tbsp (74 g)",
@@ -63,7 +63,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $57.99 across 14 servings, roughly $4.14 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $9.31 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $67.30. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.81 a serving\u003c/strong\u003e (at everyday cost). This is a rich bake because cream cheese, heavy cream, and two cheeses all showed up to the same party, and every one of them earns its place.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.86 a serving\u003c/strong\u003e (at everyday cost). This is a rich bake because cream cheese, heavy cream, and two cheeses all showed up to the same party, and every one of them earns its place.",
     "shop_smart":  [
                        "Spaghetti is the cheapest pasta shape on the shelf and this recipe wants a lot of it. Buy the 16 oz boxes, since the store brand and the name brand come out of similar machines.",
                        "White mushrooms in the 8 oz packs are less than half the price of sliced baby bellas and cook down to the same thing in a cream sauce. Slice them yourself and skip the convenience markup.",
@@ -82,7 +82,7 @@
                 ],
     "portion_html":  "Weigh the finished pan, subtract the empty pan weight, and divide by 14. Pasta bakes settle and slice cleanly once they have rested, so cut to the scale rather than by eye. Each serving delivers \u003cstrong\u003e621 calories\u003c/strong\u003e and 42 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.spendwithpennies.com/turkey-tetrazzini/\" target=\"_blank\" rel=\"noopener\"\u003espendwithpennies.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Creamy turkey pasta for about $4.81 a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "upsell_html":  "Creamy turkey pasta for about $4.86 a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
     "cost_batch":  33.7,
     "cost_batch_true":  57.99,
     "cost_per_serving":  2.41,
@@ -129,16 +129,16 @@
                                    "canon":  "White Mushrooms",
                                    "grams":  595,
                                    "buy":  "1.25 lb",
-                                   "bid":  "mushrooms",
-                                   "gpu":  "28.350"
+                                   "bid":"mushrooms",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "All-Purpose Flour",
                                    "canon":  "All-Purpose Flour",
                                    "grams":  42,
                                    "buy":  "5.25 tbsp",
-                                   "bid":  "flour",
-                                   "gpu":  "453.592"
+                                   "bid":"flour",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Chicken Broth",
@@ -153,8 +153,8 @@
                                    "canon":  "1/3 Fat Cream Cheese",
                                    "grams":  397,
                                    "buy":  "14 oz",
-                                   "bid":  "cream-cheese",
-                                   "gpu":  "28.350"
+                                   "bid":"1-3-fat-cream-cheese",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Heavy Cream",
@@ -193,16 +193,16 @@
                                    "canon":  "Reduced Fat Mozzarella",
                                    "grams":  396,
                                    "buy":  "14 oz",
-                                   "bid":  "shredded-cheese",
-                                   "gpu":  "28.350"
+                                   "bid":"reduced-fat-mozzarella",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Parmesan Cheese",
                                    "canon":  "Parmesan Cheese",
                                    "grams":  39,
                                    "buy":  "1.5 oz",
-                                   "bid":  "parmesan",
-                                   "gpu":  "28.350"
+                                   "bid":"parmesan",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Salt",
@@ -215,13 +215,13 @@
                            ]
                },
     "head":  {
-                 "description":  "Turkey tetrazzini meal prep: spaghetti and turkey breast in a mushroom cream sauce under mozzarella and parmesan. 621 calories, 42g protein, about $4.81 a serving (at everyday cost).",
+                 "description":  "Turkey tetrazzini meal prep: spaghetti and turkey breast in a mushroom cream sauce under mozzarella and parmesan. 621 calories, 42g protein, about $4.86 a serving (at everyday cost).",
                  "keywords":  "turkey tetrazzini, leftover turkey recipes, creamy pasta bake, turkey meal prep, high protein pasta, budget casserole, mushroom cream sauce",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H10M",
-                 "costPerServing":  4.81,
+                 "costPerServing":  4.86,
                  "recipeIngredient":  [
                                           "10 cups diced cooked turkey breast",
                                           "21 oz dry spaghetti",

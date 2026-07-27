@@ -15,9 +15,9 @@
                  "protein":  31,
                  "carbs":  50,
                  "fat":  29,
-                 "cost_ps":  "5.76"
+                 "cost_ps":  "5.89"
              },
-    "intro_html":  "Savory-sweet basil beef over rice that simmered in coconut milk, this is the Thai restaurant order you stop paying $15 for. Each bowl carries \u003cstrong\u003e31 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$5.76\u003c/strong\u003e (at everyday cost), with jalapeno and lime keeping every bite awake.",
+    "intro_html":  "Savory-sweet basil beef over rice that simmered in coconut milk, this is the Thai restaurant order you stop paying $15 for. Each bowl carries \u003cstrong\u003e31 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$5.89\u003c/strong\u003e (at everyday cost), with jalapeno and lime keeping every bite awake.",
     "ingredients_display": ["\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.5 cups dry (648 g)","\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 3.5 cans (1389 g)","\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1588 g)","\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3.5 (420 g)","\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 7 tbsp (60 g)","\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.75 cups (223 g)","\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1 cups (212 g)","\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 3.5 tbsp (47 g)","\u003cstrong\u003eJalapeno:\u003c/strong\u003e 4 tbsp (37 g)","\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e 1 tbsp (6 g)","\u003cstrong\u003eFresh Basil:\u003c/strong\u003e 56 tbsp (84 g)","\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3.5 (214 g)","\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 10 tbsp (60 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -37,7 +37,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $56.76 across 14 servings, roughly $4.05 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $22.77 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $79.53. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$5.76 a bowl\u003c/strong\u003e (at everyday cost) for basil beef with coconut rice. The Thai spot down the street charges $15 for a smaller portion, and they keep the leftovers.",
+    "cost_closing_html":  "About \u003cstrong\u003e$5.89 a bowl\u003c/strong\u003e (at everyday cost) for basil beef with coconut rice. The Thai spot down the street charges $15 for a smaller portion, and they keep the leftovers.",
     "shop_smart":  ["The 93/7 ground beef is the big line at 3.5 pounds. Leaner beef costs more per pound but you are not paying to drain fat down the sink, which matters when the sauce needs to cling.","Canned coconut milk is one of the most price-volatile items in the store. Stock up when it goes on sale, it keeps for ages in the pantry.","Skip the pre-shredded carrots. Whole carrots cost less for what this recipe needs and shred in under two minutes with a box grater."],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
@@ -50,7 +50,7 @@
                 ],
     "portion_html":  "Weigh your rice and beef together in the pot, subtract the empty pot weight you wrote down, and divide by 14. Portion to that number and each bowl lands at about 593 calories with 31 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.sugarandsoul.co/thai-basil-beef-bowls/\" target=\"_blank\" rel=\"noopener\"\u003eSugar and Soul\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $5.76 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about $5.89 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  49.28,
     "cost_batch_true":  56.76,
     "cost_per_serving":  3.52,
@@ -64,29 +64,29 @@
                                    "item":  "Rice",
                                    "grams":  648,
                                    "buy":  "3.5 cups dry",
-                                   "bid":  "rice",
-                                   "gpu":  "453.592"
+                                   "bid":"rice",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Coconut Milk",
                                    "grams":  1389,
                                    "buy":  "3.5 cans",
-                                   "bid":  "coconut-milk-canned",
-                                   "gpu":  "29.570"
+                                   "bid":"coconut-milk-canned",
+                                   "gpu":29.57
                                },
                                {
                                    "item":  "93/7 Ground Beef",
                                    "grams":  1588,
                                    "buy":  "3.5 lb",
-                                   "bid":  "ground-beef-8020",
-                                   "gpu":  "453.592"
+                                   "bid":"93-7-ground-beef",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Red Bell Pepper",
                                    "grams":  420,
                                    "buy":  "3.5",
-                                   "bid":  "bell-peppers",
-                                   "gpu":  "120.000"
+                                   "bid":"red-bell-pepper",
+                                   "gpu":120
                                },
                                {
                                    "item":  "Olive Oil",
@@ -127,8 +127,8 @@
                                    "item":  "Jalapeno",
                                    "grams":  37,
                                    "buy":  "4 tbsp",
-                                   "bid":  "jalapenos",
-                                   "gpu":  "453.592"
+                                   "bid":"jalapenos",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Cayenne Pepper",
@@ -148,8 +148,8 @@
                                    "item":  "Carrots",
                                    "grams":  214,
                                    "buy":  "3.5",
-                                   "bid":  "carrots",
-                                   "gpu":  "453.592"
+                                   "bid":"carrots",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Green Onions",
@@ -175,13 +175,13 @@
                            ]
                },
     "head":  {
-                 "description":  "Thai basil beef meal prep: 14 bowls, 593 calories and 31g protein each, about $5.76 a serving (at everyday cost). Savory-sweet ground beef over rich coconut rice.",
+                 "description":  "Thai basil beef meal prep: 14 bowls, 593 calories and 31g protein each, about $5.89 a serving (at everyday cost). Savory-sweet ground beef over rich coconut rice.",
                  "keywords":  "thai basil beef, coconut rice, ground beef bowls, thai meal prep, budget thai food, basil beef recipe",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",
                  "cookTime":  "PT30M",
                  "totalTime":  "PT45M",
-                 "costPerServing":  5.76,
+                 "costPerServing":  5.89,
                  "recipeIngredient":  [
                                           "3.5 lb 93/7 ground beef",
                                           "3.5 cups dry rice",

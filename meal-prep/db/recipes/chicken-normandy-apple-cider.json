@@ -28,9 +28,9 @@
                  "protein":  26,
                  "carbs":  66,
                  "fat":  21,
-                 "cost_ps":  "2.90"
+                 "cost_ps":  "3.31"
              },
-    "intro_html":  "Normandy is apple country, and their cooking shows it. Chicken braises in apple cider with onions, mustard, and cream until the sauce goes silky and the apple slices soften into it. It tastes like a restaurant dish and costs less than most weeknight chicken. Each bowl carries 567 calories and \u003cstrong\u003e26 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.90 a serving\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Normandy is apple country, and their cooking shows it. Chicken braises in apple cider with onions, mustard, and cream until the sauce goes silky and the apple slices soften into it. It tastes like a restaurant dish and costs less than most weeknight chicken. Each bowl carries 567 calories and \u003cstrong\u003e26 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.31 a serving\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 3.25 lb (1470 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)",
@@ -65,7 +65,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $22.94 across 14 servings, roughly $1.64 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $17.61 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $40.55. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.90 a serving\u003c/strong\u003e (at everyday cost). Apples, onions, and chicken thighs are all everyday grocery items, and the cream is used in a small enough amount that it barely moves the number.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.31 a serving\u003c/strong\u003e (at everyday cost). Apples, onions, and chicken thighs are all everyday grocery items, and the cream is used in a small enough amount that it barely moves the number.",
     "shop_smart":  [
                        "Apples are the flavor of this dish and they are cheapest in fall. A firm variety holds its shape in the pan while a soft one dissolves into applesauce, so pick something crisp rather than something mealy.",
                        "Apple juice stands in for hard cider here and it works. Buy the big bottle, use what the recipe needs, and drink the rest, which is a much better outcome than a half used bottle of cooking cider going flat in the fridge.",
@@ -84,7 +84,7 @@
                 ],
     "portion_html":  "Weigh the rice into each container, then set the pan on the scale, subtract the empty weight you wrote down, and divide by 14. Spoon the sauce evenly, since that is where the calories and most of the flavor live. Every portion lands at \u003cstrong\u003e567 calories\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.jocooks.com/recipes/chicken-normandy/\" target=\"_blank\" rel=\"noopener\"\u003ejocooks.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "A French cream and cider braise for about \u003cstrong\u003e$2.90 a serving\u003c/strong\u003e (at everyday cost). Members get the whole Meal Prep library along with every money lesson, calculator, and tool on the site for $1 a month.",
+    "upsell_html":  "A French cream and cider braise for about \u003cstrong\u003e$3.31 a serving\u003c/strong\u003e (at everyday cost). Members get the whole Meal Prep library along with every money lesson, calculator, and tool on the site for $1 a month.",
     "cost_batch":  16.2,
     "cost_batch_true":  22.94,
     "cost_per_serving":  1.16,
@@ -99,8 +99,8 @@
                                    "canon":  "Boneless Skinless Chicken Thigh",
                                    "grams":  1470,
                                    "buy":  "3.25 lb",
-                                   "bid":  "chicken-thighs",
-                                   "gpu":  "453.592"
+                                   "bid":"boneless-skinless-chicken-thigh",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Salt",
@@ -203,19 +203,19 @@
                                    "canon":  "Rice",
                                    "grams":  772,
                                    "buy":  "4.25 cups dry",
-                                   "bid":  "rice",
-                                   "gpu":  "453.592"
+                                   "bid":"rice",
+                                   "gpu":453.592
                                }
                            ]
                },
     "head":  {
-                 "description":  "Chicken Normandy, French chicken thighs braised in apple cider with mustard and cream, rebuilt for 14 meal prep servings at about $2.90 a serving (at everyday cost).",
+                 "description":  "Chicken Normandy, French chicken thighs braised in apple cider with mustard and cream, rebuilt for 14 meal prep servings at about $3.31 a serving (at everyday cost).",
                  "keywords":  "chicken normandy, apple cider chicken, creamy braised chicken, french chicken recipe, budget chicken dinner, cheap meal prep, make ahead chicken",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M",
-                 "costPerServing":  2.90,
+                 "costPerServing":  3.31,
                  "recipeIngredient":  [
                                           "3.25 lb boneless skinless chicken thighs",
                                           "7 apples",

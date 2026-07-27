@@ -24,9 +24,9 @@
                  "protein":  28,
                  "carbs":  45,
                  "fat":  31,
-                 "cost_ps":  "3.83"
+                 "cost_ps":  "3.84"
              },
-    "intro_html":  "Tetrazzini was named for an opera singer and built for leftovers, which is a combination you do not see every day. Spaghetti, chicken, and mushrooms get folded into a cream sauce, topped with mozzarella, and baked until the edges go brown and chewy. Those crispy edges are the reason people fight over the corner pieces. Each serving lands at 562 calories and \u003cstrong\u003e28 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.83 a serving\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Tetrazzini was named for an opera singer and built for leftovers, which is a combination you do not see every day. Spaghetti, chicken, and mushrooms get folded into a cream sauce, topped with mozzarella, and baked until the edges go brown and chewy. Those crispy edges are the reason people fight over the corner pieces. Each serving lands at 562 calories and \u003cstrong\u003e28 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.84 a serving\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eSpaghetti (Great Value):\u003c/strong\u003e 21.5 oz dry (613 g)",
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 2 lb (871 g)",
@@ -62,7 +62,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $32.39 across 14 servings, roughly $2.31 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $21.27 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.66. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.83 a serving\u003c/strong\u003e (at everyday cost). Mushrooms and cream are the two lines carrying the cost, and they are also exactly what makes tetrazzini taste like tetrazzini instead of baked spaghetti.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.84 a serving\u003c/strong\u003e (at everyday cost). Mushrooms and cream are the two lines carrying the cost, and they are also exactly what makes tetrazzini taste like tetrazzini instead of baked spaghetti.",
     "shop_smart":  [
                        "Mushrooms are the biggest produce line and they are essential, not optional. Buy whole white mushrooms and slice them yourself, because pre-sliced costs more per pound and dries out on the shelf.",
                        "Heavy cream is the second real expense. A pint goes a long way and keeps in the fridge for weeks, so there is no waste even if you only use part of it.",
@@ -81,7 +81,7 @@
                 ],
     "portion_html":  "Score the bake into 14 even squares and lift one into each container, then set the dish on the scale and subtract the empty weight to confirm your portions are honest. Every serving lands at \u003cstrong\u003e562 calories\u003c/strong\u003e. Reheat uncovered so the top browns again instead of going soft, and make sure somebody besides you gets a corner piece.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://natashaskitchen.com/chicken-tetrazzini/\" target=\"_blank\" rel=\"noopener\"\u003enatashaskitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Baked chicken tetrazzini for about \u003cstrong\u003e$3.83 a serving\u003c/strong\u003e (at everyday cost). Members get the entire Meal Prep library plus every money lesson, calculator, and tool on the site for $1 a month.",
+    "upsell_html":  "Baked chicken tetrazzini for about \u003cstrong\u003e$3.84 a serving\u003c/strong\u003e (at everyday cost). Members get the entire Meal Prep library plus every money lesson, calculator, and tool on the site for $1 a month.",
     "cost_batch":  23.84,
     "cost_batch_true":  32.39,
     "cost_per_serving":  1.7,
@@ -120,8 +120,8 @@
                                    "canon":  "White Mushrooms",
                                    "grams":  706,
                                    "buy":  "1.5 lb",
-                                   "bid":  "mushrooms",
-                                   "gpu":  "28.350"
+                                   "bid":"mushrooms",
+                                   "gpu":28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -152,8 +152,8 @@
                                    "canon":  "All-Purpose Flour",
                                    "grams":  65,
                                    "buy":  "8 tbsp",
-                                   "bid":  "flour",
-                                   "gpu":  "453.592"
+                                   "bid":"flour",
+                                   "gpu":453.592
                                },
                                {
                                    "item":  "Chicken Broth",
@@ -200,19 +200,19 @@
                                    "canon":  "Reduced Fat Mozzarella",
                                    "grams":  264,
                                    "buy":  "9.25 oz",
-                                   "bid":  "shredded-cheese",
-                                   "gpu":  "28.350"
+                                   "bid":"reduced-fat-mozzarella",
+                                   "gpu":28.3495
                                }
                            ]
                },
     "head":  {
-                 "description":  "Chicken tetrazzini, a baked spaghetti casserole with mushrooms, cream sauce, and melted mozzarella, rebuilt for 14 meal prep servings at about $3.83 each (at everyday cost).",
+                 "description":  "Chicken tetrazzini, a baked spaghetti casserole with mushrooms, cream sauce, and melted mozzarella, rebuilt for 14 meal prep servings at about $3.84 each (at everyday cost).",
                  "keywords":  "chicken tetrazzini, baked spaghetti casserole, mushroom cream pasta, make ahead casserole, budget pasta bake, cheap meal prep",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H10M",
-                 "costPerServing":  3.83,
+                 "costPerServing":  3.84,
                  "recipeIngredient":  [
                                           "2 lb boneless skinless chicken breast",
                                           "21.5 oz dry spaghetti",
