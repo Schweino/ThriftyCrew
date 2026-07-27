@@ -83,3 +83,20 @@ site-backups/*
 
 # tool-generated timestamped backups
 *.backup-*.json
+
+# --- 2026-07-27 repo hygiene: stop tracking pure regeneration churn that no cross-run step or served
+#     surface needs. Trend pages are BUILT-then-published to Ghost each publish-week (build+publish share
+#     one stamp gate), so the repo copy is disposable. Diagnostic reports are current-run snapshots.
+#     Local caches (published-hashes, catalog-digest) are per-run/per-machine. See check-uncommitted-source.ps1. ---
+/grocery/out/trend/
+/grocery/out/store-guide-embed.html
+/grocery/out/tile-integrity.json
+/grocery/out/coverage-gaps.json
+/grocery/out/store-coverage-report.json
+/grocery/out/sale-fallback-gaps.json
+/grocery/out/consistency-report.json
+/grocery/out/category-coverage-report.json
+/grocery/out/coverage-regression.json
+/meal-prep/db/published-hashes.json
+/meal-prep/pipeline/catalog-digest.json
+*.bak-*
