@@ -68,6 +68,7 @@ param(
   [string]$DensitiesFile,   # default <meal-prep>\db\densities.json
   [string]$FeedFile,        # default <estate>\grocery\out\smp-feed.json
   [string]$NoBoardOkFile,   # default <meal-prep>\db\no-board-price-ok.json
+  [string]$ManifestFile,    # default <meal-prep>\pipeline\v2-perserving.json (everyday_ps basis for stat.cost_ps)
   [switch]$RunCost,         # invoke engine\cost-recipes.ps1 -Slugs <slug> to cost a NEW recipe (writes db\costed.json; only valid when OutDir is the real db\recipes)
   [switch]$AllowUncosted,   # emit the spec with zeroed cost fields when no costed row exists yet
   [switch]$SkipMacroCheck,  # skip the food-macros-db stat recompute verification (items not in the DB yet)
@@ -83,6 +84,7 @@ if(-not $FoodDb){        $FoodDb        = Join-Path $mp 'food-macros-db.json' }
 if(-not $DensitiesFile){ $DensitiesFile = Join-Path $mp 'db\densities.json' }
 if(-not $FeedFile){      $FeedFile      = Join-Path (Split-Path $mp -Parent) 'grocery\out\smp-feed.json' }
 if(-not $NoBoardOkFile){ $NoBoardOkFile = Join-Path $mp 'db\no-board-price-ok.json' }
+if(-not $ManifestFile){  $ManifestFile  = Join-Path $mp 'pipeline\v2-perserving.json' }
 
 $LB=453.592; $OZ=28.3495
 
@@ -407,6 +409,19 @@ function Render-CostFields($cost){
 }
 if($costRow){ $costFields = Render-CostFields $costRow }
 
+# ---- everyday per-serving basis (2026-07-26 cost redesign): stat.cost_ps + head.costPerServing carry
+# the EVERYDAY whole-package per-serving from the v2-perserving manifest, not cost_batch/14. For a
+# brand-new recipe the manifest row does not exist yet - fall back to the batch cps and note that
+# compute-v2-perserving + reanchor-machine-fields (the normal post-cost steps) will stamp the real one.
+$everydayPs = $null
+if(Test-Path $ManifestFile){
+  $manRow = @((Get-Content $ManifestFile -Raw -Encoding utf8 | ConvertFrom-Json) | Where-Object { [string]$_.slug -eq $slug })
+  if($manRow.Count -eq 1 -and $manRow[0].everyday_ps){ $everydayPs = [double]$manRow[0].everyday_ps }
+}
+if($null -eq $everydayPs -and $costRow){
+  Write-Warning 'no v2-perserving manifest row - stat.cost_ps falls back to batch/14; run compute-v2-perserving.ps1 + reanchor-machine-fields.ps1 after costing to stamp the everyday basis'
+}
+
 # ---------------- assemble + write ----------------
 function Build-Spec($cf){
   $tuningArr = @(); if(IProp $intake 'tuning'){ $tuningArr = @($intake.tuning) }
@@ -424,7 +439,8 @@ function Build-Spec($cf){
   }
   if(IProp $intake 'writer_notes'){ $spec.writer_notes = @($intake.writer_notes) }
   if(IProp $intake 'forbidden_prose_terms'){ $spec.forbidden_prose_terms = @($intake.forbidden_prose_terms) }
-  $statOut = [ordered]@{ cal=$stat.cal; protein=$stat.protein; carbs=$stat.carbs; fat=$stat.fat; cost_ps=$(if($cf){ $cf.cps.ToString('0.00') } else { '0.00' }) }
+  $psShow = if($null -ne $everydayPs){ $everydayPs } elseif($cf){ $cf.cps } else { $null }
+  $statOut = [ordered]@{ cal=$stat.cal; protein=$stat.protein; carbs=$stat.carbs; fat=$stat.fat; cost_ps=$(if($null -ne $psShow){ $psShow.ToString('0.00') } else { '0.00' }) }
   $spec.stat = $statOut
   $spec.intro_html = $introHtml
   $spec.ingredients_display = @($display)
@@ -443,7 +459,7 @@ function Build-Spec($cf){
   $spec.cost_pantry_add       = $(if($cf){ $cf.pantryAdd } else { 0 })
   $spec.cost_first_run        = $(if($cf){ $cf.firstRun }  else { 0 })
   $spec.scaler = [ordered]@{ cost=$(if($cf){ $cf.trueC.ToString('0.00') } else { '0.00' }); ing=@($scalerIng) }
-  $head.costPerServing = $(if($cf){ $cf.cps } else { 0 })
+  $head.costPerServing = $(if($null -ne $psShow){ [Math]::Round($psShow,2) } else { 0 })
   $spec.head = $head
   $spec.ingredients_grams = @($gramsArr)
   return $spec
