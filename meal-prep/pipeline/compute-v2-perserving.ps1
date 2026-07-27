@@ -4,11 +4,44 @@
 #   cheapest_ps  = sum(k * (pkg_g/gpu) * feed.cheapest, else k*pkg_p) / 14   (the headline "cheapest everywhere" number)
 # Emits pipeline/v2-perserving.json (manifest: slug,name,protein,protein_g,old_ps,everyday_ps,cheapest_ps,
 # protein_rank,is_protein_rank1) - the input for BOTH the prose writer wave and the site-surface switch.
-param([string]$FeedPath = 'C:\Codex\income\meal-prep\scratch-smpfeed.json')
+param([string]$FeedPath = 'C:\Codex\income\meal-prep\scratch-smpfeed.json', [switch]$SelfTest)
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp = Split-Path -Parent $here
 Add-Type -AssemblyName System.Web -ErrorAction SilentlyContinue
+
+# BLOCK-BEFORE-SHIP (2026-07-27, overhaul-1): cheapest_ps can never legitimately exceed everyday_ps -
+# 'cheapest everywhere' is by construction the floor over the same aligned product the db everyday bid
+# prices. A row where cheapest > everyday means the two pricing paths disagree (a stale/wrong feed price,
+# or a residual gpu/unit mismatch surviving the 07-26 reconciliation). Shipping it puts a 'cheapest' HIGHER
+# than 'everyday' on every manifest surface (rankings, top5, meal-planner) - visibly nonsensical to a
+# shopper and an accuracy violation. We CLAMP the shipped cheapest to everyday (the valid bound: never
+# inverted, never overstated) so the bad number can't reach a surface, and separately flag rows whose RAW
+# inversion is beyond rounding so triage fixes the underlying price. The clamp is the block; the flag is
+# the alert. Pure function (no globals) so it is self-testable without the feed/db.
+function Resolve-Inversions($rows, $tol, $alertFrac){
+  $flagged = New-Object System.Collections.Generic.List[object]
+  foreach($r in $rows){
+    $ev = [double]$r.everyday_ps; $ch = [double]$r.cheapest_ps
+    if($ch -gt $ev + $tol){
+      $frac = ($ch - $ev) / [math]::Max(0.01,$ev)
+      if($frac -gt $alertFrac){ $flagged.Add([pscustomobject]@{ slug=$r.slug; everyday_ps=$ev; raw_cheapest_ps=$ch; over_frac=[math]::Round($frac,3) }) }
+    }
+    if($ch -gt $ev){ $r.cheapest_ps = $r.everyday_ps }   # clamp EVERY inversion so cheapest<=everyday holds exactly
+  }
+  return ,$flagged
+}
+if($SelfTest){
+  $t = @(
+    [pscustomobject]@{slug='inv-real'; everyday_ps=3.00; cheapest_ps=3.30},   # 10% inverted -> flag + clamp
+    [pscustomobject]@{slug='inv-round';everyday_ps=3.00; cheapest_ps=3.01},   # rounding only -> clamp, no flag
+    [pscustomobject]@{slug='ok';       everyday_ps=3.00; cheapest_ps=2.50}    # valid -> untouched
+  )
+  $fl = Resolve-Inversions $t 0.02 0.03
+  $pass = ($t[0].cheapest_ps -eq 3.00) -and ($t[1].cheapest_ps -eq 3.00) -and ($t[2].cheapest_ps -eq 2.50) -and ($fl.Count -eq 1) -and ($fl[0].slug -eq 'inv-real')
+  if($pass){ Write-Output 'SELFTEST PASS: cheapest<=everyday clamp + real-inversion flag correct'; exit 0 }
+  Write-Output ("SELFTEST FAIL: clamped=[{0},{1},{2}] flagged={3}" -f $t[0].cheapest_ps,$t[1].cheapest_ps,$t[2].cheapest_ps,$fl.Count); exit 1
+}
 
 if(-not (Test-Path $FeedPath)){
   Invoke-WebRequest -Uri 'https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json' -OutFile $FeedPath -TimeoutSec 40 -UseBasicParsing
@@ -72,13 +105,25 @@ foreach($grp in ($rows | Group-Object protein)){
     $sorted[$i] | Add-Member -NotePropertyName is_protein_rank1 -NotePropertyValue ($i -eq 0) -Force
   }
 }
+# block-before-ship: clamp any cheapest>everyday inversion to the valid bound BEFORE the manifest is
+# written, and collect real (beyond-rounding) inversions to alert triage.
+$inverted = Resolve-Inversions $rows 0.02 0.03
 . (Join-Path $mp 'lib\json-db-io.ps1')
 Save-JsonArray -Array $rows -Path (Join-Path $here 'v2-perserving.json') -Depth 4 | Out-Null
 $evAll = $rows | ForEach-Object { $_.everyday_ps }; $chAll = $rows | ForEach-Object { $_.cheapest_ps }
 Write-Output ("computed {0} recipes -> pipeline\v2-perserving.json" -f $rows.Count)
 Write-Output ("everyday_ps  range `${0}-`${1}  mean `${2}" -f ($evAll|Measure-Object -Minimum).Minimum,($evAll|Measure-Object -Maximum).Maximum,[math]::Round(($evAll|Measure-Object -Average).Average,2))
 Write-Output ("cheapest_ps  range `${0}-`${1}  mean `${2}" -f ($chAll|Measure-Object -Minimum).Minimum,($chAll|Measure-Object -Maximum).Maximum,[math]::Round(($chAll|Measure-Object -Average).Average,2))
-Write-Output ("old_ps       mean `${0}" -f [math]::Round((($rows|ForEach-Object{$_.old_ps})|Measure-Object -Average).Average,2))
+if($inverted.Count){
+  Write-Output ("BLOCK-BEFORE-SHIP: clamped {0} recipe(s) where cheapest_ps exceeded everyday_ps (root price bug - triage):" -f $inverted.Count)
+  $inverted | ForEach-Object { Write-Output ("  {0}: everyday `${1} but feed-cheapest `${2} ({3:P0} over)" -f $_.slug,$_.everyday_ps,$_.raw_cheapest_ps,$_.over_frac) }
+  Set-Content (Join-Path $here 'v2-inversions.json') -Value (($inverted | ConvertTo-Json -Depth 4)) -Encoding utf8
+  $alert = Join-Path $mp '..\grocery\send-alert.ps1'
+  if(Test-Path $alert){
+    $body = "compute-v2 found recipes whose 'cheapest everywhere' price computed HIGHER than the everyday price - impossible on an aligned product, so a feed price or gpu is wrong. The shipped number was clamped to everyday (safe), but the underlying price must be fixed. Rows: " + (($inverted | Select-Object -First 12 | ForEach-Object { "$($_.slug) ev=$($_.everyday_ps) ch=$($_.raw_cheapest_ps)" }) -join ' | ')
+    try { & powershell -ExecutionPolicy Bypass -File $alert -Subject ("Recipe price inversion: {0} clamped" -f $inverted.Count) -Body $body | Out-Null } catch {}
+  }
+}
 if($bad.Count){
   Write-Output ("SKIPPED {0} recipe(s) with bad cost data (manifest still written for the other {1}):" -f $bad.Count, $rows.Count)
   $bad | ForEach-Object { Write-Output ("  " + $_) }
