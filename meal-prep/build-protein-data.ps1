@@ -51,10 +51,19 @@ $candidates = @(
     @{ item = 'Kidney Beans';                     n = 'Canned kidney beans';      raw = $false }
 )
 
-# Items with macros + feed price but no ingredient-map row. Only safe when the
-# feed unit is a fixed mass unit, so grams_per_unit is unambiguous.
+# PRODUCT PINS - these WIN over the ingredient-map row (2026-07-26). The map is derived from the recipe
+# specs by MAJORITY, and the spec majority prices several items at a cheaper DIFFERENT product (93/7 beef
+# at the 80/20 row, boneless-skinless thighs at the bone-in row, Greek yogurt at regular yogurt). That is
+# a recipe-card consistency question - but THIS tool pairs each row's label-accurate macros with the
+# price, so the priced product MUST be the macro'd product or cost-per-30g-protein is faked (the same
+# Fairlife-vs-regular-milk lesson already encoded in the candidates list above).
 $mapOverrides = @{
-    'Cottage Cheese' = @{ board_id = 'cottage-cheese'; grams_per_unit = 28.3495; unit = 'oz' }
+    'Cottage Cheese'                   = @{ board_id = 'cottage-cheese';                  grams_per_unit = 28.3495;  unit = 'oz' }
+    '93/7 Ground Beef'                 = @{ board_id = '93-7-ground-beef';                grams_per_unit = 453.592;  unit = 'lb' }
+    '93/7 Ground Turkey'               = @{ board_id = '93-7-ground-turkey';              grams_per_unit = 453.592;  unit = 'lb' }
+    'Boneless Skinless Chicken Thigh'  = @{ board_id = 'boneless-skinless-chicken-thigh'; grams_per_unit = 453.592;  unit = 'lb' }
+    'Greek Yogurt'                     = @{ board_id = 'greek-yogurt';                    grams_per_unit = 28.3495;  unit = 'oz' }
+    'Cheddar Cheese, Shredded'         = @{ board_id = 'cheddar-cheese-shredded';         grams_per_unit = 28.3495;  unit = 'oz' }
 }
 
 $rows = @()
@@ -62,12 +71,14 @@ foreach ($c in $candidates) {
     $dbItem = $db.items | Where-Object { $_.item -eq $c.item } | Select-Object -First 1
     if (-not $dbItem) { Write-Warning "SKIP $($c.item): not in food-macros-db"; continue }
 
-    $m = $map.mappings | Where-Object { $_.item -eq $c.item } | Select-Object -First 1
-    if (-not $m -and $mapOverrides.ContainsKey($c.item)) {
+    # pins first (product-accuracy), then the derived map for everything else
+    $m = $null
+    if ($mapOverrides.ContainsKey($c.item)) {
         $o = $mapOverrides[$c.item]
         $m = [pscustomobject]@{ board_id = $o.board_id; grams_per_unit = $o.grams_per_unit; unit = $o.unit }
     }
-    if (-not $m) { Write-Warning "SKIP $($c.item): no ingredient-map row and no override"; continue }
+    if (-not $m) { $m = $map.mappings | Where-Object { $_.item -eq $c.item } | Select-Object -First 1 }
+    if (-not $m) { Write-Warning "SKIP $($c.item): no pin and no ingredient-map row"; continue }
 
     $f = $feed.ingredients.($m.board_id)
     if (-not $f -or -not $f.cheapest) { Write-Warning "SKIP $($c.item): board_id $($m.board_id) not priced in feed"; continue }

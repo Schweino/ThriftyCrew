@@ -1,0 +1,1 @@
+- add-serving-scaler.ps1 - RETIRED 2026-07-26: the v1 serving-scaler injector (PUT scaler blocks into published posts). Superseded by pipeline\build-card2.ps1, which builds the v2 scaler INTO every card from the spec. Running this against v2 cards would stomp them with v1 blocks. Archived during the ingredient-map re-review.

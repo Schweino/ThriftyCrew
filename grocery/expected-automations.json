@@ -10,7 +10,8 @@
     { "path": "grocery/out/smp-feed.json",             "max_age_hours": 30, "why": "public price feed every card fetches" },
     { "path": "public/smp-feed.json",                  "max_age_hours": 30, "why": "the SERVED feed (Cloudflare)" },
     { "path": "public/free-dinners.json",              "max_age_hours": 30, "why": "this week's free-dinner rotation" },
-    { "path": "meal-prep/pipeline/v2-perserving.json", "max_age_hours": 30, "why": "recipe per-serving manifest (top5/rotation read it)" }
+    { "path": "meal-prep/pipeline/v2-perserving.json", "max_age_hours": 30, "why": "recipe per-serving manifest (top5/rotation read it)" },
+    { "path": "meal-prep/ingredient-map.json",         "max_age_hours": 30, "why": "derived item->bid map (tools + top5 badges read it; regenerated daily)" }
   ],
   "output_globs": [
     { "glob": "grocery/out/comparison-*.json", "max_age_hours": 30, "why": "the daily cross-store board" }
