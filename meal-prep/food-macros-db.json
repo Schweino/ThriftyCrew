@@ -2130,6 +2130,18 @@
                       "notes":  "label: Thai Kitchen Gluten Free Stir Fry Rice Noodles (dry, pad-thai style) [R100 labels-P1.json]"
                   },
                   {
+                      "item":  "Korean glass noodles (dangmyeon)",
+                      "brand":  "generic",
+                      "serving_grams":  100,
+                      "serving_qty":  100,
+                      "serving_unit":  "g dry",
+                      "calories":  350,
+                      "protein_g":  0.2,
+                      "carbs_g":  87,
+                      "fat_g":  0.1,
+                      "notes":  "Sweet potato starch glass noodles (dangmyeon), dry, per 100g. Near-pure starch so ~0 protein/fat, unlike rice noodles (7g protein/100g). Correct macro basis for japchae/jjimdak; added by the overhaul-2 proxy-basis sweep 2026-07-27."
+                  },
+                  {
                       "item":  "Lo Mein Noodles",
                       "brand":  "Simply Asia",
                       "serving_grams":  56,
