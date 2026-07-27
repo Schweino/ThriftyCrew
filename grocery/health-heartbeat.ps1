@@ -25,6 +25,7 @@ $cfg  = Get-Content (Join-Path $root 'expected-automations.json') -Raw | Convert
 $issues = New-Object System.Collections.Generic.List[string]
 $okLines = New-Object System.Collections.Generic.List[string]
 $TASK_NOT_YET_RUN = 267011   # 0x00041303 SCHED_S_TASK_HAS_NOT_RUN
+$TASK_RUNNING     = 267009   # 0x00041301 SCHED_S_TASK_RUNNING (transient: reported as LastTaskResult while a run is in flight)
 
 # ---- Windows scheduled tasks (silent death = deleted / disabled / long-since-run) ----
 foreach ($t in @($cfg.windows_tasks)) {
@@ -41,7 +42,10 @@ foreach ($t in @($cfg.windows_tasks)) {
     continue
   }
   $ageH = [math]::Round(($now - $last).TotalHours, 1)
-  if ($ageH -gt [double]$t.max_age_hours) { $issues.Add(("TASK STALE: '{0}' last ran {1}h ago (> {2}h) - did its trigger stop? {3}" -f $name, $ageH, $t.max_age_hours, $t.why)) }
+  # A task caught mid-run reports LastTaskResult 267009 (SCHED_S_TASK_RUNNING); that is alive, not failed.
+  # This fires whenever the heartbeat's check races the watched task's own run (both scheduled 06:45).
+  if ([string]$task.State -eq 'Running' -or $res -eq $TASK_RUNNING) { $okLines.Add(("{0,-38} currently running (OK)" -f $name)) }
+  elseif ($ageH -gt [double]$t.max_age_hours) { $issues.Add(("TASK STALE: '{0}' last ran {1}h ago (> {2}h) - did its trigger stop? {3}" -f $name, $ageH, $t.max_age_hours, $t.why)) }
   elseif ($res -ne 0) { $issues.Add(("TASK FAILED: '{0}' last result {1} (nonzero) - {2}" -f $name, $res, $t.why)) }
   else { $okLines.Add(("{0,-38} ran {1}h ago, result 0" -f $name, $ageH)) }
 }
