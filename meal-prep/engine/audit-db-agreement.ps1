@@ -24,6 +24,17 @@ foreach($s in $specSlugs.Keys){ if(-not $idxBySlug.ContainsKey($s)){ $issues.Add
 $items=@{}
 foreach($row in (Get-Content (Join-Path $mp 'db\ingredients.json') -Raw | ConvertFrom-Json)){ $items[[string]$row.item]=$row }
 
+# BID single-source (2026-07-27, overhaul-2): db\ingredients.json holds the canonical bid per item, and a
+# spec's scaler bid is a DERIVED copy of it (build-v2-spec). If they diverge, everyday cost (db bid) and the
+# cheapest number (spec bid + feed) price DIFFERENT products - the exact root of a cheapest>everyday
+# inversion. The only legitimate divergence is a per-recipe product variant (a recipe whose prose calls for,
+# and prices, jasmine rice instead of generic rice); those are enumerated in db\spec-bid-overrides.json.
+# Any bid mismatch NOT on that list is drift and fails the guard. gpu is intentionally NOT value-compared:
+# it is unit-reconciled at spec-build time, so spec.gpu legitimately differs from db.gpu.
+$bidOverrides=@{}
+$boF = Join-Path $mp 'db\spec-bid-overrides.json'
+if(Test-Path $boF){ try { $bo=(Get-Content $boF -Raw|ConvertFrom-Json).overrides; foreach($p in $bo.PSObject.Properties){ $bidOverrides[[string]$p.Name]=@($p.Value | ForEach-Object { [string]$_ }) } } catch {} }
+
 # CHEAPEST-FALLBACK guard (2026-07-26 scale hardening): the live card widget + compute-v2 price the
 # "current cheapest" number by looking each ingredient's scaler BID up in the public feed. A bid that is
 # NOT a feed key silently falls back to the everyday price - the recipe shows cheapest == everyday and
@@ -38,7 +49,7 @@ $noPriceOk=@{}
 $npF = Join-Path $mp 'db\no-board-price-ok.json'
 if(Test-Path $npF){ try { $npObj=(Get-Content $npF -Raw|ConvertFrom-Json); $npList=if($npObj.PSObject.Properties.Name -contains 'bids'){ $npObj.bids } else { $npObj }; foreach($x in $npList){ $noPriceOk[[string]$x]=1 } } catch {} }
 
-$bidMiss=0; $fallback=@()
+$bidMiss=0; $fallback=@(); $bidDrift=0
 foreach($s in $specSlugs.Keys){
   if(-not $idxBySlug.ContainsKey($s)){ continue }
   $spec = Get-Content $specs[$s] -Raw | ConvertFrom-Json
@@ -52,6 +63,13 @@ foreach($s in $specSlugs.Keys){
   foreach($ing in $spec.scaler.ing){
     $key = if($ing.PSObject.Properties.Name -contains 'canon' -and $ing.canon){ [string]$ing.canon } else { [string]$ing.item }
     if(-not $items.ContainsKey($key)){ $bidMiss++; if($bidMiss -le 8){ $issues.Add("NO-DB-ITEM: $s ingredient '$key' missing from db\ingredients.json") } }
+    else {
+      $sb  = if($ing.PSObject.Properties.Name -contains 'bid'){ [string]$ing.bid } else { '' }
+      $dbb = if($items[$key].PSObject.Properties.Name -contains 'bid'){ [string]$items[$key].bid } else { '' }
+      if($sb -and $dbb -and $sb -ne $dbb -and -not ($bidOverrides.ContainsKey($key) -and ($bidOverrides[$key] -contains $sb))){
+        $bidDrift++; if($bidDrift -le 8){ $issues.Add("BID-DRIFT: $s '$key' spec bid '$sb' != db bid '$dbb' (not an allowed override; everyday & cheapest would price different products - fix the spec or list it in db\spec-bid-overrides.json)") }
+      }
+    }
     if($feedLoaded){
       $b = if($ing.PSObject.Properties.Name -contains 'bid'){ [string]$ing.bid } else { '' }
       if($b -and (-not $feedKeys.ContainsKey($b)) -and (-not $noPriceOk.ContainsKey($b)) -and (-not $noPriceOk.ContainsKey($key))){
@@ -61,6 +79,7 @@ foreach($s in $specSlugs.Keys){
   }
 }
 if($bidMiss -gt 8){ $issues.Add("... plus $($bidMiss-8) more missing-item lines") }
+if($bidDrift -gt 8){ $issues.Add("... plus $($bidDrift-8) more bid-drift lines") }
 if($fallback.Count){
   foreach($f in ($fallback | Select-Object -First 8)){ $issues.Add("CHEAPEST-FALLBACK: $f") }
   if($fallback.Count -gt 8){ $issues.Add("... plus $($fallback.Count-8) more cheapest-fallback lines (unmapped bid -> add to no-board-price-ok.json if intentional, else fix the bid)") }

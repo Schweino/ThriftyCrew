@@ -1,0 +1,6 @@
+{
+  "_doc": "Single-source exception list for OVERHAUL-2. db/ingredients.json is the canonical bid per item; a recipe spec's scaler bid must equal it, EXCEPT the {item: [allowed spec bids]} pairs here, which are intentional per-recipe product variants (the recipe's prose calls for the specific variant and prices it accurately). audit-db-agreement.ps1 fails closed on any bid mismatch NOT listed here, so accidental spec/db bid drift (the class that makes everyday and cheapest price different products) is caught. gpu is NOT listed: it is a derived, unit-reconciled field (build-v2-spec), so spec.gpu legitimately differs from db.gpu and is not value-compared.",
+  "overrides": {
+    "Rice": ["jasmine-rice"]
+  }
+}
