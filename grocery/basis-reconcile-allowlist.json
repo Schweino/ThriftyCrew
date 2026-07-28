@@ -1,0 +1,6 @@
+{
+    "readme":  "Reviewed disagreements between OUR published per-unit and the STORE'S OWN unit price (audit-basis-reconcile.ps1). An entry means a human looked and decided WE are right and the store's own number is wrong - which does happen: Walmart's unit price is provably wrong sometimes and the product NAME wins (the DERIVED-SIZE lesson). Quote what each side said and why ours stands. Do NOT add an entry to silence a conflict you have not diagnosed: a factor disagreement between two independent statements of the same quantity means one of them is a basis error, and basis errors are the class that lands on the cheapest-store verdict. Match is store + exact item name as it appears on the board.",
+    "allow":  [
+
+              ]
+}
