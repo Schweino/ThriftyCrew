@@ -103,3 +103,6 @@ site-backups/*
 
 # compute-v2 downloads the public feed here as a cache
 /meal-prep/scratch-smpfeed.json
+
+# built recipe cards: regenerated on demand by build-cards; only build/publish read them, never the cloud pipeline
+/meal-prep/db/built/
