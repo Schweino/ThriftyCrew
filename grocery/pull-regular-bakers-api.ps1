@@ -383,6 +383,16 @@ foreach ($tp in $termList) {
       size_raw    = [string]$it.size
       size_basis  = [string]$res.basis
       stock_level = [string]$it.inventory.stockLevel
+      # 2026-07-28: keep Kroger's OWN package weight on the row. The resolver above already uses it to settle
+      # the "4 ct / 16 oz" total-vs-per-item ambiguity at CAPTURE time, but nothing re-checked it afterwards -
+      # and the shipped cell is not the captured row. Carry-forward, an override, a board merge or an engine
+      # change can all move the size or the price downstream, and Kroger has no unit-price field to catch it
+      # (that is stated in this file's own header). netWeight is the one INDEPENDENT statement of package size
+      # this API gives us, so recording it lets audit-basis-reconcile verify what we actually PUBLISH.
+      # soldBy rides along because it decides whether netWeight means anything: on a per-pound card it is the
+      # random tray weight (Tyson breast reads 22.56 lb) and must be ignored, exactly as rule 1 does above.
+      net_weight  = $nwRaw
+      sold_by     = [string]$it.soldBy
     }
     if ($link) { $row['link_url'] = $link }
     if ($promo -gt 0 -and $reg -gt $promo) { $row['base_price'] = $reg; $row['marked_down'] = $true; $stats.promo++ }

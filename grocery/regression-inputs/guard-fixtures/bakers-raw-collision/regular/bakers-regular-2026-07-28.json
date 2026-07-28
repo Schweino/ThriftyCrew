@@ -1,0 +1,29 @@
+﻿{
+    "store":  "Baker\u0027s",
+    "week_of":  "2026-07-28",
+    "price_type":  "everyday",
+    "deals":  [
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Original Cream Cheese",
+                      "ad_price":  "$1.99",
+                      "size":  "8 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "current_price":  1.99,
+                      "net_weight":  "0.5 [lb_av]",
+                      "sold_by":  "UNIT"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Original Cream Cheese",
+                      "ad_price":  "$3.29",
+                      "size":  "2 pk 8 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "current_price":  3.29,
+                      "net_weight":  "1.0 [lb_av]",
+                      "sold_by":  "UNIT"
+                  }
+              ]
+}

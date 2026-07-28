@@ -1,0 +1,45 @@
+﻿{
+    "week_of":  "2026-07-28",
+    "generated":  "FIXTURE - frozen on purpose, do not regenerate",
+    "comparison":  [
+                       {
+                           "commodity":  "Cream Cheese",
+                           "id":  "cream-cheese",
+                           "unit":  "oz",
+                           "cheapest_store":  "Baker\u0027s",
+                           "cheapest_price":  0.2056,
+                           "stores":  [
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.2056,
+                                              "unit":  "",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Kroger Original Cream Cheese",
+                                              "ad":  "$3.29",
+                                              "size":  "2 pk 8 oz",
+                                              "basis":  "size 16 oz",
+                                              "note":  "",
+                                              "source_ad":  "FIXTURE"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.2494,
+                                              "unit":  "",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Great Value Cream Cheese 8 oz",
+                                              "ad":  "$1.99",
+                                              "size":  "8 oz",
+                                              "basis":  "size 8 oz",
+                                              "note":  "",
+                                              "source_ad":  "FIXTURE"
+                                          }
+                                      ]
+                       }
+                   ]
+}

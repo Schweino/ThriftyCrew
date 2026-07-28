@@ -1,0 +1,84 @@
+﻿{
+    "week_of":  "2026-07-28",
+    "generated":  "FIXTURE - frozen on purpose, do not regenerate",
+    "comparison":  [
+                       {
+                           "commodity":  "Butter",
+                           "id":  "butter",
+                           "unit":  "oz",
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.42,
+                           "stores":  [
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.5,
+                                              "unit":  "",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Kerrygold Pure Irish Butter Sticks",
+                                              "ad":  "$8.00",
+                                              "size":  "4 pk 4 oz",
+                                              "basis":  "size 16 oz",
+                                              "note":  "",
+                                              "source_ad":  "FIXTURE"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.42,
+                                              "unit":  "",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Great Value Butter Sticks 16 oz",
+                                              "ad":  "$6.72",
+                                              "size":  "16 oz",
+                                              "basis":  "size 16 oz",
+                                              "note":  "",
+                                              "source_ad":  "FIXTURE"
+                                          }
+                                      ]
+                       },
+                       {
+                           "commodity":  "Chicken Breast",
+                           "id":  "chicken-breast",
+                           "unit":  "lb",
+                           "cheapest_store":  "Baker\u0027s",
+                           "cheapest_price":  2.99,
+                           "stores":  [
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  2.99,
+                                              "unit":  "",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Tyson Boneless Skinless Chicken Breast",
+                                              "ad":  "$2.99",
+                                              "size":  "lb",
+                                              "basis":  "per-lb marker",
+                                              "note":  "",
+                                              "source_ad":  "FIXTURE"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  3.48,
+                                              "unit":  "",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Fresh Chicken Breast",
+                                              "ad":  "$3.48",
+                                              "size":  "lb",
+                                              "basis":  "per-lb marker",
+                                              "note":  "",
+                                              "source_ad":  "FIXTURE"
+                                          }
+                                      ]
+                       }
+                   ]
+}
