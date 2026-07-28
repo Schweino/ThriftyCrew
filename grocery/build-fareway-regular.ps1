@@ -35,7 +35,10 @@ foreach ($f in $In) {
     if (-not $validSet.ContainsKey($id)) { continue }
     $name = [string]$r.name
     if (-not $name -or $name -match 'NOT FOUND') { continue }
-    $price = [string]$r.price; if (-not $price) { continue }
+    # Fareway's capture writes price either bare ("5.39") or already-signed ("$5.39"); every branch below
+    # prefixes '$', so the signed form shipped "$$5.39" to the board (mirin + chipotle-adobo chips, 2026-07-28).
+    # Strip the sign once here so there is exactly one, whatever the capture handed us.
+    $price = ([string]$r.price).Trim().TrimStart('$'); if (-not $price) { continue }
     $per = ([string]$r.per).ToLower()
     $unit = [string]$r.unit
     $size = [string]$r.size
@@ -78,7 +81,7 @@ foreach ($f in $In) {
       $pnM = [regex]::Match($sz.ToLower(), '(\d+(?:\.\d+)?)\s*(?:pt|pint)s?\b'); $pn = if ($pnM.Success) { [double]$pnM.Groups[1].Value } else { 1 }
       $sz = ('{0} oz' -f ($pn * $pintMap[$id]))
     }
-    $reg = if ($r.orig -and "$($r.orig)" -ne '') { '$' + [string]$r.orig } else { '' }
+    $reg = if ($r.orig -and "$($r.orig)" -ne '') { '$' + ([string]$r.orig).Trim().TrimStart('$') } else { '' }
 
     # THE CONTRACT (guards invariant 10): record what the STORE CHARGES, separately from what we publish.
     # `current_price` is parsed from the number the storefront is showing right now, in the SAME basis as

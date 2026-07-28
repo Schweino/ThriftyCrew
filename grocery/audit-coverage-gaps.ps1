@@ -21,6 +21,17 @@ $commods = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-J
 $stores = @('Hy-Vee','Aldi','Family Fare','Fareway',"Baker's","Sam's Club",'Walmart')
 # prepared/different-form words that legitimately are NOT the plain commodity (so a match on them is not a gap)
 $GLOBAL = @('seasoning','marinade','\bsauce\b','\brub\b','\bkit\b','bundle','\bmeal\b','wrapped','breaded','\bnugget','\bjerky\b','flavored','\bdip\b','helper','lunchable','\bsoup\b','gravy','stuffing')
+# ...and the ENGINE's own global exclusions (pet food, baby food, cleaning supplies, personal care), which
+# live in compare-deals.ps1 and were never read here. Without them this audit reports candidates the engine
+# deliberately refuses and can never accept - a Happy Tot baby-food pouch was filed as "Baker's is missing
+# from spinach" every day (2026-07-28). An auditor that disagrees with the engine is a permanent false alarm,
+# so read the real list (same parse audit-match-contested.ps1 uses) instead of keeping a second opinion.
+$ENGINE_GLOBAL = @()
+try {
+  $cdtxt = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
+  $mg = [regex]::Match($cdtxt, '\$GLOBAL_EXCLUDE = @\((?<b>[\s\S]*?)\r?\n\)')
+  if ($mg.Success) { $ENGINE_GLOBAL = @(Invoke-Expression ('@(' + $mg.Groups['b'].Value + ')')) }
+} catch { Write-Output ('WARN could not read the engine GLOBAL_EXCLUDE (' + $_.Exception.Message + ') - gaps may include engine-excluded products') }
 
 # ---- gather each store's RAW pulled product names (same inputs compare-deals uses) ----
 $prod = @{}
@@ -89,6 +100,7 @@ foreach ($c in $commods) {
       # honor the commodity's relax_global waivers (pasta-sauce IS a sauce etc.) so those commodities still
       # get coverage-gap protection instead of every candidate being silently global-excluded
       if (-not $bad) { $relax = @($c.relax_global | Where-Object { $_ }); foreach ($x in $GLOBAL) { if ($relax -notcontains $x -and $nm -imatch $x) { $bad = $true; break } } }
+      if (-not $bad) { $relax = @($c.relax_global | Where-Object { $_ }); foreach ($x in $ENGINE_GLOBAL) { if ($relax -notcontains $x -and $nm -imatch $x) { $bad = $true; break } } }
       if ($bad) { continue }
       $gaps.Add([pscustomobject]@{ commodity = $id; store = $st; candidate = $nm }); break
     }

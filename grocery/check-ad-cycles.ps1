@@ -456,7 +456,12 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       #      distinct flag-set (de-duped via alerted-flags.sig) so a daily re-run doesn't spam. ----
       $flagParts = @()
       $gf = Get-ChildItem (Join-Path $OutDir 'guards-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
-      if ($gf) { $gc = @(Get-Content $gf.FullName -Raw | ConvertFrom-Json); foreach ($x in $gc) { $flagParts += ('SANITY|' + $x.commodity + '|' + $x.type + '|' + $x.detail) } }
+      # @(Get-Content|ConvertFrom-Json) does NOT unroll in PS 5.1: ConvertFrom-Json writes a JSON array to the
+      # pipeline as ONE object, so @() wraps it into a 1-element array. Every sanity outlier therefore collapsed
+      # into a single flagPart whose fields were arrays - the 2026-07-28 email said "16 price(s) to review" for
+      # 54 outliers + 15 multibuys (69), and printed all 54 commodity names mashed into one unreadable line.
+      # Worse, the whole set shared one dedupe signature. Assign first, THEN wrap, so each outlier is its own flag.
+      if ($gf) { $gj = Get-Content $gf.FullName -Raw | ConvertFrom-Json; foreach ($x in @($gj)) { $flagParts += ('SANITY|' + $x.commodity + '|' + $x.type + '|' + $x.detail) } }
       $ff = Get-ChildItem (Join-Path $OutDir 'flagged-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
       if ($ff) { $mb = @((Get-Content $ff.FullName -Raw | ConvertFrom-Json).multibuy_unpriced); foreach ($m in $mb) { $flagParts += ('MULTIBUY|' + $m.store + '|' + $m.label) } }
       $fsigFile = Join-Path $OutDir 'alerted-flags.sig'

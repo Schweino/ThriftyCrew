@@ -46,7 +46,22 @@ foreach ($t in @($cfg.windows_tasks)) {
   # This fires whenever the heartbeat's check races the watched task's own run (both scheduled 06:45).
   if ([string]$task.State -eq 'Running' -or $res -eq $TASK_RUNNING) { $okLines.Add(("{0,-38} currently running (OK)" -f $name)) }
   elseif ($ageH -gt [double]$t.max_age_hours) { $issues.Add(("TASK STALE: '{0}' last ran {1}h ago (> {2}h) - did its trigger stop? {3}" -f $name, $ageH, $t.max_age_hours, $t.why)) }
-  elseif ($res -ne 0) { $issues.Add(("TASK FAILED: '{0}' last result {1} (nonzero) - {2}" -f $name, $res, $t.why)) }
+  elseif ($res -ne 0) {
+    # A nonzero exit is only a SILENT DEATH if the work also failed to land. When the registry names a
+    # 'proves' output and that output is fresh, the task's job got done (a killed-at-the-end run, a battery
+    # stop, a retry that succeeded downstream) - report it, do not page it. Without 'proves' nothing changes.
+    $proofFresh = $false; $proofAge = $null
+    if ($t.PSObject.Properties['proves'] -and $t.proves) {
+      $pp = Join-Path $repo ([string]$t.proves)
+      $newest = @(Get-ChildItem $pp -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 1)
+      if ($newest.Count -gt 0) {
+        $proofAge = [math]::Round(($now - $newest[0].LastWriteTime).TotalHours, 1)
+        if ($proofAge -le [double]$t.max_age_hours) { $proofFresh = $true }
+      }
+    }
+    if ($proofFresh) { $okLines.Add(("{0,-38} result {1} BUT its output is {2}h fresh - work landed, not dead" -f $name, $res, $proofAge)) }
+    else { $issues.Add(("TASK FAILED: '{0}' last result {1} (nonzero) - {2}" -f $name, $res, $t.why)) }
+  }
   else { $okLines.Add(("{0,-38} ran {1}h ago, result 0" -f $name, $ageH)) }
 }
 

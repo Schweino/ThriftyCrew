@@ -309,6 +309,23 @@ function Get-UnitPrice($deal, $cat) {
   }
   if ($unit -eq 'lb' -and $pr.kind.perlb)     { return @{ unit_price=$pr.per_item; basis='per-lb marker'; note=$pr.note } }
   if ($unit -eq 'each' -and $pr.kind.pereach) { return @{ unit_price=$pr.per_item; basis='per-each marker'; note=$pr.note } }
+  # PER-LB RATE PRINTED IN THE SIZE, NOT THE PRICE. Hy-Vee's random-weight items carry the rate in the size
+  # text ("2.85 lbs ($8.99/lb)") while the captured price is that same per-pound rate - the perlb marker above
+  # only reads the PRICE text, so this fell through to the size division below and published $8.99/2.85 =
+  # $3.15/lb for corned beef brisket (65% under the real shelf price), and $1.28/0.85 = $1.51/lb for red
+  # onions (18% over). The tell is exact and self-checking: the captured price EQUALS the rate the size text
+  # spells out, so the price is already per-pound. When it differs the price is a genuine package total and
+  # the division below is right - a 0.15 lb B-size potato at $0.19 with a $1.29/lb rate must still divide.
+  # Restricted to plain prices: a multibuy's computed per-item price could coincide with the rate by accident.
+  if ($unit -eq 'lb' -and $plain) {
+    $slb = [regex]::Match(("" + $deal.size_text), '\(\s*\$\s*(\d+(?:\.\d+)?)\s*/\s*lb\.?\s*\)')
+    if ($slb.Success) {
+      $rate = [double]$slb.Groups[1].Value
+      if ($rate -gt 0 -and [math]::Abs($pr.per_item - $rate) -lt 0.005) {
+        return @{ unit_price=$rate; basis='per-lb rate in size'; note=$pr.note }
+      }
+    }
+  }
   if ($unit -in @('lb','oz','floz','gallon','dozen')) {
     # By-VOLUME container with a commodity-declared dry weight: fresh berries sold by the "pint" are a dry-volume
     # clamshell, not a liquid pint, so their label carries no weight and Convert-ToUnit (which reads pint as 16
@@ -421,6 +438,14 @@ if ($SelfTest) {
   # membership detection (the flag the board uses to gate the nomem column) fires on the Perks pattern, not on plain rows
   if ('Hy-Vee garlic bread, $2.98 PERKS PRICES, NON-MEMBER PRICE $3.48' -match '(?i)perks\s*price') { Write-Output 'ok    Perks membership flag detected' } else { Write-Output 'FAIL  Perks membership flag NOT detected'; $script:fail++ }
   if ('Hy-Vee milk $2.98' -notmatch '(?i)perks\s*price') { Write-Output 'ok    plain Hy-Vee row not flagged membership' } else { Write-Output 'FAIL  plain row wrongly flagged membership'; $script:fail++ }
+
+  # --- 11c: per-lb RATE printed in the size text (2026-07-28 corned-beef / red-onion mispricing) -----------
+  # Hy-Vee random-weight rows read "2.85 lbs ($8.99/lb)" with the per-POUND rate captured as the price. The
+  # price must be published as-is, NOT divided by the weight. These three cases pin all three outcomes.
+  _Near 'per-lb rate in size (heavy pkg)' (Get-UnitPrice (_D '$8.99' 'TableMakers, Corned Beef Brisket Point Cut' $null '2.85 lbs ($8.99/lb)') (_C 'lb')).unit_price 8.99 0.001
+  _Near 'per-lb rate in size (light pkg)' (Get-UnitPrice (_D '$1.28' 'Sweet Red Onions' $null '0.85 lbs ($1.28/lb)') (_C 'lb')).unit_price 1.28 0.001
+  # price != the stated rate -> it IS a package total and must still divide: $0.19 / 0.15 lb = $1.267/lb
+  _Near 'package total w/ rate shown'     (Get-UnitPrice (_D '$0.19' 'B-Size Gold Potatoes' $null '0.15 lbs ($1.29/lb)') (_C 'lb')).unit_price 1.2667 0.001
 
   # --- 12-14: partial-pull coverage (reproduces the 2026-07-23 Walmart flood) -----------------------------
   # A throttled Walmart pull returns ~50 of 410 commodities. Under newest-file-wins that partial REPLACED the
@@ -611,7 +636,10 @@ $GLOBAL_EXCLUDE = @(
   # pet + baby food: no human staple is ever "dog food"/"cat litter"/"Beech Nut" - keep them out of every human
   # commodity (chicken/bacon/rice/sweet-corn were stealing dog food & baby food). The pet/baby commodities
   # relax_global exactly the token they need, so they still match their own products.
-  'dog\s+food','dog\s+treats?','dog\s+biscuits?','cat\s+food','cat\s+litter','beech[\s-]?nut','gerber','happy\s*baby','baby\s+food'
+    # 'happy\s*tot' added 2026-07-28: the Stage-token exclusions stop at "Stage 1-3", so "Happy Tot Stage 4
+  # Organic Pears Blueberries & Spinach Pouch" evaded every baby-food rule and kept surfacing as fresh
+  # spinach (and as a contested match on other produce). The brand is baby/toddler food only, so name it.
+'dog\s+food','dog\s+treats?','dog\s+biscuits?','cat\s+food','cat\s+litter','beech[\s-]?nut','gerber','happy\s*baby','happy\s*tot','baby\s+food'
 )
 # a wrapper rule-file can replace the global list (the recipe set relaxes sauce/canned/frozen/juice)
 if ($GEX_OVERRIDE) { $GLOBAL_EXCLUDE = $GEX_OVERRIDE }

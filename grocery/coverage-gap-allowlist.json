@@ -2,6 +2,11 @@
     "readme":  "Reviewed, legitimate coverage gaps: the store carries the item but it genuinely cannot be priced like-for-like, so audit-coverage-gaps must not keep crying about it. Every entry states WHY, quoting the price_text/size_text the ENGINE actually saw. Do not add an entry to silence a gap you have not diagnosed - the detector exists to catch a store silently vanishing from an item it sells.",
     "allow":  [
                   {
+                      "commodity":  "breakfast-sandwiches",
+                      "store":  "Hy-Vee",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-28): the commodity is priced per EACH and Hy-Vee lists these by pack weight with no sandwich count. Engine saw price_text=[$7.49] size_text=[18 oz] for \"Hy-Vee Sausage, Egg, & Cheese Muffin Breakfast Sandwiches\" - deriving a count from ounces would be inventing one. Not a rule bug. NOTE: the same unit mismatch drops most of this commodity at most stores (Baker's prices only its 1 ct / 2 pk items); if Brad wants real coverage here the fix is to reprice breakfast-sandwiches per OZ, which is a commodity-definition call, not a triage call."
+                  },
+                  {
                       "commodity":  "avocados",
                       "store":  "Hy-Vee",
                       "why":  "UNPRICEABLE (NO-COUNT-BAG, reviewed 2026-07-16): sold as a bag/package with no count, and the commodity is priced per each - the count is unknown and must not be guessed. Engine saw price_text=[$4.00] size_text=[bag] for \"Hass Avocados\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."

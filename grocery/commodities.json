@@ -2466,6 +2466,8 @@
                         "watermelon"
                     ],
         "exclude":  [
+                        "\\bmini\\b",
+                        "\\bpersonal\\b",
                         "cut",
                         "sliced",
                         "chunk",
@@ -5398,6 +5400,8 @@
                         "spinach"
                     ],
         "exclude":  [
+                        "frittata",
+                        "\\bbites\\b",
                         "\\bfrozen\\b",
                         "creamed",
                         "\\bdip\\b",
@@ -13199,7 +13203,7 @@
         "label":  "Tilapia Fillets",
         "unit":  "lb",
         "band_min":  2.5,
-        "band_max":  10,
+        "band_max":  12,
         "relax_global":  [
                              "\\bfrozen\\b"
                          ],
@@ -13209,6 +13213,7 @@
         "exclude":  [
                         "seasoned",
                         "blackened",
+                        "encrusted",
                         "beverage",
                         "\\bdrink\\b",
                         "electrolyte",
@@ -13979,7 +13984,7 @@
         "id":  "whipped-cream",
         "label":  "Whipped Cream / Topping",
         "unit":  "oz",
-        "band_min":  0.15,
+        "band_min":  0.1,
         "band_max":  0.9,
         "relax_global":  [
                              "\\bfrozen\\b"
@@ -33590,6 +33595,7 @@
                         "wild\\s+rice"
                     ],
         "exclude":  [
+                        "\\bcooked\\b",
                         "\\bblend\\b",
                         "long\\s+grain\\s+(?:\u0026|and)\\s+wild",
                         "\\ba\\s*-?\\s*roni\\b",
@@ -35445,6 +35451,10 @@
                         "pomegranates?\\b"
                     ],
         "exclude":  [
+                        "old\\s+orchard",
+                        "\\bcranberry\\b",
+                        "cocktail",
+                        "concentrate",
                         "arils?",
                         "\\bseeds?\\b",
                         "molasses",
@@ -39653,6 +39663,7 @@
                         "tri[\\s-]?colou?r\\s+(?:coleslaw|slaw)"
                     ],
         "exclude":  [
+                        "concord\\s+foods",
                         "dressing",
                         "broccoli",
                         "\\bdeli\\b",
