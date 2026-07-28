@@ -40,6 +40,10 @@ foreach ($r in $old) {
   }
 }
 if ($drops.Count -eq 0) { Write-Output ("cell-drops: ok - no everyday cell lost vs " + $oldF.BaseName); exit 0 }
-Write-Output ("cell-drops: WARNING - {0} everyday cell(s) priced on {1} are missing from today's board (a real leak; carry-forward should have prevented it - check the store's newest pull + as_of expiry):" -f $drops.Count, $oldF.BaseName)
+# Wording fixed 2026-07-28. It used to assert "carry-forward should have prevented it", which sent every
+# reader hunting for a carry-forward bug in Baker's and Walmart - stores that run COMPREHENSIVE pulls and
+# deliberately have no carry-forward at all. For those the usual cause is a search term that failed during
+# the capture, so every product reachable only through it is simply absent from that day's file.
+Write-Output ("cell-drops: WARNING - {0} everyday cell(s) priced on {1} are missing from today's board. Baker's/Walmart run comprehensive pulls with NO carry-forward by design, so a dead search term is an instant hole - check that store's pull for failed terms first; for the browser stores check as_of expiry + carry-forward:" -f $drops.Count, $oldF.BaseName)
 $drops | ForEach-Object { Write-Output ("  " + $_.id + " @ " + $_.store + " (was $" + $_.was + ")") }
 exit 1

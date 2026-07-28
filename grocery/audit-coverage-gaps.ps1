@@ -92,6 +92,15 @@ foreach ($c in $commods) {
     if ($present.ContainsKey($id + '|' + $st)) { continue }
     if ($allow.ContainsKey($id + '|' + $st)) { continue }
     if (-not $prod.ContainsKey($st)) { continue }
+    # Collect up to MAXCAND matching candidates, not just the first. Reporting ONE candidate and stopping
+    # led reviewers to write allowlist entries asserting "the only thing at this store matching the include
+    # regex is X" - a claim this audit's output could never support. On 2026-07-27 that produced at least
+    # five false entries; the worst, tater-tots @ Baker's, was stamped on the strength of a corn-tot match
+    # while the store carried SIX real Ore-Ida tater tot products, one of them fully priceable at
+    # $5.49/32 oz. A one-day-old entry was hiding the estate's largest store from a commodity it carries.
+    # An allowlist decision is only as good as the evidence put in front of the reviewer.
+    $MAXCAND = 5
+    $found = New-Object System.Collections.Generic.List[string]
     foreach ($nm in ($prod[$st] | Select-Object -Unique)) {
       $hit = $false; foreach ($p in $probes) { if ($nm -imatch $p) { $hit = $true; break } }
       if (-not $hit) { continue }
@@ -102,7 +111,13 @@ foreach ($c in $commods) {
       if (-not $bad) { $relax = @($c.relax_global | Where-Object { $_ }); foreach ($x in $GLOBAL) { if ($relax -notcontains $x -and $nm -imatch $x) { $bad = $true; break } } }
       if (-not $bad) { $relax = @($c.relax_global | Where-Object { $_ }); foreach ($x in $ENGINE_GLOBAL) { if ($relax -notcontains $x -and $nm -imatch $x) { $bad = $true; break } } }
       if ($bad) { continue }
-      $gaps.Add([pscustomobject]@{ commodity = $id; store = $st; candidate = $nm }); break
+      $found.Add($nm)
+      if ($found.Count -ge $MAXCAND) { break }
+    }
+    if ($found.Count -gt 0) {
+      $gaps.Add([pscustomobject]@{ commodity = $id; store = $st; candidate = $found[0]
+                                   candidates = @($found); candidate_count = $found.Count
+                                   truncated = ($found.Count -ge $MAXCAND) })
     }
   }
 }
@@ -111,6 +126,14 @@ $report = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); gap_cou
 $report | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $OutDir 'coverage-gaps.json') -Encoding UTF8
 if ($gaps.Count) {
   Write-Output ("coverage-gaps: $($gaps.Count) store(s) DROPPED despite having a matching product:")
-  foreach ($gp in $gaps) { Write-Output ("  {0,-18} {1,-13} <- '{2}'" -f $gp.commodity, $gp.store, $gp.candidate) }
+  # print EVERY candidate, not just the first - a reviewer allowlisting this pair is about to make a
+  # factual claim about what the store carries, so put the whole evidence set in front of them.
+  foreach ($gp in $gaps) {
+    Write-Output ("  {0,-18} {1,-13} <- '{2}'" -f $gp.commodity, $gp.store, $gp.candidate)
+    if ($gp.candidate_count -gt 1) {
+      foreach ($extra in @($gp.candidates)[1..($gp.candidate_count-1)]) { Write-Output ("  {0,-18} {1,-13}    also: '{2}'" -f '', '', $extra) }
+      if ($gp.truncated) { Write-Output ("  {0,-18} {1,-13}    (list truncated - there may be more)" -f '', '') }
+    }
+  }
   exit 2
 } else { Write-Output 'coverage-gaps: none - every store that carries a tracked item is on the board'; exit 0 }

@@ -339,12 +339,27 @@ $seen = @{}          # keyed by productId: a product legitimately answers severa
 $stats = [ordered]@{ terms=0; fail=0; products=0; promo=0; nopriced=0; refused=0 }
 $refusals = New-Object System.Collections.Generic.List[object]
 
-foreach ($tp in $termList) {
+# RETRY FAILED TERMS ONCE (2026-07-28). A term was one HTTP call with no retry, and a failure just
+# `continue`d - so every product only reachable through that term vanished from the day's capture. Because
+# this is a comprehensive pull that deliberately skips carry-forward, a skipped term is an INSTANT HOLE in
+# the board. The 2026-07-28 morning pull had 8 failed terms out of 518 and silently dropped cucumbers,
+# spinach, yeast and canned mixed vegetables from Baker's; a re-pull four hours later had all four back,
+# same store, same rules. It costs ~8 extra requests to stop that, and Baker's had been losing 1-6 cells a
+# day to it. The only pre-existing gate was `products < 100`, which 6,800 rows sail through.
+$pending = [object[]]@($termList)
+$pass = 0
+while ($pending.Count -gt 0 -and $pass -le 1) {
+  if ($pass -eq 1) {
+    Write-Output ("bakers-api: retrying {0} failed term(s) once at a slower pace" -f $pending.Count)
+    Start-Sleep -Seconds 5
+  }
+  $failedThisPass = New-Object System.Collections.Generic.List[object]
+foreach ($tp in $pending) {
   $id = $tp.Name; $term = [string]$tp.Value
   if (-not $term) { continue }
   $url = 'https://api.kroger.com/v1/products?filter.term={0}&filter.locationId={1}&filter.limit={2}' -f [uri]::EscapeDataString($term), $LocationId, $ResultsPerTerm
   try { $r = Get-KrogerJson $url } catch {
-    $stats.fail++; Write-Warning ("term '$term' failed: " + $_.Exception.Message); Start-Sleep -Milliseconds ($PaceMs * 3); continue
+    $failedThisPass.Add($tp); Write-Warning ("term '$term' failed (pass $pass): " + $_.Exception.Message); Start-Sleep -Milliseconds ($PaceMs * 3); continue
   }
   $stats.terms++
   foreach ($p in @($r.data)) {
@@ -401,6 +416,12 @@ foreach ($tp in $termList) {
   }
   Start-Sleep -Milliseconds $PaceMs
 }
+  $pending = [object[]]$failedThisPass.ToArray()
+  $pass++
+}
+# only terms that failed BOTH passes count as failures
+$stats.fail = $pending.Count
+if ($pending.Count -gt 0) { Write-Output ("bakers-api: {0} term(s) failed twice and are NOT in this capture: {1}" -f $pending.Count, (@($pending | ForEach-Object { $_.Value }) -join ', ')) }
 
 Write-Output ("bakers-api: terms ok={0} failed={1} | rows={2} (promo/sale={3}, unpriced={4}, size-REFUSED={5})" -f $stats.terms, $stats.fail, $stats.products, $stats.promo, $stats.nopriced, $stats.refused)
 if ($refusals.Count -gt 0) {
@@ -452,6 +473,16 @@ if ($Verify) {
 # ---------------------------------------------------------------- write
 if ($stats.products -lt 100) {
   Write-Warning ("bakers-api: only $($stats.products) products - refusing to overwrite the capture with a thin pull (a partial pull is an overwrite). Nothing written.")
+  exit 1
+}
+# A ROW-COUNT GATE CANNOT SEE A TERM-SHAPED HOLE (2026-07-28). 8 dead terms out of 518 still yields ~6,800
+# rows, so the check above waves it through while four commodities silently leave the board. Gate on term
+# completeness too, AFTER the retry pass: if more than 2% of terms are still dead, this capture has holes
+# we cannot see the shape of, and yesterday's complete capture is the better thing to keep serving. Same
+# principle as the row gate - a partial pull is an overwrite - just measured on the axis that was blind.
+$termTotal = @($termList).Count
+if ($termTotal -gt 0 -and (($stats.fail / $termTotal) -gt 0.02)) {
+  Write-Warning ("bakers-api: {0} of {1} terms ({2:P1}) failed BOTH passes - refusing to overwrite the capture with a term-holed pull. The newest existing capture keeps serving. Nothing written." -f $stats.fail, $termTotal, ($stats.fail / $termTotal))
   exit 1
 }
 $doc = [ordered]@{

@@ -63,7 +63,9 @@ try {
   try { git -C (Split-Path $root -Parent) pull --rebase --autostash origin main 2>&1 | Select-Object -Last 1 | ForEach-Object { Log ('git: ' + $_) } } catch { Log ('git pull warn: ' + $_.Exception.Message) }
 
   # ---- A: headless API scan ----
-  $rc = RunChild (Join-Path $root 'pull-regular-bakers-api.ps1') @() 2 'api'
+  # keep=4, not 2: the puller's "terms ok=N failed=M" line is the only place a term-shaped hole is visible,
+  # and at keep=2 it was being discarded before it ever reached the log (2026-07-28).
+  $rc = RunChild (Join-Path $root 'pull-regular-bakers-api.ps1') @() 4 'api'
   if ($rc -ne 0) { throw "pull-regular-bakers-api exited $rc (thin pull or API failure) - newest existing capture keeps serving" }
   $rc = RunChild (Join-Path $root 'refresh-bakers-links.ps1') @() 1 'links'
   if ($rc -ne 0) { Log 'WARN refresh-bakers-links nonzero (continuing - guard 4 may flag link disagreements)' }

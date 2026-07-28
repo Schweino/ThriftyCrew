@@ -4,7 +4,7 @@
                   {
                       "commodity":  "breakfast-sandwiches",
                       "store":  "Hy-Vee",
-                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-28): the commodity is priced per EACH and Hy-Vee lists these by pack weight with no sandwich count. Engine saw price_text=[$7.49] size_text=[18 oz] for \"Hy-Vee Sausage, Egg, & Cheese Muffin Breakfast Sandwiches\" - deriving a count from ounces would be inventing one. Not a rule bug. NOTE: the same unit mismatch drops most of this commodity at most stores (Baker's prices only its 1 ct / 2 pk items); if Brad wants real coverage here the fix is to reprice breakfast-sandwiches per OZ, which is a commodity-definition call, not a triage call."
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-28): the commodity is priced per EACH and Hy-Vee lists these by pack weight with no sandwich count. Engine saw price_text=[$7.49] size_text=[18 oz] for \"Hy-Vee Sausage, Egg, \u0026 Cheese Muffin Breakfast Sandwiches\" - deriving a count from ounces would be inventing one. Not a rule bug. NOTE: the same unit mismatch drops most of this commodity at most stores (Baker\u0027s prices only its 1 ct / 2 pk items); if Brad wants real coverage here the fix is to reprice breakfast-sandwiches per OZ, which is a commodity-definition call, not a triage call."
                   },
                   {
                       "commodity":  "avocados",
@@ -618,12 +618,6 @@
                       "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Kodiak Chip Power Cakes Flapjack and Waffle Mix Chocolate Chip\" - pancake/waffle mix, not cake mix. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
                   },
                   {
-                      "commodity":  "tater-tots",
-                      "store":  "Baker\u0027s",
-                      "reviewed":  "2026-07-27",
-                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Kroger Frozen Corn on the Cob Tots Super Sweet\" - corn tots, not potato tater tots. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
-                  },
-                  {
                       "commodity":  "poblano-peppers",
                       "store":  "Family Fare",
                       "reviewed":  "2026-07-27",
@@ -850,6 +844,18 @@
                       "store":  "Baker\u0027s",
                       "reviewed":  "2026-07-27",
                       "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only current Baker\u0027s match is \"Kevin\u0027s Natural Foods Parmesan Basil Chicken with Cauliflower Pasta 24 oz\", a prepared meal. Baker\u0027s fresh cauliflower is absent from the newest complete Kroger API pull, so there is genuinely nothing to price. Delete this entry if fresh cauliflower returns to the pull."
+                  },
+                  {
+                      "commodity":  "tater-tots",
+                      "store":  "Baker\u0027s",
+                      "reviewed":  "2026-07-28",
+                      "candidates_seen":  [
+                                              "Kroger Frozen Corn on the Cob Tots Super Sweet",
+                                              "Alexia Sweet Potato Tot Bite-Sized and Crispy Frozen Potatoes",
+                                              "ACTUAL VEGGIES Crispy Potato Super Tots",
+                                              "Roots Farm Fresh World Famous Tater Tots"
+                                          ],
+                      "why":  "NO LIKE-FOR-LIKE PRICEABLE ROW (re-reviewed 2026-07-28, replacing a FALSE entry). The 2026-07-27 entry claimed \u0027the only thing matching is Kroger Frozen Corn on the Cob Tots\u0027 - that was wrong, and it was wrong because audit-coverage-gaps only ever printed the FIRST candidate (fixed 2026-07-28, it now prints up to 5). Baker\u0027s actually carries SIX Ore-Ida tater tot products. They are still correctly unpriced: every one is a \u0027Seasoned\u0027 variant and \u0027seasoned\u0027 is in the engine\u0027s GLOBAL_EXCLUDE, while tater-tots only relaxes \\\\bfrozen\\\\b. Of the four rows that DO reach the commodity: corn tots are the wrong product; Alexia Sweet Potato 20 oz $6.29 = $0.3145/oz, ACTUAL VEGGIES 14 oz $6.99 = $0.4993/oz and Roots Farm Fresh 15 oz $9.99 = $0.666/oz are all above the 0.3/oz band max - premium/specialty tots, not like-for-like. SEPARATE FINDING, not fixed here: the include regex needs plural \u0027tots\u0027, so \u0027Sonic Super Crispy Tot Frozen Potatoes\u0027 28 oz $6.29 = $0.2246/oz (in band) is missed. Adding a bare \\\\btot\\\\b was rejected as too collision-prone - \u0027Happy Tot\u0027 baby food and \u0027Mott\u0027s for Tots\u0027 juice are both live in this store\u0027s feed."
                   }
               ]
 }

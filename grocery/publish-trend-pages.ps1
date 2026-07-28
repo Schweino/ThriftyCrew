@@ -95,6 +95,14 @@ $okCount = 0
 $failCount = 0
 
 foreach ($c in $data.commodities) {
+  # MIRROR OF build-trend-pages.ps1:176. The builder skips recipe-sourced commodities, so no fragment is
+  # ever written for them - but this publisher had no such filter, so it tried to publish 80 pages that
+  # cannot exist, incremented $failCount 80 times, and the stamp below (written only when failCount is 0)
+  # became STRUCTURALLY IMPOSSIBLE. Result: every publish since 2026-07-17 re-upserted all 491 trend posts,
+  # 982 Ghost round trips plus 147s of Start-Sleep - about 86% of the 467-second publish. The stamp file
+  # sat at 2026-07-17 for eleven days as the evidence, and nobody saw it because the caller pipes this
+  # script to Out-Null and ignores its exit code. Two filters over one list must never drift apart.
+  if ($c.src -eq 'recipe') { continue }
   $hist = @($c.history | Sort-Object week_of)
   if ($hist.Count -lt $MinWeeks) { continue }
 

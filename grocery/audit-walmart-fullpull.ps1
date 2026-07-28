@@ -55,7 +55,21 @@ foreach ($st in $STORES) {
   $newestUnknown = $inWindow | Where-Object { $_.terms -eq $null } | Sort-Object date -Descending | Select-Object -First 1
 
   if ($newestUnknown -and (-not $newestFull -or $newestUnknown.date -gt $newestFull.date)) {
-    Write-Output ("fullpull [{0}]: indeterminate - newest unstamped (pre-pull_terms) capture {1} outranks any stamped-comprehensive file; staying silent until the watch arms" -f $st.label, $newestUnknown.name)
+    # TIME-BOUND THE SILENCE (2026-07-28). "Indeterminate" means we cannot PROVE the newest unstamped
+    # capture is comprehensive - it does not mean everything is fine, and it must not be a permanent gag.
+    # On 2026-07-28 this branch was silent while 334 of 426 live Walmart cells (78% of that store's board)
+    # were priced from an unstamped capture that was already 10 days old, with a hard coverage collapse
+    # dated 2026-08-02 and no advance warning: the alarm would have fired the same day as the damage.
+    # An unknown that is YOUNG is genuinely worth staying quiet about. An unknown that is older than the
+    # warn threshold is worth saying out loud, precisely BECAUSE we cannot verify it. Stays advisory - it
+    # can never block a publish.
+    $unkAge = [int]($today - $newestUnknown.date).TotalDays
+    if ($unkAge -ge $WarnAgeDays) {
+      Write-Output ("fullpull [{0}]: WARNING - the newest capture we can lean on ({1}) is UNSTAMPED, so we cannot prove it is comprehensive, AND it is already {2} days old; at day {3} it leaves the union window and coverage collapses. Every stamped capture in the window is a partial (max pull_terms {4}). Run a full-worklist browser pull." -f $st.label, $newestUnknown.name, $unkAge, $WindowDays, (($inWindow | Where-Object { $_.terms -ne $null } | Measure-Object -Property terms -Maximum).Maximum))
+      $advisory = $true
+      continue
+    }
+    Write-Output ("fullpull [{0}]: indeterminate - newest unstamped (pre-pull_terms) capture {1} is only {2}d old and outranks any stamped-comprehensive file; staying silent until it ages past {3}d or the watch arms" -f $st.label, $newestUnknown.name, $unkAge, $WarnAgeDays)
     continue
   }
   if (-not $newestFull) {

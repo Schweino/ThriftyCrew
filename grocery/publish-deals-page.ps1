@@ -52,7 +52,9 @@ try {
 
 # ---- refresh the link audits so the builder can suppress any wrong (form-flip) "See item" link ----
 try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-links.ps1') | Out-Null } catch {}
-try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-drift.ps1') | Out-Null } catch {}
+# (audit-name-drift ran here too until 2026-07-28 - a verbatim duplicate of the call ~12 lines below, with
+# no state change in between. The LOWER one is the load-bearing one: its comment records that it must run
+# against current product-urls BEFORE the builder or link suppression goes stale. Keeping one, not two.)
 
 # ---- rebuild the embed page (no <h1>; Ghost's post title is the H1) ----
 # Delete the previous embed FIRST and check the builder's exit code: without both, a build crash left
@@ -179,19 +181,29 @@ try {
   $tpStamp = Join-Path $root 'out\trend-pages.stamp'
   $curWk = ''
   try {
-    # EXACT same week derivation as publish-trend-pages' stamp logic (newest week_of across histories)
-    $phd = Get-Content (Join-Path $root 'out\price-history.json') -Raw | ConvertFrom-Json
+    # EXACT same week derivation as publish-trend-pages' stamp logic (newest week_of across histories).
+    # 2026-07-28: this read 'out\price-history.json' - A PATH THAT DOES NOT EXIST. The real file is
+    # grocery\price-history.json (which is what publish-trend-pages itself uses). The bare catch below
+    # swallowed the error, $curWk stayed empty, `if($curWk -and ...)` was always false, and this gate has
+    # therefore never fired once since it was added. A silent catch around a path is how a whole feature
+    # stays dead for weeks. It now logs instead of swallowing.
+    $phd = Get-Content (Join-Path $root 'price-history.json') -Raw | ConvertFrom-Json
     $wks=@(); foreach($c in $phd.commodities){ foreach($e in $c.history){ $wks += [string]$e.week_of } }
     if($wks.Count){ $curWk = (@($wks | Sort-Object))[-1] }
-  } catch {}
+  } catch { Write-Output ("trend gate: could not derive the current week (" + $_.Exception.Message + ") - falling through to a full rebuild") }
   $stampWk = if(Test-Path $tpStamp){ ([string](Get-Content $tpStamp -Raw)).Trim() } else { '' }
   if($curWk -and $stampWk -eq $curWk){
     Write-Output "trend pages up to date for week $curWk - builds skipped"
   } else {
     & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-trend-pages.ps1') | Out-Null
     & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-trend-index.ps1') | Out-Null
+    # Do NOT swallow the child's exit code. publish-trend-pages exits 1 when it cannot stamp, and because
+    # this call piped to Out-Null and ignored $LASTEXITCODE, 80 failures a day were invisible for 11 days.
+    # Report it; do NOT make it fatal - a trend-page problem must never hold the board publish.
     & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-trend-pages.ps1') | Out-Null
-    Write-Output "trend pages built + publish attempted (weekly stamp gate applies)"
+    $tprc = $LASTEXITCODE
+    if ($tprc -ne 0) { Write-Output ("trend pages: publisher exited $tprc - it could NOT write its weekly stamp, so the next publish will redo all of them (see publish-trend-pages output)") }
+    else { Write-Output "trend pages built + published (weekly stamp armed)" }
   }
 } catch { Write-Output ("trend pages step threw: " + $_.Exception.Message + " - board publish unaffected") }
 exit 0
