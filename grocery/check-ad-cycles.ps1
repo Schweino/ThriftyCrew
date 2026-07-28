@@ -464,6 +464,27 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       if ($gf) { $gj = Get-Content $gf.FullName -Raw | ConvertFrom-Json; foreach ($x in @($gj)) { $flagParts += ('SANITY|' + $x.commodity + '|' + $x.type + '|' + $x.detail) } }
       $ff = Get-ChildItem (Join-Path $OutDir 'flagged-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
       if ($ff) { $mb = @((Get-Content $ff.FullName -Raw | ConvertFrom-Json).multibuy_unpriced); foreach ($m in $mb) { $flagParts += ('MULTIBUY|' + $m.store + '|' + $m.label) } }
+      # ---- BASIS CHECKS (2026-07-28). Bands and freshness cannot see a basis error: the price is real and
+      # only the arithmetic is wrong, which is precisely what wins a "cheapest store" verdict. Both audits
+      # write their own report; their findings ride the same review-flag channel so they land in the triage
+      # queue instead of a log nobody reads. Advisory here by design - a store's own unit price is evidence,
+      # not gospel (Walmart's is provably wrong sometimes), so these ask for a decision, they do not block.
+      try {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-basis-reconcile.ps1') | Out-Null
+        $brF = Join-Path $OutDir 'basis-reconcile.json'
+        if (Test-Path $brF) {
+          $brJ = Get-Content $brF -Raw | ConvertFrom-Json
+          foreach ($b in @($brJ.findings)) { $flagParts += ('BASIS|' + $b.id + '|' + $b.store + '|ours ' + $b.ours + '/' + $b.unit + ' vs the store''s own ' + $b.store_says + ' (x' + $b.factor + ') - ' + $b.item) }
+        }
+      } catch { Log ('audit-basis-reconcile threw: ' + $_.Exception.Message) }
+      try {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-pack-basis.ps1') | Out-Null
+        $pbF = Join-Path $OutDir 'pack-basis-audit.json'
+        if (Test-Path $pbF) {
+          $pbJ = Get-Content $pbF -Raw | ConvertFrom-Json
+          foreach ($p in @($pbJ.findings)) { $flagParts += ('PACKBASIS|' + $p.id + '|' + $p.store + '|cheapest only because a ' + $p.count + '-pack count was multiplied into the size (' + $p.published + ' vs ' + $p.as_pack_total + ' as a pack total) - ' + $p.item) }
+        }
+      } catch { Log ('audit-pack-basis threw: ' + $_.Exception.Message) }
       $fsigFile = Join-Path $OutDir 'alerted-flags.sig'
       if ($flagParts.Count -gt 0) {
         $flagSig = (($flagParts | Sort-Object) -join ';')
@@ -481,6 +502,23 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         # clean day: clear the dedupe sig so the SAME flag genuinely recurring in a future week re-alerts.
         if (Test-Path $fsigFile) { Remove-Item $fsigFile -ErrorAction SilentlyContinue }
       }
+
+      # ---- WATCH THE WATCHERS (2026-07-28). A guard that reports nothing looks exactly like a guard that is
+      # broken, and on 2026-07-28 three of them were broken at once while "passing" for days. test-auditors.ps1
+      # replays each watcher's founding bug against a frozen fixture and asserts it still fires (and stays
+      # silent on the clean twin). It runs here, daily, because a blind watcher has to be LOUDER than the
+      # thing it watches - if this fails, every quiet guard above becomes unproven.
+      try {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'test-auditors.ps1') | Out-Null
+        if ($LASTEXITCODE -ne 0) {
+          $ta = (& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'test-auditors.ps1') 2>&1 | ForEach-Object { [string]$_ }) -join "`n"
+          Log 'WATCHERS FAILED: test-auditors could not prove a guard still sees its own bug'
+          $summary += 'WATCHERS  a guard can no longer see its own founding bug - see test-auditors output'
+          if (-not $NoAlert) {
+            & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject 'Grocery: a GUARD has gone blind (test-auditors failed)' -Body ("test-auditors.ps1 replays each watcher's founding bug against a frozen fixture. At least one watcher no longer fires on it, which means any quiet report from that guard is unproven - including a clean board.`n`n" + $ta) | Out-Null
+          }
+        } else { Log 'watchers ok: every guard still fires on its own founding bug' }
+      } catch { Log ('test-auditors threw: ' + $_.Exception.Message) }
 
       # AUTO-PUBLISH only when the board changed. publish-deals-page.ps1 self-gates on coverage, rebuilds
       # (recomputing the sale-window badges), and republishes preserving visibility.

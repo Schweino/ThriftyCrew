@@ -1,0 +1,75 @@
+﻿{
+    "week_of":  "2026-07-27",
+    "generated":  "FIXTURE - frozen on purpose, do not regenerate",
+    "comparison":  [
+                       {
+                           "commodity":  "Furniture Polish / Dusting Spray",
+                           "id":  "furniture-polish",
+                           "unit":  "oz",
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.1439,
+                           "stores":  [
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.1439,
+                                              "unit":  "",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Pledge Furniture Enhancing Polish Spray, Lemon, 3ct., 29 oz.",
+                                              "ad":  "$12.52",
+                                              "size":  "3 ct 29 oz",
+                                              "basis":  "size 87 oz",
+                                              "note":  "",
+                                              "source_ad":  "FIXTURE"
+                                          },
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.2392,
+                                              "unit":  "",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Behold Furniture Polish, Lemon",
+                                              "ad":  "$2.99",
+                                              "size":  "12.5 oz",
+                                              "basis":  "size 12.5 oz",
+                                              "note":  "",
+                                              "source_ad":  "FIXTURE"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.499,
+                                              "unit":  "",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Pledge Expert Care Wood Polish, Lemon, 9.7 oz",
+                                              "ad":  "$4.84",
+                                              "size":  "9.7 oz",
+                                              "basis":  "size 9.7 oz",
+                                              "note":  "",
+                                              "source_ad":  "FIXTURE"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.7206,
+                                              "unit":  "",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Pledge Lemon Clean Furniture Spray 9.7 oz",
+                                              "ad":  "$6.99",
+                                              "size":  "9.7 oz",
+                                              "basis":  "size 9.7 oz",
+                                              "note":  "",
+                                              "source_ad":  "FIXTURE"
+                                          }
+                                      ]
+                       }
+                   ]
+}

@@ -1,0 +1,45 @@
+﻿{
+    "week_of":  "2026-07-27",
+    "generated":  "FIXTURE - frozen on purpose, do not regenerate",
+    "comparison":  [
+                       {
+                           "commodity":  "Cotton Swabs",
+                           "id":  "cotton-swabs",
+                           "unit":  "each",
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.0053,
+                           "stores":  [
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.0053,
+                                              "unit":  "",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Q-tips Cotton Swabs, 1750 ct., 3 pk.",
+                                              "ad":  "$9.28",
+                                              "size":  "1750 ct ($0.01/ea)",
+                                              "basis":  "per-1750-pack",
+                                              "note":  "",
+                                              "source_ad":  "FIXTURE"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.0089,
+                                              "unit":  "",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Equate Cotton Swabs 350 ct",
+                                              "ad":  "$3.12",
+                                              "size":  "350 ct",
+                                              "basis":  "per-350-pack",
+                                              "note":  "",
+                                              "source_ad":  "FIXTURE"
+                                          }
+                                      ]
+                       }
+                   ]
+}

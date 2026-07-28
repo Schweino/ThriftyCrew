@@ -1,0 +1,45 @@
+﻿{
+    "week_of":  "2026-07-27",
+    "generated":  "FIXTURE - frozen on purpose, do not regenerate",
+    "comparison":  [
+                       {
+                           "commodity":  "Corned Beef Brisket (raw)",
+                           "id":  "corned-beef-brisket",
+                           "unit":  "lb",
+                           "cheapest_store":  "Hy-Vee",
+                           "cheapest_price":  3.1544,
+                           "stores":  [
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  3.1544,
+                                              "unit":  "",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "TableMakers, Corned Beef Brisket Point Cut",
+                                              "ad":  "$8.99",
+                                              "size":  "2.85 lbs ($8.99/lb)",
+                                              "basis":  "size 2.85 lb",
+                                              "note":  "",
+                                              "source_ad":  "FIXTURE"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  4.9968,
+                                              "unit":  "",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Blarney Stone Corned Beef Brisket Flat",
+                                              "ad":  "$15.49",
+                                              "size":  "3.1 lb",
+                                              "basis":  "size 3.1 lb",
+                                              "note":  "",
+                                              "source_ad":  "FIXTURE"
+                                          }
+                                      ]
+                       }
+                   ]
+}

@@ -1,0 +1,114 @@
+﻿{
+    "week_of":  "2026-07-27",
+    "generated":  "FIXTURE - frozen on purpose, do not regenerate",
+    "comparison":  [
+                       {
+                           "commodity":  "Bottled Water",
+                           "id":  "bottled-water",
+                           "unit":  "floz",
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.0058,
+                           "stores":  [
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.0058,
+                                              "unit":  "",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Member\u0027s Mark Purified Water, 24 pk., 16.9 fl oz",
+                                              "ad":  "$2.35",
+                                              "size":  "24 ct 16.9 fl oz",
+                                              "basis":  "size 405.6 floz",
+                                              "note":  "",
+                                              "source_ad":  "FIXTURE"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.0169,
+                                              "unit":  "",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Great Value Purified Water, 16.9 fl oz",
+                                              "ad":  "$0.99",
+                                              "size":  "16.9 fl oz",
+                                              "basis":  "size 16.9 floz",
+                                              "note":  "",
+                                              "source_ad":  "FIXTURE"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.0207,
+                                              "unit":  "",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Hy-Vee Purified Water 16.9 fl oz",
+                                              "ad":  "$1.29",
+                                              "size":  "16.9 fl oz",
+                                              "basis":  "size 16.9 floz",
+                                              "note":  "",
+                                              "source_ad":  "FIXTURE"
+                                          }
+                                      ]
+                       },
+                       {
+                           "commodity":  "Grits (quick)",
+                           "id":  "grits",
+                           "unit":  "oz",
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.0449,
+                           "stores":  [
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.0449,
+                                              "unit":  "",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Quaker Quick 5-Minute Grits 5 lb., 3 pk.",
+                                              "ad":  "$10.78",
+                                              "size":  "3 ct 80 oz",
+                                              "basis":  "size 240 oz",
+                                              "note":  "",
+                                              "source_ad":  "FIXTURE"
+                                          },
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.1246,
+                                              "unit":  "",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Quaker Grits, Quick 5-Minute",
+                                              "ad":  "$2.99",
+                                              "size":  "24 oz",
+                                              "basis":  "size 24 oz",
+                                              "note":  "",
+                                              "source_ad":  "FIXTURE"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.1108,
+                                              "unit":  "",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Quaker Quick Grits 5 lb",
+                                              "ad":  "$8.86",
+                                              "size":  "80 oz",
+                                              "basis":  "size 80 oz",
+                                              "note":  "",
+                                              "source_ad":  "FIXTURE"
+                                          }
+                                      ]
+                       }
+                   ]
+}
