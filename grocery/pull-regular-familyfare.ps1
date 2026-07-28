@@ -183,6 +183,25 @@ if ($prevMax -gt 100 -and @($deals).Count -lt ($prevMax * 0.5)) {
   $pfile = Join-Path $qDir ("family-fare-$todayS.throttled.json")
   ([ordered]@{ store='Family Fare'; week_of=$todayS; price_type='everyday'; throttled=$true; deal_count=@($deals).Count; empty_terms=@($empty); deals=$deals } | ConvertTo-Json -Depth 6) | Set-Content $pfile -Encoding UTF8
   Write-Warning ("Family Fare: THROTTLE-WIPEOUT guard tripped - got only " + @($deals).Count + " items vs " + $prevMax + " in the last good file. NOT overwriting; wrote " + $pfile + ". Last good FF prices stay live.")
+  # ALERT ON A CONSECUTIVE RUN OF THROTTLED DAYS (2026-07-28). The guard above is correct and does its job -
+  # it refuses to let a throttled partial overwrite good prices. But it did that SILENTLY, and a throttled
+  # file has been written on 8 of the last 8 days: out\throttled\ holds family-fare-2026-07-21 through -28.
+  # A store whose prices quietly freeze is exactly the failure the whole estate is built to prevent, and the
+  # one signal that it is happening was a Write-Warning nobody reads. One day of throttling is routine
+  # weather; several in a row means the store has stopped refreshing and the board is serving old prices.
+  try {
+    $recent = @(Get-ChildItem (Join-Path $qDir 'family-fare-*.throttled.json') -ErrorAction SilentlyContinue |
+                Where-Object { $_.BaseName -match '(\d{4}-\d{2}-\d{2})' -and [datetime]$Matches[1] -ge (Get-Date).AddDays(-4) })
+    if ($recent.Count -ge 3) {
+      $lastGood = @(Get-ChildItem (Join-Path $OutDir 'regular\family-fare-regular-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1)
+      $lgName = if ($lastGood.Count) { $lastGood[0].Name } else { '(none)' }
+      $body = "Family Fare's pull has hit the throttle-wipeout guard on $($recent.Count) of the last 4 days, so the board is still serving prices from $lgName.`n`n" +
+              "Nothing is WRONG on the board - the guard is refusing to let a throttled partial overwrite good prices, which is correct. The problem is that Family Fare has effectively stopped refreshing, and until now that happened silently.`n`n" +
+              "Today's run collected $(@($deals).Count) items against a best-of-recent of $prevMax, with $(@($empty).Count) term(s) still empty after recovery. Diagnostic: $pfile`n`n" +
+              "Freshop rate-limits several hundred sequential terms from one IP. The fix is fewer requests per window (shard the term list across the day), NOT slower pacing - a 2026-07-28 probe showed 20 terms at 200ms all succeed while a second burst all came back empty, so the budget is per-window request COUNT."
+      & powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'send-alert.ps1') -Subject ("Grocery: Family Fare has been throttled " + $recent.Count + " of the last 4 days - prices frozen") -Body $body | Out-Null
+    }
+  } catch { Write-Warning ('family-fare throttle alert failed: ' + $_.Exception.Message) }
   return
 }
 # CARRY-FORWARD: a pull that returns FEWER products than last time has NOT proved those products are gone.
