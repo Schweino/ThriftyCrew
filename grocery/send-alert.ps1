@@ -20,7 +20,14 @@ param(
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $logFile = Join-Path $root 'alert-log.txt'
-function Log($m) { Add-Content -Path $logFile -Value (("[" + (Get-Date).ToString('s') + "] ") + $m) }
+# a locked log file must never kill the alerter - see the note in check-ad-cycles.ps1 (2026-07-28). This one
+# matters twice over: Log() runs inside the catch that handles a failed queue write, so a locked log here
+# would swallow the alert entirely.
+function Log($m) {
+  $line = ("[" + (Get-Date).ToString('s') + "] ") + $m
+  for ($i = 0; $i -lt 5; $i++) { try { Add-Content -Path $logFile -Value $line -ErrorAction Stop; return } catch { Start-Sleep -Milliseconds 120 } }
+  try { Write-Host ('[log locked, not written] ' + $line) } catch {}
+}
 
 # ---- ONE EMAIL PER ALERT TYPE PER DAY -------------------------------------------------------------------
 # 2026-07-23: a single bad Walmart pull produced ~20 emails in one morning - not because 20 things broke, but

@@ -24,7 +24,12 @@ $ErrorActionPreference = 'Continue'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = Split-Path -Parent $root
 $log  = Join-Path $root 'local-daily-log.txt'
-function Log($m) { Add-Content -Path $log -Value (("[" + (Get-Date).ToString('s') + "] ") + $m) }
+# a locked log file must never kill the run it is logging - see the note in check-ad-cycles.ps1 (2026-07-28)
+function Log($m) {
+  $line = ("[" + (Get-Date).ToString('s') + "] ") + $m
+  for ($i = 0; $i -lt 5; $i++) { try { Add-Content -Path $log -Value $line -ErrorAction Stop; return } catch { Start-Sleep -Milliseconds 120 } }
+  try { Write-Host ('[log locked, not written] ' + $line) } catch {}
+}
 
 # ---- LOG ROTATION (1st of the month): the pipeline logs grow forever and every line rides every bot ----
 # commit. Roll last month's logs into a gitignored archive; git history keeps the old content anyway.

@@ -31,7 +31,12 @@ New-Item -ItemType Directory -Force $logDir | Out-Null
 $log = Join-Path $logDir ('bakers-daily-scan-' + (Get-Date -Format 'yyyy-MM') + '.log')
 # Write-Host, NOT Write-Output: Log is called inside RunChild, and function pipeline output would
 # pollute RunChild's return value (the first test's $rc became [logline, logline, 0] - an array).
-function Log([string]$m){ $line = (Get-Date -Format 'yyyy-MM-dd HH:mm:ss') + '  ' + $m; Add-Content -Path $log -Value $line; Write-Host $line }
+# a locked log file must never kill the scan - see the note in check-ad-cycles.ps1 (2026-07-28)
+function Log([string]$m){
+  $line = (Get-Date -Format 'yyyy-MM-dd HH:mm:ss') + '  ' + $m
+  for ($i = 0; $i -lt 5; $i++) { try { Add-Content -Path $log -Value $line -ErrorAction Stop; break } catch { Start-Sleep -Milliseconds 120 } }
+  Write-Host $line
+}
 # Run a child script, tolerant of stderr noise (PS5.1 + EAP=Stop turns redirected child stderr into a
 # terminating error - that killed the first test run on a downstream script's non-fatal error line).
 function RunChild([string]$file,[object[]]$childArgs,[int]$keep=2,[string]$tag='child'){

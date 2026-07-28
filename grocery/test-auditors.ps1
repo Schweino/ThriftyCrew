@@ -136,6 +136,47 @@ if ($mg.Success) {
   else { Bad ("the GLOBAL_EXCLUDE parse returned " + $ge.Count + " tokens - a reformat has broken every auditor that reads it") }
 } else { Bad 'the GLOBAL_EXCLUDE block can no longer be parsed out of compare-deals.ps1' }
 
+# ---------------------------------------------------------------- 7. a locked log must not kill the pipeline
+# 2026-07-28: a `tail -f` on ad-cycle-log.txt held the file open, Add-Content threw under EAP=Stop, and
+# check-ad-cycles died mid-run TWICE - with no log line explaining it, because logging WAS the failure. An
+# editor with the log open, a backup or an antivirus scan does the same. Reproduce the exact condition:
+# hold an exclusive handle on a log file and assert the Log pattern survives it.
+$logProbe = Join-Path $env:TEMP ('logprobe-' + [guid]::NewGuid().ToString('N').Substring(0,6) + '.txt')
+'seed' | Set-Content $logProbe -Encoding UTF8
+$fs = [IO.File]::Open($logProbe, 'Open', 'ReadWrite', 'None')   # 'None' = no sharing, exactly like a lock
+try {
+  $probeScript = @'
+$ErrorActionPreference = 'Stop'
+$log = $args[0]
+function Log($m) {
+  $line = ("[" + (Get-Date).ToString('s') + "] ") + $m
+  for ($i = 0; $i -lt 5; $i++) { try { Add-Content -Path $log -Value $line -ErrorAction Stop; return } catch { Start-Sleep -Milliseconds 120 } }
+  try { Write-Host ('[log locked, not written] ' + $line) } catch {}
+}
+Log 'first'
+Log 'second'
+Write-Output 'SURVIVED'
+'@
+  $pf = Join-Path $env:TEMP ('logprobe-' + [guid]::NewGuid().ToString('N').Substring(0,6) + '.ps1')
+  Set-Content $pf $probeScript -Encoding UTF8
+  $out = (& powershell -NoProfile -ExecutionPolicy Bypass -File $pf $logProbe 2>&1 | ForEach-Object { [string]$_ }) -join ' '
+  Remove-Item $pf -Force -ErrorAction SilentlyContinue
+  if ($out -match 'SURVIVED') { Ok 'a locked log file does not kill the run (retry-then-continue Log pattern)' }
+  else { Bad ('a locked log file still terminates the run: ' + $out) }
+} finally { $fs.Close(); Remove-Item $logProbe -Force -ErrorAction SilentlyContinue }
+# and assert every pipeline logger actually uses that pattern rather than a bare Add-Content
+$bare = @()
+foreach ($n in 'check-ad-cycles.ps1','run-daily-local.ps1','send-alert.ps1','bakers-daily-scan.ps1','weekly-post-capture.ps1') {
+  $p = Join-Path $root $n
+  if (-not (Test-Path $p)) { continue }
+  $t = Get-Content $p -Raw
+  $m = [regex]::Match($t, '(?ms)^function Log\(.*?^\}|^function Log\([^\r\n]*$')
+  $body = if ($m.Success) { $m.Value } else { '' }
+  if ($body -notmatch 'catch') { $bare += $n }
+}
+if ($bare.Count -eq 0) { Ok 'every pipeline logger retries instead of dying on a locked file' }
+else { Bad ('these loggers still die on a locked log file: ' + ($bare -join ', ')) }
+
 Write-Output ''
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2

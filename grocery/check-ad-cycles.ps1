@@ -32,7 +32,19 @@ $LogFile = Join-Path $root 'ad-cycle-log.txt'
 $asof = if ($Today) { ([datetime]$Today).Date } else { (Get-Date).Date }
 $asofS = $asof.ToString('yyyy-MM-dd')
 function DT([string]$s) { try { return ([datetime]$s).Date } catch { return $null } }
-function Log([string]$m) { Add-Content -Path $LogFile -Value (("[" + (Get-Date).ToString('s') + "] ") + $m) }
+# LOGGING MUST NEVER KILL THE RUN (2026-07-28). $ErrorActionPreference is 'Stop', so a plain Add-Content
+# turns any transient lock on the log file into a TERMINATING error: the pipeline dies mid-flight, and the
+# one thing that would explain why - the log - is the thing that failed, so it stops with no reason recorded.
+# Proved the hard way twice in one afternoon by a `tail -f` on this file; an editor with the log open, a
+# backup, or an antivirus scan does exactly the same. Retry briefly, then carry on WITHOUT the line: a lost
+# log line is a small loss, an abandoned board pull halfway through publishing is a real one.
+function Log([string]$m) {
+  $line = ("[" + (Get-Date).ToString('s') + "] ") + $m
+  for ($i = 0; $i -lt 5; $i++) {
+    try { Add-Content -Path $LogFile -Value $line -ErrorAction Stop; return } catch { Start-Sleep -Milliseconds 120 }
+  }
+  try { Write-Host ('[log locked, not written] ' + $line) } catch {}
+}
 # Price signature of the current board: sorted id|store|per_unit|type over the latest comparison, hashed.
 # Used to re-publish only when a price actually changed (a new ad, a flash sale ending, a mid-cycle fix),
 # so the daily pull can run every day without needlessly re-pushing an unchanged page.

@@ -33,7 +33,12 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 $logDir = Join-Path $root 'out\logs'
 New-Item -ItemType Directory -Force $logDir | Out-Null
 $log = Join-Path $logDir ('weekly-post-capture-' + (Get-Date -Format 'yyyy-MM') + '.log')
-function Log([string]$m){ $line=(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')+'  ['+$Phase+'] '+$m; Add-Content -Path $log -Value $line; Write-Host $line }
+# a locked log file must never kill the capture - see the note in check-ad-cycles.ps1 (2026-07-28)
+function Log([string]$m){
+  $line=(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')+'  ['+$Phase+'] '+$m
+  for ($i = 0; $i -lt 5; $i++) { try { Add-Content -Path $log -Value $line -ErrorAction Stop; break } catch { Start-Sleep -Milliseconds 120 } }
+  Write-Host $line
+}
 function RunChild([string]$file,[object[]]$childArgs,[int]$keep=2,[string]$tag='step',[switch]$NonFatal){
   $prev=$ErrorActionPreference; $ErrorActionPreference='Continue'
   try {
