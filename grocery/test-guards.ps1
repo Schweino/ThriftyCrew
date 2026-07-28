@@ -7,6 +7,31 @@ $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 $pass = 0; $failed = 0
 
+# ---- CRASH-SAFE RESTORE (2026-07-28) -------------------------------------------------------------------
+# This suite tests by BREAKING live production files and putting them back: 16 mutation windows, 13 of them
+# on git-tracked files, and until now not one was protected. Every restore was a bare sequential statement,
+# so a Ctrl-C during a slow guards run (they shell out over a 6 MB Baker's file), a hung child, or any throw
+# left the mutation on disk. That matters because push-data.ps1 runs `git add -A` and pushes: an abandoned
+# mutation gets committed unreviewed on the next refresh. The worst case is commodities.json with its
+# cleaner excludes stripped, which re-creates the founding bathroom-cleaner-priced-as-fruit bug AND is
+# invisible, because audit-household-in-food reads the same file the engine does - the two would agree with
+# each other. Register every backup the moment it is taken; the finally block puts them all back on any exit
+# path. Idempotent: restoring an already-restored file is a no-op write of identical bytes.
+$script:Restores = New-Object System.Collections.Generic.List[object]
+function Backup([string]$path) {
+  # returns the content so callers can keep using their existing $bak variables unchanged
+  $content = Get-Content $path -Raw
+  $script:Restores.Add([pscustomobject]@{ path = $path; content = $content })
+  return $content
+}
+function RestoreAll {
+  foreach ($r in $script:Restores) {
+    try { Set-Content -Path $r.path -Value $r.content -Encoding UTF8 -NoNewline } catch { Write-Warning ("RESTORE FAILED for " + $r.path + " - fix this by hand before committing: " + $_.Exception.Message) }
+  }
+}
+# Ctrl-C does not run finally in every host, so also arm an engine-exit handler.
+$null = Register-EngineEvent PowerShell.Exiting -Action { RestoreAll } -ErrorAction SilentlyContinue
+
 function RunGuards {
   & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'guards.ps1') -Quiet | Out-Null
   return $LASTEXITCODE
@@ -28,10 +53,11 @@ function CheckScript($name, $expect, $script) {
 
 # baseline
 Check 'baseline: guards pass on the current board' 0
+try {
 
 # ---- 1. price-mode -----------------------------------------------------------------
 $f = (Get-ChildItem (Join-Path $root 'out\regular\aldi-regular-*.json') | Sort-Object Name -Desc | Select-Object -First 1).FullName
-$bak = Get-Content $f -Raw
+$bak = Backup $f
 $d = $bak | ConvertFrom-Json; $d.price_mode = 'delivery'
 ($d | ConvertTo-Json -Depth 6) | Set-Content $f -Encoding UTF8
 Check 'price-mode: Aldi flipped to the marked-up DELIVERY catalogue' 2
@@ -42,7 +68,7 @@ Set-Content $f $bak -Encoding UTF8 -NoNewline
 # regenerated daily, so the original "Lysol Mango & Hibiscus" row vanished and this test silently
 # stopped testing anything (it passed by finding nothing). A negative test must create its own fixture.
 $cf = Join-Path $root 'commodities.json'
-$cbak = Get-Content $cf -Raw
+$cbak = Backup $cf
 $c = $cbak | ConvertFrom-Json
 $m = $c | Where-Object { $_.id -eq 'mangoes' }
 # strip EVERY cleaner-ish exclude, including the category-library ones (\bcleaner\b, disinfect, ...) baked in
@@ -53,7 +79,7 @@ $m.exclude = @($m.exclude | Where-Object { $_ -notmatch 'lysol|cleaner|disinfect
 ($c | ConvertTo-Json -Depth 6) | Set-Content $cf -Encoding UTF8
 
 $wf = (Get-ChildItem (Join-Path $root 'out\regular\walmart-regular-*.json') | Sort-Object Name -Desc | Select-Object -First 1).FullName
-$wbak = Get-Content $wf -Raw
+$wbak = Backup $wf
 $w = $wbak | ConvertFrom-Json
 $rows = New-Object System.Collections.ArrayList
 foreach ($r in $w.deals) { [void]$rows.Add($r) }
@@ -68,7 +94,7 @@ Set-Content $cf $cbak -Encoding UTF8 -NoNewline
 
 # ---- 3. rogue pin ------------------------------------------------------------------
 $of = Join-Path $root 'board-price-overrides.json'
-$obak = Get-Content $of -Raw
+$obak = Backup $of
 $o = $obak | ConvertFrom-Json
 $cells = New-Object System.Collections.ArrayList
 foreach ($x in $o.cells) { [void]$cells.Add($x) }
@@ -80,7 +106,7 @@ Set-Content $of $obak -Encoding UTF8 -NoNewline
 
 # ---- 4. factor mismatch ------------------------------------------------------------
 $pf = Join-Path $root 'product-urls.json'
-$pbak = Get-Content $pf -Raw
+$pbak = Backup $pf
 $p = $pbak | ConvertFrom-Json
 # halve a link's recorded size -> its per-unit doubles vs the board = the 2x pack bug
 $target = $p.items.'white-vinegar'.'Sam''s Club'
@@ -91,7 +117,7 @@ Set-Content $pf $pbak -Encoding UTF8 -NoNewline
 
 # ---- 5. multipack size -------------------------------------------------------------
 $sf = (Get-ChildItem (Join-Path $root 'out\regular\sams-regular-*.json') | Sort-Object Name -Desc | Select-Object -First 1).FullName
-$sbak = Get-Content $sf -Raw
+$sbak = Backup $sf
 $s = $sbak | ConvertFrom-Json
 foreach ($r in $s.deals) { if ($r.item -match 'ReaLemon') { $r.size = '48 fl oz' } }   # truth: "2 pk 48 fl oz"
 ($s | ConvertTo-Json -Depth 6) | Set-Content $sf -Encoding UTF8
@@ -121,7 +147,7 @@ Remove-Item $strayF -Force
 # household-in-food test above: A NEGATIVE TEST MUST CREATE ITS OWN FIXTURE. (Guard 8 only looks at extra-deals
 # files dated BEFORE today, which is the point - a markdown captured today is still live.)
 $cmpF = (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Desc | Select-Object -First 1).FullName
-$cbak2 = Get-Content $cmpF -Raw
+$cbak2 = Backup $cmpF
 $cmpD  = $cbak2 | ConvertFrom-Json
 $sirloin = $cmpD.comparison | Where-Object { $_.id -eq 'sirloin-steak' } | Select-Object -First 1
 $hv = $sirloin.stores | Where-Object { $_.store -eq 'Hy-Vee' } | Select-Object -First 1
@@ -170,7 +196,7 @@ if ($hv) {
 # to the regular price - exactly what reading `basePrice` instead of `price` does - and prove guard 10 sees it.
 $hf = (Get-ChildItem (Join-Path $root 'out\regular\hyvee-regular-*.json') |
   Where-Object { $_.BaseName -match '^hyvee-regular-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Desc | Select-Object -First 1).FullName
-$hbak = Get-Content $hf -Raw
+$hbak = Backup $hf
 $hd = $hbak | ConvertFrom-Json
 $md = @($hd.deals | Where-Object { $_.marked_down -and $_.base_price -and $_.current_price }) | Select-Object -First 1
 if ($md) {
@@ -192,6 +218,11 @@ if ($md) {
 # wrong price_multiple would make any ad_price "agree" with any current_price. So plant one and prove the guard
 # still fires. (This exists because the raw comparison hard-failed 18 rows of CORRECT multibuy data, and the
 # fix for a false positive is the easiest place in a gate to accidentally open a real one.)
+# RE-READ FROM THE RESTORED FILE (2026-07-28). The line above restored $hf on disk, but $hd was still the
+# MUTATED in-memory object from step 8, so the write below shipped BOTH mutations - and guard 10 hard-failed
+# on the leftover step-8 row no matter what this test did to price_multiple. This case has therefore been
+# passing for the wrong reason and has never once exercised the price_multiple reconciliation path.
+$hd = $hbak | ConvertFrom-Json
 $mb = @($hd.deals | Where-Object { $_.price_multiple -and $_.current_price -and $_.ad_price }) | Select-Object -First 1
 if ($mb) {
   $mb.price_multiple = ([double]$mb.price_multiple) + 1     # a divisor the store never quoted
@@ -208,7 +239,7 @@ if ($mb) {
 # baseline, no ratchet, no -Strict flag - there is no version of this repo where a wrong link is tolerable).
 # A gate that reports zero is worthless if it cannot fail, so plant one and prove it fires.
 $puF2 = Join-Path $root 'product-urls.json'
-$pubak = Get-Content $puF2 -Raw
+$pubak = Backup $puF2
 $pud = $pubak | ConvertFrom-Json
 $victim = $null
 foreach ($n in @('bananas', 'milk', 'eggs', 'butter')) { if ($pud.items.$n.'Hy-Vee'.url) { $victim = $pud.items.$n.'Hy-Vee'; break } }
@@ -229,7 +260,7 @@ if ($victim) {
 $bkf = (Get-ChildItem (Join-Path $root 'out\regular\bakers-regular-*.json') |
   Where-Object { $_.BaseName -match '^bakers-regular-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Desc | Select-Object -First 1).FullName
 $bkrCsv = Join-Path $root 'out\bakers-prices-raw.csv'
-$bkbak = Get-Content $bkf -Raw
+$bkbak = Backup $bkf
 $bkd = $bkbak | ConvertFrom-Json
 $milk = @($bkd.deals | Where-Object { $_.item -match '2% Reduced Fat Milk' -and $_.upc -and $_.current_price }) | Select-Object -First 1
 if ((Test-Path $bkrCsv) -and $milk) {
@@ -247,7 +278,7 @@ if ((Test-Path $bkrCsv) -and $milk) {
 # Rebuild the exact shape (a produce cell whose matched item is a beverage) and prove audit-food-category
 # sees it.
 $cmpF2 = (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Desc | Select-Object -First 1).FullName
-$cbak3 = Get-Content $cmpF2 -Raw
+$cbak3 = Backup $cmpF2
 $cmpD2 = $cbak3 | ConvertFrom-Json
 $bb = $cmpD2.comparison | Where-Object { $_.id -eq 'blueberries' } | Select-Object -First 1
 $bbCell = $null
@@ -268,7 +299,7 @@ if ($bbCell) {
 # RECIPE-board id, so it skipped all 20 and reported "ok". These two cases are what stop it going quiet again.
 $of = Join-Path $root 'board-price-overrides.json'
 if (Test-Path $of) {
-  $obak = Get-Content $of -Raw
+  $obak = Backup $of
   $o = $obak | ConvertFrom-Json
   if (@($o.cells).Count -gt 0) {
     # 12. a HAND-EDITED pin: doubling per_unit must no longer match the link it claims to be derived from
@@ -290,6 +321,10 @@ if (Test-Path $of) {
   }
 }
 
+} finally {
+  # every mutation above is undone here, on ANY exit path - normal, thrown, or aborted.
+  RestoreAll
+}
 # ---- restored? ---------------------------------------------------------------------
 Check 'restored: guards pass again after every mutation is reverted' 0
 
