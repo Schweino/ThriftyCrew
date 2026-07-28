@@ -1,4 +1,4 @@
-﻿<#
+<#
   check-ad-cycles.ps1 - Runs DAILY (Windows Task Scheduler). Pulls a store's ad only the day AFTER its
   current ad expires, tracks each store's cycle in ad-schedule.json, and keeps the comparison + price
   history fresh when a new ad drops.
@@ -467,15 +467,18 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       #      advisory (we still publish so the board stays current) but must NOT be silent. Alert Brad ONCE per
       #      distinct flag-set (de-duped via alerted-flags.sig) so a daily re-run doesn't spam. ----
       $flagParts = @()
+      # STABLE KEYS, deliberately excluding prices (2026-07-28). See the differential alert block below:
+      # a flag's identity is WHICH commodity/store is flagged, not what today's numbers happen to be.
+      $flagKeys  = @()
       $gf = Get-ChildItem (Join-Path $OutDir 'guards-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
       # @(Get-Content|ConvertFrom-Json) does NOT unroll in PS 5.1: ConvertFrom-Json writes a JSON array to the
       # pipeline as ONE object, so @() wraps it into a 1-element array. Every sanity outlier therefore collapsed
       # into a single flagPart whose fields were arrays - the 2026-07-28 email said "16 price(s) to review" for
       # 54 outliers + 15 multibuys (69), and printed all 54 commodity names mashed into one unreadable line.
       # Worse, the whole set shared one dedupe signature. Assign first, THEN wrap, so each outlier is its own flag.
-      if ($gf) { $gj = Get-Content $gf.FullName -Raw | ConvertFrom-Json; foreach ($x in @($gj)) { $flagParts += ('SANITY|' + $x.commodity + '|' + $x.type + '|' + $x.detail) } }
+      if ($gf) { $gj = Get-Content $gf.FullName -Raw | ConvertFrom-Json; foreach ($x in @($gj)) { $flagParts += ('SANITY|' + $x.commodity + '|' + $x.type + '|' + $x.detail); $flagKeys += ('SANITY|' + $x.commodity + '|' + $x.type) } }
       $ff = Get-ChildItem (Join-Path $OutDir 'flagged-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
-      if ($ff) { $mb = @((Get-Content $ff.FullName -Raw | ConvertFrom-Json).multibuy_unpriced); foreach ($m in $mb) { $flagParts += ('MULTIBUY|' + $m.store + '|' + $m.label) } }
+      if ($ff) { $mb = @((Get-Content $ff.FullName -Raw | ConvertFrom-Json).multibuy_unpriced); foreach ($m in $mb) { $flagParts += ('MULTIBUY|' + $m.store + '|' + $m.label); $flagKeys += ('MULTIBUY|' + $m.store + '|' + $m.id) } }
       # ---- BASIS CHECKS (2026-07-28). Bands and freshness cannot see a basis error: the price is real and
       # only the arithmetic is wrong, which is precisely what wins a "cheapest store" verdict. Both audits
       # write their own report; their findings ride the same review-flag channel so they land in the triage
@@ -486,7 +489,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         $brF = Join-Path $OutDir 'basis-reconcile.json'
         if (Test-Path $brF) {
           $brJ = Get-Content $brF -Raw | ConvertFrom-Json
-          foreach ($b in @($brJ.findings)) { $flagParts += ('BASIS|' + $b.id + '|' + $b.store + '|ours ' + $b.ours + '/' + $b.unit + ' vs the store''s own ' + $b.store_says + ' (x' + $b.factor + ') - ' + $b.item) }
+          foreach ($b in @($brJ.findings)) { $flagKeys += ('BASIS|' + $b.id + '|' + $b.store); $flagParts += ('BASIS|' + $b.id + '|' + $b.store + '|ours ' + $b.ours + '/' + $b.unit + ' vs the store''s own ' + $b.store_says + ' (x' + $b.factor + ') - ' + $b.item) }
         }
       } catch { Log ('audit-basis-reconcile threw: ' + $_.Exception.Message) }
       try {
@@ -494,43 +497,64 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         $pbF = Join-Path $OutDir 'pack-basis-audit.json'
         if (Test-Path $pbF) {
           $pbJ = Get-Content $pbF -Raw | ConvertFrom-Json
-          foreach ($p in @($pbJ.findings)) { $flagParts += ('PACKBASIS|' + $p.id + '|' + $p.store + '|cheapest only because a ' + $p.count + '-pack count was multiplied into the size (' + $p.published + ' vs ' + $p.as_pack_total + ' as a pack total) - ' + $p.item) }
+          foreach ($p in @($pbJ.findings)) { $flagKeys += ('PACKBASIS|' + $p.id + '|' + $p.store); $flagParts += ('PACKBASIS|' + $p.id + '|' + $p.store + '|cheapest only because a ' + $p.count + '-pack count was multiplied into the size (' + $p.published + ' vs ' + $p.as_pack_total + ' as a pack total) - ' + $p.item) }
         }
       } catch { Log ('audit-pack-basis threw: ' + $_.Exception.Message) }
-      $fsigFile = Join-Path $OutDir 'alerted-flags.sig'
-      if ($flagParts.Count -gt 0) {
-        $flagSig = (($flagParts | Sort-Object) -join ';')
-        Log ("REVIEW FLAGS: " + $flagParts.Count + " -> " + (($flagParts | Select-Object -First 4) -join ' ; '))
-        $summary += ("REVIEW    $($flagParts.Count) price flag(s) need eyes (sanity/multibuy) - see guards-/flagged- json")
-        $prevFsig = if (Test-Path $fsigFile) { ([string](Get-Content $fsigFile -Raw)).Trim() } else { '' }
-        if ($flagSig -ne $prevFsig -and -not $NoAlert) {
-          $body = "The daily grocery check flagged $($flagParts.Count) price(s) to review on $asofS (these still published; verify they are real):`n`n" + (($flagParts) -join "`n") + "`n`nSee guards-*.json / flagged-*.json in $OutDir ."
-          # only record the sig when the email actually SENT (send-alert exits 1 on failure); UTF8 so a
-          # non-ASCII char in a flag doesn't corrupt the sig and cause daily re-alerts.
-          & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: $($flagParts.Count) price(s) to review - $asofS" -Body $body | Out-Null
-          if ($LASTEXITCODE -eq 0) { Set-Content -Path $fsigFile -Value $flagSig -Encoding UTF8; Log 'review-flag alert sent' } else { Log 'review-flag alert FAILED to send (will retry next run)' }
-        }
-      } else {
-        # clean day: clear the dedupe sig so the SAME flag genuinely recurring in a future week re-alerts.
-        if (Test-Path $fsigFile) { Remove-Item $fsigFile -ErrorAction SilentlyContinue }
+      # ---- DIFFERENTIAL ALERTING (2026-07-28). The old dedupe hashed the WHOLE flag text into one
+      # signature, and that text embeds prices - so ordinary price movement changed the hash and re-emailed
+      # all 68 flags every single day. About 48 of them are the same benign warehouse-bulk economics
+      # recurring forever, which is precisely how a real flag hides. Measured on this data: keying on
+      # commodity+type instead, 07-27 had 54 and 07-28 had 53, of which only 5 were NEW.
+      # 68 lines a day becomes 5, and nothing is lost - the full set still goes to the report files, each
+      # flag is just shown to a human ONCE.
+      # Deliberately NOT auto-classifying "benign bulk" by heuristic: that can hide a real bug.
+      # "New or returning" is lossless; classification is not.
+      $fstateFile = Join-Path $OutDir 'alerted-flags.json'
+      $fstate = @{}
+      if (Test-Path $fstateFile) {
+        try { foreach ($p in ((Get-Content $fstateFile -Raw | ConvertFrom-Json).PSObject.Properties)) { $fstate[[string]$p.Name] = $p.Value } } catch { $fstate = @{} }
       }
-
-      # ---- WATCH THE WATCHERS (2026-07-28). A guard that reports nothing looks exactly like a guard that is
-      # broken, and on 2026-07-28 three of them were broken at once while "passing" for days. test-auditors.ps1
-      # replays each watcher's founding bug against a frozen fixture and asserts it still fires (and stays
-      # silent on the clean twin). It runs here, daily, because a blind watcher has to be LOUDER than the
-      # thing it watches - if this fails, every quiet guard above becomes unproven.
-      try {
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'test-auditors.ps1') | Out-Null
-        if ($LASTEXITCODE -ne 0) {
-          $ta = (& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'test-auditors.ps1') 2>&1 | ForEach-Object { [string]$_ }) -join "`n"
-          Log 'WATCHERS FAILED: test-auditors could not prove a guard still sees its own bug'
-          $summary += 'WATCHERS  a guard can no longer see its own founding bug - see test-auditors output'
-          if (-not $NoAlert) {
-            & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject 'Grocery: a GUARD has gone blind (test-auditors failed)' -Body ("test-auditors.ps1 replays each watcher's founding bug against a frozen fixture. At least one watcher no longer fires on it, which means any quiet report from that guard is unproven - including a clean board.`n`n" + $ta) | Out-Null
+      if ($flagParts.Count -gt 0) {
+        Log ("REVIEW FLAGS: " + $flagParts.Count + " -> " + (($flagParts | Select-Object -First 4) -join ' ; '))
+        $newIdx = @()
+        for ($fi = 0; $fi -lt $flagParts.Count; $fi++) {
+          $k = if ($fi -lt $flagKeys.Count) { [string]$flagKeys[$fi] } else { [string]$flagParts[$fi] }
+          $isNew = $true
+          if ($fstate.ContainsKey($k)) {
+            # a flag that CLEARED and came back must page again - it is a new event, not the same one
+            try { if (((Get-Date) - [datetime]$fstate[$k].last_seen).TotalDays -le 7) { $isNew = $false } } catch { $isNew = $false }
           }
-        } else { Log 'watchers ok: every guard still fires on its own founding bug' }
-      } catch { Log ('test-auditors threw: ' + $_.Exception.Message) }
+          if ($isNew) { $newIdx += $fi }
+        }
+        $stillOpen = $flagParts.Count - $newIdx.Count
+        $summary += ("REVIEW    $($flagParts.Count) price flag(s) on the board ($($newIdx.Count) new, $stillOpen already seen) - see guards-/flagged- json")
+        if ($newIdx.Count -gt 0 -and -not $NoAlert) {
+          $newLines = @($newIdx | ForEach-Object { $flagParts[$_] })
+          $body = "$($newIdx.Count) NEW price flag(s) on $asofS (these still published; verify they are real):`n`n" + ($newLines -join "`n") +
+                  "`n`n$stillOpen other flag(s) were already reported and are still open - the full set is in guards-*.json / flagged-*.json in $OutDir ."
+          & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: $($newIdx.Count) NEW price flag(s) - $asofS" -Body $body | Out-Null
+          if ($LASTEXITCODE -eq 0) { Log ("review-flag alert sent (" + $newIdx.Count + " new of " + $flagParts.Count + ")") }
+          else { Log 'review-flag alert FAILED to send (will retry next run)'; $newIdx = @() }   # do not mark as seen if it never sent
+        }
+        # mark everything currently flagged as seen (only the ones we actually alerted on get first_seen)
+        $nowS = (Get-Date).ToString('s')
+        for ($fi = 0; $fi -lt $flagParts.Count; $fi++) {
+          $k = if ($fi -lt $flagKeys.Count) { [string]$flagKeys[$fi] } else { [string]$flagParts[$fi] }
+          if (-not $fstate.ContainsKey($k)) { $fstate[$k] = [pscustomobject]@{ first_seen = $nowS; last_seen = $nowS; last_detail = [string]$flagParts[$fi] } }
+          else { $fstate[$k].last_seen = $nowS; $fstate[$k].last_detail = [string]$flagParts[$fi] }
+        }
+      }
+      # prune anything unseen for 30 days so the state file cannot grow forever
+      $cutoff = (Get-Date).AddDays(-30)
+      foreach ($k in @($fstate.Keys)) { try { if ([datetime]$fstate[$k].last_seen -lt $cutoff) { $fstate.Remove($k) } } catch { $fstate.Remove($k) } }
+      try {
+        $tmpF = $fstateFile + '.tmp'
+        ([pscustomobject]$fstate | ConvertTo-Json -Depth 4) | Set-Content $tmpF -Encoding UTF8
+        Move-Item $tmpF $fstateFile -Force
+      } catch { Log ('alerted-flags state write failed: ' + $_.Exception.Message) }
+      # retire the old blob signature - it only ever caused the daily re-alert this replaced
+      $fsigFile = Join-Path $OutDir 'alerted-flags.sig'
+      if (Test-Path $fsigFile) { Remove-Item $fsigFile -ErrorAction SilentlyContinue }
 
       # AUTO-PUBLISH only when the board changed. publish-deals-page.ps1 self-gates on coverage, rebuilds
       # (recomputing the sale-window badges), and republishes preserving visibility.
@@ -732,6 +756,27 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
   Log 'HARD FAILURE - skipped re-compare/publish; board left at last good (alert already sent)'
   $summary += 'HELD      server pull hard-failed - board left at last good, not republished'
 }
+
+# ---- WATCH THE WATCHERS - ALWAYS, outside the downstream branch (hoisted 2026-07-28) ----
+# A guard that reports nothing looks exactly like a guard that is broken, and on 2026-07-28 three of them
+# were broken at once while "passing" for days. test-auditors.ps1 replays each watcher's founding bug
+# against a frozen fixture and asserts it still fires (and stays silent on the clean twin).
+# This deliberately sits OUTSIDE `if ($serverDue -and ... -and (-not $hardFail))`. It used to live inside,
+# which meant it was skipped on exactly the days a guard hard-failed - the days you most need to know
+# whether the guards themselves can still be trusted. It depends on nothing but its own fixtures, so there
+# is no reason for it ever to be conditional. A blind watcher has to be LOUDER than the thing it watches:
+# if this fails, every quiet guard above it becomes unproven, including a clean board.
+try {
+  & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'test-auditors.ps1') | Out-Null
+  if ($LASTEXITCODE -ne 0) {
+    $ta = (& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'test-auditors.ps1') 2>&1 | ForEach-Object { [string]$_ }) -join "`n"
+    Log 'WATCHERS FAILED: test-auditors could not prove a guard still sees its own bug'
+    $summary += 'WATCHERS  a guard can no longer see its own founding bug - see test-auditors output'
+    if (-not $NoAlert) {
+      & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject 'Grocery: a GUARD has gone blind (test-auditors failed)' -Body ("test-auditors.ps1 replays each watcher's founding bug against a frozen fixture. At least one watcher no longer fires on it, which means any quiet report from that guard is unproven - including a clean board.`n`n" + $ta) | Out-Null
+    }
+  } else { Log 'watchers ok: every guard still fires on its own founding bug' }
+} catch { Log ('test-auditors threw: ' + $_.Exception.Message) }
 
 # ---- report ----
 $pullNote = if ($serverDue) { '   (server pull ran)' } else { '   (nothing due)' }
