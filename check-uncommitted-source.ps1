@@ -21,6 +21,7 @@ try {
 $regenRx = @(
   'grocery/out/',                       # all pipeline outputs (board, trend, audit, logs, sigs, captures)
   'grocery/ad-cycle-log', 'grocery/alert-log', 'grocery/local-daily-log',
+  'grocery/alert-sent-',                 # daily alert-dedup markers (send-alert.ps1); rotate by date
   'grocery/board-price-overrides\.json',# generate-board-overrides regenerates
   'grocery/category-excludes\.json',    # apply-category-excludes rebakes the whole file daily
   'grocery/product-urls\.json',         # link resolvers rewrite daily
