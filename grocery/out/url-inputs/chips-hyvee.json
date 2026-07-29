@@ -40,14 +40,6 @@
         "unit":  "oz"
     },
     {
-        "id":  "canned-pineapple",
-        "q":  "canned pineapple chunks",
-        "match":  "Hy-Vee Short Cuts pineapple chunks, FUEL SAVER EARN 5¢ OFF PER GALLON, $4.99 lb.",
-        "size":  "",
-        "pu":  0.0625,
-        "unit":  "oz"
-    },
-    {
         "id":  "carrots",
         "q":  "carrots",
         "match":  "Bunny Luv Organic Whole Carrots",
@@ -62,14 +54,6 @@
         "size":  "lb",
         "pu":  1.77,
         "unit":  "lb"
-    },
-    {
-        "id":  "cottage-cheese",
-        "q":  "cottage cheese",
-        "match":  "Hy Vee 4 Small Curd Cottage Cheese",
-        "size":  "24 oz",
-        "pu":  0.1162,
-        "unit":  "oz"
     },
     {
         "id":  "cotton-swabs",
@@ -192,20 +176,20 @@
         "unit":  "each"
     },
     {
+        "id":  "ground-cinnamon",
+        "q":  "ground cinnamon",
+        "match":  "That\u0027s Smart Ground Cinnamon",
+        "size":  "2.5 oz",
+        "pu":  0.5,
+        "unit":  "oz"
+    },
+    {
         "id":  "ground-turkey",
         "q":  "ground turkey",
         "match":  "Butterball ground turkey roll, 85% lean, 15% fat 16 oz. roll, $3.99",
         "size":  "",
         "pu":  3.99,
         "unit":  "lb"
-    },
-    {
-        "id":  "hot-sauce",
-        "q":  "hot sauce",
-        "match":  "Franks Redhot Original Cayenne Pepper Hot Sauce",
-        "size":  "12 oz",
-        "pu":  0.2492,
-        "unit":  "floz"
     },
     {
         "id":  "jumbo-pasta-shells",
@@ -224,20 +208,20 @@
         "unit":  "each"
     },
     {
-        "id":  "marshmallows",
-        "q":  "marshmallows",
-        "match":  "Hy Vee Marshmallows",
-        "size":  "16 oz",
-        "pu":  0.1056,
-        "unit":  "oz"
-    },
-    {
         "id":  "microwave-popcorn",
         "q":  "microwave popcorn",
         "match":  "Hy Vee Extra Butter Microwave Popcorn 6Ct",
         "size":  "6 ct",
         "pu":  0.615,
         "unit":  "each"
+    },
+    {
+        "id":  "milk",
+        "q":  "milk gallon",
+        "match":  "Thats Smart 2 Reduced Fat Milk",
+        "size":  "gallon",
+        "pu":  3.06,
+        "unit":  "gallon"
     },
     {
         "id":  "muffins",
@@ -270,14 +254,6 @@
         "size":  "lb",
         "pu":  2.99,
         "unit":  "lb"
-    },
-    {
-        "id":  "potato-gnocchi",
-        "q":  "gnocchi",
-        "match":  "Gustare Vita Original Potato Gnocchi",
-        "size":  "16 oz",
-        "pu":  0.1231,
-        "unit":  "oz"
     },
     {
         "id":  "ramen",

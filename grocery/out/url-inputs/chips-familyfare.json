@@ -1,5 +1,13 @@
 ﻿[
     {
+        "id":  "apples",
+        "q":  "apples",
+        "match":  "Lady Apples",
+        "size":  "lb",
+        "pu":  2.19,
+        "unit":  "lb"
+    },
+    {
         "id":  "applesauce",
         "q":  "applesauce",
         "match":  "Mott\u0027s Apple Sauce 6 Ea",
@@ -102,6 +110,14 @@
         "size":  "1 rl",
         "pu":  1.3738,
         "unit":  "each"
+    },
+    {
+        "id":  "toasted-sesame-seeds",
+        "q":  "sesame seeds",
+        "match":  "Mc Cormick Sesame Seed 1 Oz",
+        "size":  "1 oz",
+        "pu":  2.69,
+        "unit":  "oz"
     },
     {
         "id":  "shower-cleaner",

@@ -48,14 +48,6 @@
         "unit":  "oz"
     },
     {
-        "id":  "blueberries",
-        "q":  "blueberries",
-        "match":  "Emergency Essentials Freeze-Dried Whole Blueberries, 10 oz",
-        "size":  "each",
-        "pu":  0.48,
-        "unit":  "oz"
-    },
-    {
         "id":  "brown-gravy-mix",
         "q":  "brown gravy mix",
         "match":  "Great Value Reduced Sodium Brown Gravy Mix, 0.87 oz Packet",
@@ -202,7 +194,7 @@
     {
         "id":  "fish-sauce",
         "q":  "fish sauce",
-        "match":  "Kikkoman Glutenâ€‘Free Fish Sauce, 6.8 fl oz Glass Bottle",
+        "match":  "Kikkoman Gluten‑Free Fish Sauce, 6.8 fl oz Glass Bottle",
         "size":  "6.8 fl oz",
         "pu":  0.4176,
         "unit":  "floz"
@@ -221,6 +213,14 @@
         "match":  "Dole Fruit Bowls No Sugar Added Variety Pack, 4 oz Cups (12 Pack)",
         "size":  "48 oz",
         "pu":  0.7783,
+        "unit":  "each"
+    },
+    {
+        "id":  "fruit-snacks",
+        "q":  "fruit snacks",
+        "match":  "Plum Organics® Teensy® Snacks Mixed Berry Soft Fruit Snacks .35oz Pouch/5-Count Box",
+        "size":  "1.747 oz",
+        "pu":  0.566,
         "unit":  "each"
     },
     {
@@ -266,9 +266,9 @@
     {
         "id":  "hamburger-buns",
         "q":  "hamburger buns",
-        "match":  "Ball Park Tailgaters Gourmet Extra Large Buns, 8 count, White Hamburger Buns, 21 oz Bag",
-        "size":  "21 oz",
-        "pu":  0.515,
+        "match":  "Nature\u0027s Own 100% Whole Wheat Hamburger Buns, Non-GMO Hamburger Buns, 28g Whole Grains per Bun, 8 Ct",
+        "size":  "14.981 oz",
+        "pu":  0.4962,
         "unit":  "each"
     },
     {
@@ -296,14 +296,6 @@
         "unit":  "oz"
     },
     {
-        "id":  "hot-sauce",
-        "q":  "hot sauce",
-        "match":  "Fairbury Fully Cooked Skinless, Red Hot Dogs, Vacuum Sealed, Refrigerated, Plastic Pouch, 32 oz",
-        "size":  "2 lb",
-        "pu":  0.3038,
-        "unit":  "floz"
-    },
-    {
         "id":  "italian-seasoning",
         "q":  "italian seasoning",
         "match":  "Great Value Italian Seasoning, 2 oz",
@@ -326,14 +318,6 @@
         "size":  "120.847 oz",
         "pu":  1.426,
         "unit":  "dozen"
-    },
-    {
-        "id":  "lime-juice",
-        "q":  "lime juice bottle",
-        "match":  "Great Value Lime 100% Juice, 15 fl oz (Shelf Stable)",
-        "size":  "15.1 fl oz",
-        "pu":  0.0907,
-        "unit":  "floz"
     },
     {
         "id":  "fresh-mint",
@@ -456,14 +440,6 @@
         "unit":  "oz"
     },
     {
-        "id":  "salsa",
-        "q":  "salsa mild",
-        "match":  "Great Value Thick and Chunky Salsa Mild",
-        "size":  "16 oz",
-        "pu":  0.1231,
-        "unit":  "oz"
-    },
-    {
         "id":  "sesame-oil",
         "q":  "sesame oil",
         "match":  "Oi! Toasted Pure Sesame Oil 250 ml",
@@ -493,22 +469,6 @@
         "match":  "Bella Sun Luci Sun Dried Tomatoes in Olive Oil with Italian",
         "size":  "8.5 oz",
         "pu":  0.6094,
-        "unit":  "oz"
-    },
-    {
-        "id":  "taco-seasoning",
-        "q":  "taco seasoning",
-        "match":  "Great Value Taco Seasoning Mix, Original, 1 oz",
-        "size":  "1 oz",
-        "pu":  0.47,
-        "unit":  "oz"
-    },
-    {
-        "id":  "tahini",
-        "q":  "tahini",
-        "match":  "Krinos Tahini Spread with Velvety Texture 16oz Jar - Premium",
-        "size":  "16 oz",
-        "pu":  0.3731,
         "unit":  "oz"
     },
     {

@@ -1,67 +1,11 @@
 ﻿[
     {
-        "id":  "almond-milk",
-        "q":  "unsweetened almond milk",
-        "match":  "Simple Truth Plant Based Non Dairy Unsweetened Almondmilk Half Gallon",
-        "size":  "1/2 gal",
-        "pu":  0.0436,
-        "unit":  "floz"
-    },
-    {
-        "id":  "baby-wipes",
-        "q":  "baby wipes",
-        "match":  "Comforts Fragrance Free Baby Wipes",
-        "size":  "72 ct",
-        "pu":  0.0318,
-        "unit":  "each"
-    },
-    {
-        "id":  "baked-beans",
-        "q":  "baked beans",
-        "match":  "Saucy Spoon Vegetarian Sweet Hickory Flavor Baked Beans 28 oz",
-        "size":  "28 oz",
-        "pu":  0.0782,
-        "unit":  "oz"
-    },
-    {
-        "id":  "coffee",
-        "q":  "ground coffee",
-        "match":  "Kroger Original Medium Roast Ground Coffee",
-        "size":  "29 oz",
-        "pu":  0.4997,
-        "unit":  "oz"
-    },
-    {
-        "id":  "dishwasher-detergent",
-        "q":  "dishwasher detergent pacs",
-        "match":  "Cascade Complete Action Pacs Dishwasher Detergent Fresh",
-        "size":  "100 ct",
-        "pu":  0.2499,
-        "unit":  "each"
-    },
-    {
-        "id":  "deli-ham",
-        "q":  "sliced deli ham",
-        "match":  "Frick\u0027s Applewood Smoked Sliced Ham",
-        "size":  "24 oz",
-        "pu":  0.3329,
-        "unit":  "oz"
-    },
-    {
-        "id":  "ice-cream",
-        "q":  "vanilla ice cream",
-        "match":  "Kroger 1883 Vanilla Ice Cream Party Pail BIG DEAL!",
-        "size":  "1 gal",
-        "pu":  0.0546,
-        "unit":  "floz"
-    },
-    {
-        "id":  "sports-drinks",
-        "q":  "gatorade",
-        "match":  "Gatorade Orange Sports Drink Multipack Bottles",
-        "size":  "12 pk 12 fl oz",
-        "pu":  0.0555,
-        "unit":  "floz"
+        "id":  "cherries",
+        "q":  "fresh cherries",
+        "match":  "Washington Red Cherries",
+        "size":  "lb",
+        "pu":  3.99,
+        "unit":  "lb"
     },
     {
         "id":  "tomatoes",

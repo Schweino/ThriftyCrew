@@ -1,5 +1,21 @@
 ﻿[
     {
+        "id":  "bagels",
+        "q":  "plain bagels",
+        "match":  "Thomas\u0027 Plain Bagels, 12 pk.",
+        "size":  "36.737 oz",
+        "pu":  0.5817,
+        "unit":  "each"
+    },
+    {
+        "id":  "bar-soap",
+        "q":  "bar soap",
+        "match":  "Irish Spring Bar Soap, Original  Clean, 4 oz., 20 ct.",
+        "size":  "80 oz",
+        "pu":  0.549,
+        "unit":  "each"
+    },
+    {
         "id":  "bottled-water",
         "q":  "purified water 24 pack",
         "match":  "Member\u0027s Mark Purified Water 16.9 fl. oz., 40 pk.",
@@ -16,20 +32,28 @@
         "unit":  "each"
     },
     {
+        "id":  "beef-stew",
+        "q":  "canned beef stew",
+        "match":  "Dinty Moore Beef Stew, 15 oz., 6 pk.",
+        "size":  "6 ct 15 oz",
+        "pu":  0.1538,
+        "unit":  "oz"
+    },
+    {
+        "id":  "canned-chili",
+        "q":  "chili with beans can",
+        "match":  "Nalley Original Chili with Beans, 15 oz., 12 pk.",
+        "size":  "12 ct 15 oz",
+        "pu":  0.0988,
+        "unit":  "oz"
+    },
+    {
         "id":  "coconut-milk-canned",
         "q":  "coconut milk canned",
         "match":  "Thai Kitchen Unsweetened Coconut Milk 13.66 fl. oz. cans, 6 pk.",
         "size":  "6 ct 13.66 fl oz",
         "pu":  0.1371,
         "unit":  "floz"
-    },
-    {
-        "id":  "canned-corn",
-        "q":  "whole kernel corn",
-        "match":  "Del Monte Whole Kernel Corn, 106 oz.",
-        "size":  "106 oz",
-        "pu":  0.0543,
-        "unit":  "oz"
     },
     {
         "id":  "diced-tomatoes",
@@ -48,11 +72,19 @@
         "unit":  "oz"
     },
     {
-        "id":  "canned-peas",
-        "q":  "sweet peas can",
-        "match":  "Del Monte Sweet Peas, 105 oz.",
-        "size":  "105 oz",
-        "pu":  0.0678,
+        "id":  "canned-pasta",
+        "q":  "canned ravioli",
+        "match":  "Chef Boyardee Beef Ravioli 15 oz., 12 pk.",
+        "size":  "12 ct 15 oz",
+        "pu":  0.0708,
+        "unit":  "oz"
+    },
+    {
+        "id":  "canned-pears",
+        "q":  "canned pears",
+        "match":  "Del Monte Lite Pear Halves, 15 oz., 8 pk.",
+        "size":  "8 ct 15 oz",
+        "pu":  0.1248,
         "unit":  "oz"
     },
     {
@@ -64,12 +96,28 @@
         "unit":  "oz"
     },
     {
-        "id":  "coffee-creamer",
-        "q":  "coffee creamer",
-        "match":  "Nestle Coffee mate Liquid Non-Dairy Refrigerated Coffee Creamer, French Vanilla, 66 fl. oz.",
-        "size":  "66 fl oz",
-        "pu":  0.0861,
-        "unit":  "floz"
+        "id":  "chicken-noodle-soup",
+        "q":  "chicken noodle soup",
+        "match":  "Progresso Traditional Chicken Noodle Soup, 19 oz., 6 pk.",
+        "size":  "6 ct 19 oz",
+        "pu":  0.0919,
+        "unit":  "oz"
+    },
+    {
+        "id":  "cream-of-chicken-soup",
+        "q":  "cream of chicken soup",
+        "match":  "Campbell\u0027s Condensed Cream of Chicken Soup 10.5 oz., 8 pk.",
+        "size":  "8 ct 10.5 oz",
+        "pu":  0.1069,
+        "unit":  "oz"
+    },
+    {
+        "id":  "cream-of-mushroom-soup",
+        "q":  "cream of mushroom soup",
+        "match":  "Campbell\u0027s Cream of Mushroom Soup 10.5 oz., 8 pk.",
+        "size":  "8 ct 10.5 oz",
+        "pu":  0.1069,
+        "unit":  "oz"
     },
     {
         "id":  "tomatoes-green-chilies",
@@ -80,11 +128,27 @@
         "unit":  "oz"
     },
     {
+        "id":  "disinfectant-spray",
+        "q":  "disinfectant spray",
+        "match":  "Clorox Anywhere Daily Disinfectant \u0026 Sanitizing Spray 32 fl. oz., 12 ct.",
+        "size":  "12 ct 32 fl oz",
+        "pu":  0.156,
+        "unit":  "oz"
+    },
+    {
         "id":  "donuts",
         "q":  "glazed donuts",
         "match":  "Duchess Mini Frosted Donuts, 3 oz, 12 pk.",
         "size":  "36 oz",
         "pu":  0.6933,
+        "unit":  "each"
+    },
+    {
+        "id":  "fruit-snacks",
+        "q":  "fruit snacks",
+        "match":  "Welch\u0027s Mixed Fruit Fruit Snack, 0.8 oz, 90 pk.",
+        "size":  "72 oz",
+        "pu":  0.1327,
         "unit":  "each"
     },
     {
@@ -112,14 +176,6 @@
         "unit":  "each"
     },
     {
-        "id":  "hot-dogs",
-        "q":  "hot dogs",
-        "match":  "Member\u0027s Mark Beef Hot Dogs, 2 oz., 24 ct.",
-        "size":  "24 ct 2 oz",
-        "pu":  0.2262,
-        "unit":  "oz"
-    },
-    {
         "id":  "italian-seasoning",
         "q":  "italian seasoning",
         "match":  "Member\u0027s Mark Italian Seasoning, 6 oz.",
@@ -136,6 +192,14 @@
         "unit":  "dozen"
     },
     {
+        "id":  "lemons",
+        "q":  "lemons",
+        "match":  "Starry Mini Cans Lemon Lime, 7.5 fl. oz., 30 pk.",
+        "size":  "225 fl oz",
+        "pu":  0.5327,
+        "unit":  "each"
+    },
+    {
         "id":  "egg-whites",
         "q":  "liquid egg whites",
         "match":  "Member\u0027s Mark Liquid Egg Whites 16 oz., 6 pk.",
@@ -144,12 +208,20 @@
         "unit":  "floz"
     },
     {
-        "id":  "orange-juice",
-        "q":  "orange juice",
-        "match":  "Member\u0027s Mark Pulp-Free 100% Orange Juice, 52 fl. oz., 2 pk.",
-        "size":  "104 fl oz",
-        "pu":  0.0667,
-        "unit":  "floz"
+        "id":  "mangoes",
+        "q":  "mango",
+        "match":  "Monster Energy Mango Loco, 16 fl. oz., 24 pk.",
+        "size":  "384 fl oz",
+        "pu":  1.77,
+        "unit":  "each"
+    },
+    {
+        "id":  "muffins",
+        "q":  "blueberry muffins",
+        "match":  "Entenmann\u0027s Little Bites Chocolate Chip Muffins, 1.5 oz., 20 pk.",
+        "size":  "30 oz",
+        "pu":  0.589,
+        "unit":  "each"
     },
     {
         "id":  "pita-bread",
@@ -162,9 +234,17 @@
     {
         "id":  "refried-beans",
         "q":  "refried beans",
-        "match":  "Isadora Original Refried Beans Pouch, 15.2 oz., 8 pk.",
-        "size":  "8 ct 15.2 oz",
-        "pu":  0.0821,
+        "match":  "Old El Paso Traditional Refried Beans 16 oz., 6 pk.",
+        "size":  "6 ct 16 oz",
+        "pu":  0.0806,
+        "unit":  "oz"
+    },
+    {
+        "id":  "sloppy-joe-sauce",
+        "q":  "sloppy joe sauce manwich",
+        "match":  "Manwich Sloppy Joe Sauce, 15 oz., 6 pk.",
+        "size":  "6 ct 15 oz",
+        "pu":  0.0842,
         "unit":  "oz"
     },
     {
@@ -184,6 +264,14 @@
         "unit":  "each"
     },
     {
+        "id":  "whipped-cream",
+        "q":  "whipped topping",
+        "match":  "Member\u0027s Mark Original Dairy Whipped Topping 15 oz., 3 pk.",
+        "size":  "3 ct 15 oz",
+        "pu":  0.1771,
+        "unit":  "oz"
+    },
+    {
         "id":  "whole-chicken",
         "q":  "whole chicken",
         "match":  "Member\u0027s Mark Organic Whole Chickens, Case, priced per pound",
@@ -194,9 +282,9 @@
     {
         "id":  "yogurt",
         "q":  "yogurt",
-        "match":  "Yoplait Go-Gurt Simple Kids Low-fat Yogurt, Variety Pack, 2.25 oz., 32ct.",
-        "size":  "32 ct 2.25 oz",
-        "pu":  0.0769,
+        "match":  "Yoplait Original Lowfat Yogurt Variety Pack, 6 oz., 18 ct.",
+        "size":  "18 ct 6 oz",
+        "pu":  0.0739,
         "unit":  "oz"
     }
 ]

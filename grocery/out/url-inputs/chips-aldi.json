@@ -56,6 +56,22 @@
         "unit":  "oz"
     },
     {
+        "id":  "fruit-snacks",
+        "q":  "fruit snacks",
+        "match":  "Simply Nature Organic Fruit Snacks 12 CT",
+        "size":  "9.6 oz",
+        "pu":  0.4125,
+        "unit":  "each"
+    },
+    {
+        "id":  "fresh-green-beans",
+        "q":  "fresh green beans",
+        "match":  "French Green Beans, Package",
+        "size":  "1 lb",
+        "pu":  2.99,
+        "unit":  "lb"
+    },
+    {
         "id":  "hamburger-buns",
         "q":  "hamburger buns",
         "match":  "L\u0027oven Fresh Hamburger Buns",
@@ -96,14 +112,6 @@
         "unit":  "oz"
     },
     {
-        "id":  "ribeye-steak",
-        "q":  "ribeye steak",
-        "match":  "Thin Sliced Ribeye Steak Per LB",
-        "size":  "lb",
-        "pu":  10.99,
-        "unit":  "lb"
-    },
-    {
         "id":  "sun-dried-tomatoes",
         "q":  "sun dried tomatoes",
         "match":  "Tuscan Garden Sundried Tomatoes",
@@ -125,14 +133,6 @@
         "match":  "Casa Mamita Taco Seasoning Mix",
         "size":  "1 oz",
         "pu":  0.46,
-        "unit":  "oz"
-    },
-    {
-        "id":  "walnuts",
-        "q":  "chopped walnuts",
-        "match":  "Southern Grove Chopped Walnuts 8 OZ",
-        "size":  "8 oz",
-        "pu":  0.3488,
         "unit":  "oz"
     }
 ]

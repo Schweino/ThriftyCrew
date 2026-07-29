@@ -1,10 +1,34 @@
 ﻿[
     {
+        "id":  "flour",
+        "q":  "all purpose flour",
+        "match":  "Fareway Flour, All Purpose",
+        "size":  "10 lb",
+        "pu":  0.499,
+        "unit":  "lb"
+    },
+    {
         "id":  "apples",
         "q":  "apples",
         "match":  "Golden Delicious Apple",
         "size":  "lb",
         "pu":  1.68,
+        "unit":  "lb"
+    },
+    {
+        "id":  "asparagus",
+        "q":  "asparagus",
+        "match":  "Asparagus",
+        "size":  "lb",
+        "pu":  4.99,
+        "unit":  "lb"
+    },
+    {
+        "id":  "bacon",
+        "q":  "bacon",
+        "match":  "Hormel Black Label Black Label Original Bacon",
+        "size":  "16 oz",
+        "pu":  4.99,
         "unit":  "lb"
     },
     {
@@ -24,6 +48,14 @@
         "unit":  "lb"
     },
     {
+        "id":  "bar-soap",
+        "q":  "bar soap",
+        "match":  "Irish Spring Men\u0027s Bar Soap, Original Clean",
+        "size":  "3 ct",
+        "pu":  1.23,
+        "unit":  "each"
+    },
+    {
         "id":  "chicken-breast",
         "q":  "boneless skinless chicken breast",
         "match":  "All-Natural Boneless Skinless Chicken Breast",
@@ -40,6 +72,14 @@
         "unit":  "each"
     },
     {
+        "id":  "cake-mix",
+        "q":  "yellow cake mix",
+        "match":  "Jiffy Golden Yellow Cake Mix",
+        "size":  "each",
+        "pu":  1.29,
+        "unit":  "each"
+    },
+    {
         "id":  "canned-peas",
         "q":  "sweet peas can",
         "match":  "Fareway Sweet Peas",
@@ -48,12 +88,76 @@
         "unit":  "oz"
     },
     {
+        "id":  "carrots",
+        "q":  "carrots",
+        "match":  "Carrot",
+        "size":  "2 lb",
+        "pu":  1.245,
+        "unit":  "lb"
+    },
+    {
         "id":  "celery",
         "q":  "celery",
         "match":  "Celery",
         "size":  "1 ct",
         "pu":  1.99,
         "unit":  "each"
+    },
+    {
+        "id":  "cheese-tortellini",
+        "q":  "cheese tortellini",
+        "match":  "Louisa Four Cheese Tortellini",
+        "size":  "19 oz",
+        "pu":  0.2621,
+        "unit":  "oz"
+    },
+    {
+        "id":  "cherries",
+        "q":  "fresh cherries",
+        "match":  "Red Cherries",
+        "size":  "lb",
+        "pu":  4.99,
+        "unit":  "lb"
+    },
+    {
+        "id":  "chili-crisp",
+        "q":  "chili crisp",
+        "match":  "Dynasty Hot Chili Oil, Spicy",
+        "size":  "5.5 oz",
+        "pu":  1.0891,
+        "unit":  "oz"
+    },
+    {
+        "id":  "clam-chowder",
+        "q":  "clam chowder canned",
+        "match":  "Campbell\u0027s New England Clam Chowder18.8 fl oz",
+        "size":  "18.8 fl oz",
+        "pu":  0.1319,
+        "unit":  "oz"
+    },
+    {
+        "id":  "clementines",
+        "q":  "mandarins clementines",
+        "match":  "Mandarin Clementine",
+        "size":  "3 lb",
+        "pu":  1.9967,
+        "unit":  "lb"
+    },
+    {
+        "id":  "corn-dogs",
+        "q":  "corn dogs",
+        "match":  "State Fair Fully Cooked Classic Corn Dogs, Frozen, 6 Count",
+        "size":  "6 ct",
+        "pu":  0.8317,
+        "unit":  "each"
+    },
+    {
+        "id":  "cream-cheese",
+        "q":  "cream cheese",
+        "match":  "Fareway Cream Cheese, Original",
+        "size":  "8 oz",
+        "pu":  0.1862,
+        "unit":  "oz"
     },
     {
         "id":  "croissants",
@@ -80,12 +184,36 @@
         "unit":  "each"
     },
     {
+        "id":  "dishwasher-detergent",
+        "q":  "dishwasher detergent pacs",
+        "match":  "Cascade Complete Dishwasher Detergent Fresh",
+        "size":  "16 ct",
+        "pu":  0.4056,
+        "unit":  "each"
+    },
+    {
+        "id":  "dog-food",
+        "q":  "dry dog food",
+        "match":  "Rachael Ray Nutrish Adult Dry Dog Food Real Beef, Pea \u0026 Brown Rice Recipe, 13 lb. Bag",
+        "size":  "208 oz",
+        "pu":  1.5377,
+        "unit":  "lb"
+    },
+    {
         "id":  "dryer-sheets",
         "q":  "dryer sheets",
         "match":  "Bright Essentials Dryer Sheets, Fresh Scent, Wrinkle Reducing",
         "size":  "120 ct",
         "pu":  0.0328,
         "unit":  "each"
+    },
+    {
+        "id":  "energy-drinks",
+        "q":  "energy drink",
+        "match":  "Alani Nu Cotton Candy Energy Drink Can",
+        "size":  "12 fl oz",
+        "pu":  0.2242,
+        "unit":  "floz"
     },
     {
         "id":  "facial-tissues",
@@ -96,12 +224,36 @@
         "unit":  "each"
     },
     {
+        "id":  "fish-sauce",
+        "q":  "fish sauce",
+        "match":  "KA-ME Fish Sauce",
+        "size":  "7 fl oz",
+        "pu":  0.6271,
+        "unit":  "floz"
+    },
+    {
         "id":  "storage-bags",
         "q":  "gallon freezer bags",
         "match":  "Bright Essentials Freezer Bags, Double Zipper, Gallon Size",
         "size":  "15 ct",
         "pu":  0.152,
         "unit":  "each"
+    },
+    {
+        "id":  "french-bread",
+        "q":  "french bread",
+        "match":  "Bakery Fresh French Baguette",
+        "size":  "1 ct",
+        "pu":  1.99,
+        "unit":  "each"
+    },
+    {
+        "id":  "chicken-nuggets",
+        "q":  "frozen chicken nuggets",
+        "match":  "Tyson Frozen Chicken Nuggets Family Pack, 4-Pound",
+        "size":  "4 lb",
+        "pu":  0.2178,
+        "unit":  "oz"
     },
     {
         "id":  "frozen-lasagna",
@@ -168,6 +320,14 @@
         "unit":  "each"
     },
     {
+        "id":  "grapes",
+        "q":  "grapes",
+        "match":  "Combo Red \u0026 Green Seedless Grapes",
+        "size":  "lb",
+        "pu":  2.88,
+        "unit":  "lb"
+    },
+    {
         "id":  "deli-ham",
         "q":  "sliced deli ham",
         "match":  "Cedar Hollow Foods Cherry Wood Ham",
@@ -190,6 +350,14 @@
         "size":  "50 fl oz",
         "pu":  0.1194,
         "unit":  "floz"
+    },
+    {
+        "id":  "honey-mustard",
+        "q":  "honey mustard",
+        "match":  "Fareway Honey Mustard",
+        "size":  "12 oz",
+        "pu":  0.1567,
+        "unit":  "oz"
     },
     {
         "id":  "hot-dog-buns",
@@ -296,6 +464,30 @@
         "unit":  "oz"
     },
     {
+        "id":  "mushrooms",
+        "q":  "white mushrooms",
+        "match":  "Highline Sliced White Mushrooms",
+        "size":  "8 oz",
+        "pu":  0.2488,
+        "unit":  "oz"
+    },
+    {
+        "id":  "paper-napkins",
+        "q":  "paper napkins",
+        "match":  "Bright Essentials 2-Ply Everyday Napkins",
+        "size":  "100 ct",
+        "pu":  0.0199,
+        "unit":  "each"
+    },
+    {
+        "id":  "paper-plates",
+        "q":  "paper plates",
+        "match":  "Bright Essentials Heavy-Duty Designer 7 Inch Paper Plates",
+        "size":  "48 ct",
+        "pu":  0.0623,
+        "unit":  "each"
+    },
+    {
         "id":  "paper-towels",
         "q":  "paper towels",
         "match":  "Scott One-Ply Choose-A-Sheet Fast Absorbing Double Rolls Paper Towels",
@@ -318,6 +510,22 @@
         "size":  "lb",
         "pu":  1.99,
         "unit":  "lb"
+    },
+    {
+        "id":  "pears",
+        "q":  "bartlett pears",
+        "match":  "Bartlett Pear",
+        "size":  "lb",
+        "pu":  1.77,
+        "unit":  "lb"
+    },
+    {
+        "id":  "popsicles",
+        "q":  "popsicles",
+        "match":  "Bomb Pop Original Ice Pops",
+        "size":  "12 ct",
+        "pu":  0.2492,
+        "unit":  "each"
     },
     {
         "id":  "pork-chops",
@@ -344,6 +552,30 @@
         "unit":  "each"
     },
     {
+        "id":  "queso",
+        "q":  "salsa con queso",
+        "match":  "Tostitos Medium Con Queso Salsa Dip",
+        "size":  "23 oz",
+        "pu":  0.1952,
+        "unit":  "oz"
+    },
+    {
+        "id":  "ramen",
+        "q":  "ramen noodles",
+        "match":  "Maruchan Ramen Noodle Soup, Chicken",
+        "size":  "each",
+        "pu":  0.37,
+        "unit":  "each"
+    },
+    {
+        "id":  "ribeye-steak",
+        "q":  "ribeye steak",
+        "match":  "USDA Choice Thick Cut Ribeye Steak",
+        "size":  "lb",
+        "pu":  24.99,
+        "unit":  "lb"
+    },
+    {
         "id":  "rotisserie-chicken",
         "q":  "rotisserie chicken",
         "match":  "Roasted Whole Chicken",
@@ -357,6 +589,30 @@
         "match":  "Russet Potato Bag",
         "size":  "5 lb",
         "pu":  0.598,
+        "unit":  "lb"
+    },
+    {
+        "id":  "salmon",
+        "q":  "salmon fillet",
+        "match":  "Demings Salmon, Pink, Wild Caught Alaskan",
+        "size":  "14.75 oz",
+        "pu":  5.4129,
+        "unit":  "lb"
+    },
+    {
+        "id":  "sandwich-bags",
+        "q":  "sandwich bags",
+        "match":  "Bright Essentials Sandwich Bags, Double Zipper, Sandwich Size",
+        "size":  "50 ct",
+        "pu":  0.0456,
+        "unit":  "each"
+    },
+    {
+        "id":  "shrimp",
+        "q":  "frozen raw shrimp",
+        "match":  "Supreme Choice Raw Shrimp Shell-On 51-60 ct",
+        "size":  "12 oz",
+        "pu":  8.6533,
         "unit":  "lb"
     },
     {
@@ -382,6 +638,22 @@
         "size":  "8 pk 20 fl oz",
         "pu":  0.053,
         "unit":  "floz"
+    },
+    {
+        "id":  "string-cheese",
+        "q":  "mozzarella string cheese",
+        "match":  "Fareway Low-Moisture Part-Skim Sticks Mozzarella String Cheese",
+        "size":  "12 oz",
+        "pu":  0.2908,
+        "unit":  "oz"
+    },
+    {
+        "id":  "stuffing-mix",
+        "q":  "stuffing mix",
+        "match":  "Fareway Cornbread Stuffing Mix",
+        "size":  "6 oz",
+        "pu":  0.365,
+        "unit":  "oz"
     },
     {
         "id":  "sweet-potatoes",

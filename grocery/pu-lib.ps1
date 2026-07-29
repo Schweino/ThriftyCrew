@@ -87,8 +87,27 @@ function Get-LinkPerUnit {
     # The converter below has always known litres - it was the SIZE pattern that did not: the bare 'l\b' cannot
     # match "2 ltr" because a 't' follows the 'l', so soda came back unpriceable rather than wrong. A parse gap
     # that returns $null is the safe failure mode, but it is still a gap; 2 real cells sat unverifiable on it.
-    $q = [regex]::Match($s, '(\d+(?:\.\d+)?)\s*(fl\s*oz|floz|oz|lbs?|pound|ct|count|ea|pk|gal|gallon|qt|quart|dozen|doz|ml|ltr|liters?|litres?|l)\b')
-    if ($q.Success) {
+    # FRACTIONAL SIZE ("1/2 gal", "3/4 lb") MUST BE TESTED BEFORE THE PLAIN-NUMBER MATCH. Without this the
+    # pattern below finds the "2" in "1/2 gal" and reads it as TWO gallons - 4x the real 64 fl oz - so a link
+    # priced a $4.99 half gallon at $0.0195/fl oz against the board's correct $0.078 and guards.ps1 hard-failed
+    # three Baker's cells at exactly 0.25x (buttermilk, half-and-half, almondmilk) on 2026-07-29.
+    # compare-deals fixed this long ago; pu-lib never got the fix - two copies of the same math, one of them
+    # wrong, which is precisely the class board-data-integrity warns about. Keep the rules identical.
+    # A FRACTION HAS THE SMALLER NUMBER ON TOP. "6/4 oz" is not six-quarters of an ounce, it is the count/size
+    # pack idiom (6 cups of 4 oz = 24 oz), so numerator >= denominator means MULTIPLY, not divide.
+    $n = $null; $un = $null
+    $mf = [regex]::Match($s, '(\d+)\s*/\s*(\d+(?:\.\d+)?)\s*(fl\s*oz|floz|oz|lbs?|pound|gal|gallon|qt|quart|pt|pint|ml|ltr|liters?|litres?|l)\b')
+    if ($mf.Success) {
+      $num = [double]$mf.Groups[1].Value; $den = [double]$mf.Groups[2].Value
+      if ($den -gt 0) {
+        $n = if ($num -lt $den) { $num / $den } else { $num * $den }
+        $un = (($mf.Groups[3].Value -replace '\s','') -replace 'fl','') -replace '^(ltr|liters?|litres?)$','l'
+      }
+    }
+    $q = if ($null -eq $n) { [regex]::Match($s, '(\d+(?:\.\d+)?)\s*(fl\s*oz|floz|oz|lbs?|pound|ct|count|ea|pk|gal|gallon|qt|quart|dozen|doz|ml|ltr|liters?|litres?|l)\b') } else { $null }
+    if ($null -ne $n) {
+      # already resolved by the fractional branch
+    } elseif ($q.Success) {
       $n = [double]$q.Groups[1].Value
       $un = (($q.Groups[2].Value -replace '\s','') -replace 'fl','') -replace '^(ltr|liters?|litres?)$','l'
     } else {
