@@ -264,6 +264,35 @@
                                            "Seeds of Change Certified Organic Quinoa and Brown Rice with Garlic 8.5 oz., 6 pk."
                                        ],
                       "verdict_reason":  "Sam\u0027s brown-rice cell was a microwaveable organic quinoa/rice pouch 6-pack at $3.76/lb against ~$0.90-1.19/lb for dry rice everywhere else. guards.ps1 caught it as a 0.27x factor mismatch against its own link (Mahatma Brown Rice 5 lb, $0.996/lb) - the link was right and the BOARD row was the wrong product."
+                  },
+                  {
+                      "commodity":  "(batch)",
+                      "pattern":  "coffee frappuccino / avocado cups / fabric conditioner / canned Allens green beans",
+                      "added":  "2026-07-29",
+                      "source":  "guards.ps1 factor-mismatch after the broader 25-per-term Sam\u0027s capture",
+                      "from_weeks":  [
+                                         "2026-07-29"
+                                     ],
+                      "killed_items":  [
+                                           "Starbucks Frappuccino Vanilla Coffee 9.5 fl oz 15 pk",
+                                           "GoVerden Perfectly Ripe Avocado 2 oz cups 16 ct",
+                                           "Snuggle SuperFresh Liquid FABRIC Conditioner",
+                                           "Allens Italian Style Green Beans 28 oz 6 pk"
+                                       ],
+                      "verdict_reason":  "Capturing 25 candidates per term instead of 6 is the right call - it took Sam\u0027s from 1.2 to 22.5 priced rows per term and restored 339 board cells - but a broader net also surfaces more impostors, and the cheapest one wins. These four are the classic forms: a bottled coffee DRINK priced per fl oz against ground coffee per oz, avocado PULP cups on the whole-avocado row, FABRIC conditioner on the hair-conditioner row, and CANNED green beans on the fresh per-lb row. guards.ps1 caught every one as a board-vs-link factor mismatch."
+                  },
+                  {
+                      "commodity":  "trash-bags",
+                      "pattern":  "\\b([2-9]|1[0-2])[\\s-]?gallon\\b",
+                      "added":  "2026-07-29",
+                      "source":  "sanity-check outlier (49% below runner-up)",
+                      "from_weeks":  [
+                                         "2026-07-29"
+                                     ],
+                      "killed_items":  [
+                                           "Member\u0027s Mark 4-Gallon Drawstring Trash Bags, 200 ct."
+                                       ],
+                      "verdict_reason":  "This commodity is the 13-GALLON tall kitchen bag. A 4-gallon bin liner is cheaper per bag because it is a smaller bag, not a better deal - it won the row at $0.067/bag against $0.133 for real kitchen bags. Excludes bag sizes 2-12 gallon; 13 gallon and \"tall kitchen\" are untouched."
                   }
               ]
 }

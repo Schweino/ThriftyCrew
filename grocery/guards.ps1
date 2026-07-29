@@ -459,6 +459,27 @@ foreach ($f in (RegFiles)) {
   $fileDate = $today
   if ($f.BaseName -match '(\d{4}-\d{2}-\d{2})$') { try { $fileDate = [datetime]$Matches[1] } catch {} }
 
+  # MEASURE THE FILE THE ENGINE ACTUALLY PRICED FROM (2026-07-29). Sam's is the one store that does not write
+  # out\regular\<store>-regular-<date>.json - its prices reach the board through out\sams\sams-deals-*.json via
+  # -SamsFile, and out\regular\sams-regular-*.json only ever held a one-off hand-promotion from 2026-07-14
+  # ("promoted from verified recipe pricing", 60 rows) that NOTHING refreshes. So this check was aging out an
+  # orphan and hard-failing the publish on a day the Sam's pull had just succeeded with 316 terms and 7,110
+  # rows. A gate that fails no matter how well the job runs is a gate people learn to ignore.
+  # Same principle derive-links-from-prices already adopted: index the SAME files the engine priced from.
+  $altGlob = switch ($store) {
+    "Sam's Club" { 'out\sams\sams-deals-*.json' }
+    "Baker's"    { 'out\bakers\bakers-deals-*.json' }
+    'Fareway'    { 'out\fareway\fareway-deals-*.json' }
+    default      { '' }
+  }
+  if ($altGlob) {
+    $alt = Get-ChildItem (Join-Path $root $altGlob) -ErrorAction SilentlyContinue |
+           Where-Object { $_.BaseName -match '\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
+    if ($alt -and $alt.BaseName -match '(\d{4}-\d{2}-\d{2})$') {
+      try { $altDate = [datetime]$Matches[1]; if ($altDate -gt $fileDate) { $fileDate = $altDate } } catch {}
+    }
+  }
+
   $age = [int]($today - $fileDate).TotalDays
   $verifiedToday = 0
   foreach ($r in $dated) { if (([string]$r.as_of) -eq (Get-Date -Format 'yyyy-MM-dd')) { $verifiedToday++ } }

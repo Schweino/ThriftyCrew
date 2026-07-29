@@ -34,7 +34,11 @@
 
   Read-only unless -Apply.
 #>
-param([switch]$Apply, [string]$OutDir = "")
+# -Store scopes the derivation to one store. Added 2026-07-29 after a global -Apply re-pointed ~40 FAREWAY
+# links onto pack prices where the board holds per-unit (24x, 100x, 120x factor mismatches on the publish
+# gate) while fixing the Sam's links it was actually run for. When only one store's prices moved, only that
+# store's links should move: a link layer this wide should never be rewritten wholesale to fix one store.
+param([switch]$Apply, [string]$OutDir = "", [string]$Store = "")
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
@@ -49,6 +53,11 @@ $STORES = @(
   @{ store = 'Aldi'; glob = 'aldi-regular-*.json' }
   @{ store = 'Fareway'; glob = 'fareway-regular-*.json' }
 )
+if ($Store) {
+  $STORES = @($STORES | Where-Object { $_.store -eq $Store })
+  if ($STORES.Count -eq 0) { throw ("derive-links-from-prices: unknown -Store '$Store'") }
+  Write-Output ("scoped to $Store only - no other store's links will be touched")
+}
 
 # The board is NOT priced from out\regular\ alone: compare-deals also ingests out\bakers\bakers-deals-*.json,
 # out\fareway\fareway-deals-*.json, and EVERY out\sams\sams-deals-*.json inside a 14-day window (Sam's is

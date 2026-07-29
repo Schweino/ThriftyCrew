@@ -15,9 +15,15 @@
   It is a COMPLEMENT to send-alert.ps1 (email), not a replacement: use -AlsoEmail when the run is unattended
   and the wall means a store will go stale. On screen for "you can fix this now", email for the record.
 
+  *** CLICKING OK IS THE RESUME SIGNAL *** (Brad, 2026-07-29: "clicking ok on the alert you gave me should
+  be confirmation for you to resume"). Dismissing the dialog writes out\notify-ack-<store>.json. The agent
+  polls for that file instead of asking Brad to type anything - the click is the handshake. Any stale ack is
+  deleted when a new prompt is raised, so a leftover from last week can never read as "already cleared".
+
   Usage:
     .\notify-desktop.ps1 -Store "Sam's Club" -Detail "human-verification wall after 203 of 526 terms"
     .\notify-desktop.ps1 -Title "Grocery run needs you" -Message "..." -AlsoEmail
+    .\notify-desktop.ps1 -WaitForAck "Sam's Club" -TimeoutMin 20     # block until OK is clicked
 #>
 param(
   [string]$Store   = "",
@@ -25,7 +31,10 @@ param(
   [string]$Title   = "",
   [string]$Message = "",
   [switch]$AlsoEmail,
-  [switch]$SelfTest
+  [switch]$SelfTest,
+  # Poll for the ack a prompt writes when it is dismissed. Prints ACK or TIMEOUT; exit 0 = cleared to resume.
+  [string]$WaitForAck = "",
+  [int]$TimeoutMin = 20
 )
 $ErrorActionPreference = 'Continue'   # a notifier must not throw into the caller
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\income\grocery' }
@@ -51,6 +60,19 @@ challenge, then tell me and I'll resume the pull from where it stopped.
        else { "An automated grocery run needs attention. Nothing more specific was passed - check the run's log and notify-log.txt." }
   return @{ Title = $t; Message = $m }
 }
+if ($WaitForAck) {
+  $slugW = ($WaitForAck.ToLower() -replace '[^a-z0-9]', '')
+  $ackW  = Join-Path $root ("out\notify-ack-$slugW.json")
+  $deadline = (Get-Date).AddMinutes($TimeoutMin)
+  Write-Output ("waiting for the OK click on the $WaitForAck prompt (up to $TimeoutMin min)...")
+  while ((Get-Date) -lt $deadline) {
+    if (Test-Path $ackW) { Write-Output ("ACK - $WaitForAck prompt was dismissed; cleared to resume"); exit 0 }
+    Start-Sleep -Seconds 5
+  }
+  Write-Output ("TIMEOUT - no OK click on the $WaitForAck prompt within $TimeoutMin min; still blocked")
+  exit 1
+}
+
 $p = New-Prompt $Store $Detail $Title $Message (Get-Date -Format 'ddd HH:mm')
 $Title = $p.Title; $Message = $p.Message
 
@@ -76,17 +98,31 @@ if ($SelfTest) {
 }
 
 # ---- the prompt, in a DETACHED process so an unattended run is never held up ---------------------------
+# CLICKING OK IS THE RESUME SIGNAL (Brad, 2026-07-29: "clicking ok on the alert you gave me should be
+# confirmation for you to resume"). The detached process writes an ACK file the moment the dialog is
+# dismissed, so the agent can poll for it instead of asking Brad to type anything. The ack is deleted up
+# front, so a stale one from a previous wall can never read as "already cleared" - that would have the agent
+# charge back into a wall it was never released from.
+$slug = if ($Store) { ($Store.ToLower() -replace '[^a-z0-9]', '') } else { 'run' }
+$ackFile = Join-Path $root ("out\notify-ack-$slug.json")
+try { if (Test-Path $ackFile) { Remove-Item $ackFile -Force } } catch {}
 try {
   $t = $Title   -replace "'", "''"
   $m = $Message -replace "'", "''"
+  $a = $ackFile -replace "'", "''"
+  $s = $slug    -replace "'", "''"
   $inner = "Add-Type -AssemblyName System.Windows.Forms; " +
            "`$f = New-Object System.Windows.Forms.Form; `$f.TopMost = `$true; `$f.ShowInTaskbar = `$false; " +
            "[void][System.Windows.Forms.MessageBox]::Show(`$f, '$m', '$t', " +
-           "[System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Warning); `$f.Dispose()"
+           "[System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Warning); `$f.Dispose(); " +
+           "`$d = Split-Path '$a' -Parent; if (-not (Test-Path `$d)) { New-Item -ItemType Directory -Path `$d -Force | Out-Null }; " +
+           "@{ store='$s'; acknowledged_at=(Get-Date).ToString('s'); meaning='user dismissed the prompt - treat as clearance to resume' } " +
+           "| ConvertTo-Json | Set-Content '$a' -Encoding UTF8"
   Start-Process -FilePath 'powershell.exe' `
                 -ArgumentList @('-NoProfile', '-WindowStyle', 'Hidden', '-ExecutionPolicy', 'Bypass', '-Command', $inner) `
                 -WindowStyle Hidden | Out-Null
   Write-Output ("desktop prompt raised: " + $Title)
+  Write-Output ("clicking OK writes: " + $ackFile + "   (poll it - that click IS the resume signal)")
 } catch {
   Write-Output ("desktop prompt FAILED to raise (" + $_.Exception.Message + ") - the notification is still in notify-log.txt")
 }
