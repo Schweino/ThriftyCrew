@@ -1,4 +1,4 @@
-<#
+﻿<#
   promote-verdicts.ps1 - turn the semantic verify pass's DROP verdicts into PERMANENT commodity excludes.
 
   *** WHY THIS EXISTS ***
@@ -161,6 +161,7 @@ foreach ($vf in $vFiles) {
   if (-not (Test-Path $cmpPath)) { Write-Output ("  (skipping $($vf.Name) - no comparison-$week.json to resolve item names)"); continue }
   $cj = Get-Content $cmpPath -Raw | ConvertFrom-Json
 
+  if (-not (Test-Path variable:script:staleSkipped)) { $script:staleSkipped = 0 }
   $dropSet = @{}
   foreach ($c in @($vj.verdicts)) { foreach ($e in @($c.entries)) { if ($e.keep -eq $false) { $dropSet[("$($c.id)|$($e.store)")] = [string]$e.reason } } }
 
@@ -168,7 +169,42 @@ foreach ($vf in $vFiles) {
     foreach ($s in @($row.stores)) {
       $key = "$($row.id)|$($s.store)"
       if ($dropSet.ContainsKey($key)) {
-        [void]$drops.Add([pscustomobject]@{ week = $week; id = $row.id; store = $s.store; item = [string]$s.item; reason = $dropSet[$key] })
+        # STALENESS GATE. A verdict is keyed only by (id|store), and every comparison-<week>.json is rebuilt
+        # AFTER its verdict file - so the item sitting in that cell now may be the REPLACEMENT product, not the
+        # one the pass judged. Measured 2026-07-29: 16 of 74 verdicts had drifted, and 6 of 13 proposed rules
+        # were built from the CORRECT product (Aldi's only ground coffee, Hy-Vee's cheese tortellini and queso,
+        # Baker's strawberries). Applying them would have permanently deleted real products, silently, because
+        # excludes never report what they removed - which voids the whole "provably cannot kill a legitimate
+        # product" promise this script is built on.
+        # The verdict reason quotes the judged item in 16 of 16 drift cases, so use it as the witness: if the
+        # reason names a product and the cell now holds a different one, refuse and say so.
+        $reason = [string]$dropSet[$key]
+        $nowItem = [string]$s.item
+        $quoted = [regex]::Match($reason, "['" + [char]0x2018 + [char]0x201C + '"]([^' + "'" + [char]0x2019 + [char]0x201D + '"]{6,})[' + "'" + [char]0x2019 + [char]0x201D + '"]')
+        $stale = $false
+        if ($quoted.Success) {
+          $judged = $quoted.Groups[1].Value.Trim()
+          # compare on shared significant words - store feeds re-title the same product constantly
+          # The commodity's OWN words are not evidence that two products are the same: "Stok Cold Brew Coffee"
+          # and "Beaumont Medium Classic Roast Coffee" share only the word "coffee", which every item on the
+          # row carries by construction. Strip the row's own vocabulary before comparing.
+          $own = @{}
+          foreach ($w in (([string]$row.id + ' ' + [string]$row.commodity).ToLower() -replace '[^a-z0-9 ]', ' ') -split '\s+') {
+            if ($w.Length -ge 4) { $own[$w] = $true; if ($w.EndsWith('s')) { $own[$w.Substring(0, $w.Length - 1)] = $true } else { $own[$w + 's'] = $true } }
+          }
+          $jw = @(($judged.ToLower() -replace '[^a-z0-9 ]', ' ') -split '\s+' | Where-Object { $_.Length -ge 4 -and -not $own.ContainsKey($_) })
+          $nw = @(($nowItem.ToLower() -replace '[^a-z0-9 ]', ' ') -split '\s+' | Where-Object { $_.Length -ge 4 -and -not $own.ContainsKey($_) })
+          if ($jw.Count -ge 2 -and $nw.Count -ge 1) {
+            $shared = @($jw | Where-Object { $nw -contains $_ }).Count
+            if ($shared -eq 0) { $stale = $true }
+          }
+          if ($stale) {
+            Write-Output ("  STALE [$week $($row.id)|$($s.store)] verdict judged '{0}' but the cell now holds '{1}' - NOT promoting" -f $judged, $nowItem)
+            $script:staleSkipped++
+            continue
+          }
+        }
+        [void]$drops.Add([pscustomobject]@{ week = $week; id = $row.id; store = $s.store; item = $nowItem; reason = $reason })
       } else {
         if (-not $keptNames.ContainsKey($row.id)) { $keptNames[$row.id] = New-Object System.Collections.ArrayList }
         [void]$keptNames[$row.id].Add([string]$s.item)

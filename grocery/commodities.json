@@ -394,6 +394,9 @@
                         "\\bbacon\\b"
                     ],
         "exclude":  [
+                        "\\bmacaroni\\b",
+                        "\\bmac\\s+(?:and|&)\\s+cheese\\b",
+                        "\\bpork\\s+loin\\b",
                         "bits",
                         "ranch",
                         "bacon\\s+cheese",
@@ -743,6 +746,9 @@
                         "\\bbutter\\b"
                     ],
         "exclude":  [
+                        "\\balternatives?\\b",
+                        "\\bsubstitutes?\\b",
+                        "\\bwhirl\\b",
                         "garlic butter",
                         "peanut",
                         "almond\\s+butter",
@@ -2594,6 +2600,9 @@
                         "peach(es)?"
                     ],
         "exclude":  [
+                        "\\bbeauty\\s+bars?\\b",
+                        "\\bsoaps?\\b",
+                        "\\bbody\\s+wash\\b",
                         "ring",
                         "cobbler",
                         "canned",
@@ -2971,6 +2980,9 @@
                         "coffee\\s+beans"
                     ],
         "exclude":  [
+                        "coffee\\s*mate",
+                        "half\\s*&?\\s*half",
+                        "\\bcreamers?\\b",
                         "creamer",
                         "filter",
                         "\\bmug\\b",
@@ -4328,6 +4340,8 @@
                         "\\btomato(?:es)?\\b"
                     ],
         "exclude":  [
+                        "\\bchopped\\s+tomatoes\\b",
+                        "\\bpomi\\b",
                         "\\bbouillon\\b",
                         "\\bcanned\\b",
                         "\\bsauce\\b",
@@ -6037,6 +6051,9 @@
                         "\\brice\\b"
                     ],
         "exclude":  [
+                        "\\bready\\s+rice\\b",
+                        "\\bready\\s+to\\s+heat\\b",
+                        "\\bpouch\\b",
                         "krisp",
                         "\\bcake\\b",
                         "cereal",
@@ -7212,6 +7229,7 @@
                         "black\\s+beans?"
                     ],
         "exclude":  [
+                        "\\b\\d{2,}\\s*lbs?\\.?\\b",
                         "\\bsoup\\b",
                         "\\bdry\\b",
                         "\\bdried\\b",
@@ -8966,6 +8984,8 @@
                         "\\bd\u0027?anjou\\b"
                     ],
         "exclude":  [
+                        "in\\s+(?:heavy|light)\\s+syrup",
+                        "\\bfruit\\s+bowls?\\b",
                         "\\bcanned\\b",
                         "halves",
                         "\\bcup\\b",
@@ -10439,6 +10459,9 @@
                         "\\bhalos\\b"
                     ],
         "exclude":  [
+                        "\\bfruit\\s+bowls?\\b",
+                        "\\bin\\s+gel\\b",
+                        "\\bcups?\\b",
                         "\\bcanned\\b",
                         "\\bcup\\b",
                         "juice",
@@ -11468,6 +11491,9 @@
                         "jalape[nÃ±]os?"
                     ],
         "exclude":  [
+                        "\\bseasonings?\\b",
+                        "\\brubs?\\b",
+                        "\\bchophouse\\b",
                         "\\bcanned\\b",
                         "pickled",
                         "\\bjar\\b",
@@ -11738,6 +11764,9 @@
                         "\\bginger\\b"
                     ],
         "exclude":  [
+                        "\\bsqueeze\\b",
+                        "\\bminced\\b",
+                        "\\bpastes?\\b",
                         "\\bale\\b",
                         "\\bbeer\\b",
                         "cookie",
@@ -15789,6 +15818,8 @@
                         "baking\\s+chips"
                     ],
         "exclude":  [
+                        "\\bloaf\\b",
+                        "\\bbrioche\\b",
                         "cookie",
                         "granola",
                         "pancake",
@@ -17055,6 +17086,7 @@
                         "pinto\\s+beans?"
                     ],
         "exclude":  [
+                        "\\b\\d{2,}\\s*lbs?\\.?\\b",
                         "\\bdry\\b",
                         "\\bdried\\b",
                         "refried",
@@ -20271,6 +20303,9 @@
                         "\\bjerky\\b"
                     ],
         "exclude":  [
+                        "\\bwaggin",
+                        "skin\\s*&?\\s*coat",
+                        "\\bfor\\s+(?:dogs?|cats?|pets?)\\b",
                         "\\bdog\\b",
                         "turkey",
                         "\\bsticks\\b",
@@ -35499,6 +35534,10 @@
                         "pomegranates?\\b"
                     ],
         "exclude":  [
+                        "\\bchews?\\b",
+                        "\\bsupplements?\\b",
+                        "\\bsuperbeets\\b",
+                        "\\bgumm(?:y|ies)\\b",
                         "old\\s+orchard",
                         "\\bcranberry\\b",
                         "cocktail",

@@ -255,11 +255,20 @@ function Clean-Name([string]$s) {
   # the SOURCE becomes mojibake and the script will not even parse. Reference characters by code point.
   $t = $s.Replace([string][char]0x00AE, '').Replace([string][char]0x2122, '').Replace([string][char]0xFFFD, ' ')
   $t = $t.Replace([string][char]0x2019, "'").Replace([string][char]0x2018, "'")
+  # TRANSLITERATE ACCENTED LETTERS FIRST. "Spaces are safe" was false for an accent INSIDE a word: it split the
+  # word in half. "Mezzetta Sliced Hot Jalapeno Peppers" (with an n-tilde) became "Jalape o", which no longer
+  # contains the token "jalapeno", so both real Baker's pickled-jalapeno SKUs ($0.187 and $0.208/oz) fell off
+  # the row and "Ranch Style Beans with Sliced Jalapeno Peppers" won the cell at $0.0833/oz - a can of BEANS
+  # named as the product, 2.2x underpriced, on the board and on the live trend page. 19 names were split this
+  # way, including "Starbucks Cr me Br l e" (Crème Brûlée). Decompose to FormD and drop the combining marks, so
+  # n-tilde -> n and e-acute -> e, THEN blank whatever genuinely has no letter form.
+  $t = [string]::Join('', ($t.Normalize([Text.NormalizationForm]::FormD).ToCharArray() | Where-Object {
+    [Globalization.CharUnicodeInfo]::GetUnicodeCategory($_) -ne [Globalization.UnicodeCategory]::NonSpacingMark
+  }))
   # Anything still outside printable ASCII becomes a space. Kroger's titles carry stray glyphs (a caret-like
   # mark on "Fresh Natural^", non-breaking hyphens in "5-7 Bananas", a replacement char mid-word in
   # "Milk?Product"), and the include/exclude matcher reads this string as a lowercase regex subject - a stray
-  # byte sitting inside a word silently breaks the match and the store vanishes from that row. Spaces are
-  # safe: they only ever split tokens the matcher already treats as separated.
+  # byte sitting inside a word silently breaks the match and the store vanishes from that row.
   $t = ($t -replace '[^\x20-\x7E]', ' ')
   return (($t -replace '\s{2,}', ' ').Trim())
 }
@@ -325,6 +334,18 @@ if ($SelfTest) {
   T 'engine: "4 pk 4 oz" on an oz commodity'   ('{0:N4}' -f (Get-LinkPerUnit '4 pk 4 oz' 'oz' 9.99 'Kerrygold Butter Sticks'))   ('{0:N4}' -f 0.6244)
   T 'engine: "12 pk 2 oz" on a dozen commodity' ('{0:N4}' -f (Get-LinkPerUnit '12 pk 2 oz' 'dozen' 3.99 'Eggs'))                 ('{0:N4}' -f 3.99)
   T 'engine: "12 pk 12 fl oz" on a floz commodity' ('{0:N4}' -f (Get-LinkPerUnit '12 pk 12 fl oz' 'floz' 11.99 'Sprite Cans'))   ('{0:N4}' -f 0.0833)
+  # CLEAN-NAME MUST TRANSLITERATE, NOT BLANK. Founding bug (2026-07-29): an accent inside a word was replaced
+  # with a space, so "Jalapeno" (n-tilde) became "Jalape o" and stopped matching its own commodity - both real
+  # Baker's pickled-jalapeno SKUs fell off the row and a can of Ranch Style Beans won the cell at 2.2x under.
+  # Non-ASCII is built from code points because this file must stay pure ASCII (see Clean-Name's header).
+  $NT = [char]0x00F1; $EG = [char]0x00E8; $UC = [char]0x00FB; $EA = [char]0x00E9; $RG = [char]0x00AE
+  T 'clean-name: n-tilde transliterates, word stays whole' (Clean-Name ("Mezzetta Sliced Hot Jalape${NT}o Peppers")) 'Mezzetta Sliced Hot Jalapeno Peppers'
+  T 'clean-name: multiple accents in one name'             (Clean-Name ("Starbucks Cr${EG}me Br${UC}l${EA}e K-Cup")) 'Starbucks Creme Brulee K-Cup'
+  T 'clean-name: (R) still stripped, not spaced'           (Clean-Name ("Kroger${RG} 100% Pure Olive Oil")) 'Kroger 100% Pure Olive Oil'
+  T 'clean-name: plain ASCII is untouched'                 (Clean-Name 'Kroger 80/20 Ground Beef Roll 1 LB') 'Kroger 80/20 Ground Beef Roll 1 LB'
+  # a glyph with no letter form must still become a space, not vanish into a joined word
+  T 'clean-name: non-letter glyph becomes a space'          (Clean-Name ("Fresh Natural" + [string][char]0x2038 + "Chicken")) 'Fresh Natural Chicken'
+
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output ("SELF-TEST FAIL: " + $fail + " case(s)"); exit 1 }
 }
 

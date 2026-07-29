@@ -71,8 +71,29 @@ foreach ($row in $rows) {
   $newHistory += ,$thisWeek
 
   # ---- all-time record low over the full history ----
+  # PLAUSIBILITY FLOOR. record_low drives the buy/wait verdict, and the compaction rule below deliberately keeps
+  # each old week's LOWEST entry - so a corrupt low can never age out on its own. On 2026-07-12 a whole-board
+  # per-oz-rate-as-per-lb error banked brown sugar at $0.03/lb, and for 17 days the page told shoppers "Lowest
+  # we have tracked: $0.03/lb. If it can wait, it usually comes back down." A price that low never existed.
+  # So a candidate low that sits >= 2x under the lowest OTHER week on record is not a record, it is a parse bug:
+  # keep the week in the history (it is evidence) but refuse to let it set record_low, and say so out loud.
   $rl = $null
-  foreach ($h in $newHistory) { $hp=[double]$h.cheapest_price; if ($rl -eq $null -or $hp -lt $rl.price) { $rl=[ordered]@{ price=$hp; store=$h.cheapest_store; week_of=$h.week_of } } }
+  $ordered = @($newHistory | Where-Object { $null -ne $_.cheapest_price } | Sort-Object { [double]$_.cheapest_price })
+  $skip = @{}
+  if ($ordered.Count -ge 3) {
+    $lo = [double]$ordered[0].cheapest_price
+    $nx = [double]$ordered[1].cheapest_price
+    if ($lo -gt 0 -and ($nx / $lo) -ge 2.0) {
+      $skip[[string]$ordered[0].week_of] = $true
+      Write-Output ("  record_low REFUSED for {0}: {1} on {2} is {3}x under the next lowest week ({4}) - treating as a parse error, not a record" -f `
+        $id, $lo, $ordered[0].week_of, [math]::Round($nx / $lo, 1), $nx)
+    }
+  }
+  foreach ($h in $newHistory) {
+    if ($skip.ContainsKey([string]$h.week_of)) { continue }
+    $hp=[double]$h.cheapest_price; if ($rl -eq $null -or $hp -lt $rl.price) { $rl=[ordered]@{ price=$hp; store=$h.cheapest_store; week_of=$h.week_of } }
+  }
+  if ($null -eq $rl) { foreach ($h in $newHistory) { $hp=[double]$h.cheapest_price; if ($rl -eq $null -or $hp -lt $rl.price) { $rl=[ordered]@{ price=$hp; store=$h.cheapest_store; week_of=$h.week_of } } } }
 
   $updated += ,([ordered]@{ id=$id; label=$row.commodity; unit=$row.unit; record_low=$rl; history=$newHistory })
   $updatedIds[$id] = $true
