@@ -56,11 +56,35 @@
         "unit":  "oz"
     },
     {
+        "id":  "brown-gravy-mix",
+        "q":  "brown gravy mix",
+        "match":  "Great Value Reduced Sodium Brown Gravy Mix, 0.87 oz Packet",
+        "size":  "0.9 oz",
+        "pu":  0.5333,
+        "unit":  "oz"
+    },
+    {
         "id":  "cajun-seasoning",
         "q":  "cajun seasoning",
         "match":  "Tony Chachere\u0027s, Seasoning, Cajun, 8 oz",
         "size":  "8 oz",
         "pu":  0.3425,
+        "unit":  "oz"
+    },
+    {
+        "id":  "beef-stew",
+        "q":  "canned beef stew",
+        "match":  "DINTY MOORE Beef Stew, Shelf-Stable, Steel Can 38 oz",
+        "size":  "38 oz",
+        "pu":  0.165,
+        "unit":  "oz"
+    },
+    {
+        "id":  "canned-green-chilies",
+        "q":  "diced green chiles",
+        "match":  "Ortega Mild Fire Roasted Diced Green Chiles, Kosher, 7 oz Ca",
+        "size":  "7 oz",
+        "pu":  0.3671,
         "unit":  "oz"
     },
     {
@@ -78,6 +102,14 @@
         "size":  "36 oz",
         "pu":  0.1881,
         "unit":  "oz"
+    },
+    {
+        "id":  "chicken-livers",
+        "q":  "chicken livers",
+        "match":  "Tyson All Natural Chicken Livers, 1.25 lb",
+        "size":  "1.3 lb",
+        "pu":  1.5077,
+        "unit":  "lb"
     },
     {
         "id":  "chili-crisp",
@@ -128,11 +160,27 @@
         "unit":  "oz"
     },
     {
+        "id":  "corned-beef-brisket",
+        "q":  "corned beef brisket",
+        "match":  "Blarney Stone, No MSG, Gluten Free, Corned Beef Brisket Flat 1.75-3.75 lb",
+        "size":  "3.1 lb",
+        "pu":  4.9968,
+        "unit":  "lb"
+    },
+    {
         "id":  "curry-powder",
         "q":  "curry powder",
         "match":  "Great Value Curry Powder, 2 oz",
         "size":  "2 oz",
         "pu":  1.04,
+        "unit":  "oz"
+    },
+    {
+        "id":  "diced-ham",
+        "q":  "diced ham",
+        "match":  "Farmland Diced Ham 16oz",
+        "size":  "1 lb",
+        "pu":  0.31,
         "unit":  "oz"
     },
     {
@@ -144,11 +192,19 @@
         "unit":  "oz"
     },
     {
+        "id":  "eggplant",
+        "q":  "eggplant",
+        "match":  "Fresh Purple Eggplant, Each",
+        "size":  "1 lb",
+        "pu":  1.82,
+        "unit":  "each"
+    },
+    {
         "id":  "fish-sauce",
         "q":  "fish sauce",
         "match":  "Kikkoman Glutenâ€‘Free Fish Sauce, 6.8 fl oz Glass Bottle",
-        "size":  "10 fl oz",
-        "pu":  0.284,
+        "size":  "6.8 fl oz",
+        "pu":  0.4176,
         "unit":  "floz"
     },
     {
@@ -157,6 +213,14 @@
         "match":  "Red Baron Four Cheese Classic Crust Frozen Pizza",
         "size":  "each",
         "pu":  4.82,
+        "unit":  "each"
+    },
+    {
+        "id":  "fruit-cups",
+        "q":  "fruit cups",
+        "match":  "Dole Fruit Bowls No Sugar Added Variety Pack, 4 oz Cups (12 Pack)",
+        "size":  "48 oz",
+        "pu":  0.7783,
         "unit":  "each"
     },
     {
@@ -224,6 +288,14 @@
         "unit":  "floz"
     },
     {
+        "id":  "horseradish-sauce",
+        "q":  "horseradish sauce",
+        "match":  "Great Value Original Horseradish Sauce, 12 oz (Regular)",
+        "size":  "12 fl oz",
+        "pu":  0.1558,
+        "unit":  "oz"
+    },
+    {
         "id":  "hot-sauce",
         "q":  "hot sauce",
         "match":  "Fairbury Fully Cooked Skinless, Red Hot Dogs, Vacuum Sealed, Refrigerated, Plastic Pouch, 32 oz",
@@ -254,6 +326,14 @@
         "size":  "120.847 oz",
         "pu":  1.426,
         "unit":  "dozen"
+    },
+    {
+        "id":  "lime-juice",
+        "q":  "lime juice bottle",
+        "match":  "Great Value Lime 100% Juice, 15 fl oz (Shelf Stable)",
+        "size":  "15.1 fl oz",
+        "pu":  0.0907,
+        "unit":  "floz"
     },
     {
         "id":  "fresh-mint",
@@ -328,6 +408,14 @@
         "unit":  "oz"
     },
     {
+        "id":  "poultry-seasoning",
+        "q":  "poultry seasoning",
+        "match":  "Great Value Poultry Seasoning, 1.5 oz",
+        "size":  "1.5 oz",
+        "pu":  1.3133,
+        "unit":  "oz"
+    },
+    {
         "id":  "ranch-seasoning-mix",
         "q":  "ranch seasoning mix",
         "match":  "Great Value Classic Ranch Salad Dressing \u0026 Recipe Mix, 8 oz",
@@ -360,6 +448,22 @@
         "unit":  "oz"
     },
     {
+        "id":  "rye-bread",
+        "q":  "rye bread",
+        "match":  "Great Value New York Style Rye Bread, 24 oz",
+        "size":  "24.1 oz",
+        "pu":  0.1029,
+        "unit":  "oz"
+    },
+    {
+        "id":  "salsa",
+        "q":  "salsa mild",
+        "match":  "Great Value Thick and Chunky Salsa Mild",
+        "size":  "16 oz",
+        "pu":  0.1231,
+        "unit":  "oz"
+    },
+    {
         "id":  "sesame-oil",
         "q":  "sesame oil",
         "match":  "Oi! Toasted Pure Sesame Oil 250 ml",
@@ -376,6 +480,14 @@
         "unit":  "oz"
     },
     {
+        "id":  "sugar-snap-peas",
+        "q":  "sugar snap peas",
+        "match":  "Marketside Fresh Sugar Snap Peas, 8 oz",
+        "size":  "8 oz",
+        "pu":  0.3162,
+        "unit":  "oz"
+    },
+    {
         "id":  "sun-dried-tomatoes",
         "q":  "sun dried tomatoes",
         "match":  "Bella Sun Luci Sun Dried Tomatoes in Olive Oil with Italian",
@@ -386,9 +498,9 @@
     {
         "id":  "taco-seasoning",
         "q":  "taco seasoning",
-        "match":  "Taco Bell Original Taco Seasoning Mix Shaker, for Weeknight Dinners and Mexican-Inspired Dishes, 1 Canister, Original Taco Flavor, 6X More Seasoning than Individual Packets, 6.25 oz",
-        "size":  "each",
-        "pu":  0.0896,
+        "match":  "Great Value Taco Seasoning Mix, Original, 1 oz",
+        "size":  "1 oz",
+        "pu":  0.47,
         "unit":  "oz"
     },
     {
@@ -430,6 +542,14 @@
         "size":  "26 oz",
         "pu":  0.106,
         "unit":  "each"
+    },
+    {
+        "id":  "turkey-breast",
+        "q":  "turkey breast",
+        "match":  "Butterball All Natural Frozen Turkey Breast Roast, 3 lbs",
+        "size":  "3 lb",
+        "pu":  4.8133,
+        "unit":  "lb"
     },
     {
         "id":  "walnuts",

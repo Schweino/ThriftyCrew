@@ -1,0 +1,136 @@
+{
+  "week_of": "2026-07-29",
+  "note": "Semantic verify, 2026-07-29. Judged the winning (cheapest) row of all 492 commodities plus every runner-up within reach of the crown, since a wrong winner is what actually reaches the page. DROP = a different product wearing the commodity's words. NOTE = genuinely the commodity but not strictly like-for-like, so the tile should say so.",
+  "verdicts": [
+    { "id": "black-pepper", "entries": [
+      { "store": "Baker's", "keep": false, "annotation": null, "reason": "Not black pepper. 'Simple Truth Protein Black Pepper Lentils Brown Rice and Ancient Grains Whole Grain Blend' is a seasoned grain side dish; 'black pepper' is a flavour word in its name. It was crowning the spice at $0.34/oz." }
+    ]},
+    { "id": "coffee", "entries": [
+      { "store": "Aldi", "keep": false, "annotation": null, "reason": "Liquid, not ground. 'Stok Cold Brew Coffee Black Unsweetened 48 FL OZ' is ready-to-drink cold brew; comparing its fluid ounces against ground coffee's dry ounces is why it read 66% under the runner-up." }
+    ]},
+    { "id": "fresh-green-beans", "entries": [
+      { "store": "Aldi", "keep": false, "annotation": null, "reason": "Canned, not fresh. 'Happy Harvest French Green Beans 14.5 OZ' is Aldi's canned-vegetable label; this commodity is fresh green beans priced per pound. It was 49% under the runner-up because a can of beans is not a pound of produce." }
+    ]},
+    { "id": "canned-pineapple", "entries": [
+      { "store": "Hy-Vee", "keep": false, "annotation": null, "reason": "Fresh-cut produce, not canned. 'Hy-Vee Short Cuts pineapple chunks' is the refrigerated cut-fruit tub, and the captured line is a fuel-saver ad string quoting $4.99 lb." }
+    ]},
+    { "id": "cheese-tortellini", "entries": [
+      { "store": "Hy-Vee", "keep": false, "annotation": null, "reason": "Combined A-or-B ad line with a size range: 'Hy-Vee ravioli or tortellini, 42 or 48 oz., $5.99'. Neither which product nor which size is determinable, so the per-ounce price is a coin flip." }
+    ]},
+    { "id": "coconut-milk-canned", "entries": [
+      { "store": "Fareway", "keep": false, "annotation": null, "reason": "Carton beverage, not canned cooking milk. 'Califia Farms Organic Coconut Milk' is the refrigerated drinking carton; this commodity is the thick canned milk used for cooking. Different products, different per-ounce economics." }
+    ]},
+    { "id": "honey", "entries": [
+      { "store": "Baker's", "keep": false, "annotation": null, "reason": "Not honey. 'Kroger Rich N Honey Hot Dog Buns' is bread that matched on the word honey." }
+    ]},
+    { "id": "raspberries", "entries": [
+      { "store": "Baker's", "keep": false, "annotation": null, "reason": "Not fruit. 'Bomb Pop Extremes Super Sour Blue Raspberry Ice Pops' is a freezer novelty that matched on 'raspberry'." }
+    ]},
+    { "id": "strawberries", "entries": [
+      { "store": "Baker's", "keep": false, "annotation": null, "reason": "Not fruit. 'Kroger Strawberry Applesauce' matched on 'strawberry' and was crowning fresh berries at $0.083/oz." }
+    ]},
+    { "id": "toasted-sesame-seeds", "entries": [
+      { "store": "Hy-Vee", "keep": false, "annotation": null, "reason": "Not sesame seeds. 'Ball Park Sesame Seed Burger Buns, 8 Count' is bread." }
+    ]},
+    { "id": "sun-dried-tomatoes", "entries": [
+      { "store": "Hy-Vee", "keep": false, "annotation": null, "reason": "Not sun-dried tomatoes. 'Mission Sun-Dried Tomato Basil Wraps 6Ct' is flavoured tortillas." }
+    ]},
+    { "id": "queso", "entries": [
+      { "store": "Hy-Vee", "keep": false, "annotation": null, "reason": "Combined A-or-B-or-C ad line with a size range: 'Pace salsa, picante sauce or queso bowls, 11 to 22 oz., 2/ $5.00'. Two of the three products are not queso and the size spans 2x." }
+    ]},
+    { "id": "pesto", "entries": [
+      { "store": "Aldi", "keep": false, "annotation": null, "reason": "Not pesto. 'Mama Cozzis Pesto Burrata' is a refrigerated pizza/burrata item, and its captured size (1815 OZ) is a mangled decimal we could not prove, so the per-ounce price is unsound as well." }
+    ]},
+    { "id": "spinach", "entries": [
+      { "store": "Hy-Vee", "keep": false, "annotation": null, "reason": "Frozen, not fresh. 'Birds Eye Chopped Spinach' is a freezer box; this commodity is fresh spinach. Frozen spinach is several times denser per ounce, so it undercuts fresh on a per-ounce board without being the same purchase." }
+    ]},
+    { "id": "jalapenos", "entries": [
+      { "store": "Baker's", "keep": false, "annotation": null, "reason": "Canned, not fresh. 'La Costena Whole Jalapeno Peppers' is the canned pepper; fresh jalapenos are the commodity here and pickled/canned ones already have their own row (pickled-jalapenos)." }
+    ]},
+    { "id": "pineapple", "entries": [
+      { "store": "Fareway", "keep": false, "annotation": null, "reason": "Cut/canned chunks, not a whole pineapple. This commodity is a whole pineapple priced per each; 'Fareway Chunk Pineapple' is a container of pieces." }
+    ]},
+    { "id": "dried-parsley", "entries": [
+      { "store": "Aldi", "keep": false, "annotation": null, "reason": "Cannot tell fresh from dried. The captured name is just 'Parsley 2 OZ' with no brand - Aldi sells both a Stonemill dried jar and a fresh clamshell in that weight, and at 76% under the runner-up the two readings give very different answers. Dropped rather than publish a guess; dried-parsley still has six other stores." }
+    ]},
+
+    { "id": "avocados", "entries": [
+      { "store": "Aldi", "keep": true, "annotation": "mini avocados, sold in a 6-count bag", "reason": "Genuinely avocados and correctly priced per each, but they are the small size - not the large single avocado most shoppers picture." }
+    ]},
+    { "id": "beets", "entries": [
+      { "store": "Baker's", "keep": true, "annotation": "organic", "reason": "Real fresh beets, but the organic line - unusual for an organic item to win, so say so." }
+    ]},
+    { "id": "carrots", "entries": [
+      { "store": "Sam's Club", "keep": true, "annotation": "organic, 5 lb club bag", "reason": "Organic carrots in a bulk bag beating conventional; correct per pound, but not a like-for-like 1 lb conventional bag." }
+    ]},
+    { "id": "ground-ginger", "entries": [
+      { "store": "Sam's Club", "keep": true, "annotation": "organic, 7 oz club jar", "reason": "Organic and bulk-sized; the per-ounce math is right." }
+    ]},
+    { "id": "dried-dill", "entries": [
+      { "store": "Walmart", "keep": true, "annotation": "organic, 16 oz bulk bag", "reason": "A 1 lb co-op bag of dill weed against supermarket spice jars - real, but a very different purchase." }
+    ]},
+    { "id": "dried-basil", "entries": [
+      { "store": "Walmart", "keep": true, "annotation": "third-party marketplace seller, 2-pack", "reason": "Correct product, but sold by a Walmart marketplace seller rather than off the Omaha shelf, and the captured name is truncated." }
+    ]},
+    { "id": "bay-leaves", "entries": [
+      { "store": "Walmart", "keep": true, "annotation": "third-party marketplace seller", "reason": "Whole bay leaves, right per-ounce, but a marketplace listing rather than a shelf item." }
+    ]},
+    { "id": "ground-fennel", "entries": [
+      { "store": "Family Fare", "keep": true, "annotation": "whole seed, not ground", "reason": "Fennel seed sold whole where the commodity is ground; same spice, and shoppers do substitute, but the form differs." }
+    ]},
+    { "id": "dried-arbol-chiles", "entries": [
+      { "store": "Family Fare", "keep": true, "annotation": "bulk bag", "reason": "86% under the runner-up, which is plausible for dried chiles: the comparison is a bulk bag against a small branded spice packet." }
+    ]},
+    { "id": "garlic-bread", "entries": [
+      { "store": "Baker's", "keep": true, "annotation": "gluten-free Texas toast, priced per slice", "reason": "It is garlic bread, but a gluten-free per-slice product against per-loaf garlic bread elsewhere." }
+    ]},
+    { "id": "ground-beef-93-7", "entries": [
+      { "store": "Aldi", "keep": true, "annotation": "pre-formed burger patties", "reason": "93/7 beef at the right per-pound price, but formed patties rather than bulk ground." }
+    ]},
+    { "id": "croissants", "entries": [
+      { "store": "Sam's Club", "keep": true, "annotation": "chocolate-filled", "reason": "Correct per-each price; filled rather than plain butter croissants." }
+    ]},
+    { "id": "donuts", "entries": [
+      { "store": "Aldi", "keep": true, "annotation": "mini donut cups, 36 count", "reason": "Real donuts per each, but the bite-size format." }
+    ]},
+    { "id": "muffins", "entries": [
+      { "store": "Hy-Vee", "keep": true, "annotation": "Little Bites mini muffins", "reason": "Priced per pouch, not per full-size bakery muffin." }
+    ]},
+    { "id": "lettuce", "entries": [
+      { "store": "Sam's Club", "keep": true, "annotation": "romaine hearts, 6 ct", "reason": "The commodity's search term is iceberg; romaine hearts are a different lettuce, though a normal substitute." }
+    ]},
+    { "id": "hummus", "entries": [
+      { "store": "Sam's Club", "keep": true, "annotation": "roasted red pepper flavour", "reason": "Flavoured rather than plain hummus." }
+    ]},
+    { "id": "kielbasa", "entries": [
+      { "store": "Aldi", "keep": true, "annotation": "cheddar jalapeno variety", "reason": "Flavoured smoked sausage rather than plain kielbasa." }
+    ]},
+    { "id": "ribeye-steak", "entries": [
+      { "store": "Aldi", "keep": true, "annotation": "thin sliced", "reason": "Real ribeye per pound, but the thin-sliced cut rather than a steak-thickness ribeye." }
+    ]},
+    { "id": "yogurt", "entries": [
+      { "store": "Sam's Club", "keep": true, "annotation": "kids' yogurt tubes, variety pack", "reason": "Yogurt by weight, but Go-Gurt tubes rather than a tub of plain yogurt." }
+    ]},
+    { "id": "eggs", "entries": [
+      { "store": "Walmart", "keep": true, "annotation": "60-count bulk pack", "reason": "Correct per dozen; you have to buy five dozen at once to get it." }
+    ]},
+    { "id": "storage-bags", "entries": [
+      { "store": "Hy-Vee", "keep": true, "annotation": "ad line quotes 105 or 108 ct", "reason": "Same product line, but the ad states two counts so the per-bag price carries about 3% slack." }
+    ]},
+    { "id": "corned-beef-brisket", "entries": [
+      { "store": "Walmart", "keep": true, "annotation": "sold by weight, 1.75-3.75 lb pieces", "reason": "Per-pound price is right; the package weight is a range, so the shelf total will vary." }
+    ]},
+    { "id": "whole-chicken", "entries": [
+      { "store": "Walmart", "keep": true, "annotation": "twin pack, 11.0-12.2 lb total", "reason": "Correct per pound, but sold as a two-bird pack by weight range." }
+    ]},
+    { "id": "chili-crisp", "entries": [
+      { "store": "Hy-Vee", "keep": true, "annotation": "hot honey variety", "reason": "A real Lee Kum Kee chili crisp, in the hot-honey flavour rather than the original." }
+    ]},
+    { "id": "turkey-breast", "entries": [
+      { "store": "Fareway", "keep": true, "annotation": "fresh bone-in breast; the stores behind it sell boneless frozen roasts", "reason": "Sanity gate flagged it 38% under the runner-up. Checked the source rows: Fareway's fresh bone-in breast is $2.99/lb against Butterball frozen boneless 3 lb roasts at $14.44-$14.99 ($4.81-$5.00/lb). Both prices parse correctly - it is bone-in vs boneless, so say so on the tile." }
+    ]},
+    { "id": "harissa-paste", "entries": [
+      { "store": "Walmart", "keep": true, "annotation": "10 fl oz jar vs small tubes elsewhere", "reason": "Genuine harissa; the 92% gap to the runner-up is jar-versus-tube sizing, not a bad parse." }
+    ]}
+  ]
+}

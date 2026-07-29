@@ -8,6 +8,22 @@
         "unit":  "oz"
     },
     {
+        "id":  "caesar-salad-kit",
+        "q":  "caesar salad kit",
+        "match":  "Fresh Express Caesar Supreme Salad Kit 10.5 Oz",
+        "size":  "1 bag",
+        "pu":  0.4467,
+        "unit":  "oz"
+    },
+    {
+        "id":  "cherry-tomatoes",
+        "q":  "cherry tomatoes",
+        "match":  "Grape Tomatoes Our Family",
+        "size":  "1 pt",
+        "pu":  0.329,
+        "unit":  "oz"
+    },
+    {
         "id":  "ground-coriander",
         "q":  "ground coriander",
         "match":  "Sugar \u0027N Spice Coriander Ground Pp",
@@ -16,11 +32,11 @@
         "unit":  "oz"
     },
     {
-        "id":  "dried-dill",
-        "q":  "dill weed",
-        "match":  "Sugar \u0027N Spice Dill Weed Pp",
-        "size":  "0.5 oz",
-        "pu":  3.78,
+        "id":  "ground-fennel",
+        "q":  "fennel seed",
+        "match":  "Sugar \u0027N Spice Fennel Seed Whole",
+        "size":  "5.6 oz",
+        "pu":  0.6232,
         "unit":  "oz"
     },
     {
@@ -32,11 +48,35 @@
         "unit":  "each"
     },
     {
+        "id":  "ground-cinnamon",
+        "q":  "ground cinnamon",
+        "match":  "That\u0027s Smart! Ground Cinnamon 2.5 Oz",
+        "size":  "2.5 oz",
+        "pu":  0.272,
+        "unit":  "oz"
+    },
+    {
+        "id":  "ground-cumin",
+        "q":  "ground cumin",
+        "match":  "Sugar \u0027N Spice Cumin Ground Pp",
+        "size":  "2 oz",
+        "pu":  1.145,
+        "unit":  "oz"
+    },
+    {
         "id":  "ground-turmeric",
         "q":  "ground turmeric",
         "match":  "Sugar \u0027N Spice Turmeric Ground 2 Oz",
         "size":  "2 oz",
         "pu":  0.675,
+        "unit":  "oz"
+    },
+    {
+        "id":  "deli-ham",
+        "q":  "sliced deli ham",
+        "match":  "Hillshire Farm Ultra Thin Sliced Brown Sugar Ham Sandwich Meat 9 Oz",
+        "size":  "9 oz",
+        "pu":  0.6656,
         "unit":  "oz"
     },
     {
@@ -56,6 +96,14 @@
         "unit":  "each"
     },
     {
+        "id":  "paper-towels",
+        "q":  "paper towels",
+        "match":  "Sparkle Pick A Size Modern White 2 Ply Paper Towels 8 Ea",
+        "size":  "1 rl",
+        "pu":  1.3738,
+        "unit":  "each"
+    },
+    {
         "id":  "shower-cleaner",
         "q":  "bathroom cleaner",
         "match":  "Lysol Mango \u0026 Hibiscus Bathroom Cleaner 32 Fl Oz",
@@ -64,11 +112,11 @@
         "unit":  "floz"
     },
     {
-        "id":  "sloppy-joe-sauce",
-        "q":  "sloppy joe sauce manwich",
-        "match":  "Manwich Sloppy Joe Sauce, Original 15 Oz",
-        "size":  "15 oz",
-        "pu":  0.1,
-        "unit":  "oz"
+        "id":  "tomatillos",
+        "q":  "tomatillos",
+        "match":  "Tomatillos",
+        "size":  "lb",
+        "pu":  1.99,
+        "unit":  "lb"
     }
 ]

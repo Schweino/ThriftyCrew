@@ -1,6 +1,6 @@
 ﻿{
     "week_of":  "2026-07-28",
-    "updated":  "2026-07-28T09:09:43",
+    "updated":  "2026-07-28T11:52:43",
     "note":  "This week free because they are the cheapest dinners per protein on the live Omaha board. They revert to members-only when prices re-rank.",
     "free":  [
                  {
@@ -116,32 +116,32 @@
                      "per_serving":  1.33
                  },
                  {
-                     "slug":  "orecchiette-italian-sausage-broccoli",
+                     "slug":  "slow-cooker-country-style-pork-ribs-rice",
                      "protein":  "pork",
                      "rank":  2,
+                     "name":  "Slow Cooker BBQ Country Style Pork Ribs over Rice",
+                     "per_serving":  1.49
+                 },
+                 {
+                     "slug":  "vietnamese-thit-kho-braised-pork-and-eggs",
+                     "protein":  "pork",
+                     "rank":  3,
+                     "name":  "Vietnamese Thit Kho Braised Pork and Eggs",
+                     "per_serving":  1.51
+                 },
+                 {
+                     "slug":  "orecchiette-italian-sausage-broccoli",
+                     "protein":  "pork",
+                     "rank":  4,
                      "name":  "Orecchiette with Italian Sausage and Broccoli",
                      "per_serving":  1.58
                  },
                  {
                      "slug":  "slow-cooker-kalua-pork-bowls",
                      "protein":  "pork",
-                     "rank":  3,
+                     "rank":  5,
                      "name":  "Slow Cooker Kalua Pork Bowls",
                      "per_serving":  1.63
-                 },
-                 {
-                     "slug":  "slow-cooker-filipino-pork-adobo-bowls",
-                     "protein":  "pork",
-                     "rank":  4,
-                     "name":  "Slow Cooker Filipino Pork Adobo Bowls",
-                     "per_serving":  1.74
-                 },
-                 {
-                     "slug":  "slow-cooker-pork-sauerkraut-apples",
-                     "protein":  "pork",
-                     "rank":  5,
-                     "name":  "Slow Cooker Pork and Sauerkraut with Apples and Potatoes",
-                     "per_serving":  1.76
                  }
              ]
 }

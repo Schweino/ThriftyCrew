@@ -1,5 +1,13 @@
 ﻿[
     {
+        "id":  "ground-beef-93-7",
+        "q":  "93 lean ground beef",
+        "match":  "Fresh 93/7 Ground Beef Burgers",
+        "size":  "",
+        "pu":  6.49,
+        "unit":  "lb"
+    },
+    {
         "id":  "blueberries",
         "q":  "blueberries",
         "match":  "Blueberries",
@@ -22,14 +30,6 @@
         "size":  "4 oz",
         "pu":  0.2125,
         "unit":  "oz"
-    },
-    {
-        "id":  "cantaloupe",
-        "q":  "cantaloupe",
-        "match":  "Kandy Plus Cantaloupe",
-        "size":  "",
-        "pu":  1.99,
-        "unit":  "each"
     },
     {
         "id":  "cheese-tortellini",
@@ -88,11 +88,19 @@
         "unit":  "oz"
     },
     {
+        "id":  "refrigerated-biscuits",
+        "q":  "refrigerated biscuits",
+        "match":  "Bake House Creations Jumbo Flaky Biscuits",
+        "size":  "16 oz",
+        "pu":  0.1181,
+        "unit":  "oz"
+    },
+    {
         "id":  "ribeye-steak",
         "q":  "ribeye steak",
-        "match":  "Black Angus Choice Beef Ribeye Steak",
+        "match":  "Thin Sliced Ribeye Steak Per LB",
         "size":  "lb",
-        "pu":  14.79,
+        "pu":  10.99,
         "unit":  "lb"
     },
     {
@@ -122,7 +130,7 @@
     {
         "id":  "walnuts",
         "q":  "chopped walnuts",
-        "match":  "Southern Grove Chopped Walnuts",
+        "match":  "Southern Grove Chopped Walnuts 8 OZ",
         "size":  "8 oz",
         "pu":  0.3488,
         "unit":  "oz"

@@ -41457,7 +41457,7 @@
         "label":  "Fresh Rosemary",
         "unit":  "oz",
         "include":  [
-                        "fresh\\s+rosemary",
+                        "fresh\\b.{0,12}\\brosemary",
                         "rosemary\\s+(?:clamshell|bunch|sprigs?)"
                     ],
         "exclude":  [
@@ -41714,3 +41714,5 @@
                     ]
     }
 ]
+
+

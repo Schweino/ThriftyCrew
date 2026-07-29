@@ -1,146 +1,74 @@
 ﻿[
     {
-        "id":  "apples",
-        "q":  "apples",
-        "match":  "Kroger Granny Smith Apples 3 Pound Bag",
-        "size":  "3 lb",
-        "pu":  1.33,
-        "unit":  "lb"
+        "id":  "almond-milk",
+        "q":  "unsweetened almond milk",
+        "match":  "Simple Truth Plant Based Non Dairy Unsweetened Almondmilk Half Gallon",
+        "size":  "1/2 gal",
+        "pu":  0.0436,
+        "unit":  "floz"
     },
     {
         "id":  "baby-wipes",
         "q":  "baby wipes",
-        "match":  "Pampers Baby Wipes",
+        "match":  "Comforts Fragrance Free Baby Wipes",
         "size":  "72 ct",
-        "pu":  0.0276,
+        "pu":  0.0318,
         "unit":  "each"
     },
     {
         "id":  "baked-beans",
         "q":  "baked beans",
-        "match":  "Van Camp\u0027s Pork and Beans",
-        "size":  "15 oz",
-        "pu":  0.0667,
+        "match":  "Saucy Spoon Vegetarian Sweet Hickory Flavor Baked Beans 28 oz",
+        "size":  "28 oz",
+        "pu":  0.0782,
         "unit":  "oz"
-    },
-    {
-        "id":  "dried-basil",
-        "q":  "dried basil",
-        "match":  "Kroger Basil Leaves Shaker",
-        "size":  "0.43 oz",
-        "pu":  4.6279,
-        "unit":  "oz"
-    },
-    {
-        "id":  "bay-leaves",
-        "q":  "bay leaves",
-        "match":  "Simple Truth Organic Bay Leaves",
-        "size":  "0.42 oz",
-        "pu":  5.9286,
-        "unit":  "oz"
-    },
-    {
-        "id":  "cajun-seasoning",
-        "q":  "cajun seasoning",
-        "match":  "Smart Way Cajun Seasoning",
-        "size":  "3.88 oz",
-        "pu":  0.3222,
-        "unit":  "oz"
-    },
-    {
-        "id":  "carrots",
-        "q":  "carrots",
-        "match":  "Kroger Whole Carrots (5 lb)",
-        "size":  "5 lb",
-        "pu":  0.998,
-        "unit":  "lb"
     },
     {
         "id":  "coffee",
         "q":  "ground coffee",
-        "match":  "Kroger Classic Blend Ground Coffee",
+        "match":  "Kroger Original Medium Roast Ground Coffee",
         "size":  "29 oz",
-        "pu":  0.3962,
+        "pu":  0.4997,
         "unit":  "oz"
     },
     {
-        "id":  "ground-coriander",
-        "q":  "ground coriander",
-        "match":  "Simple Truth Organic Ground Coriander",
-        "size":  "1.49 oz",
-        "pu":  2.6779,
-        "unit":  "oz"
-    },
-    {
-        "id":  "croissants",
-        "q":  "croissants",
-        "match":  "Private Selection Butter Croissants",
-        "size":  "4 ct",
-        "pu":  1.25,
+        "id":  "dishwasher-detergent",
+        "q":  "dishwasher detergent pacs",
+        "match":  "Cascade Complete Action Pacs Dishwasher Detergent Fresh",
+        "size":  "100 ct",
+        "pu":  0.2499,
         "unit":  "each"
     },
     {
-        "id":  "frozen-pizza",
-        "q":  "frozen pizza",
-        "match":  "Totino\u0027s Party Pizza Pepperoni Thin Crust",
-        "size":  "1 ct",
-        "pu":  2,
-        "unit":  "each"
-    },
-    {
-        "id":  "mushrooms",
-        "q":  "white mushrooms",
-        "match":  "Kroger Whole White Mushrooms (24 oz)",
+        "id":  "deli-ham",
+        "q":  "sliced deli ham",
+        "match":  "Frick\u0027s Applewood Smoked Sliced Ham",
         "size":  "24 oz",
-        "pu":  0.25,
+        "pu":  0.3329,
         "unit":  "oz"
     },
     {
-        "id":  "ground-nutmeg",
-        "q":  "ground nutmeg",
-        "match":  "Kroger Ground Nutmeg",
-        "size":  "1.85 oz",
-        "pu":  2.3189,
-        "unit":  "oz"
+        "id":  "ice-cream",
+        "q":  "vanilla ice cream",
+        "match":  "Kroger 1883 Vanilla Ice Cream Party Pail BIG DEAL!",
+        "size":  "1 gal",
+        "pu":  0.0546,
+        "unit":  "floz"
     },
     {
-        "id":  "pineapple",
-        "q":  "whole pineapple",
-        "match":  "Private Selection Super Sweet Gold Island Pineapple",
-        "size":  "1 ct",
-        "pu":  3.49,
-        "unit":  "each"
+        "id":  "sports-drinks",
+        "q":  "gatorade",
+        "match":  "Gatorade Orange Sports Drink Multipack Bottles",
+        "size":  "12 pk 12 fl oz",
+        "pu":  0.0555,
+        "unit":  "floz"
     },
     {
-        "id":  "refrigerated-biscuits",
-        "q":  "refrigerated biscuits",
-        "match":  "Kroger Buttermilk Jumbo Biscuits",
-        "size":  "8 ct / 16 oz",
-        "pu":  0.0155,
-        "unit":  "oz"
-    },
-    {
-        "id":  "rice-noodles",
-        "q":  "rice noodles",
-        "match":  "A Taste of Thai Rice Noodles",
-        "size":  "16 oz",
-        "pu":  0.2806,
-        "unit":  "oz"
-    },
-    {
-        "id":  "russet-potatoes",
-        "q":  "russet potatoes",
-        "match":  "Kroger Russet Potatoes Bag (10 lb)",
-        "size":  "10 lb",
-        "pu":  0.499,
+        "id":  "tomatoes",
+        "q":  "tomatoes on the vine",
+        "match":  "Roma Tomatoes",
+        "size":  "lb",
+        "pu":  1.49,
         "unit":  "lb"
-    },
-    {
-        "id":  "yogurt",
-        "q":  "yogurt",
-        "match":  "Kroger Blended Vanilla Low Fat Yogurt",
-        "size":  "32 oz",
-        "pu":  0.0934,
-        "unit":  "oz"
     }
 ]

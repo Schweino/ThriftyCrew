@@ -1,11 +1,11 @@
 ﻿[
     {
-        "id":  "apples",
-        "q":  "apples",
-        "match":  "Granny Smith apples, $1.68 lb.",
+        "id":  "avocados",
+        "q":  "avocado",
+        "match":  "Avocados, from California, large each, 3/ $5.00",
         "size":  "",
-        "pu":  1.68,
-        "unit":  "lb"
+        "pu":  1.6667,
+        "unit":  "each"
     },
     {
         "id":  "black-pepper",
@@ -24,22 +24,6 @@
         "unit":  "oz"
     },
     {
-        "id":  "chicken-breast",
-        "q":  "boneless skinless chicken breast",
-        "match":  "Hy-Vee fresh boneless skinless chicken breasts, 100% natural, value pack No antibiotics ever., $3.99 lb.",
-        "size":  "",
-        "pu":  3.99,
-        "unit":  "lb"
-    },
-    {
-        "id":  "bottled-water",
-        "q":  "purified water 24 pack",
-        "match":  "Hy-Vee spring water, 24 pk. mini bottles 10 fl. oz., $3.99",
-        "size":  "",
-        "pu":  0.1662,
-        "unit":  "each"
-    },
-    {
         "id":  "cereal",
         "q":  "cereal",
         "match":  "Hy Vee Whole Grain Raisin Bran",
@@ -56,11 +40,27 @@
         "unit":  "oz"
     },
     {
+        "id":  "canned-pineapple",
+        "q":  "canned pineapple chunks",
+        "match":  "Hy-Vee Short Cuts pineapple chunks, FUEL SAVER EARN 5¢ OFF PER GALLON, $4.99 lb.",
+        "size":  "",
+        "pu":  0.0625,
+        "unit":  "oz"
+    },
+    {
         "id":  "carrots",
         "q":  "carrots",
         "match":  "Bunny Luv Organic Whole Carrots",
         "size":  "2 lb",
         "pu":  0.995,
+        "unit":  "lb"
+    },
+    {
+        "id":  "chicken-thighs",
+        "q":  "chicken thighs",
+        "match":  "Hy Vee 100 Natural Chicken Thighs Value Pack",
+        "size":  "lb",
+        "pu":  1.77,
         "unit":  "lb"
     },
     {
@@ -152,19 +152,19 @@
         "unit":  "oz"
     },
     {
-        "id":  "frozen-pizza",
-        "q":  "frozen pizza",
-        "match":  "Roma Original or Bellatoria personal pizza, 5.67 to 11.05 oz., $2.22 ea. with purchase of 4",
+        "id":  "frozen-fries",
+        "q":  "frozen french fries",
+        "match":  "McCain fries or onion rings, 14 to 26 oz., 2/ $7.00",
         "size":  "",
-        "pu":  2.22,
-        "unit":  "each"
+        "pu":  0.1346,
+        "unit":  "oz"
     },
     {
-        "id":  "fruit-snacks",
-        "q":  "fruit snacks",
-        "match":  "Hy-Vee fruit snacks, 40 ct., $6.99",
+        "id":  "frozen-pizza",
+        "q":  "frozen pizza",
+        "match":  "Roma Original or Personal Size pizza, 5.67 to 11.05 oz., $2.22 ea. with purchase of 4",
         "size":  "",
-        "pu":  0.1748,
+        "pu":  2.22,
         "unit":  "each"
     },
     {
@@ -184,6 +184,22 @@
         "unit":  "each"
     },
     {
+        "id":  "granola-bars",
+        "q":  "chewy granola bars",
+        "match":  "Hy Vee Chewy Granola Bars Variety Pack 18Ct",
+        "size":  "18 ct",
+        "pu":  0.3328,
+        "unit":  "each"
+    },
+    {
+        "id":  "ground-turkey",
+        "q":  "ground turkey",
+        "match":  "Butterball ground turkey roll, 85% lean, 15% fat 16 oz. roll, $3.99",
+        "size":  "",
+        "pu":  3.99,
+        "unit":  "lb"
+    },
+    {
         "id":  "hot-sauce",
         "q":  "hot sauce",
         "match":  "Franks Redhot Original Cayenne Pepper Hot Sauce",
@@ -192,12 +208,12 @@
         "unit":  "floz"
     },
     {
-        "id":  "lettuce",
-        "q":  "iceberg lettuce",
-        "match":  "Dole spinach 8 oz. pkg., classic romaine 9 oz. pkg. or greener selection 11 oz. pkg., 2/ $5.00",
-        "size":  "",
-        "pu":  2.5,
-        "unit":  "each"
+        "id":  "jumbo-pasta-shells",
+        "q":  "jumbo pasta shells",
+        "match":  "Barilla Manicotti - Non-GMO Pasta Made with Durum Wheat Semolina - Kosher Certified Pasta",
+        "size":  "8 oz",
+        "pu":  0.4238,
+        "unit":  "oz"
     },
     {
         "id":  "mangoes",
@@ -248,11 +264,19 @@
         "unit":  "oz"
     },
     {
-        "id":  "peanut-butter",
-        "q":  "peanut butter",
-        "match":  "Skippy peanut butter, 15 to 16.3 oz., $1.98",
-        "size":  "",
-        "pu":  0.1215,
+        "id":  "peaches",
+        "q":  "peaches",
+        "match":  "Yellow Flesh Peaches",
+        "size":  "lb",
+        "pu":  2.99,
+        "unit":  "lb"
+    },
+    {
+        "id":  "potato-gnocchi",
+        "q":  "gnocchi",
+        "match":  "Gustare Vita Original Potato Gnocchi",
+        "size":  "16 oz",
+        "pu":  0.1231,
         "unit":  "oz"
     },
     {
@@ -266,17 +290,17 @@
     {
         "id":  "rotisserie-chicken",
         "q":  "rotisserie chicken",
-        "match":  "Whole Savory Rotisserie Chicken",
-        "size":  "each",
-        "pu":  5.99,
+        "match":  "Market Grille Whole Rotisserie Chicken, SAVE 4.00, $4.99 PERKS PRICE. NON-MEMBER PRICE $8.99",
+        "size":  "",
+        "pu":  4.99,
         "unit":  "each"
     },
     {
         "id":  "soda",
         "q":  "cola 12 pack",
-        "match":  "Hy-Vee soda or mixer, 2 liter, 4/ $5.00",
+        "match":  "Pepsi soda, 2 liter, $1.99",
         "size":  "",
-        "pu":  0.0185,
+        "pu":  0.0294,
         "unit":  "floz"
     },
     {
@@ -285,14 +309,6 @@
         "match":  "Hy Vee Black Tea Bags",
         "size":  "100 ct",
         "pu":  0.0449,
-        "unit":  "each"
-    },
-    {
-        "id":  "toaster-pastries",
-        "q":  "toaster pastries",
-        "match":  "Pop-Tarts original 12 ct. or Protein Boostin\u0027 toaster pastries 8 ct., - .50 off with digital coupon, $2.99",
-        "size":  "",
-        "pu":  0.2492,
         "unit":  "each"
     },
     {
