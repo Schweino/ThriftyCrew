@@ -293,6 +293,19 @@
                                            "Member\u0027s Mark 4-Gallon Drawstring Trash Bags, 200 ct."
                                        ],
                       "verdict_reason":  "This commodity is the 13-GALLON tall kitchen bag. A 4-gallon bin liner is cheaper per bag because it is a smaller bag, not a better deal - it won the row at $0.067/bag against $0.133 for real kitchen bags. Excludes bag sizes 2-12 gallon; 13 gallon and \"tall kitchen\" are untouched."
+                  },
+                  {
+                      "commodity":  "coffee",
+                      "pattern":  "\\bcold\\s+brew\\b , \\bconcentrates?\\b",
+                      "added":  "2026-07-29",
+                      "source":  "post-publish spot check",
+                      "from_weeks":  [
+                                         "2026-07-29"
+                                     ],
+                      "killed_items":  [
+                                           "Starbucks Cold Brew Coffee Concentrates, Signature Black, 64 oz., 2 ct."
+                                       ],
+                      "verdict_reason":  "Third time this class hit the coffee row today: Aldi Stok cold brew (dropped in verify), a Starbucks Frappuccino bottle (excluded after a factor mismatch), and now a Starbucks cold brew CONCENTRATE crowning it at $0.218/oz. Liquid coffee is priced per FLUID ounce and ground coffee per WEIGHT ounce, so liquid always looks cheaper on this row. Every other store here is ground coffee, so both tokens are safe."
                   }
               ]
 }

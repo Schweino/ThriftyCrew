@@ -3039,7 +3039,9 @@
                         "body\\s+spray",
                         "\\bsunscreen\\b",
                         "\\bblack\\s+unsweeteneds?\\b",
-                        "\\bfrappuccino\\b"
+                        "\\bfrappuccino\\b",
+                        "\\bcold\\s+brew\\b",
+                        "\\bconcentrates?\\b"
                     ]
     },
     {
