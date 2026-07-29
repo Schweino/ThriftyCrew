@@ -204,6 +204,24 @@ foreach ($n in 'check-ad-cycles.ps1','run-daily-local.ps1','send-alert.ps1','bak
 if ($bare.Count -eq 0) { Ok 'every pipeline logger retries instead of dying on a locked file' }
 else { Bad ('these loggers still die on a locked log file: ' + ($bare -join ', ')) }
 
+# ---- the golden regression guard itself (added 2026-07-29) --------------------------------------------
+# It sat RED for weeks and nobody noticed, because it was not hermetic: the harness froze the DATA but let
+# the engine read the LIVE commodities.json/price-bands.json, so every ordinary rule edit registered as
+# "drift". On 2026-07-29 it reported 66 differences and not one was a code bug. Now that the rules are
+# pinned it can only fail on a CODE change - which makes it safe to run daily, and makes red mean something.
+# Three checks: the guard is green, its founding-bug fixture still exists, and the hermetic seal is intact.
+$rt = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'regression-test.ps1') 2>&1 | ForEach-Object { [string]$_ }
+if ($LASTEXITCODE -eq 0) { Ok 'golden regression guard is GREEN on the hermetic frozen inputs' }
+else { Bad ('golden regression guard is RED - the engine changed a known-good number: ' + (($rt | Select-Object -Last 3) -join ' | ')) }
+
+$cdSrc = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
+if ($cdSrc -match 'must NOT divide') { Ok "the weight-package divisor's founding-bug fixture is still in -SelfTest" }
+else { Bad 'the "(3 lb bag) in NAME must NOT divide" fixture has been removed from compare-deals -SelfTest - that is the bug the regression guard was written for ($0.33/lb onions), and without it a green run cannot be distinguished from a blind one' }
+
+$rtSrc = Get-Content (Join-Path $root 'regression-test.ps1') -Raw
+if ($rtSrc -match 'CommoditiesFile' -and $rtSrc -match 'BandsFile') { Ok 'regression harness still pins the RULES as well as the data (hermetic)' }
+else { Bad 'regression-test.ps1 no longer passes -CommoditiesFile/-BandsFile from regression-inputs - the hermetic seal is broken and the guard will drift red on ordinary rule edits again, which is how it stopped being read the first time' }
+
 Write-Output ''
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2

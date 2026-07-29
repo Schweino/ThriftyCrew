@@ -34,6 +34,10 @@ param(
   [string]$OutName = "comparison",
   [string]$RegularDir = "",
   [string]$ExtraDir = "",
+  # Pin the sanity bands the same way -CommoditiesFile pins the rules. The regression harness needs BOTH
+  # frozen or it is not hermetic: it froze the data, then read the LIVE rule + band files, so every ordinary
+  # rule edit tripped it and it sat red for weeks until nobody read it. See regression-test.ps1.
+  [string]$BandsFile = "",
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
@@ -47,7 +51,7 @@ $cdoc = Get-Content $CommoditiesFile -Raw | ConvertFrom-Json
 if ($cdoc.PSObject.Properties['commodities']) { $commodities = $cdoc.commodities; $GEX_OVERRIDE = @($cdoc.global_exclude) } else { $commodities = $cdoc; $GEX_OVERRIDE = $null }
 # sanity price bands (magnitude/garbage net + health check)
 $BANDS = @{}
-$bandsFile = Join-Path $root 'price-bands.json'
+$bandsFile = if ($BandsFile) { $BandsFile } else { Join-Path $root 'price-bands.json' }
 if (Test-Path $bandsFile) { $bDoc = Get-Content $bandsFile -Raw | ConvertFrom-Json; foreach ($p in $bDoc.bands.PSObject.Properties) { $BANDS[$p.Name] = $p.Value } }
 # rules may carry their own inline band_min/band_max (recipe set) - these OVERRIDE price-bands.json because a
 # recipe commodity that shares an id with a staple (butter/milk/peanut-butter) may use a DIFFERENT unit (oz vs
@@ -438,6 +442,19 @@ if ($SelfTest) {
   # membership detection (the flag the board uses to gate the nomem column) fires on the Perks pattern, not on plain rows
   if ('Hy-Vee garlic bread, $2.98 PERKS PRICES, NON-MEMBER PRICE $3.48' -match '(?i)perks\s*price') { Write-Output 'ok    Perks membership flag detected' } else { Write-Output 'FAIL  Perks membership flag NOT detected'; $script:fail++ }
   if ('Hy-Vee milk $2.98' -notmatch '(?i)perks\s*price') { Write-Output 'ok    plain Hy-Vee row not flagged membership' } else { Write-Output 'FAIL  plain row wrongly flagged membership'; $script:fail++ }
+
+  # --- 11b2: MUST-FIRE FIXTURE for this guard's FOUNDING BUG - the weight-package divisor ------------------
+  # Added 2026-07-29. The golden regression test exists because of one bug: the first weight-package divisor
+  # read the pack size out of the item NAME, so "Kroger Yellow Onions (3 lb bag)" priced per POUND got divided
+  # by 3 and published at $0.33/lb. The fix was to read the PRICE TEXT only. Nothing in the suite actually
+  # proved the guard could still catch that, so a green run could equally have meant "working" or "blind" -
+  # the [[guard-fixture-rule]] failure mode. These are the founding bug and its clean twin, pinned:
+  #   MUST-FIRE  : pack size in the NAME + a plain per-lb price  -> must NOT divide
+  #   CLEAN TWIN : pack size in the PRICE TEXT                   -> must divide
+  _Near 'onions (3 lb bag) in NAME - must NOT divide' (Get-UnitPrice (_D '$0.99' 'Kroger Yellow Onions (3 lb bag)' $null 'lb') (_C 'lb')).unit_price 0.99 0.001
+  _Near 'onions "Per 3-Lb Bag" in PRICE - must divide' (Get-UnitPrice (_D '$4.99 Per 3-Lb Bag' 'Kroger Yellow Onions' $null 'lb') (_C 'lb')).unit_price 1.6633 0.001
+  # the sibling that produced the same class on Aldi grapes: "$4.99 Per 2-Lb. Pkg" published as $4.99/lb
+  _Near 'grapes "Per 2-Lb. Pkg" - must divide'        (Get-UnitPrice (_D '$4.99 Per 2-Lb. Pkg' 'Aldi Red Seedless Grapes' $null 'lb') (_C 'lb')).unit_price 2.495 0.001
 
   # --- 11c: per-lb RATE printed in the size text (2026-07-28 corned-beef / red-onion mispricing) -----------
   # Hy-Vee random-weight rows read "2.85 lbs ($8.99/lb)" with the per-POUND rate captured as the price. The

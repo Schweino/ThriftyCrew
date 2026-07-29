@@ -251,6 +251,19 @@
                                            "Mezzetta Mild Sweet Cherry Peppers"
                                        ],
                       "verdict_reason":  "Excluding \"blue raspberry\" from raspberries pushed a cherry/raspberry CUPCAKE into cherries instead - the soundness guard caught the move and held the publish. Removing an impostor from one row can hand it to a neighbouring row; always re-run the guard after a rule change. Also caught Mezzetta Cherry Peppers sitting third on cherries."
+                  },
+                  {
+                      "commodity":  "brown-rice",
+                      "pattern":  "\\bquinoa\\b , \\bready\\s+to\\s+heat\\b , \\bmicrowav",
+                      "added":  "2026-07-29",
+                      "source":  "guards.ps1 factor-mismatch (0.27x) surfaced it",
+                      "from_weeks":  [
+                                         "2026-07-29"
+                                     ],
+                      "killed_items":  [
+                                           "Seeds of Change Certified Organic Quinoa and Brown Rice with Garlic 8.5 oz., 6 pk."
+                                       ],
+                      "verdict_reason":  "Sam\u0027s brown-rice cell was a microwaveable organic quinoa/rice pouch 6-pack at $3.76/lb against ~$0.90-1.19/lb for dry rice everywhere else. guards.ps1 caught it as a 0.27x factor mismatch against its own link (Mahatma Brown Rice 5 lb, $0.996/lb) - the link was right and the BOARD row was the wrong product."
                   }
               ]
 }

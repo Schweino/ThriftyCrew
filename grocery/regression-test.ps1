@@ -7,6 +7,17 @@
   regression-inputs\ via -RegularDir/-ExtraDir. (The original harness pinned only ads/bakers/sams while the
   engine auto-loaded the LIVE newest regular files - so the "frozen" test drifted with the data and once
   failed with 47 phantom diffs. Never point this at live out\ inputs again.)
+
+  ...AND SO ARE THE RULES (pinned 2026-07-29). Freezing the data but not commodities.json/price-bands.json
+  left the same hole one level up: every ordinary rule edit - a widened include, a new exclude, and there is
+  one most weeks - registered as "regression drift". The guard went red, stayed red, and stopped being read.
+  On 2026-07-29 it reported 66 differences and NOT ONE was a code bug: 36 were the price_mode in-store
+  contract correctly refusing a frozen Aldi capture that predates it, the rest were rule growth (29 -> 503
+  commodities) and the knock-on winner moves. A guard that can fail for legitimate reasons will, and then it
+  is worse than no guard because it looks like coverage.
+
+  So this test now answers exactly one question: DID THE CODE CHANGE A KNOWN-GOOD NUMBER? Rule drift is
+  audit-match-soundness's job (it has a reviewed baseline and an -Accept workflow). Two guards, one job each.
 #>
 param([string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
@@ -30,6 +41,8 @@ New-Item -ItemType Directory -Force -Path $scratch | Out-Null
     -SamsFile (Join-Path $fz 'sams-deals-2026-07-05.json') `
     -RegularDir (Join-Path $fz 'regular') `
     -ExtraDir $fz `
+    -CommoditiesFile (Join-Path $fz 'commodities.json') `
+    -BandsFile (Join-Path $fz 'price-bands.json') `
     -OutDir $scratch -MinStores 2 | Out-Null
 if ($LASTEXITCODE -ne 0) { Write-Output 'REGRESSION FAIL  -  engine crashed on the frozen inputs'; exit 1 }
 

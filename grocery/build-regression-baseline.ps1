@@ -7,6 +7,17 @@
   whatever -CompareFile was handed to it (once a Jul-6 live file) while labeling it frozen_week=2026-07-05 -
   a baseline built from different inputs than the test replays, which made the regression test meaningless.
   Building FROM the frozen inputs guarantees baseline and test always share the same input set.
+
+  It reads the PINNED rules (regression-inputs\commodities.json + price-bands.json), exactly as
+  regression-test.ps1 does, so baseline and test cannot disagree about the rules either.
+
+  *** BEFORE YOU RE-BASELINE, EXPLAIN EVERY DIFF ***
+  Re-baselining is how a real bug becomes the reference. On 2026-07-29 the guard was red with 66 diffs and
+  the temptation was to just rebuild; the diffs turned out to be the price_mode in-store contract correctly
+  refusing a pre-contract Aldi capture (36), plus rule growth and its knock-on winner moves. Only because
+  every line had an explanation was blessing them safe. If you cannot say WHY a line moved, do not run this.
+  And never regenerate the fixture from the LIVE board - re-derive from the frozen inputs, which is what
+  this script does.
 #>
 param([string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
@@ -22,6 +33,8 @@ New-Item -ItemType Directory -Force -Path $scratch | Out-Null
     -SamsFile (Join-Path $fz 'sams-deals-2026-07-05.json') `
     -RegularDir (Join-Path $fz 'regular') `
     -ExtraDir $fz `
+    -CommoditiesFile (Join-Path $fz 'commodities.json') `
+    -BandsFile (Join-Path $fz 'price-bands.json') `
     -OutDir $scratch -MinStores 2 | Out-Null
 if ($LASTEXITCODE -ne 0) { Write-Output "engine FAILED on the frozen inputs - no baseline written"; exit 1 }
 

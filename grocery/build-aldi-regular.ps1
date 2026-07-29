@@ -73,6 +73,22 @@ function Repair-SlugDecimals([string]$name, [string]$cardSize) {
 function Get-Size([string]$name, [string]$cardSize, [string]$unit) {
   # 1) weighted goods: the unit price is per pound, so the basis IS the pound
   if ($unit -match '(?i)/\s*lb') { return 'lb' }
+
+  # 1b) MULTIPACK: the pack COUNT only ever appears in the name, while the storefront card shows the size of
+  # ONE unit ("Maruchan Ramen 6 PK 13.5 OZ" -> card says 2.25 oz; "Gatorade 18 Pack 12 FL OZ" -> card 12 fl oz).
+  # Preferring the card blindly records one unit as the whole pack, which is guards.ps1 hard-fail #5 (the Sam's
+  # 2-pack bug) - it shipped 3 Aldi rows on 2026-07-29 and blocked the daily publish. So when the NAME states a
+  # pack count, emit the engine's "N pk M unit" form, which multiplies them back into the pack total.
+  $pk = [regex]::Match($name, '(?i)\b(\d+)\s*(?:pk|pack)\b')
+  if ($pk.Success -and [int]$pk.Groups[1].Value -gt 1 -and $cardSize) {
+    $one = [regex]::Match($cardSize, '(?i)^\s*(\d+(?:\.\d+)?)\s*(fl\s*oz|floz|oz|lb|lbs|ml|liter|qt|pt)\b')
+    if ($one.Success) {
+      $u = ($one.Groups[2].Value.ToLower() -replace '\s+', ' ') -replace '^floz$', 'fl oz'
+      if ($u -eq 'lbs') { $u = 'lb' }
+      return ($pk.Groups[1].Value + ' pk ' + $one.Groups[1].Value + ' ' + $u)
+    }
+  }
+
   $hay = if ($cardSize) { $cardSize } else { $name }
 
   # 2) milk / liquid gallons - normalise before the generic scan so "1 gal" doesn't read as a count
@@ -179,6 +195,11 @@ if ($SelfTest) {
     @{ n = 'purified water 24 pk 16.9 fl oz';             s = '';       u = '';          want = '24 pk 16.9 fl oz' }
     @{ n = 'countryside creamery butter quarters 16 oz';  s = '';       u = '';          want = '16 oz' }
     @{ n = 'mystery item with no size at all';            s = '';       u = '';          want = '' }
+    # guards.ps1 hard-fail #5: a NAME saying "N pack" must never record ONE unit as the size
+    @{ n = 'maruchan ramen noodle soup chicken 6 pk 13.5 oz'; s = '2.25 oz';  u = ''; want = '6 pk 2.25 oz' }
+    @{ n = 'gatorade thirst quencher 18 pack 12 fl oz';       s = '12 fl oz'; u = ''; want = '18 pk 12 fl oz' }
+    @{ n = 'breakfast best breakfast pizza 2pk 11.2 oz';      s = '11.2 oz';  u = ''; want = '2 pk 11.2 oz' }
+    @{ n = 'single item 1 pk 16 oz';                          s = '16 oz';    u = ''; want = '16 oz' }
   )
   $fail = 0
   foreach ($c in $cases) {
