@@ -13,7 +13,9 @@
         that changes inputs (idempotent).
 
     -Phase publish
-        verify-apply -> sanity-check (flags REPORTED; review any before trusting the board) ->
+        verify-apply -> verify-apply (MinStores 1 -> verified-history, so the long tail keeps its history)
+        -> update-history (banks the VERIFIED board, never the raw comparison) -> sanity-check (flags
+        REPORTED) -> guards.ps1 (HARD gate: exit 2 = HELD - the SAME gate check-ad-cycles runs daily) ->
         publish-deals-page (self-gates on coverage; HELD is a real stop) -> resolve-worklist.
         THEN THE AGENT RESOLVES LINKS: browser re-resolve of url-worklist chips (step K2).
 
@@ -78,6 +80,16 @@ try {
       $null = RunChild (Join-Path $root 'sanity-check.ps1') @() 4 'sanity' -NonFatal
       $g = Join-Path $root ('out\guards-' + (Get-Date -Format 'yyyy-MM-dd') + '.json')
       if(Test-Path $g){ Log ('sanity flags file present: ' + $g + ' - REVIEW before trusting the board.') }
+      # THE SAME GATE THE DAILY JOB USES (added 2026-07-29). guards.ps1 was wired into check-ad-cycles only, so
+      # the WEEKLY path could publish a board the daily hard gate would refuse - and did. On 2026-07-29 this
+      # run published cleanly, then guards.ps1 on the identical data reported four hard fails: three Aldi
+      # multipack rows recording ONE unit as the whole pack, and a Sam's "brown rice" that was a Seeds of
+      # Change quinoa microwave pouch at $3.76/lb. Later passes caught 4-gallon bin liners winning the
+      # 13-GALLON kitchen-bag row and liquid cold brew crowning ground coffee. Two paths to publish must not
+      # have two definitions of "safe".
+      $gc = RunChild (Join-Path $root 'guards.ps1') @() 4 'guards' -NonFatal
+      if($gc -eq 2){ Log 'publish HELD by guards.ps1 - a HARD invariant is violated (see the guards lines above). Fix the data, then re-run -Phase publish.'; exit 2 }
+      if($gc -ne 0){ throw "guards.ps1 exited $gc" }
       $rc = RunChild (Join-Path $root 'publish-deals-page.ps1') @() 3 'publish' -NonFatal
       if($rc -eq 2){ Log 'publish HELD by coverage gate - fix the thin store, then re-run -Phase publish.'; exit 2 }
       if($rc -ne 0){ throw "publish-deals-page exited $rc" }
