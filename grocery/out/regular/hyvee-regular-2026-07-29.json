@@ -6,10 +6,10 @@
     "source":  "Hy-Vee Aisles Online GraphQL storeProducts.price - the CURRENT shelf price at storeId 1465 (Omaha #01). NOT basePrice (the regular price) and NOT ssrPricing (a different store).",
     "size_policy":  "sizes are OUR verified ones, not Hy-Vee\u0027s - their size field mixes totals, single units of a multipack, and mislabelled units",
     "deal_count":  1538,
-    "refreshed_today":  1014,
-    "marked_down":  191,
+    "refreshed_today":  1017,
+    "marked_down":  194,
     "newly_priced":  0,
-    "not_reverified":  524,
+    "not_reverified":  521,
     "failed":  0,
     "deals":  [
                   {
@@ -233,12 +233,15 @@
                   {
                       "store":  "Hy-Vee",
                       "item":  "Hy Vee 4 Small Curd Cottage Cheese",
-                      "ad_price":  "$2.79",
+                      "ad_price":  "$3.89",
                       "size":  "24 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "as_of":  "2026-07-15",
-                      "not_reverified":  true
+                      "regular":  3.89,
+                      "current_price":  3.89,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
+                      "as_of":  "2026-07-29",
+                      "product_id":  57274,
+                      "base_price":  3.99,
+                      "marked_down":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -2950,12 +2953,14 @@
                   {
                       "store":  "Hy-Vee",
                       "item":  "Hy Vee Marshmallows",
-                      "ad_price":  "$1.69",
+                      "ad_price":  "$2.49",
                       "size":  "16 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "as_of":  "2026-07-15",
-                      "not_reverified":  true
+                      "regular":  2.49,
+                      "current_price":  2.49,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
+                      "as_of":  "2026-07-29",
+                      "product_id":  23532,
+                      "base_price":  2.49
                   },
                   {
                       "store":  "Hy-Vee",
@@ -4923,14 +4928,15 @@
                   {
                       "store":  "Hy-Vee",
                       "item":  "Chophouse Meats Jalapeno Pepper Hot Sauce",
-                      "ad_price":  "$1.79",
+                      "ad_price":  "$1",
                       "size":  "6 fl oz",
-                      "regular":  1.79,
-                      "current_price":  1.79,
+                      "regular":  1,
+                      "current_price":  1,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-07-29",
                       "product_id":  4177381,
-                      "base_price":  1.79
+                      "base_price":  1.79,
+                      "marked_down":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -13694,14 +13700,15 @@
                   {
                       "store":  "Hy-Vee",
                       "item":  "Chophouse Cajun Seasoning with Jalapeno",
-                      "ad_price":  "$7.99",
+                      "ad_price":  "$1",
                       "size":  "12 oz",
-                      "regular":  7.99,
-                      "current_price":  7.99,
+                      "regular":  1,
+                      "current_price":  1,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-07-29",
                       "product_id":  3972380,
-                      "base_price":  7.99
+                      "base_price":  7.99,
+                      "marked_down":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -15373,12 +15380,14 @@
                   {
                       "store":  "Hy-Vee",
                       "item":  "Gustare Vita Original Potato Gnocchi",
-                      "ad_price":  "$1.97",
+                      "ad_price":  "$2.99",
                       "size":  "16 oz",
-                      "regular":  1.97,
+                      "regular":  2.99,
+                      "current_price":  2.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
-                      "as_of":  "2026-07-22",
-                      "not_reverified":  true
+                      "as_of":  "2026-07-29",
+                      "product_id":  835069,
+                      "base_price":  2.99
                   },
                   {
                       "store":  "Hy-Vee",

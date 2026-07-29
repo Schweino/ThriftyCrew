@@ -2457,3 +2457,128 @@
 [2026-07-28T11:55:08] guards: GUARDS OK: every hard invariant holds. Safe to publish.
 [2026-07-28T11:55:08] share: share-image: 5 drops -> C:\Codex\income\public\share\omaha-drops.png
 [2026-07-28T12:25:08] triage: log writability probe after clearing the stale tail handle
+[2026-07-29T08:31:06] pull attempt 1 ok=True
+[2026-07-29T08:40:09] FF everyday refreshed
+[2026-07-29T08:53:42] Hy-Vee everyday refreshed (current shelf price, Omaha #01)
+[2026-07-29T09:04:46] Baker's everyday+promo refreshed via Kroger API (Saddlecreek) + link snapshots synced
+[2026-07-29T09:04:46] Hy-Vee link snapshots refreshed
+[2026-07-29T09:11:22] match-soundness: match-soundness: MOVED=0  DROPPED=0  new-contested=0  drift-vs-engine=0
+[2026-07-29T09:11:22] category-coverage: category-coverage: OK  all 503 commodities are in exactly one of 16 categories
+[2026-07-29T09:11:23] store-registry: store-registry: OK  7 stores; board, files, schedule and live scripts all agree
+[2026-07-29T09:11:25] sale-fallback: 3 on-sale cell(s) with no everyday fallback - bell-peppers @ Family Fare; plums @ Family Fare; sandwich-cookies @ Family Fare
+[2026-07-29T09:11:26] sale-fallback alert sent
+[2026-07-29T09:11:26] sale-windows refreshed
+[2026-07-29T09:11:27] verify-apply re-applied verdicts to fresh board
+[2026-07-29T09:11:32] recipe-overlay applied
+[2026-07-29T09:11:34] engine cost-recipes refreshed db\costed
+[2026-07-29T09:11:34] cost-flag alert threw: You cannot call a method on a null-valued expression.
+[2026-07-29T09:11:35] db-agreement guard: clean
+[2026-07-29T09:11:36] v2 per-serving manifest recomputed
+[2026-07-29T09:11:37] ingredient-map regenerated (derived from specs + feed)
+[2026-07-29T09:11:42] top5-weekly refreshed
+[2026-07-29T09:11:42] free-rotation: rotation: board-week=2026-07-29  target free set = 20 recipe(s)
+[2026-07-29T09:11:42] free-rotation:   chicken #1  $1.53/srv  chicken-bulgogi-rice-bowls
+[2026-07-29T09:11:42] free-rotation:   chicken #2  $1.73/srv  chicken-fried-rice-skillet
+[2026-07-29T09:11:42] free-rotation:   chicken #3  $1.73/srv  claypot-chicken-mushroom-rice
+[2026-07-29T09:11:42] free-rotation:   chicken #4  $1.79/srv  poppy-seed-chicken-and-rice-casserole
+[2026-07-29T09:11:42] free-rotation:   chicken #5  $1.85/srv  slow-cooker-salsa-chicken-bowl
+[2026-07-29T09:11:42] free-rotation:   turkey  #1  $1.83/srv  turkey-huevos-rancheros-rice-bowls
+[2026-07-29T09:11:42] free-rotation:   turkey  #2  $1.91/srv  turkey-biscuit-pot-pie-casserole
+[2026-07-29T09:11:42] free-rotation:   turkey  #3  $1.94/srv  haluski-and-kielbasa-cabbage-noodles
+[2026-07-29T09:11:42] free-rotation:   turkey  #4  $1.99/srv  scalloped-potato-turkey-casserole
+[2026-07-29T09:11:42] free-rotation:   turkey  #5  $2.08/srv  red-beans-turkey-sausage-and-rice
+[2026-07-29T09:11:42] free-rotation:   beef    #1  $2.37/srv  lebanese-hashweh
+[2026-07-29T09:11:42] free-rotation:   beef    #2  $2.39/srv  beef-potato-au-gratin-casserole
+[2026-07-29T09:11:42] free-rotation:   beef    #3  $2.44/srv  bistek-tagalog-filipino-beef-onion-rice
+[2026-07-29T09:11:42] free-rotation:   beef    #4  $2.49/srv  mediterranean-beef-hummus-bowls
+[2026-07-29T09:11:42] free-rotation:   beef    #5  $2.54/srv  million-dollar-baked-spaghetti
+[2026-07-29T09:11:42] free-rotation:   pork    #1  $1.33/srv  bratwurst-sauerkraut-potatoes-bake
+[2026-07-29T09:11:42] free-rotation:   pork    #2  $1.49/srv  slow-cooker-country-style-pork-ribs-rice
+[2026-07-29T09:11:42] free-rotation:   pork    #3  $1.51/srv  vietnamese-thit-kho-braised-pork-and-eggs
+[2026-07-29T09:11:42] free-rotation:   pork    #4  $1.58/srv  orecchiette-italian-sausage-broccoli
+[2026-07-29T09:11:42] free-rotation:   pork    #5  $1.63/srv  slow-cooker-kalua-pork-bowls
+[2026-07-29T09:11:43] free-rotation:   FREE   chicken-bulgogi-rice-bowls -> already-public
+[2026-07-29T09:11:44] free-rotation:   FREE   chicken-fried-rice-skillet -> already-public
+[2026-07-29T09:11:44] free-rotation:   FREE   claypot-chicken-mushroom-rice -> already-public
+[2026-07-29T09:11:45] free-rotation:   FREE   poppy-seed-chicken-and-rice-casserole -> already-public
+[2026-07-29T09:11:45] free-rotation:   FREE   slow-cooker-salsa-chicken-bowl -> already-public
+[2026-07-29T09:11:46] free-rotation:   FREE   turkey-huevos-rancheros-rice-bowls -> already-public
+[2026-07-29T09:11:46] free-rotation:   FREE   turkey-biscuit-pot-pie-casserole -> already-public
+[2026-07-29T09:11:47] free-rotation:   FREE   haluski-and-kielbasa-cabbage-noodles -> already-public
+[2026-07-29T09:11:47] free-rotation:   FREE   scalloped-potato-turkey-casserole -> already-public
+[2026-07-29T09:11:48] free-rotation:   FREE   red-beans-turkey-sausage-and-rice -> already-public
+[2026-07-29T09:11:49] free-rotation:   FREE   lebanese-hashweh -> already-public
+[2026-07-29T09:11:49] free-rotation:   FREE   beef-potato-au-gratin-casserole -> already-public
+[2026-07-29T09:11:50] free-rotation:   FREE   bistek-tagalog-filipino-beef-onion-rice -> already-public
+[2026-07-29T09:11:50] free-rotation:   FREE   mediterranean-beef-hummus-bowls -> already-public
+[2026-07-29T09:11:51] free-rotation:   FREE   million-dollar-baked-spaghetti -> already-public
+[2026-07-29T09:11:51] free-rotation:   FREE   bratwurst-sauerkraut-potatoes-bake -> already-public
+[2026-07-29T09:11:52] free-rotation:   FREE   slow-cooker-country-style-pork-ribs-rice -> already-public
+[2026-07-29T09:11:52] free-rotation:   FREE   vietnamese-thit-kho-braised-pork-and-eggs -> already-public
+[2026-07-29T09:11:53] free-rotation:   FREE   orecchiette-italian-sausage-broccoli -> already-public
+[2026-07-29T09:11:53] free-rotation:   FREE   slow-cooker-kalua-pork-bowls -> already-public
+[2026-07-29T09:11:54] free-rotation:   recipes-db: patched 0 visibility field(s) key-scoped (no whole-file round-trip)
+[2026-07-29T09:11:54] free-rotation: rotation: 20 flip(s), 0 error(s); state + recipes-db + public/free-dinners.json written
+[2026-07-29T09:11:55] smp-feed exported
+[2026-07-29T09:13:08] price-alerts: price-alerts done: 0 email(s) sent
+[2026-07-29T09:13:12] derive-links-from-prices: .
+[2026-07-29T09:13:52] family-fare link fill: APPLIED: 0 Family Fare link(s) written from the plan (0 network calls)
+[2026-07-29T09:13:54] prune-bad-links: links DROPPED (wrong product/price)    : 62   (of which 2 were SALE cells the old rule skipped entirely) | links DROPPED (per-unit unverifiable)  : 5   (cannot prove the link shows our price - unknown is not a pass) | links DROPPED (link carries no price)  : 0   (nothing from the store to check against)
+[2026-07-29T09:14:02] REVIEW FLAGS: 71 -> SANITY|Allspice (ground)|outlier|Walmart $1.06 is 49% below runner-up Baker's $2.09 - verify the price/size parse ; SANITY|Beets (fresh)|outlier|Baker's $2.49 is 53% below runner-up Family Fare $5.32 - verify the price/size parse ; SANITY|Bok Choy|outlier|Baker's $2.49 is 38% below runner-up Hy-Vee $3.99 - verify the price/size parse ; SANITY|Bouillon (cubes / granules / base)|outlier|Walmart $0.08 is 48% below runner-up Sam's Club $0.16 - verify the price/size parse
+[2026-07-29T09:14:03] review-flag alert sent (71 new of 71)
+[2026-07-29T09:14:07] pins:   basis-gap SKIPPED (not pinned): boneless-skinless-chicken-thigh / Hy-Vee  board=1.99 link=3.996  (2.0x)
+[2026-07-29T09:14:07] pins:   basis-gap SKIPPED (not pinned): apple / Hy-Vee  board=0.79 link=1.98  (2.5x)
+[2026-07-29T09:14:07] pins:   basis-gap SKIPPED (not pinned): fries / Sam's Club  board=0.0334 link=0.067  (2.0x)
+[2026-07-29T09:14:07] pins:   basis-gap SKIPPED (not pinned): zero-sugar-soda / Aldi  board=2.15 link=0.3158  (0.1x)
+[2026-07-29T09:14:07] pins:   basis-gap SKIPPED (not pinned): parmesan-cheese / Hy-Vee  board=0.3744 link=1.9967  (5.3x)
+[2026-07-29T09:14:07] pins:   basis-gap SKIPPED (not pinned): smoked-paprika / Family Fare  board=0.9986 link=2.49  (2.5x)
+[2026-07-29T09:14:07] pins:   basis-gap SKIPPED (not pinned): swiss-cheese / Hy-Vee  board=0.3125 link=0.658  (2.1x)
+[2026-07-29T09:14:07] pins: board-overrides: wrote 16 corrections  (skipped: sale=58 collision=874 name-drift=0 no-link=176 bad-price=86 already-agree=2293 basis-gap=7)
+[2026-07-29T09:14:07] guards:   ok    pu-lib per-unit engine self-check
+[2026-07-29T09:14:07] guards:   ok    partial-pull union (compare-deals) self-test
+[2026-07-29T09:14:08] guards:   ok    multipack reject + pricing (walmart-deals) self-test
+[2026-07-29T09:14:08] guards:   ok    name-size vs Walmart unit price (walmart-batch) self-test
+[2026-07-29T09:14:09] guards:   ok    price-mode (in-store pricing)
+[2026-07-29T09:14:11] guards:   ok    household-in-food
+[2026-07-29T09:14:11] guards:   ok    no food commodity matched a wrong-class product (beverage/baby/pet/household/carrier/candy)
+[2026-07-29T09:14:12] guards:   ok    no store lost coverage vs the previous board
+[2026-07-29T09:14:13] guards:   ok    ZERO shipped links disagree with their tile (hard), and no store regressed on coverage (ratchet)
+[2026-07-29T09:14:13] guards:   ok    every override pin is derivable from its own verified link (16 checked)
+[2026-07-29T09:14:13] guards:   ok    no board cell differs from its linked product by a factor
+[2026-07-29T09:14:16] guards:   ok    no store's newest data file collapsed vs its recent history
+[2026-07-29T09:14:16] guards:   ok    out\regular holds only canonical <store>-regular-<date>.json data files
+[2026-07-29T09:14:16] guards:   ok    no undated stale discount is being published as a live sale
+[2026-07-29T09:14:18] guards:   ok    every price we publish is the price the store charges (13525 rows verified against their own current_price)
+[2026-07-29T09:14:18] guards:   ok    Baker's prices reconcile with the raw store capture (0 pack=our-size rows checked against the exact cur)
+[2026-07-29T09:14:18] guards:   ok    the board is built from the newest ads file (ads-2026-07-29 -> comparison-2026-07-29)
+[2026-07-29T09:14:18] guards: 
+[2026-07-29T09:14:18] guards:   warn  fullpull [Walmart]: WARNING - the newest capture we can lean on (walmart-regular-2026-07-18.json) is UNSTAMPED, so we cannot prove it is comprehensive, AND it is already 11 days old; at day 14 it leaves the union window and coverage collapses. Every stamped capture in the window is a partial (max pull_terms 50). Run a full-worklist browser pull. fullpull [Sam's Club]: ok - newest comprehensive capture sams-deals-2026-07-29.json (203 terms) is 0 day(s) old (warn at 10, cliff at 14)
+[2026-07-29T09:14:18] guards:   warn  cell-drops: WARNING - 2 everyday cell(s) priced on comparison-2026-07-24 are missing from today's board. Baker's/Walmart run comprehensive pulls with NO carry-forward by design, so a dead search term is an instant hole - check that store's pull for failed terms first; for the browser stores check as_of expiry + carry-forward: |   bread @ Baker's (was $0.75) |   bread @ Aldi (was $1.65)
+[2026-07-29T09:14:18] guards:   warn  allowlist hygiene: 0 entr(y/ies) reviewed >120 days ago + 18 with no 'reviewed' date - re-verify against the store and stamp 'reviewed: yyyy-MM-dd' (multipack-allowlist / coverage-gap-allowlist)
+[2026-07-29T09:14:18] guards:   warn  38 cell(s) drift from their link by <50% (ordinary price movement; the daily consistency repair handles it)
+[2026-07-29T09:14:18] guards:   warn  Aldi          1838 rows |  78% re-verified against the store TODAY | file 0d old
+[2026-07-29T09:14:18] guards:   warn  Baker's       6960 rows | 100% re-verified against the store TODAY | file 0d old
+[2026-07-29T09:14:18] guards:   warn  Family Fare   2011 rows |   0% re-verified against the store TODAY | file 3d old  <-- NOT price-verified today: this store CAN discount, so it may be publishing regular prices (the Hy-Vee/Baker's bug)
+[2026-07-29T09:14:18] guards:   warn  Fareway        747 rows |   0% re-verified against the store TODAY | file 2d old  <-- NOT price-verified today: this store CAN discount, so it may be publishing regular prices (the Hy-Vee/Baker's bug)
+[2026-07-29T09:14:18] guards:   warn  Hy-Vee        1538 rows |  66% re-verified against the store TODAY | file 0d old | 521 row(s) flagged unverified
+[2026-07-29T09:14:18] guards:   warn  Sam's Club      60 rows |   0% re-verified against the store TODAY | file 15d old  <-- NOT price-verified today: this store CAN discount, so it may be publishing regular prices (the Hy-Vee/Baker's bug)
+[2026-07-29T09:14:18] guards:   warn  Walmart       1351 rows |   0% re-verified against the store TODAY | file 4d old  <-- NOT price-verified today: this store CAN discount, so it may be publishing regular prices (the Hy-Vee/Baker's bug)
+[2026-07-29T09:14:18] guards:   warn  these stores do NOT record the store's current price on their rows, so guard 10 CANNOT check them: Sam's Club - until their pullers record current_price, guard 9's freshness numbers are the only thing standing between them and the basePrice bug
+[2026-07-29T09:14:18] guards: 
+[2026-07-29T09:14:18] guards:   HARD FAIL: multipack size  [Aldi] 'Maruchan Ramen Noodle Soup Chicken 6 PK 13 5 OZ' size=[2.25 oz] records ONE unit (name says a pack count and its stated weight does not reconcile with the size)
+[2026-07-29T09:14:18] guards:   HARD FAIL: multipack size  [Aldi] 'Breakfast Best Sausage Egg Cheese Breakfast Pizza 2pk 112 OZ' size=[11.2 oz] records ONE unit (name says a pack count and its stated weight does not reconcile with the size)
+[2026-07-29T09:14:18] guards:   HARD FAIL: multipack size  [Aldi] 'Gatorade Thirst Quencher 18 Pack 12 FL OZ' size=[12 fl oz] records ONE unit (name says a pack count and its stated weight does not reconcile with the size)
+[2026-07-29T09:14:18] guards:   HARD FAIL: Sam's Club price data is 15 days old - a stale price is a wrong price
+[2026-07-29T09:14:18] guards: 
+[2026-07-29T09:14:18] guards: GUARDS FAILED: 4 hard invariant(s) violated. Board NOT safe to publish.
+[2026-07-29T09:14:18] GUARDS FAILED - board NOT republished (left at last good state)
+[2026-07-29T09:14:20] share: share-image: 5 drops -> C:\Codex\income\public\share\omaha-drops.png
+[2026-07-29T09:14:20] walmart-fullpull ADVISORY: fullpull [Walmart]: WARNING - the newest capture we can lean on (walmart-regular-2026-07-18.json) is UNSTAMPED, so we cannot prove it is comprehensive, AND it is already 11 days old; at day 14 it leaves the union window and coverage collapses. Every stamped capture in the window is a partial (max pull_terms 50). Run a full-worklist browser pull. fullpull [Sam's Club]: ok - newest comprehensive capture sams-deals-2026-07-29.json (203 terms) is 0 day(s) old (warn at 10, cliff at 14)
+[2026-07-29T09:14:23] consistency BREACH - auto-repairing Family Fare + Hy-Vee links + republishing
+[2026-07-29T09:17:18] GUARDS FAILED after consistency auto-repair - NOT republished (left at last good)
+[2026-07-29T09:17:19] consistency STILL breached after repair - no-link=21 (browser-store price drift, needs re-pull)
+[2026-07-29T09:17:21] consistency drift alert sent
+[2026-07-29T09:17:21] store-coverage OK - every staple commodity shows all 7 stores
+[2026-07-29T09:17:22] notify-item-added: notify-item-added: new-ids=1 queue=0 sent=0 failed=0 expired=0
+[2026-07-29T09:17:48] watchers ok: every guard still fires on its own founding bug
+[2026-07-29T09:17:48] run complete; flips=0

@@ -4,67 +4,75 @@
                  ],
     "refused":  [
                     {
+                        "id":  "apples",
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                    },
+                    {
                         "id":  "applesauce",
-                        "why":  "match found but per-unit disagrees: board $0.1454 vs link $0.8725 (83.3%)"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "caesar-salad-kit",
-                        "why":  "match found but its size \"1 bag\" gives no per-unit in oz"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "cherry-tomatoes",
-                        "why":  "match found but its size \"1 pt\" gives no per-unit in oz"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "ground-coriander",
-                        "why":  "no confident match (best 0)"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "ground-fennel",
-                        "why":  "match found but per-unit disagrees: board $0.6232 vs link $0.945 (34.1%)"
+                        "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "gelatin",
-                        "why":  "match found but its size \"3 oz\" gives no per-unit in each"
+                        "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "ground-cinnamon",
-                        "why":  "no confident match (best 0)"
+                        "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "ground-cumin",
-                        "why":  "no confident match (best 0)"
+                        "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "ground-turmeric",
-                        "why":  "no confident match (best 0)"
+                        "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "deli-ham",
-                        "why":  "no confident match (best 0)"
+                        "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "hamburger-buns",
-                        "why":  "match found but its size \"16 oz\" gives no per-unit in each"
+                        "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "muffins",
-                        "why":  "match found but its size \"16 oz\" gives no per-unit in each"
+                        "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "paper-towels",
-                        "why":  "match found but per-unit disagrees: board $1.3738 vs link $1.4988 (8.3%)"
+                        "why":  "not attempted - circuit breaker tripped"
+                    },
+                    {
+                        "id":  "toasted-sesame-seeds",
+                        "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "shower-cleaner",
-                        "why":  "no confident match (best 0)"
+                        "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "tomatillos",
-                        "why":  "match found but per-unit disagrees: board $1.99 vs link $2.49 (20.1%)"
+                        "why":  "not attempted - circuit breaker tripped"
                     }
                 ],
-    "worked":  15,
-    "generated":  "2026-07-28 12:23",
-    "board":  "comparison-2026-07-28.json"
+    "worked":  17,
+    "generated":  "2026-07-29 09:13",
+    "board":  "comparison-2026-07-29.json"
 }
