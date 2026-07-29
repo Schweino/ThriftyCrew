@@ -60,12 +60,21 @@ try {
       $null = RunChild (Join-Path $root 'compare-deals.ps1') $cmpArgs 3 'compare'
       $null = RunChild (Join-Path $root 'audit-coverage-gaps.ps1') @() 3 'coverage' -NonFatal
       $null = RunChild (Join-Path $root 'audit-sale-fallback.ps1') @() 3 'fallback' -NonFatal
-      $null = RunChild (Join-Path $root 'update-history.ps1') @() 1 'history'
+      # NOTE: update-history deliberately does NOT run here. It used to, and that banked the week's "cheapest"
+      # from the board BEFORE the semantic verify - so every wrong-product winner the verify pass exists to
+      # catch set a RECORD LOW on its way out (strawberries $0.0833 from an applesauce, honey $0.1244 from hot
+      # dog buns). It now runs in -Phase publish, after verify-apply. See grocery-engine-guards.
       $null = RunChild (Join-Path $root 'verify-prep.ps1') @() 2 'verify-prep'
       Log 'PHASE compare DONE. Agent: judge verify-input entries (write verify-verdicts), review coverage/fallback/multibuy flags, then -Phase publish.'
     }
     'publish' {
       $null = RunChild (Join-Path $root 'verify-apply.ps1') @() 2 'verify-apply'
+      # Price history banks the VERIFIED board, never the raw comparison. Built at MinStores 1 into its own
+      # file so the ~24 single-store long-tail commodities keep their history even though MinStores 2 keeps
+      # them off the published page - that is the only reason history used to run against the raw board.
+      $histFile = 'verified-history.json'
+      $null = RunChild (Join-Path $root 'verify-apply.ps1') @('-MinStores','1','-OutFile',$histFile) 2 'verify-history'
+      $null = RunChild (Join-Path $root 'update-history.ps1') @('-CompareFile',(Join-Path $root ('out\' + $histFile))) 1 'history'
       $null = RunChild (Join-Path $root 'sanity-check.ps1') @() 4 'sanity' -NonFatal
       $g = Join-Path $root ('out\guards-' + (Get-Date -Format 'yyyy-MM-dd') + '.json')
       if(Test-Path $g){ Log ('sanity flags file present: ' + $g + ' - REVIEW before trusting the board.') }

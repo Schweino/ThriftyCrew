@@ -1482,7 +1482,9 @@
                         "fruit\\s+pops?",
                         "ice\\s+bars?",
                         "\\bhelados\\b",
-                        "\\boutshine\\b"
+                        "\\boutshine\\b",
+                        "\\benergy\\s+zeros?\\b",
+                        "\\bapplesauces?\\b"
                     ]
     },
     {
@@ -3033,7 +3035,8 @@
                         "\\bmouthwash\\b",
                         "hand\\s+soap",
                         "body\\s+spray",
-                        "\\bsunscreen\\b"
+                        "\\bsunscreen\\b",
+                        "\\bblack\\s+unsweeteneds?\\b"
                     ]
     },
     {
@@ -7178,7 +7181,16 @@
                         "\\bmouthwash\\b",
                         "hand\\s+soap",
                         "body\\s+spray",
-                        "\\bsunscreen\\b"
+                        "\\bsunscreen\\b",
+                        "\\bdog\\s+buns?\\b",
+                        "\\bbiscuits?\\b",
+                        "\\brolls?\\b",
+                        "\\btea\\b",
+                        "\\bspread\\b",
+                        "\\bcereal\\b",
+                        "\\bgraham\\b",
+                        "\\bmustard\\b",
+                        "\\bgranola\\b"
                     ]
     },
     {
@@ -8033,7 +8045,8 @@
                         "\\bmouthwash\\b",
                         "hand\\s+soap",
                         "body\\s+spray",
-                        "\\bsunscreen\\b"
+                        "\\bsunscreen\\b",
+                        "\\bancient\\s+grains?\\b"
                     ]
     },
     {
@@ -9864,7 +9877,8 @@
                         "fruit\\s+pops?",
                         "ice\\s+bars?",
                         "\\bhelados\\b",
-                        "\\boutshine\\b"
+                        "\\boutshine\\b",
+                        "\\bblue\\s+raspberrys?\\b"
                     ]
     },
     {
@@ -10141,7 +10155,11 @@
                         "fruit\\s+pops?",
                         "ice\\s+bars?",
                         "\\bhelados\\b",
-                        "\\boutshine\\b"
+                        "\\boutshine\\b",
+                        "\\bcupcakes?\\b",
+                        "\\bbuttercreme\\b",
+                        "\\bicing\\b",
+                        "\\bcherry\\s+peppers?\\b"
                     ]
     },
     {
@@ -11566,7 +11584,8 @@
                         "fruit\\s+pops?",
                         "ice\\s+bars?",
                         "\\bhelados\\b",
-                        "\\boutshine\\b"
+                        "\\boutshine\\b",
+                        "\\bcostena\\s+wholes?\\b"
                     ]
     },
     {
@@ -12223,7 +12242,8 @@
                         "fruit\\s+pops?",
                         "ice\\s+bars?",
                         "\\bhelados\\b",
-                        "\\boutshine\\b"
+                        "\\boutshine\\b",
+                        "\\bhappy\\s+harvests?\\b"
                     ]
     },
     {
@@ -18456,7 +18476,8 @@
                         "\\bmouthwash\\b",
                         "hand\\s+soap",
                         "body\\s+spray",
-                        "\\bsunscreen\\b"
+                        "\\bsunscreen\\b",
+                        "\\bpicante\\s+sauces?\\b"
                     ]
     },
     {
@@ -18908,7 +18929,8 @@
                         "\\bmouthwash\\b",
                         "hand\\s+soap",
                         "body\\s+spray",
-                        "\\bsunscreen\\b"
+                        "\\bsunscreen\\b",
+                        "\\bcuts\\s+pineapples?\\b"
                     ]
     },
     {
@@ -19374,7 +19396,8 @@
                         "\\bmouthwash\\b",
                         "hand\\s+soap",
                         "body\\s+spray",
-                        "\\bsunscreen\\b"
+                        "\\bsunscreen\\b",
+                        "\\blance\\s+varietys?\\b"
                     ]
     },
     {
@@ -28535,7 +28558,8 @@
                         "\\bmouthwash\\b",
                         "hand\\s+soap",
                         "body\\s+spray",
-                        "\\bsunscreen\\b"
+                        "\\bsunscreen\\b",
+                        "\\bcozzis\\s+pestos?\\b"
                     ]
     },
     {
@@ -29481,7 +29505,14 @@
                         "\\bmouthwash\\b",
                         "hand\\s+soap",
                         "body\\s+spray",
-                        "\\bsunscreen\\b"
+                        "\\bsunscreen\\b",
+                        "\\bball\\s+parks?\\b",
+                        "\\bbuns?\\b",
+                        "\\brolls?\\b",
+                        "\\bbagels?\\b",
+                        "\\bbread\\b",
+                        "\\bhoagies?\\b",
+                        "\\bbrioche\\b"
                     ]
     },
     {
@@ -31674,7 +31705,8 @@
                         "\\bmouthwash\\b",
                         "hand\\s+soap",
                         "body\\s+spray",
-                        "\\bsunscreen\\b"
+                        "\\bsunscreen\\b",
+                        "\\bvee\\s+raviolis?\\b"
                     ],
         "relax_global":  [
                              "\\bfrozen\\b"
@@ -31891,7 +31923,11 @@
                         "\\bmouthwash\\b",
                         "hand\\s+soap",
                         "body\\s+spray",
-                        "\\bsunscreen\\b"
+                        "\\bsunscreen\\b",
+                        "\\bbasil\\s+wraps?\\b",
+                        "\\bvinaigrettes?\\b",
+                        "\\bdressings?\\b",
+                        "\\bhummus\\b"
                     ]
     },
     {
@@ -41714,5 +41750,3 @@
                     ]
     }
 ]
-
-

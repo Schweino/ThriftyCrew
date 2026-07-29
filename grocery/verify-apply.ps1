@@ -8,7 +8,11 @@
   Verdict file shape:
     { week_of, verdicts: [ { id, entries: [ { store, keep: bool, annotation: string|null, reason: string } ] } ] }
 #>
-param([string]$CompareFile = "", [string]$VerdictFile = "", [string]$OutDir = "", [int]$MinStores = 2)
+param([string]$CompareFile = "", [string]$VerdictFile = "", [string]$OutDir = "", [int]$MinStores = 2,
+      # Write somewhere other than verified-<week>.json. Used to build a SECOND, MinStores-1 verified board
+      # purely as the price-history input: history must bank verified numbers, but it must also keep tracking
+      # the ~24 single-store long-tail commodities that MinStores 2 legitimately keeps off the published page.
+      [string]$OutFile = "")
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
@@ -49,7 +53,7 @@ foreach ($row in $doc.comparison) {
 }
 
 $out = [ordered]@{ built_at=(Get-Date).ToString('s'); week_of=$week; verified_from=$CompareFile; commodities=$verified.Count; comparison=$verified.ToArray() }
-$file = Join-Path $OutDir ("verified-"+$week+".json")
+$file = if ($OutFile) { if ([IO.Path]::IsPathRooted($OutFile)) { $OutFile } else { Join-Path $OutDir $OutFile } } else { Join-Path $OutDir ("verified-"+$week+".json") }
 ($out | ConvertTo-Json -Depth 8) | Set-Content $file -Encoding UTF8
 
 Write-Output ("VERIFIED  week $week   commodities kept: " + $verified.Count + " / " + @($doc.comparison).Count)

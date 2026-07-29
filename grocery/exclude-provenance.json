@@ -1,0 +1,256 @@
+﻿{
+    "readme":  "Provenance for excludes added by promote-verdicts.ps1. commodities.json is what the engine reads; this file records WHY each promoted rule exists, which weeks and items produced it, and is what you read before reverting one. A rule here was gated: it provably matched the dropped item and matched NO item the verify pass ever kept for that commodity.",
+    "rules":  [
+                  {
+                      "commodity":  "honey",
+                      "pattern":  "\\bdog\\s+buns?\\b",
+                      "added":  "2026-07-29",
+                      "source":  "promote-verdicts",
+                      "from_weeks":  [
+                                         "2026-07-29"
+                                     ],
+                      "killed_items":  [
+                                           "Kroger Rich N Honey Hot Dog Buns"
+                                       ],
+                      "verdict_reason":  "Not honey. \u0027Kroger Rich N Honey Hot Dog Buns\u0027 is bread that matched on the word honey."
+                  },
+                  {
+                      "commodity":  "raspberries",
+                      "pattern":  "\\bblue\\s+raspberrys?\\b",
+                      "added":  "2026-07-29",
+                      "source":  "promote-verdicts",
+                      "from_weeks":  [
+                                         "2026-07-29"
+                                     ],
+                      "killed_items":  [
+                                           "Bomb Pop Extremes Super Sour Blue Raspberry Ice Pops"
+                                       ],
+                      "verdict_reason":  "Not fruit. \u0027Bomb Pop Extremes Super Sour Blue Raspberry Ice Pops\u0027 is a freezer novelty that matched on \u0027raspberry\u0027."
+                  },
+                  {
+                      "commodity":  "crackers",
+                      "pattern":  "\\blance\\s+varietys?\\b",
+                      "added":  "2026-07-29",
+                      "source":  "promote-verdicts",
+                      "from_weeks":  [
+                                         "2026-07-17"
+                                     ],
+                      "killed_items":  [
+                                           "Lance Variety Pack Sandwich Crackers, 40 pk."
+                                       ],
+                      "verdict_reason":  "\u0027Lance Variety Pack Sandwich Crackers\u0027 are filled cracker sandwiches (peanut butter/cheese), a different snack product than saltine/buttery crackers."
+                  },
+                  {
+                      "commodity":  "queso",
+                      "pattern":  "\\bpicante\\s+sauces?\\b",
+                      "added":  "2026-07-29",
+                      "source":  "promote-verdicts",
+                      "from_weeks":  [
+                                         "2026-07-29"
+                                     ],
+                      "killed_items":  [
+                                           "Pace salsa, picante sauce or queso bowls, 11 to 22 oz., 2/ $5.00"
+                                       ],
+                      "verdict_reason":  "Combined A-or-B-or-C ad line with a size range: \u0027Pace salsa, picante sauce or queso bowls, 11 to 22 oz., 2/ $5.00\u0027. Two of the three products are not queso and the size spans 2x."
+                  },
+                  {
+                      "commodity":  "strawberries",
+                      "pattern":  "\\benergy\\s+zeros?\\b",
+                      "added":  "2026-07-29",
+                      "source":  "promote-verdicts",
+                      "from_weeks":  [
+                                         "2026-07-17",
+                                         "2026-07-22"
+                                     ],
+                      "killed_items":  [
+                                           "Monster Energy Zero Sugar, Strawberry Shot, 16 fl. oz., 24 pk."
+                                       ],
+                      "verdict_reason":  "Monster Energy Zero Sugar Strawberry Shot is an energy drink, not fresh strawberries"
+                  },
+                  {
+                      "commodity":  "toasted-sesame-seeds",
+                      "pattern":  "\\bball\\s+parks?\\b",
+                      "added":  "2026-07-29",
+                      "source":  "promote-verdicts",
+                      "from_weeks":  [
+                                         "2026-07-22",
+                                         "2026-07-29"
+                                     ],
+                      "killed_items":  [
+                                           "Ball Park Sesame Seed Burger Buns, 8 Count"
+                                       ],
+                      "verdict_reason":  "Ball Park Sesame Seed Burger Buns, not sesame seeds"
+                  },
+                  {
+                      "commodity":  "sun-dried-tomatoes",
+                      "pattern":  "\\bbasil\\s+wraps?\\b",
+                      "added":  "2026-07-29",
+                      "source":  "promote-verdicts",
+                      "from_weeks":  [
+                                         "2026-07-22",
+                                         "2026-07-29"
+                                     ],
+                      "killed_items":  [
+                                           "Mission Sun-Dried Tomato Basil Wraps 6Ct"
+                                       ],
+                      "verdict_reason":  "Mission Sun-Dried Tomato Basil tortilla Wraps, not sun-dried tomatoes"
+                  },
+                  {
+                      "commodity":  "black-pepper",
+                      "pattern":  "\\bancient\\s+grains?\\b",
+                      "added":  "2026-07-29",
+                      "source":  "promote-verdicts",
+                      "from_weeks":  [
+                                         "2026-07-29"
+                                     ],
+                      "killed_items":  [
+                                           "Simple Truth Protein Black Pepper Lentils Brown Rice and Ancient Grains Whole Grain Blend"
+                                       ],
+                      "verdict_reason":  "Not black pepper. \u0027Simple Truth Protein Black Pepper Lentils Brown Rice and Ancient Grains Whole Grain Blend\u0027 is a seasoned grain side dish; \u0027black pepper\u0027 is a flavour word in its name. It was crowning the spice at $0.34/oz."
+                  },
+                  {
+                      "commodity":  "canned-pineapple",
+                      "pattern":  "\\bcuts\\s+pineapples?\\b",
+                      "added":  "2026-07-29",
+                      "source":  "promote-verdicts",
+                      "from_weeks":  [
+                                         "2026-07-29"
+                                     ],
+                      "killed_items":  [
+                                           "Hy-Vee Short Cuts pineapple chunks, FUEL SAVER EARN 5¢ OFF PER GALLON, $4.99 lb."
+                                       ],
+                      "verdict_reason":  "Fresh-cut produce, not canned. \u0027Hy-Vee Short Cuts pineapple chunks\u0027 is the refrigerated cut-fruit tub, and the captured line is a fuel-saver ad string quoting $4.99 lb."
+                  },
+                  {
+                      "commodity":  "cheese-tortellini",
+                      "pattern":  "\\bvee\\s+raviolis?\\b",
+                      "added":  "2026-07-29",
+                      "source":  "promote-verdicts",
+                      "from_weeks":  [
+                                         "2026-07-29"
+                                     ],
+                      "killed_items":  [
+                                           "Hy-Vee ravioli or tortellini, 42 or 48 oz., $5.99"
+                                       ],
+                      "verdict_reason":  "Combined A-or-B ad line with a size range: \u0027Hy-Vee ravioli or tortellini, 42 or 48 oz., $5.99\u0027. Neither which product nor which size is determinable, so the per-ounce price is a coin flip."
+                  },
+                  {
+                      "commodity":  "coffee",
+                      "pattern":  "\\bblack\\s+unsweeteneds?\\b",
+                      "added":  "2026-07-29",
+                      "source":  "promote-verdicts",
+                      "from_weeks":  [
+                                         "2026-07-29"
+                                     ],
+                      "killed_items":  [
+                                           "Stok Cold Brew Coffee Black Unsweetened 48 FL OZ"
+                                       ],
+                      "verdict_reason":  "Liquid, not ground. \u0027Stok Cold Brew Coffee Black Unsweetened 48 FL OZ\u0027 is ready-to-drink cold brew; comparing its fluid ounces against ground coffee\u0027s dry ounces is why it read 66% under the runner-up."
+                  },
+                  {
+                      "commodity":  "fresh-green-beans",
+                      "pattern":  "\\bhappy\\s+harvests?\\b",
+                      "added":  "2026-07-29",
+                      "source":  "promote-verdicts",
+                      "from_weeks":  [
+                                         "2026-07-29"
+                                     ],
+                      "killed_items":  [
+                                           "Happy Harvest French Green Beans 14 5 OZ"
+                                       ],
+                      "verdict_reason":  "Canned, not fresh. \u0027Happy Harvest French Green Beans 14.5 OZ\u0027 is Aldi\u0027s canned-vegetable label; this commodity is fresh green beans priced per pound. It was 49% under the runner-up because a can of beans is not a pound of produce."
+                  },
+                  {
+                      "commodity":  "jalapenos",
+                      "pattern":  "\\bcostena\\s+wholes?\\b",
+                      "added":  "2026-07-29",
+                      "source":  "promote-verdicts",
+                      "from_weeks":  [
+                                         "2026-07-29"
+                                     ],
+                      "killed_items":  [
+                                           "La Costena Whole Jalapeno Peppers"
+                                       ],
+                      "verdict_reason":  "Canned, not fresh. \u0027La Costena Whole Jalapeno Peppers\u0027 is the canned pepper; fresh jalapenos are the commodity here and pickled/canned ones already have their own row (pickled-jalapenos)."
+                  },
+                  {
+                      "commodity":  "pesto",
+                      "pattern":  "\\bcozzis\\s+pestos?\\b",
+                      "added":  "2026-07-29",
+                      "source":  "promote-verdicts",
+                      "from_weeks":  [
+                                         "2026-07-29"
+                                     ],
+                      "killed_items":  [
+                                           "Mama Cozzis Pesto Burrata 1815 OZ"
+                                       ],
+                      "verdict_reason":  "Not pesto. \u0027Mama Cozzis Pesto Burrata\u0027 is a refrigerated pizza/burrata item, and its captured size (1815 OZ) is a mangled decimal we could not prove, so the per-ounce price is unsound as well."
+                  },
+                  {
+                      "commodity":  "strawberries",
+                      "pattern":  "\\bapplesauces?\\b",
+                      "added":  "2026-07-29",
+                      "source":  "hand-picked over the scorer\u0027s brand bigram",
+                      "from_weeks":  [
+                                         "2026-07-29"
+                                     ],
+                      "killed_items":  [
+                                           "Kroger Strawberry Applesauce"
+                                       ],
+                      "verdict_reason":  "Applesauce is never fresh fruit. Preferred over the auto-proposed \\bkroger\\s+strawberrys?\\b, which would also have killed a legitimately named Kroger strawberry product."
+                  },
+                  {
+                      "commodity":  "toasted-sesame-seeds",
+                      "pattern":  "\\bbuns?\\b , \\brolls?\\b , \\bbagels?\\b , \\bbread\\b , \\bhoagies?\\b , \\bbrioche\\b",
+                      "added":  "2026-07-29",
+                      "source":  "carrier-noun tightening (kept-set gate OVERRIDDEN on purpose)",
+                      "from_weeks":  [
+                                         "2026-07-29"
+                                     ],
+                      "killed_items":  [
+                                           "bakery/beverage/dressing carriers of the flavour word"
+                                       ],
+                      "verdict_reason":  "This row\u0027s own word is a common FLAVOUR descriptor, so its include (e.g. \\bhoney\\b) matches biscuits, tea and spreads. Excluding one impostor only promotes the next: killing the hot dog buns handed the honey crown to Pillsbury Honey Butter Biscuits. The gate refused these patterns because those impostors were never DROPPED in a verdict - but not-dropped only means nobody judged them, it does not mean verified. Overridden deliberately: a biscuit is not honey, a hoagie roll is not sesame seeds, a vinaigrette is not sun-dried tomatoes."
+                  },
+                  {
+                      "commodity":  "honey",
+                      "pattern":  "\\bbiscuits?\\b , \\brolls?\\b , \\btea\\b , \\bspread\\b , \\bcereal\\b , \\bgraham\\b , \\bmustard\\b , \\bglaze\\b , \\bgranola\\b",
+                      "added":  "2026-07-29",
+                      "source":  "carrier-noun tightening (kept-set gate OVERRIDDEN on purpose)",
+                      "from_weeks":  [
+                                         "2026-07-29"
+                                     ],
+                      "killed_items":  [
+                                           "bakery/beverage/dressing carriers of the flavour word"
+                                       ],
+                      "verdict_reason":  "This row\u0027s own word is a common FLAVOUR descriptor, so its include (e.g. \\bhoney\\b) matches biscuits, tea and spreads. Excluding one impostor only promotes the next: killing the hot dog buns handed the honey crown to Pillsbury Honey Butter Biscuits. The gate refused these patterns because those impostors were never DROPPED in a verdict - but not-dropped only means nobody judged them, it does not mean verified. Overridden deliberately: a biscuit is not honey, a hoagie roll is not sesame seeds, a vinaigrette is not sun-dried tomatoes."
+                  },
+                  {
+                      "commodity":  "sun-dried-tomatoes",
+                      "pattern":  "\\bvinaigrettes?\\b , \\bdressings?\\b , \\bhummus\\b",
+                      "added":  "2026-07-29",
+                      "source":  "carrier-noun tightening (kept-set gate OVERRIDDEN on purpose)",
+                      "from_weeks":  [
+                                         "2026-07-29"
+                                     ],
+                      "killed_items":  [
+                                           "bakery/beverage/dressing carriers of the flavour word"
+                                       ],
+                      "verdict_reason":  "This row\u0027s own word is a common FLAVOUR descriptor, so its include (e.g. \\bhoney\\b) matches biscuits, tea and spreads. Excluding one impostor only promotes the next: killing the hot dog buns handed the honey crown to Pillsbury Honey Butter Biscuits. The gate refused these patterns because those impostors were never DROPPED in a verdict - but not-dropped only means nobody judged them, it does not mean verified. Overridden deliberately: a biscuit is not honey, a hoagie roll is not sesame seeds, a vinaigrette is not sun-dried tomatoes."
+                  },
+                  {
+                      "commodity":  "cherries",
+                      "pattern":  "\\bcupcakes?\\b , \\bbuttercreme\\b , \\bicing\\b , \\bcherry\\s+peppers?\\b",
+                      "added":  "2026-07-29",
+                      "source":  "side-effect of the raspberries rule, caught by audit-match-soundness",
+                      "from_weeks":  [
+                                         "2026-07-29"
+                                     ],
+                      "killed_items":  [
+                                           "Bakery Fresh White Mini Cupcakes with Cherry and Blue Raspberry Buttercreme Icing",
+                                           "Mezzetta Mild Sweet Cherry Peppers"
+                                       ],
+                      "verdict_reason":  "Excluding \"blue raspberry\" from raspberries pushed a cherry/raspberry CUPCAKE into cherries instead - the soundness guard caught the move and held the publish. Removing an impostor from one row can hand it to a neighbouring row; always re-run the guard after a rule change. Also caught Mezzetta Cherry Peppers sitting third on cherries."
+                  }
+              ]
+}
