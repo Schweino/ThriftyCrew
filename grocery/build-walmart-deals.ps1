@@ -183,11 +183,28 @@ function Format-Qty([double]$q) {
 # Build ONE engine-shaped row from a raw capture row. Returns @{row=..; err=..}
 function Build-Row($raw) {
   $lpm = [regex]::Match(("" + $raw.lp), '\$\s*([\d,]+(?:\.\d{1,2})?)')
-  $upm = [regex]::Match(("" + $raw.up), '\$\s*([\d,]+(?:\.\d{1,3})?)\s*/\s*(.+)$')
   if (-not $lpm.Success) { return @{ err='no linePrice' } }
-  if (-not $upm.Success) { return @{ err='no unitPrice' } }
+
+  # WALMART PRICES CHEAP UNITS IN CENTS: "24.9 c/oz", not "$0.249/oz". Sam's never does - this parser was
+  # lifted from build-sams-deals - so a dollars-only regex silently rejected EVERY cent-denominated row as
+  # "no unitPrice". On 2026-07-29 that was 927 of 1,199 unit prices (707 of them c/oz), and the capture built
+  # 184 priced rows instead of ~1,350. It reads as "the pull came back thin" and gets blamed on the bot wall.
+  # Which notation you get depends on where the price was read: priceInfo.unitPrice gives dollars, the
+  # priceDetails.priceLines UNIT_PRICE fallback gives cents. Accept both.
+  # NOTE the cent sign arrives mangled (UTF-8 read as Latin-1) as "A-cedilla cent", so match on the DIGITS +
+  # slash shape and any non-digit run before the slash rather than on the glyph itself.
+  $upRaw = ("" + $raw.up)
+  $upm = [regex]::Match($upRaw, '\$\s*([\d,]+(?:\.\d{1,3})?)\s*/\s*(.+)$')
+  if ($upm.Success) {
+    $up = [double]($upm.Groups[1].Value -replace ',','')
+  } else {
+    # cents form: "<number> <cent-glyph>/<unit>"  ->  dollars
+    $cm = [regex]::Match($upRaw, '^\s*([\d,]+(?:\.\d{1,3})?)\s*[^\d/\s]{1,3}\s*/\s*(.+)$')
+    if (-not $cm.Success) { return @{ err='no unitPrice' } }
+    $up = [double]($cm.Groups[1].Value -replace ',','') / 100.0
+    $upm = $cm
+  }
   $lp = [double]($lpm.Groups[1].Value -replace ',','')
-  $up = [double]($upm.Groups[1].Value -replace ',','')
   if ($lp -le 0 -or $up -le 0) { return @{ err='zero price' } }
   $u = Resolve-Unit $upm.Groups[2].Value
   if (-not $u) { return @{ err=('unknown unit "' + $upm.Groups[2].Value + '"') } }
