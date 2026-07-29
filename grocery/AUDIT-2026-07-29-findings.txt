@@ -1,0 +1,948 @@
+﻿=== [1] BLOCKING / bug / conf=proven
+TITLE: Weekly SKILL step F3 omits -ModeVerified, so following it literally makes compare-deals drop all 433 Fareway cells
+EVID: SKILL.md:60 says only: "Then run  powershell -ExecutionPolicy Bypass -File C:\Codex\income\grocery\build-fareway-regular.ps1  -> it maps to out\regular\fareway-regular-<today>.json (auto-loaded by the engine...)". build-fareway-regular.ps1:127-129: `$pmode = if ($ModeVerified) { 'in-store' } else { 'unverified' }` + a Write-Warning saying "Fareway is (correctly) excluded from the board". compare-deals.ps1:628: `if (@('Aldi','Fareway') -contains [string]$ex.store -and ([string]$ex.price_mode -ne 'in-store' -or -not [string]$ex.mode_verified)) { ...DROPPED... }`. Fareway currently supplies 433 of 493 commodity cells (measured from out\comparison-2026-07-29.json). The SIBLING task doc already has it right: grocery-fareway-daily-check/SKILL.md:23 prescribes `build-fareway-regular.ps1 -Today <today> -ModeVerified <today>` and states "-ModeVerified is REQUIRED... without it price_mode='unverified' and compare-deals drops Fareway entirely".
+IMPACT: An agent that follows the weekly SKILL verbatim writes a Fareway file the engine silently discards. The board loses its second-largest store column (433 of 493 rows) and the only visible symptom is a Write-Warning buried in build output; publish-deals-page's coverage gate would then HOLD the whole board on "thin/missing stores: Fareway=0".
+FIX: Replace the SKILL.md:60 command with the exact line already proven in grocery-fareway-daily-check/SKILL.md:23: `build-fareway-regular.ps1 -Today <today> -ModeVerified <today>`, with the same one-sentence warning about what happens without it.
+
+=== [2] HIGH / bug / conf=proven
+TITLE: Weekly SKILL's Fareway extractor emits no product URL, which build-fareway-regular needs for links AND for the per-lb basis override
+EVID: SKILL.md:59 extractor ends `out.push({id:'<COMMODITY-ID>',name:name,price:cur[1]||'',per:...,orig:orig,unit:unit,size:size})` - no url. build-fareway-regular.ps1 reads `$r.url` in three load-bearing places: :63 the slug-basis override (`-1-lb` slug forces size='lb'), :101 `$row['link_url'] = [string]$r.url`, :115 the store-fareway1-urls.json emission. The SKILL's own IDENTITY RULE at SKILL.md:25 demands a Fareway `link_url` - and even that names the wrong field, since the builder reads `url`, not `link_url`. grocery-fareway-daily-check/SKILL.md:23 gets it right: "array of {id,name,price,per,orig,unit,size,url}); every item MUST have a url".
+IMPACT: A Fareway capture built from the weekly SKILL produces zero See-item links for the store and re-arms the exact bug build-fareway-regular.ps1:58-63 was written to stop (Fareway cantaloupe published at $0.88 for a whole melon because the tile said 'each' and only the slug said per-lb).
+FIX: Add `url` to the SKILL.md:59 extractor push (`u=(card.querySelector('a[href*="/products/"]')||{}).href`) and correct SKILL.md:25's Fareway line from "link_url" to "url" so it matches what build-fareway-regular actually reads.
+
+=== [3] HIGH / bug / conf=proven
+TITLE: browser-refresh-due.ps1 does not check Fareway, so the weekly STEP 0 gate says FRESH with the store's data unrefreshed
+EVID: browser-refresh-due.ps1:19-26 lists exactly six feeds (Baker's ad, Sam's, Baker's everyday, Hy-Vee everyday, Walmart everyday, Aldi everyday) - no Fareway. stores.json marks Fareway `"capture": "browser (Instacart storefront)"`. Ran it just now: `FRESH - browser refresh already done for the week of 2026-07-29; nothing to do. EXIT=0`, while `ls out/regular/fareway-regular-*` shows the newest is fareway-regular-2026-07-27.json (this week's F3 never ran). SKILL.md:8 tells the agent that on FRESH it must "STOP immediately (do NOT open a browser or pull anything)". The identical six-feed list is duplicated in check-ad-cycles.ps1:213-221, so the missed-refresh alert to Brad also cannot name Fareway.
+IMPACT: A week where the Fareway browser sweep never runs is invisible to both the pre-run idempotency gate and the post-run stale alert. The store contributing 433 of 493 board cells can go arbitrarily stale with every guard reporting green.
+FIX: Add `"Fareway everyday" = (NewestMtime (Join-Path $OutDir 'regular\fareway-regular-*.json'))` to browser-refresh-due.ps1:19-26, and de-duplicate: have check-ad-cycles.ps1:213-221 call browser-refresh-due.ps1 instead of carrying its own copy of the same rule (the two-copies-of-one-rule class today's pu-lib fix closed).
+
+=== [4] HIGH / bug / conf=proven
+TITLE: Both freshness gates key on file mtime, so today's heal-mojibake rewrite made stale captures read as this week's pull
+EVID: browser-refresh-due.ps1:18 and check-ad-cycles.ps1:213 use `Sort-Object LastWriteTime -Descending` then compare `$m.Date -lt $lastWed`; fareway-daily-due.ps1:24-25 does the same (`$reg.LastWriteTime.Date -eq $today`) under a comment that claims "its everyday/storefront file dated today counts". heal-mojibake.ps1:22 globs `out\regular\*-regular-*.json` and :46 rewrites each with Set-Content. Ran fareway-daily-due.ps1: `FRESH  Fareway already refreshed today (07-29 12:28) - nothing to do` -- but the newest Fareway file is fareway-regular-2026-07-27.json, whose 12:28 mtime is the mojibake rewrite. Replayed browser-refresh-due's own logic with today's dated files hidden (scratchpad\sim-refresh-due.ps1): "Baker's everyday -> bakers-regular-2026-07-18.json mtime=2026-07-29 12:27" and "Walmart everyday -> walmart-regular-2026-07-18.json mtime=2026-07-29 12:28" - two 11-day-old captures both satisfying the week's freshness check.
+IMPACT: Any maintenance sweep that rewrites historical capture files (heal-mojibake -Apply today; any future backfill) silently blinds the weekly STEP 0 gate, the weekly missed-refresh alert and the daily Fareway check. A store whose pull failed outright is reported as refreshed, and the SKILL then tells the agent to STOP.
+FIX: Key freshness on the capture date encoded in the filename, not LastWriteTime: parse `-(\d{4}-\d{2}-\d{2})\.json$` and compare that date to $lastWed in all three gates (browser-refresh-due.ps1:18-28, check-ad-cycles.ps1:213-223, fareway-daily-due.ps1:24-25,38).
+
+=== [5] HIGH / bug / conf=proven
+TITLE: build-aldi-regular hard-codes price_mode='in-store' with no proof - the exact guard-defeat that put 320 marked-up Fareway cells on the board
+EVID: build-aldi-regular.ps1:272-273 writes `price_mode = 'in-store'` and `mode_verified = $Date` unconditionally. The capture CSV it consumes is `id|term|name|prices|unit|size|href` (build-aldi-regular.ps1:10-18) - it carries no fulfilment-mode field, so the builder cannot know. build-fareway-regular.ps1:119-127 documents this as a known incident: "This script used to hard-code price_mode='in-store' - which DEFEATED the guard: on 2026-07-15 the whole storefront extract was found to be delivery-priced (butter +14%, cream cheese +50%, OJ +37%) yet stamped in-store, putting 320 marked-up cells on the board", and was fixed to require -ModeVerified. audit-price-mode.ps1:47-54 and compare-deals.ps1:628 both read only the self-declared field, so neither can catch it. Aldi currently supplies 339 board cells.
+IMPACT: If an Aldi sweep is captured in Delivery or Pickup mode (the default a cold aldi.us session serves), every one of the 339 Aldi cells ships ~10% high while audit-price-mode prints "OK Aldi: in-store (verified 2026-07-29)". This is the sibling of a bug already fixed on the other Instacart-platform store.
+FIX: Give build-aldi-regular.ps1 the same `-ModeVerified` contract as build-fareway-regular.ps1:18,127-129: default price_mode to 'unverified' and only stamp 'in-store' when the caller passes the date it confirmed the In-Store toggle. Update SKILL.md:56 to pass it.
+
+=== [6] HIGH / bug / conf=proven
+TITLE: promote-verdicts.ps1 (today's fix #1) has no caller and is named in no runbook - it will never run again
+EVID: `grep -rn "promote-verdicts" --include=*.ps1 --include=*.md C:\Codex\income` returns only promote-verdicts.ps1 itself and exclude-provenance.json (the data it wrote today). `grep -c "promote-verdicts" SKILL.md` = 0, and no other file under C:\Users\Owner\.claude\scheduled-tasks\ mentions it. weekly-post-capture.ps1 does not invoke it in any of its three phases. Its own header (promote-verdicts.ps1:33-35) shows it is dry-run by default and needs `-Apply` plus a human `-Ids` pick; the only instruction to run it lives in memory grocery-engine-guards.md:28, which SKILL.md:16's token-diet paragraph tells the agent NOT to read.
+IMPACT: The fix built today to stop the verify pass re-making the same 81 DROP judgments every week is orphaned. Next Wednesday's run produces verdicts, applies them for one week, and the repeats start over - the exact non-convergence (broccoli|Sam's Club and apples|Family Fare dropped three separate weeks each) the script was built to end.
+FIX: Add a step to SKILL.md step H, right after verify-apply: run `promote-verdicts.ps1` (dry run), review the proposals, then `-Apply -Ids ...`. Optionally have weekly-post-capture.ps1 -Phase publish run the dry run and print the proposal count so the agent cannot miss it.
+
+=== [7] HIGH / bug / conf=proven
+TITLE: SKILL step F still ends with "Then update-history.ps1", re-introducing the pre-verify history banking fixed today
+EVID: SKILL.md:67 (end of step F, before the step H semantic verify): "So in step A, positively scan each tracked commodity's flyer area for 'Buy / Get / Mix & Match / BOGO' wording before trusting the zero. Then update-history.ps1." This contradicts weekly-post-capture.ps1:65-68, which states: "NOTE: update-history deliberately does NOT run here. It used to, and that banked the week's 'cheapest' from the board BEFORE the semantic verify - so every wrong-product winner the verify pass exists to catch set a RECORD LOW on its way out (strawberries $0.0833 from an applesauce, honey $0.1244 from hot dog buns)." The correct call is now weekly-post-capture.ps1:79, inside -Phase publish and against verified-history.json.
+IMPACT: An agent following the step letters (which SKILL.md:14 explicitly says "remain the reference for WHAT happens") runs update-history against the raw pre-verify comparison, permanently banking record lows from the wrong-product winners the verify pass then drops. price-history.json is append-only and drives the "cheapest since" claims on the live page.
+FIX: Delete "Then update-history.ps1." from SKILL.md:67 and replace it with a pointer to -Phase publish, mirroring the comment at weekly-post-capture.ps1:75-79.
+
+=== [8] HIGH / bug / conf=proven
+TITLE: grocery-method-sams.md prescribes the exact row shape that got the 2026-07-15 Sam's capture quarantined, and never mentions build-sams-deals.ps1
+EVID: grocery-method-sams.md:8: "Feed into the engine via `-SamsFile` with `ad_price`=the per-unit dollar + `size`=the bare unit token ('lb'/'oz'/'dozen'/'gal') so the engine's bare-unit path returns it as-is." build-sams-deals.ps1:11-23 says that is the quarantined shape: "The 2026-07-15 capture was QUARANTINED... It wrote Sam's per-unit price as ad_price with a BARE unit in size ('$1.09' + size:'each')... So 'Seedless English Cucumbers, 3 ct.' at $1.09 PER EACH became $0.3633/each - wrong by 3x", and the builder now emits the PACKAGE shape (ad_price=linePrice, size=derived pack qty). The memory file is the whole Sam's method doc and mentions no builder at all. SKILL.md:16 instructs: "Per-store methods live in grocery-method-<store>.md ... Follow the method files exactly."
+IMPACT: The one per-store doc the SKILL orders the agent to follow exactly for Sam's teaches the ingest convention that produced a 3x pricing error and a full-file quarantine, and omits the script written specifically to prevent hand-assembly.
+FIX: Rewrite grocery-method-sams.md's ingest paragraph to: capture `q|n|lp|up|id` (linePrice AND unitPrice, per SKILL.md:41), save to out\captures\sams-capture-<date>.csv, and run `build-sams-deals.ps1 -In <csv> -Date <date>`; state that hand-assembling out\sams\sams-deals-*.json is forbidden and why (build-sams-deals.ps1:11-23).
+
+=== [9] HIGH / bug / conf=proven
+TITLE: The Fareway extractor's two silent repairs live only in a scratchpad script that no longer exists, and select-fareway-shop's default input path is a dead session directory
+EVID: grocery-method-fareway.md:21: "Both repairs live in the run's `fw-to-jsonl.ps1` (scratchpad) between the browser capture and `select-fareway-shop.ps1`." `find C:\Codex\income -name "fw-to-jsonl*"` returns nothing. select-fareway-shop.ps1:22 hard-codes `$scratch = 'C:\Users\Owner\AppData\Local\Temp\claude\C--Codex\32c86fd5-620b-4a8f-a670-285987b7c2fb\scratchpad'` as the default -In, a specific past session's temp dir. The defects the missing script repairs are, per grocery-method-fareway.md:19-20, a glued unit price yielding "$649/lb" for a $6.49/lb item (39 of 175 unit-carrying candidates) and descriptor names like "Sold individually" that silently drop the store from a row (82 rows).
+IMPACT: The repaired-capture step in the documented Fareway pipeline has no artifact in the repo. Next run either re-writes both repairs from prose or skips them, publishing 100x prices and silently losing ~82 Fareway rows. select-fareway-shop.ps1 run without -In points at a temp directory tied to a dead session.
+FIX: Promote the two repairs out of the scratchpad into a committed script (or into select-fareway-shop.ps1's ingest, alongside a -SelfTest with both defects as fixtures), and change select-fareway-shop.ps1:22 to default -In to out\fareway\fareway-shop-<date>.jsonl instead of a session temp path.
+
+=== [10] HIGH / issue / conf=proven
+TITLE: SKILL's headless-first paragraph lists only four browser steps and drops Fareway (F3), its own step
+EVID: SKILL.md:12: "Only FOUR steps still need Chrome: the Baker's flyer vision read (A), Sam's (B), Walmart (E) and Aldi (F2)." But SKILL.md:58-60 is step F3 (Fareway), and stores.json records Fareway as `"capture": "browser (Instacart storefront)"`; grocery-method-fareway.md:12 calls it "Browser-ONLY (persisted-query GraphQL + bot protection = no clean headless API, like Aldi)". The consequence is on disk: today's run produced 2026-07-29 files for bakers/sams/hyvee/walmart/aldi but the newest Fareway everyday file is fareway-regular-2026-07-27.json.
+IMPACT: The paragraph an agent reads first to plan its browser budget tells it Fareway is not a browser step, so F3 gets skipped - which is what happened on 2026-07-29 - and no gate reports it (see the browser-refresh-due finding).
+FIX: Change SKILL.md:12 to "FIVE steps still need Chrome: A, B, E, F2 and F3 (Fareway)", and list the Fareway sweep in the same sentence as the other browser stores.
+
+=== [11] MEDIUM / issue / conf=proven
+TITLE: SKILL's ORCHESTRATOR and step J describe a publish phase that no longer matches weekly-post-capture, and mis-explain what a HELD means
+EVID: SKILL.md:14 describes phase publish as "(verify-apply + sanity + gated publish + resolve-worklist)" - it omits update-history (weekly-post-capture.ps1:79) and guards.ps1 (weekly-post-capture.ps1:90-92, where `if($gc -eq 2){ ... exit 2 }`), both added today. SKILL.md:79 tells the agent a HELD means "a store's pull came back thin, so go fix that store and re-run", but publish-deals-page.ps1 has three further exit-2 gates with unrelated causes: :105 a staple commodity missing a store tile, :111 match-soundness ("A product MOVED/DROPPED commodity"), :117 category coverage. weekly-post-capture.ps1:91 adds a fourth (guards hard invariant).
+IMPACT: When -Phase publish exits 2, the runbook sends the agent to look for a thin store pull. Four of the five ways it can exit 2 are not that, so the agent chases the wrong cause or overrides with -Force.
+FIX: Update SKILL.md:14 to list guards.ps1 and update-history in the publish phase, and replace SKILL.md:79's single HELD explanation with the five distinct exit-2 causes and where each prints its report file (out\guards-*.json, out\store-coverage-report.json, out\audit\soundness-report.json, out\category-coverage-report.json).
+
+=== [12] MEDIUM / bug / conf=proven
+TITLE: build-pull-order prints a SAFE STOP that is 18 published Walmart cells short of the truth
+EVID: build-pull-order.ps1:97 prints "SAFE STOP after {t1+t2} terms (covers every cell this store publishes today)", but the file is written in the order produced at :85, which sorts by depth/contest/has/id and never uses `tier`. Replaying the script's own math against out\comparison-2026-07-29.json and price-history.json for Walmart: "terms=526 T1=379 T2=50 -> script prints 'SAFE STOP after 429 terms'"; "cells Walmart publishes that ACTUALLY fall inside the first 429 lines: 411 of 429"; "cells Walmart publishes that fall AFTER the claimed safe stop: 18"; "deepest line index of a published Walmart cell: 472".
+IMPACT: SKILL.md:49 tells the agent to walk pull-order-walmart.txt top-down; an agent that trusts the printed SAFE STOP as a complete pull stops 43 terms early and drops 18 cells the store currently publishes, plus it leaves audit-walmart-fullpull's comprehensive-capture clock running.
+FIX: Either compute the safe stop as the 1-based index of the LAST line with has=1 (472 for Walmart today), or drop the sentence. Fixing the wording is enough - the depth-first ordering itself is the intended behaviour.
+
+=== [13] MEDIUM / bug / conf=proven
+TITLE: The missed-refresh alert Brad receives still prescribes a 447-term Walmart pull; the file has 526 terms
+EVID: check-ad-cycles.ps1:225 alert body: "IMPORTANT: the Walmart capture must run the FULL commodity worklist (all ~447 commodity-search.json terms)". Measured: `@($s.terms.PSObject.Properties).Count` on commodity-search.json = 526. SKILL.md:48 already carries the corrected count and the rule "use the file count, not this note". The same stale 447 appears in the SKILL's own frontmatter description line (SKILL.md:3, "Walmart FULL 447-term worklist").
+IMPACT: The email that fires precisely when the weekly refresh was missed - the moment a human is being asked to run it manually - specifies a pull 15% short of the worklist, which is the partial-pull condition audit-walmart-fullpull exists to flag.
+FIX: Replace the hardcoded ~447 in check-ad-cycles.ps1:225 and SKILL.md:3 with a runtime count of commodity-search.json terms, or with the same "use the file count" instruction as SKILL.md:48.
+
+=== [14] MEDIUM / bug / conf=proven
+TITLE: Aldi has no carry-forward or never-shrink protection, though both the SKILL and its method memory say to run them
+EVID: SKILL.md:56 (step F2): "AFTER writing, run ... carry-forward-regular.ps1 -Store aldi AND THEN ... heal-degraded-sizes.ps1 -Store aldi"; grocery-method-aldi.md:19 repeats it ("Then run `carry-forward-regular.ps1 -Store aldi` and `heal-degraded-sizes.ps1 -Store aldi` as before"). `grep -rn "carry-forward-regular|heal-degraded-sizes" --include=*.ps1` finds invocations only in build-fareway-regular.ps1:157 and :162, both `-Store fareway`. build-aldi-regular.ps1's only shrink protection is :262, `if ($rows.Count -lt 1) { throw }` - compare with build-fareway-regular.ps1:137-141, which refuses to overwrite when the existing file holds >1.2x the rebuilt row count ("Replacing a bigger file with a smaller one is a partial-pull-as-overwrite bug, not a refresh").
+IMPACT: A bot-walled or short Aldi sweep silently replaces a good aldi-regular file with a smaller one. Today's file holds 1.08MB of rows against 182KB a week ago, so the downside is large; a 100-row partial would overwrite it without a warning, and the instruction that would have caught it is documented in two places but implemented in none.
+FIX: Either invoke carry-forward-regular.ps1 -Store aldi and heal-degraded-sizes.ps1 -Store aldi at the end of build-aldi-regular.ps1 the way build-fareway-regular.ps1:157-162 does, or port the never-shrink guard (build-fareway-regular.ps1:137-141) into build-aldi-regular.ps1 - and make the SKILL/memory say which one is real.
+
+=== [15] MEDIUM / improvement / conf=proven
+TITLE: Hy-Vee going headless removed the only path that can discover a price for a newly tracked commodity
+EVID: pull-regular-hyvee.ps1:122 comments its work list as "what to refresh: our existing Hy-Vee rows (validated sizes) + any Hy-Vee product we hold a link for", built at :141-147 from the previous hyvee-regular-*.json plus product-urls.json entries - there is no search step, so a commodity we have never priced at Hy-Vee can never enter. SKILL.md:45 now tells the agent "do NOT browser-crawl this store" and "Spend the browser on Baker's flyer, Aldi and Fareway instead", retiring the only discovery method the runbook had. A headless Hy-Vee product search does exist and is already used for links: resolve-hyvee-links.ps1:24 `$EP = 'https://www.hy-vee.com/aisles-online/api/search/products'`, :29-31 POST with storeId in the body, no session.
+IMPACT: Hy-Vee's commodity coverage is now frozen at whatever the last browser crawl found (454 of 493 today). Every commodity added by a future staples batch gets zero Hy-Vee coverage forever, and nothing reports it, because the re-pricing pull reports "0 failures" on the rows it does hold.
+FIX: Extend pull-regular-hyvee.ps1 to seed its work list with a search pass over commodity-search.json terms for commodities that have no held Hy-Vee row, reusing the POST /aisles-online/api/search/products call already proven in resolve-hyvee-links.ps1:24-31.
+
+=== [16] MEDIUM / improvement / conf=proven
+TITLE: SKILL step A's justification for the expensive Baker's flyer vision read is false - the sanctioned Kroger API returns promo prices
+EVID: SKILL.md:30: "Baker's has NO structured feed (unlike Hy-Vee's Flipp), so this vision read IS the only source". But step C's own headless pull carries sale prices: pull-regular-bakers-api.ps1:11 "THE PRICE WE PUBLISH: price.promo when the store has an active promo, else price.regular", :413 sets base_price + marked_down on promo rows. Measured on today's output: out\regular\bakers-regular-2026-07-29.json holds 6960 rows of which 1317 carry marked_down with a base_price (e.g. "Kroger 80/20 Ground Beef Roll 1 LB $6.99 was 7.49 lb", "Simple Truth ... Fresh Chicken Breast Family Pack BIG DEAL! $5.49 was 5.99 lb"). stores.json records Baker's as `"capture": "headless (sanctioned Kroger API...)"`, "current+promo daily".
+IMPACT: The most token-expensive step in the weekly run (browser + vision read of ~16 flyer JPGs against 503 commodities) is justified by a claim the code disproves. The flyer is still the only source for multibuy/BOGO phrasing (SKILL.md:32-39), but that is a much narrower job than "scan for all 503 commodities".
+FIX: Rewrite SKILL.md:30 to scope step A to what the API genuinely cannot give: conditional deals (Buy N Get K, mix & match) and ad-only call-outs. State that plain single-price ad items already arrive via pull-regular-bakers-api.ps1 as promo rows, so the vision read should target BOGO wording rather than the full commodity list.
+
+=== [17] MEDIUM / issue / conf=proven
+TITLE: SKILL step K2 tells the agent to accumulate numbered url-input files forever, with no archive step - the accumulation fixed by hand today
+EVID: SKILL.md:83: "write {id,url,price,size,name} to out\url-inputs\store-<store>N-urls.json (use the next free N so it overrides the old link; merge sorts base-first then numbered)". SKILL.md:84 (step K3) then lists merge -> resolve-worklist -> stamp -> publish, with no archive and no prune-bad-links. weekly-post-capture.ps1:99-108 (-Phase links) matches the SKILL and also archives nothing. The archive instruction exists only as prose inside an email body: check-ad-cycles.ps1:225 "...merge -> stamp -> prune-bad-links -Tol 0.32 -> guards -> publish -> archive the url-inputs file". Today's cleanup moved store-fareway1-urls.json and store-ff9-urls.json into out\url-inputs\archive\ - and build-fareway-regular.ps1:149 unconditionally rewrites store-fareway1-urls.json on every Fareway build.
+IMPACT: The runbook still describes the growth pattern that let stale numbered url-input files re-inject bad links on every merge. Nothing automated archives them, so the same pile rebuilds week by week and the fix has to be repeated by hand.
+FIX: Add the archive step to SKILL.md:84 and to weekly-post-capture.ps1's links phase: after merge-product-urls succeeds, move consumed out\url-inputs\store-*N-urls.json into out\url-inputs\archive\ (leaving builder-owned files like store-fareway1-urls.json, which are regenerated from the same capture as the board).
+
+=== [18] HIGH / bug / conf=proven
+TITLE: guards.ps1 guard 11 (Baker's raw-capture reconcile) checks ZERO rows and prints "ok" - it has been dead since Baker's went headless on 2026-07-24
+EVID: Today's live run: `C:\Codex\income\grocery\guards.ps1` line 18 of output = "  ok    Baker's prices reconcile with the raw store capture (0 pack=our-size rows checked against the exact cur)". Three independent kills, each sufficient, proven against today's data:
+(1) guards.ps1:610 `if (-not $d.upc -or ($null -eq $d.current_price)) { continue }` - the Kroger-API puller writes `product_id`, not `upc`. Measured: `rows in bakers file carrying a .upc property: 0` (of 6,960) in out\regular\bakers-regular-2026-07-29.json; a sample row's props are `store, item, ad_price, size, regular, source_ad, as_of, current_price, product_id, size_raw, size_basis, stock_level, net_weight, sold_by, link_url`.
+(2) guards.ps1:611 `if (([string]$d.source_ad) -notmatch 'bakersplus') { continue }` - measured: all 6,960 rows have `source_ad = kroger-api`; `rows with upc+current_price=0`, `...of which source_ad matches bakersplus=0`.
+(3) guards.ps1:577-578 gates the whole block on `out\bakers-prices-raw.csv`, which is frozen: `-rw-r--r-- 5792 Jul 14 16:32 out/bakers-prices-raw.csv`, 193 lines, 15 days stale.
+Timeline: guard 11 was introduced 2026-07-14 (`git log -S"bakersplus" -- guards.ps1` -> b9d26fe9 "Local browser-store refresh 2026-07-14 17:28"); Baker's switched to the Kroger API in 4b52ce0b "Baker's goes headless: Kroger API size-basis resolver, wired into the daily pipeline".
+The negative test that would have caught this self-skips as well: test-guards.ps1:264 selects `$bkd.deals | Where-Object { $_.item -match '2% Reduced Fat Milk' -and $_.upc -and $_.current_price }`; measured `guard-11 negative-test selector matches: 0   (rows named 2% Reduced Fat Milk at all: 8)`, so it takes the `else { Write-Output '  SKIP  baker rounding: ...' }` branch and asserts nothing.
+IMPACT: Baker's is the largest store on the board (6,960 rows, 457 priced cells today). Guard 11 is the ONLY check that brings in an independent statement of Baker's price - guards.ps1:568 says so itself: "Guard 10 asserts ad_price == current_price - but BOTH are our own numbers, so it cannot catch a current_price that was COMPUTED wrong." That is the founding milk bug ($2.56 reconstructed from a rounded $0.02/fl oz against the $3.19 the store charges). Right now that class ships with a green "ok" line, and the "0 rows checked" wording reads as a pass in the log the publish gate writes.
+FIX: Re-point guard 11 at the Kroger feed: key on `product_id` (fall back to `upc`), accept `source_ad -match 'kroger-api|bakersplus'`, and replace the dead out\bakers-prices-raw.csv dependency with the raw Kroger capture that audit-basis-reconcile already reads via -RawDir (it has working netWeight fixtures in regression-inputs\guard-fixtures\bakers-raw). Then add a hard assertion that the guard checked > 0 rows: a check that examines nothing must WARN, never print ok. Fix the test-guards.ps1:264 selector at the same time and make its else-branch a FAIL, not a SKIP.
+
+=== [19] HIGH / issue / conf=proven
+TITLE: test-guards.ps1 - the only negative-test suite for the blocking gate - is invoked by nothing
+EVID: Exhaustive scan of every .ps1/.yml/.md/.json in C:\Codex\income plus C:\Users\Owner\.claude\scheduled-tasks (excluding grocery/archive and the unrelated meal-prep/pipeline/test-guards.ps1) returns ZERO invocation sites. Every hit is prose:
+  ./grocery/guards.ps1:328 (comment)
+  ./grocery/INCIDENT-2026-07-23-walmart-flood.md:131,158 (retrospective)
+  ./grocery/test-auditors.ps1:2,19 (comments)
+No `& powershell ... -File ...test-guards.ps1` exists anywhere. check-ad-cycles.ps1:770 runs test-auditors.ps1 daily; nothing runs test-guards.ps1. The Windows tasks are "SMP Grocery Daily Pipeline (local)" -> run-daily-local.ps1:94 -> check-ad-cycles.ps1, "SMP Bakers Daily Scan" -> bakers-daily-scan.ps1 -> check-ad-cycles -NoPull, "SMP Grocery Failure Watchdog" -> local-watchdog.ps1; none touch it. .github/workflows/daily.yml runs only check-ad-cycles.ps1 -NoAlert.
+test-auditors.ps1:2-3 states the division of labour explicitly: "Complements test-guards.ps1, which breaks a live invariant and asserts guards.ps1 exits 2; this one tests the auditors and alert plumbing that guards.ps1 does not own." test-auditors.ps1 never invokes guards.ps1 at all - grep confirms its only guards.ps1 references are the two header comments.
+IMPACT: guards.ps1 is THE hard publish gate (12 invariants, exit 2 = board not published), and the 16 Check()/CheckScript() cases in test-guards.ps1 are the only proof any of them can still fail. Nothing verifies that. Finding #1 is the proof this matters: guard 11 went blind on 2026-07-24 and stayed green for 5 days, and its negative test degraded to a SKIP over the same change - both invisible because the suite never runs. The daily "watchers ok: every guard still fires on its own founding bug" line in check-ad-cycles.ps1:778 is therefore over-claiming: it proves nothing about guards 0-12.
+FIX: Wire test-guards.ps1 into the same always-run block as test-auditors.ps1 (check-ad-cycles.ps1:760-779), but NOT on the daily critical path as written - it mutates 13 git-tracked production files. Either (a) run it weekly against a scratch copy of out\ + the tracked rule files, or (b) convert its 16 mutations to frozen fixtures under regression-inputs\guard-fixtures\ and give guards.ps1 a -CompareFile/-RootDir switch so the suite can run hermetically. Whichever path: make a SKIP branch count as a FAIL, since three of its cases (guard-11 milk, tile-integrity, blueberries) already SKIP silently when their live selector matches nothing.
+
+=== [20] HIGH / bug / conf=proven
+TITLE: weekly-post-capture -Phase links republishes the live board after mutating the link/pin inputs, with no guards.ps1 re-run - and that is the LAST publish of the weekly run
+EVID: weekly-post-capture.ps1:99-108 (-Phase links):
+  100  merge-product-urls.ps1
+  101  resolve-worklist.ps1
+  102  stamp-board-pu.ps1
+  103  $rc = RunChild (Join-Path $root 'publish-deals-page.ps1') @() 3 'republish' -NonFatal
+No guards.ps1 call anywhere in that phase (guards runs only at line 90, inside -Phase publish). publish-deals-page.ps1 does not run guards itself - grep shows its only guards.ps1 reference is the comment at line 71; it runs audit-price-mode, audit-links, audit-name-drift, audit-store-coverage, audit-match-soundness, audit-category-coverage.
+The daily path knows this is required and does it: check-ad-cycles.ps1:671-693 = merge-product-urls -> prune-bad-links -Tol 0.32 -> sync-browser-links -> generate-board-overrides -> `guards.ps1 -Quiet` (line 691) -> publish (line 693), with an explicit `if ($LASTEXITCODE -eq 0)` gate.
+merge-product-urls.ps1:53 writes product-urls.json, which is exactly the file guards 3 (pin derivable from its own verified link) and 4 (board cell vs its linked product by a FACTOR) read - guards.ps1:174 "shared: the board + the links". Today's own commit 01e416d7 archived stale out\url-inputs\store-*-urls.json precisely because "merge-product-urls re-injected bad links every run."
+Today's state: out\logs\weekly-post-capture-2026-07.log shows only [publish] phases (12:32 and 12:57); -Phase links has not run yet, so the hole is live for the rest of this run.
+IMPACT: Two paths to publish with two definitions of safe - the exact defect today's commit fixed for -Phase publish, still open one phase later. A link merged during the browser resolution step (step K2) that is off by a factor, or that moves a pin's source so the pin is no longer derivable, ships to the live board ungated. Worse, it ships LAST: the next morning's check-ad-cycles would run guards, hard-fail, and refuse to publish - leaving the ungated weekly board live on thriftycrew.com until a human intervenes.
+FIX: Mirror the daily repair chain in -Phase links: after stamp-board-pu.ps1 and before publish-deals-page.ps1, insert prune-bad-links.ps1 -Tol 0.32, sync-browser-links.ps1, generate-board-overrides.ps1, then guards.ps1 with the same `if($gc -eq 2){ exit 2 }` treatment used at weekly-post-capture.ps1:91.
+
+=== [21] HIGH / bug / conf=proven
+TITLE: Sam's Club - 339 priced cells, the 3rd-largest store on the board - is structurally exempt from guards 6, 10 and 11, and guard 9 measures a 60-row orphan file instead of the 2,537 rows the engine priced from
+EVID: Board size: out\coverage-regression.json (written by today's guards run) reports Sam's Club 334 -> 339 priced cells.
+Guard 9 (guards.ps1:447-498) warns "Sam's Club      60 rows |   0% re-verified against the store TODAY | file 0d old". The 60 rows come from out\regular\sams-regular-2026-07-14.json (`store=Sam's Club deals=60`), described in guards.ps1:464-466 as "a one-off hand-promotion from 2026-07-14 ... that NOTHING refreshes". Today's real Sam's feed is out\sams\sams-deals-2026-07-29.json with 2,537 rows. Today's fix (guards.ps1:469-481) redirected only the AGE via $altGlob; $rows (line 453) and therefore the row count and the 0% verification figure still come from the orphan. The 0% can never move.
+Guard 6 (store data collapsed, guards.ps1:362-364): `$files = @(RegFiles ($p + '-regular-*.json') ...); if ($files.Count -lt 2) { continue }`. `ls out/regular/ | grep sams` returns exactly one file, sams-regular-2026-07-14.json, so Sam's is skipped entirely.
+Guard 10 (guards.ps1:527-565): today's warn line - "these stores do NOT record the store's current price on their rows, so guard 10 CANNOT check them: Sam's Club".
+Guard 11: Baker's-only by construction.
+Guard 9's own warn text states the consequence: "until their pullers record current_price, guard 9's freshness numbers are the only thing standing between them and the basePrice bug" - and for Sam's those numbers are computed on the orphan.
+IMPACT: Sam's is the CAPTCHA-walled store, i.e. the one most prone to the partial/throttled capture that guard 6 exists to catch (audit-coverage-regression.ps1:5 records the founding incident: "a bare compare-deals.ps1 re-run cut Sam's Club from 251 priced cells to 116"). A thin Sam's pull cannot trip guard 6, its rows cannot trip guard 10, and the freshness readout that is supposed to be the last line of defence is measuring a file from two weeks ago. Sam's currently supplies 339 cells including sanity outliers flagged today (White Rice $0.44, Yeast $0.22).
+FIX: Two changes: (a) in guard 9, load $rows/$dated/$unver from the SAME $altGlob file whose date it already prefers, so Sam's freshness is measured on sams-deals-<date>.json; (b) in guard 6, make the store-collapse comparison registry-driven off stores.json + each store's real data glob rather than out\regular only, so Sam's (and any future non-out\regular store) gets a history to collapse against. Separately, retire or clearly quarantine out\regular\sams-regular-2026-07-14.json - it is an unrefreshed orphan that three guards still read.
+
+=== [22] HIGH / bug / conf=proven
+TITLE: audit-coverage-gaps only runs in -Phase compare, so the weekly run audits coverage on a board that is then rebuilt and replaced - it reported 0 gaps while the board that shipped had dropped Aldi and Baker's from the bread row
+EVID: Wiring: audit-coverage-gaps.ps1 is invoked at weekly-post-capture.ps1:63 (-Phase compare) and check-ad-cycles.ps1:275. It is NOT re-run in -Phase publish or -Phase links.
+Ordering, by mtime:
+  out/coverage-gaps.json                      09:10  (gap_count=0)
+  out/regular/aldi-regular-2026-07-29.json    12:24  (rebuilt after the audit)
+  out/comparison-2026-07-29.json              12:29
+  publish                                     12:58  (weekly-post-capture-2026-07.log: "PUBLISHED omaha-grocery-prices  (visibility=public, 470 commodities, week 2026-07-29)")
+What the shipped board lost: the `bread` row (unit=each) in out\comparison-2026-07-29.json carries only Walmart $1.48, Fareway $1.69, Sam's $3.52, Hy-Vee $1.99. On out\comparison-2026-07-24.json it also carried Aldi "L'oven Fresh White Bread (20 oz)" size="each", per_unit 1.65.
+Both stores demonstrably still carry it in today's captures:
+  Aldi   {"item":"L'oven Fresh White Bread","ad_price":"$1.45","size":"20 oz","as_of":"2026-07-18"}
+  Baker's {"item":"Kroger White Bread","ad_price":"$1.99","size":"20 oz","current_price":1.99,"size_basis":"label","sold_by":"UNIT"}
+The tell is the size field: the 07-24 Aldi row recorded size "each", today's records "20 oz", and an each-unit commodity cannot price a weight size - Walmart's surviving row is "Great Value White Round Top Bread Loaf, 20 oz" with size="each". No verdict removed them: out\verify-verdicts-2026-07-29.json (43 verdicts) contains no bread entry, only a garlic-bread keep.
+Only one watcher saw it, and only as an advisory: guards.ps1:120 audit-cell-drops -> today's WARN "2 everyday cell(s) priced on comparison-2026-07-24 are missing from today's board ... bread @ Baker's (was $0.75) | bread @ Aldi (was $1.65)". guards.ps1:114 marks it "ADVISORY, never blocks".
+IMPACT: The guard written for exactly this class - audit-coverage-gaps.ps1:1-14, "HOLISTIC guard against a store being SILENTLY dropped from a commodity" - reported gap_count=0 because it ran 3h14m and one full store rebuild before the board that went live. The published bread row names Walmart $1.48 as cheapest while Aldi's loaf sits at $1.45 in the same day's capture, so the board's headline verdict on that row is wrong. (Note the Baker's half of the same WARN is a correct removal: the 07-24 Baker's bread cell was "The Cheesecake Factory At Home Brown Bread Wheat Dinner Rolls" at $0.7488/each, now excluded by the `\brolls?\b` rule - so 1 of the 2 drops is a fix and 1 is a real loss.)
+FIX: Move audit-coverage-gaps.ps1 (and audit-sale-fallback.ps1, same placement at weekly-post-capture.ps1:64) into -Phase publish, after verify-apply and after the final compare, so they audit the board that publishes. Separately, add an each-unit size guard: a row whose commodity unit is `each` but whose size parses as a weight/volume is silently unpriceable today - it should be counted and reported, not dropped in silence, which is what let a 3-cent-cheaper Aldi loaf disappear between two runs of the same day.
+
+=== [23] MEDIUM / issue / conf=proven
+TITLE: Six audit/test scripts in grocery\ are invoked by nothing - no script, no workflow, no scheduled task
+EVID: Scan of every .ps1/.yml/.md/.json under C:\Codex\income and C:\Users\Owner\.claude\scheduled-tasks (excluding grocery/archive and meal-prep's unrelated same-named files). Every remaining hit is a comment or a doc line, never an invocation:
+  test-guards.ps1            - see separate finding; hits are guards.ps1:328, test-auditors.ps1:2,19, INCIDENT md
+  test-pu-lib.ps1            - hits are audit-board-consistency.ps1:31, build-deals-page.ps1:165, generate-board-overrides.ps1:31, guards.ps1:57,77 (all comments)
+  test-unitprice.ps1         - ZERO references of any kind outside its own header
+  audit-everyday-mismatch.ps1 - hits are prune-bad-links.ps1:16 and audit-ff-missing-products.ps1:19 (both comments)
+  audit-ff-missing-products.ps1 - ZERO references of any kind
+  audit-match-contested.ps1  - one hit, audit-coverage-gaps.ps1:28 (a comment)
+Contrast with the wired guards: guards.ps1 (check-ad-cycles.ps1:590,691; weekly-post-capture.ps1:90; two scheduled-task SKILLs), test-auditors.ps1 (check-ad-cycles.ps1:770), regression-test.ps1 (test-auditors.ps1:213).
+IMPACT: Roughly a quarter of the audit surface is decoration. Two matter concretely: test-guards.ps1 is the blocking gate's only negative suite (separate finding), and audit-ff-missing-products.ps1 is the Family Fare heal-verification audit for a store that today's guard 9 reports as "0% re-verified against the store TODAY | file 3d old" - the exact condition it was written for, with nothing running it. The others (test-pu-lib, test-unitprice, audit-everyday-mismatch, audit-match-contested) are duplicate math that will drift from the engine unnoticed, which is the same two-copies-of-one-rule class as today's pu-lib "1/2 gal" fix (commit 885bd7ad).
+FIX: Decide per script and record the decision in grocery/README.md: wire it into check-ad-cycles/test-auditors, or move it to grocery\archive\ so nobody mistakes it for live cover. At minimum wire test-pu-lib.ps1 into test-auditors.ps1 (it is pure computation, no I/O, and guards.ps1:57 already says guard 0 only "mirrors" a subset of its assertions), and either revive audit-ff-missing-products.ps1 on the Family Fare path or archive it.
+
+=== [24] MEDIUM / issue / conf=proven
+TITLE: The "every guard ships with a must-fire fixture" rule holds for only 2 of ~23 auditors, and the coverage-gaps entry in test-auditors is a source grep rather than a behavioural fixture
+EVID: Fixture inventory - `ls regression-inputs/guard-fixtures/` returns 8 board files + 2 raw dirs, all for two guards only:
+  basis-{conflict,clean,rounding}-board.json, bakers-netweight-{conflict,clean}-board.json, bakers-namecollision-board.json, bakers-raw/, bakers-raw-collision/   -> audit-basis-reconcile
+  packbasis-board.json, packbasis-legit-bulk-board.json                                                                                                            -> audit-pack-basis
+test-auditors.ps1 (24 checks, all PASS today) covers: audit-basis-reconcile (7), audit-pack-basis (2), triage-due (4), the PS 5.1 @()-no-unroll class check (2), send-alert atomicity (2), the locked-log pattern (2), regression-test/compare-deals -SelfTest (3). Its coverage-gaps case is test-auditors.ps1:154-156: `$cg = Get-Content audit-coverage-gaps.ps1 -Raw; if ($cg -match 'GLOBAL_EXCLUDE')` - a string match on the source, which passes whether or not the guard can still fire.
+No must-fire fixture exists for: all 12 guards.ps1 invariants, sanity-check, audit-board-consistency, audit-category-coverage, audit-cell-drops, audit-coverage-gaps (behaviourally), audit-coverage-regression, audit-ff-carry, audit-food-category, audit-household-in-food, audit-links, audit-match-soundness, audit-name-drift, audit-price-mode, audit-sale-fallback, audit-store-coverage, audit-store-registry, audit-tile-integrity, audit-walmart-fullpull.
+The stated rule is test-auditors.ps1:14-15: "THE RULE: every guard ships with two fixtures, one where it MUST fire and one where it MUST stay silent."
+IMPACT: The daily "watchers ok" line covers 2 auditors plus some class checks, but reads as a clean bill of health for the whole watcher layer. Findings #1 and #5 are what that gap costs: guard 11 checking zero rows and guard 9 measuring a 60-row orphan both survive a fully green test-auditors run.
+FIX: Prioritise fixtures for the auditors that can silently examine nothing: audit-coverage-gaps (a frozen raw-pull + board pair where a store carries an item and is off the board - the bread case above is a ready-made fixture), audit-cell-drops, audit-tile-integrity, audit-store-coverage, and each guards.ps1 invariant that reports a COUNT (guards 3, 5, 10, 11) - for those, the cheapest fixture is an assertion that the count is non-zero, since "checked 0 cells" is how every one of them goes blind.
+
+=== [25] HIGH / issue / conf=proven
+TITLE: Standing WARN triage: the Walmart full-capture clock was NOT reset by today's run - today's Walmart pull stamped 57 terms against a 200-term comprehensiveness threshold
+EVID: Today's guards WARN: "fullpull [Walmart]: WARNING - the newest capture we can lean on (walmart-regular-2026-07-18.json) is UNSTAMPED ... AND it is already 11 days old; at day 14 it leaves the union window and coverage collapses. Every stamped capture in the window is a partial (max pull_terms 57)."
+Measured stamps:
+  walmart-regular-2026-07-29.json  rows=920   pull_terms=57
+  walmart-regular-2026-07-25.json  rows=1351  pull_terms=50
+  walmart-regular-2026-07-23.json  rows=1328  pull_terms=50
+  walmart-regular-2026-07-18.json  rows=886   pull_terms=<absent>
+Threshold: audit-walmart-fullpull.ps1:33 `@{ label = 'Walmart'; fullTerms = 200; ... }`. Sam's, by contrast, cleared its 150-term bar today: "fullpull [Sam's Club]: ok - newest comprehensive capture sams-deals-2026-07-29.json (316 terms) is 0 day(s) old".
+Guard 6 (store collapse) cannot see the shrink either: best of the previous 4 files = 1,351, and 920 > 1,351 * 0.5 = 675.5, so guards.ps1:372 does not fire.
+Standing-WARN verdicts for the rest of today's guards output:
+  ACTIONABLE - fullpull [Walmart] (this finding).
+  ACTIONABLE - cell-drops bread @ Aldi (separate finding); the Baker's half of that WARN is a correct removal.
+  ACTIONABLE - "allowlist hygiene: 0 reviewed >120 days + 18 with no 'reviewed' date" - measured: coverage-gap-allowlist.json has 179 entries, 18 undated; multipack-allowlist.json 13 entries, 0 undated.
+  ACTIONABLE - "Sam's Club 60 rows | 0% re-verified" (separate finding); it can never clear as written.
+  EXPECTED NOISE - "Family Fare 0% / file 3d old", "Fareway 0% / file 2d old", "Walmart 0% / file 0d old": these stores do not stamp per-row as_of on a re-verify, so the percentage is structural, not a price signal.
+  EXPECTED NOISE - "Hy-Vee 66% ... 521 row(s) flagged unverified" and "10 cell(s) drift from their link by <50%" (guards.ps1 explicitly routes sub-factor drift to the daily consistency repair).
+  EXPECTED NOISE - "guard 10 CANNOT check Sam's Club": true and by design, but see the Sam's finding for why it is not harmless.
+  EXPECTED NOISE (confirmed hand-verified today) - the 4 sanity outliers Toothbrushes / Turkey Breast / White Rice / Yeast, visible in out\logs\weekly-post-capture-2026-07.log at 12:32:53 and 12:57:08.
+IMPACT: The weekly run believed it had done a full 526-term Walmart pass (task E), but the artefact it produced is a 57-term, 920-row partial - 431 fewer rows than the 07-25 partial. Walmart holds 429 board cells. On 2026-08-01 the last unstamped capture leaves the 14-day union window and the publish coverage gate will HOLD the board, and no earlier signal exists: guard 6 cannot see it, and guard 9 reads the file as 0 days old.
+FIX: Re-run the full Walmart worklist before 2026-08-01 and confirm the resulting file stamps pull_terms >= 200. Separately, close the detection gap: audit-walmart-fullpull already knows the expected full-pull size, so have it also compare row count against the recent per-store maximum and warn when a run stamped as 'today's pull' comes back at a fraction of it - 920 vs 1,351 four days earlier should not be silent just because guard 6's 50% floor was cleared.
+
+=== [26] LOW / issue / conf=proven
+TITLE: guards.ps1's allowlist-rot check scans only 2 of the 3 allowlists - basis-reconcile-allowlist.json is exempt from the hygiene guard
+EVID: guards.ps1:131 `foreach ($alf in @('multipack-allowlist.json', 'coverage-gap-allowlist.json')) {` - basis-reconcile-allowlist.json is not in the list. It is a real, read allowlist: audit-basis-reconcile.ps1:162 `$alf = Join-Path $root 'basis-reconcile-allowlist.json'`. Its own readme is the strongest warning of the three: "Do NOT add an entry to silence a conflict you have not diagnosed: a factor disagreement between two independent statements of the same quantity means one of them is a basis error, and basis errors are the class that lands on the cheapest-store verdict." Currently `allow: []`, so nothing is being hidden today.
+Also note guards.ps1:135 reads entries via `$doc.allow` or `$doc.gaps` only - a future allowlist using a different key silently contributes 0 entries and the guard reports clean.
+IMPACT: The one allowlist that suppresses factor-level basis conflicts - the class that decides which store the board calls cheapest - is the one with no expiry pressure. Entries added there age forever with no prompt to re-verify, and the WARN counts will never mention them.
+FIX: Add 'basis-reconcile-allowlist.json' to the guards.ps1:131 list, and make the entry extraction fail loudly (WARN) when a listed allowlist file parses to 0 entries but is non-empty on disk, so a schema change cannot silently zero the hygiene count.
+
+=== [27] MEDIUM / issue / conf=proven
+TITLE: A sanity/review flag that recurs every day is suppressed permanently: last_seen is refreshed on every run, so the 7-day re-arm can never elapse
+EVID: check-ad-cycles.ps1:525 decides novelty: `try { if (((Get-Date) - [datetime]$fstate[$k].last_seen).TotalDays -le 7) { $isNew = $false } } catch { $isNew = $false }`. check-ad-cycles.ps1:544 then unconditionally refreshes it for every currently-flagged key: `else { $fstate[$k].last_seen = $nowS; $fstate[$k].last_detail = [string]$flagParts[$fi] }`. A flag present on consecutive days therefore always has last_seen = today, the delta is always 0, and it is never new again. The comment at line 524 states the intended behaviour - "a flag that CLEARED and came back must page again" - which only holds for a gap of more than 7 consecutive days. Note also the catch on 525 fails toward SILENCE ($isNew = $false) when the stored date will not parse.
+Scale today: out\guards-2026-07-29.json holds 67 sanity flags (07-27: 54, 07-28: 53); out\alerted-flags.json tracks 63 keys. Every key's first_seen is within 5 days because the keying scheme was reset on 2026-07-28, so no key has yet crossed a long horizon - the mechanism is proven from code, its accumulated cost is not yet observable.
+IMPACT: There is no ack file, no expiry and no escalation for sanity/basis/packbasis review flags, unlike coverage-ack.json which audit-coverage-regression.ps1:67 re-arms on expiry. A genuine parse bug flagged once and never fixed disappears into the '\''already seen'\'' count in the daily summary and is never raised again. The 4 legitimately-verified outliers (toothbrushes, turkey breast, yeast, white rice) will behave identically to a real one that nobody actioned.
+FIX: Give review flags the same shape as coverage-ack.json: an explicit ack file with a reason and an expiry, and re-page any flag that is still open past its expiry (or past N days with no ack) rather than treating continuous presence as proof it was handled. Change the catch on check-ad-cycles.ps1:525 to fail OPEN ($isNew = $true) - an unparseable state entry should page, not silence.
+
+=== [28] HIGH / bug / conf=proven
+TITLE: compare-deals' Get-SizeAmount has no WEIGHT-FIRST multipack branch that pu-lib has — "16 oz 6 pk" prices 6x/12x high
+EVID: compare-deals.ps1:166 multipack regex is COUNT-FIRST only: `(\d+(?:\.\d+)?)\s*[- ]?\s*(?:ct|count|pk|packs?)\D+(\d+(?:\.\d+)?)\s*(fl\s*oz|...)`. pu-lib.ps1:126-128 has the weight-first multiply (`$pk = [regex]::Match($s,'([0-9]+)\s*(pk|pack)\b'); if ($pk.Success -and $n -and ($un -match '^(oz|lbs?|gal)$')) { $n = $n * ... }`). Ran both: `Get-SizeAmount '16 oz 6 pk' 'oz'` -> 16 ; `Get-LinkPerUnit -size '16 oz 6 pk' -unit oz -price 12` -> 0.125 (implies 96 oz). '6 oz 12 pk' -> engine 6, pu-lib 72. LIVE TODAY, out\flagged-2026-07-29.json: tomato-paste/Sam's 1.33 (band 0.04-0.6, size_text '6 oz 12 pk'), chickpeas/Sam's 0.3988, kidney-beans/Sam's 0.3988, crushed-tomatoes/Sam's 0.4279 (band 0.02-0.25) — correct values are 0.1108, 0.0665, 0.0665, 0.0535. Source rows: out\regular\sams-regular-2026-07-14.json (the newest sams-regular, so it IS loaded).
+IMPACT: Every run, 4 correct Sam's prices are computed 6x-12x too high, fail their price band, and are thrown out of the ranking. They only fail to reach shoppers because a duplicate count-first row from out\sams\sams-deals-2026-07-29.json happens to cover the same commodity. 176 of 503 commodities carry no band at all (counted from commodities.json + price-bands.json), and the universal FLOOR only catches prices that are too LOW — so on any un-banded commodity this shape publishes a 6x-12x price straight to the board.
+FIX: Add the weight-first branch to compare-deals' Get-SizeAmount (or, better, delete the duplicate: make Get-SizeAmount call Get-LinkPerUnit from pu-lib.ps1 with price=1 and invert, so there is one size parser). Then add '16 oz 6 pk' to compare-deals -SelfTest next to the existing '12 pk 12 fl oz' case, which only pins the count-first order.
+
+=== [29] HIGH / bug / conf=proven
+TITLE: compare-deals' Get-SizeAmount does not know the 'x' pack separator that pu-lib was fixed for — "12 x 12 fl oz" prices 12x high (the exact $0.3933/floz soda bug pu-lib's comment claims is fixed)
+EVID: pu-lib.ps1:56-58 comment: "'x' is the SAME form with a different spelling (\"12 x 12 fl oz\") ... a live 12x error on soda|Hy-Vee ($0.3933/floz published against a true $0.0328)", and pu-lib.ps1:60 handles it (`(?:pk|pack|x|×)`). compare-deals.ps1:166+193 have no 'x' form, so the scan slides to the SECOND number. Ran both: `Get-SizeAmount '12 x 12 fl oz' 'floz'` -> 12 ; pu-lib implies 144. LIVE TODAY: out\regular\hyvee-regular-2026-07-29.json 'Hy-Vee Cola 12Pk' size '12 x 12 fl oz' $4.72 and out\regular\aldi-regular-2026-07-29.json 'Summit Zero Sugar Cola 12pk' size '12 x 12 fl oz' $3.79. out\flagged-2026-07-29.json: soda/Hy-Vee 0.3933 and soda/Aldi 0.3158 vs band 0.015-0.2; correct = 0.0328 and 0.0263. The published-and-wrong $0.3933 in the pu-lib comment is still being produced by the engine today.
+IMPACT: The fix for a known 12x error was applied to the link layer only; the board engine still makes it. Two real soda prices are discarded as out-of-band every run. Anything with an 'x' size on an un-banded commodity publishes at 12x — the shopper sees the cheapest store named wrong, or a $0.39/fl oz soda.
+FIX: Extend compare-deals.ps1:166 to `(?:ct|count|pk|packs?|x|×)` with the same `[- ]?` tolerance pu-lib uses, and add '12 x 12 fl oz' + '24 x 16.9 fl oz' to compare-deals -SelfTest. Same root fix as the previous finding: one size parser, not two.
+
+=== [30] HIGH / bug / conf=proven
+TITLE: guards.ps1 defines "the live file set" as newest-per-store while compare-deals UNIONS Walmart's 14-day window — 332 live board cells are never seen by the multipack or current_price guards
+EVID: compare-deals.ps1:378-393 `Select-RegularFileSet` unions every walmart-regular file inside -WalmartMaxAgeDays (14, line 25); guards.ps1:47-50 `RegFiles` plus `if ($f.FullName -ne $newest.FullName) { continue }` at guards.ps1:312-315 (guard 5, multipack) and guards.ps1:528+ (guard 10, current_price contract) keep only the newest file per store. Ran a cross-reference of out\comparison-2026-07-29.json against out\regular\walmart-regular-*.json: "LIVE Walmart board cells sourced from an OLDER (unioned) capture, i.e. from a file guards 5/10 never open: 332" (e.g. flour from walmart-regular-2026-07-23.json $0.4308/lb, alfredo-sauce from 2026-07-15, asparagus from 2026-07-15). Those files carry current_price on 1328/1328 (07-23) and 323/711 (07-15) rows, so there is real data being skipped, not empty rows.
+IMPACT: Guard 5 exists to stop a 2x multipack price and guard 10 exists to stop publishing a price the store is not charging. Both cover roughly a third of the live Walmart cells. A bad row in any capture older than today is live on the board and structurally unreachable by the two gates written to catch it.
+FIX: Dot-source / lift compare-deals' `Select-RegularFileSet` in guards.ps1 and iterate the same file set the engine loads, instead of guards.ps1's own newest-per-store `RegFiles`. It is already a pure function with a self-test, written to be shared.
+
+=== [31] MEDIUM / bug / conf=proven
+TITLE: pu-lib cannot read the hyphenated pack-first size "6-pack 12 fl oz" that compare-deals was fixed for — the link layer computes 6x high and hides the See-item link
+EVID: compare-deals.ps1:163-165 documents the hyphen fix and its regex allows it (`\s*[- ]?\s*`); pu-lib.ps1:60 does not (`([0-9]+)\s*(?:pk|pack|x|×)\s*`), and `\s*` cannot cross the '-'. Ran both: `Get-SizeAmount '6-pack 12 fl oz' 'floz'` -> 72 ; `Get-LinkPerUnit -size '6-pack 12 fl oz' -unit floz -price 12` -> 1.0 (implies 12 fl oz). test-unitprice.ps1:35 pins this exact case ('PACK-FIRST "6-pack 12 fl oz" (want 72 floz -> 0.0971)') but it lifts the functions out of compare-deals only (test-unitprice.ps1:15-25) — nothing tests pu-lib on it, and guards.ps1:59-70's pu-lib case list has no hyphenated form.
+IMPACT: build-deals-page.ps1:265 uses this number to decide whether to show the "See item" link (a >30% gap hides it, build-deals-page.ps1:282), and guards.ps1:273 uses it to hard-fail a cell at >=1.5x. A hyphenated pack size therefore silently strips the product link from the card, or blocks the whole publish, on a correct board cell. No such size is in today's data (0 hits across 97,813 live size strings), so this is loaded and unfired rather than currently firing.
+FIX: Change pu-lib.ps1:60 and :73 to `([0-9]+)\s*[-x×]?\s*(?:pk|pack)\b|...` — i.e. accept the same separators compare-deals accepts — and add '6-pack 12 fl oz' to both guards.ps1's guard-0 case list and test-pu-lib.ps1's assertions.
+
+=== [32] MEDIUM / bug / conf=proven
+TITLE: The leading-dot decimal fix (".98 oz" read as 98 oz) exists in build-sams-deals only — build-walmart-deals, compare-deals and pu-lib are all still the old, broken copy
+EVID: build-sams-deals.ps1:118-123 uses `(\d[\d.]*|\.\d+)` and `'^(\d+(\.\d+)?|\.\d+)$'` with the comment about the grits case; build-walmart-deals.ps1:118-120 and :160-161 still use `(\d[\d.]*)` / `'^\d+(\.\d+)?$'`. compare-deals.ps1:193 uses `(\d+(?:\.\d+)?)` and pu-lib.ps1:107 uses `(\d+(?:\.\d+)?)` — same gap. Proof on a REAL name from out\captures\walmart-capture-2026-07-29.csv ('Plum Organics Teensy Snacks ... .35oz Pouch/5-Count Box', $2.83): fed through the real build-walmart-deals with a per-each unit price it emits size='5 ct 35 oz' and compare-deals' own Get-UnitPrice then returns $0.0162/oz against a true $1.6171/oz (100x low). Patching only those four regexes to the Sam's version and re-running the real builder over the real 1,425-row capture changed 2 rows ('1.747 oz'->'1.75 oz', '0.879 oz'->'0.88 oz').
+IMPACT: On today's oz-priced rows the lp/up fallback masks it to ~0.2%. On a per-each row whose name carries a leading-dot per-item weight — a shape that IS in today's capture — the emitted size is 100x wrong, which lands under the implausibility floor and makes the store vanish from that commodity with no error anywhere. Three of the four copies are still wrong, so the next fix in one of them will not reach the others.
+FIX: Move the number pattern into capture-lib.ps1 (which exists precisely for this) as one exported regex/parse helper, and have build-walmart-deals, build-sams-deals, compare-deals' Get-SizeAmount and pu-lib all use it. Add '.98 oz, 46 pk' to build-walmart-deals -SelfTest — its Sam's twin already has the case.
+
+=== [33] MEDIUM / bug / conf=proven
+TITLE: multipack-lib's pack-total arithmetic is a third, weaker copy of the name-measure parser: no "fl. oz.", no spelled-out "Ounces", no lb->oz conversion
+EVID: multipack-lib.ps1:32 `foreach ($wm in [regex]::Matches($n, '([\d.]+)\s*(?:fl\s?oz|oz|lb)\b'))` and line 37 compares `$w * $c` directly against the size's first number with no unit conversion. build-sams-deals.ps1:157 already solves the same problem with `'(fl\.?\s*oz|floz|oz|lbs?|pounds?|ml)'` and build-sams-deals.ps1:86-92 carries a full UnitFamily conversion table. Measured on live data: of 242 rows in out\sams\sams-deals-2026-07-29.json that Test-MpClassify calls 'reject', 189 are cleared by nothing more than allowing the dot / spelled-out unit (e.g. "Mott's 100% Original Apple Juice 8 fl. oz., 24 pk." size '192 fl oz' = exactly 8x24). Unit-blindness: "Member's Mark Part-Skim Shredded Mozzarella Cheese 1 lb., 2 pk." size '32 oz' is 2 x 1 lb, judged 'reject' because 1x2=2 != 32. Today's Walmart build dropped 5 rows as 'multipack' (out\walmart-rejects-2026-07-29.json), of which '(6 pack) Augason Farms ... 6.5 Ounces' size 38.434 (6x6.5=39, 1.4% off) and '(24 pack) Domino ... 1 lb Box' size 384 (24 lb = 384 oz) are arithmetic the lib simply cannot do.
+IMPACT: guards.ps1 guard 5 hard-fails the whole publish on a 'reject', and build-walmart-deals.ps1:320-322 silently drops the row at ingest. Correct rows are therefore either blocking the nightly publish or disappearing from the board, with a reason ('the name declares a pack the size does not account for') that is false. The 189 Sam's rows are only harmless because guard 5 never opens out\sams (see the Sam's-channel finding).
+FIX: Give multipack-lib the same tokenizer and unit table the builders already have — accept `fl\.?\s*oz|ounces?|lbs?|pounds?` and normalise lb->oz before comparing to the size — and ship a fixture pair (the Mott's row and the Smucker's row) per the repo's guard-fixture rule.
+
+=== [34] MEDIUM / issue / conf=proven
+TITLE: import-walmart-batch.ps1 is a second Walmart ingest with independent size math writing into the same walmart-regular file, with none of build-walmart-deals' invariants
+EVID: Both write out\regular\walmart-regular-<date>.json: build-walmart-deals.ps1:476 and import-walmart-batch.ps1:153 (ADD-only merge into the newest file, lines 148-155). build-walmart-deals verifies every emitted row back through compare-deals' real Get-UnitPrice (lines 275-308) and runs the guard-5 multipack pre-filter (lines 311-322); import-walmart-batch does neither — its Resolve-WMSize (lines 56-74) just backs size out of linePrice/unitPrice and settles name-vs-backed disagreements with a 10% rule. It also drops every per-each row outright (line 24). Its cents handling is a third independent rule (`$hasDollar = $unitStr.Contains('$')`, line 19) versus build-walmart-deals' dollars-regex-then-cents-fallback (lines 197-207). Live: out\regular\walmart-regular-2026-07-25.json contains 23 rows with source_ad 'Walmart Bellevue 68123 shelf price (batch capture)', and that file is inside the 14-day union window compare-deals loads.
+IMPACT: Rows can enter the Walmart board that the Walmart builder would have rejected as unpriceable or as bulk multipacks, and they carry no engine-reproduces-the-store's-unit-price proof. Two different answers to "what size is this Walmart product" are merged into one file with no reconciliation, and the merge key is item|size, so a size disagreement produces two rows for the same product rather than a conflict.
+FIX: Have import-walmart-batch emit through build-walmart-deals' Build-Row (or at minimum run the same engine-invariant check and the multipack-lib pre-filter before merging), and record which builder wrote each row so a divergence is visible in the file.
+
+=== [35] MEDIUM / bug / conf=proven
+TITLE: pu-lib prices sizes the engine deliberately refuses — a bare "lb"/"1 lb" on an each-commodity becomes the whole package price PER ITEM
+EVID: pu-lib.ps1:160-163 'each' branch ends with `if ($n -eq 1) { return $price }`, and pu-lib.ps1:115 treats a bare `lbs?|pound|gal|gallon|dozen|each|ea` as n=1 — so a pound size satisfies an 'each' commodity. compare-deals' Convert-ToUnit 'each' (compare-deals.ps1:116-120) accepts only ct/count/ea/each/pk/pack/pkg/package/bunch/head/loaf and returns null for lb. Differential over all 2,539 product-urls links x their commodity unit: 9 links are priced by pu-lib and refused by the engine, including `[kiwi/Aldi] unit=each price=4.19 size='1 lb' name='Kiwi, Package' -> pu-lib says 4.19 per each`, `[limes/Aldi] unit=each price=2.45 size='1 lb'`, `[grapefruit/Hy-Vee] unit=each price=1.29 size='1 lb'`, `[bell-peppers/Hy-Vee] unit=each price=1.50 size='lb'`, `[cauliflower/Hy-Vee] unit=each price=5.99 size='lb'`. Also 'Half Gallon' -> pu-lib returns ONE full gallon (engine returns null), and '2 ltr' -> pu-lib 67.628 floz (engine null; compare-deals.ps1:193 lists liter|litre but not 'ltr').
+IMPACT: That number is what build-deals-page.ps1:265 gates the "See item" link with (>30% gap hides it, line 282) and what guards.ps1:273 hard-fails a cell on at >=1.5x, and what generate-board-overrides pins a cell to. A $4.19-per-kiwi link value silently strips the product link from the card, or blocks the publish, or pins a wrong price — on a correct board cell. None of those 5 stores is on those rows today, so the exposure is loaded, not firing.
+FIX: Make pu-lib's 'each'/'dozen' branches return $null when the only basis found is a weight/volume token, matching Convert-ToUnit; and decide 'Half Gallon' in ONE place (compare-deals returns null, pu-lib returns a full gallon — one of the two is wrong).
+
+=== [36] MEDIUM / issue / conf=proven
+TITLE: test-pu-lib.ps1 carries a fourth, frozen copy of the per-unit math and now permanently reports "pu-lib is NOT safe to wire in" — while three scripts cite it as proof pu-lib is correct
+EVID: test-pu-lib.ps1:41-65 embeds the OLD LinkPU verbatim as its oracle. Running it today: "DIFF half-and-half/Baker's unit=floz size=\"1/2 gal\" old=0.0195 new=0.078 ... pu-lib is NOT safe to wire in." exit=1 — i.e. it reports today's 1/2-gal fix (commit 885bd7ad) as a regression, because its baseline is the copy that had the bug. Meanwhile build-deals-page.ps1:165, audit-board-consistency.ps1:31 and generate-board-overrides.ps1:31 all say "test-pu-lib.ps1 proves it matches everywhere and resolves more", and pu-lib is already wired into all of them plus guards.ps1 and prune-bad-links.ps1.
+IMPACT: The one differential test between the two per-unit implementations is now a permanent red that says the opposite of the truth, so the next person either ignores it (and loses the only cross-check) or 'fixes' pu-lib back toward the buggy baseline. Its embedded copy is also a fourth implementation that will keep drifting.
+FIX: Delete the embedded LinkPU and re-point test-pu-lib at the real second implementation it should be grading — compare-deals' Get-SizeAmount/Get-UnitPrice, lifted the way test-unitprice.ps1:15-25 already does — so the test measures engine-vs-link divergence (which is where the live bugs are) instead of pu-lib-vs-its-own-history.
+
+=== [37] LOW / issue / conf=proven
+TITLE: build-walmart-deals.ps1 throws and logs under the name "build-sams-deals", and import-sams-prices.ps1 narrates itself as Walmart
+EVID: Scanned every emitting line in all 100+ grocery scripts for a message naming a different script. Hits: build-walmart-deals.ps1:59 `throw "build-sams-deals: could not lift $fn from compare-deals.ps1"`, :451 `throw "build-sams-deals: -In not found: $In"`, :499 `Write-Output ("build-sams-deals: {0} raw -> ...")`, plus the usage block at :43-44. Confirmed at runtime — running the real builder on today's real capture prints: "build-sams-deals: 1425 raw -> 1084 priced (920 after de-dupe), 346 rejected -> walmart-regular-X.json". Sibling: import-sams-prices.ps1 (a Sam's script reading out\sams-prices-raw.json and writing sams-regular) prints at line 64 "Walmart prices captured from the store : " and names Walmart at lines 39, 103, 108, 121, 126, 135. capture-lib.ps1:14-19 already documents this class as open.
+IMPACT: The weekly run log attributes Walmart's row counts to the Sam's builder, and a missing-input failure tells the operator to look at the wrong script and the wrong capture file. During an incident that is the first thing read.
+FIX: Replace the literals with `$MyInvocation.MyCommand.Name` (or a single `$SCRIPT` variable set at the top) in both builders, and fix import-sams-prices' store nouns; it is superseded but still referenced (grocery\archive\INDEX.md:20).
+
+=== [38] LOW / issue / conf=suspected
+TITLE: build-sams-deals has no multipack pre-filter and guard 5 never opens out\sams — the entire 2,537-row Sam's channel sits outside the multipack invariant that exists because of a Sam's bug
+EVID: build-walmart-deals.ps1:311-322 dot-sources multipack-lib and pre-filters; build-sams-deals.ps1 has no reference to multipack-lib at all (grep: 0 hits). guards.ps1:312 guard 5 iterates `RegFiles` = out\regular\*-regular-*.json only, while Sam's board rows come from out\sams\sams-deals-*.json (compare-deals.ps1:539-549). The out\regular\sams-regular file guard 5 does see is 60 rows dated 2026-07-14; the live Sam's capture is 2,537 rows. Classifying those 2,537 rows with the shared lib yields 242 'reject' and 53 that survive even a dot/unit-aware version, including "Smucker's Strawberry Jam, 64 oz., 2 pk." size '64 oz' — the exact ReaLemon shape guard 5 was written for (guards.ps1:328-333). That row's own qty_basis says 'name (reproduces Sam's unit price)' and its engine_check is 0.0934/oz, so build-sams-deals' emit-invariant is what is protecting it, not guard 5.
+IMPACT: The invariant whose founding bug was a Sam's 2-pack is not applied to Sam's. Today the builder's reproduce-Sam's-unit-price check covers for it, so I could not demonstrate a wrong live Sam's price — but the coverage is accidental, and the 53 unverifiable rows are shipped with nobody looking.
+FIX: Point guard 5 at every file compare-deals actually loads (out\regular\* plus out\sams\sams-deals-*.json plus out\bakers\*), and fix multipack-lib's tokenizer first — running it over Sam's today would produce 189 false hard-fails and block the publish.
+
+=== [39] BLOCKING / bug / conf=proven
+TITLE: Aldi renamed every item today; carry-forward keys on the name, so 199 of 335 published Aldi cells are 11-day-old duplicates of products that WERE pulled today
+EVID: Name format changed between captures. `out\regular\aldi-regular-2026-07-18.json` names end in a size token 3.4% of the time; today's fresh rows in `out\regular\aldi-regular-2026-07-29.json` do 88.3% of the time ('Ground Beef 80/20' -> 'Ground Beef 80 20 1 Per LB', 'Millville Old Fashioned Oats' -> 'Millville Rolled Oats 42 OZ', 'Broccoli Crowns' -> 'Broccoli Crowns Per LB'). `carry-forward-regular.ps1:42` and `:56` key on `([string]$d.item).ToLower().Trim()`, so every renamed product reads as absent: carry_note says '+408 item(s) from aldi-regular-2026-07-18.json + aldi-regular-2026-07-15.json'. Normalising away trailing size tokens shows 191 of those 408 carried rows are the SAME product as a row pulled today (47%). Cross-referencing `out\verified-2026-07-29.json` against `out\candidates-2026-07-29.json`: 218 of 335 published Aldi cells carry as_of 2026-07-15/07-18, and for 199 of them today's pull DID return a priced Aldi candidate for the same commodity. `build-aldi-regular.ps1` mtime is 2026-07-29 12:24 (today's builder de-fork, commit e8c3ad9f).
+IMPACT: Aldi looks 98.3% freshly pulled (517/526 terms) but 59% of its shopper-facing prices are 11 days old, and the stale copy is what wins the cheapest-price ranking because ranking has no freshness tiebreak. Aldi is the cheapest store on many rows, so this is the store most likely to send a shopper somewhere on a price that no longer exists. It also inflates the file (1838 rows for 1430 real ones) and will keep compounding every day until 2026-08-01 when the 07-18 rows hit the 14-day cap and ~200 Aldi cells vanish at once.
+FIX: Give carry-forward a normalised match key (lowercase, strip a trailing size/count token, strip punctuation) instead of the raw item string, and re-run it against today's Aldi file so the 191 duplicates collapse. Add a guard that fails when >20% of a store's carried rows normalise onto a row present in the same file - that is the exact fingerprint of a rename event. Longer term, carry on the store's stable product id (Aldi rows already carry link_url) rather than on display text.
+
+=== [40] BLOCKING / bug / conf=proven
+TITLE: Family Fare's live pull is thrown away every day: today's 773-row capture landed in out\throttled\ and 5 published cells are provably wrong right now
+EVID: `out\throttled\family-fare-2026-07-29.throttled.json` holds 773 rows pulled this morning; compare-deals only reads `out\regular\` (compare-deals.ps1:606-621), so all 773 are discarded. Diffing them against the file the board actually uses (`out\regular\family-fare-regular-2026-07-26.json`): 705 rows confirm the published price, 32 disagree, 36 are new. Five of the 32 are published board cells: sour-cream $2.99->$3.29 ('Our Family Sour Cream, Original 24 Oz'), strawberries $3.99->$4.49, chipotle-adobo $1.99->$2.29, lemons $0.79->$0.99, zucchini $2.29->$2.19. Family Fare has been throttled 13 days running (out\throttled\family-fare-2026-07-{17,19,20,21,22,23,24,25,26,27,28,29}). The 07-25 and 07-26 'successful' regular files both report fresh_count=963 carried_count=872, byte-identical to the 07-18 file's counts - no genuinely new fresh row since 2026-07-18.
+IMPACT: 256 Family Fare cells are on the board and 225 of them (88%) are 11-16 days old; 20 are 16 days old, past the file's own max_carry_days=14, because the carry cap is measured from the capture date and the capture itself is 3 days stale. Five prices are known-wrong today and the pipeline had the correct number in hand this morning.
+FIX: Merge throttled captures instead of quarantining them: a throttled pull is a PARTIAL pull, not a bad one. Feed `out\throttled\<store>-<date>.throttled.json` through the same carry-forward union used for Walmart (compare-deals.ps1:377 EVERYDAY_ONLY_STORES) so its 773 verified-today rows supersede the 07-18 copies, and only its 466 empty terms fall back to carry. Also measure the carry cap against publish date, not capture date, so a 16-day-old row cannot ship under a '14-day cap' label.
+
+=== [41] HIGH / bug / conf=proven
+TITLE: Sam's builder derives a pack size from Sam's own unit price when the name does not reconcile - publishing sazon seasoning at $0.07/oz, 8x below the next store
+EVID: `out\sams\sams-deals-2026-07-29.json`: item 'Goya Sazon Seasoning 6.3 oz., 36 ct.', ad_price $4.58, size '65.429 oz', qty_basis literally reads "package; qty derived lp/up; no name quantity (6.3, 226.8) reproduces Sam's 0.07". 4.58/0.07 = 65.43, i.e. the size was back-solved from the store's posted unit price after BOTH name-derived candidates were rejected. Live on the board: `out\verified-2026-07-29.json` sazon-seasoning = Sam's Club $0.07/oz vs Aldi $0.5633/oz vs Baker's $1.1986/oz. The truth is 4.58/6.3 = $0.727/oz (a 6.3 oz box of 36 packets), in line with Aldi. The identical lesson is already documented and fixed for Walmart ('Walmart's own unit price can be wrong; the product NAME wins', grocery-method-walmart) but was never ported to build-sams-deals.ps1.
+IMPACT: A 10x-understated price sits at the top of the sazon row as the cheapest store, and it was banked into price-history.json this morning as an all-time record low ($0.07/oz @ Sam's Club, week_of 2026-07-29), which will suppress every future 'stock up' verdict for that commodity. Any other Sam's row using the derived-size fallback carries the same risk.
+FIX: In build-sams-deals.ps1, treat 'qty derived lp/up' as a REJECT, not a fallback: when no name-derived quantity reproduces the store's unit price, drop the row to `out\sams\sams-rejects-*.json` rather than trusting the store's arithmetic. That is the rule build-walmart-deals.ps1 already applies. Then re-run compare for the affected commodities and purge the 2026-07-29 record low.
+
+=== [42] HIGH / bug / conf=proven
+TITLE: A beet-supplement chew is published as the cheapest pomegranate at $0.39 - the commodity exclude list has no supplement token
+EVID: `out\verified-2026-07-29.json` row pomegranates: cheapest_store = Sam's Club, cheapest_price 0.3887/each, item = 'Humann SuperBeets Heart Chews, Pomegranate Berry 90 ct.' ($34.98 / 90 ct). The only other cell is Baker's 'Pomegranates' at $4.99 each. In commodities.json the pomegranates rule is include `pomegranates?\b` with excludes covering juice/soda/tea/candy/gummy/baby-food/pet-food but nothing for `chews`, `supplement`, `heart health`, or `ct.` counts. sanity-check flagged it the same run (`out\guards-2026-07-29.json`: "Pomegranate ... Sam's Club $0.39 is 92% below runner-up Baker's $4.99 - verify the price/size parse") and it published anyway.
+IMPACT: The board's headline for pomegranates is a wrong product at a 92% discount, and update-history banked it as an all-time record low (record_low 0.3887 @ Sam's Club, week_of 2026-07-29) so the row will read 'usually cheaper, wait' forever after. This is exactly the wrong-product-winner class the verify-then-bank fix was meant to close, and it still got through.
+FIX: Add `\bchews?\b`, `\bsupplement`, `\bgumm`, `heart\s+chews` to the pomegranates exclude (and promote them to the shared produce exclude block, since the same shape will hit cranberries/blueberries). Then delete the 2026-07-29 entry from pomegranates' history so record_low recomputes off the real $2.99-$4.99 band.
+
+=== [43] HIGH / bug / conf=proven
+TITLE: update-history runs BEFORE sanity-check, so record lows are banked from cells the same run flags as parse errors - 7 today
+EVID: weekly-post-capture.ps1:79 runs update-history.ps1; :80 runs sanity-check.ps1 (and with -NonFatal, so its output never gates anything). Intersecting the 58 record lows stamped week_of 2026-07-29 in price-history.json with the 54 'outlier' entries in out\guards-2026-07-29.json gives 7 exact matches: coleslaw-mix 0.0731/oz, dog-treats 0.0582/oz, dried-cranberries 0.1588/oz, peanuts 0.0748/oz, pomegranates 0.3887/each, sazon-seasoning 0.0700/oz, spring-mix 0.1742/oz - every one carrying a flag that reads 'is N% below runner-up - verify the price/size parse'. update-history.ps1:75 recomputes record_low from the whole history each run, and the compaction rule at :110-112 deliberately keeps each old week's LOWEST entry, so a corrupt low can never age out.
+IMPACT: The verify-then-bank fix shipped today moved history behind semantic verify, but sanity-check's outlier detector runs after banking and is advisory, so the exact failure mode it was meant to stop still happens. Because compaction preserves the minimum, every bad low is permanent until someone hand-edits price-history.json.
+FIX: Move sanity-check.ps1 above update-history.ps1 in the publish phase and have update-history skip banking any commodity present in that run's guards-<date>.json outlier list (bank the history row, but do not let it set record_low). Add a plausibility floor to record_low: refuse a new low more than ~2x below the next-lowest week ever recorded for the same commodity unless a human acks it.
+
+=== [44] HIGH / bug / conf=proven
+TITLE: 16 live record lows are physically impossible; brown sugar and sugar are pinned to a whole-board 16x per-oz-as-per-lb error from 2026-07-12, and the page tells shoppers to wait for $0.03/lb brown sugar
+EVID: Scanning price-history.json for commodities whose all-time minimum is >=2x below the next-lowest week ever recorded: 17 hits, 16 still on today's board. The 2026-07-12 row for sugar reads Sam's 0.0411, Hy-Vee 0.0488, Aldi 0.0498, Walmart 0.05, Baker's 0.0514 /lb; the 07-13 row reads 0.658, 0.78, 0.7975, 0.8175, 0.8225 - ratios of 16.01, 15.98, 16.01, 16.35, 16.00. brown-sugar shows the same whole-row jump (0.03-0.25 on 07-12, 0.94-1.20 on 07-13). Full live list with ratio of today's price to the banked low: brown-sugar 30.8x, grits 19.5x, sazon-seasoning 17.1x, sugar 14.6x, pomegranates 7.7x, refrigerated-biscuits 7.6x, yeast 6.4x, toothbrushes 5.9x, garlic-bread 3.4x, taco-seasoning 3.4x, bay-leaves 3.2x, honeydew 3.0x, gelatin 2.5x, floor-cleaner 2.5x, coleslaw-mix 2.2x, hand-sanitizer 2.0x. Rendered impact in out\deals-page-embed.html: brown-sugar carries `pg-verd-wait` with title "Lowest we have tracked: $0.03/lb at Sam's Club. If it can wait, it usually comes back down." Same badge on refrigerated-biscuits ($0.02/oz), fresh-mint, bouillon, toasted-sesame-seeds, poppy-seeds, gelatin.
+IMPACT: The buy/wait verdict is the board's most opinionated feature and on these rows it is advising shoppers to hold out for a price that never existed. brown sugar can never earn a 'stock up' badge again because today's real price is 31x the phantom record.
+FIX: Delete the 2026-07-12 history rows for sugar and brown-sugar (an entire board-wide basis error, not a price), and the isolated single-store outlier rows behind the other 14. Then add the plausibility floor described above so a future 16x row cannot be banked, and make the verdict renderer suppress the wait badge when today's price is >3x the record low rather than shouting about it.
+
+=== [45] HIGH / bug / conf=proven
+TITLE: The 'every price has a link' invariant is satisfied by a substring: 310 priced chips only get a store-SEARCH link and the guard reports 21
+EVID: audit-board-consistency.ps1:86 classifies a chip as no-link with `if ($body -notmatch 'pg-see' -and $body -notmatch 'pg-none')`. The search fallback that build-deals-page.ps1:242 emits is `class='pg-see pg-see-search'` - it contains the substring 'pg-see', so it passes. Replaying that exact regex and test over the shipped `C:\Codex\public\board.json` (2026-07-29 12:57:28, 3471 priced chips): 3139 real 'See item' product links, 310 'Find at store' store-search links, 22 'weekly ad' pills, 0 truly bare. The guard's reproduction returns 22 - and out\consistency-report.json's 21 no_link rows are exactly the ad-pill chips (Hy-Vee 17, Baker's 2, Fareway 1, Aldi 1), i.e. the ONE category that has no product page by design. Per-store search-only counts: Walmart 89, Fareway 86, Hy-Vee 42, Sam's 39, Family Fare 29, Aldi 20, Baker's 5. build-deals-page.ps1:1510 does print the number ('$searchN on store-search fallback links') but nothing persists or gates it.
+IMPACT: MaxNoLink is 0 with a documented zero-tolerance rationale, and publish-deals-page.ps1:98 warns on it - but the signal is inverted. The guard fires on 22 by-design ad pills and is blind to the 310 chips where a shopper clicks and lands on a search results page instead of the product whose price we quoted. The real shopper-facing number is 332 of 3471 priced chips (9.6%) with no product page, not 21.
+FIX: Change the test to look for the product-link class specifically, e.g. treat a chip as linked only when its anchor class is exactly 'pg-see' (or tag the search fallback with a class that does not contain 'pg-see'). Then split the report into three counters - product_link / search_fallback / ad_only - and set MaxNoLink against search_fallback, with the ad_only bucket excluded by design. Seed the backlog from out\url-worklist.json, which already names 266 missing and 131 drifted links.
+
+=== [46] HIGH / bug / conf=proven
+TITLE: Half the board's rows are a 2026-07-12 snapshot with no Fareway, and they contradict the fresh half on 124 same-store, same-unit cells
+EVID: out\recipe-board.json (week_of 2026-07-06, reverified '2026-07-07', regenerated daily from the frozen out\recipe-board-everyday.json whose mtime is 2026-07-12 10:00) supplies 158 of the 628 rows in public\board.json and 807 of the 3471 priced chips (23%). 78 of its 158 ids also appear on today's verified staples board; 65 of those share the same unit. Comparing per-store per_unit between the two sections for the same id, same store and same unit, 124 cells differ by >=10%: ground-coriander/Family Fare 3.2071 vs 1.045 (+207%), hominy/Baker's 0.1155 vs 0.0426 (+171%), dried-oregano/Family Fare 2.92 vs 1.1067, ground-cinnamon/Family Fare 0.676 vs 0.272, bay-leaves/Walmart 1.25 vs 3.995 (-69%), lemon-juice/Walmart 0.035 vs 0.1116. The recipe board also has no Fareway row anywhere (stores present: Aldi, Baker's, Family Fare, Hy-Vee, Sam's Club, Walmart) even though 73 of its 78 shared ids have a fresh Fareway price on the staples board today.
+IMPACT: A shopper scrolling one page sees Family Fare ground coriander at $1.05/oz in the staples section and $3.21/oz in the recipe section. Fareway - one of the seven stores, holding 429 staple cells - is invisible on 158 rows, so 'cheapest' in that section is decided without it. The page discloses 'checked Jul 12, 2026, re-checked monthly', which is honest about age but does not excuse two contradictory numbers on one page.
+FIX: Drop the 78 overlapping ids from the recipe section and let the fresh staples row own them (the lazy-render code already handles the id collision via the '<id>::r' key, so removal is a data change, not a rendering one). Rebuild the remaining 80 recipe-only ids through the normal weekly pipeline so they pick up Fareway and the current price basis, and retire recipe-board-everyday.json as a separate frozen source.
+
+=== [47] HIGH / issue / conf=proven
+TITLE: Walmart holds 426 board cells off a 57-term pull; 293 of them come from the 2026-07-18 file and all 293 fall out of the union window on 2026-08-02
+EVID: out\regular\walmart-regular-2026-07-29.json reports pull_terms=57 of 526 (10.8%) with 920 rows. Walmart is the only store unioned across 14 days (compare-deals.ps1:377, :387). Tracing each of the 426 published Walmart cells in out\verified-2026-07-29.json to the newest union file that contains its item name: 98 cells from 2026-07-29, 35 from 2026-07-25, 293 from 2026-07-18 (11 days old), 0 unmatched. Simulating the union with no further pull: 426 items survive on 2026-07-30 and 2026-08-01, then 133 on 2026-08-02 - a 69% collapse in one day. For context, publish gates on per-store cell counts, and 133 would trip them.
+IMPACT: Walmart looks fully covered on the board while 69% of its prices are 11 days old, and there is a dated cliff four days out where the store either regains a broad pull or loses two thirds of its cells mid-week. Board-wide, only 49.6% of the 2669 published cells were priced today and 33.0% were priced 11 or more days ago (Walmart 293, Family Fare 225, Aldi 218, Fareway 116, Hy-Vee 27, Sam's 1, Baker's 0).
+FIX: Treat 'pull_terms far below the safe stop' as a first-class alert, not just a log line: if a bot-walled store covers less than ~60% of the terms that feed its published cells, raise it the same way the Family Fare freeze alert now works. Schedule the Walmart re-pull before 2026-08-02 and prioritise the ~293 commodities currently sourced from 07-18. Consider a per-cell max age (publish the cell with an age badge, or drop it) so the union degrades gradually instead of falling off a cliff.
+
+=== [48] MEDIUM / bug / conf=proven
+TITLE: build-pull-order's advertised SAFE STOP is computed from a tier the sort never uses - stopping there silently drops 18 Walmart and 41 Sam's published cells
+EVID: build-pull-order.ps1:82 assigns `$tier` from ($has, $contest), but :85 sorts by `depth desc, contest desc, has desc, id` - tier is never a sort key, so tier-1/2 terms are interleaved with tier-3/4 terms. Line 97 nonetheless prints "SAFE STOP after ($t1+$t2) terms (covers every cell this store publishes today)". Reproducing it against out\comparison-2026-07-29.json and out\pull-order-walmart.txt: the printed safe stop is term 429, but the last position holding a commodity Walmart actually publishes is 478 - 18 published cells sit beyond 429 (#448 brown-gravy-mix, #449 red-onion, #454 ground-beef-93-7, #458 turkey-breast, #468 garden-salad, #472 butternut-squash, #478 acorn-squash, and 11 more). Sam's is worse: printed 339, real last needed position 510, 41 published cells beyond the cut (#341 cayenne-pepper, #360 tomatoes-green-chilies, #368 bouillon, #385 canned-pears, #393 sloppy-joe-sauce, ...).
+IMPACT: This file exists to tell an operator where a bot-walled pull can safely stop. Its headline number under-reports by 49 terms for Walmart and 171 for Sam's, so following it drops 18 and 41 live cells - the precise loss the script was written today to prevent.
+FIX: Either add `@{e='tier'}` as the first sort key so tiers really are contiguous, or compute the safe stop as the 1-based index of the LAST ordered term whose id the store publishes, rather than as a count of tier-1+tier-2 rows. The second is a two-line change and is what the wording already promises.
+
+=== [49] MEDIUM / bug / conf=proven
+TITLE: Fareway honeydew publishes a per-pound price as an each price and takes the cheapest slot - the link the shopper clicks says 1 lb
+EVID: out\verified-2026-07-29.json row honeydew (unit=each): Fareway $1.49 size='each' wins over Baker's $2.99, Walmart $4.46, Hy-Vee $4.99. The source row in out\regular\fareway-regular-2026-07-27.json carries link_url https://shop.fareway.com/store/fareway-meat-grocery/products/17668522-honeydew-melon-1-lb - the store's own slug says the listing is per pound. A honeydew runs ~5 lb, so the true each price is around $7.45, i.e. the most expensive cell, not the cheapest. Scanning every published Fareway cell for board size='each' against a link slug ending in a weight unit returns exactly 2 hits: honeydew and eggplant ($1.99, not currently winning). sanity-check flagged it both today and yesterday ('Honeydew Melon ... Fareway $1.49 is 50% below runner-up Baker's $2.99 - verify the price/size parse') and it published both times.
+IMPACT: The board's answer to 'where is honeydew cheapest' is the wrong store by a factor of five, and the evidence needed to catch it is already in the row's own URL.
+FIX: Add a cheap cross-check to the Fareway builder or to guards.ps1: when a row's link_url slug ends in `-<n>-lb` (or `-per-lb`) but the parsed size is 'each'/'1 ct', reject the row or re-basis it to lb. The same check generalises to any store whose product URLs carry the sell-by unit.
+
+=== [50] MEDIUM / bug / conf=proven
+TITLE: heal-mojibake's target globs skip the recipe board, so 61 mangled product names survive and 4 render on the live page
+EVID: heal-mojibake.ps1:21 defines $targets as out\regular\*-regular-*.json, out\sams\sams-deals-*.json, out\bakers\bakers-deals-*.json, out\fareway\fareway-deals-*.json, plus a special-cased product-urls.json. recipe-board.json and recipe-board-everyday.json are not in the list and both still contain 61 mojibake sequences ('Kroger\u00c2\u00ae Teriyaki Marinade and Sauce', 'Simple Truth Organic\u00c2\u00ae Baby Dill', 'Campbell's\u00c2\u00ae Condensed French Onion Soup', 'Kikkoman\u00c2\u00ae Panko Japanese Style Bread Crumbs', 33 names in all). 8 of them (4 products x title + text) survive into the shipped C:\Codex\public\board.json. Every other 2026-07-29 capture file scans clean, so the ingest-side fix is working.
+IMPACT: The bug today's commit was written to kill still ships mangled brand names to shoppers on 4 chips, and audit-name-drift compares product-urls names word-by-word against these board names, so mojibake on one side reads as a wrong product.
+FIX: Add `out\recipe-board.json` and `out\recipe-board-everyday.json` to heal-mojibake.ps1's $targets (they use the same `.deals`-less `.comparison[].stores[].item` shape, so the loop needs a second walker), and add a one-line publish gate that greps the built board.json for /Ã|Â|â/ and fails the publish rather than shipping it.
+
+=== [51] MEDIUM / issue / conf=proven
+TITLE: audit-board-consistency never runs in the weekly publish path; the consistency report shipped today is 3h40m older than the board it describes
+EVID: Grepping the repo, audit-board-consistency.ps1 is invoked only from check-ad-cycles.ps1:656 and :699 (the daily job). weekly-post-capture.ps1's three phases run compare-deals, audit-coverage-gaps, audit-sale-fallback, verify-prep, verify-apply, update-history, sanity-check, guards, publish-deals-page, resolve-worklist, merge-product-urls, stamp-board-pu, publish again, audit-links, audit-name-drift, push-data - no link-consistency check. Timestamps for today's run: out\consistency-report.json generated '2026-07-29 09:17'; out\verified-2026-07-29.json built_at 12:57:04; public\board.json 12:57:28; out\deals-page-embed.html 12:57; out\url-worklist.json 12:58. Replaying the guard's own logic against the 12:57 board.json yields 22 no-link rows where the shipped report says 21, confirming the report describes a superseded board.
+IMPACT: Today's commit closed exactly this class for guards.ps1 ('two paths to publish must not have two definitions of safe') but left the link guard behind. Everything downstream that reads consistency-report.json - check-ad-cycles' alert dedup signature at :705, publish-deals-page.ps1:98's warning, resolve-ff-boardmatch, resolve-hyvee-links - is reasoning about a board that is no longer live.
+FIX: Add `audit-board-consistency.ps1` to weekly-post-capture.ps1's links phase, immediately after the final publish-deals-page and before push-data, treating exit 2 the same way the guards call at :90-91 does. That makes the report always describe the artifact that was actually pushed.
+
+=== [52] LOW / efficiency / conf=proven
+TITLE: 23 of the 526 search terms have no commodity behind them, so every full pull spends 4.4% of its budget on terms that can never produce a board cell
+EVID: commodity-search.json defines 526 terms; commodities.json defines 503 ids; the set difference is 23 term ids with no matching commodity: 93-7-ground-beef, sugar-free-bbq-sauce, beef-chuck-roast, frozen-broccoli-florets, buffalo-wing-sauce, chipotle-in-adobo, coconut-milk, fajita-seasoning, frozen-green-beans, green-bell-pepper, hot-honey, hot-italian-sausage, parmesan-cheese, penne-pasta, pepperoncini, reduced-fat-mozzarella, jasmine-rice, salsa-verde, seasoned-black-beans, shredded-carrots, canned-sweet-corn, turkey-pepperoni, zero-sugar-soda-2l. Every one is a near-duplicate of a live id (93-7-ground-beef/ground-beef-93-7, coconut-milk/coconut-milk-canned, chipotle-in-adobo/chipotle-adobo, beef-chuck-roast/chuck-roast); three are byte-identical term strings (frozen broccoli florets, green bell pepper, grated parmesan cheese). All 526 appear in every out\pull-order-*.txt. Baker's pulled 526/526 and Aldi 517/526 today, so both paid for all 23.
+IMPACT: Roughly 23 wasted searches per full-pull store per run. Low impact today because build-pull-order sinks them to positions 425-447 so the bot-walled stores never reach them, but they are pure cost for Baker's and Aldi and they inflate the empty_terms counts that operators read as coverage failures.
+FIX: Delete the 23 orphan entries from commodity-search.json (or map each to its live commodity id and drop the duplicate), then assert `terms.Keys` is a subset of commodities.json ids in a guard so the two files cannot drift again. Related: 33 defined commodities never reach the published board - 23 are priced by exactly one store and dropped by MinStores=2 (achiote-paste, berbere-seasoning, broccolini, cake-mix, dried-ancho-chiles, dried-guajillo-chiles, fresh-dill, habanero-peppers, jicama, okra, onion-soup-mix, pigeon-peas, plantains, pomegranate-molasses, rutabagas, steak-sauce, turnips, turnip-greens, mustard-greens, vegetable-soup, wild-rice, coconut, fresh-stir-fry-blend) and 10 reached zero stores this run (doubanjiang, aji-amarillo-paste, papaya, fresh-cranberries, swiss-chard, bean-sprouts, fennel, chayote, yuca-root, pie-pumpkins).
+
+=== [53] BLOCKING / bug / conf=proven
+TITLE: promote-verdicts resolves a verdict to whatever item is in that cell NOW, not the item that was judged — 16 of 74 verdicts have drifted, and 6 of today's 13 proposed rules are built from the CORRECT product
+EVID: promote-verdicts.ps1:160-177 keys a verdict only by (id|store) and re-reads that week's comparison-<week>.json to recover the item name. Every comparison file is rebuilt AFTER its verdict file, so the name it recovers is the REPLACEMENT product:
+
+  wk          verdict written      comparison rebuilt   after?
+  2026-07-15  2026-07-15 09:35     2026-07-17 06:19     True
+  2026-07-17  2026-07-17 07:25     2026-07-17 09:54     True
+  2026-07-22  2026-07-23 07:03     2026-07-23 09:51     True
+  2026-07-29  2026-07-29 07:46     2026-07-29 12:29     True
+(all 6 weeks True)
+
+DRIFT  2026-07-29 coffee            Aldi
+   verdict named : Stok Cold Brew Coffee Black Unsweetened 48 FL OZ
+   now resolves to: Beaumont Medium Classic Roast 100 Pure Coffee 30.5 OZ
+DRIFT  2026-07-29 cheese-tortellini  Hy-Vee
+   verdict named : Hy-Vee ravioli or tortellini, 42 or 48 oz., $5.99
+   now resolves to: Hy-Vee Select Cheese Tortellini
+DRIFT  2026-07-29 queso              Hy-Vee
+   verdict named : Pace salsa, picante sauce or queso bowls...
+   now resolves to: The Mad Butcher's Queso Cheese 15 oz
+DRIFT  2026-07-29 sun-dried-tomatoes Hy-Vee
+   verdict named : Mission Sun-Dried Tomato Basil Wraps 6Ct
+   now resolves to: Valued Naturals Sun Dried Tomatoes PrePriced
+DRIFT  2026-07-15 tortillas          Sam's Club
+   verdict named : Quest 'Tortilla Style' Protein Chips
+   now resolves to: Mission 6 Inch Fajita Flour Tortillas, 40 ct
+DRIFT  2026-07-29 strawberries       Baker's
+   verdict named : Kroger Strawberry Applesauce
+   now resolves to: Kroger Sliced Strawberries BIG DEAL!
+
+`.\promote-verdicts.ps1` (dry run, today) consequently proposes:
+  coffee            \bbeaumont\s+mediums?\b     <- Aldi's real ground coffee
+  cheese-tortellini \bselect\s+cheeses?\b       <- a real cheese tortellini
+  queso             \bmad\s+butchers?\b         <- a real queso
+  sun-dried-tomatoes \bnaturals\s+suns?\b       <- real sun-dried tomatoes
+  tortillas         \binch\s+fajitas?\b         <- real fajita tortillas
+  strawberries      \bkroger\s+sliceds?\b       <- real sliced strawberries
+IMPACT: The next `promote-verdicts.ps1 -Apply` writes PERMANENT excludes that delete legitimate products from the board. Aldi loses its only ground-coffee cell, Hy-Vee loses cheese tortellini and queso, Baker's loses strawberries, and the loss is silent (excludes never report what they removed). The whole safety story in the header comment ("a rule is only written if it provably cannot kill a product the board legitimately carries") is void, because the gate is run against the wrong item.
+FIX: Make the verdict self-describing: have the verify pass write the judged `item` string into each entry of verify-verdicts-<week>.json, and have promote-verdicts key on (id|store|item) — refusing to promote and printing 'STALE: cell now holds <X>, verdict judged <Y>' when they disagree. As an interim guard, parse the quoted item out of `entry.reason` (it is present in 16/16 drift cases above) and compare it to the resolved name before proposing anything.
+
+=== [54] BLOCKING / bug / conf=proven
+TITLE: Three previously-DROPPED cells are the published CROWN on today's board; 18 dropped cells are live again
+EVID: Cross-referencing all 74 historical DROP verdicts (exact commodity|store|item text) against out\verified-2026-07-29.json:
+
+CROWN bacon              Sam's Club  3.6070/lb  [dropped 2026-07-17] Smithfield Applewood Smoked Bacon Fresh Pork Loin Filet, 23 oz, 2 Pk.
+CROWN broccoli           Sam's Club  1.7450/lb  [dropped 2026-07-22] Member's Mark Broccoli Normandy 4 lbs.
+CROWN canned-pinto-beans Sam's Club  0.0416/oz  [dropped 2026-07-17] Member's Mark Pinto Beans 12 lbs.
+(+15 non-crown: apple-juice/Sam's, apples/FF Lady Apples, avocados/Sam's, bacon/Hy-Vee, cat-food/FF, cheese-crackers/Hy-Vee, corn-dogs/FF, disinfecting-wipes/Hy-Vee, frozen-fries/FF 'Frozen Carrots, Crinkle Cut', honey/Hy-Vee, marshmallows/Sam's 'Lucky Charms with Marshmallows', olive-oil/FF Violi blend, pita-bread/Sam's Stacy's Pita Thins, raspberries/Hy-Vee, sweet-corn/FF)
+
+The original verdicts (out\verify-verdicts-2026-07-17.json / -22.json):
+  bacon|Sam's       : "'Smithfield Applewood Smoked Bacon Fresh Pork Loin Filet' is a seasoned pork loin filet, not sliced bacon."
+  broccoli|Sam's    : "frozen Broccoli Normandy blend (broccoli/cauliflower/carrot), not fresh broccoli crowns"
+  canned-pinto-beans: "'Member's Mark Pinto Beans 12 lbs.' is a 12-lb bag of DRY pinto beans, not canned beans. No 192 oz can exists."
+
+Root cause: verify-apply.ps1:35-36 applies only THIS week's verdict file; nothing re-applies prior weeks. promote-verdicts leaves 47 of 61 still-live verdicts unpromoted, so they return every week.
+IMPACT: The board's headline 'cheapest store' answer is wrong on three rows right now. A shopper told bacon is $3.61/lb at Sam's finds a pork loin filet; $1.75/lb 'fresh broccoli' is a frozen mixed-veg blend; and canned pinto beans at $0.0416/oz is a 12-lb bag of dry beans (~2.5x yield difference), which also drags the recipe-cost feed and price-history record lows.
+FIX: Carry forward unpromoted verdicts as data, not as rules: write a `verdict-suppressions.json` of (commodity, store, normalised item) tuples from every DROP verdict ever made, and have verify-apply drop any cell matching a suppression regardless of week. Rules stay for name-generalisable cases; suppressions cover the 47 that are not generalisable.
+
+=== [55] BLOCKING / bug / conf=proven
+TITLE: Five wrong-product CROWNS nobody has caught, in the same classes fixed today (supplement, pet food, substitute, seasoning, dry-vs-canned)
+EVID: Ranked every crown against its peer median in out\verified-2026-07-29.json, then confirmed each by running the commodity's own include/exclude from commodities.json against the item text (include matched, ZERO excludes matched):
+
+  pomegranates       Sam's Club  $0.3887/each | 'Humann SuperBeets Heart Chews, Pomegranate Berry 90 ct.'   (peer: Baker's real Pomegranates $4.99 = 12.8x)  commodities.json:35495; include-hit=pomegranates?\b, exclude-hits=0
+  beef-jerky         Sam's Club  $0.7217/oz   | "Waggin' Train, Salmon Jerky Tenders for Skin & Coat Support, 36 oz."  (DOG TREAT; peer Aldi Peppered Beef Jerky $0.998 = 1.9x)  commodities.json:20261; include-hit=\bjerky\b, exclude-hits=0 (the row DOES exclude \bdog\b, \bpurina\b, \bfor\s+dogs?\b - the name says none of them)
+  butter             Sam's Club  $2.4975/lb   | 'Whirl Butter Alternative, 128 oz.' (butter-flavoured liquid oil; size field literally reads '128 fl oz' yet the row is per lb)  commodities.json:739; include-hit=\bbutter\b, exclude-hits=0 (row excludes 'not\s+butter', 'butter\s+flav', 'spread', '\boil\b' - none fire)
+  jalapenos          Hy-Vee      $1.3333/lb   | 'Chophouse Cajun Seasoning with Jalapeno' (a 12 oz spice jar converted to $/lb of fresh produce; real fresh jalapenos are $1.70-$2.99/lb)  commodities.json:11462; include-hit=jalape[n..]os?, exclude-hits=0
+  canned-black-beans Sam's Club  $0.0520/oz   | "Member's Mark Black Beans 12 lbs." - identical dry-bean bug the 2026-07-17 verdict already confirmed for canned-pinto-beans, never checked on the black-bean twin  commodities.json:7202; include-hit=black\s+beans?, exclude-hits=0
+IMPACT: Five of the board's 470 'cheapest store' verdicts point at a product the shopper cannot buy. Pomegranates is the worst: the row has only 2 stores, so the board tells a shopper a pomegranate costs $0.39 at Sam's when the only real one on the board is $4.99. These prices also feed price-history record lows and the recipe cost engine.
+FIX: Add targeted excludes: pomegranates += \bchews?\b|supplement|superbeets|\bgumm(y|ies)\b; beef-jerky += waggin|\bsalmon\b|skin\s*&?\s*coat|\btenders?\b; butter += \balternatives?\b|\bsubstitutes?\b|\bwhirl\b; jalapenos += \bseasoning\b|\brub\b|\bblend\b; canned-black-beans/canned-pinto-beans += \b\d{2}\s*lbs?\b (no 12-lb can exists) or require \bcan(ned)?\b. Longer term add a structural guard: on a per-lb/per-each fresh row, reject any item whose captured size is a spice-jar/pouch weight.
+
+=== [56] HIGH / bug / conf=proven
+TITLE: Eight more wrong-product cells sitting on the board below the crown, one bad week away from crowning
+EVID: Same method (include matched, 0 excludes matched), all from out\verified-2026-07-29.json:
+
+  bacon           Baker's #4  $3.9867/lb  'Private Selection Gruyere and Bacon White Cheddar Macaroni and Cheese'  (mac & cheese on the bacon row; only $0.03 above the #3 cell)
+  coffee          Walmart #4  $0.5150/oz  'NESTLE COFFEE MATE Half & Half Tubs (24x0.304floz) Box'  (creamer; the row DOES exclude 'creamer' but the brand spells it 'COFFEE MATE' - 0/71 excludes fire. fl-oz item priced against dry oz, the exact Stok cold-brew class fixed this morning)
+  peaches         Sam's #5    $2.1280/lb  'Caress Silkening Daily Silk Beauty Bar, White Peach & Orange Blossom' (BAR SOAP on fresh peaches - sibling of the Pure Silk raspberry shave cream)
+  pears           Baker's #6  $2.5075/lb  'Del Monte Sliced Bartlett Pears in Heavy Syrup' (canned fruit on a fresh row)
+  clementines     Walmart #6  $2.8961/lb  'Dole Fruit Bowls Peaches, Mandarin Oranges, and Mixed Fruit in Gel, 4.3 oz Cups (12 Pack)'
+  chocolate-chips Aldi #3     $0.2812/oz  'Specially Selected Chocolate Chip Sliced Brioche Loaf 17.6 OZ' (bread)
+  fresh-ginger    Sam's #5    $4.0651/lb  'Spice World Squeeze Minced Ginger Seasoning 22.75 oz.' (paste tube on a fresh-root row; only 2% above the crown)
+  tomatoes        Walmart #6  $2.1285/lb  'Pomi Chopped Tomatoes, 26.46 oz' (boxed chopped tomatoes on fresh)
+  rice            Walmart #7  $3.6809/lb  'Ben's Original Ready Rice Jasmine ... 17.3 oz Pouch' (the microwave-pouch class that got a rule on brown-rice today but not on rice)
+IMPACT: Every one of these is a crown next week if that store discounts it or the real winner runs out of stock. bacon/Baker's and fresh-ginger/Sam's are within 3% of crowning today. They also inflate the per-store 'coverage' numbers, so a store looks stocked on a commodity it is not.
+FIX: bacon += macaroni|\bmac\s+and\s+cheese\b; coffee += coffee\s*mate|half\s*&?\s*half|\btubs?\b; peaches/raspberries/strawberries += beauty\s+bar|\bsoap\b|body\s+wash (the shared non-food block already has \bshampoo\b/\blotion\b - add the bar-soap nouns to it once, it propagates to all 446 rows); fresh fruit rows += in\s+(heavy|light)\s+syrup|fruit\s+bowls?|\bin\s+gel\b; chocolate-chips += \bloaf\b|\bbrioche\b; fresh-ginger += \bsqueeze\b|\bminced\b|\bpaste\b; rice += the brown-rice pouch rule (\bready\s+to\s+heat\b, \bpouch\b).
+
+=== [57] HIGH / bug / conf=proven
+TITLE: The promoted coffee rule \bcold\s+brew\b overrides promote-verdicts' own safety gate and will delete legitimate cold-brew GROUND coffee
+EVID: commodities.json:3043 now carries \bcold\s+brew\b on the coffee row; exclude-provenance.json records it with `source: post-publish spot check` (i.e. added by hand, not by the gated promoter).
+
+promote-verdicts.ps1:146-147 - the tool's OWN self-test asserts this exact token must be refused:
+  $r3 = Test-Safe (New-Pattern 'cold brew') 'cold brew' 'Stok Cold Brew Coffee Black Unsweetened 48 FL OZ' @('Folgers Classic Roast Ground Coffee','Kroger Cold Brew Coffee Concentrate') $cm2 ...
+  if ($r3 -ne '') { "ok    refused because a KEPT coffee item also says cold brew" }
+
+Regex test against real ground-coffee product names:
+  'Stone Street Cold Brew Coarse Ground Coffee 1 lb'   killed=True
+  'Cafe Du Monde Cold Brew Coffee Grounds 15 oz'       killed=True
+  'Folgers Classic Roast Ground Coffee'                killed=False
+
+Same file also carries \bconcentrates?\b, which is the correct half of the intent.
+IMPACT: Coarse-ground cold-brew coffee is dry ground coffee sold by the pound and belongs on this row. When any of the 7 stores stocks it, the cell disappears silently and coverage for that store drops with no alert - the exact 'a rule that exists still fails/overfires for weeks' failure the promoter was written to prevent.
+FIX: Replace \bcold\s+brew\b with the basis-specific form: cold\s+brew.*\b(fl\.?\s*oz|ready\s+to\s+drink|bottle|carton|can)\b, or drop it and rely on \bconcentrates?\b + the existing ready_to_drink/\brtd\b rules. Also: hand-added rules should be recorded in exclude-provenance.json with `gate: OVERRIDDEN` and a stated reason, the way the three 'carrier-noun tightening' entries already are.
+
+=== [58] HIGH / bug / conf=proven
+TITLE: promote-verdicts turns price/size verdicts into permanent product bans — two of today's 13 proposals would delete a real product to hide an arithmetic bug
+EVID: The 2026-07-22 verdicts that produced two of today's proposals are not about product identity at all (out\verify-verdicts-2026-07-22.json):
+  grits|Sam's Club                : "$0.0023/oz is an impossible price - per-packet size mis-divided"
+  refrigerated-biscuits|Baker's   : "$0.0155/oz implausibly low - bad size/count parse"
+
+`.\promote-verdicts.ps1` proposes for them:
+  grits                 \binstant\s+grits?\b     kills 1  - 'Quaker Instant Grits, Variety Pack, .98 oz., 46 pk.'
+  refrigerated-biscuits \bkroger\s+buttermilks?\b kills 1  - 'Kroger Buttermilk Jumbo Biscuits'
+
+Both named items are legitimate members of their commodity. Nothing in promote-verdicts.ps1 (the Test-Safe gate, lines 104-120) inspects WHY the verdict dropped the cell.
+IMPACT: Applying these permanently removes Quaker Instant Grits and Kroger Buttermilk Jumbo Biscuits from the board while leaving the size-parse bug that caused the drop untouched. The board loses real coverage and the underlying divisor bug goes unfixed and unlogged.
+FIX: Give each verdict entry a typed `class` field (identity | basis | ad-line | ambiguous) and let promote-verdicts propose rules ONLY for class=identity. Route class=basis verdicts to the basis-reconcile/allowlist path instead, so the arithmetic bug gets a ticket rather than a ban.
+
+=== [59] MEDIUM / issue / conf=proven
+TITLE: Two more proposed rules are over-broad and would kill legitimate future products: \bdole\s+pineapples?\b and \band\s+spicys?\b
+EVID: From `.\promote-verdicts.ps1` (dry run):
+  pineapple  \bdole\s+pineapples?\b   kills 2  [weeks 2026-07-15,2026-07-17]  - 'Dole Pineapple'
+  shrimp     \band\s+spicys?\b        kills 1  [week 2026-07-17]              - 'Nissin Hot and Spicy Shrimp Bowl, 3.27 oz., 12 pk.'
+
+The underlying verdicts were narrower than the rules:
+  pineapple|Baker's (07-17): "'Dole Pineapple, 8 oz' at $1 is a packaged/canned pineapple cup, not a whole fresh pineapple"
+  shrimp|Sam's (07-17)     : "Nissin Hot and Spicy Shrimp Bowl is instant ramen noodles, not frozen raw shrimp"
+
+Dole is the dominant brand of WHOLE fresh pineapple, and the pineapple row is priced per each/whole. 'and spicy' is a generic descriptor ('Hot and Spicy Shrimp', 'Sweet and Spicy Shrimp') that says nothing about ramen.
+
+Separately, the trash-bags rule already applied (commodities.json:8860) is asymmetric:
+  '4-Gallon Drawstring Trash Bags'  killed=True   (intended)
+  '13 Gallon Tall Kitchen'          killed=False  (correct)
+  '30 Gallon Large Trash Bags'      killed=False  <- a 30-gal bag still qualifies for the 13-gal row
+  '55 Gallon Drum Liners'           killed=False
+IMPACT: The Dole rule takes out real whole pineapples the moment Baker's or Walmart labels one 'Dole Pineapple'; the shrimp rule takes out any spicy shrimp SKU. Neither reports the removal. The trash-bag rule blocks only the too-small side, so an oversized contractor bag can still land on a 13-gallon row.
+FIX: For pineapple use a size/format token instead of the brand: \b8\s*oz\b|\bcups?\b|\bchunks?\b|\bin\s+juice\b. For shrimp use \bramen\b|\bnoodle\s+bowls?\b|\bnissin\b. For trash-bags make the rule two-sided: \b(?!13\b)([2-9]|1[0-2]|[2-9]\d)[\s-]?gallon\b, or better, positively require 13 gal / tall kitchen on that row.
+
+=== [60] MEDIUM / bug / conf=proven
+TITLE: New-Pattern's plural folding only handles regular -s plurals; 9 of 10 common grocery nouns silently fail, and the self-test pins only the one case that motivated it
+EVID: promote-verdicts.ps1:76-90 (New-Pattern) appends `s?` to the last word. Extracting that exact function from the shipped file and running it:
+
+  token        pattern                  plural test string             matches?
+  bun          \bbuns?\b                Hot Dog Buns                   True
+  raspberry    \braspberrys?\b          Blue Raspberries Ice Pops      False
+  cherry       \bcherrys?\b             Maraschino Cherries            False
+  tomato       \btomatos?\b             Sun Dried Tomatoes             False
+  potato       \bpotatos?\b             Mashed Potatoes                False
+  peach        \bpeachs?\b              Sliced Peaches in Syrup        False
+  sandwich     \bsandwichs?\b           Sandwiches                     False
+  box          \bboxs?\b                Snack Boxes                    False
+  berry        \bberrys?\b              Mixed Berries                  False
+  patty        \bpattys?\b              Sausage Patties                False
+
+A rule shipped today is already fragile this way:
+  \bblue\s+raspberrys?\b  vs 'Bomb Pop ... Blue Raspberry Ice Pops'   -> True
+  \bblue\s+raspberrys?\b  vs 'Bomb Pop ... Blue Raspberries Ice Pops' -> False
+
+promote-verdicts.ps1:126-127 tests only 'buns'/'bun'.
+IMPACT: Exactly the failure the comment at promote-verdicts.ps1:78 says the function exists to prevent ('\bbun\b vs "Buns" is how a rule that EXISTS still fails to fire'), for every -y/-es/-ch/-x noun - which is most of the produce and bakery vocabulary. A promoted rule looks applied but never fires when the store spells the item plural.
+FIX: Extend New-Pattern to emit an inflection alternation: word ending in consonant+y -> (?:y|ies); ending in s/x/z/ch/sh -> (?:es)?; otherwise s?. Add one fixture per class to the -SelfTest block (raspberry/raspberries, tomato/tomatoes, box/boxes, sandwich/sandwiches) so the gap can never reopen.
+
+=== [61] MEDIUM / bug / conf=proven
+TITLE: The matching rules themselves carry mojibake: 7 include/exclude patterns accept the corrupted spelling and now MISS the repaired one
+EVID: Today's fix (capture-lib.ps1:44 Repair-Mojibake, commit e8c3ad9f) repairs captured names, but commodities.json still holds the corrupted character classes:
+
+  jalapenos          [include]  jalape[n<U+00C3><U+00B1>]os?                        (commodities.json:11468)
+  pickled-jalapenos  [include]  pickled\s+jalape[n<U+00C3><U+00B1>]os?             (28656)
+  pickled-jalapenos  [include]  jalape[n<U+00C3><U+00B1>]o\s+(?:slices|rings|nacho) (28657)
+  pickled-jalapenos  [include]  (?:nacho|tamed|sliced|diced)\s+(?:hot\s+)?jalape[n<U+00C3><U+00B1>]os?  (28658)
+  canned-pumpkin     [include]  pumpkin\s+pur[e<U+00C3><U+00A9>]e                   (26109)
+  butternut-squash   [exclude]  pur[e<U+00C3><U+00A9>]e                             (38678)
+  pie-pumpkins       [exclude]  pur[e<U+00C3><U+00A9>]e                             (41137)
+
+The class contains U+00C3 and U+00B1, not U+00F1:
+  'Fresh Jalapenos'            -> True
+  'Jalape<U+00F1>o Peppers'    -> False
+
+And the repaired board now really does carry U+00F1 (3 cells in out\verified-2026-07-29.json):
+  pickled-jalapenos | Walmart | La Coste<U+00F1>a Pickled Sliced Jalapenos, 28 oz
+  pickled-jalapenos | Fareway | La Coste<U+00F1>a Jalapeno Nacho Slices, Pickled
+  fabric-softener   | Sam's   | Ensue<U+00F1>o Max Liquid Fabric Softener...
+IMPACT: Two-sided. An item spelled 'Jalapeño' or 'purée' no longer matches its include (the row silently loses a store), and butternut-squash / pie-pumpkins no longer exclude 'purée' (a puree can win a fresh-squash row). The rules were written to be encoding-tolerant and today's repair moved the data to the side of the class they do not cover.
+FIX: Rewrite the seven classes to cover the real codepoint plus the mojibake: [nñ] / [eé] (keeping the mojibake pair only if any un-repaired source remains). Add a startup assertion in compare-deals that commodities.json contains no U+00C3/U+00C2 lead bytes, so this class of corruption cannot re-enter the rule file.
+
+=== [62] MEDIUM / issue / conf=proven
+TITLE: The semantic verify pass judged 43 of 493 rows (8.7%) this week and starts from zero every week; 77% of what it has ever found cannot be turned into a rule
+EVID: Verdict coverage per week vs board size:
+  verify-verdicts-2026-07-05  judged  9 of  29 rows
+  verify-verdicts-2026-07-08  judged  6 of  29
+  verify-verdicts-2026-07-15  judged 20 of 378
+  verify-verdicts-2026-07-17  judged 171 of 378
+  verify-verdicts-2026-07-22  judged 17 of 424
+  verify-verdicts-2026-07-29  judged 43 of 493
+
+Accounting of all 74 resolved DROP verdicts against the current commodities.json:
+  already killed by an exclude that exists : 13
+  covered by the 13 rules proposed today   : 14
+  NOT PROMOTABLE                           : 47   (77% of the 61 still live)
+
+Why the 47 cannot become rules (re-running the shipped Get-Tokens/New-Pattern/Test-Safe over each):
+  38  every candidate token also appears on an item the pass previously KEPT (the safety gate at promote-verdicts.ps1:118)
+   9  the item name IS the commodity's own identity words, so no distinguishing token exists
+      e.g. sweet-corn|Hy-Vee 'Sweet Corn'; dried-parsley|Aldi 'Parsley 2 OZ'; avocados|Sam's 'Avocados, 5 ct.';
+           corn-dogs|Family Fare 'Corn Dogs Hot'; jalapenos|Baker's 'Fresh Jalapeno Peppers'
+IMPACT: The pass is a spot check, not a sweep - 450 of 493 rows were never looked at this week, which is why the five wrong crowns above have gone unnoticed. And because 77% of its findings cannot become rules, the weekly job does not shrink the way the promote-verdicts header claims; the same 47 judgments are needed forever, and any unattended run publishes them.
+FIX: Two changes. (1) Persist the 38 kept-set-collision cases as (commodity, store, item) suppressions rather than discarding them - a name-identical repeat needs no LLM. (2) The 9 identity-word cases are not name problems at all (deli vs frozen corn dogs, fresh vs dried parsley, count-basis corn); they need a per-cell `basis`/`form` field on the capture, not a regex. Track them as a separate defect class so they stop being counted as verify failures.
+
+=== [63] MEDIUM / issue / conf=proven
+TITLE: audit-match-soundness reports zero issues today while at least 13 demonstrably wrong assignments are live, because the wrong assignments are inside its blessed baseline
+EVID: out\audit\soundness-report.json (written 2026-07-29 12:58):
+  { "drift_vs_engine": 0, "moved": [], "dropped": [], "new_contested": [] }
+
+out\audit\match-baseline.json (16,604 name entries, rewritten 2026-07-29 12:57 by the -Accept step at audit-match-soundness.ps1:75-77) contains every wrong assignment as if correct:
+  Waggin' Train, Salmon Jerky Tenders for Skin & Coat Support, 36 oz.   -> beef-jerky
+  Humann SuperBeets Heart Chews, Pomegranate Berry 90 ct.               -> pomegranates
+  Whirl Butter Alternative, 128 oz.                                     -> butter
+  Chophouse Cajun Seasoning with Jalapeno                               -> jalapenos
+  Member's Mark Broccoli Normandy 4 lbs.                                -> broccoli
+  Member's Mark Pinto Beans 12 lbs.                                     -> canned-pinto-beans
+  Member's Mark Black Beans 12 lbs.                                     -> canned-black-beans
+  Smithfield Applewood Smoked Bacon Fresh Pork Loin Filet, 23 oz, 2 Pk. -> bacon
+
+publish-deals-page.ps1:110-111 gates publish on this guard's exit code, so publish passed green.
+IMPACT: The one standing guard over the matching layer is a change detector, and -Accept blesses whatever is currently mapped. Every wrong assignment that survives one -Accept becomes permanently invisible to it - which is precisely how bacon|Sam's and broccoli|Sam's, both already judged wrong by the verify pass, sailed through publish as crowns today.
+FIX: Refuse to bless a cell that has an outstanding DROP verdict: have -Accept read the verdict suppressions and exit non-zero listing any (commodity, store, item) it is being asked to baseline. Cheap complement: a plausibility check on crowns (crown < 40% of peer median AND crown item shares no noun with the commodity label) as an advisory alert - all five crowns in finding #3 clear that bar (12.8x, 1.9x, 1.2x... pomegranates alone is 12.8x).
+
+=== [64] LOW / issue / conf=proven
+TITLE: 11,268 exclude patterns are singular-only and \b-anchored; the escape it causes today is what puts Dole fruit cups on the fresh-clementines row
+EVID: Scanning commodities.json (503 commodities, 1,079 include and 34,889 exclude patterns):
+  SINGULAR-ONLY \b-anchored patterns: 11,371 occurrences / 496 distinct
+     exclude-side (a plural intruder survives): 11,268
+     include-side (a plural product name misses the row): 103
+  most-replicated: \bconditioner\b, \bdrano\b, \bcleaner\b, \bbleach\b, \blotion\b (each on ~446 commodities)
+
+Testing every live cell against a plural-tolerant variant of its own commodity's excludes, exactly one currently escapes - and it is a real wrong product:
+  clementines  Walmart  \bcup\b -> \bcups?\b would have killed:
+     'Dole Fruit Bowls Peaches, Mandarin Oranges, and Mixed Fruit in Gel, 4.3 oz Cups (12 Pack)'
+
+(For contrast, the two-word adjacency style is NOT a defect: of 11 near-misses found, all 11 are cases where firing would be wrong, e.g. `chili\s+beans` correctly not matching 'Chili with Beans' on the canned-chili row.)
+IMPACT: Low today (one escape), high variance tomorrow: 11,268 rules are one plural spelling away from not firing, and store feeds are inconsistent about singular/plural. The shared non-food block (\bconditioner\b, \blotion\b, \bwipes\b...) is replicated onto ~446 commodities, so one fix there propagates board-wide.
+FIX: Do a one-time mechanical pass over commodities.json converting `\bWORD\b` to `\bWORDs?\b` (or the inflection alternation from finding #8) for the shared blocks first, and add a check to test-guards.ps1 that no \b-anchored single-noun exclude ships without plural tolerance.
+
+=== [65] MEDIUM / bug / conf=proven
+TITLE: Sam's sazon-seasoning crown is ~10x too cheap: a 6.3 oz box of 36 packets was sized as 65.4 oz
+EVID: out\verified-2026-07-29.json, sazon-seasoning row:
+  Sam's Club  $0.0700/oz  size=65.429 oz  ad=$4.58  | 'Goya Sazon Seasoning 6.3 oz., 36 ct.'
+  Aldi        $0.5633/oz  size=3 oz       ad=$1.69  | 'Stonemill Sazon Seasoning 3 OZ'
+  Baker's     $1.1986/oz  size=1.41 oz    ad=$1.69  | 'Sazon Goya with Cilantro & Tomato'
+
+Goya's 36-count box is 6.3 oz TOTAL (36 packets x 0.175 oz), not 36 x 6.3 oz. The correct unit price is 4.58/6.3 = $0.727/oz, in line with Aldi. 4.58/65.429 = 0.0700 confirms the published number comes from the inflated size. The crown is 8.05x under the second-cheapest store, the third-largest such gap on the whole board.
+IMPACT: The board's cheapest sazon price is off by roughly 10x, and it crowns the row. This is the same 'X oz., N ct.' Sam's convention that the multipack allowlist exists for, applied to a case where the stated ounces are the total rather than the per-unit size.
+FIX: Add a plausibility rule to the Sam's size parser: when 'A oz., N ct.' would yield a per-unit price more than ~4x below every other store on the row, treat A as the pack total instead of the per-unit size (or refuse the cell and log it) rather than publishing. Add 'Goya Sazon Seasoning 6.3 oz., 36 ct.' as a frozen must-fire fixture.
+
+=== [66] LOW / issue / conf=suspected
+TITLE: Air freshener, gochujang and lettuce crowns are category-adjacent substitutes rather than the labelled product
+EVID: From out\verified-2026-07-29.json (each verified against the row's own include/exclude):
+  air-freshener  Sam's   $0.1557/oz  'Febreze Extra Strength and Downy Fabric Spray, Original Scent and Calm, 50.6 fl. oz., Pack of 2' - a FABRIC spray 2-pack; every other cell on the row is an aerosol air freshener (Glade 7.3 oz, Febreze Air 8.1 oz). It matches only because the include is `febreze`. Same family as the fabric-conditioner/hair-conditioner class fixed today.
+  gochujang      Baker's $0.2321/oz  'Kikkoman Gochujang Spicy Miso Teriyaki Sauce' - the row is labelled 'Gochujang (Korean Chili Paste)'; this is a teriyaki sauce carrying gochujang as a flavour word.
+  lettuce        Sam's   $0.8100/each 'Romaine Hearts, 6 ct.' on a row labelled 'Lettuce (head)', priced per each against whole iceberg heads at $1.99-$2.49. A romaine heart is roughly a quarter of a head, so the each-basis comparison overstates the saving.
+IMPACT: Smaller than the outright wrong products, but each one understates the true cheapest price for the commodity a shopper thinks they are buying, and the air-freshener case is the exact rule shape (brand-only include, no product-noun requirement) that let fabric conditioner onto the hair-conditioner row.
+FIX: air-freshener: require a product noun alongside the brand - change the `febreze` include to febreze\s+air|febreze.*\bair\s+(freshener|effects)\b and add \bfabric\s+(spray|refresher)\b to the exclude. gochujang: exclude \bteriyaki\b. lettuce: either add \bhearts?\b to the exclude, or split romaine hearts into their own commodity so the each-basis is honest.
+
+=== [67] HIGH / efficiency / conf=proven
+TITLE: audit-coverage-gaps.ps1 re-deduplicates every store's full product list inside its inner loop: 138.6s of its 181s runtime is that one pipeline
+EVID: C:\Codex\income\grocery\audit-coverage-gaps.ps1:104 — `foreach ($nm in ($prod[$st] | Select-Object -Unique)) {`  — the dedup is INSIDE the `foreach ($c in $commods) { foreach ($st in $stores) {` loop.
+
+Measured end-to-end on live inputs (scratch OutDir, live regular/ads):
+  `audit-coverage-gaps: 181.0s exit=2`
+
+Isolated benchmark, replaying the script's own data-gather and its own pair filter (present-set from out\comparison-2026-07-29.json + coverage-gap-allowlist.json):
+  commodities: 503 / include regexes: 1079
+  raw names per store: Hy-Vee 2144, Aldi 1939, Family Fare 3011, Fareway 758, Baker's 6989, Sam's Club 2537, Walmart 920 (TOTAL raw=18298 unique=16762)
+  (commodity,store) pairs that reach the Select-Object -Unique line: 673
+  names re-deduplicated across one run: 1,644,486
+  CURRENT (dedup inside the loop, 673x): 140.9s
+  HOISTED (dedup once per store):          2.3s
+  SAVING: 138.6s per audit-coverage-gaps run
+IMPACT: The single most expensive script in the whole pipeline is 77% pure overhead. It ran 3x in today's weekly run (weekly-post-capture.ps1:63) and runs once per daily job (check-ad-cycles.ps1:275), i.e. ~10 runs/week => ~23 minutes/week of wall clock burned re-sorting the same 7 string lists. Every one of those minutes is in the agent's critical path: -Phase compare cannot return until it finishes, so the Wednesday agent sits idle for 3 minutes per compare iteration.
+FIX: Build the unique list once per store before the commodity loop: `$uniq=@{}; foreach($s in $stores){ if($prod.ContainsKey($s)){ $uniq[$s]=@($prod[$s] | Select-Object -Unique) } }` and change line 104 to `foreach ($nm in $uniq[$st])`. Behaviour is identical (Select-Object -Unique is order-preserving and the loop already breaks at MAXCAND=5). Expected: 181s -> ~42s.
+
+=== [68] HIGH / efficiency / conf=proven
+TITLE: audit-match-soundness.ps1 (47s) is recomputed from scratch on every publish — 13 times in today's run, and twice per daily run on byte-identical inputs
+EVID: Measured against live inputs:
+  `audit-match-soundness (real inputs): 47.0s exit=0`
+  `match-soundness: MOVED=0  DROPPED=0  new-contested=0  drift-vs-engine=0`
+For comparison, everything else in publish-deals-page is trivial: build-deals-page 5.5s, audit-store-coverage 0.5s, audit-category-coverage 0.3s, audit-links 0.7s, audit-name-drift 1.1s, audit-price-mode 0.7s. publish-deals-page as a whole takes ~63-66s (out\logs\weekly-post-capture-2026-07.log: guards done 12:57:20 -> `publish: PUBLISHED` 12:58:23). So ~75% of every publish is this one audit.
+
+It is called twice per day on the same data: C:\Codex\income\grocery\check-ad-cycles.ps1:295 and again from C:\Codex\income\grocery\publish-deals-page.ps1:110 (which check-ad-cycles.ps1:614 invokes).
+
+Its inputs are a closed set (audit-match-soundness.ps1:29-31 commodities.json + compare-deals.ps1 GLOBAL_EXCLUDE; :55-64 newest-per-store out\regular + newest ads-*.json + newest bakers/sams/fareway deals). Their mtimes today:
+  commodities.json 10:40:41 ; compare-deals.ps1 09:31:28 ; hyvee-regular 08:53 ; bakers-regular 09:04 ; walmart-regular + aldi-regular + sams-deals 12:24 ; fareway-regular 12:25
+Publish-phase invocations at 10:42:31, 11:14:58 and 11:45:21 therefore ran on a byte-identical input set (nothing changed between 10:40:41 and 12:24:31), as did 12:32:50 vs 12:57:04.
+IMPACT: 13 invocations x 47s = 10.2 minutes of today's run spent re-deriving an answer that was already known, at least 5 of them provably on unchanged inputs. On an ordinary day it costs 94s (two identical runs) inside a 46-minute scheduled job. It is also the gate the agent waits on before it learns whether the publish will HOLD.
+FIX: Add an input fingerprint: SHA1 over commodities.json, the GLOBAL_EXCLUDE block of compare-deals.ps1, and the (name,length,mtime) of the newest-per-store input files. Cache `$names`/`$contest` next to out\audit\match-baseline.json keyed by that hash; on a hit, reuse it and skip the Get-Eligible sweep. Also drop the duplicate call at check-ad-cycles.ps1:295 (publish-deals-page runs it minutes later with -OutDir the same directory) or make that call the -Alert one and pass a `-UseCache` to the publish-time one.
+
+=== [69] HIGH / efficiency / conf=proven
+TITLE: Today's run published the same board to Ghost 12 times and invoked publish-deals-page 13 times — ~14 minutes of script time and 24 Ghost upserts for one week's data
+EVID: C:\Codex\income\grocery\out\logs\weekly-post-capture-2026-07.log:
+  `grep -c "PUBLISHED omaha-grocery-prices"` -> 11 (a 12th at 07:44 fell out of RunChild's keep=3 window; `grep -c "store guide republished"` -> 12)
+  `grep -c "PHASE publish DONE"` -> 9  (+1 HELD run at 08:47 = 10 publish-phase invocations)
+  `grep -c "PHASE links DONE"` -> 3   (weekly-post-capture.ps1:103 republishes in every links phase)
+  => 13 publish-deals-page invocations, 12 successful Ghost board upserts + 12 store-guide upserts.
+Timeline: 07:44, 07:55, 07:58, 08:01, 08:47(HELD), 08:51, 10:34, 10:38, 10:43, 11:16, 11:46, 12:34, 12:58.
+Each invocation also rewrites C:\Codex\income\public\board.json (2.44 MB) and public\price-history.json (0.41 MB) — ~32 MB of writes, and board.json is a tracked file that push-data commits.
+IMPACT: ~13.9 minutes of the run is the publish script alone, 10.2 of which is finding 2. Three of the invocations (the links phase) exist only to re-stamp product URLs, and four consecutive ones (10:34/10:38/10:43) were triggered by successive small link fixes. Every one re-runs the full audit stack, re-renders the page and re-uploads a 2.44 MB feed.
+FIX: Give publish-deals-page.ps1 a content-signature short-circuit: hash (CompareFile bytes + product-urls.json + board-price-overrides.json). If the signature matches out\last-publish.sig and the Ghost post's updated_at is newer than that stamp, skip the rebuild/upsert entirely and print `no change - not republishing`. Separately, in weekly-post-capture.ps1 let -Phase links accept a `-NoPublish` so the agent can batch several link-resolution rounds and publish once at the end.
+
+=== [70] HIGH / bug / conf=proven
+TITLE: promote-verdicts.ps1 — today's fix for repeat DROP verdicts — is wired into nothing: no script, no scheduled task, and not the weekly SKILL
+EVID: Reference census across every .ps1/.js/.vbs/.yml under C:\Codex\income, C:\Users\Owner\.claude\scheduled-tasks\*, and all .md docs/memory: promote-verdicts.ps1 has Exec-refs = 0, Doc-refs = 1.
+The only non-self hits are:
+  income/grocery/exclude-provenance.json (the file promote-verdicts itself writes)
+  ~/.claude/projects/C--Codex/memory/grocery-engine-guards.md:28
+It does NOT appear in weekly-post-capture.ps1, check-ad-cycles.ps1, run-daily-local.ps1, or ~/.claude/scheduled-tasks/grocery-browser-stores-refresh/SKILL.md (grep of the SKILL for 'promote-verdicts' returns nothing; its step (H) still ends at verify-apply).
+The memory note records the problem it was built to end: "81 DROP verdicts across six weeks, 14 of them repeats (broccoli|Sam's Club and apples|Family Fare dropped THREE separate weeks each)".
+IMPACT: The semantic-verify pass costs the agent a judgment call on ~492 commodities every week (out\verify-input-2026-07-29.json, per the 07:19:21 log line). The one mechanism built to make those judgments permanent will not run again unless a human remembers it exists. Next Wednesday the repeat-verdict tax comes straight back, and the run that is 'rushed or unattended' publishes the wrong product — the exact failure the memory note says already happened.
+FIX: Add a step to weekly-post-capture.ps1 -Phase publish (after verify-apply, before guards): run promote-verdicts.ps1 in propose-only mode and print its proposals into the phase log, so the agent is handed the list at the natural decision point. Add the corresponding sentence to SKILL step (H) after verify-apply. Same treatment for heal-mojibake.ps1, which is likewise Exec-refs=0.
+
+=== [71] HIGH / issue / conf=proven
+TITLE: The Walmart weekly capture covered 57 of 526 terms; the pipeline's own audit says the 4-hour browser pull must be repeated within 3 days or coverage collapses
+EVID: out\regular\walmart-regular-2026-07-29.json stamps `pull_terms: 57`; out\captures\walmart-capture-2026-07-29.csv holds 1426 rows across 58 distinct search terms. For scale, out\pull-order-walmart.txt has 526 lines and build-pull-order.ps1 -All prints `Walmart terms=526 ... SAFE STOP after 429 terms`.
+Running the estate's own watcher:
+  `powershell -File audit-walmart-fullpull.ps1` -> exit 1
+  "fullpull [Walmart]: WARNING - the newest capture we can lean on (walmart-regular-2026-07-18.json) is UNSTAMPED, so we cannot prove it is comprehensive, AND it is already 11 days old; at day 14 it leaves the union window and coverage collapses. Every stamped capture in the window is a partial (max pull_terms 57). Run a full-worklist browser pull."
+  "fullpull [Sam's Club]: ok - newest comprehensive capture sams-deals-2026-07-29.json (316 terms) is 0 day(s) old"
+The session task list records this step as "E: Walmart everyday capture (FULL 526-term worklist) [completed]".
+IMPACT: The most expensive browser step of the week (Walmart, in-page fetch chunked ~8 terms/call = ~66 calls for a full worklist) produced 11% coverage and did NOT reset the comprehensive-capture clock. The whole point of Wednesday, per SKILL step (E)(1), is resetting that clock. Within 3 days the union window drops walmart-regular-2026-07-18 and the publish coverage gate will HOLD the board — meaning the entire Walmart capture has to be re-run out-of-band, on top of next Wednesday's.
+FIX: Make the partial visible before the run ends rather than after: have weekly-post-capture.ps1 -Phase compare call audit-walmart-fullpull.ps1 and print its output as a phase warning (it exits 1, never 2, so it cannot block). Then either finish Walmart in a second sitting the same day, or explicitly record the partial in the run report instead of marking the step complete.
+
+=== [72] HIGH / efficiency / conf=proven
+TITLE: Fareway is still prescribed as a navigate-per-term browser crawl (~4 h) although the SKILL itself documents a 35-minute router sweep for the identical storefront platform — and Fareway was consequently not captured at all this week
+EVID: ~/.claude/scheduled-tasks/grocery-browser-stores-refresh/SKILL.md:56 (step F2, Aldi): "aldi.us runs the same Instacart Storefront platform as Fareway, so `window.__do_not_use_me_history.push('/aldi/s?k='+...)` does a client-side search and `window` state SURVIVES it ... Whole 526-term sweep: ~35 min, ~3000 rows. Navigate-per-term is ~30s/term (4+ hours)".
+SKILL.md:58 (step F3, Fareway): "It is a React/Apollo SPA with persisted GraphQL (no headless API), so navigate PER TERM and extract from the rendered DOM."
+Result this week: Aldi got out\captures\aldi-capture-2026-07-29.csv = 3042 rows / 523 distinct terms (99% of 526). Fareway got nothing — the newest capture is out\fareway\fareway-shop-2026-07-27.json (450 rows) and out\regular\fareway-regular-2026-07-27.json (747 deals, mode_verified 2026-07-27). guards.ps1 in today's daily run: "warn  Fareway  747 rows | 0% re-verified against the store TODAY | file 2d old".
+IMPACT: One of the seven stores on the board was skipped in the weekly run whose entire purpose is refreshing browser stores, and the reason is that its documented method costs 4+ hours while its twin costs 35 minutes. Shoppers get 2-day-old Fareway prices; the guard warns but cannot block. Porting the Aldi method saves ~3.5 hours of browser wall clock and turns a step that gets dropped into one that fits in the run.
+FIX: Rewrite SKILL step F3's capture recipe to use the same `window.__do_not_use_me_history.push('/fareway-meat-grocery/s?k='+encodeURIComponent(term))` router loop as F2 (poll until the first `a[href*="/products/"]` href changes, cap ~9s), keeping F3's existing Omaha retailerLocation-531573 verification and the two documented post-processing repairs. Keep the navigate-per-term text only as a labelled fallback, exactly as F2 does.
+
+=== [73] MEDIUM / efficiency / conf=proven
+TITLE: 26 of 132 top-level scripts (1,918 lines) have no code caller; 9 of them (459 lines) are referenced by nothing at all, and 43 more one-off scripts (2,505 lines) ship inside grocery\out\
+EVID: Census: for each of the 132 .ps1 in C:\Codex\income\grocery, its filename was grepped across every .ps1/.psm1/.js/.yml/.vbs/.bat under C:\Codex\income (216 exec files, out\ and archive\ excluded) plus all 7 SKILL.md under ~/.claude/scheduled-tasks, and separately across 216 .md docs/memory files. Windows Task Scheduler actions were enumerated with Get-ScheduledTask (only run-daily-local.ps1, bakers-daily-scan.ps1 via run-hidden.vbs, and local-watchdog.ps1 are registered).
+  top-level .ps1 count: 132 / total lines: 17,857
+  ORPHANS (0 exec refs, 0 doc refs) = 9, 459 lines: add-search-terms.ps1(48), audit-ff-missing-products.ps1(82), build-drift-chips.ps1(53), diag-ff.ps1(26), drop-stale-overrides.ps1(34), publish-retry-until-live.ps1(24), triage-outofband.ps1(46), triage-unpriced.ps1(67), verify-no-regression.ps1(79)
+  DOC-ONLY (0 exec refs, prose only) = 17, 1,459 lines: promote-verdicts(271), prime-batch-headless(164), build-freezer-data(118), build-sams-data(103), recover-sams-quarantine(95), import-browser-batch(94), register-batch(78), merge-candidates(72), validate-fills(71), heal-mojibake(71), build-staples-data(62), import-instacart-batch(59), test-unitprice(53), import-aldi-batch(52), stamp-fareway-instore(51), transform-store-links(30), get-tiers(15)
+  Also: 43 .ps1 / 2,505 lines live under grocery\out\ (out\r100\, out\r300\, out\staples100\, out\staples300\, out\audit\ — one-off migration scripts), plus 60 .ps1 / 3,537 lines already in grocery\archive\.
+IMPACT: Every agent that opens this directory reads a 132-file listing in which 1 in 5 files is unreachable, and 43 more one-off scripts sit inside the pipeline's own output directory where globs and greps find them. That is pure token and orientation cost on every run, and it is how a live script (promote-verdicts.ps1, finding 4) becomes indistinguishable from a dead one.
+FIX: Move the 9 orphans and the clearly-finished one-shots (import-*-batch, build-*-data, merge-candidates, register-batch, prime-batch-headless, transform-store-links, stamp-fareway-instore, triage-outofband, triage-unpriced) into grocery\archive\one-off\, and move out\r100 / out\r300 / out\staples100 / out\staples300 / out\audit script folders to archive\ too. Then wire the survivors that should be live (promote-verdicts.ps1, validate-fills.ps1) into weekly-post-capture.ps1 so the census stays meaningful. Add the census itself as a check in test-auditors.ps1 so a new orphan is caught the week it appears.
+
+=== [74] MEDIUM / efficiency / conf=proven
+TITLE: The daily scheduled pipeline ran a full 46-minute compare/audit/guard/publish cycle in the middle of the weekly agent run, on the same files, and threw the result away
+EVID: grocery\ad-cycle-log.txt, 2026-07-29: `08:31:06 pull attempt 1 ok=True` ... `09:11:22 match-soundness: MOVED=0 DROPPED=0` ... `09:14:18 GUARDS FAILED: 4 hard invariant(s) violated. Board NOT safe to publish.` / `09:14:18 GUARDS FAILED - board NOT republished (left at last good state)` / `09:14:23 consistency BREACH - auto-repairing Family Fare + Hy-Vee links + republishing` / `09:17:18 GUARDS FAILED after consistency auto-repair - NOT republished` / `09:17:48 run complete; flips=0`.
+That window (08:31-09:17) sits inside the weekly run, which was mid-flight: out\logs\weekly-post-capture-2026-07.log shows -Phase links at 08:01 and the next -Phase publish at 08:46. Both paths re-ran compare-deals, audit-coverage-gaps (181s), audit-match-soundness (47s) and guards (14.6s) against the same out\ files.
+The scheduled task is registered and armed: `SMP Grocery Daily Pipeline (local)  powershell.exe ... -File "C:\Codex\income\grocery\run-daily-local.ps1"  State=Ready`.
+IMPACT: ~46 minutes of machine time producing nothing, competing for the same input and output files as the agent's own compare/publish cycles, and a 3-minute link auto-repair pass that ended in a discarded board. It also generated the alert traffic (sale-fallback alert 09:11:26, consistency drift alert 09:17:21) that the agent then had to triage.
+FIX: Have the weekly SKILL's STEP 0 (after browser-refresh-due.ps1 prints DUE) disable the 'SMP Grocery Daily Pipeline (local)' task for the duration and re-enable it in -Phase links, or write a lock file (grocery\out\weekly-run.lock) that run-daily-local.ps1 checks and STANDS DOWN on — it already has a STAND DOWN path (local-daily-log.txt: "STAND DOWN: the pipeline already committed today").
+
+=== [75] LOW / efficiency / conf=proven
+TITLE: weekly-post-capture -Phase links re-runs audit-links and audit-name-drift immediately after publish-deals-page already ran both — the de-duplication was done inside the wrong script
+EVID: publish-deals-page.ps1:54 `& powershell ... audit-links.ps1 | Out-Null` and :69 `& powershell ... audit-name-drift.ps1 | Out-Null`. Its own comment at :55-57 records that a verbatim duplicate audit-name-drift call was removed on 2026-07-28: "a verbatim duplicate of the call ~12 lines below, with no state change in between ... Keeping one, not two."
+But weekly-post-capture.ps1:103 calls publish-deals-page, then :106 `RunChild audit-links.ps1` and :107 `RunChild audit-name-drift.ps1` with no state change in between. Log confirms the gap: `08:01:29 [links] republish: PUBLISHED` -> `08:01:31 [links] name-drift:` -> `08:01:34 [links] push:`.
+Measured: audit-links 0.7s, audit-name-drift 1.1s. Both rewrite out\link-audit.json and out\name-drift.json with the same content they were just given.
+IMPACT: Small in seconds (~6s across the 3 links phases today), but it is a literal write-then-immediately-overwrite, and it means the cleanup done inside publish-deals-page on 2026-07-28 did not actually remove the duplicate — it just moved it one layer up, where nobody looked.
+FIX: In weekly-post-capture.ps1, delete lines 106-107 and instead surface the audit results publish-deals-page already produced: read out\link-audit.json and out\name-drift.json and Log their counts. If the orchestrator genuinely needs a post-stamp re-run, pass a flag to publish-deals-page to skip its internal copies instead.
+
+=== [76] MEDIUM / issue / conf=proven
+TITLE: validate-fills.ps1 is documented as a standing guard against board match collisions but nothing ever runs it, so that class returns as manual triage every expansion
+EVID: ~/.claude/projects/C--Codex/memory/board-match-collisions.md:3 — "Guards: validate-fills.ps1 + audit-household-in-food.ps1." and :19 — "**`grocery\validate-fills.ps1`** - takes top-N candidates per store x commodity ... runs each product NAME through the REAL matcher".
+Census result for validate-fills.ps1: Exec-refs = 0, Doc-refs = 2. Grepping every .ps1/.md under C:\Codex\income plus the scheduled-task SKILLs, the only hits outside the file itself are: grocery/archive/one-off/apply-newitem-fills.ps1:4 (archived), grocery/out/r300/build-r300-fills.ps1:3 and :49 (an out\ one-off), grocery/out/r300/patch-batch8.ps1:58-60, grocery/out/r300/tighten-r300.ps1:36-38, and the memory file. Nothing in guards.ps1, check-ad-cycles.ps1, weekly-post-capture.ps1 or test-auditors.ps1.
+By contrast its stated partner audit-household-in-food.ps1 IS a hard guard (guards.ps1 header, HARD FAIL #2).
+IMPACT: Half of the documented defence against 'adding a commodity silently hijacks another commodity's cell' exists only as prose. The out\r300 comments show it caught real collisions ('Sazon Goya with Cilantro & Tomato' resolving to fresh TOMATOES, a primer row re-pricing the BRATWURST cell) — but only because a human ran it by hand during that expansion. The next 500-item batch pays that discovery cost again in agent triage time.
+FIX: Either wire validate-fills.ps1 into the staples-expansion path (register-batch -> prime-batch -> validate-fills -> diff-board) and reference it from the SKILL, or, if the candidate-file workflow it needs no longer exists, archive it and correct board-match-collisions.md:3 so the memory stops claiming a guard the estate does not run. Add it to test-auditors.ps1's fixture set if it is kept.
+
+=== [77] BLOCKING / bug / conf=proven
+TITLE: 14 published SEO trend pages are live RIGHT NOW with mojibake brand names, and the weekly stamp guarantees they stay that way
+EVID: Live fetch, 2026-07-29:
+$ curl -s https://www.thriftycrew.com/honey-price-omaha/ | grep -oP '.{0,30}Wildflower.{0,40}'
+tp-item">Memberâ€™s Mark Wildflower Pure Premium Honey, 48 oz.</span></td><
+$ curl .../trash-bags-price-omaha/  -> tp-item">GladÂ® ForceFlex Tall Kitchen Drawstring Trash Bags...
+$ curl .../pickled-jalapenos-price-omaha/ -> tp-item">La CostenaÂ® Jalapeno Nacho Slices, 100 oz.
+
+Local fragments (built 07:37, i.e. BEFORE today's encoding fix at ~11:48-12:35):
+$ grep -lP '\xc3\x83|\xc3\x82|\xc3\xa2' out/trend/*.html | wc -l  -> 14
+(corn-muffin-mix, drain-cleaner, fish-sauce, fish-sticks, hominy, honey, insect-spray, minced-garlic, pickled-jalapenos, ribeye-steak, sirloin-steak, storage-bags, taco-seasoning, trash-bags)
+Some are DOUBLE-mangled: "JiffyÃ‚Â® Corn Muffin Mix", "La CosteÃƒÂ±a", "Gourmet GardenÃ¢â€žÂ¢".
+
+Why they will not self-heal:
+- C:\Codex\income\grocery\heal-mojibake.ps1:21-25 targets only out\regular\*-regular-*.json, out\sams\sams-deals-*.json, out\bakers\bakers-deals-*.json, out\fareway\fareway-deals-*.json (+ product-urls.json). out\trend\*.html is not in the list. Running it now prints "heal-mojibake: nothing to repair - every store file is clean."
+- C:\Codex\income\grocery\publish-deals-page.ps1:194-196 skips BOTH build-trend-pages and publish-trend-pages while out\trend-pages.stamp equals the newest week_of. `cat out/trend-pages.stamp` -> 2026-07-29, and price-history.json's newest week_of is 2026-07-29. The gate was repaired on 2026-07-28, so it now actually fires.
+- The clean names exist: out/comparison-2026-07-29.json (12:29) has "Member’s Mark Wildflower Pure Premium Honey, 48 oz." correctly.
+IMPACT: Fourteen public, Google-indexed landing pages show shoppers garbled brand names ("Memberâ€™s Mark", "GladÂ®", "La CostenaÂ®") in the one cell that names the actual product. Today's fix cleaned the board but not these pages, and the weekly stamp means they will not be regenerated until next week's board lands - so the visible symptom that triggered today's whole fix is still on the site.
+FIX: 1) Add 'out\trend\*.html' (and the built page HTML generally) to heal-mojibake.ps1's target list, or better, run `build-trend-pages.ps1` + `publish-trend-pages.ps1 -Force` once now - the source data (price-history.json, comparison-2026-07-29.json) is already clean, so a plain rebuild fixes all 14. 2) Make the trend stamp a content hash of the rendered fragments, not just week_of, so a data repair inside the same week still forces a republish.
+
+=== [78] HIGH / bug / conf=proven
+TITLE: Today's Aldi line-rejoin fix destroys 31 real records and corrupts 12 product URLs - the rule treats the HEAD of a wrapped record as a continuation
+EVID: C:\Codex\income\grocery\build-aldi-regular.ps1:245-253
+  foreach ($ln in $rawLines) {
+    $pipes = ([regex]::Matches($ln, '\|')).Count
+    if ($fixed.Count -gt 0 -and $pipes -lt 6) { $fixed[$fixed.Count-1] = ... + ' ' + $ln.Trim(); $rejoined++ }
+
+A record is 7 fields / 6 pipes. The wrap splits it 5 pipes + 1 pipe, so BOTH halves are "< 6" and BOTH get glued onto the previous, already-complete record.
+
+$ awk -F'|' '{print NF-1}' out/captures/aldi-capture-2026-07-29.csv | sort -n | uniq -c
+     27 1      <- wrapped tails (correctly continuations)
+     31 5      <- wrapped HEADS (real new records, wrongly eaten)
+   2984 6
+
+Replaying the exact shipped loop on today's capture:
+  rejoined       : 58
+  lines with >6 pipes AFTER rejoin (should be 0): 16
+  Import-Csv rows: 2983
+  record 'keto friendly white bread'  present after rejoin: 0
+  record 'artisanal style bread'      present after rejoin: 0
+  record 'garlic knots'               present after rejoin: 0
+  record 'original english muffins'   present after rejoin: 0
+
+A correct rejoin (accumulate until the running pipe count reaches 6) on the same file:
+  Import-Csv rows (correct): 3010   (+27)
+  rows with a SPACE in href: 4      (vs 12)
+  all four records above present.
+
+Damage already on disk - out/regular/aldi-regular-2026-07-29.json has 12 link_url values ending in a space plus the next record's search term, e.g.
+  "link_url": "https://www.aldi.us/store/aldi/products/24735190-specially-selected-sesame-seed-brioche-buns-10-58-oz hamburger-buns"
+and that exact broken URL is already committed into product-urls.json under commodity "toasted-sesame-seeds".
+
+The rejoin block sits at line 240+, AFTER `if ($SelfTest)` at line 190, so `build-aldi-regular.ps1 -SelfTest` cannot exercise it - and indeed it passes clean.
+IMPACT: Aldi's entire store-brand bread lineup (L'oven Fresh white / wheat / artisanal / keto / bagels / english muffins / garlic knots, 31 records) silently vanishes from the Aldi feed every run, so Aldi cannot win or even appear on those board rows. Twelve "See item" URLs per run are corrupted with trailing junk; one is already live in product-urls.json and will 404 the moment Aldi becomes cheapest on that row. The fix that was supposed to recover 27 rows nets -27.
+FIX: Replace the per-line rule with an accumulator: buffer lines and flush only when the buffered pipe count reaches 6 (the code I ran as the control does exactly this and yields 3010 clean rows, 0 destroyed records). Ship it with a -SelfTest fixture built from a real 5-pipe + 1-pipe pair (move the rejoin into a function above line 190 so the self-test can reach it). Then re-run the Aldi build for 2026-07-29 and re-run prune-bad-links / merge-product-urls to evict the space-bearing URL from product-urls.json.
+
+=== [79] HIGH / bug / conf=proven
+TITLE: Four browser-capture importers still read their raw file with a bare Get-Content - the exact bug capture-lib was created to kill
+EVID: Only 4 of the ingest scripts adopted capture-lib (build-aldi-regular, build-fareway-regular, build-sams-deals, build-walmart-deals). These four did not:
+  C:\Codex\income\grocery\import-browser-batch.ps1:47   $lines = Get-Content (Join-Path $root $Raw)
+  C:\Codex\income\grocery\import-walmart-batch.ps1:110  $lines = Get-Content (Join-Path $root $Raw)
+  C:\Codex\income\grocery\import-instacart-batch.ps1:36 $lines = Get-Content (Join-Path $root $Raw)
+  C:\Codex\income\grocery\import-aldi-batch.ps1:28      $lines = Get-Content (Join-Path $root $Raw)
+None of them dot-sources capture-lib.ps1 or calls Repair-Mojibake, and each then writes the names it read with `Set-Content -Encoding UTF8` (e.g. import-browser-batch.ps1:91-92) straight into out\regular\<store>-regular-<date>.json.
+
+Measured on this machine (PS 5.1.26100.8875, ACP Windows-1252): Get-Content with no -Encoding on a UTF-8-no-BOM file turns U+00E9 into U+00C3 U+00A9. The staged capture files in the repo are UTF-8 no BOM and full of non-ASCII:
+  Get-Content (default, as shipped) : Deutsche KÃ¼che German Style Sauerkrau
+  Get-Content -Encoding UTF8        : Deutsche Küche German Style Sauerkraut
+
+Lines the default read corrupts, on the files already sitting in out\staples500\:
+  walmart-batch1-raw.txt   50 of 50
+  bakers-batch1-raw.txt    40 of 50
+  fareway-batch1-raw.txt    2 of 50
+  aldi-batch1-raw.txt       2 of 49
+(Walmart hits every line because its unit price carries the ¢ glyph, so the PRICE string is mangled too, not just the name.)
+
+These are live: guards.ps1:93 registers import-walmart-batch.ps1 as a guarded builder, and out/r300/build-capture-worklist.ps1:66 names all four as the store importers for the staples expansion.
+IMPACT: Every future staples-expansion batch through the walled stores re-introduces exactly the mojibake that shipped 16 mangled board rows today, and heal-mojibake will not see it on the raw side. For Walmart the corruption also lands in the price field, not just the name.
+FIX: Dot-source capture-lib.ps1 in all four and change the read to `Get-Content $path -Encoding UTF8`, then run each parsed name through Repair-Mojibake before it is stored (same two lines build-fareway-regular.ps1:34-37 already uses for its JSON input). Add a must-fire fixture: a 3-line UTF-8-no-BOM raw file containing "Deutsche Küche" that fails the test if the imported name is not byte-identical.
+
+=== [80] HIGH / bug / conf=proven
+TITLE: Baker's Clean-Name replaces every non-ASCII byte with a SPACE, splitting words in half - it is why the board's Baker's pickled-jalapeno cell is a can of beans
+EVID: C:\Codex\income\grocery\pull-regular-bakers-api.ps1:263
+  $t = ($t -replace '[^\x20-\x7E]', ' ')
+with the comment "Spaces are safe: they only ever split tokens the matcher already treats as separated." That is false for an accent inside a word.
+
+19 names in out/regular/bakers-regular-2026-07-29.json are split mid-word, e.g.
+  "Mezzetta Sliced Hot Jalape o Peppers"      ($2.99 / 16 fl oz)
+  "Mt. Olive Diced Jalape o Peppers"          ($2.49 / 12 fl oz)
+  "Rosarita Spicy Jalape o Refried Beans"
+  "Starbucks Cr me Br l e Flavored K-Cup Coffee Pods"   (Crème Brûlée)
+
+Match test against the real rules loaded from commodities.json:
+  'Mezzetta Sliced Hot Jalape o Peppers' matches pickled-jalapenos? False
+  'Mt. Olive Diced Jalape o Peppers'     matches pickled-jalapenos? False
+  'Mezzetta Sliced Hot Jalapeno Peppers' matches pickled-jalapenos? True
+
+Consequence on today's published board (out/comparison-2026-07-29.json, and live at /pickled-jalapenos-price-omaha/):
+  pickled-jalapenos, unit oz
+     Sam's Club   0.0677   La Costena® Jalapeno Nacho Slices, 100 oz.
+     Baker's      0.0833   Ranch Style Beans with Sliced Jalapeno Peppers   <-- a can of BEANS
+     Walmart      0.0961   La Costeña Pickled Sliced Jalapenos, 28 oz
+The two real Baker's pickled-jalapeno SKUs price at $0.187/oz and $0.208/oz and cannot compete for the cell because their names no longer contain the token "jalapeno".
+IMPACT: Baker's is priced 2.2x too low on the pickled-jalapenos row and the tile names a bean can as the product, on the board and on the live trend page. Any Baker's product whose name carries an accented letter is structurally unmatchable, so Baker's silently drops off those rows - the same failure mode for any future ñ/é/ü commodity.
+FIX: Transliterate instead of blanking: normalize to FormD, drop combining marks, then apply the printable-ASCII filter (ñ->n, é->e, û->u). Keep the space substitution only for characters with no letter form. Add a Clean-Name self-test fixture asserting "Mezzetta Sliced Hot Jalapeño Peppers" -> "Mezzetta Sliced Hot Jalapeno Peppers" and "Crème Brûlée" -> "Creme Brulee". Then re-run compare-deals so the Baker's cell picks up a real jalapeno SKU.
+
+=== [81] MEDIUM / bug / conf=proven
+TITLE: commodities.json accent character classes are themselves mojibake, so they can never match the real accented letter they were written for
+EVID: Codepoint dump of the patterns as they load from C:\Codex\income\grocery\commodities.json:
+  jalapenos / include         :: jalape[n<U+00C3><U+00B1>]os?
+  pickled-jalapenos / include :: pickled\s+jalape[n<U+00C3><U+00B1>]os?
+  pickled-jalapenos / include :: jalape[n<U+00C3><U+00B1>]o\s+(?:slices|rings|nacho)
+  pickled-jalapenos / include :: (?:nacho|tamed|sliced|diced)\s+(?:hot\s+)?jalape[n<U+00C3><U+00B1>]os?
+  canned-pumpkin / include    :: pumpkin\s+pur[e<U+00C3><U+00A9>]e
+  butternut-squash / exclude  :: pur[e<U+00C3><U+00A9>]e
+  pie-pumpkins / exclude      :: pur[e<U+00C3><U+00A9>]e
+
+The class holds U+00C3 and U+00B1 - the two HALVES of mojibake'd "ñ" - as separate alternatives, not U+00F1. A char class matches one character, so it matches neither the real ñ nor the two-char mojibake sequence:
+  jalapenos-rule vs real n-tilde  -> False
+  jalapenos-rule vs plain n       -> True
+  puree-rule vs real e-acute      -> False
+  puree-rule vs plain e           -> True
+
+This now matters more than it used to: since capture-lib repairs on ingest, correctly accented names are flowing again, e.g. out/sams/sams-deals-2026-07-29.json carries "Lay's Kettle Cooked Jalapeño Potato Chips" and "Member's Mark Jalapeño Grassfed Beef Sticks".
+IMPACT: An include rule that was written to be accent-tolerant is accent-blind: a correctly spelled "Pickled Jalapeño Slices" cannot match its own commodity. Worse on the exclude side - butternut-squash and pie-pumpkins cannot exclude a "Purée", so a puree product can be admitted into a whole-vegetable row and set a wrong cheapest price.
+FIX: Rewrite the seven classes with the real code points: [nñ] and [eé] (or, since the file is UTF-8 with BOM, the literal ñ/é). Add a rules linter to guards.ps1 that fails when any commodities.json pattern contains U+00C3, U+00C2 or U+00E2 - those three bytes are never legitimate inside a hand-written rule and are the exact mojibake signature capture-lib already defines.
+
+=== [82] MEDIUM / issue / conf=proven
+TITLE: heal-mojibake.ps1 reports "every store file is clean" while four other product-name stores still carry mojibake, and no guard checks for it
+EVID: $ powershell -File heal-mojibake.ps1
+heal-mojibake: nothing to repair - every store file is clean.
+
+Still dirty at that moment (mojibake-signature line counts):
+  out/trend/*.html                        14 files  (LIVE on the site - see finding 1)
+  out/recipe-board-everyday.json          72   e.g. "KrogerÂ® 100% Pure Olive Oil", "HerdezÂ® Salsa Verde Mild"
+  out/recipe-board.json                   72   (rebuilt today 09:11 from that baseline by recipe-overlay.ps1:50,78)
+  out/fareway/fareway-shop-2026-07-23.json 10   and -2026-07-27.json 9  (the INPUT that build-fareway-regular.ps1:24 globs)
+  out/regular/walmart-regular-2026-07-29.json 736 lines - in the wm_unit_price audit field only
+
+heal-mojibake.ps1:21-25 covers only:
+  'out\regular\*-regular-*.json', 'out\sams\sams-deals-*.json', 'out\bakers\bakers-deals-*.json', 'out\fareway\fareway-deals-*.json'  (+ product-urls.json)
+- so out\fareway\fareway-shop-*.json, out\recipe-board*.json and out\trend\ are all outside it.
+
+And nothing watches for a relapse:
+$ grep -rln 'Repair-Mojibake|mojibake|MOJI' --include='*.ps1' .
+build-aldi-regular.ps1  build-fareway-regular.ps1  build-sams-deals.ps1  build-walmart-deals.ps1  capture-lib.ps1  heal-mojibake.ps1  pull-regular-bakers-api.ps1
+No guards.ps1, no audit-*.ps1, no test-auditors.ps1 fixture.
+IMPACT: A repair tool that prints an all-clear while mangled names are live on the site is worse than no tool - it closes the investigation. The recipe baseline in particular is refreshed only monthly, so its 72 mangled names keep flowing into recipe-board.json on every run, and fareway-shop is re-parsed on every Fareway build.
+FIX: Extend the target list to out\fareway\fareway-shop-*.json, out\recipe-board*.json and out\trend\*.html (the HTML needs a plain text-level Repair-Mojibake pass, not the JSON walker). Then add a guard to guards.ps1 that greps the published artifacts (deals-page-embed.html, out/trend/*.html, comparison-<date>.json, product-urls.json, recipe-board.json) for the U+00C3 / U+00C2 / U+00E2 signature and hard-fails the publish, with a frozen must-fire fixture per the existing guard-fixture rule.
+
+=== [83] MEDIUM / bug / conf=proven
+TITLE: 53 Aldi rows still carry a slug-collapsed decimal in the item name; for 17 of them the engine's name fallback derives a grossly wrong weight
+EVID: Repair-SlugDecimals (build-aldi-regular.ps1) only fires when the CARD size independently states the same decimal. When the card size is a count, or carries no decimal, the name keeps the collapsed form. Measured against out/regular/aldi-regular-2026-07-29.json with the real Get-SizeAmount / Get-PackCount lifted from compare-deals.ps1:
+
+  Aldi rows total                          : 1838
+  rows whose NAME still has a split decimal: 53
+    ...Get-PackCount reads a fake pack out of the name: 2
+       pack=6  size=[6 pk 2.25 oz]  Maruchan Ramen Noodle Soup Chicken 6 PK 13 5 OZ
+       pack=5  size=[6.2 oz]        Nature Valley Soft Baked Muffin Bars Blueberry 5 Count 6 200 OZ
+    ...SIZE unparseable in oz/lb, so Get-UnitPrice falls back to the NAME: 17
+       size=[10 ct] name-derived oz=80  Family Pack 80 Lean 20 Fat Ground Beef Patties 2 5 LB   (true 40 oz)
+       size=[6 ct]  name-derived oz=58  Specially Selected Brioche Buns 10 58 OZ                (true 10.58 oz)
+       size=[4 ct]  name-derived oz=59  Raspberry Filled Croissant 9 59 OZ                      (true 9.59 oz)
+       size=[4 ct]  name-derived oz=2   Cheese Club Express Mac Cheese Cups 8 2 OZ              (true 8.2 oz)
+       size=[8 ct]  name-derived oz=4   Millville Crispy Rice Treats 6 4 OZ                     (true 6.4 oz)
+       size=[6 ct]  name-derived oz=5   Summit Diet Cola Mini Cans 7 5 FL OZ                    (true 7.5 fl oz)
+The fallback is compare-deals.ps1:361: `if (($amt -eq $null) -and $deal.name) { $amt = Get-SizeAmount $deal.name $unit }`.
+
+Three of the 53 reached today's published board (out/comparison-2026-07-29.json): canned-green-beans / cherry-tomatoes / mac-and-cheese Aldi cells. Those three happen to price off the card size, so they are only 3-5% off - the 17 fallback rows are the loaded gun.
+IMPACT: Any of the 17 that matches a weight-unit commodity publishes a per-unit price wrong by 2x to 6x in the CHEAP direction ("Raspberry Filled Croissant 9 59 OZ" would price as 59 oz instead of 9.59), which is exactly the shape that crowns a false cheapest store. "Family Pack 80 Lean 20 Fat Ground Beef Patties 2 5 LB" reading 80 oz off the marketing text "80 Lean" is the worst case.
+FIX: Widen Repair-SlugDecimals: when the card size cannot corroborate, still splice the decimal if the collapsed pair sits immediately before a unit token AND the whole-part+frac reading is the only one that keeps the derived unit price inside the commodity's price band. Failing that, make the name fallback in Get-UnitPrice refuse a name that still matches `\b\d+\s+\d+\s*(oz|lb|fl oz|ct)\b` - dropping the cell is correct here, guessing is not. Add the six rows above as a frozen fixture.
+
+=== [84] LOW / issue / conf=proven
+TITLE: Import-CaptureCsv repairs only name columns, so Walmart's mangled cent glyph is preserved in 736 stored unit-price strings
+EVID: C:\Codex\income\grocery\capture-lib.ps1:81  [string[]]$RepairColumns = @('n', 'name', 'item')
+The capture's `up` column is never repaired, and build-walmart-deals.ps1:302 stores it verbatim:
+  wm_unit_price = $upm.Groups[0].Value.Trim()
+
+$ grep -ocP '\xc3\x83|\xc3\x82|\xc3\xa2' out/regular/walmart-regular-2026-07-29.json
+736
+All 736 are the audit field, e.g. "wm_unit_price": "17.1 Â¢/oz" (should be "17.1 ¢/oz"). Same in out/walmart-rejects-2026-07-29.json: "up": "46.5 Â¢/oz".
+
+This is currently harmless for pricing only because the cents parser at build-walmart-deals.ps1:203 deliberately matches `[^\d/\s]{1,3}` instead of the glyph.
+IMPACT: A store file that is supposed to be clean after today's fix still trips any mojibake grep, which will make the next person chasing an encoding relapse start from a false positive. It also means the audit trail a human reads when reconciling a Walmart basis error is itself garbled.
+FIX: Add 'up','lp','unit_price','prices' to the default RepairColumns (Repair-Mojibake is a no-op on clean text, so widening it is safe), or repair the whole row generically. Keep the digits-and-slash cent regex either way - it is the right defence.
+
+=== [85] LOW / issue / conf=proven
+TITLE: ad-cycle-log.txt is the one live file written in ANSI, and it is committed to git on every run
+EVID: $ for f in $(find . -name '*.txt' -o -name '*.json' ...); do iconv -f UTF-8 -t UTF-8 "$f" >/dev/null || echo "$f"; done
+./ad-cycle-log.txt        <- the only non-UTF-8 data file in the tree
+
+Written by bare Add-Content (default = Windows-1252 on this box, verified: Set-Content/Add-Content default writes U+00E9 as byte 0xE9 and turns U+200B into '?'):
+  check-ad-cycles.ps1:44, run-daily-local.ps1:30, weekly-post-capture.ps1:41, bakers-daily-scan.ps1:37, send-alert.ps1:28
+Those are in fact the ONLY writes in grocery\*.ps1 that lack an explicit -Encoding - of 451 unencoded Get-Content/Import-Csv/Out-File/Set-Content/Add-Content call sites, 441 are reads and every one of them currently targets a BOM-carrying file, so the read side is safe today by accident of the BOM, not by design.
+
+Damage visible in the file: "Campbell's<0xAE> Cool Shapes", "BUBBL<0x92>R Pomegranate", "Fresh Snacks <0x96> 6.5 Ounces".
+run-daily-local.ps1:100 adds 'grocery/ad-cycle-log.txt' to the commit list every run.
+IMPACT: Alert bodies and triage text quoted out of this log come back with raw high bytes, so the hourly grocery-alert-triage agent reads a corrupted product name when diagnosing. It also puts a non-UTF-8 blob into git history daily, which will render as replacement characters anywhere the log is viewed as UTF-8.
+FIX: Add `-Encoding UTF8` to the five Add-Content log writers (the retry loops already exist around them, so it is a one-token change each). Convert the existing ad-cycle-log.txt once with Repair-Mojibake-style re-decode, or truncate it - it is append-only diagnostics.
+
+
