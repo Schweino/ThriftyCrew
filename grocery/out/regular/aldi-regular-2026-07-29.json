@@ -5,8 +5,8 @@
     "price_mode":  "in-store",
     "mode_verified":  "2026-07-29",
     "source":  "aldi.us storefront search (ALDI - OLA 42 - Omaha, In-Store fulfillment)",
-    "pull_terms":  517,
-    "deal_count":  1430,
+    "pull_terms":  520,
+    "deal_count":  1446,
     "deals":  [
                   {
                       "store":  "Aldi",
@@ -618,7 +618,19 @@
                       "source_ad":  "everyday shelf price",
                       "price_type":  "everyday",
                       "as_of":  "2026-07-29",
-                      "link_url":  "https://www.aldi.us/store/aldi/products/20150078-goldhen-liquid-egg-whites-32-fl-oz eggs"
+                      "link_url":  "https://www.aldi.us/store/aldi/products/20150078-goldhen-liquid-egg-whites-32-fl-oz"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "L Oven Fresh Original English Muffins 12 OZ",
+                      "ad_price":  "$1.59",
+                      "size":  "12 oz",
+                      "regular":  null,
+                      "current_price":  1.59,
+                      "source_ad":  "everyday shelf price",
+                      "price_type":  "everyday",
+                      "as_of":  "2026-07-29",
+                      "link_url":  "https://www.aldi.us/store/aldi/products/18648793-l-oven-fresh-original-english-muffins-12-oz"
                   },
                   {
                       "store":  "Aldi",
@@ -1870,30 +1882,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Single Wick Candle Watermelon Spritz",
-                      "ad_price":  "$2.99",
-                      "size":  "each",
-                      "regular":  null,
-                      "current_price":  2.99,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-29",
-                      "link_url":  "https://www.aldi.us/store/aldi/products/64802979-single-wick-candle-watermelon-spritz"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "3 Wick Candle Watermelon Spritz",
-                      "ad_price":  "$4.99",
-                      "size":  "each",
-                      "regular":  null,
-                      "current_price":  4.99,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-29",
-                      "link_url":  "https://www.aldi.us/store/aldi/products/64876098-3-wick-candle-watermelon-spritz"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Mandarins Bag 3 LB",
                       "ad_price":  "$3.99",
                       "size":  "3 lb",
@@ -2022,7 +2010,31 @@
                       "source_ad":  "everyday shelf price",
                       "price_type":  "everyday",
                       "as_of":  "2026-07-29",
-                      "link_url":  "https://www.aldi.us/store/aldi/products/119736529-kirkton-house-vintage-tin-candle-peach-blossom-2pk-tin-1-each bread"
+                      "link_url":  "https://www.aldi.us/store/aldi/products/119736529-kirkton-house-vintage-tin-candle-peach-blossom-2pk-tin-1-each"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "L Oven Fresh White Bread 20 OZ",
+                      "ad_price":  "$1.45",
+                      "size":  "20 oz",
+                      "regular":  null,
+                      "current_price":  1.45,
+                      "source_ad":  "everyday shelf price",
+                      "price_type":  "everyday",
+                      "as_of":  "2026-07-29",
+                      "link_url":  "https://www.aldi.us/store/aldi/products/20946160-l-oven-fresh-white-bread-20-oz"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "L Oven Fresh Keto Friendly White Bread 14 OZ",
+                      "ad_price":  "$4.49",
+                      "size":  "14 oz",
+                      "regular":  null,
+                      "current_price":  4.49,
+                      "source_ad":  "everyday shelf price",
+                      "price_type":  "everyday",
+                      "as_of":  "2026-07-29",
+                      "link_url":  "https://www.aldi.us/store/aldi/products/26625570-l-oven-fresh-keto-friendly-white-bread-14-oz"
                   },
                   {
                       "store":  "Aldi",
@@ -2034,7 +2046,31 @@
                       "source_ad":  "everyday shelf price",
                       "price_type":  "everyday",
                       "as_of":  "2026-07-29",
-                      "link_url":  "https://www.aldi.us/store/aldi/products/19845429-livegfree-wide-pan-gluten-free-white-bread-20-oz bread"
+                      "link_url":  "https://www.aldi.us/store/aldi/products/19845429-livegfree-wide-pan-gluten-free-white-bread-20-oz"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "L Oven Fresh Artisanal Style Bread 20 OZ",
+                      "ad_price":  "$3.29",
+                      "size":  "20 oz",
+                      "regular":  null,
+                      "current_price":  3.29,
+                      "source_ad":  "everyday shelf price",
+                      "price_type":  "everyday",
+                      "as_of":  "2026-07-29",
+                      "link_url":  "https://www.aldi.us/store/aldi/products/21010542-l-oven-fresh-artisanal-style-bread-20-oz"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "L Oven Fresh Split Top Wheat Bread 20 OZ",
+                      "ad_price":  "$1.45",
+                      "size":  "20 oz",
+                      "regular":  null,
+                      "current_price":  1.45,
+                      "source_ad":  "everyday shelf price",
+                      "price_type":  "everyday",
+                      "as_of":  "2026-07-29",
+                      "link_url":  "https://www.aldi.us/store/aldi/products/20851225-l-oven-fresh-split-top-wheat-bread-20-oz"
                   },
                   {
                       "store":  "Aldi",
@@ -2046,7 +2082,19 @@
                       "source_ad":  "everyday shelf price",
                       "price_type":  "everyday",
                       "as_of":  "2026-07-29",
-                      "link_url":  "https://www.aldi.us/store/aldi/products/28263491-specially-selected-italian-bread-24-oz bread"
+                      "link_url":  "https://www.aldi.us/store/aldi/products/28263491-specially-selected-italian-bread-24-oz"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "L Oven Fresh Honey Wheat Bread 20 OZ",
+                      "ad_price":  "$1.85",
+                      "size":  "20 oz",
+                      "regular":  null,
+                      "current_price":  1.85,
+                      "source_ad":  "everyday shelf price",
+                      "price_type":  "everyday",
+                      "as_of":  "2026-07-29",
+                      "link_url":  "https://www.aldi.us/store/aldi/products/18647726-l-oven-fresh-honey-wheat-bread-20-oz"
                   },
                   {
                       "store":  "Aldi",
@@ -2082,7 +2130,19 @@
                       "source_ad":  "everyday shelf price",
                       "price_type":  "everyday",
                       "as_of":  "2026-07-29",
-                      "link_url":  "https://www.aldi.us/store/aldi/products/64344102-bistro-original-bread bread"
+                      "link_url":  "https://www.aldi.us/store/aldi/products/64344102-bistro-original-bread"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Fit Active 40 Calorie Wheat Bread 16 OZ",
+                      "ad_price":  "$2.29",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "current_price":  2.29,
+                      "source_ad":  "everyday shelf price",
+                      "price_type":  "everyday",
+                      "as_of":  "2026-07-29",
+                      "link_url":  "https://www.aldi.us/store/aldi/products/20852854-fit-active-40-calorie-wheat-bread-16-oz"
                   },
                   {
                       "store":  "Aldi",
@@ -3486,7 +3546,19 @@
                       "source_ad":  "everyday shelf price",
                       "price_type":  "everyday",
                       "as_of":  "2026-07-29",
-                      "link_url":  "https://www.aldi.us/store/aldi/products/19907623-stonemill-minced-garlic-in-extra-virgin-olive-oil-7-oz garlic"
+                      "link_url":  "https://www.aldi.us/store/aldi/products/19907623-stonemill-minced-garlic-in-extra-virgin-olive-oil-7-oz"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "L Oven Fresh Garlic Herb Bread 10 OZ",
+                      "ad_price":  "$3.49",
+                      "size":  "10 oz",
+                      "regular":  null,
+                      "current_price":  3.49,
+                      "source_ad":  "everyday shelf price",
+                      "price_type":  "everyday",
+                      "as_of":  "2026-07-29",
+                      "link_url":  "https://www.aldi.us/store/aldi/products/20167385-l-oven-fresh-garlic-herb-bread-10-oz"
                   },
                   {
                       "store":  "Aldi",
@@ -3510,7 +3582,19 @@
                       "source_ad":  "everyday shelf price",
                       "price_type":  "everyday",
                       "as_of":  "2026-07-29",
-                      "link_url":  "https://www.aldi.us/store/aldi/products/120771305-crofton-silicone-grip-ss-kitchen-gadgets-garlic-press-blue-1-each garlic"
+                      "link_url":  "https://www.aldi.us/store/aldi/products/120771305-crofton-silicone-grip-ss-kitchen-gadgets-garlic-press-blue-1-each"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "L Oven Fresh Parmesan Romano Garlic Bread 10 OZ",
+                      "ad_price":  "$3.49",
+                      "size":  "10 oz",
+                      "regular":  null,
+                      "current_price":  3.49,
+                      "source_ad":  "everyday shelf price",
+                      "price_type":  "everyday",
+                      "as_of":  "2026-07-29",
+                      "link_url":  "https://www.aldi.us/store/aldi/products/20222034-l-oven-fresh-parmesan-romano-garlic-bread-10-oz"
                   },
                   {
                       "store":  "Aldi",
@@ -3895,6 +3979,18 @@
                       "price_type":  "everyday",
                       "as_of":  "2026-07-29",
                       "link_url":  "https://www.aldi.us/store/aldi/products/19673946-mild-italian-sausage-16-oz"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "L Oven Fresh Hot Dog Buns 12 OZ",
+                      "ad_price":  "$1.39",
+                      "size":  "12 oz",
+                      "regular":  null,
+                      "current_price":  1.39,
+                      "source_ad":  "everyday shelf price",
+                      "price_type":  "everyday",
+                      "as_of":  "2026-07-29",
+                      "link_url":  "https://www.aldi.us/store/aldi/products/19652694-l-oven-fresh-hot-dog-buns-12-oz"
                   },
                   {
                       "store":  "Aldi",
@@ -5638,18 +5734,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Tomatoes Campari Per LB",
-                      "ad_price":  "$3.29",
-                      "size":  "each",
-                      "regular":  null,
-                      "current_price":  3.29,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-29",
-                      "link_url":  "https://www.aldi.us/store/aldi/products/3289577-tomatoes-campari-per-lb"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Beefsteak Tomatoes Package 16 OZ",
                       "ad_price":  "$2.99",
                       "size":  "1 lb",
@@ -5914,6 +5998,18 @@
                   },
                   {
                       "store":  "Aldi",
+                      "item":  "L Oven Fresh Low Carb Tortillas 12 OZ",
+                      "ad_price":  "$3.39",
+                      "size":  "12 oz",
+                      "regular":  null,
+                      "current_price":  3.39,
+                      "source_ad":  "everyday shelf price",
+                      "price_type":  "everyday",
+                      "as_of":  "2026-07-29",
+                      "link_url":  "https://www.aldi.us/store/aldi/products/29707778-l-oven-fresh-low-carb-tortillas-12-oz"
+                  },
+                  {
+                      "store":  "Aldi",
                       "item":  "L Oven Fresh Hamburger Buns 12 OZ",
                       "ad_price":  "$1.39",
                       "size":  "11 oz",
@@ -5946,7 +6042,55 @@
                       "source_ad":  "everyday shelf price",
                       "price_type":  "everyday",
                       "as_of":  "2026-07-29",
-                      "link_url":  "https://www.aldi.us/store/aldi/products/24735190-specially-selected-sesame-seed-brioche-buns-10-58-oz hamburger-buns"
+                      "link_url":  "https://www.aldi.us/store/aldi/products/24735190-specially-selected-sesame-seed-brioche-buns-10-58-oz"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Loven Fresh Pretzel Burger Buns 128 OZ",
+                      "ad_price":  "$2.99",
+                      "size":  "128 oz",
+                      "regular":  null,
+                      "current_price":  2.99,
+                      "source_ad":  "everyday shelf price",
+                      "price_type":  "everyday",
+                      "as_of":  "2026-07-29",
+                      "link_url":  "https://www.aldi.us/store/aldi/products/73476360-loven-fresh-pretzel-burger-buns-128-oz"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "L Oven Fresh Classic Kaiser Buns 26 OZ",
+                      "ad_price":  "$2.99",
+                      "size":  "26 oz",
+                      "regular":  null,
+                      "current_price":  2.99,
+                      "source_ad":  "everyday shelf price",
+                      "price_type":  "everyday",
+                      "as_of":  "2026-07-29",
+                      "link_url":  "https://www.aldi.us/store/aldi/products/17498622-l-oven-fresh-classic-kaiser-buns-26-oz"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "L Oven Fresh Artisanal Bakery Buns 18 OZ",
+                      "ad_price":  "$2.99",
+                      "size":  "18 oz",
+                      "regular":  null,
+                      "current_price":  2.99,
+                      "source_ad":  "everyday shelf price",
+                      "price_type":  "everyday",
+                      "as_of":  "2026-07-29",
+                      "link_url":  "https://www.aldi.us/store/aldi/products/21217195-l-oven-fresh-artisanal-bakery-buns-18-oz"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "L Oven Fresh Potato Sandwich Rolls 15 OZ",
+                      "ad_price":  "$1.99",
+                      "size":  "15 oz",
+                      "regular":  null,
+                      "current_price":  1.99,
+                      "source_ad":  "everyday shelf price",
+                      "price_type":  "everyday",
+                      "as_of":  "2026-07-29",
+                      "link_url":  "https://www.aldi.us/store/aldi/products/20144285-l-oven-fresh-potato-sandwich-rolls-15-oz"
                   },
                   {
                       "store":  "Aldi",
@@ -5970,7 +6114,79 @@
                       "source_ad":  "everyday shelf price",
                       "price_type":  "everyday",
                       "as_of":  "2026-07-29",
-                      "link_url":  "https://www.aldi.us/store/aldi/products/20230820-l-oven-fresh-plain-bagels-20-oz bagels"
+                      "link_url":  "https://www.aldi.us/store/aldi/products/20230820-l-oven-fresh-plain-bagels-20-oz"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "L Oven Fresh Plain Mini Bagels 18 OZ",
+                      "ad_price":  "$3.49",
+                      "size":  "18 oz",
+                      "regular":  null,
+                      "current_price":  3.49,
+                      "source_ad":  "everyday shelf price",
+                      "price_type":  "everyday",
+                      "as_of":  "2026-07-29",
+                      "link_url":  "https://www.aldi.us/store/aldi/products/20212864-l-oven-fresh-plain-mini-bagels-18-oz"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "L Oven Fresh Plain Bagel Skinnys 13 OZ",
+                      "ad_price":  "$2.99",
+                      "size":  "13 oz",
+                      "regular":  null,
+                      "current_price":  2.99,
+                      "source_ad":  "everyday shelf price",
+                      "price_type":  "everyday",
+                      "as_of":  "2026-07-29",
+                      "link_url":  "https://www.aldi.us/store/aldi/products/20060906-l-oven-fresh-plain-bagel-skinnys-13-oz"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "L Oven Fresh Everything Bagels 20 OZ",
+                      "ad_price":  "$1.99",
+                      "size":  "20 oz",
+                      "regular":  null,
+                      "current_price":  1.99,
+                      "source_ad":  "everyday shelf price",
+                      "price_type":  "everyday",
+                      "as_of":  "2026-07-29",
+                      "link_url":  "https://www.aldi.us/store/aldi/products/20503623-l-oven-fresh-everything-bagels-20-oz"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "L Oven Fresh French Toast Bagels 20 OZ",
+                      "ad_price":  "$1.99",
+                      "size":  "20 oz",
+                      "regular":  null,
+                      "current_price":  1.99,
+                      "source_ad":  "everyday shelf price",
+                      "price_type":  "everyday",
+                      "as_of":  "2026-07-29",
+                      "link_url":  "https://www.aldi.us/store/aldi/products/33325793-l-oven-fresh-french-toast-bagels-20-oz"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "L Oven Fresh Hawaiian Bagels 20 OZ",
+                      "ad_price":  "$1.99",
+                      "size":  "20 oz",
+                      "regular":  null,
+                      "current_price":  1.99,
+                      "source_ad":  "everyday shelf price",
+                      "price_type":  "everyday",
+                      "as_of":  "2026-07-29",
+                      "link_url":  "https://www.aldi.us/store/aldi/products/21255464-l-oven-fresh-hawaiian-bagels-20-oz"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "L Oven Fresh Everything Skinnys Bagel 13 OZ",
+                      "ad_price":  "$2.99",
+                      "size":  "13 oz",
+                      "regular":  null,
+                      "current_price":  2.99,
+                      "source_ad":  "everyday shelf price",
+                      "price_type":  "everyday",
+                      "as_of":  "2026-07-29",
+                      "link_url":  "https://www.aldi.us/store/aldi/products/20060905-l-oven-fresh-everything-skinnys-bagel-13-oz"
                   },
                   {
                       "store":  "Aldi",
@@ -9246,7 +9462,7 @@
                       "source_ad":  "everyday shelf price",
                       "price_type":  "everyday",
                       "as_of":  "2026-07-29",
-                      "link_url":  "https://www.aldi.us/store/aldi/products/68872-king-s-hawaiian-original-hawaiian-sweet-rolls-12pk-12-ct english-muffins"
+                      "link_url":  "https://www.aldi.us/store/aldi/products/68872-king-s-hawaiian-original-hawaiian-sweet-rolls-12pk-12-ct"
                   },
                   {
                       "store":  "Aldi",
@@ -13290,7 +13506,7 @@
                       "source_ad":  "everyday shelf price",
                       "price_type":  "everyday",
                       "as_of":  "2026-07-29",
-                      "link_url":  "https://www.aldi.us/store/aldi/products/20383672-fremont-fish-market-wild-caught-breaded-fish-sticks-24-oz garlic-bread"
+                      "link_url":  "https://www.aldi.us/store/aldi/products/20383672-fremont-fish-market-wild-caught-breaded-fish-sticks-24-oz"
                   },
                   {
                       "store":  "Aldi",
@@ -13558,18 +13774,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Power Sponge",
-                      "ad_price":  "$1.89",
-                      "size":  "each",
-                      "regular":  null,
-                      "current_price":  1.89,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-29",
-                      "link_url":  "https://www.aldi.us/store/aldi/products/63298163-power-sponge"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Power Force Hero Sponge 1 Each",
                       "ad_price":  "$1.89",
                       "size":  "each",
@@ -13584,7 +13788,7 @@
                       "store":  "Aldi",
                       "item":  "Boulder Decorated Paper Plates 100 CT",
                       "ad_price":  "$5.25",
-                      "size":  "each",
+                      "size":  "100 ct",
                       "regular":  null,
                       "current_price":  5.25,
                       "source_ad":  "everyday shelf price",
@@ -13608,7 +13812,7 @@
                       "store":  "Aldi",
                       "item":  "Boulder Everyday Plate 100 CT",
                       "ad_price":  "$7.99",
-                      "size":  "each",
+                      "size":  "100 ct",
                       "regular":  null,
                       "current_price":  7.99,
                       "source_ad":  "everyday shelf price",
@@ -13831,42 +14035,6 @@
                       "price_type":  "everyday",
                       "as_of":  "2026-07-29",
                       "link_url":  "https://www.aldi.us/store/aldi/products/99322141-kirkton-house-dark-vanilla-sandalwood-rustic-carved-wood-candle-1-each"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "3 Wick Candle Mahogany Sandalwood",
-                      "ad_price":  "$4.99",
-                      "size":  "each",
-                      "regular":  null,
-                      "current_price":  4.99,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-29",
-                      "link_url":  "https://www.aldi.us/store/aldi/products/64876004-3-wick-candle-mahogany-sandalwood"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Single Wick Candle Mahogany Sandalwood",
-                      "ad_price":  "$2.99",
-                      "size":  "each",
-                      "regular":  null,
-                      "current_price":  2.99,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-29",
-                      "link_url":  "https://www.aldi.us/store/aldi/products/64803030-single-wick-candle-mahogany-sandalwood"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "3 Wick Candle Fresh Linen",
-                      "ad_price":  "$4.99",
-                      "size":  "each",
-                      "regular":  null,
-                      "current_price":  4.99,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-29",
-                      "link_url":  "https://www.aldi.us/store/aldi/products/64876020-3-wick-candle-fresh-linen"
                   },
                   {
                       "store":  "Aldi",
@@ -14292,7 +14460,7 @@
                       "store":  "Aldi",
                       "item":  "Willow Facial Tissue 144 CT",
                       "ad_price":  "$1.39",
-                      "size":  "each",
+                      "size":  "144 ct",
                       "regular":  null,
                       "current_price":  1.39,
                       "source_ad":  "everyday shelf price",
@@ -16506,7 +16674,31 @@
                       "source_ad":  "everyday shelf price",
                       "price_type":  "everyday",
                       "as_of":  "2026-07-29",
-                      "link_url":  "https://www.aldi.us/store/aldi/products/19685443-specially-selected-sourdough-square-24-oz rye-bread"
+                      "link_url":  "https://www.aldi.us/store/aldi/products/19685443-specially-selected-sourdough-square-24-oz"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "L Oven Fresh Cinnamon Raisin Bread 16 OZ",
+                      "ad_price":  "$2.39",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "current_price":  2.39,
+                      "source_ad":  "everyday shelf price",
+                      "price_type":  "everyday",
+                      "as_of":  "2026-07-29",
+                      "link_url":  "https://www.aldi.us/store/aldi/products/20220171-l-oven-fresh-cinnamon-raisin-bread-16-oz"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "L Oven Fresh 12 Grain Wide Pan Bread 24 OZ",
+                      "ad_price":  "$2.69",
+                      "size":  "24 oz",
+                      "regular":  null,
+                      "current_price":  2.69,
+                      "source_ad":  "everyday shelf price",
+                      "price_type":  "everyday",
+                      "as_of":  "2026-07-29",
+                      "link_url":  "https://www.aldi.us/store/aldi/products/20942187-l-oven-fresh-12-grain-wide-pan-bread-24-oz"
                   },
                   {
                       "store":  "Aldi",
@@ -17180,28 +17372,8 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Kirkwood Fresh Thin Sliced Chicken Breasts",
-                      "ad_price":  "$3.99",
-                      "size":  "lb",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Kirkwood Family Pack Boneless Skinless Chicken Thighs",
                       "ad_price":  "$2.99",
-                      "size":  "lb",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Ground Beef 80/20",
-                      "ad_price":  "$5.99",
                       "size":  "lb",
                       "regular":  null,
                       "source_ad":  "everyday shelf price",
@@ -17230,78 +17402,8 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Appleton Farms Uncured Turkey Bacon",
-                      "ad_price":  "$3.25",
-                      "size":  "10 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Lunch Mate Oven Roasted Turkey Breast",
-                      "ad_price":  "$5.89",
-                      "size":  "16 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Mama Cozzi Sliced Turkey Pepperoni",
-                      "ad_price":  "$2.89",
-                      "size":  "5 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Appleton Farms Premium Sliced Bacon",
-                      "ad_price":  "$3.99",
-                      "size":  "16 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Boneless Center Cut Pork Chops",
-                      "ad_price":  "$4.49",
-                      "size":  "lb",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Boneless Half Pork Butt Roast",
                       "ad_price":  "$2.99",
-                      "size":  "lb",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Baby Back Pork Ribs",
-                      "ad_price":  "$3.29",
-                      "size":  "lb",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Boneless Pork Tenderloin",
-                      "ad_price":  "$3.59",
                       "size":  "lb",
                       "regular":  null,
                       "source_ad":  "everyday shelf price",
@@ -17320,69 +17422,9 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Original Pork Breakfast Sausage Links",
-                      "ad_price":  "$2.39",
-                      "size":  "12 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Italian Mild Sausage",
-                      "ad_price":  "$2.95",
-                      "size":  "19 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Bratwurst",
-                      "ad_price":  "$2.95",
-                      "size":  "19 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Perdue Whole Chicken",
                       "ad_price":  "$6.79",
                       "size":  "60 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Fresh Chicken Wings Family Pack",
-                      "ad_price":  "$2.49",
-                      "size":  "lb",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Goldhen Grade A Large Eggs",
-                      "ad_price":  "$1.46",
-                      "size":  "12 ct",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Goldhen Liquid Egg Whites",
-                      "ad_price":  "$4.79",
-                      "size":  "32 fl oz",
                       "regular":  null,
                       "source_ad":  "everyday shelf price",
                       "price_type":  "everyday",
@@ -17400,69 +17442,9 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Friendly Farms Chocolate Milk",
-                      "ad_price":  "$1.93",
-                      "size":  "64 fl oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Countryside Creamery Salted Butter Quarters",
                       "ad_price":  "$2.89",
                       "size":  "16 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Peanut Delight Creamy Peanut Butter",
-                      "ad_price":  "$3.95",
-                      "size":  "40 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Berryhill Grape Jelly",
-                      "ad_price":  "$2.45",
-                      "size":  "30 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Priano Extra Virgin Olive Oil",
-                      "ad_price":  "$5.79",
-                      "size":  "16.9 fl oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Carlini Vegetable Oil",
-                      "ad_price":  "$3.55",
-                      "size":  "48 fl oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Simply Nature Organic Coconut Oil",
-                      "ad_price":  "$5.19",
-                      "size":  "14 fl oz",
                       "regular":  null,
                       "source_ad":  "everyday shelf price",
                       "price_type":  "everyday",
@@ -17480,26 +17462,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Earthly Grains Long Grain White Rice",
-                      "ad_price":  "$2.65",
-                      "size":  "3 lb",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Earthly Grains Jasmine Rice",
-                      "ad_price":  "$6.19",
-                      "size":  "5 lb",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Reggano Spaghetti",
                       "ad_price":  "$1.89",
                       "size":  "32 oz",
@@ -17510,59 +17472,9 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Reggano Penne Rigate",
-                      "ad_price":  "$1.09",
-                      "size":  "16 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Reggano Traditional Pasta Sauce",
                       "ad_price":  "$1.69",
                       "size":  "24 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Baker\u0027s Corner All Purpose Flour",
-                      "ad_price":  "$1.95",
-                      "size":  "5 lb",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Baker\u0027s Corner Granulated Sugar",
-                      "ad_price":  "$2.89",
-                      "size":  "4 lb",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Baker\u0027s Corner Light Brown Sugar",
-                      "ad_price":  "$1.85",
-                      "size":  "32 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Millville Fruit Rounds Cereal",
-                      "ad_price":  "$1.85",
-                      "size":  "12.2 oz",
                       "regular":  null,
                       "source_ad":  "everyday shelf price",
                       "price_type":  "everyday",
@@ -17610,119 +17522,9 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "L\u0027oven Fresh White Bread",
-                      "ad_price":  "$1.45",
-                      "size":  "20 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Pueblo Lindo Flour Tortillas",
-                      "ad_price":  "$1.95",
-                      "size":  "17.5 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "L\u0027oven Fresh Hamburger Buns",
-                      "ad_price":  "$1.39",
-                      "size":  "8 ct",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "L\u0027oven Fresh Hot Dog Buns",
-                      "ad_price":  "$1.39",
-                      "size":  "8 ct",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Specially Selected Brioche Dinner Rolls",
-                      "ad_price":  "$3.99",
-                      "size":  "16.9 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Happy Farms Shredded Mild Cheddar Cheese",
-                      "ad_price":  "$3.29",
-                      "size":  "16 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Friendly Farms Sour Cream",
-                      "ad_price":  "$1.75",
-                      "size":  "16 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Friendly Farms Cottage Cheese",
-                      "ad_price":  "$2.85",
-                      "size":  "24 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Happy Farms Cream Cheese",
-                      "ad_price":  "$1.49",
-                      "size":  "8 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Friendly Farms Heavy Whipping Cream",
-                      "ad_price":  "$4.59",
-                      "size":  "32 fl oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Friendly Farms Nonfat Plain Greek Yogurt",
                       "ad_price":  "$2.79",
                       "size":  "32 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Bananas",
-                      "ad_price":  "$0.49",
-                      "size":  "per lb",
                       "regular":  null,
                       "source_ad":  "everyday shelf price",
                       "price_type":  "everyday",
@@ -17790,16 +17592,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Mandarins, Bag",
-                      "ad_price":  "$3.99",
-                      "size":  "3 lb",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Pineapple",
                       "ad_price":  "$1.89",
                       "size":  "each",
@@ -17813,16 +17605,6 @@
                       "item":  "Lemons, Bag",
                       "ad_price":  "$3.69",
                       "size":  "2 lb",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Limes, Bag",
-                      "ad_price":  "$2.45",
-                      "size":  "16 oz",
                       "regular":  null,
                       "source_ad":  "everyday shelf price",
                       "price_type":  "everyday",
@@ -17853,16 +17635,6 @@
                       "item":  "Green Onions",
                       "ad_price":  "$1.05",
                       "size":  "5.5 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Green Bell Pepper",
-                      "ad_price":  "$2.49",
-                      "size":  "3 ct",
                       "regular":  null,
                       "source_ad":  "everyday shelf price",
                       "price_type":  "everyday",
@@ -17930,16 +17702,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Zucchini Squash",
-                      "ad_price":  "$1.39",
-                      "size":  "lb",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Russet Potatoes, Bag",
                       "ad_price":  "$3.19",
                       "size":  "5 lb",
@@ -17953,16 +17715,6 @@
                       "item":  "Red Potatoes, Bag",
                       "ad_price":  "$3.99",
                       "size":  "5 lb",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Broccoli Crowns",
-                      "ad_price":  "$2.15",
-                      "size":  "lb",
                       "regular":  null,
                       "source_ad":  "everyday shelf price",
                       "price_type":  "everyday",
@@ -17990,26 +17742,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Little Salad Bar Spinach",
-                      "ad_price":  "$1.89",
-                      "size":  "8 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Garlic",
-                      "ad_price":  "$1.69",
-                      "size":  "3 ct",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Green Cabbage",
                       "ad_price":  "$0.79",
                       "size":  "lb",
@@ -18030,16 +17762,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Northern Catch Pink Salmon",
-                      "ad_price":  "$3.39",
-                      "size":  "14.75 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Fremont Fish Market Tilapia Fillets",
                       "ad_price":  "$8.85",
                       "size":  "32 oz",
@@ -18050,99 +17772,9 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Atlantic Salmon Fillet",
-                      "ad_price":  "$8.29",
-                      "size":  "lb",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Fremont Fish Market Medium Raw Peeled Shrimp",
-                      "ad_price":  "$6.49",
-                      "size":  "12 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Happy Farms American Cheese Singles",
-                      "ad_price":  "$1.85",
-                      "size":  "12 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Happy Farms String Cheese",
-                      "ad_price":  "$3.09",
-                      "size":  "10 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Parkview Hot Dogs",
-                      "ad_price":  "$0.99",
-                      "size":  "12 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Parkview Polska Kielbasa",
-                      "ad_price":  "$2.89",
-                      "size":  "14 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Lunch Mate Black Forest Ham",
-                      "ad_price":  "$4.15",
-                      "size":  "16 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Mama Cozzi Sliced Pepperoni",
                       "ad_price":  "$2.79",
                       "size":  "6 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Clancy\u0027s Original Potato Chips",
-                      "ad_price":  "$1.79",
-                      "size":  "10 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Clancy\u0027s Restaurant Style Tortilla Chips",
-                      "ad_price":  "$2.15",
-                      "size":  "13 oz",
                       "regular":  null,
                       "source_ad":  "everyday shelf price",
                       "price_type":  "everyday",
@@ -18170,119 +17802,9 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Happy Harvest Whole Kernel Corn",
-                      "ad_price":  "$0.78",
-                      "size":  "15.25 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Casa Mamita Traditional Refried Beans",
-                      "ad_price":  "$0.99",
-                      "size":  "16 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Dakota\u0027s Pride Dark Red Kidney Beans",
-                      "ad_price":  "$0.85",
-                      "size":  "15.5 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Dakota\u0027s Pride Garbanzo Beans",
-                      "ad_price":  "$0.85",
-                      "size":  "15.5 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Happy Harvest Diced Tomatoes",
-                      "ad_price":  "$0.89",
-                      "size":  "14.5 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Happy Harvest Crushed Tomatoes",
-                      "ad_price":  "$1.49",
-                      "size":  "28 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Happy Harvest Tomato Sauce",
-                      "ad_price":  "$0.47",
-                      "size":  "8 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Happy Harvest Tomato Paste",
-                      "ad_price":  "$0.86",
-                      "size":  "6 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Casa Mamita Diced Tomatoes with Green Chilies",
-                      "ad_price":  "$0.95",
-                      "size":  "10 oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Countryside Creamery Half \u0026 Half",
                       "ad_price":  "$2.49",
                       "size":  "32 fl oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Friendly Farms French Vanilla Creamer",
-                      "ad_price":  "$2.69",
-                      "size":  "32 fl oz",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Berryhill 100% Natural Clover Honey",
-                      "ad_price":  "$4.99",
-                      "size":  "24 oz",
                       "regular":  null,
                       "source_ad":  "everyday shelf price",
                       "price_type":  "everyday",
@@ -18330,26 +17852,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Priano Creamy Alfredo Sauce",
-                      "ad_price":  "$1.75",
-                      "size":  "15 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Friendly Farms Original Unsweetened Almondmilk",
-                      "ad_price":  "$2.29",
-                      "size":  "64 fl oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Southern Grove Whole Almonds",
                       "ad_price":  "$6.19",
                       "size":  "14 oz",
@@ -18363,26 +17865,6 @@
                       "item":  "Boulder Regular Aluminum Foil (75 ft)",
                       "ad_price":  "$4.39",
                       "size":  "each",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Simply Nature Organic Apple Cider Vinegar",
-                      "ad_price":  "$4.49",
-                      "size":  "33.8 fl oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Nature\u0027s Nectar 100% Apple Juice",
-                      "ad_price":  "$1.99",
-                      "size":  "64 fl oz",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -18450,69 +17932,9 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "L\u0027oven Fresh Plain Bagels",
-                      "ad_price":  "$1.99",
-                      "size":  "20 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Dakota\u0027s Pride Homestyle Baked Beans",
                       "ad_price":  "$1.59",
                       "size":  "28 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Baker\u0027s Corner Baking Powder",
-                      "ad_price":  "$1.95",
-                      "size":  "8.1 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Baker\u0027s Corner Baking Soda",
-                      "ad_price":  "$0.89",
-                      "size":  "16 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Priano Balsamic Vinegar",
-                      "ad_price":  "$2.99",
-                      "size":  "16.9 fl oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Bananas, per lb",
-                      "ad_price":  "$0.48",
-                      "size":  "per lb",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Lacura Deep Moisturizing Beauty Bar",
-                      "ad_price":  "$2.99",
-                      "size":  "4 oz",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -18533,16 +17955,6 @@
                       "item":  "Burman\u0027s Original BBQ Sauce",
                       "ad_price":  "$1.69",
                       "size":  "18 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Chef\u0027s Cupboard Beef Broth",
-                      "ad_price":  "$1.25",
-                      "size":  "32 fl oz",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -18610,16 +18022,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Lacura Deep Moisturizing Body Wash",
-                      "ad_price":  "$3.39",
-                      "size":  "20 fl oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Kirkwood Boneless Skinless Chicken Thighs",
                       "ad_price":  "$7.29",
                       "size":  "48 oz",
@@ -18630,59 +18032,9 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "PurAqua Purified Water 24 Pack",
-                      "ad_price":  "$3.19",
-                      "size":  "24 ct",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Chef\u0027s Cupboard Panko Breadcrumbs",
                       "ad_price":  "$1.85",
                       "size":  "8 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Chef\u0027s Cupboard Italian Bread Crumbs",
-                      "ad_price":  "$1.85",
-                      "size":  "15 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Breakfast Best Sausage, Egg \u0026 Cheese Biscuit Sandwiches",
-                      "ad_price":  "$4.99",
-                      "size":  "18 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Appleton Farms Premium Pork Sausage Roll",
-                      "ad_price":  "$2.89",
-                      "size":  "16 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Baker\u0027s Corner Fudge Brownie Mix",
-                      "ad_price":  "$1.59",
-                      "size":  "18.3 oz",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -18730,16 +18082,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Baker\u0027s Corner Yellow Cake Mix",
-                      "ad_price":  "$1.09",
-                      "size":  "15.25 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Brookdale Chunk Chicken Breast",
                       "ad_price":  "$2.49",
                       "size":  "12.5 oz",
@@ -18770,16 +18112,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Happy Harvest Mushrooms Pieces \u0026 Stems",
-                      "ad_price":  "$1.45",
-                      "size":  "4 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Sweet Harvest Peach Slices in Heavy Syrup",
                       "ad_price":  "$1.55",
                       "size":  "15.25 oz",
@@ -18790,29 +18122,9 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Happy Harvest Medium Sweet Peas",
-                      "ad_price":  "$0.78",
-                      "size":  "15 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Sweet Harvest Pineapple Chunks in Pineapple Juice",
                       "ad_price":  "$1.65",
                       "size":  "20 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Dakota\u0027s Pride Cannellini Beans",
-                      "ad_price":  "$0.85",
-                      "size":  "15.5 oz",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -18850,28 +18162,8 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Heart to Tail Scoopable Cat Litter with Baking Soda",
-                      "ad_price":  "$6.19",
-                      "size":  "14 lb",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Cauliflower",
                       "ad_price":  "$2.99",
-                      "size":  "each",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Celery, Package",
-                      "ad_price":  "$2.09",
                       "size":  "each",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
@@ -18893,46 +18185,6 @@
                       "item":  "Happy Farms Thick Shredded Triple Cheddar",
                       "ad_price":  "$2.59",
                       "size":  "11 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Savoritz Family Size Cheese Crackers",
-                      "ad_price":  "$3.79",
-                      "size":  "21 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Red Cherries, Bag",
-                      "ad_price":  "$2.49",
-                      "size":  "lb",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Chef\u0027s Cupboard Chicken Broth",
-                      "ad_price":  "$1.25",
-                      "size":  "32 fl oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Chef\u0027s Cupboard Chunky Chicken Noodle Soup",
-                      "ad_price":  "$1.69",
-                      "size":  "18.6 oz",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -18970,16 +18222,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Baker\u0027s Corner Semi Sweet Chocolate Morsels",
-                      "ad_price":  "$3.65",
-                      "size":  "12 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "USDA Choice Black Angus Chuck Roast",
                       "ad_price":  "$7.99",
                       "size":  "lb",
@@ -18993,16 +18235,6 @@
                       "item":  "Cilantro, Package",
                       "ad_price":  "$0.89",
                       "size":  "each",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Fremont Fish Market Value Pack Cod Fillets",
-                      "ad_price":  "$15.25",
-                      "size":  "32 oz",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -19040,16 +18272,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Baker\u0027s Corner Sweetened Condensed Milk",
-                      "ad_price":  "$1.95",
-                      "size":  "14 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Pantene Pro-V Daily Moisture Renewal Conditioner",
                       "ad_price":  "$5.73",
                       "size":  "10.4 fl oz",
@@ -19080,46 +18302,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Bremer Regular Corn Dogs",
-                      "ad_price":  "$3.39",
-                      "size":  "16 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Baker\u0027s Corner Corn Starch",
-                      "ad_price":  "$1.89",
-                      "size":  "16 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Welby Cotton Swabs",
-                      "ad_price":  "$2.15",
-                      "size":  "500 ct",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Savoritz Saltine Crackers",
-                      "ad_price":  "$1.85",
-                      "size":  "16 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Nature\u0027s Nectar Cranberry 100% Juice",
                       "ad_price":  "$3.25",
                       "size":  "64 fl oz",
@@ -19130,29 +18312,9 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Chef\u0027s Cupboard Condensed Cream of Chicken Soup",
-                      "ad_price":  "$0.73",
-                      "size":  "10.5 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Chef\u0027s Cupboard Condensed Cream of Mushroom Soup",
                       "ad_price":  "$0.73",
                       "size":  "10.5 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Bake Shop Large Croissants",
-                      "ad_price":  "$2.79",
-                      "size":  "6 ct",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -19200,16 +18362,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "L\u0027oven Fresh Hawaiian Sweet Rolls",
-                      "ad_price":  "$2.45",
-                      "size":  "12 ct",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Power Force Original Blue Dishwashing Liquid",
                       "ad_price":  "$2.09",
                       "size":  "24 fl oz",
@@ -19230,16 +18382,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Radiance Lemon Disinfectant Wipes",
-                      "ad_price":  "$2.95",
-                      "size":  "75 ct",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Pure Being Chicken and Rice Premium Dog Food",
                       "ad_price":  "$6.79",
                       "size":  "5 lb",
@@ -19253,36 +18395,6 @@
                       "item":  "Pure Being Grain Free Beef and Cheddar Dog Treats",
                       "ad_price":  "$2.89",
                       "size":  "5.5 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Stonemill Oregano Leaves",
-                      "ad_price":  "$0.99",
-                      "size":  "0.75 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Stonemill Parsley Flakes",
-                      "ad_price":  "$0.99",
-                      "size":  "0.25 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Tandil Original Fresh Fabric Softener Sheets",
-                      "ad_price":  "$2.39",
-                      "size":  "80 ct",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -19350,16 +18462,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Emporium Selection Original Feta Cheese Crumbles",
-                      "ad_price":  "$1.89",
-                      "size":  "4 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Fremont Fish Market Breaded Fish Sticks",
                       "ad_price":  "$5.25",
                       "size":  "24 oz",
@@ -19373,56 +18475,6 @@
                       "item":  "Specially Selected French Bread",
                       "ad_price":  "$3.15",
                       "size":  "18.5 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Ginger Root, Package",
-                      "ad_price":  "$1.99",
-                      "size":  "8 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "French Green Beans, Package",
-                      "ad_price":  "$2.99",
-                      "size":  "1 lb",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Season\u0027s Choice Seasoned French Fries",
-                      "ad_price":  "$2.89",
-                      "size":  "32 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Baker\u0027s Corner Vanilla Frosting",
-                      "ad_price":  "$1.69",
-                      "size":  "16 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Season\u0027s Choice Steamable Frozen Broccoli Florets",
-                      "ad_price":  "$1.15",
-                      "size":  "12 oz",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -19460,16 +18512,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Season\u0027s Choice Crinkle Cut French Fried Potatoes",
-                      "ad_price":  "$2.89",
-                      "size":  "32 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Season\u0027s Choice Cherry Berry Blend",
                       "ad_price":  "$6.49",
                       "size":  "48 oz",
@@ -19483,16 +18525,6 @@
                       "item":  "Season\u0027s Choice Sweet Garden Peas",
                       "ad_price":  "$0.97",
                       "size":  "12 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Bremer Lasagna with Meat Sauce",
-                      "ad_price":  "$5.99",
-                      "size":  "38 oz",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -19560,26 +18592,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Nature\u0027s Nectar Fruit Punch",
-                      "ad_price":  "$1.79",
-                      "size":  "59 fl oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Lunch Buddies Mixed Berry Fruit Snacks",
-                      "ad_price":  "$3.99",
-                      "size":  "17.6 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Garlic, Package",
                       "ad_price":  "$1.69",
                       "size":  "3 ct",
@@ -19590,39 +18602,9 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Mama Cozzi\u0027s Pizza Kitchen Garlic Texas Toast",
-                      "ad_price":  "$1.95",
-                      "size":  "11.25 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Ginger Root, 8 oz",
                       "ad_price":  "$1.99",
                       "size":  "8 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Southern Grove Seedless Raisins",
-                      "ad_price":  "$3.99",
-                      "size":  "20 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Benton\u0027s Graham Crackers",
-                      "ad_price":  "$1.99",
-                      "size":  "14.4 oz",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -19650,39 +18632,9 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Nature\u0027s Nectar 100% Grape Juice",
-                      "ad_price":  "$2.95",
-                      "size":  "64 fl oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Red Grapes, per lb",
-                      "ad_price":  "$1.69",
-                      "size":  "per lb",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Green Peppers, Package",
                       "ad_price":  "$2.49",
                       "size":  "3 ct",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Cabbage, per lb",
-                      "ad_price":  "$0.79",
-                      "size":  "per lb",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -19710,29 +18662,9 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Stonemill Ground Cinnamon",
-                      "ad_price":  "$0.99",
-                      "size":  "2.37 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Kirkwood USDA Fresh Ground Turkey 85% Lean 15% Fat",
                       "ad_price":  "$7.99",
                       "size":  "3 lb",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Simply Nature Organic Ground Turmeric",
-                      "ad_price":  "$1.99",
-                      "size":  "1.37 oz",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -19753,16 +18685,6 @@
                       "item":  "Lacura Aquarium Liquid Hand Soap",
                       "ad_price":  "$0.97",
                       "size":  "7.5 fl oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Season\u0027s Choice Shredded Hash Browns",
-                      "ad_price":  "$3.69",
-                      "size":  "30 oz",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -19800,26 +18722,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Burman\u0027s Hot Sauce",
-                      "ad_price":  "$1.55",
-                      "size":  "12 fl oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Park Street Deli Classic Hummus",
-                      "ad_price":  "$2.59",
-                      "size":  "10 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Sundae Shoppe Vanilla Bean Ice Cream",
                       "ad_price":  "$2.49",
                       "size":  "48 fl oz",
@@ -19850,26 +18752,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Chef\u0027s Cupboard Homestyle Butter Mashed Potatoes",
-                      "ad_price":  "$0.99",
-                      "size":  "4 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Tuscan Garden Zesty Italian Dressing",
-                      "ad_price":  "$1.95",
-                      "size":  "16 fl oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "USDA Mild Italian Sausage",
                       "ad_price":  "$2.95",
                       "size":  "19 oz",
@@ -19883,16 +18765,6 @@
                       "item":  "Jalapeno Peppers, Package",
                       "ad_price":  "$0.85",
                       "size":  "8 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Burman\u0027s Ketchup",
-                      "ad_price":  "$1.95",
-                      "size":  "38 oz",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -19950,36 +18822,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Nature\u0027s Nectar 100% Lemon Juice",
-                      "ad_price":  "$2.19",
-                      "size":  "32 fl oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Friendly Farms Light Sour Cream",
-                      "ad_price":  "$1.75",
-                      "size":  "16 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Lacura Oatmeal Body Lotion",
-                      "ad_price":  "$3.99",
-                      "size":  "18 fl oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Cheese Club Macaroni and Cheese Dinner",
                       "ad_price":  "$0.59",
                       "size":  "7.25 oz box",
@@ -19993,56 +18835,6 @@
                       "item":  "Millville Original Pancake Syrup",
                       "ad_price":  "$2.35",
                       "size":  "24 fl oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Reggano Marinara Pasta Sauce",
-                      "ad_price":  "$1.69",
-                      "size":  "24 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Baker\u0027s Corner Marshmallows",
-                      "ad_price":  "$1.15",
-                      "size":  "10 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Burman\u0027s Real Mayonnaise",
-                      "ad_price":  "$2.89",
-                      "size":  "30 fl oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Clancy\u0027s Movie Theater Butter Microwave Popcorn",
-                      "ad_price":  "$4.49",
-                      "size":  "12 pk 2.5 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Friendly Farms Whole Milk",
-                      "ad_price":  "$3.00",
-                      "size":  "1 gal",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -20080,16 +18872,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Bake Shop Blueberry Muffins",
-                      "ad_price":  "$3.89",
-                      "size":  "14.1 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "White Mushrooms, Package",
                       "ad_price":  "$1.49",
                       "size":  "8 oz",
@@ -20113,16 +18895,6 @@
                       "item":  "Millville Old Fashioned Oats",
                       "ad_price":  "$3.99",
                       "size":  "42 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Friendly Farms Original Oatmilk",
-                      "ad_price":  "$3.49",
-                      "size":  "64 fl oz",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -20200,16 +18972,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Stonemill Paprika",
-                      "ad_price":  "$0.99",
-                      "size":  "2.12 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Boulder Parchment Paper",
                       "ad_price":  "$2.79",
                       "size":  "45 sq ft",
@@ -20220,29 +18982,9 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Reggano Grated Parmesan Cheese",
-                      "ad_price":  "$2.79",
-                      "size":  "8 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Peaches, Bag",
                       "ad_price":  "$3.49",
                       "size":  "2 lb",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Southern Grove Dry Roasted Peanuts with Sea Salt",
-                      "ad_price":  "$2.29",
-                      "size":  "16 oz",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -20263,16 +19005,6 @@
                       "item":  "Simms Thick Sliced Pepperoni",
                       "ad_price":  "$6.49",
                       "size":  "16 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Great Gherkins Kosher Dill Spears",
-                      "ad_price":  "$2.49",
-                      "size":  "24 fl oz",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -20380,16 +19112,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Clancy\u0027s Pretzel Sticks",
-                      "ad_price":  "$2.19",
-                      "size":  "16 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Millville Peanut Butter Dark Chocolate Protein Chewy Bars",
                       "ad_price":  "$2.89",
                       "size":  "5 ct",
@@ -20420,79 +19142,9 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Casa Mamita Salsa Con Queso",
-                      "ad_price":  "$2.29",
-                      "size":  "15 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Radishes, Package",
                       "ad_price":  "$1.89",
                       "size":  "16 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Maruchan Ramen Noodle Soup Chicken Flavor",
-                      "ad_price":  "$3.85",
-                      "size":  "12 ct",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Tuscan Garden Ranch Dressing",
-                      "ad_price":  "$1.95",
-                      "size":  "16 fl oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Raspberries, Package",
-                      "ad_price":  "$2.69",
-                      "size":  "6 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Lacura Men\u0027s Triple Blade Disposable Razors",
-                      "ad_price":  "$2.99",
-                      "size":  "4 ct",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Multi-Colored Peppers, Package",
-                      "ad_price":  "$2.69",
-                      "size":  "3 ct",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Stonemill Crushed Red Pepper",
-                      "ad_price":  "$0.99",
-                      "size":  "1.5 oz",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -20510,26 +19162,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Priano Red Wine Vinegar",
-                      "ad_price":  "$2.99",
-                      "size":  "16.9 fl oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Great Gherkins Sweet Relish",
-                      "ad_price":  "$1.69",
-                      "size":  "16 fl oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Black Angus Choice Beef Ribeye Steak",
                       "ad_price":  "$14.79",
                       "size":  "lb",
@@ -20540,29 +19172,9 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Fit \u0026 Active Lightly Salted Rice Cakes",
-                      "ad_price":  "$3.15",
-                      "size":  "4.9 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Nakano Seasoned Rice Vinegar",
                       "ad_price":  "$3.12",
                       "size":  "12 fl oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Tuscan Garden Roasted Red Pepper Pieces",
-                      "ad_price":  "$2.59",
-                      "size":  "12 oz",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -20590,16 +19202,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Fremont Fish Market Value Pack Wild Caught Salmon",
-                      "ad_price":  "$10.35",
-                      "size":  "32 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Casa Mamita Mild Salsa",
                       "ad_price":  "$2.59",
                       "size":  "24 oz",
@@ -20620,36 +19222,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Boulder Reclosable Sandwich Bags",
-                      "ad_price":  "$2.25",
-                      "size":  "100 ct",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Benton\u0027s Vanilla Sandwich Creme Cookies",
-                      "ad_price":  "$2.75",
-                      "size":  "25 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Pantene Pro-V Daily Moisture Renewal Shampoo",
-                      "ad_price":  "$5.73",
-                      "size":  "12 fl oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Happy Farms Shredded Mild Cheddar",
                       "ad_price":  "$3.29",
                       "size":  "16 oz",
@@ -20660,39 +19232,9 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Fremont Fish Market Value Pack Large Raw Peeled Shrimp",
-                      "ad_price":  "$16.49",
-                      "size":  "32 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "USDA Choice Black Angus Petite Sirloin Steak",
                       "ad_price":  "$8.99",
                       "size":  "lb",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Simply Nature Organic Smoked Paprika",
-                      "ad_price":  "$1.99",
-                      "size":  "1.6 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Summit Cola 12 Pack",
-                      "ad_price":  "$3.79",
-                      "size":  "144 fl oz",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -20730,16 +19272,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Gatorade Fruit Punch Thirst Quencher",
-                      "ad_price":  "$1.38",
-                      "size":  "28 fl oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Shout Original Laundry Stain Remover",
                       "ad_price":  "$3.39",
                       "size":  "22 fl oz",
@@ -20753,26 +19285,6 @@
                       "item":  "Boulder Gallon Storage Bags",
                       "ad_price":  "$1.85",
                       "size":  "40 ct",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Strawberries, 1 lb",
-                      "ad_price":  "$2.39",
-                      "size":  "1 lb",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Chef\u0027s Cupboard Chicken Stuffing Mix",
-                      "ad_price":  "$0.95",
-                      "size":  "6 oz",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -20800,59 +19312,9 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Season\u0027s Choice Crispy Tots Potato Puffs",
-                      "ad_price":  "$2.89",
-                      "size":  "32 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Benner Black Tea Bags",
-                      "ad_price":  "$1.49",
-                      "size":  "100 ct",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Fremont Fish Market Value Pack Tilapia",
                       "ad_price":  "$8.85",
                       "size":  "32 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Millville Strawberry Toaster Tarts",
-                      "ad_price":  "$2.26",
-                      "size":  "12 ct",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Power Force Toilet Bowl Cleaner",
-                      "ad_price":  "$1.89",
-                      "size":  "24 fl oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Willow 1000 Sheet Bath Tissue",
-                      "ad_price":  "$7.69",
-                      "size":  "12 ct",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -20890,26 +19352,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Pueblo Lindo Fajita Flour Tortillas",
-                      "ad_price":  "$1.85",
-                      "size":  "20 ct",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Reggano Tomato Basil Garlic Pasta Sauce",
-                      "ad_price":  "$1.69",
-                      "size":  "24 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Boulder Drawstring Kitchen Trash Bags",
                       "ad_price":  "$5.99",
                       "size":  "45 ct",
@@ -20923,26 +19365,6 @@
                       "item":  "Stonemill Pure Vanilla Extract",
                       "ad_price":  "$3.49",
                       "size":  "2 fl oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Seedless Watermelon, Each",
-                      "ad_price":  "$4.65",
-                      "size":  "each",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Friendly Farms Whipped Topping",
-                      "ad_price":  "$1.09",
-                      "size":  "8 oz",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
                       "price_type":  "everyday",
@@ -20980,16 +19402,6 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Perdue Reserve Whole Young Chicken",
-                      "ad_price":  "$6.79",
-                      "size":  "60 oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Baker\u0027s Corner Active Dry Yeast",
                       "ad_price":  "$1.09",
                       "size":  "0.75 oz",
@@ -21010,41 +19422,11 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Summit Zero Sugar Cola 12pk",
-                      "ad_price":  "$3.79",
-                      "size":  "12 x 12 fl oz",
-                      "regular":  null,
-                      "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Zucchini, Package",
                       "ad_price":  "$2.08",
                       "size":  "1 lb",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Power Force Bathroom Cleaner 32 fl oz",
-                      "ad_price":  "$2.69",
-                      "size":  "32 fl oz",
-                      "regular":  null,
-                      "source_ad":  "new-item fill 2026-07-14 (store search, in-store/everyday price, collision-validated)",
-                      "price_type":  "everyday",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Baker\u0027s Corner Strawberry Gelatin 3 oz",
-                      "ad_price":  "$0.98",
-                      "size":  "1 ct",
-                      "regular":  null,
-                      "source_ad":  "verified on store page 2026-07-14 (boxed gelatin, open-item resolution)",
                       "price_type":  "everyday",
                       "as_of":  "2026-07-18"
                   },
@@ -21140,82 +19522,10 @@
                   },
                   {
                       "store":  "Aldi",
-                      "item":  "Stonemill Cajun Seasoning",
-                      "ad_price":  "$1.69",
-                      "size":  "3.5 oz",
-                      "regular":  1.69,
-                      "source_ad":  "aldi.us storefront In-Store OLA 42 Omaha (r100 capture 2026-07-18)",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Casa Mamita Taco Seasoning Mix",
-                      "ad_price":  "$0.46",
-                      "size":  "1 oz",
-                      "regular":  0.46,
-                      "source_ad":  "aldi.us storefront In-Store OLA 42 Omaha (r100 capture 2026-07-18)",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
                       "item":  "Tuscan Garden Ranch Salad Dressing and Seasoning Mix",
                       "ad_price":  "$0.55",
                       "size":  "1 oz",
                       "regular":  0.55,
-                      "source_ad":  "aldi.us storefront In-Store OLA 42 Omaha (r100 capture 2026-07-18)",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Southern Grove Chopped Walnuts",
-                      "ad_price":  "$2.79",
-                      "size":  "8 oz",
-                      "regular":  2.79,
-                      "source_ad":  "aldi.us storefront In-Store OLA 42 Omaha (r100 capture 2026-07-18)",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Jiffy Corn Muffin Mix",
-                      "ad_price":  "$0.72",
-                      "size":  "8.5 oz",
-                      "regular":  0.72,
-                      "source_ad":  "aldi.us storefront In-Store OLA 42 Omaha (r100 capture 2026-07-18)",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Bake House Creations Jumbo Flaky Biscuits",
-                      "ad_price":  "$1.89",
-                      "size":  "16 oz",
-                      "regular":  1.89,
-                      "source_ad":  "aldi.us storefront In-Store OLA 42 Omaha (r100 capture 2026-07-18)",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Priano Three Cheese Tortellini",
-                      "ad_price":  "$5.99",
-                      "size":  "20 oz",
-                      "regular":  5.99,
-                      "source_ad":  "aldi.us storefront In-Store OLA 42 Omaha (r100 capture 2026-07-18)",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Priano Gnocchi",
-                      "ad_price":  "$1.89",
-                      "size":  "17.6 oz",
-                      "regular":  1.89,
-                      "source_ad":  "aldi.us storefront In-Store OLA 42 Omaha (r100 capture 2026-07-18)",
-                      "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Tuscan Garden Sundried Tomatoes",
-                      "ad_price":  "$3.99",
-                      "size":  "8 oz",
-                      "regular":  3.99,
                       "source_ad":  "aldi.us storefront In-Store OLA 42 Omaha (r100 capture 2026-07-18)",
                       "as_of":  "2026-07-18"
                   },
@@ -21227,16 +19537,7 @@
                       "regular":  0.85,
                       "source_ad":  "aldi.us storefront In-Store OLA 42 Omaha (r100 capture 2026-07-18)",
                       "as_of":  "2026-07-18"
-                  },
-                  {
-                      "store":  "Aldi",
-                      "item":  "Priano Cheese Tortelloni",
-                      "ad_price":  "$1.49",
-                      "size":  "8.8 oz",
-                      "regular":  1.49,
-                      "source_ad":  "aldi.us storefront In-Store OLA 42 Omaha (r100 capture 2026-07-18)",
-                      "as_of":  "2026-07-18"
                   }
               ],
-    "carry_note":  "carry-forward: +408 item(s) from aldi-regular-2026-07-18.json + aldi-regular-2026-07-15.json (absent from this pull; as_of-stamped, 14-day cap), 24 expired"
+    "carry_note":  "carry-forward: +218 item(s) from aldi-regular-2026-07-18.json + aldi-regular-2026-07-15.json (absent from this pull; as_of-stamped, 14-day cap), 18 expired"
 }

@@ -30,6 +30,40 @@ $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $regDir = if ($RegularDir) { $RegularDir } else { Join-Path $root 'out\regular' }
 
+function Get-CarryKey([string]$item) {
+  <#
+    The identity key for "do we already have this product today?".
+
+    IT CANNOT BE THE RAW NAME. On 2026-07-29 Aldi changed its name format - trailing size tokens went from 3.4%
+    of names to 88.3% ("Ground Beef 80/20" -> "Ground Beef 80 20 1 Per LB", "Broccoli Crowns" -> "Broccoli
+    Crowns Per LB") - so every renamed product read as ABSENT and got carried from an 11-day-old file even
+    though it HAD been pulled that morning. 199 of 335 published Aldi cells became stale duplicates of fresh
+    rows, and the stale copy wins the ranking because ranking has no freshness tiebreak.
+
+    So: fold case, flatten punctuation, and strip a TRAILING measure phrase (repeatedly - names carry more than
+    one). Interior numbers are left alone, so two genuinely different sizes of the same product still key apart
+    unless the size is the only thing at the end. Collapsing too much only ever SUPPRESSES a carry, which is the
+    safe direction: a missing carried row costs coverage, a stale carried row prices the board wrong.
+  #>
+  $k = ([string]$item).ToLower().Trim()
+  $k = ($k -replace '[^a-z0-9\. ]', ' ')
+  $k = ($k -replace '\s+', ' ').Trim()
+  $unit = '(?:fl\s*oz|floz|oz|ounces?|lbs?|pounds?|ct|count|pk|packs?|gal|gallons?|qt|quarts?|pt|pints?|ml|liters?|litres?|each|ea|dozen|doz)'
+  for ($i = 0; $i -lt 4; $i++) {
+    $before = $k
+    # "1 Per LB" / "Per LB" / "20 OZ" - a quantity bound to a unit. Do NOT strip bare trailing numbers: that
+    # would fold "ground beef 80 20" and "ground beef 93 7" onto the same key and suppress the carry for
+    # whichever grind was not pulled today.
+    $k = ($k -replace ('\s+\d+(?:\.\d+)?\s+per\s+' + $unit + '\.?$'), '')
+    $k = ($k -replace ('\s+per\s+' + $unit + '\.?$'), '')
+    $k = ($k -replace ('\s+\d+(?:\.\d+)?\s*' + $unit + '\.?$'), '')
+    $k = $k.Trim()
+    if ($k -eq $before -or -not $k) { break }
+  }
+  if (-not $k) { $k = ([string]$item).ToLower().Trim() }   # never return empty - fall back to the raw name
+  return $k
+}
+
 function Invoke-CarryForward([string]$prefix, [string]$dir, [int]$maxDays) {
   $files = @(Get-ChildItem (Join-Path $dir ($prefix + '-regular-*.json')) -ErrorAction SilentlyContinue |
     Where-Object { $_.BaseName -match ('^' + [regex]::Escape($prefix) + '-regular-\d{4}-\d{2}-\d{2}$') } |
@@ -39,7 +73,7 @@ function Invoke-CarryForward([string]$prefix, [string]$dir, [int]$maxDays) {
   $newDate = [datetime]([regex]::Match($newF.BaseName, '(\d{4}-\d{2}-\d{2})$').Groups[1].Value)
   $new = Get-Content $newF.FullName -Raw | ConvertFrom-Json
   $have = @{}
-  foreach ($d in @($new.deals)) { $have[([string]$d.item).ToLower().Trim()] = $true }
+  foreach ($d in @($new.deals)) { $have[(Get-CarryKey $d.item)] = $true }
   $carried = 0; $expired = 0
   $outDeals = New-Object System.Collections.Generic.List[object]
   foreach ($d in @($new.deals)) { $outDeals.Add($d) }
@@ -53,7 +87,7 @@ function Invoke-CarryForward([string]$prefix, [string]$dir, [int]$maxDays) {
     if (($newDate - $prevDate).TotalDays -gt $maxDays) { break }   # files sorted newest-first; older = all out
     $prev = Get-Content $prevF.FullName -Raw | ConvertFrom-Json
     foreach ($d in @($prev.deals)) {
-      $k = ([string]$d.item).ToLower().Trim()
+      $k = Get-CarryKey $d.item
       if (-not $k -or $have.ContainsKey($k)) { continue }
       $have[$k] = $true    # newest-first walk: first sighting wins, older sightings skipped
       # true capture date: a row already carried once keeps its original as_of

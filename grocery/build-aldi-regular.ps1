@@ -90,7 +90,22 @@ function Get-Size([string]$name, [string]$cardSize, [string]$unit) {
     }
   }
 
-  $hay = if ($cardSize) { $cardSize } else { $name }
+  # The card size wins ONLY if it actually states a measure. A wrapped record leaves junk in this field (the
+  # split price text: "449" + newline + "L"), and a bare `if ($cardSize)` handed that junk to every scan below,
+  # which found no unit and returned '' - so the NAME, which says "14 oz" right there, was never consulted.
+  # That silently rejected 42 rows as "no size", including Aldi's entire L'oven Fresh bread lineup.
+  $hasMeasure = $cardSize -match '(?i)\d\s*(fl\s*oz|floz|oz|ounces?|lbs?|pounds?|qt|quarts?|pt|pints?|liters?|litres?|ml|gal|gallons?|ct|count|pk|pack|dozen)\b'
+  $hay = if ($cardSize -and $hasMeasure) { $cardSize } else { $name }
+
+  # REFUSE TO GUESS A SLUG-COLLAPSED DECIMAL. Aldi names come from URL slugs, which cannot hold a '.', so
+  # "10.4 OZ" arrives as "10 4 OZ". Repair-SlugDecimals fixes it only when the card size independently proves
+  # the digits; when it cannot, reading the trailing number alone gives 4 oz for a 10.4 oz item - a 2.6x error
+  # in the CHEAP direction, which is exactly the shape that crowns a false cheapest store. Two bare integers
+  # in front of a unit means the decimal is lost, so drop the cell. Guessing here is worse than no cell.
+  # ('6 pk 13.5 oz' and '12 pk 12 fl oz' are unaffected - they carry a pack word between the numbers.)
+  if (-not ($cardSize -and $hasMeasure)) {
+    if ($hay -match '(?i)\b\d+\s+\d+(?:\.\d+)?\s*(fl\s*oz|floz|oz|ounces?|lbs?|pounds?|ct|count)\b') { return '' }
+  }
 
   # 2) milk / liquid gallons - normalise before the generic scan so "1 gal" doesn't read as a count
   $g = [regex]::Match($hay, '(?i)(\d+(?:\.\d+)?)\s*(?:gal|gallon)s?\b')
@@ -187,6 +202,45 @@ function Invoke-Build([object[]]$raw, [string]$date) {
   return @{ rows = $rows.ToArray(); rejects = $rejects.ToArray() }
 }
 
+function Join-WrappedRecords {
+  <#
+    Rejoin records the browser capture split across lines. A card's innerText can swallow the newline after a
+    size token, writing a literal line break INSIDE a field, so one 7-field record arrives as a 5-pipe HEAD
+    plus a 1-pipe TAIL.
+
+    THE TRAP (shipped 2026-07-29, caught the same day): the first version tested each line in isolation and
+    glued anything with fewer than 6 pipes onto the previous line. Both halves of a wrapped record are under
+    6, so BOTH got glued onto the previous, already-complete record - it ate 31 real records (Aldi's whole
+    store-brand bread lineup) and left 12 link_urls carrying the next record's search term after a space, one
+    of which reached product-urls.json. A "fix" that recovered 27 rows net -27.
+
+    So: accumulate until the BUFFER reaches 6 pipes, and never absorb a line that is itself a complete record
+    (>= 6 pipes) - an incomplete buffer followed by a whole record means the capture dropped a fragment, and
+    dropping one damaged row beats swallowing a good one.
+  #>
+  param([string[]]$Lines)
+  $out = New-Object System.Collections.ArrayList
+  $buf = $null
+  $rejoined = 0
+  $orphans = 0
+  foreach ($ln in $Lines) {
+    $lnPipes = ([regex]::Matches([string]$ln, '\|')).Count
+    if ($null -ne $buf) {
+      if ($lnPipes -ge 6) {
+        [void]$out.Add($buf); $buf = $null; $orphans++     # keep the fragment, keep the whole record
+        [void]$out.Add([string]$ln)
+        continue
+      }
+      $buf = $buf + ' ' + ([string]$ln).Trim(); $rejoined++
+      if (([regex]::Matches($buf, '\|')).Count -ge 6) { [void]$out.Add($buf); $buf = $null }
+      continue
+    }
+    if ($lnPipes -ge 6) { [void]$out.Add([string]$ln) } else { $buf = [string]$ln }
+  }
+  if ($null -ne $buf) { [void]$out.Add($buf); $orphans++ }
+  return @{ lines = $out.ToArray(); rejoined = $rejoined; orphans = $orphans }
+}
+
 if ($SelfTest) {
   $cases = @(
     @{ n = 'goldhen grade a large eggs 12 ct';            s = '12 ct';  u = '';          want = 'dozen' }
@@ -201,6 +255,18 @@ if ($SelfTest) {
     @{ n = 'gatorade thirst quencher 18 pack 12 fl oz';       s = '12 fl oz'; u = ''; want = '18 pk 12 fl oz' }
     @{ n = 'breakfast best breakfast pizza 2pk 11.2 oz';      s = '11.2 oz';  u = ''; want = '2 pk 11.2 oz' }
     @{ n = 'single item 1 pk 16 oz';                          s = '16 oz';    u = ''; want = '16 oz' }
+    # a wrapped record leaves junk with no measure in the card-size field; the NAME must still be read
+    @{ n = 'l oven fresh keto friendly white bread 14 oz';     s = '449 L';    u = ''; want = '14 oz' }
+    @{ n = 'l oven fresh artisanal style bread 20 oz';         s = '329 L';    u = ''; want = '20 oz' }
+    @{ n = 'l oven fresh original english muffins 12 oz';      s = '159 L';    u = ''; want = '12 oz' }
+    # ...but a card size that DOES state a measure still wins over the name
+    @{ n = 'brioche buns 10 58 oz';                           s = '6 ct';     u = ''; want = '6 ct' }
+    # a slug-collapsed decimal with nothing to corroborate it must be REFUSED, not read as its last number
+    @{ n = 'l oven fresh garlic knots 10 4 oz';                s = '299 L';    u = ''; want = '' }
+    @{ n = 'raspberry filled croissant 9 59 oz';               s = '';         u = ''; want = '' }
+    @{ n = 'ground beef patties 2 5 lb';                       s = '';         u = ''; want = '' }
+    # a genuine pack form keeps working - the pack word separates the two numbers
+    @{ n = 'purified water 24 pk 16.9 fl oz';                  s = '';         u = ''; want = '24 pk 16.9 fl oz' }
   )
   $fail = 0
   foreach ($c in $cases) {
@@ -226,6 +292,30 @@ if ($SelfTest) {
     if ($got -eq $d.want) { Write-Output ("ok    slug-decimal '{0}' -> '{1}'" -f $d.n, $got) }
     else { Write-Output ("FAIL  slug-decimal '{0}' -> '{1}' (want '{2}')" -f $d.n, $got, $d.want); $fail++ }
   }
+  # WRAPPED-RECORD REJOIN. The founding bug: a 5-pipe head and a 1-pipe tail are BOTH under 6, so the first
+  # version glued both onto the record above and destroyed it. H = complete record, W1/W2 = the two halves.
+  $H1 = 'bread|bread|Loven Fresh White Bread 20 OZ|$1.45|$0.07 per oz|20 oz|https://x/a'
+  $W1 = 'hamburger-buns|hamburger-buns|Specially Selected Sesame Seed Brioche Buns 10 58 OZ|$2.49|$0.24 per oz|6 ct'
+  $W2 = 'https://x/b'
+  $H2 = 'milk|milk|Friendly Farms Whole Milk 1 GAL|$2.19|$2.19 per gal|1 gal|https://x/c'
+  $j = Join-WrappedRecords @($H1, $W1, $W2, $H2)
+  if ($j.lines.Count -eq 3 -and $j.rejoined -eq 1 -and $j.lines[0] -eq $H1 -and $j.lines[2] -eq $H2 -and
+      $j.lines[1] -eq ($W1 + ' ' + $W2)) {
+    Write-Output 'ok    rejoin: a wrapped record is repaired and BOTH neighbouring records survive intact'
+  } else {
+    Write-Output ("FAIL  rejoin: got {0} line(s), rejoined={1}" -f $j.lines.Count, $j.rejoined); $fail++
+    foreach ($l in $j.lines) { Write-Output ("        [{0}]" -f $l) }
+  }
+  # an incomplete fragment followed by a WHOLE record must never swallow it
+  $j2 = Join-WrappedRecords @($W1, $H2)
+  if ($j2.lines.Count -eq 2 -and $j2.lines[1] -eq $H2 -and $j2.rejoined -eq 0 -and $j2.orphans -eq 1) {
+    Write-Output 'ok    rejoin: an orphan fragment does not eat the complete record that follows it'
+  } else { Write-Output ("FAIL  rejoin orphan: {0} line(s), orphans={1}" -f $j2.lines.Count, $j2.orphans); $fail++ }
+  # a clean file must pass through byte-identical
+  $j3 = Join-WrappedRecords @($H1, $H2)
+  if ($j3.lines.Count -eq 2 -and $j3.rejoined -eq 0 -and $j3.orphans -eq 0) { Write-Output 'ok    rejoin: a clean file is untouched' }
+  else { Write-Output 'FAIL  rejoin clean-file no-op'; $fail++ }
+
   if ($fail) { Write-Output "$fail FAILED"; exit 1 } else { Write-Output "all self-tests pass"; exit 0 }
 }
 
@@ -234,26 +324,13 @@ if (-not $Date) { $Date = (Get-Date -Format 'yyyy-MM-dd') }
 $inPath = if ([IO.Path]::IsPathRooted($In)) { $In } else { Join-Path $root $In }
 if (-not (Test-Path $inPath)) { throw "build-aldi-regular: no such capture $inPath" }
 
-# REJOIN WRAPPED RECORDS BEFORE PARSING. The browser capture reads a card's innerText, and a size token can
-# swallow the newline that follows it ("159" + \n + "L"), which writes a literal line break INSIDE a field and
-# splits one record across two lines. Import-Csv then reads the tail as its own row, and the URL lands in the
-# `term` column - 27 of 3041 rows on 2026-07-29, and every one of them silently lost its price. A record is
-# 7 pipe-separated fields, so any line carrying fewer than 6 pipes is a continuation of the line above it.
+# REJOIN WRAPPED RECORDS BEFORE PARSING - see Join-WrappedRecords above for the algorithm and the trap.
 $rawLines = Get-Content $inPath -Encoding UTF8
-$fixed = New-Object System.Collections.ArrayList
-$rejoined = 0
-foreach ($ln in $rawLines) {
-  $pipes = ([regex]::Matches($ln, '\|')).Count
-  if ($fixed.Count -gt 0 -and $pipes -lt 6) {
-    $fixed[$fixed.Count - 1] = ([string]$fixed[$fixed.Count - 1]) + ' ' + $ln.Trim()
-    $rejoined++
-  } else {
-    [void]$fixed.Add($ln)
-  }
-}
-if ($rejoined) { Write-Output ("build-aldi-regular: rejoined {0} line-wrapped record(s) before parsing" -f $rejoined) }
+$jr = Join-WrappedRecords $rawLines
+if ($jr.rejoined) { Write-Output ("build-aldi-regular: rejoined {0} line-wrapped record(s) before parsing" -f $jr.rejoined) }
+if ($jr.orphans)  { Write-Output ("build-aldi-regular: {0} incomplete fragment(s) kept as-is (capture dropped a piece)" -f $jr.orphans) }
 $tmp = Join-Path $env:TEMP ("aldi-capture-clean-" + $Date + ".csv")
-Set-Content -Path $tmp -Value $fixed.ToArray() -Encoding UTF8
+Set-Content -Path $tmp -Value $jr.lines -Encoding UTF8
 
 $raw = Import-CaptureCsv -Path $tmp -Delimiter '|'
 if ($script:CaptureRepairCount -gt 0) { Write-Output ("  repaired $($script:CaptureRepairCount) mangled product name(s) on ingest (UTF-8 read as ANSI upstream)") }
