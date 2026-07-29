@@ -73,6 +73,9 @@
                                       "trash\\s+bags?",
                                       "\\bshampoo\\b",
                                       "body\\s*wash",
+                                      "beauty\\s+bars?",
+                                      "\\bbar\\s+soap\\b",
+                                      "\\bsoaps?\\b",
                                       "\\bconditioner\\b",
                                       "\\blotion\\b",
                                       "toothpaste",
@@ -134,7 +137,17 @@
                                   "ice\\s+bars?",
                                   "\\bhelados\\b",
                                   "\\boutshine\\b"
-                              ]
+                              ],
+                    "supplement":  [
+                                       "\\bsupplements?\\b",
+                                       "dietary\\s+supplement",
+                                       "\\bmultivitamins?\\b",
+                                       "superbeets",
+                                       "\\bcollagen\\b",
+                                       "\\bsoftgels?\\b",
+                                       "heart\\s+chews?",
+                                       "\\bheart\\s+health\\b"
+                                   ]
                 },
     "apply":  [
                   {
@@ -146,7 +159,8 @@
                                       "household",
                                       "bakery_carrier",
                                       "dairy_carrier",
-                                      "candy"
+                                      "candy",
+                                      "supplement"
                                   ]
                   },
                   {
@@ -155,7 +169,8 @@
                                       "beverage",
                                       "babyfood",
                                       "pet",
-                                      "household"
+                                      "household",
+                                      "supplement"
                                   ]
                   },
                   {
@@ -163,7 +178,8 @@
                       "classes":  [
                                       "babyfood",
                                       "pet",
-                                      "household"
+                                      "household",
+                                      "supplement"
                                   ]
                   }
               ],
@@ -174,11 +190,13 @@
                    "household":  "",
                    "bakery_carrier":  "pumpkin",
                    "dairy_carrier":  "milk|yogurt|cheese|cream|butter",
-                   "candy":  ""
+                   "candy":  "",
+                   "supplement":  ""
                },
     "universal_for_unknown":  [
                                   "babyfood",
                                   "pet",
-                                  "household"
+                                  "household",
+                                  "supplement"
                               ]
 }
