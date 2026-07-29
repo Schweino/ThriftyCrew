@@ -1,4 +1,4 @@
-<#
+﻿<#
   build-fareway-regular.ps1 - turns the Fareway STOREFRONT extracts (shop.fareway.com, no-markup in-store
   prices, Omaha) into an engine-ready everyday-price file: out\regular\fareway-regular-<date>.json.
   compare-deals.ps1 auto-discovers out\regular\<store>-regular-*.json (price_type=everyday) with NO code
@@ -23,6 +23,7 @@ $asofS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
 if (-not $In -or $In.Count -eq 0) {
   $In = @(Get-ChildItem (Join-Path $OutDir 'fareway\fareway-shop-*.json') -ErrorAction SilentlyContinue | Sort-Object Name | ForEach-Object { $_.FullName })
 }
+. (Join-Path $root 'capture-lib.ps1')   # UTF-8 capture read + mojibake repair, shared by every builder
 $commod = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
 $validSet = @{}; $unitMap = @{}; $pintMap = @{}; foreach ($c in $commod) { $validSet[[string]$c.id] = $true; $unitMap[[string]$c.id] = [string]$c.unit; if ($c.PSObject.Properties['pint_oz'] -and $c.pint_oz) { $pintMap[[string]$c.id] = [double]$c.pint_oz } }
 
@@ -30,7 +31,10 @@ $byId = [ordered]@{}
 $byUrl = [ordered]@{}
 foreach ($f in $In) {
   if (-not (Test-Path $f)) { continue }
-  foreach ($r in (Get-Content $f -Raw | ConvertFrom-Json)) {
+  foreach ($r in (Get-Content $f -Raw -Encoding UTF8 | ConvertFrom-Json)) {
+  # The storefront capture is UTF-8; reading it under the system ANSI codepage turned brand names into
+  # mojibake that then shipped to the board ("Mott(junk)s", "Saran(junk)"). Repair on ingest - see capture-lib.
+  if ($r.PSObject.Properties['name']) { $r.name = Repair-Mojibake ([string]$r.name) }
     $id = [string]$r.id
     if (-not $validSet.ContainsKey($id)) { continue }
     $name = [string]$r.name
@@ -156,3 +160,4 @@ $deals | ForEach-Object { "  {0,-20} {1,-8} {2}" -f $_.item.Substring(0,[Math]::
 # price 48x too high and the band drops the store from the row. Re-adopt the prior capture's size when
 # item AND price are identical. See heal-degraded-sizes.ps1.
 & powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'heal-degraded-sizes.ps1') -Store fareway | Write-Output
+

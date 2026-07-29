@@ -1,4 +1,4 @@
-<#
+﻿<#
   build-aldi-regular.ps1 - turn a RAW aldi.us browser capture into out\regular\aldi-regular-<date>.json.
 
   WHY THIS EXISTS. Aldi was the last priced store whose everyday file was hand-assembled in the agent's head
@@ -34,6 +34,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\income\grocery' }
+. (Join-Path $root 'capture-lib.ps1')   # UTF-8 capture read + mojibake repair, shared by every builder
 
 # Words that mean "this tile is not the plain commodity". Kept deliberately small: compare-deals owns the real
 # include/exclude per commodity. This only drops things that are never the base item at any store.
@@ -238,7 +239,7 @@ if (-not (Test-Path $inPath)) { throw "build-aldi-regular: no such capture $inPa
 # splits one record across two lines. Import-Csv then reads the tail as its own row, and the URL lands in the
 # `term` column - 27 of 3041 rows on 2026-07-29, and every one of them silently lost its price. A record is
 # 7 pipe-separated fields, so any line carrying fewer than 6 pipes is a continuation of the line above it.
-$rawLines = Get-Content $inPath
+$rawLines = Get-Content $inPath -Encoding UTF8
 $fixed = New-Object System.Collections.ArrayList
 $rejoined = 0
 foreach ($ln in $rawLines) {
@@ -254,7 +255,8 @@ if ($rejoined) { Write-Output ("build-aldi-regular: rejoined {0} line-wrapped re
 $tmp = Join-Path $env:TEMP ("aldi-capture-clean-" + $Date + ".csv")
 Set-Content -Path $tmp -Value $fixed.ToArray() -Encoding UTF8
 
-$raw = Import-Csv $tmp -Delimiter '|'
+$raw = Import-CaptureCsv -Path $tmp -Delimiter '|'
+if ($script:CaptureRepairCount -gt 0) { Write-Output ("  repaired $($script:CaptureRepairCount) mangled product name(s) on ingest (UTF-8 read as ANSI upstream)") }
 $res = Invoke-Build $raw $Date
 $rows = $res.rows
 if ($rows.Count -lt 1) { throw 'build-aldi-regular: capture produced ZERO priced rows - do not write an empty file over a good one' }
@@ -286,3 +288,4 @@ if ($res.rejects.Count) {
   Write-Output ("  {0} rejected -> aldi-rejects-$Date.json" -f $res.rejects.Count)
   foreach ($g in $why) { Write-Output ("     {0}x {1}" -f $g.Count, $g.Name) }
 }
+

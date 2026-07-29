@@ -50,6 +50,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\income\grocery' }
+. (Join-Path $root 'capture-lib.ps1')   # UTF-8 capture read + mojibake repair, shared by every builder
 
 # ---- lift the REAL pricing math out of the engine (it runs a pipeline on load, so we can't dot-source it) ----
 $engineSrc = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
@@ -399,7 +400,8 @@ if ($SelfTest) {
 # ---------------------------------------------------------------- build
 if (-not $In -or -not (Test-Path $In)) { throw "build-sams-deals: -In not found: $In" }
 if (-not $Date) { $Date = (Get-Date).ToString('yyyy-MM-dd') }
-$raw = Import-Csv $In -Delimiter '|'
+$raw = Import-CaptureCsv -Path $In -Delimiter '|'   # UTF-8 + repairs names mangled by an upstream ANSI read
+if ($script:CaptureRepairCount -gt 0) { Write-Output ("  repaired $($script:CaptureRepairCount) mangled product name(s) on ingest (UTF-8 read as ANSI upstream)") }
 $rows = New-Object System.Collections.Generic.List[object]
 $rejects = New-Object System.Collections.Generic.List[object]
 foreach ($r in $raw) {
@@ -439,3 +441,5 @@ if ($rejects.Count) {
   Write-Output "  reject reasons:"
   $rejects | Group-Object { ($_.reason -split ':')[0] -replace '\d+','N' } | Sort-Object Count -Descending | Select-Object -First 8 | ForEach-Object { Write-Output ("   {0,4}x {1}" -f $_.Count, $_.Name) }
 }
+
+
