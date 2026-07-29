@@ -15,15 +15,10 @@ $dow = [int]$asof.DayOfWeek                      # Sun=0 .. Wed=3 .. Sat=6
 $daysSinceWed = (($dow - 3) + 7) % 7             # 0 if today IS Wednesday
 $lastWed = $asof.AddDays(-$daysSinceWed).Date    # most recent Wednesday (or today if Wed)
 
-function NewestMtime($glob) { $f = Get-ChildItem $glob -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 1; if ($f) { return $f.LastWriteTime } else { return $null } }
-$feeds = [ordered]@{
-  "Baker's ad"       = (NewestMtime (Join-Path $OutDir 'bakers\bakers-deals-*.json'))
-  "Sam's"            = (NewestMtime (Join-Path $OutDir 'sams\sams-deals-*.json'))
-  "Baker's everyday" = (NewestMtime (Join-Path $OutDir 'regular\bakers-regular-*.json'))
-  "Hy-Vee everyday"  = (NewestMtime (Join-Path $OutDir 'regular\hyvee-regular-*.json'))
-  "Walmart everyday" = (NewestMtime (Join-Path $OutDir 'regular\walmart-regular-*.json'))
-  "Aldi everyday"    = (NewestMtime (Join-Path $OutDir 'regular\aldi-regular-*.json'))
-}
+# The feed list and the capture-date rule live in browser-feeds-lib.ps1, shared with check-ad-cycles.ps1's
+# missed-refresh alert. They used to be two copies and both were missing Fareway; see that file's header.
+. (Join-Path $PSScriptRoot 'browser-feeds-lib.ps1')
+$feeds = Get-BrowserFeedDates -OutDir $OutDir
 $stale = @()
 foreach ($k in $feeds.Keys) { $m = $feeds[$k]; if (($null -eq $m) -or ($m.Date -lt $lastWed)) { $stale += $k } }
 if ($stale.Count -eq 0) {
