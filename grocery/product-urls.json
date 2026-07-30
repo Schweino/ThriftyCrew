@@ -15301,14 +15301,6 @@
                                                  "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)",
                                                  "board_pu":  0.1693
                                              },
-                                    "Baker\u0027s":  {
-                                                         "url":  "https://www.bakersplus.com/p/private-selection-porcini-mushroom-truffle-with-aged-cheddar-macaroni-and-cheese/0001111005343",
-                                                         "name":  "Private Selection Porcini Mushroom Truffle with Aged Cheddar Macaroni and Cheese",
-                                                         "price":  2.99,
-                                                         "size":  "12 oz",
-                                                         "verified":  "2026-07-30",
-                                                         "board_pu":  0.2492
-                                                     },
                                     "Family Fare":  {
                                                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/mushrooms/our_family_mushrooms_baby_bella_sliced_8_oz/p/1564405684713576556",
                                                         "price":  3.49,
@@ -15337,7 +15329,14 @@
                                                     "price":  "$0.87",
                                                     "size":  "3.991 oz",
                                                     "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                                }
+                                                },
+                                    "Baker\u0027s":  {
+                                                         "url":  "https://www.bakersplus.com/p/kroger-sliced-white-mushrooms-big-deal-/0001111067494",
+                                                         "price":  "6",
+                                                         "size":  "24 oz",
+                                                         "name":  "Kroger Sliced White Mushrooms BIG DEAL!",
+                                                         "verified":  "2026-07-30 price-pull self-capture"
+                                                     }
                                 },
                   "mustard":  {
                                   "commodity":  "mustard",

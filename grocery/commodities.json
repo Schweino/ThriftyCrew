@@ -6664,7 +6664,10 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "tortelloni",
+                        "tortellini",
+                        "macaroni"
                     ]
     },
     {
@@ -10997,7 +11000,8 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "monster\\s+energy"
                     ]
     },
     {
@@ -13713,7 +13717,8 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\bbeans?\\b"
                     ]
     },
     {
@@ -38602,7 +38607,9 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\bmushroom\\b",
+                        "\\bsausage\\b"
                     ],
         "relax_global":  [
                              "\\bfrozen\\b"
