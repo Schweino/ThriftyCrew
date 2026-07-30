@@ -1239,14 +1239,6 @@
                                              "name":  "Appleton Farms Premium Sliced Bacon",
                                              "board_pu":  3.99
                                          },
-                                "Baker\u0027s":  {
-                                                     "url":  "https://www.bakersplus.com/p/private-selection-gruyere-and-bacon-white-cheddar-macaroni-and-cheese/0001111015155",
-                                                     "name":  "Private Selection Gruyere and Bacon White Cheddar Macaroni and Cheese",
-                                                     "price":  2.99,
-                                                     "size":  "12 oz",
-                                                     "verified":  "2026-07-29",
-                                                     "board_pu":  3.9867
-                                                 },
                                 "Family Fare":  {
                                                     "url":  "https://www.shopfamilyfare.com/shop/meat/bacon/chuck_wagon_bacon_smoked_ends_pieces_32_oz/p/1564405684705237744",
                                                     "price":  10.99,
@@ -3157,13 +3149,6 @@
                                                 "size":  "lb",
                                                 "verified":  "2026-07-27 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                             },
-                                 "Sam\u0027s Club":  {
-                                                         "url":  "https://www.samsclub.com/ip/13725451500",
-                                                         "name":  "Whirl Butter Alternative, 128 oz.",
-                                                         "price":  "$19.98",
-                                                         "size":  "128 fl oz",
-                                                         "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                     },
                                  "Walmart":  {
                                                  "url":  "https://www.walmart.com/ip/879148225",
                                                  "name":  "Great Value Sweet Cream Salted Butter Twin Pack, 16 oz Box, 8 Sticks, Slow Churned, Refrigerated",
@@ -6222,14 +6207,7 @@
                                                          "price":  "$17.88",
                                                          "size":  "43.5 oz",
                                                          "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                     },
-                                 "Walmart":  {
-                                                 "url":  "https://www.walmart.com/ip/19976870056",
-                                                 "name":  "NESTLE COFFEE MATE Half \u0026 Half Tubs (24x0.304floz) Box",
-                                                 "price":  "$3.76",
-                                                 "size":  "7.301 fl oz",
-                                                 "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                             }
+                                                     }
                              },
                   "coffee-creamer":  {
                                          "commodity":  "coffee-creamer",
@@ -16323,13 +16301,6 @@
                                                       "name":  "Fresh Peaches",
                                                       "board_pu":  2.99
                                                   },
-                                  "Sam\u0027s Club":  {
-                                                          "url":  "https://www.samsclub.com/ip/1111101741",
-                                                          "name":  "Caress Silkening Daily Silk Beauty Bar, White Peach \u0026 Orange Blossom, 3.75 oz., 16 ct.",
-                                                          "price":  "$7.98",
-                                                          "size":  "60 oz",
-                                                          "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                      },
                                   "Walmart":  {
                                                   "url":  "https://www.walmart.com/ip/141418923",
                                                   "name":  "Peaches, 2lb Bag",
@@ -21711,13 +21682,6 @@
                                                            "verified":  "2026-07-23 DERIVED from the price row (same record the board priced)",
                                                            "board_pu":  1.6567
                                                        },
-                                   "Walmart":  {
-                                                   "url":  "https://www.walmart.com/ip/110328607",
-                                                   "name":  "Pomi Chopped Tomatoes, 26.46 oz, 1/4 Cup per serving, 12 servings per Container",
-                                                   "price":  "$3.52",
-                                                   "size":  "26.46 oz",
-                                                   "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                               },
                                    "Aldi":  {
                                                 "url":  "https://www.aldi.us/store/aldi/products/17763870-tomatoes-roma-per-lb",
                                                 "name":  "Tomatoes Roma Per LB",
