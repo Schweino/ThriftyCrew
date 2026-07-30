@@ -775,6 +775,23 @@ else { Bad 'check-ad-cycles blind email body regressed - a blackout would email 
 # missed stamp re-opened the gate into a silent daily 658 MB crash loop (post-batch review 2026-07-30).
 if ($cacSrc -match "run-test-guards-weekly\.ps1'\)\s*2>&1") { Bad 'check-ad-cycles captures run-test-guards-weekly with 2>&1 under EAP=Stop again - a crashing suite throws past the stamp and alert into a silent daily retry loop' }
 else { Ok 'check-ad-cycles weekly test-guards capture leaves stderr unredirected (crash still reaches the alert path)' }
+# (k1d) AN AUDIT THAT DIED ON ITS OWN FIRST FINDING (2026-07-30). audit-everyday-mismatch built each bug
+# record with price=[double]$e.price. 579 of the 2,987 stored link prices are strings like "$1.88", [double]
+# on one of those throws, and it threw INSIDE the record for the first mismatch found - under EAP=Stop, so the
+# audit reported nothing whenever it had anything to report. Clean board: silent. Board with bugs: silent. The
+# price was already parsed safely two lines earlier into $sp. With the fix it checks 2,427 everyday cells and
+# finds 43 real mismatches (brand-swapped links inside the 0.32 factor tolerance, which name-drift's token test
+# passes because board and link share the commodity word). Deliberately NOT wired into any gate: 43 findings on
+# a green board is a backlog to work, not a daily warn.
+$aemSrc = Get-Content (Join-Path $root 'audit-everyday-mismatch.ps1') -Raw
+$aemThrows = $false
+try { $null = [double]'$1.88' } catch { $aemThrows = $true }
+if ($aemThrows) { Ok 'PS still throws casting a "$1.88" price string to [double] - the founding hazard is real' }
+else { Bad 'a "$1.88" string now casts cleanly to [double]; re-derive this fixture' }
+if ($aemSrc -match 'price\s*=\s*\[double\]\$e\.price') { Bad 'audit-everyday-mismatch casts the raw link price again - it will die on the first mismatch it finds and report nothing' }
+else { Ok 'audit-everyday-mismatch records the already-parsed price (it can survive its own findings)' }
+if ($aemSrc -notmatch 'price\s*=\s*\$sp;') { Bad 'audit-everyday-mismatch no longer records $sp - check it is not re-parsing the raw string somewhere else' }
+else { Ok 'audit-everyday-mismatch reuses $sp, the price it already parsed safely' }
 # (k1a) A GUARD THAT CANNOT FINISH, AND A CALLER THAT CANNOT NOTICE (2026-07-30). audit-ff-carry.ps1 wrapped a
 # System.Collections.Generic.List[object] in @( ) to build its report - which throws "ArgumentException:
 # Argument types do not match" in Windows PowerShell 5.1 (it is fine around a List[string], and fine around the

@@ -56,7 +56,11 @@ foreach ($row in $cmp.comparison) {
         id=$id; store=$store; unit=[string]$row.unit
         board=[math]::Round($boardPu,4); link=[math]::Round($linkPu,4)
         ratio=[math]::Round($linkPu/$boardPu,2)
-        price=[double]$e.price; size=[string]$e.size
+        # $sp, NOT [double]$e.price. 579 of the 2,987 stored link prices are strings like "$1.88", and
+        # [double] on one of those throws - inside the record for the FIRST bug found, under EAP=Stop, so
+        # this audit died on its own first finding and reported nothing at all. $sp is that same price
+        # already parsed safely at the top of this iteration, so there is nothing to re-derive here.
+        price=$sp; size=[string]$e.size
         boardItem=[string]$s.item; linkItem=[string]$e.name
       })
     }

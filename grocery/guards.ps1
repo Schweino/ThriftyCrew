@@ -267,7 +267,21 @@ foreach ($g in @(
   # run by construction (out\comparison-*.json is gitignored), so failing on it would turn a blind spot into a
   # missed board on exactly the days the local run was already missed - the cry-wolf outcome that matters most
   # here. Capturing is harmless for the other delegated audits; only exit 3 is special-cased.
-  $o = & powershell -NoProfile -ExecutionPolicy Bypass -File $p 2>$null
+  # NO STDERR REDIRECT HERE, DELIBERATELY (2026-07-30). In PS 5.1, redirecting a NATIVE child's stderr
+  # wraps its first line in an ErrorRecord, and this file runs under $ErrorActionPreference='Stop', which
+  # makes that write TERMINATING. This is the ONE delegate invocation that is not inside a try/catch, so
+  # ANY audit printing a single benign diagnostic line killed guards RIGHT HERE: the delegated HARD FAIL
+  # below never printed, the exit-3 warn above it never printed, and guards 3 through 12 never ran at all.
+  # Reproduced directly: a child that writes one line to stderr and exits 0 makes the caller throw at the
+  # call site with 2>$null, and run cleanly to the end without it.
+  # Fail-closed on the exit code (check-ad-cycles blocks on -ne 0), but blind on everything after this
+  # point, and run-test-guards-weekly's baseline pre-check reads that exit as 'already red' and stops
+  # proving anything at all.
+  # Same trap, same decision, already written down twice in test-guards.ps1 (RunGuardsOut, CheckWarn) and
+  # already asserted for check-ad-cycles by test-auditors ('leaves stderr unredirected'). This call was the
+  # one site never converted. The child's stderr now passes through to the console; measured today, all
+  # five delegated audits emit zero stderr bytes, so nothing new appears on a healthy run.
+  $o = & powershell -NoProfile -ExecutionPolicy Bypass -File $p
   if ($LASTEXITCODE -eq 3) { [void]$warn.Add($g.n + ' could NOT be evaluated, so it proves nothing this run: ' + ((@($o) | Where-Object { $_ }) -join ' ')) }
   elseif ($LASTEXITCODE -ne 0) { [void]$fail.Add(("HARD FAIL: " + $g.n + " (see " + $g.f + ")")) }
   else { Say ("  ok    " + $g.n) }

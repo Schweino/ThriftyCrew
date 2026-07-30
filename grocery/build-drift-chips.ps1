@@ -32,22 +32,55 @@ $tf = Join-Path $root 'commodity-search.json'
 if (Test-Path $tf) { foreach ($p in (Get-Content $tf -Raw | ConvertFrom-Json).terms.PSObject.Properties) { $terms[$p.Name] = [string]$p.Value } }
 
 $cell = @{}
-foreach ($r in $cmp) { foreach ($s in $r.stores) { $cell[([string]$r.id + '|' + [string]$s.store)] = @{ item = [string]$s.item; size = [string]$s.size_text; unit = [string]$r.unit } } }
+# BOTH BOARDS, AND THE FLAG'S OWN RECORD IS THE SOURCE OF `match`. This map was built from the STAPLE
+# comparison only, so a flag whose id was not on the staple board hit `continue` below and vanished with no
+# output of any kind. audit-name-drift started scanning out\recipe-board.json too (2026-07-30, 3d25a939) and
+# immediately produced 3 flags on recipe-board-only ids - pineapple-chunks/Hy-Vee, mozzarella-cheese/Family
+# Fare, cheddar-cheese/Family Fare - and this script silently dropped all three: 12 flags in, 9 chips out,
+# no re-resolve worklist for the wrong links, and nothing printed to say so. MEASURED 2026-07-30 on the live
+# board. `match` now comes from the FLAG (board_item) rather than from a re-read of the board: audit-name-drift
+# already recorded the exact string it judged the link against, and recipe-overlay.ps1 rewrites
+# recipe-board.json every morning, so re-deriving it here is a second, drifting copy of the producer's own
+# record - the same lesson guards.ps1 guard 3 learned when it stopped re-deriving name-drift's scope. The board
+# map survives only to enrich `size`, and it now reads `size` with a `size_text` fallback because no board cell
+# has ever carried a `size_text` property: every chip emitted to date shipped size:"".
+foreach ($r in $cmp) { foreach ($s in $r.stores) { $cell[([string]$r.id + '|' + [string]$s.store)] = @{ item = [string]$s.item; size = $(if ([string]$s.size) { [string]$s.size } else { [string]$s.size_text }); unit = [string]$r.unit } } }
+$rbF = Join-Path $root 'out\recipe-board.json'
+if (Test-Path $rbF) {
+  foreach ($rr in @((Get-Content $rbF -Raw | ConvertFrom-Json).comparison)) {
+    foreach ($rs in $rr.stores) {
+      $rk = [string]$rr.id + '|' + [string]$rs.store
+      if ($cell.ContainsKey($rk)) { continue }   # the staple row owns a shared id - the same collision rule audit-name-drift applies
+      $cell[$rk] = @{ item = [string]$rs.item; size = [string]$rs.size; unit = [string]$rr.unit }
+    }
+  }
+}
 
-$byStore = @{}
+$byStore = @{}; $unmapped = New-Object System.Collections.Generic.List[string]
 foreach ($f in $drift) {
   $st = [string]$f.store
   if ($Store -and $st -ne $Store) { continue }
   $k = [string]$f.id + '|' + $st
-  if (-not $cell.ContainsKey($k)) { continue }
+  # NEVER A SILENT DROP. The flag carries the board product name audit-name-drift compared; use it. Only a
+  # flag with NO name at all is unchippable (nothing to re-resolve it BY), and that case is REPORTED below.
+  $match = [string]$f.board_item
+  if (-not $match -and $cell.ContainsKey($k)) { $match = [string]$cell[$k].item }
+  if (-not $match) { [void]$unmapped.Add($k); continue }
+  $sz = if ($cell.ContainsKey($k)) { [string]$cell[$k].size } else { '' }
   $q = if ($terms.ContainsKey([string]$f.id)) { $terms[[string]$f.id] } else { ([string]$f.id) -replace '-', ' ' }
   if (-not $byStore.ContainsKey($st)) { $byStore[$st] = New-Object System.Collections.Generic.List[object] }
-  $byStore[$st].Add([pscustomobject]@{ id = [string]$f.id; q = $q; match = $cell[$k].item; size = $cell[$k].size; reason = [string]$f.reason; was = [string]$f.link_name })
+  $byStore[$st].Add([pscustomobject]@{ id = [string]$f.id; q = $q; match = $match; size = $sz; reason = [string]$f.reason; was = [string]$f.link_name })
 }
 
 $dir = Join-Path $root 'out\url-inputs'
 if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Force -Path $dir | Out-Null }
-Write-Output ("build-drift-chips: " + $drift.Count + " drifted link(s) across " + $byStore.Keys.Count + " store(s)")
+$emitted = 0; foreach ($bk in $byStore.Keys) { $emitted += $byStore[$bk].Count }
+Write-Output ("build-drift-chips: " + $drift.Count + " drifted link(s) -> " + $emitted + " chip(s) across " + $byStore.Keys.Count + " store(s)")
+if ($unmapped.Count -gt 0) { Write-Output ("  UNCHIPPABLE (" + $unmapped.Count + "): name-drift flagged these but recorded no board product name, so there is nothing to re-resolve them BY. They get NO worklist row and need a hand look: " + (($unmapped | Sort-Object) -join ', ')) }
+if (-not $Store -and $drift.Count -gt 0 -and $emitted -eq 0) {
+  Write-Output '  build-drift-chips: COULD NOT EVALUATE - name-drift reported flags and this produced ZERO chips. That is not "nothing to re-resolve", it is a scope break (check out\name-drift.json flag shape).'
+  exit 3
+}
 Write-Output ''
 foreach ($st in ($byStore.Keys | Sort-Object)) {
   $rows = $byStore[$st]
