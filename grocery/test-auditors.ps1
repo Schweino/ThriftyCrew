@@ -776,6 +776,109 @@ $pdpSrc = Get-Content (Join-Path $root 'publish-deals-page.ps1') -Raw
 if ($pdpSrc -match 'price-mode: BLIND' -and $pdpSrc -match 'name-drift: BLIND' -and $pdpSrc -match 'match-soundness: BLIND') { Ok 'publish-deals-page surfaces exit 3 from all three of its direct audit calls' }
 else { Bad 'publish-deals-page lost a blind surface line - a blind audit falls through silently during publish' }
 
+# ---------------------------------------------------------------- (l) review-flag re-arm + ack expiry
+# The block in check-ad-cycles.ps1 that decides whether a price flag pages has no entry point of its own,
+# so this extracts its two sentinel-delimited regions and runs THE REAL SOURCE against frozen synthetic
+# state. Nothing about the expected outcome is hard-coded except the outcome, so reverting the logic breaks
+# these checks. Founding bugs, all three measured on the live files on 2026-07-30:
+#   1. (2026-07-29) last_seen was refreshed every run, so the novelty gap was always 0: an open flag paged
+#      exactly ONCE, ever, and a genuine parse bug that was flagged and never fixed simply went quiet.
+#   2. an EXPIRED ack did not re-arm the flag - it fell back onto the parallel 14-day clock, so any ack
+#      shorter than 14 days was silently rounded up (the 7 MULTIBUY acks expired 08-06 and paged 08-13).
+#   3. -NoAlert stamped last_alerted on flags it never mailed; the GitHub Actions backup runs -NoAlert and
+#      commits the tracked state file back, so it consumed re-arms nobody was ever told about.
+$rfSrc = [IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))
+# [regex]::Match into a LOCAL - $Matches is global and gets clobbered.
+$rfD = [regex]::Match($rfSrc, '(?s)<<REVIEW-DECISION-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<REVIEW-DECISION-END>>')
+$rfS = [regex]::Match($rfSrc, '(?s)<<REVIEW-STAMP-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<REVIEW-STAMP-END>>')
+if (-not $rfD.Success -or -not $rfS.Success) {
+  Bad 'review-flag re-arm regions are GONE from check-ad-cycles.ps1 - this check EXAMINED NOTHING, the re-arm logic is untested'
+} else {
+  $RF_DECISION = $rfD.Groups[1].Value
+  $RF_STAMP    = $rfS.Groups[1].Value
+  # FROZEN synthetic state - never regenerated from out\alerted-flags.json, the bug lives in these dates.
+  $rfOpen  = 'SANITY|FIXTURE Widget|outlier'      # open every day since T0-30, never re-paged
+  $rfAck   = 'MULTIBUY|FIXTURE Store|fx-2'        # acked until T0+3
+  $rfFresh = 'SANITY|FIXTURE Fresh|outlier'       # paged yesterday - must stay quiet
+  $rfT0 = [datetime]'2026-03-02'
+  $rfAckDoc = [pscustomobject]@{ acks = @([pscustomobject]@{ key = $rfAck; reason = 'frozen fixture'; expires = $rfT0.AddDays(3).ToString('yyyy-MM-dd') }) }
+  function RfNewState {
+    $h = @{}
+    $h[$rfOpen]  = [pscustomobject]@{ first_seen = $rfT0.AddDays(-30).ToString('s'); last_seen = $rfT0.AddDays(-1).ToString('s'); last_detail = 'x' }
+    # last_alerted = YESTERDAY on purpose: this is the discriminating case. The parallel 14-day clock is
+    # nowhere near elapsing when the ack runs out on day 4, so if the ack expiry is not itself the re-arm
+    # point the flag stays silent until day 13. Exactly the shape of the 7 live MULTIBUY acks on 2026-07-30
+    # (first_seen 07-29, ack expires 08-06: an 8-day gap against a 14-day clock). A 30-day-old key here
+    # would pass whether or not the fix is present, which is a fixture that tests nothing.
+    $h[$rfAck]   = [pscustomobject]@{ first_seen = $rfT0.AddDays(-1).ToString('s'); last_seen = $rfT0.AddDays(-1).ToString('s'); last_detail = 'x'; last_alerted = $rfT0.AddDays(-1).ToString('s') }
+    $h[$rfFresh] = [pscustomobject]@{ first_seen = $rfT0.AddDays(-1).ToString('s'); last_seen = $rfT0.AddDays(-1).ToString('s'); last_detail = 'x'; last_alerted = $rfT0.AddDays(-1).ToString('s') }
+    return $h
+  }
+  # one simulated day of the REAL decision + stamp regions. $script:RF_NOW shadows Get-Date inside the scope.
+  function RfRunDay([datetime]$now, [hashtable]$fstate, [bool]$noAlert, [bool]$sendFails) {
+    $script:RF_NOW = $now
+    function Get-Date { return $script:RF_NOW }
+    function Log([string]$m) { }
+    $NoAlert = $noAlert
+    $flagKeys  = @($rfOpen, $rfAck, $rfFresh)          # all three flagged EVERY day - the backlog scenario
+    $flagParts = @($flagKeys | ForEach-Object { $_ + '|detail' })
+    $REARM_DAYS = 14
+    $ackOpen = @{}; $ackUntil = @{}; $ackExpired = 0; $ackHit = 0; $reArmed = 0; $ackReArmed = 0
+    foreach ($a in @($rfAckDoc.acks)) {
+      if (-not $a.key) { continue }
+      $exp = $null; try { $exp = [datetime]$a.expires } catch { $exp = $null }
+      if ($null -ne $exp -and $exp.Date -ge $now.Date) { $ackOpen[[string]$a.key] = $true }
+      else { $ackExpired++; if ($null -ne $exp) { $ackUntil[[string]$a.key] = $exp.Date } }
+    }
+    $newIdx = @()
+    Invoke-Expression $RF_DECISION
+    $due = @($newIdx | ForEach-Object { [string]$flagKeys[$_] })
+    if ($sendFails) { $newIdx = @() }                  # mirrors the existing send-failure guard
+    Invoke-Expression $RF_STAMP
+    return [pscustomobject]@{ due = $due; stamped = @($fstate.Keys | Where-Object { $fstate[$_].last_alerted -eq $now.ToString('s') }) }
+  }
+  # MUST FIRE 1: a flag flagged on CONSECUTIVE days must eventually page again (the 2026-07-29 bug).
+  $rfSt = RfNewState; $rfSaw = $false
+  for ($rfD2 = 0; $rfD2 -lt 20; $rfD2++) { if ((RfRunDay $rfT0.AddDays($rfD2) $rfSt $false $false).due -contains $rfOpen) { $rfSaw = $true; break } }
+  if ($rfSaw) { Ok 'review flags: an open flag present every day RE-ARMS (the never-re-arms bug)' }
+  else { Bad 'review flags: a flag open on 20 consecutive days NEVER re-armed - it pages once and goes quiet forever' }
+  # CLEAN TWIN 1: no cry-wolf. Window is 12 days, INSIDE the 14-day re-arm - a flag paged yesterday is
+  # legitimately due again on day 13, so a 20-day window would call correct behaviour a failure.
+  $rfSt = RfNewState; $rfFreshHits = 0; $rfOpenHits = 0
+  for ($rfD2 = 0; $rfD2 -lt 12; $rfD2++) { $rfR = RfRunDay $rfT0.AddDays($rfD2) $rfSt $false $false; if ($rfR.due -contains $rfFresh) { $rfFreshHits++ }; if ($rfR.due -contains $rfOpen) { $rfOpenHits++ } }
+  if ($rfFreshHits -eq 0) { Ok 'review flags: a flag paged yesterday stays SILENT for its whole re-arm window' }
+  else { Bad ('review flags: a freshly-paged flag re-paged ' + $rfFreshHits + ' time(s) inside its 14-day window') }
+  if ($rfOpenHits -eq 1) { Ok 'review flags: a re-armed flag pages ONCE, not daily' }
+  else { Bad ('review flags: re-armed flag paged ' + $rfOpenHits + ' time(s) in 12 days - expected exactly 1') }
+  # MUST FIRE 2: the ack's expiry is the re-arm moment.
+  $rfSt = RfNewState; $rfAckDue = @()
+  for ($rfD2 = 0; $rfD2 -lt 12; $rfD2++) { if ((RfRunDay $rfT0.AddDays($rfD2) $rfSt $false $false).due -contains $rfAck) { $rfAckDue += $rfD2 } }
+  if (@($rfAckDue | Where-Object { $_ -le 3 }).Count -eq 0) { Ok 'review flags: an acked flag stays SILENT through its expiry date' }
+  else { Bad ('review flags: an acked flag paged while its ack was still open, on day(s) ' + (($rfAckDue | Where-Object { $_ -le 3 }) -join ',')) }
+  if ($rfAckDue -contains 4) { Ok 'review flags: an acked flag RE-ARMS the day after its ack expires' }
+  else { Bad ('review flags: ack expiry did not re-arm the flag - paged on day(s) [' + ($rfAckDue -join ',') + '] instead of day 4, so the expiry date is decorative and short acks are silently rounded up to the 14-day clock') }
+  if (@($rfAckDue).Count -le 2) { Ok 'review flags: an expired ack re-arms ONCE, not every day after expiry' }
+  else { Bad ('review flags: an expired ack re-paged on ' + @($rfAckDue).Count + ' days - that is a daily spam loop') }
+  # MUST FIRE 3: an alert nobody received must not consume the re-arm (.github\workflows\daily.yml -NoAlert).
+  $rfSt = RfNewState
+  $null = RfRunDay $rfT0.AddDays(0) $rfSt $true $false
+  $rfStamped = @($rfSt.Keys | Where-Object { $rfSt[$_].last_alerted -eq $rfT0.ToString('s') })
+  if ($rfStamped.Count -eq 0) { Ok 'review flags: a -NoAlert run stamps NO last_alerted (the cloud backup cannot consume a re-arm)' }
+  else { Bad ('review flags: a -NoAlert run stamped last_alerted on ' + $rfStamped.Count + ' key(s) it never mailed: ' + ($rfStamped -join ' ; ')) }
+  $rfR = RfRunDay $rfT0.AddDays(1) $rfSt $false $false
+  if ($rfR.due -contains $rfOpen) { Ok 'review flags: a flag suppressed by -NoAlert is still DUE on the next alerting run' }
+  else { Bad 'review flags: a flag went through a -NoAlert run and is no longer due - the page was silently swallowed' }
+  # CLEAN TWIN 3: a real send still marks the flag delivered, and a FAILED send still does not.
+  $rfSt = RfNewState
+  $rfR = RfRunDay $rfT0.AddDays(0) $rfSt $false $false
+  if ($rfR.stamped -contains $rfOpen) { Ok 'review flags: a real alerting run DOES stamp last_alerted' }
+  else { Bad 'review flags: an alerting run failed to stamp last_alerted - flags would re-page forever' }
+  $rfSt = RfNewState
+  $null = RfRunDay $rfT0.AddDays(0) $rfSt $false $true
+  if (@($rfSt.Keys | Where-Object { $rfSt[$_].last_alerted -eq $rfT0.ToString('s') }).Count -eq 0) { Ok 'review flags: a FAILED send stamps nothing (existing guard still intact)' }
+  else { Bad 'review flags: a failed send stamped last_alerted - the alert is lost' }
+}
+
 # ---------------------------------------------------------------- publish-deals-page CHANGE GATE
 # The MUST-FIRE / CLEAN-TWIN pair lives in that script's own -SelfTest (frozen synthetic signatures, never
 # regenerated from the live board). Founding bug 2026-07-29: 13 invocations pushed the SAME week's board to

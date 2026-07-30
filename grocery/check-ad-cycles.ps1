@@ -568,20 +568,28 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # on the strength of a typo is exactly the failure this whole block exists to prevent. The estate already
       # works this way for coverage (coverage-ack.json), which re-arms on expiry.
       $REARM_DAYS = 14
-      $ackOpen = @{}; $ackExpired = 0; $ackHit = 0; $reArmed = 0
+      $ackOpen = @{}; $ackUntil = @{}; $ackExpired = 0; $ackHit = 0; $reArmed = 0; $ackReArmed = 0
       $ackFile = Join-Path $OutDir 'review-ack.json'
       if (Test-Path $ackFile) {
         try {
           foreach ($a in @((Get-Content $ackFile -Raw | ConvertFrom-Json).acks)) {
             if (-not $a.key) { continue }
             $exp = $null; try { $exp = [datetime]$a.expires } catch { $exp = $null }
-            if ($null -ne $exp -and $exp.Date -ge (Get-Date).Date) { $ackOpen[[string]$a.key] = $true } else { $ackExpired++ }
+            if ($null -ne $exp -and $exp.Date -ge (Get-Date).Date) { $ackOpen[[string]$a.key] = $true }
+            else {
+              $ackExpired++
+              # A DATED ack that has run out is a RE-ARM POINT, not just an absent ack. Undated/unparseable
+              # acks get no date and fall through to the 14-day clock: using "now" for them would re-page
+              # every single day forever, which is the cry-wolf this block exists to prevent.
+              if ($null -ne $exp) { $ackUntil[[string]$a.key] = $exp.Date }
+            }
           }
         } catch { Log ('review-ack.json unreadable - treating every flag as unacknowledged: ' + $_.Exception.Message) }
       }
       if ($flagParts.Count -gt 0) {
         Log ("REVIEW FLAGS: " + $flagParts.Count + " -> " + (($flagParts | Select-Object -First 4) -join ' ; '))
         $newIdx = @()
+        # <<REVIEW-DECISION-BEGIN>> test-auditors.ps1 extracts this region and runs it against frozen state.
         for ($fi = 0; $fi -lt $flagParts.Count; $fi++) {
           $k = if ($fi -lt $flagKeys.Count) { [string]$flagKeys[$fi] } else { [string]$flagParts[$fi] }
           $isNew = $true
@@ -606,20 +614,32 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
               # stop. first_seen is when the key was first recorded and therefore first paged, so it is an
               # honest clock for keys created before the field existed: they re-arm 14 days after they
               # appeared, not all at once tonight.
-              $la = $null
-              try { if ($fstate[$k].last_alerted) { $la = ((Get-Date) - [datetime]$fstate[$k].last_alerted).TotalDays } } catch { $la = $null }
-              if ($null -eq $la) { try { $la = ((Get-Date) - [datetime]$fstate[$k].first_seen).TotalDays } catch { $la = $null } }
-              if ($null -eq $la) { $isNew = $true }                                  # no usable clock -> fail OPEN
-              elseif ($la -ge $REARM_DAYS) { $isNew = $true; $reArmed++ }            # open and ignored too long
+              # Kept as a DATE, not a day count, because the ack expiry below is a date and the two must be
+              # comparable: an ack that ran out yesterday has to out-rank a 14-day clock that has not.
+              $lastPage = $null
+              try { if ($fstate[$k].last_alerted) { $lastPage = [datetime]$fstate[$k].last_alerted } } catch { $lastPage = $null }
+              if ($null -eq $lastPage) { try { $lastPage = [datetime]$fstate[$k].first_seen } catch { $lastPage = $null } }
+              if ($null -eq $lastPage) { $isNew = $true }                            # no usable clock -> fail OPEN
+              # THE ACK'S OWN EXPIRY IS THE RE-ARM MOMENT. Without this the expiry date is decorative: the
+              # flag drops back onto the parallel 14-day clock, which has been ticking the whole time the ack
+              # was open, so any ack SHORTER than 14 days is silently rounded up to 14. Measured 2026-07-30 on
+              # the live files: the 7 MULTIBUY acks expire 08-06 and the flags stay silent 08-07..08-12,
+              # paging only on 08-13 - six days of silence nobody asked for. review-ack.json tells the reader
+              # "keep expiries short (weeks, not months): the expiry is the whole point"; this makes that true.
+              # Fires ONCE: the page stamps last_alerted past the expiry date, so the next run falls through.
+              elseif ($ackUntil.ContainsKey($k) -and $lastPage.Date -le $ackUntil[$k]) { $isNew = $true; $ackReArmed++ }
+              elseif (((Get-Date) - $lastPage).TotalDays -ge $REARM_DAYS) { $isNew = $true; $reArmed++ }
               else { $isNew = $false }
             }
           }
           if ($isNew) { $newIdx += $fi }
         }
+        # <<REVIEW-DECISION-END>>
         $stillOpen = $flagParts.Count - $newIdx.Count
         $extra = ''
         if ($ackHit)     { $extra += ", $ackHit acknowledged" }
         if ($reArmed)    { $extra += ", $reArmed RE-ARMED after $REARM_DAYS days open" }
+        if ($ackReArmed) { $extra += ", $ackReArmed RE-ARMED the day their ack expired" }
         if ($ackExpired) { $extra += ", $ackExpired ack(s) EXPIRED" }
         $summary += ("REVIEW    $($flagParts.Count) price flag(s) on the board ($($newIdx.Count) new, $stillOpen already seen$extra) - see guards-/flagged- json")
         if ($newIdx.Count -gt 0 -and -not $NoAlert) {
@@ -630,6 +650,19 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           if ($LASTEXITCODE -eq 0) { Log ("review-flag alert sent (" + $newIdx.Count + " new of " + $flagParts.Count + ")") }
           else { Log 'review-flag alert FAILED to send (will retry next run)'; $newIdx = @() }   # do not mark as seen if it never sent
         }
+        # <<REVIEW-STAMP-BEGIN>> test-auditors.ps1 extracts this region and runs it against frozen state;
+        # it makes no external calls, so it is the behavioural self-test for a block with no entry point.
+        # AN ALERT NOBODY RECEIVED MUST NOT CONSUME THE RE-ARM (2026-07-30). Exactly the situation the
+        # send-failure line above already handles, and it was missed one case over. The GitHub Actions daily
+        # backup runs this script as `check-ad-cycles.ps1 -NoAlert` (.github\workflows\daily.yml line 79) and
+        # then `git add -A` commits the result; out\alerted-flags.json is TRACKED (it is not in the
+        # /grocery/out/ ignore list) and the commit step rebases -X theirs, so the runner's copy wins and
+        # comes back down to this machine. Without this line, every flag that came DUE on a day the cloud
+        # backup ran was stamped last_alerted, restarting the 14-day clock, while no mail was ever sent -
+        # and the cloud only runs on the days Brad's machine was off, which are the days the mail matters
+        # most. That is this block's own founding bug one level up: a clock advanced by something that is
+        # not a page. -NoAlert must leave the flag DUE, not mark it delivered.
+        if ($NoAlert -and $newIdx.Count -gt 0) { Log ("review-flag alert SUPPRESSED by -NoAlert (" + $newIdx.Count + " due) - left DUE so the next alerting run pages"); $newIdx = @() }
         # mark everything currently flagged as seen (only the ones we actually alerted on get first_seen)
         $nowS = (Get-Date).ToString('s')
         # last_alerted is the clock the re-arm above reads, so it must be stamped ONLY on keys this run
@@ -648,6 +681,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
             else { $fstate[$k] | Add-Member -NotePropertyName last_alerted -NotePropertyValue $nowS -Force }
           }
         }
+        # <<REVIEW-STAMP-END>>
       }
       # prune anything unseen for 30 days so the state file cannot grow forever
       $cutoff = (Get-Date).AddDays(-30)
