@@ -101,6 +101,32 @@ if ($last -eq $today -and $env:SMP_FORCE -ne '1') {
   exit 0
 }
 
+# ---- GATE 2: is the WEEKLY browser refresh in flight? (2026-07-30) -------------------------------
+# Measured 2026-07-29: this job pulled at 08:31:06 and ran to 09:17:48 (46m42s) while the weekly agent's
+# -Phase publish ran 08:46:24-08:51:39 on the same out\ files, writing verified-2026-07-29.json and
+# PUBLISHING the live board. This job then graded that board with its own guards (09:14:18 GUARDS FAILED),
+# started a link auto-repair and republish on top of it (09:14:23), and threw all 46 minutes away.
+# GATE 1 above cannot see the weekly at all: the weekly ends in push-data.ps1, which commits under Brad's
+# own identity, so "the bot committed today" is false the whole time the weekly is running.
+# STANDING DOWN IS NOT A LOST DAY. With no bot commit today, daily.yml's 16:00 UTC backup finds no bot
+# commit in its 16h window and runs the full pipeline in a clean clone (feed, recipes, alerts, publish)
+# hours after the weekly is done - the exact case that backup exists for. It costs cloud minutes, not data.
+# THE LOCK EXPIRES ON ITS OWN TERMS: weekly-run-lock.ps1 stamps expires INTO the file and reads it back, so
+# a weekly that crashes costs at most one daily tick and never disables this job. exit 3 = could-not-read,
+# and we run anyway (fail open). SMP_FORCE=1 overrides, same as GATE 1.
+$wl = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'weekly-run-lock.ps1') 2>&1 | ForEach-Object { [string]$_ }
+$wlRc = $LASTEXITCODE
+@($wl) | ForEach-Object { Log ("weekly-lock: " + $_) }
+if ($wlRc -eq 2 -and $env:SMP_FORCE -ne '1') {
+  Log "STAND DOWN: the weekly browser refresh holds grocery\out. Not starting a second full pipeline on the same files; the 16:00 UTC cloud backup covers today."
+  exit 0
+}
+if ($wlRc -eq 0 -and (@($wl) -match 'STALE')) {
+  # debris from a weekly that never reached a successful -Phase links: reported above, now swept, so the
+  # same dead lock is not re-reported every morning for the rest of its life.
+  & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'weekly-run-lock.ps1') -Release 2>&1 | ForEach-Object { Log ("weekly-lock: " + $_) }
+}
+
 # ---- SYNC: build on the latest (the browser agents push their data before 8:30) ------------------
 Log "start: syncing repo"
 git -C $repo pull --rebase --autostash origin main 2>&1 | ForEach-Object { Log ("pull: " + $_) }

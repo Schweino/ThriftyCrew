@@ -53,6 +53,18 @@ function RunChild([string]$file,[object[]]$childArgs,[int]$keep=2,[string]$tag='
 }
 
 try {
+  # ---- HOLD THE WEEKLY LOCK FOR THE WHOLE RUN (2026-07-30). On 2026-07-29 the 8:30 daily job started 29
+  # minutes after this script's 08:01:34 links phase and 16 minutes before its 08:46:24 publish phase - i.e.
+  # squarely inside the run, in a judgment gap - and spent 46m42s recomputing and republishing the same board.
+  # So EVERY phase takes the lock, and NOTHING here ever hands it back. That asymmetry is deliberate and
+  # measured: the same run executed three SUCCESSFUL links phases (07:55:21, 07:58:07, 08:01:34), each ending
+  # in push-data, and then published again at 08:46:24. Releasing after "the last step" would therefore have
+  # freed grocery\out 28.5 minutes before the daily fired - the exact hole this lock exists to close. The
+  # agent iterates; no phase reliably means done. The lock expires on its own instead: weekly-run-lock.ps1
+  # stamps an expiry into the file (4h, vs a measured 187.5-min worst-case in-run pause), and the daily sweeps
+  # an expired one after reporting it. -NonFatal on purpose - a lock we cannot write must never stop the
+  # week's prices.
+  $null = RunChild (Join-Path $root 'weekly-run-lock.ps1') @('-Acquire', '-Phase', $Phase) 1 'lock' -NonFatal
   switch ($Phase) {
     'compare' {
       $cmpArgs = @('-MinStores','1')

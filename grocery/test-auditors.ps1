@@ -959,5 +959,76 @@ else {
 }
 Remove-Item $fxMs -Recurse -Force -ErrorAction SilentlyContinue
 
+# ---- (l) the weekly-run lock (added 2026-07-30) --------------------------------------------------------
+# FOUNDING BUG: on 2026-07-29 the 8:30 daily job ran a full 46m42s cycle (ad-cycle-log 08:31:06 ->
+# 09:17:48) INSIDE the weekly run - weekly-post-capture's -Phase publish wrote out\verified-2026-07-29.json
+# and published the live board at 08:46:24-08:51:39, and the daily then graded that board, hard-failed, and
+# auto-repaired links on top of it at 09:14:23. Both halves are the requirement: a live weekly run must
+# stand the daily down, and a lock the weekly never released must NOT - a stale lock that silently disables
+# the daily forever is strictly worse than the waste it prevents. Locks here are written by the REAL
+# -Acquire path at the REAL phase timestamps; a hand-written fixture lock would pass whether or not the
+# writer still stamps an expiry, and - worse - would pass on a weekly that hands the tree back mid-run.
+$fxWl = NewFxDir 'weekly-lock'
+$wlF  = Join-Path $fxWl 'weekly-run.lock'
+# MUST STAND DOWN: the founding run, replayed. These are the actual phase START times of 2026-07-29 from
+# out\logs\weekly-post-capture-2026-07.log. The daily fires at 08:30:01, between the 08:00:26 links phase
+# and the 08:46:24 publish phase - a 44.8-minute judgment gap with no phase executing.
+foreach ($stamp in @('2026-07-29T07:17:22','2026-07-29T07:29:20','2026-07-29T07:32:30','2026-07-29T07:36:03','2026-07-29T07:54:11','2026-07-29T07:56:30','2026-07-29T08:00:26')) {
+  $null = RunPS 'weekly-run-lock.ps1' @('-LockFile',$wlF,'-Acquire','-Phase','replay','-Now',$stamp)
+}
+$wpcLk = Get-Content (Join-Path $root 'weekly-post-capture.ps1') -Raw
+if ($wpcLk -match "weekly-run-lock\.ps1'\) @\('-Release'") {
+  # the weekly hands the tree back mid-run: the three links phases at 07:55:21, 07:58:07 and 08:01:34 each
+  # ended in push-data, so the lock is GONE before the daily tick. Model that, do not paper over it.
+  Remove-Item $wlF -Force -ErrorAction SilentlyContinue
+}
+$r = RunPS 'weekly-run-lock.ps1' @('-LockFile',$wlF,'-Now','2026-07-29T08:30:01')
+if ($r.rc -eq 2 -and $r.text -match 'HELD') { Ok 'weekly lock: the REPLAYED 2026-07-29 run still holds the tree at the 08:30 daily tick' }
+else { Bad ('weekly lock is NOT held at 08:30 on a replay of the founding run (rc=' + $r.rc + ') - the 46m42s collision of 2026-07-29 still happens: ' + $r.text) }
+# ...and must survive the REAL maximum in-run pause: 12:58:25 -> 16:05:53 = 187.5 min, measured over all 383
+# timestamped lines of that run. A TTL under this expires while the agent is still working.
+$null = RunPS 'weekly-run-lock.ps1' @('-LockFile',$wlF,'-Acquire','-Phase','publish','-Now','2026-07-29T12:58:25')
+$r = RunPS 'weekly-run-lock.ps1' @('-LockFile',$wlF,'-Now','2026-07-29T16:05:53')
+if ($r.rc -eq 2) { Ok 'weekly lock: the real 187.5-min agent judgment pause still reads HELD' }
+else { Bad ('weekly lock expired inside the REAL max in-run pause (rc=' + $r.rc + ') - the TTL is shorter than a normal weekly gap') }
+# MUST NOT STAND DOWN, AND MUST SAY SO: nothing in the weekly releases the lock, so the end state is always
+# an abandoned one. That run's last phase was 19:07:26; by the next 08:30 tick it must be dead.
+$null = RunPS 'weekly-run-lock.ps1' @('-LockFile',$wlF,'-Acquire','-Phase','publish','-Now','2026-07-29T19:07:26')
+$r = RunPS 'weekly-run-lock.ps1' @('-LockFile',$wlF,'-Now','2026-07-30T08:30:01')
+if ($r.rc -eq 0 -and $r.text -match 'STALE' -and $r.text -match 'EXPIRED' -and $r.text -match 'must never disable the daily job') { Ok 'weekly lock: a finished/abandoned lock EXPIRES before the next daily, says so loudly, and does NOT stand it down' }
+else { Bad ('weekly lock did not expire by the next 08:30 (rc=' + $r.rc + ') - a finished or crashed weekly would disable the 8:30 job: ' + $r.text) }
+# the expiry the reader trusts must come from the FILE, not from a constant on the read side
+$wlJson = try { (((Get-Content $wlF -Raw -Encoding UTF8) + '').Trim() | ConvertFrom-Json) } catch { $null }
+if ($wlJson -and $wlJson.expires -and $wlJson.refreshed -and $wlJson.acquired -and $wlJson.pid) { Ok 'weekly lock carries its own acquired/refreshed/expires/pid stamp' }
+else { Bad 'weekly lock file lost its self-describing expiry - the reader has nothing to read and the TTL can drift' }
+# CLEAN TWIN: no lock is a definite answer, not a blind one, and never blocks the daily (6 days in 7).
+Remove-Item $wlF -Force -ErrorAction SilentlyContinue
+$r = RunPS 'weekly-run-lock.ps1' @('-LockFile',$wlF,'-Now','2026-07-30T08:30:01')
+if ($r.rc -eq 0 -and $r.text -match 'none - no weekly refresh') { Ok 'weekly lock clean twin: no lock = the daily runs, and says nothing alarming' }
+else { Bad ('weekly lock false-positived with no lock present (rc=' + $r.rc + '): ' + $r.text) }
+# an unreadable lock must FAIL OPEN and NAME the blindness (exit 3), never silently block the day's prices
+Set-Content $wlF '' -Encoding UTF8
+$r = RunPS 'weekly-run-lock.ps1' @('-LockFile',$wlF,'-Now','2026-07-30T08:30:01')
+if ($r.rc -eq 3 -and $r.text -match 'CANNOT EVALUATE') { Ok 'weekly lock: an empty lock is exit 3 (could-not-evaluate) and fails OPEN' }
+else { Bad ('weekly lock did not report could-not-evaluate on an empty file (rc=' + $r.rc + '): ' + $r.text) }
+Set-Content $wlF 'not json at all' -Encoding UTF8
+$r = RunPS 'weekly-run-lock.ps1' @('-LockFile',$wlF,'-Now','2026-07-30T08:30:01')
+if ($r.rc -eq 3 -and $r.text -match 'CANNOT EVALUATE') { Ok 'weekly lock: a corrupt lock is exit 3 and fails OPEN' }
+else { Bad ('weekly lock did not report could-not-evaluate on a corrupt file (rc=' + $r.rc + '): ' + $r.text) }
+$null = RunPS 'weekly-run-lock.ps1' @('-LockFile',$wlF,'-Acquire','-Phase','links','-Now','2026-07-30T08:00:00')
+$null = RunPS 'weekly-run-lock.ps1' @('-LockFile',$wlF,'-Release')
+if (-not (Test-Path $wlF)) { Ok 'weekly lock: -Release removes it (so the daily can sweep its own stale debris)' }
+else { Bad 'weekly lock: -Release left the file behind - a swept stale lock would come straight back every morning' }
+Remove-Item $fxWl -Recurse -Force -ErrorAction SilentlyContinue
+# and BOTH callers must still be wired to it - a lock nobody takes and nobody checks is a no-op that
+# passes every behavioural test above (source asserts: house precedent for caller plumbing).
+$rdlLk = Get-Content (Join-Path $root 'run-daily-local.ps1') -Raw
+if ($rdlLk -match 'weekly-run-lock\.ps1' -and $rdlLk -match '\$wlRc -eq 2' -and $rdlLk -match 'STAND DOWN: the weekly browser refresh' -and $rdlLk -match "weekly-run-lock\.ps1'\) -Release") { Ok 'run-daily-local still checks the weekly lock, stands down on HELD, and sweeps a stale one' }
+else { Bad 'run-daily-local no longer stands down for the weekly run - the 46-minute collision of 2026-07-29 is back' }
+if ($wpcLk -match "weekly-run-lock\.ps1'\) @\('-Acquire'") { Ok 'weekly-post-capture still takes the lock on every phase' }
+else { Bad 'weekly-post-capture stopped taking the weekly lock - the daily has nothing to stand down for' }
+if ($wpcLk -match "weekly-run-lock\.ps1'\) @\('-Release'") { Bad 'weekly-post-capture releases the lock mid-run again - on 2026-07-29 a links phase finished at 08:01:34 and the next phase was 08:46:24, so releasing hands grocery\out back 28 min before the 08:30 daily fires. The lock expires on its own TTL; nothing in the weekly may hand it back.' }
+else { Ok 'weekly-post-capture never hands the tree back mid-run (the lock expires on its own TTL)' }
+
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2
