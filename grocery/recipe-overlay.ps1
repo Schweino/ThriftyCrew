@@ -48,6 +48,32 @@ if ($salesFile) {
 
 # 3. overlay sales onto the everyday baseline, re-rank, write the live board
 $base = Get-Content $baseFile -Raw | ConvertFrom-Json
+
+# THE STAPLES ROW OWNS ITS ID (2026-07-30). Any recipe row whose id also exists on the weekly staples board is
+# DROPPED here, dynamically, before the overlay. The recipe baseline is a frozen monthly snapshot (2026-07-12
+# vintage), and 78 of its 158 ids also lived on the fresh weekly board - so one page showed TWO prices for the
+# same product: Family Fare ground coriander $3.21/oz in the recipe section against $1.05/oz in the staples
+# section, 124 same-store same-unit cells disagreeing by >=10%, and the recipe half had NO Fareway anywhere,
+# so its "cheapest" verdicts were decided over six stores instead of seven. The page already keys recipe rows
+# separately ('<id>::r'), so removal is purely a data change: the fresh staple row simply becomes the only
+# place that id appears. Recipe-ONLY ids (80 today) stay - stale-but-disclosed beats absent, and their history
+# banking is unaffected (update-history already skips ids the weekly board covered).
+# Dynamic on purpose: a commodity promoted onto the staples board in a future batch auto-resolves instead of
+# waiting for someone to remember this file.
+$stapleIds = @{}
+$newestCmp = Get-ChildItem (Join-Path $out 'comparison-*.json') -ErrorAction SilentlyContinue |
+  Where-Object { $_.Name -match '^comparison-\d{4}-\d{2}-\d{2}\.json$' } | Sort-Object Name -Descending | Select-Object -First 1
+if ($newestCmp) {
+  try { foreach ($sr in @((Get-Content $newestCmp.FullName -Raw | ConvertFrom-Json).comparison)) { $stapleIds[[string]$sr.id] = $true } } catch {}
+}
+if ($stapleIds.Count -gt 0) {
+  $beforeN = @($base.comparison).Count
+  $base.comparison = @($base.comparison | Where-Object { -not $stapleIds.ContainsKey([string]$_.id) })
+  $droppedN = $beforeN - @($base.comparison).Count
+  Write-Output ("recipe-overlay: dropped $droppedN row(s) whose id lives on the weekly staples board (the fresh row owns the id); $(@($base.comparison).Count) recipe-only row(s) remain")
+} else {
+  Write-Output 'recipe-overlay: WARNING - no staples comparison found, so the overlap filter examined NOTHING and every recipe row is kept; duplicate-price rows are possible this run'
+}
 $overlaid = 0
 foreach ($row in $base.comparison) {
   $id = [string]$row.id

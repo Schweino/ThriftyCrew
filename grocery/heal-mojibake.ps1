@@ -47,6 +47,40 @@ foreach ($glob in $targets) {
     }
   }
 }
+# The RECIPE boards have their own shape ({ comparison: [ { commodity, stores: [ { item } ] } ] }) and were a
+# real gap: recipe-board-everyday.json is the frozen monthly baseline recipe-overlay.ps1 rebuilds the live
+# recipe-board.json from EVERY morning - so 72 mojibake sequences ("KrogerA(R) 100% Pure Olive Oil" class) kept
+# flowing back into the shopper-visible board no matter how often the derived file was cleaned. Heal the
+# baseline and the live file both; the walker is idempotent for the same reason the deals one is.
+foreach ($rbName in @('recipe-board-everyday.json', 'recipe-board.json')) {
+  $rbPath = Join-Path $root ('out\' + $rbName)
+  if (-not (Test-Path $rbPath)) { continue }
+  try { $rb = Get-Content $rbPath -Raw -Encoding UTF8 | ConvertFrom-Json } catch { continue }
+  if (-not $rb.PSObject.Properties['comparison']) { continue }
+  $rn = 0
+  foreach ($row in @($rb.comparison)) {
+    foreach ($col in @('commodity')) {
+      if ($row.PSObject.Properties[$col]) {
+        $before = [string]$row.$col; $after = Repair-Mojibake $before
+        if ($after -ne $before) { $row.$col = $after; $rn++ }
+      }
+    }
+    foreach ($st in @($row.stores)) {
+      foreach ($col in @('item')) {
+        if ($st.PSObject.Properties[$col]) {
+          $before = [string]$st.$col; $after = Repair-Mojibake $before
+          if ($after -ne $before) { $st.$col = $after; $rn++ }
+        }
+      }
+    }
+  }
+  if ($rn -gt 0) {
+    $totalFiles++; $totalRows += $rn
+    Write-Output ("  {0,-38} {1} name(s)" -f $rbName, $rn)
+    if ($Apply) { ($rb | ConvertTo-Json -Depth 8) | Set-Content $rbPath -Encoding UTF8 }
+  }
+}
+
 # product-urls.json has its own shape (items.<commodity>.<store>.name) and its own reason to be clean: that
 # name is what the "See item" tile advertises, and audit-name-drift compares it WORD BY WORD against the board
 # item. Mojibake on one side and not the other reads as a wrong product.
