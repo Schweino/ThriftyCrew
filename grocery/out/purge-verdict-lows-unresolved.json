@@ -1,0 +1,27 @@
+﻿{
+    "generated":  "2026-07-30T10:10:36",
+    "note":  "winning history cells at a verdict-rejected (commodity,store) whose product could not be identified from any surviving board; neither purged nor cleared",
+    "cells":  [
+                  {
+                      "id":  "avocados",
+                      "store":  "Sam\u0027s Club",
+                      "week":  "2026-07-17",
+                      "price":  0.3827,
+                      "is_record_low":  true
+                  },
+                  {
+                      "id":  "raspberries",
+                      "store":  "Baker\u0027s",
+                      "week":  "2026-07-14",
+                      "price":  0.4167,
+                      "is_record_low":  false
+                  },
+                  {
+                      "id":  "raspberries",
+                      "store":  "Baker\u0027s",
+                      "week":  "2026-07-23",
+                      "price":  0.4167,
+                      "is_record_low":  false
+                  }
+              ]
+}

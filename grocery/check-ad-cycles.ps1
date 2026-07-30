@@ -290,6 +290,13 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'update-history.ps1') | Out-Null
         Log 'history banked from the raw board (no verdict file for this week - nothing judged, so raw == verified)'
       }
+      # "raw == verified" is only true for products nobody has judged YET. The raw path above skips verify-apply
+      # entirely, so it also skips verdict-suppressions.json - every standing DROP is inert on that branch and a
+      # product judged wrong in an earlier week can bank a fresh history row (and a fresh record low) any day the
+      # current week has no verdict file. Measured: the raw boards on 2026-07-25..28 each carried 15-17 cells
+      # whose product a verdict had already rejected, 10-12 of them CROWNING their commodity. Sweep it back out.
+      # Evidence-driven and idempotent, so a day that banked nothing rejected changes nothing and costs ~3s.
+      & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'purge-verdict-lows.ps1') -Apply | Out-Null
       & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'sanity-check.ps1') | Out-Null   # exit 1 = flags (expected), not a crash -> guards-<week>.json
       # NOTE: the coverage-REGRESSION check (a store quietly shrinking between boards) is NOT run here. It is a
       # hard invariant, so it lives in guards.ps1 where a failure actually stops the publish. Setting $hardFail

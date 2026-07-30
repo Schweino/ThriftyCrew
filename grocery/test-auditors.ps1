@@ -776,6 +776,39 @@ $pdpSrc = Get-Content (Join-Path $root 'publish-deals-page.ps1') -Raw
 if ($pdpSrc -match 'price-mode: BLIND' -and $pdpSrc -match 'name-drift: BLIND' -and $pdpSrc -match 'match-soundness: BLIND') { Ok 'publish-deals-page surfaces exit 3 from all three of its direct audit calls' }
 else { Bad 'publish-deals-page lost a blind surface line - a blind audit falls through silently during publish' }
 
+# ---------------------------------------------------------------- N+6. the verdict-driven record-low purge
+# 2026-07-30: purge-bad-lows.ps1 is a RATIO test (>=2x under the next-lowest week) and structurally cannot
+# reach a wrong-product low. Two reasons, both measured: the pork-loin filet crowning bacon was 1.02x under,
+# and because prices carry forward daily the "next-lowest week" is usually the SAME bad number, making the
+# ratio exactly 1.00 (grits held $0.0023/oz for 7 rows against a real $0.0449). That left 219 history entries
+# set by 27 products a verdict had already rejected - 12 owning a record low, and 8 tiles printing "Usually
+# cheaper - lowest we have tracked $X" on the live page from a hot dog bun, a breakfast cereal, an applesauce.
+# purge-verdict-lows.ps1 removes by EVIDENCE. Three of its fixtures decide whether it is safe at all and must
+# stay in the file: the quote-fragment match (lose it and bacon/broccoli survive again, which is exactly how
+# they survived the last purge), the price-exact name lookup (lose it and a real Member's Mark bacon price
+# is deleted as a filet, because history and that day's comparison file disagree on the number), and the
+# human-overturn rule (lose it and it deletes history for a product a later keep verdict re-reviewed and KEPT,
+# which is chocolate-milk/Walmart today). The two wiring checks below exist because a green self-test cannot
+# tell you the tool is still being CALLED.
+$r = RunPS 'purge-verdict-lows.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'MUST-FIRE' -and $r.text -match 'SELF-TEST PASS') { Ok 'purge-verdict-lows -SelfTest passes with its founding-bug fixtures armed' }
+else { Bad ('purge-verdict-lows -SelfTest failed or lost its founding-bug fixtures: ' + ((($r.text -split "`n") | Select-Object -Last 3) -join ' | ')) }
+$pvlSrc = Get-Content (Join-Path $root 'purge-verdict-lows.ps1') -Raw
+if ($pvlSrc -match '1\.02x under the next row') { Ok 'the 1.02x bacon shape (invisible to any ratio purge) is still the must-fire fixture' }
+else { Bad 'purge-verdict-lows lost the 1.02x founding-bug fixture - a ratio-invisible wrong-product low would pass again' }
+if ($pvlSrc -match 'board-rebuilt-same-day drift') { Ok 'the price-exact name lookup still has its clean twin (a week-only match deletes real prices)' }
+else { Bad 'purge-verdict-lows lost the price-drift clean twin - it can label a history row with a product that was never at that price' }
+if ($pvlSrc -match 'verdict-lib\.ps1') { Ok 'purge-verdict-lows sources verdict-lib (one definition of item identity)' }
+else { Bad 'purge-verdict-lows no longer sources verdict-lib - the purge and verify-apply can disagree on what "the same item" means' }
+if ($pvlSrc -match 'Remove-OverturnedRejects \$rej \$overturns') { Ok 'the purge still honours a later KEEP verdict (verify-apply''s human-overturn rule)' }
+else { Bad 'purge-verdict-lows no longer subtracts overturned verdicts - it will delete history for a product a human re-reviewed and KEPT' }
+$wpc2 = Get-Content (Join-Path $root 'weekly-post-capture.ps1') -Raw
+if ($wpc2 -match "purge-verdict-lows\.ps1'\) @\('-Apply'\)") { Ok 'weekly publish still purges verdict-rejected history entries after banking' }
+else { Bad 'weekly-post-capture no longer runs purge-verdict-lows - a late DROP verdict stops reaching the weeks it already poisoned' }
+$cacSrc2 = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
+if ($cacSrc2 -match "purge-verdict-lows\.ps1'\) -Apply") { Ok 'the daily history bank is swept for verdict-rejected entries' }
+else { Bad 'check-ad-cycles no longer purges after banking - the raw branch skips verify-apply, so every standing DROP is inert there and can bank a fresh record low' }
+
 # ---------------------------------------------------------------- (l) review-flag re-arm + ack expiry
 # The block in check-ad-cycles.ps1 that decides whether a price flag pages has no entry point of its own,
 # so this extracts its two sentinel-delimited regions and runs THE REAL SOURCE against frozen synthetic

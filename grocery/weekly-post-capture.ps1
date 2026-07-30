@@ -116,6 +116,14 @@ try {
       $histFile = 'verified-history.json'
       $null = RunChild (Join-Path $root 'verify-apply.ps1') @('-MinStores','1','-OutFile',$histFile) 2 'verify-history'
       $null = RunChild (Join-Path $root 'update-history.ps1') @('-CompareFile',(Join-Path $root ('out\' + $histFile))) 1 'history'
+      # A DROP verdict lands AFTER the weeks it poisoned. verify-apply stops the product publishing from now on,
+      # but price-history keeps every week it already won, and compaction preserves each week's minimum forever -
+      # so the wrong number owns "lowest we have tracked" permanently. purge-verdict-lows deletes exactly the
+      # entries a verdict NAMES. Evidence, not a ratio: the pork-loin filet crowning bacon was 1.02x under the
+      # next week and purge-bad-lows' >=2x test can never see it. Idempotent (a second run reports 0 changes).
+      # -NonFatal because exit 3 here means "a record_low refusal blocks a recompute, a human decides", not a
+      # failed step; it must not hold the publish.
+      $null = RunChild (Join-Path $root 'purge-verdict-lows.ps1') @('-Apply') 3 'purge-verdict-lows' -NonFatal
       $null = RunChild (Join-Path $root 'sanity-check.ps1') @() 4 'sanity' -NonFatal
       $g = Join-Path $root ('out\guards-' + (Get-Date -Format 'yyyy-MM-dd') + '.json')
       if(Test-Path $g){ Log ('sanity flags file present: ' + $g + ' - REVIEW before trusting the board.') }
