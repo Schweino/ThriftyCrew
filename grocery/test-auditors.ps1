@@ -775,6 +775,50 @@ else { Bad 'check-ad-cycles blind email body regressed - a blackout would email 
 # missed stamp re-opened the gate into a silent daily 658 MB crash loop (post-batch review 2026-07-30).
 if ($cacSrc -match "run-test-guards-weekly\.ps1'\)\s*2>&1") { Bad 'check-ad-cycles captures run-test-guards-weekly with 2>&1 under EAP=Stop again - a crashing suite throws past the stamp and alert into a silent daily retry loop' }
 else { Ok 'check-ad-cycles weekly test-guards capture leaves stderr unredirected (crash still reaches the alert path)' }
+# (k1e) THE DRIFT SCANNER COULD NOT READ THE LANGUAGE IT SCANS (2026-07-30). audit-store-registry hunts
+# hardcoded store lists in live .ps1 source. It recognised a store name written plainly, as &#39; and as
+# &rsquo; - but NOT as '', which is how an apostrophe is actually written inside a single-quoted PowerShell
+# string. test-auditors seeds all 7 stores onto one fixture line with Baker''s and Sam''s Club escaped, so
+# the guard reported "names 5 store(s) but is missing Baker's, Sam's Club" against a line naming every one.
+# Permanently red on correct code, which is how a drift guard gets ignored. The variant list is read out of
+# the real file and EXERCISED below, so this tracks behaviour rather than a spelling.
+$asrSrc = Get-Content (Join-Path $root 'audit-store-registry.ps1') -Raw
+$asrM = [regex]::Match($asrSrc, '\$variants\s*=\s*@\((.+?)\)\r?\n')
+if (-not $asrM.Success) { Bad 'audit-store-registry: cannot find its $variants list to check' }
+else {
+  $asrNames = @("Hy-Vee","Aldi","Family Fare","Fareway","Baker's","Sam's Club","Walmart")
+  function Test-RegistryScan([string]$variantExpr, [string]$code) {
+    $hit = 0; $missing = @()
+    foreach ($n in $asrNames) {
+      $variants = & ([scriptblock]::Create('$n = $args[0]; ' + $variantExpr)) $n
+      $found = $false; foreach ($v in @($variants)) { if ($code.IndexOf([string]$v, [StringComparison]::Ordinal) -ge 0) { $found = $true; break } }
+      if ($found) { $hit++ } else { $missing += $n }
+    }
+    return @{ hit = $hit; missing = $missing; flags = ($hit -ge 3 -and $missing.Count -gt 0) }
+  }
+  $asrExpr = '@(' + $asrM.Groups[1].Value + ')'
+  $asrQ = [char]39
+  $asrSeven = "'" + (($asrNames | ForEach-Object { $_ -replace "'", ($asrQ + $asrQ) }) -join ',') + "'"
+  $asrFive  = "'" + ((@("Hy-Vee","Aldi","Family Fare","Fareway","Walmart")) -join ',') + "'"
+  $asrClean = Test-RegistryScan $asrExpr $asrSeven
+  $asrFire  = Test-RegistryScan $asrExpr $asrFive
+  if (-not $asrClean.flags) { Ok "store-registry scan reads PowerShell '' escaping - a line naming all 7 stores is not reported as drift" }
+  else { Bad ('store-registry scan is red on a line that names every store (missing: ' + ($asrClean.missing -join ', ') + ") - it cannot read '' escaping") }
+  if ($asrFire.flags) { Ok 'store-registry scan still FIRES on a genuine 5-store hardcoded list (not blinded by the escaping fix)' }
+  else { Bad 'store-registry scan no longer flags a real 5-store list - the escaping fix blinded it' }
+}
+# (k1f) A CONSISTENCY GUARD THAT COULD SCORE PERFECT FROM AN EMPTY REGEX (2026-07-30). Every audit-board-
+# consistency finding comes from one regex over rendered chip markup, and nothing checked the regex matched
+# anything: a missing feed or a one-attribute markup drift would print "no-link=0", exit 0, and be logged by
+# check-ad-cycles as "consistency OK" - the blindest state wearing the healthiest label. 3,164 chips are
+# examined on a healthy run, so the new exit-3 branch is 3,164 away from arming.
+$abcSrc = Get-Content (Join-Path $root 'audit-board-consistency.ps1') -Raw
+if ($abcSrc -match 'chips_examined\s*=\s*\$chipsSeen') { Ok 'board-consistency records chips_examined in its report' }
+else { Bad 'board-consistency no longer records chips_examined - a blind run is indistinguishable from a clean one' }
+if ($abcSrc -match '(?s)if\s*\(\s*\$chipsSeen\s*-eq\s*0\s*\)\s*\{[^}]*exit 3') { Ok 'board-consistency exits 3 (could-not-evaluate) when it examined zero chips' }
+else { Bad 'board-consistency no longer exits 3 from zero chips - "no-link=0 out of 0" would read as a pass' }
+if ($cacSrc -match 'consistency BLIND') { Ok 'check-ad-cycles has the matching exit-3 branch (a blind run is not logged as OK)' }
+else { Bad 'check-ad-cycles lost its consistency exit-3 branch - an exit 3 falls into the else and is logged "consistency OK"' }
 # (k1d) AN AUDIT THAT DIED ON ITS OWN FIRST FINDING (2026-07-30). audit-everyday-mismatch built each bug
 # record with price=[double]$e.price. 579 of the 2,987 stored link prices are strings like "$1.88", [double]
 # on one of those throws, and it threw INSIDE the record for the first mismatch found - under EAP=Stop, so the
