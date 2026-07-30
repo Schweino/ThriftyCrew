@@ -54,6 +54,12 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Minh Frozen Large Pork Egg Rolls, 44 oz., 2 PK",
+        "lp":  "$9.88",
+        "up":  "$0.62/ea",
+        "reason":  "NAME CONFLICT: name states 2 ct but none reproduces Sam\u0027s 0.62/ct (lp/up derives 15.935)"
+    },
+    {
         "name":  "Jennie-O 93/7 Ground Turkey, 2 lbs., 2 pk.",
         "lp":  "$22.77",
         "up":  "",
@@ -120,6 +126,24 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Dole Tropical Gold Pineapple Chunks, 15.25 oz., 6 pk.",
+        "lp":  "$11.48",
+        "up":  "$0.12/oz",
+        "reason":  "NAME CONFLICT: name states 15.25, 91.5 oz but none reproduces Sam\u0027s 0.12/oz (lp/up derives 95.667)"
+    },
+    {
+        "name":  "Optimum Nutrition, Amino Energy + Focus, Pre-Workout, Watermelon, 1.42 lbs.",
+        "lp":  "$29.98",
+        "up":  "$1.31/oz",
+        "reason":  "NAME CONFLICT: name states 22.72 oz but none reproduces Sam\u0027s 1.31/oz (lp/up derives 22.885)"
+    },
+    {
+        "name":  "Nature\u0027s Garden Probiotic Mixed Berry Yoggies 0.7 oz., 24 pk.",
+        "lp":  "$10.38",
+        "up":  "$0.61/oz",
+        "reason":  "NAME CONFLICT: name states 0.7, 16.8 oz but none reproduces Sam\u0027s 0.61/oz (lp/up derives 17.016)"
+    },
+    {
         "name":  "Clio Greek Yogurt Raspberry Cotton Candy Bars, 15 count",
         "lp":  "$9.86",
         "up":  "",
@@ -136,6 +160,12 @@
         "lp":  "$11.87",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Nature\u0027s Garden Probiotic Tropical Yoggies 0.7 oz., 24 pk.",
+        "lp":  "$10.38",
+        "up":  "$0.61/oz",
+        "reason":  "NAME CONFLICT: name states 0.7, 16.8 oz but none reproduces Sam\u0027s 0.61/oz (lp/up derives 17.016)"
     },
     {
         "name":  "Chobani Zero Sugar Nonfat Blended Greek Yogurt Variety Pack (5.3 oz., 16 ct.)",
@@ -300,6 +330,18 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Pinalen 2X Multipurpose Cleaner, Fresh Pine Scent, 304 oz.",
+        "lp":  "$11.48",
+        "up":  "$0.05/foz",
+        "reason":  "NAME CONFLICT: name states 304 fl oz but none reproduces Sam\u0027s 0.05/fl oz (lp/up derives 229.6)"
+    },
+    {
+        "name":  "Biotrue Multi-Purpose Contact Lens Solution, 16 fl. oz., 2 pk. + 2 fl. oz.",
+        "lp":  "$21.48",
+        "up":  "$0.63/foz",
+        "reason":  "NAME CONFLICT: name states 16, 32, 2, 4 fl oz but none reproduces Sam\u0027s 0.63/fl oz (lp/up derives 34.095)"
+    },
+    {
         "name":  "Ocean Spray Tropical Juice Variety Pack 10 fl. oz., 24 pk.",
         "lp":  "$14.88",
         "up":  "",
@@ -310,6 +352,24 @@
         "lp":  "$5.94",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Ranch Style Beans, Canned Beans, 15 oz.",
+        "lp":  "$8.18",
+        "up":  "$0.07/oz",
+        "reason":  "NAME CONFLICT: name states 15 oz but none reproduces Sam\u0027s 0.07/oz (lp/up derives 116.857)"
+    },
+    {
+        "name":  "Clorox Disinfecting Wipes Refills, Fresh Scent (700 wipes/pk., 2 pk.)",
+        "lp":  "$60.54",
+        "up":  "$0.04/ea",
+        "reason":  "NAME CONFLICT: name states 2 ct but none reproduces Sam\u0027s 0.04/ct (lp/up derives 1513.5)"
+    },
+    {
+        "name":  "Shout Advanced Action Gel Laundry Stain Remover, 22 oz. Trigger \u0026 60 oz. refill",
+        "lp":  "$11.49",
+        "up":  "$0.14/oz",
+        "reason":  "NAME CONFLICT: name states 22, 60 oz but none reproduces Sam\u0027s 0.14/oz (lp/up derives 82.071)"
     },
     {
         "name":  "Sunbrella Extract Oil Based Stain Remover, 5 oz",
@@ -352,6 +412,30 @@
         "lp":  "$3.82",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Ranch Style Beans, Canned Beans, 15 oz.",
+        "lp":  "$8.18",
+        "up":  "$0.07/oz",
+        "reason":  "NAME CONFLICT: name states 15 oz but none reproduces Sam\u0027s 0.07/oz (lp/up derives 116.857)"
+    },
+    {
+        "name":  "Dole Tropical Gold Pineapple Chunks, 15.25 oz., 6 pk.",
+        "lp":  "$11.48",
+        "up":  "$0.12/oz",
+        "reason":  "NAME CONFLICT: name states 15.25, 91.5 oz but none reproduces Sam\u0027s 0.12/oz (lp/up derives 95.667)"
+    },
+    {
+        "name":  "Ranch Style Beans, Canned Beans, 15 oz.",
+        "lp":  "$8.18",
+        "up":  "$0.07/oz",
+        "reason":  "NAME CONFLICT: name states 15 oz but none reproduces Sam\u0027s 0.07/oz (lp/up derives 116.857)"
+    },
+    {
+        "name":  "Goya Sazon Seasoning 6.3 oz., 36 ct.",
+        "lp":  "$4.58",
+        "up":  "$0.07/oz",
+        "reason":  "NAME CONFLICT: name states 6.3, 226.8 oz but none reproduces Sam\u0027s 0.07/oz (lp/up derives 65.429)"
     },
     {
         "name":  "Member\u0027s Mark Grade A Vitamin D Whole Milk, 1 gal.",
@@ -402,16 +486,76 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Member\u0027s Mark Uncured Black Forest Ham, Sliced, 1 lb. 6 oz.",
+        "lp":  "$6.97",
+        "up":  "$5.07/lb",
+        "reason":  "NAME CONFLICT: name states 1, 0.375 lb but none reproduces Sam\u0027s 5.07/lb (lp/up derives 1.375)"
+    },
+    {
+        "name":  "Member\u0027s Mark Uncured Honey Ham, Sliced, 1 lb. 6 oz.",
+        "lp":  "$6.97",
+        "up":  "$5.07/lb",
+        "reason":  "NAME CONFLICT: name states 1, 0.375 lb but none reproduces Sam\u0027s 5.07/lb (lp/up derives 1.375)"
+    },
+    {
         "name":  "Principe Uncured Salami Trio, 12 oz.",
         "lp":  "$7.87",
         "up":  "",
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Member\u0027s Mark Oven Roasted Turkey Breast, Sliced 1 lb. 6 oz.",
+        "lp":  "$8.92",
+        "up":  "$0.41/oz",
+        "reason":  "NAME CONFLICT: name states 16, 6 oz but none reproduces Sam\u0027s 0.41/oz (lp/up derives 21.756)"
+    },
+    {
+        "name":  "Member\u0027s Mark Honey Roasted Turkey Breast, Sliced, 1 lb. 6 oz.",
+        "lp":  "$8.92",
+        "up":  "$0.41/oz",
+        "reason":  "NAME CONFLICT: name states 16, 6 oz but none reproduces Sam\u0027s 0.41/oz (lp/up derives 21.756)"
+    },
+    {
+        "name":  "Member\u0027s Mark Four Peppered Turkey Breast, Sliced, 1 lb. 6 oz.",
+        "lp":  "$9.57",
+        "up":  "$6.96/lb",
+        "reason":  "NAME CONFLICT: name states 1, 0.375 lb but none reproduces Sam\u0027s 6.96/lb (lp/up derives 1.375)"
+    },
+    {
+        "name":  "Member\u0027s Mark Seasoned Angus Roast Beef, Sliced, 1 lb. 6 oz.",
+        "lp":  "$14.34",
+        "up":  "$0.65/oz",
+        "reason":  "NAME CONFLICT: name states 16, 6 oz but none reproduces Sam\u0027s 0.65/oz (lp/up derives 22.062)"
+    },
+    {
         "name":  "Member\u0027s Mark Seasoned Rotisserie Chicken",
         "lp":  "$4.98",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark Four Peppered Turkey Breast, Sliced, 1 lb. 6 oz.",
+        "lp":  "$9.57",
+        "up":  "$6.96/lb",
+        "reason":  "NAME CONFLICT: name states 1, 0.375 lb but none reproduces Sam\u0027s 6.96/lb (lp/up derives 1.375)"
+    },
+    {
+        "name":  "Member\u0027s Mark Oven Roasted Turkey Breast, Sliced 1 lb. 6 oz.",
+        "lp":  "$8.92",
+        "up":  "$0.41/oz",
+        "reason":  "NAME CONFLICT: name states 16, 6 oz but none reproduces Sam\u0027s 0.41/oz (lp/up derives 21.756)"
+    },
+    {
+        "name":  "Member\u0027s Mark Uncured Hard Salami, Sliced 1 lb. 6 oz.",
+        "lp":  "$8.46",
+        "up":  "$0.38/oz",
+        "reason":  "NAME CONFLICT: name states 16, 6 oz but none reproduces Sam\u0027s 0.38/oz (lp/up derives 22.263)"
+    },
+    {
+        "name":  "Member\u0027s Mark Uncured Pepperoni, Sliced, 1 lb. 6 oz.",
+        "lp":  "$8.46",
+        "up":  "$0.38/oz",
+        "reason":  "NAME CONFLICT: name states 16, 6 oz but none reproduces Sam\u0027s 0.38/oz (lp/up derives 22.263)"
     },
     {
         "name":  "Lume Whole Body Smooth Solid Deodorant Stick \u0026 Mini Spray Set",
@@ -430,6 +574,12 @@
         "lp":  "$16.48",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Native Aluminum-Free Deodorant, Vanilla Variety Pack, 2.65 oz., 3 pk.",
+        "lp":  "$27.98",
+        "up":  "$4.00/oz",
+        "reason":  "NAME CONFLICT: name states 2.65, 7.95 oz but none reproduces Sam\u0027s 4/oz (lp/up derives 6.995)"
     },
     {
         "name":  "Dr. Squatch Fresh Falls Stick Deodorant, 3 pk.",
@@ -492,6 +642,12 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Minh Frozen Large Pork Egg Rolls, 44 oz., 2 PK",
+        "lp":  "$9.88",
+        "up":  "$0.62/ea",
+        "reason":  "NAME CONFLICT: name states 2 ct but none reproduces Sam\u0027s 0.62/ct (lp/up derives 15.935)"
+    },
+    {
         "name":  "Appetizers To Go Crispy Cream Cheese Rangoons (20 ct.)",
         "lp":  "$9.97",
         "up":  "",
@@ -504,10 +660,22 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Goya Sazon Seasoning 6.3 oz., 36 ct.",
+        "lp":  "$4.58",
+        "up":  "$0.07/oz",
+        "reason":  "NAME CONFLICT: name states 6.3, 226.8 oz but none reproduces Sam\u0027s 0.07/oz (lp/up derives 65.429)"
+    },
+    {
         "name":  "Sara Lee 100% Whole Wheat Bread 20 oz., 2 pk.",
         "lp":  "$5.84",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark Aloe Vera Moisturizing Hand Soap, 80 fl. oz.",
+        "lp":  "$7.98",
+        "up":  "$0.05/foz",
+        "reason":  "NAME CONFLICT: name states 80 fl oz but none reproduces Sam\u0027s 0.05/fl oz (lp/up derives 159.6)"
     },
     {
         "name":  "Dove Liquid Hand Wash Gel Variety Pack,12 oz., 3 pk.",
@@ -570,6 +738,18 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Ranch Style Beans, Canned Beans, 15 oz.",
+        "lp":  "$8.18",
+        "up":  "$0.07/oz",
+        "reason":  "NAME CONFLICT: name states 15 oz but none reproduces Sam\u0027s 0.07/oz (lp/up derives 116.857)"
+    },
+    {
+        "name":  "Ranch Style Beans, Canned Beans, 15 oz.",
+        "lp":  "$8.18",
+        "up":  "$0.07/oz",
+        "reason":  "NAME CONFLICT: name states 15 oz but none reproduces Sam\u0027s 0.07/oz (lp/up derives 116.857)"
+    },
+    {
         "name":  "ECOS Hypoallergenic Liquid Laundry Detergent + Enzymes, Lavender Scent, 230 loads, 210 fl. oz.",
         "lp":  "$17.98",
         "up":  "",
@@ -604,6 +784,12 @@
         "lp":  "$8.48",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark Mac \u0026 Cheese, 10 oz., 4 pk.",
+        "lp":  "$8.98",
+        "up":  "$0.90/ea",
+        "reason":  "NAME CONFLICT: name states 4 ct but none reproduces Sam\u0027s 0.9/ct (lp/up derives 9.978)"
     },
     {
         "name":  "Country Pasta Homemade Style Egg Pasta 56 oz.",
@@ -741,7 +927,7 @@
         "name":  "Marathon Interfold Gray Napkin Dispenser 2 ct.",
         "lp":  "$28.47",
         "up":  "$28.47/ea",
-        "reason":  "INVARIANT: no shape reproduces Sam\u0027s 28.47/ct -\u003e package: engine 14.235 vs Sam\u0027s 28.47 (50% off) | per-unit: engine 14.235 vs Sam\u0027s 28.47 (50% off)"
+        "reason":  "NAME CONFLICT: name states 2 ct but none reproduces Sam\u0027s 28.47/ct (lp/up derives 1)"
     },
     {
         "name":  "Marathon Combo Folded Paper Towel Dispenser",
@@ -768,10 +954,34 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "The Only Bean Edamame Beans, 0.8 oz., 14 pk.",
+        "lp":  "$6.98",
+        "up":  "$0.65/oz",
+        "reason":  "NAME CONFLICT: name states 0.8, 11.2 oz but none reproduces Sam\u0027s 0.65/oz (lp/up derives 10.738)"
+    },
+    {
+        "name":  "Corn Nuts Crunchy Corn Snacks, Variety Pack, 1.7 oz., 24 pk.",
+        "lp":  "$10.98",
+        "up":  "$0.26/oz",
+        "reason":  "NAME CONFLICT: name states 1.7, 40.8 oz but none reproduces Sam\u0027s 0.26/oz (lp/up derives 42.231)"
+    },
+    {
         "name":  "Principe Uncured Salami Trio, 12 oz.",
         "lp":  "$7.87",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark Uncured Pepperoni, Sliced, 1 lb. 6 oz.",
+        "lp":  "$8.46",
+        "up":  "$0.38/oz",
+        "reason":  "NAME CONFLICT: name states 16, 6 oz but none reproduces Sam\u0027s 0.38/oz (lp/up derives 22.263)"
+    },
+    {
+        "name":  "Member\u0027s Mark Uncured Hard Salami, Sliced 1 lb. 6 oz.",
+        "lp":  "$8.46",
+        "up":  "$0.38/oz",
+        "reason":  "NAME CONFLICT: name states 16, 6 oz but none reproduces Sam\u0027s 0.38/oz (lp/up derives 22.263)"
     },
     {
         "name":  "Principe Uncured Salami Trio, 12 oz.",
@@ -796,6 +1006,24 @@
         "lp":  "$13.67",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Pringles Potato Crisps Snack Cups, Variety Pack Chips, 0.67 oz., 36 ct.",
+        "lp":  "$13.98",
+        "up":  "$0.53/oz",
+        "reason":  "NAME CONFLICT: name states 0.67, 24.12 oz but none reproduces Sam\u0027s 0.53/oz (lp/up derives 26.377)"
+    },
+    {
+        "name":  "Dot\u0027s Homestyle Original Pretzels Snack Bags, 1 oz., 36 pks.",
+        "lp":  "$14.98",
+        "up":  "$0.42/oz",
+        "reason":  "NAME CONFLICT: name states 1 oz but none reproduces Sam\u0027s 0.42/oz (lp/up derives 35.667)"
+    },
+    {
+        "name":  "Combos Stuffed Baked Pretzel Snacks, Variety Pack, 1.76 oz, 18 pk.",
+        "lp":  "$9.98",
+        "up":  "$0.31/oz",
+        "reason":  "NAME CONFLICT: name states 1.76, 31.68 oz but none reproduces Sam\u0027s 0.31/oz (lp/up derives 32.194)"
     },
     {
         "name":  "Nissin Cup Noodles, Beef Flavor, 2.25 oz., 24 pk.",
@@ -816,6 +1044,30 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Idahoan Baby Reds Value Pack Mashed Potatoes, 4 oz., 9 pk.",
+        "lp":  "$9.68",
+        "up":  "$0.26/oz",
+        "reason":  "NAME CONFLICT: name states 4, 36 oz but none reproduces Sam\u0027s 0.26/oz (lp/up derives 37.231)"
+    },
+    {
+        "name":  "Member\u0027s Mark Norwegian Antibiotic-Free Sashimi-Grade Skinless Atlantic Salmon, Frozen, 5 lbs., 10-12 ct.",
+        "lp":  "$67.98",
+        "up":  "$4.25/ea",
+        "reason":  "NAME CONFLICT: name states 12 ct but none reproduces Sam\u0027s 4.25/ct (lp/up derives 15.995)"
+    },
+    {
+        "name":  "MadeGood Soft Baked Cookie Bites Variety Pack, 0.85 oz., 32 pk.",
+        "lp":  "$10.98",
+        "up":  "$0.41/oz",
+        "reason":  "NAME CONFLICT: name states 0.85, 27.2 oz but none reproduces Sam\u0027s 0.41/oz (lp/up derives 26.78)"
+    },
+    {
+        "name":  "Member\u0027s Mark 85/15 Ground Sirloin Beef Patties, Frozen, 1/3 lb., 18 ct.",
+        "lp":  "$34.57",
+        "up":  "$5.76/lb",
+        "reason":  "NAME CONFLICT: name states 3, 54 lb but none reproduces Sam\u0027s 5.76/lb (lp/up derives 6.002)"
+    },
+    {
         "name":  "Gourmet Specialty Foods Korean-Style Barbeque Beef Sirloin Tips, 32 oz.",
         "lp":  "$32.92",
         "up":  "",
@@ -832,6 +1084,12 @@
         "lp":  "See price in cart",
         "up":  "",
         "reason":  "no linePrice"
+    },
+    {
+        "name":  "Bonduelle Bistro Loaded Chicken \u0026 Guacamole Bowl, 8 oz., 2 pk.",
+        "lp":  "$7.12",
+        "up":  "$0.46/oz",
+        "reason":  "NAME CONFLICT: name states 8, 16 oz but none reproduces Sam\u0027s 0.46/oz (lp/up derives 15.478)"
     },
     {
         "name":  "Tanimura and Antle Sweet Italian Red Onions, 6 lbs.",
@@ -1026,6 +1284,18 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Mission Zero Net Carbs Tortillas Original 17.78 oz., 28 ct.",
+        "lp":  "$4.82",
+        "up":  "$0.34/ea",
+        "reason":  "NAME CONFLICT: name states 28 ct but none reproduces Sam\u0027s 0.34/ct (lp/up derives 14.176)"
+    },
+    {
+        "name":  "Mission Zero Net Carbs Tortillas Original 17.78 oz., 28 ct.",
+        "lp":  "$4.82",
+        "up":  "$0.34/ea",
+        "reason":  "NAME CONFLICT: name states 28 ct but none reproduces Sam\u0027s 0.34/ct (lp/up derives 14.176)"
+    },
+    {
         "name":  "Member\u0027s Mark Grade A Vitamin D Whole Milk, 1 gal.",
         "lp":  "$3.87",
         "up":  "",
@@ -1194,16 +1464,58 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Idahoan Baby Reds Value Pack Mashed Potatoes, 4 oz., 9 pk.",
+        "lp":  "$9.68",
+        "up":  "$0.26/oz",
+        "reason":  "NAME CONFLICT: name states 4, 36 oz but none reproduces Sam\u0027s 0.26/oz (lp/up derives 37.231)"
+    },
+    {
         "name":  "Tanimura and Antle Sweet Italian Red Onions, 6 lbs.",
         "lp":  "$5.96",
         "up":  "",
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Dole Tropical Gold Pineapple Chunks, 15.25 oz., 6 pk.",
+        "lp":  "$11.48",
+        "up":  "$0.12/oz",
+        "reason":  "NAME CONFLICT: name states 15.25, 91.5 oz but none reproduces Sam\u0027s 0.12/oz (lp/up derives 95.667)"
+    },
+    {
+        "name":  "Dole Tropical Gold Pineapple Chunks, 15.25 oz., 6 pk.",
+        "lp":  "$11.48",
+        "up":  "$0.12/oz",
+        "reason":  "NAME CONFLICT: name states 15.25, 91.5 oz but none reproduces Sam\u0027s 0.12/oz (lp/up derives 95.667)"
+    },
+    {
+        "name":  "Ranch Style Beans, Canned Beans, 15 oz.",
+        "lp":  "$8.18",
+        "up":  "$0.07/oz",
+        "reason":  "NAME CONFLICT: name states 15 oz but none reproduces Sam\u0027s 0.07/oz (lp/up derives 116.857)"
+    },
+    {
+        "name":  "Ranch Style Beans, Canned Beans, 15 oz.",
+        "lp":  "$8.18",
+        "up":  "$0.07/oz",
+        "reason":  "NAME CONFLICT: name states 15 oz but none reproduces Sam\u0027s 0.07/oz (lp/up derives 116.857)"
+    },
+    {
         "name":  "State Fair Classic Corn Dogs, Frozen, 30 ct.",
         "lp":  "$13.47",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Clorox Disinfecting Wipes Refills, Fresh Scent (700 wipes/pk., 2 pk.)",
+        "lp":  "$60.54",
+        "up":  "$0.04/ea",
+        "reason":  "NAME CONFLICT: name states 2 ct but none reproduces Sam\u0027s 0.04/ct (lp/up derives 1513.5)"
+    },
+    {
+        "name":  "2XL Professional Gym Wipes, Unscented (700 wipes/pk., 4 pk.)",
+        "lp":  "$110.56",
+        "up":  "$0.04/ea",
+        "reason":  "NAME CONFLICT: name states 4 ct but none reproduces Sam\u0027s 0.04/ct (lp/up derives 2764)"
     },
     {
         "name":  "OdoBan Disinfectant \u0026 Odor Eliminator, Eucalyptus 1 gal. concentrate + 32 oz. Ready-to-Use Spray",
@@ -1278,6 +1590,18 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Idahoan Baby Reds Value Pack Mashed Potatoes, 4 oz., 9 pk.",
+        "lp":  "$9.68",
+        "up":  "$0.26/oz",
+        "reason":  "NAME CONFLICT: name states 4, 36 oz but none reproduces Sam\u0027s 0.26/oz (lp/up derives 37.231)"
+    },
+    {
+        "name":  "Idahoan Baby Reds Value Pack Mashed Potatoes, 4 oz., 9 pk.",
+        "lp":  "$9.68",
+        "up":  "$0.26/oz",
+        "reason":  "NAME CONFLICT: name states 4, 36 oz but none reproduces Sam\u0027s 0.26/oz (lp/up derives 37.231)"
+    },
+    {
         "name":  "Member\u0027s Mark Grade A Vitamin D Whole Milk, 1 gal.",
         "lp":  "$3.87",
         "up":  "",
@@ -1288,6 +1612,12 @@
         "lp":  "$3.62",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Idahoan Baby Reds Value Pack Mashed Potatoes, 4 oz., 9 pk.",
+        "lp":  "$9.68",
+        "up":  "$0.26/oz",
+        "reason":  "NAME CONFLICT: name states 4, 36 oz but none reproduces Sam\u0027s 0.26/oz (lp/up derives 37.231)"
     },
     {
         "name":  "Litehouse Homestyle Ranch Dressing and Dip, 32 fl. oz.",
@@ -1350,10 +1680,34 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Idahoan Baby Reds Value Pack Mashed Potatoes, 4 oz., 9 pk.",
+        "lp":  "$9.68",
+        "up":  "$0.26/oz",
+        "reason":  "NAME CONFLICT: name states 4, 36 oz but none reproduces Sam\u0027s 0.26/oz (lp/up derives 37.231)"
+    },
+    {
+        "name":  "Ranch Style Beans, Canned Beans, 15 oz.",
+        "lp":  "$8.18",
+        "up":  "$0.07/oz",
+        "reason":  "NAME CONFLICT: name states 15 oz but none reproduces Sam\u0027s 0.07/oz (lp/up derives 116.857)"
+    },
+    {
+        "name":  "Ranch Style Beans, Canned Beans, 15 oz.",
+        "lp":  "$8.18",
+        "up":  "$0.07/oz",
+        "reason":  "NAME CONFLICT: name states 15 oz but none reproduces Sam\u0027s 0.07/oz (lp/up derives 116.857)"
+    },
+    {
         "name":  "Member\u0027s Mark Seasoned Rotisserie Chicken",
         "lp":  "$4.98",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark No Antibiotics Ever Rotisserie Seasoned Chicken Breast, Sliced, 1 lb. 6 oz.",
+        "lp":  "$9.57",
+        "up":  "$6.96/lb",
+        "reason":  "NAME CONFLICT: name states 1, 0.375 lb but none reproduces Sam\u0027s 6.96/lb (lp/up derives 1.375)"
     },
     {
         "name":  "Bentgo Fresh 4-Compartment Leak-Proof Lunch Box",
@@ -1366,6 +1720,12 @@
         "lp":  "$13.50",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Shout Advanced Action Gel Laundry Stain Remover, 22 oz. Trigger \u0026 60 oz. refill",
+        "lp":  "$11.49",
+        "up":  "$0.14/oz",
+        "reason":  "NAME CONFLICT: name states 22, 60 oz but none reproduces Sam\u0027s 0.14/oz (lp/up derives 82.071)"
     },
     {
         "name":  "Sunbrella Extract Oil Based Stain Remover, 5 oz",
@@ -1464,16 +1824,76 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Member\u0027s Mark Oven Roasted Turkey Breast, Sliced 1 lb. 6 oz.",
+        "lp":  "$8.92",
+        "up":  "$0.41/oz",
+        "reason":  "NAME CONFLICT: name states 16, 6 oz but none reproduces Sam\u0027s 0.41/oz (lp/up derives 21.756)"
+    },
+    {
+        "name":  "Member\u0027s Mark Honey Roasted Turkey Breast, Sliced, 1 lb. 6 oz.",
+        "lp":  "$8.92",
+        "up":  "$0.41/oz",
+        "reason":  "NAME CONFLICT: name states 16, 6 oz but none reproduces Sam\u0027s 0.41/oz (lp/up derives 21.756)"
+    },
+    {
+        "name":  "Member\u0027s Mark Four Peppered Turkey Breast, Sliced, 1 lb. 6 oz.",
+        "lp":  "$9.57",
+        "up":  "$6.96/lb",
+        "reason":  "NAME CONFLICT: name states 1, 0.375 lb but none reproduces Sam\u0027s 6.96/lb (lp/up derives 1.375)"
+    },
+    {
         "name":  "Principe Uncured Salami Trio, 12 oz.",
         "lp":  "$7.87",
         "up":  "",
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Member\u0027s Mark Uncured Black Forest Ham, Sliced, 1 lb. 6 oz.",
+        "lp":  "$6.97",
+        "up":  "$5.07/lb",
+        "reason":  "NAME CONFLICT: name states 1, 0.375 lb but none reproduces Sam\u0027s 5.07/lb (lp/up derives 1.375)"
+    },
+    {
+        "name":  "Member\u0027s Mark Uncured Honey Ham, Sliced, 1 lb. 6 oz.",
+        "lp":  "$6.97",
+        "up":  "$5.07/lb",
+        "reason":  "NAME CONFLICT: name states 1, 0.375 lb but none reproduces Sam\u0027s 5.07/lb (lp/up derives 1.375)"
+    },
+    {
+        "name":  "Member\u0027s Mark Seasoned Angus Roast Beef, Sliced, 1 lb. 6 oz.",
+        "lp":  "$14.34",
+        "up":  "$0.65/oz",
+        "reason":  "NAME CONFLICT: name states 16, 6 oz but none reproduces Sam\u0027s 0.65/oz (lp/up derives 22.062)"
+    },
+    {
         "name":  "Premium Carved Oven Roasted Turkey Breast",
         "lp":  "$10.68",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark Uncured Black Forest Ham, Sliced, 1 lb. 6 oz.",
+        "lp":  "$6.97",
+        "up":  "$5.07/lb",
+        "reason":  "NAME CONFLICT: name states 1, 0.375 lb but none reproduces Sam\u0027s 5.07/lb (lp/up derives 1.375)"
+    },
+    {
+        "name":  "Member\u0027s Mark Uncured Hard Salami, Sliced 1 lb. 6 oz.",
+        "lp":  "$8.46",
+        "up":  "$0.38/oz",
+        "reason":  "NAME CONFLICT: name states 16, 6 oz but none reproduces Sam\u0027s 0.38/oz (lp/up derives 22.263)"
+    },
+    {
+        "name":  "Member\u0027s Mark Uncured Pepperoni, Sliced, 1 lb. 6 oz.",
+        "lp":  "$8.46",
+        "up":  "$0.38/oz",
+        "reason":  "NAME CONFLICT: name states 16, 6 oz but none reproduces Sam\u0027s 0.38/oz (lp/up derives 22.263)"
+    },
+    {
+        "name":  "Member\u0027s Mark Uncured Honey Ham, Sliced, 1 lb. 6 oz.",
+        "lp":  "$6.97",
+        "up":  "$5.07/lb",
+        "reason":  "NAME CONFLICT: name states 1, 0.375 lb but none reproduces Sam\u0027s 5.07/lb (lp/up derives 1.375)"
     },
     {
         "name":  "Nordic Ware Extra Large Oven Crisping Baking Tray",
@@ -1504,6 +1924,18 @@
         "lp":  "$28.84",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "The Only Bean Edamame Beans, 0.8 oz., 14 pk.",
+        "lp":  "$6.98",
+        "up":  "$0.65/oz",
+        "reason":  "NAME CONFLICT: name states 0.8, 11.2 oz but none reproduces Sam\u0027s 0.65/oz (lp/up derives 10.738)"
+    },
+    {
+        "name":  "Corn Nuts Crunchy Corn Snacks, Variety Pack, 1.7 oz., 24 pk.",
+        "lp":  "$10.98",
+        "up":  "$0.26/oz",
+        "reason":  "NAME CONFLICT: name states 1.7, 40.8 oz but none reproduces Sam\u0027s 0.26/oz (lp/up derives 42.231)"
     },
     {
         "name":  "Little Brainiac Neuro+ Smoothie, Choose Flavor",
@@ -1566,6 +1998,54 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Dole Tropical Gold Pineapple Chunks, 15.25 oz., 6 pk.",
+        "lp":  "$11.48",
+        "up":  "$0.12/oz",
+        "reason":  "NAME CONFLICT: name states 15.25, 91.5 oz but none reproduces Sam\u0027s 0.12/oz (lp/up derives 95.667)"
+    },
+    {
+        "name":  "Sheba Perfect Portions Cuts in Gravy Adult Variety Wet Cat Food, Twin-Pack Tray, 1.32 oz., 60 ct., 120 servings",
+        "lp":  "$41.98",
+        "up":  "$0.27/oz",
+        "reason":  "NAME CONFLICT: name states 1.32, 79.2 oz but none reproduces Sam\u0027s 0.27/oz (lp/up derives 155.481)"
+    },
+    {
+        "name":  "Temptations Classics Mixups Chicken, Catnip, and Seafood Adult Cat Treats, 16 oz., 3 tubs",
+        "lp":  "$19.18",
+        "up":  "$0.40/oz",
+        "reason":  "NAME CONFLICT: name states 16 oz but none reproduces Sam\u0027s 0.4/oz (lp/up derives 47.95)"
+    },
+    {
+        "name":  "Temptations Classics Mixups Chicken, Catnip, and Seafood Adult Cat Treats, 16 oz., 3 tubs",
+        "lp":  "$19.18",
+        "up":  "$0.40/oz",
+        "reason":  "NAME CONFLICT: name states 16 oz but none reproduces Sam\u0027s 0.4/oz (lp/up derives 47.95)"
+    },
+    {
+        "name":  "Sheba Perfect Portions Cuts in Gravy Adult Variety Wet Cat Food, Twin-Pack Tray, 1.32 oz., 60 ct., 120 servings",
+        "lp":  "$41.98",
+        "up":  "$0.27/oz",
+        "reason":  "NAME CONFLICT: name states 1.32, 79.2 oz but none reproduces Sam\u0027s 0.27/oz (lp/up derives 155.481)"
+    },
+    {
+        "name":  "Sheba Perfect Portions Cuts in Gravy Adult Variety Wet Cat Food, Twin-Pack Tray, 1.32 oz., 60 ct., 120 servings",
+        "lp":  "$41.98",
+        "up":  "$0.27/oz",
+        "reason":  "NAME CONFLICT: name states 1.32, 79.2 oz but none reproduces Sam\u0027s 0.27/oz (lp/up derives 155.481)"
+    },
+    {
+        "name":  "Temptations Classics Mixups Chicken, Catnip, and Seafood Adult Cat Treats, 16 oz., 3 tubs",
+        "lp":  "$19.18",
+        "up":  "$0.40/oz",
+        "reason":  "NAME CONFLICT: name states 16 oz but none reproduces Sam\u0027s 0.4/oz (lp/up derives 47.95)"
+    },
+    {
+        "name":  "Cheez-It Snap\u0027d, Baked Snack Chips, Variety Pack, 0.75 oz., 42 pk.",
+        "lp":  "$13.98",
+        "up":  "$0.46/oz",
+        "reason":  "NAME CONFLICT: name states 0.75, 31.5 oz but none reproduces Sam\u0027s 0.46/oz (lp/up derives 30.391)"
+    },
+    {
         "name":  "L\u0027Oreal Paris Elvive Hyaluron Plump Hydrating Shampoo \u0026 Conditioner, 40 fl. oz. 2pk",
         "lp":  "$16.98",
         "up":  "",
@@ -1582,6 +2062,12 @@
         "lp":  "$14.98",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "MadeGood Soft Baked Cookie Bites Variety Pack, 0.85 oz., 32 pk.",
+        "lp":  "$10.98",
+        "up":  "$0.41/oz",
+        "reason":  "NAME CONFLICT: name states 0.85, 27.2 oz but none reproduces Sam\u0027s 0.41/oz (lp/up derives 26.78)"
     },
     {
         "name":  "Red Bull Sugar Free Pink Edition 8.4 fl. oz., 24 pk.",
@@ -1656,6 +2142,12 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Vital Proteins Strawberry Lemonade Collagen Peptides Powder - 26ct",
+        "lp":  "$29.98",
+        "up":  "$1.09/ea",
+        "reason":  "NAME CONFLICT: name states 26 ct but none reproduces Sam\u0027s 1.09/ct (lp/up derives 27.505)"
+    },
+    {
         "name":  "Alder Creek Gift Baskets Sunshine is for Lemonade",
         "lp":  "$50.00",
         "up":  "",
@@ -1686,6 +2178,12 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Gold Medal Mega Pop Popcorn Kit, 8 oz., 36 pk.",
+        "lp":  "$42.68",
+        "up":  "$0.20/oz",
+        "reason":  "NAME CONFLICT: name states 8, 288 oz but none reproduces Sam\u0027s 0.2/oz (lp/up derives 213.4)"
+    },
+    {
         "name":  "Cracker Jack Original Caramel Coated Popcorn and Peanuts 1.25 oz., 30 pk.",
         "lp":  "$9.98",
         "up":  "",
@@ -1696,6 +2194,18 @@
         "lp":  "$13.98",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Gold Medal Mega Pop Popcorn Kit, 10.6 oz., 24 pk.",
+        "lp":  "$33.88",
+        "up":  "$0.18/oz",
+        "reason":  "NAME CONFLICT: name states 10.6, 254.4 oz but none reproduces Sam\u0027s 0.18/oz (lp/up derives 188.222)"
+    },
+    {
+        "name":  "Gold Medal Mega Pop Popcorn Kit, 22 oz.",
+        "lp":  "$44.58",
+        "up":  "$0.14/oz",
+        "reason":  "NAME CONFLICT: name states 22 oz but none reproduces Sam\u0027s 0.14/oz (lp/up derives 318.429)"
     },
     {
         "name":  "Golden Kernel Super Deluxe Mixed Nuts, 30 oz.",
@@ -1726,6 +2236,12 @@
         "lp":  "$26.98",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Combos Stuffed Baked Pretzel Snacks, Variety Pack, 1.76 oz, 18 pk.",
+        "lp":  "$9.98",
+        "up":  "$0.31/oz",
+        "reason":  "NAME CONFLICT: name states 1.76, 31.68 oz but none reproduces Sam\u0027s 0.31/oz (lp/up derives 32.194)"
     },
     {
         "name":  "Clorox Antimicrobial Round Stay Fresh Scented Plastic Toilet Seat Value Pack",
@@ -1926,6 +2442,12 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Mangos, 8.8 lbs.",
+        "lp":  "$12.95",
+        "up":  "$1.52/lb",
+        "reason":  "NAME CONFLICT: name states 8.8 lb but none reproduces Sam\u0027s 1.52/lb (lp/up derives 8.52)"
+    },
+    {
         "name":  "Pepperoni Pizza Pretzel",
         "lp":  "$1.98",
         "up":  "",
@@ -2100,10 +2622,40 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Minh Frozen Large Pork Egg Rolls, 44 oz., 2 PK",
+        "lp":  "$9.88",
+        "up":  "$0.62/ea",
+        "reason":  "NAME CONFLICT: name states 2 ct but none reproduces Sam\u0027s 0.62/ct (lp/up derives 15.935)"
+    },
+    {
         "name":  "Appetizers To Go Crispy Cream Cheese Rangoons (20 ct.)",
         "lp":  "$9.97",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Huggies Natural Care Sensitive Baby Wipes, Fragrance Free, 17 pk., 1088 Wipes",
+        "lp":  "$21.98",
+        "up":  "$0.02/ea",
+        "reason":  "NAME CONFLICT: name states 17 ct but none reproduces Sam\u0027s 0.02/ct (lp/up derives 1099)"
+    },
+    {
+        "name":  "Huggies Natural Care Baby Wipes, Cucumber and Green Tea, 17 pk., 1088 Wipes",
+        "lp":  "$21.98",
+        "up":  "$0.02/ea",
+        "reason":  "NAME CONFLICT: name states 17 ct but none reproduces Sam\u0027s 0.02/ct (lp/up derives 1099)"
+    },
+    {
+        "name":  "Huggies Simply Clean Unscented Baby Wipes, 18 pk., 1152 Wipes",
+        "lp":  "$21.98",
+        "up":  "$0.02/ea",
+        "reason":  "NAME CONFLICT: name states 18 ct but none reproduces Sam\u0027s 0.02/ct (lp/up derives 1099)"
+    },
+    {
+        "name":  "Pampers Aqua Pure Baby Wipes, Fragrance Free, 13 pk., 728 Wipes",
+        "lp":  "$26.98",
+        "up":  "$0.04/ea",
+        "reason":  "NAME CONFLICT: name states 13 ct but none reproduces Sam\u0027s 0.04/ct (lp/up derives 674.5)"
     },
     {
         "name":  "Huggies Extra Large Baby Wipes, 18 Flip-Top Packs, 756 ct.",
@@ -2118,6 +2670,30 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Huggies Nourish Baby Wipes, Cocoa \u0026 Shea Butter, 10 pk., 640 Wipes",
+        "lp":  "$21.98",
+        "up":  "$0.03/ea",
+        "reason":  "NAME CONFLICT: name states 10 ct but none reproduces Sam\u0027s 0.03/ct (lp/up derives 732.667)"
+    },
+    {
+        "name":  "Member\u0027s Mark Premium Baby Wipes, Fragrance Free, 12 pk., 1152 Wipes",
+        "lp":  "$21.74",
+        "up":  "$0.02/ea",
+        "reason":  "NAME CONFLICT: name states 12 ct but none reproduces Sam\u0027s 0.02/ct (lp/up derives 1087)"
+    },
+    {
+        "name":  "Member\u0027s Mark Premium Baby Wipes, Refreshing Clean Scent, 12 pk., 1152 Wipes",
+        "lp":  "$21.74",
+        "up":  "$0.02/ea",
+        "reason":  "NAME CONFLICT: name states 12 ct but none reproduces Sam\u0027s 0.02/ct (lp/up derives 1087)"
+    },
+    {
+        "name":  "Pampers, Complete Clean Baby Wipes, Baby Fresh Scent, 15 pk., 1200 Wipes",
+        "lp":  "$24.48",
+        "up":  "$0.02/ea",
+        "reason":  "NAME CONFLICT: name states 15 ct but none reproduces Sam\u0027s 0.02/ct (lp/up derives 1224)"
+    },
+    {
         "name":  "Momcozy Baby Wipe Warmer with Night Light",
         "lp":  "$28.78",
         "up":  "",
@@ -2128,6 +2704,12 @@
         "lp":  "$41.98",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "2XL Professional Gym Wipes, Unscented (700 wipes/pk., 4 pk.)",
+        "lp":  "$110.56",
+        "up":  "$0.04/ea",
+        "reason":  "NAME CONFLICT: name states 4 ct but none reproduces Sam\u0027s 0.04/ct (lp/up derives 2764)"
     },
     {
         "name":  "Sealy Soybean Comfort 3-Sided Contoured Diaper Changing Pad, White",
@@ -2202,10 +2784,28 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Bonduelle Bistro Loaded Chicken \u0026 Guacamole Bowl, 8 oz., 2 pk.",
+        "lp":  "$7.12",
+        "up":  "$0.46/oz",
+        "reason":  "NAME CONFLICT: name states 8, 16 oz but none reproduces Sam\u0027s 0.46/oz (lp/up derives 15.478)"
+    },
+    {
         "name":  "Tanimura and Antle Sweet Italian Red Onions, 6 lbs.",
         "lp":  "$5.96",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Dole Tropical Gold Pineapple Chunks, 15.25 oz., 6 pk.",
+        "lp":  "$11.48",
+        "up":  "$0.12/oz",
+        "reason":  "NAME CONFLICT: name states 15.25, 91.5 oz but none reproduces Sam\u0027s 0.12/oz (lp/up derives 95.667)"
+    },
+    {
+        "name":  "Dole Tropical Gold Pineapple Chunks, 15.25 oz., 6 pk.",
+        "lp":  "$11.48",
+        "up":  "$0.12/oz",
+        "reason":  "NAME CONFLICT: name states 15.25, 91.5 oz but none reproduces Sam\u0027s 0.12/oz (lp/up derives 95.667)"
     },
     {
         "name":  "Petkit Puramax 2 Automatic Self-Cleaning Litter Box Bundle",
@@ -2364,16 +2964,34 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Member\u0027s Mark Premium Baby Wipes, Fragrance Free, 12 pk., 1152 Wipes",
+        "lp":  "$21.74",
+        "up":  "$0.02/ea",
+        "reason":  "NAME CONFLICT: name states 12 ct but none reproduces Sam\u0027s 0.02/ct (lp/up derives 1087)"
+    },
+    {
         "name":  "Member\u0027s Mark Peanut Butter \u0026 Banana Soft \u0026 Chewy Dog Treats, 3 lbs.",
         "lp":  "$14.98",
         "up":  "",
         "reason":  "no unitPrice"
     },
     {
+        "name":  "UBite Raw Bits Freeze-Dried Beef Liver Dog + Cat Treats, 17 oz.",
+        "lp":  "$12.98",
+        "up":  "$0.74/oz",
+        "reason":  "NAME CONFLICT: name states 17 oz but none reproduces Sam\u0027s 0.74/oz (lp/up derives 17.541)"
+    },
+    {
         "name":  "Suavitel Advanced Liquid Fabric Softener, Field Flowers, 280 loads, 160 fl. oz.",
         "lp":  "$11.98",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Kleenex Snap \u0026 Go Facial Tissues, 12 packs, 25 tissues/pack",
+        "lp":  "$14.98",
+        "up":  "$0.05/ea",
+        "reason":  "NAME CONFLICT: name states 12 ct but none reproduces Sam\u0027s 0.05/ct (lp/up derives 299.6)"
     },
     {
         "name":  "Kiehl\u0027s Ultra Facial Cream, Choose Size",
@@ -2410,6 +3028,36 @@
         "lp":  "$10.78",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark Organic Fruit Twist, Variety Pack, 0.63 oz., 24 pk.",
+        "lp":  "$9.98",
+        "up":  "$0.52/oz",
+        "reason":  "NAME CONFLICT: name states 0.63, 15.12 oz but none reproduces Sam\u0027s 0.52/oz (lp/up derives 19.192)"
+    },
+    {
+        "name":  "Nature\u0027s Garden Probiotic Mixed Berry Yoggies 0.7 oz., 24 pk.",
+        "lp":  "$10.38",
+        "up":  "$0.61/oz",
+        "reason":  "NAME CONFLICT: name states 0.7, 16.8 oz but none reproduces Sam\u0027s 0.61/oz (lp/up derives 17.016)"
+    },
+    {
+        "name":  "Pure Organic Layered Fruit Bars, Snack Variety Pack, 0.63 oz., 28 pk.",
+        "lp":  "$13.98",
+        "up":  "$0.72/oz",
+        "reason":  "NAME CONFLICT: name states 0.63, 17.64 oz but none reproduces Sam\u0027s 0.72/oz (lp/up derives 19.417)"
+    },
+    {
+        "name":  "Sprayway Glass Cleaner, 19 oz., Choose Pack Size",
+        "lp":  "$8.38",
+        "up":  "$0.11/foz",
+        "reason":  "NAME CONFLICT: name states 19 fl oz but none reproduces Sam\u0027s 0.11/fl oz (lp/up derives 76.182)"
+    },
+    {
+        "name":  "Windex Original Glass Cleaner, 1 spray bottle + 128 fl. oz. Refill",
+        "lp":  "$11.72",
+        "up":  "$0.07/foz",
+        "reason":  "NAME CONFLICT: name states 128 fl oz but none reproduces Sam\u0027s 0.07/fl oz (lp/up derives 167.429)"
     },
     {
         "name":  "ZEISS Lens Cleaning Solution Kit",
@@ -2454,6 +3102,12 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Gold Peak Unsweetened Tea 16.9 fl. oz., 18 pk.",
+        "lp":  "$16.98",
+        "up":  "$0.08/foz",
+        "reason":  "NAME CONFLICT: name states 16.9, 304.2 fl oz but none reproduces Sam\u0027s 0.08/fl oz (lp/up derives 212.25)"
+    },
+    {
         "name":  "ECOS Hypoallergenic Liquid Laundry Detergent + Enzymes, Lavender Scent, 230 loads, 210 fl. oz.",
         "lp":  "$17.98",
         "up":  "",
@@ -2482,6 +3136,12 @@
         "lp":  "$19.96",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Mangos, 8.8 lbs.",
+        "lp":  "$12.95",
+        "up":  "$1.52/lb",
+        "reason":  "NAME CONFLICT: name states 8.8 lb but none reproduces Sam\u0027s 1.52/lb (lp/up derives 8.52)"
     },
     {
         "name":  "Listerine On-The-Go Cool Mint Mouthwash Sachets, Alcohol Free, 45 ct.",
@@ -2536,6 +3196,18 @@
         "lp":  "$41.38",
         "up":  "$0.01/sft",
         "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Marathon Interfold 1-Ply White Dispenser Napkins, 12 pk., 250 napkins/pk.",
+        "lp":  "$27.48",
+        "up":  "$0.01/ea",
+        "reason":  "NAME CONFLICT: name states 12 ct but none reproduces Sam\u0027s 0.01/ct (lp/up derives 2748)"
+    },
+    {
+        "name":  "Party Essentials Napkin Roll Bag Set with Black Cutlery (4 - 25 ct. packs, 100 total)",
+        "lp":  "$24.48",
+        "up":  "$0.24/ea",
+        "reason":  "NAME CONFLICT: name states 25 ct but none reproduces Sam\u0027s 0.24/ct (lp/up derives 102)"
     },
     {
         "name":  "Member\u0027s Mark Select \u0026 Tear 2-Ply Paper Towel 15 rolls, 150 sheets/roll",
@@ -2626,6 +3298,12 @@
         "lp":  "$5.96",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "The Only Bean Edamame Beans, 0.8 oz., 14 pk.",
+        "lp":  "$6.98",
+        "up":  "$0.65/oz",
+        "reason":  "NAME CONFLICT: name states 0.8, 11.2 oz but none reproduces Sam\u0027s 0.65/oz (lp/up derives 10.738)"
     },
     {
         "name":  "Mariani Yogurt Coated Blueberries with Chia Seed Crunch, 20 oz.",
@@ -2728,6 +3406,12 @@
         "lp":  "$4.98",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Gold Peak Unsweetened Tea 16.9 fl. oz., 18 pk.",
+        "lp":  "$16.98",
+        "up":  "$0.08/foz",
+        "reason":  "NAME CONFLICT: name states 16.9, 304.2 fl oz but none reproduces Sam\u0027s 0.08/fl oz (lp/up derives 212.25)"
     },
     {
         "name":  "Member\u0027s Mark Grade A Vitamin D Whole Milk, 1 gal.",
@@ -2910,6 +3594,18 @@
         "reason":  "no unitPrice"
     },
     {
+        "name":  "Clorox Disinfecting Wipes Refills, Fresh Scent (700 wipes/pk., 2 pk.)",
+        "lp":  "$60.54",
+        "up":  "$0.04/ea",
+        "reason":  "NAME CONFLICT: name states 2 ct but none reproduces Sam\u0027s 0.04/ct (lp/up derives 1513.5)"
+    },
+    {
+        "name":  "2XL Professional Gym Wipes, Unscented (700 wipes/pk., 4 pk.)",
+        "lp":  "$110.56",
+        "up":  "$0.04/ea",
+        "reason":  "NAME CONFLICT: name states 4 ct but none reproduces Sam\u0027s 0.04/ct (lp/up derives 2764)"
+    },
+    {
         "name":  "Member\u0027s Mark Commercial  Disinfectant, Lemon Scent, 4 pk., 1 gal. each",
         "lp":  "$30.32",
         "up":  "",
@@ -2943,13 +3639,25 @@
         "name":  "Purell Advanced Gel Hand Sanitizer Refill 1,200 mL, 2 ct.",
         "lp":  "$43.48",
         "up":  "$43.48/ea",
-        "reason":  "INVARIANT: no shape reproduces Sam\u0027s 43.48/ct -\u003e package: engine 21.74 vs Sam\u0027s 43.48 (50% off) | per-unit: engine 21.74 vs Sam\u0027s 43.48 (50% off)"
+        "reason":  "NAME CONFLICT: name states 2 ct but none reproduces Sam\u0027s 43.48/ct (lp/up derives 1)"
+    },
+    {
+        "name":  "Purell Push-Style Hand Sanitizer Dispenser, White 1 pk.",
+        "lp":  "$10.88",
+        "up":  "$5.44/ea",
+        "reason":  "NAME CONFLICT: name states 1 ct but none reproduces Sam\u0027s 5.44/ct (lp/up derives 2)"
     },
     {
         "name":  "Purell Advanced Hand Sanitizer, Refreshing Gel, 33.8 fl. oz.",
         "lp":  "$7.48",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark Aloe Vera Moisturizing Hand Soap, 80 fl. oz.",
+        "lp":  "$7.98",
+        "up":  "$0.05/foz",
+        "reason":  "NAME CONFLICT: name states 80 fl oz but none reproduces Sam\u0027s 0.05/fl oz (lp/up derives 159.6)"
     },
     {
         "name":  "Dove Liquid Hand Wash Gel Variety Pack,12 oz., 3 pk.",
@@ -2986,6 +3694,12 @@
         "lp":  "$21.48",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Scrub Daddy Dish Daddy Non-Scratch Sponge Dishwand + Non-Scratch Scrub Dishwand Refills, 6 ct.",
+        "lp":  "$11.18",
+        "up":  "$1.60/ea",
+        "reason":  "NAME CONFLICT: name states 6 ct but none reproduces Sam\u0027s 1.6/ct (lp/up derives 6.988)"
     },
     {
         "name":  "Mr. Clean Magic Eraser Shower \u0026 Tub Scrubber Starter Kit, Lavender, 1 Scrubber + 6 Erasers",

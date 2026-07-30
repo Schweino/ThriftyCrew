@@ -221,7 +221,16 @@ function Build-Row($raw) {
     if ($err -le 0.005001 -and $err -lt $bestErr) { $best = $c; $bestErr = $err }   # would display as Sam's up
   }
   if ($best) { $qty = $best; $basis = 'name (reproduces Sam''s unit price)' }
-  elseif ($cands.Count) { $basis = ('derived lp/up; no name quantity (' + (($cands | Select-Object -First 4) -join ', ') + ') reproduces Sam''s ' + $up) }
+  elseif ($cands.Count) {
+    # THE SAZON RULE (2026-07-29). The name STATES a quantity in the very unit Sam's priced by, and NO reading
+    # of it reproduces Sam's own unit price. One of the two store numbers is wrong and we cannot tell which:
+    # back-solving lp/up published Goya Sazon (a 6.3 oz box of 36 packets) as size 65.429 oz -> $0.07/oz, 8x
+    # under every other store, CROWNED the commodity and banked a record low. When the name is SILENT in the
+    # priced unit, lp/up is the only measure of the pack and stays trusted (the bulk class - Q-tips, trash
+    # bags - where Sam's arithmetic is right); when the name SPEAKS in that unit and disagrees, the row is
+    # ambiguous and is REJECTED, never published.
+    return @{ err=('NAME CONFLICT: name states ' + (($cands | Select-Object -First 4) -join ', ') + ' ' + $u.tok + ' but none reproduces Sam''s ' + $up + '/' + $u.tok + ' (lp/up derives ' + (Format-Qty $derived) + ')') }
+  }
   # A COUNT MUST BE A WHOLE NUMBER. You cannot buy 210.889 trash bags, and a fractional count is not merely
   # untidy - compare-deals' Get-PackCount regex reads the digits immediately before "ct", so size "210.889 ct"
   # is parsed as a pack of EIGHT HUNDRED EIGHTY-NINE and the price comes out 4x low. (The invariant check
@@ -374,10 +383,23 @@ if ($SelfTest) {
     } else { Write-Output "FAIL  cross-unit: each=$($asEach.unit_price) oz=$($asOz.unit_price)"; $fail++ }
   } else { Write-Output "FAIL  cross-unit size = '$($r7f.size)' want '32 ct 3.2 oz'"; $fail++ }
 
-  # 8. a row whose name lies about the pack by >5% must fall back to Sam's arithmetic, never publish the lie
-  $r8 = Build-Row (_R 'Bogus Beans, 99 ct.' '$3.27' '$1.09/ea')
-  if ($r8.row -and $r8.row.size -eq '3 ct' -and $r8.row.qty_basis -match 'no name quantity') { Write-Output "ok    name-vs-arithmetic conflict -> trusts lp/up ($($r8.row.qty_basis))" }
-  else { Write-Output "FAIL  conflict row: $($r8.err)$($r8.row.size)"; $fail++ }
+  # 8. THE SAZON MUST-FIRE (real row, 2026-07-29): the name states 6.3 oz / 36 ct (-> 226.8 oz) in the unit
+  #    Sam's priced by and NEITHER reading reproduces Sam's $0.07/oz, so back-solving lp/up invented a
+  #    65.429 oz package and published $0.07/oz - 8x under Aldi's $0.5633/oz - crowning the commodity and
+  #    banking a record low. Such a row must now REJECT, never publish.
+  $r8 = Build-Row (_R 'Goya Sazon Seasoning 6.3 oz., 36 ct.' '$4.58' '$0.07/oz')
+  if ($r8.err -and $r8.err -match 'NAME CONFLICT') { Write-Output "ok    sazon conflict rejected -> $($r8.err)" }
+  else { Write-Output "FAIL  sazon must reject, got ad=$($r8.row.ad_price) size='$($r8.row.size)'"; $fail++ }
+  # 8b. the count flavor of the same conflict (before the Sazon rule this published via the lp/up fallback)
+  $r8b = Build-Row (_R 'Bogus Beans, 99 ct.' '$3.27' '$1.09/ea')
+  if ($r8b.err -and $r8b.err -match 'NAME CONFLICT') { Write-Output "ok    lying count rejected -> $($r8b.err)" }
+  else { Write-Output "FAIL  lying-count row must reject: $($r8b.row.size)"; $fail++ }
+  # 8c. KEEP-SIDE TWIN (the bulk class the fallback exists FOR): "13 Gallon" is bag CAPACITY, not a count -
+  #     the name states NO quantity in the priced unit (ea), so Sam's own lp/up arithmetic still stands
+  #     (18.98/0.09 -> 211 ct) and the row still publishes.
+  $r8c = Build-Row (_R 'Hefty Ultra Strong 13 Gallon Kitchen Drawstring Trash Bags' '$18.98' '$0.09/ea')
+  if ($r8c.row -and $r8c.row.size -eq '211 ct' -and $r8c.row.qty_basis -match 'derived lp/up') { Write-Output "ok    keep-side: name silent in priced unit -> derived 211 ct kept ($($r8c.row.qty_basis))" }
+  else { Write-Output "FAIL  keep-side fallback lost: $($r8c.err)$($r8c.row.size)"; $fail++ }
 
   # 9. rows the engine cannot price are REJECTED, not published
   foreach ($bad in @(@{r=(_R 'No Unit Price Item' '$5.00' ''); l='missing unitPrice'},
