@@ -289,5 +289,26 @@ try {
 } catch { Bad ('utf8 fixture threw: ' + $_.Exception.Message) }
 finally { if (Test-Path $tmpU) { Remove-Item -LiteralPath $tmpU -Force -ErrorAction SilentlyContinue } }
 
+# ---------------------------------------------------------------- N+2. allowlist-rot must cover ALL allowlists
+# basis-reconcile-allowlist.json was omitted from guards' hygiene loop, and it is the one that suppresses
+# FACTOR-level basis conflicts - the class that decides which store the board calls cheapest. It was therefore
+# the only allowlist entries could age in forever with no expiry pressure at all.
+$gtxt = Get-Content (Join-Path $root 'guards.ps1') -Raw
+foreach ($al in @('multipack-allowlist.json','coverage-gap-allowlist.json','basis-reconcile-allowlist.json')) {
+  if ($gtxt -match [regex]::Escape($al)) { Ok "allowlist-rot check still covers $al" }
+  else { Bad "$al dropped out of guards' allowlist-rot loop - stale suppressions in it become invisible" }
+}
+# And every allowlist on disk must still expose a key the extractor recognises. A file that renamed its list
+# would yield zero entries and the rot check would report a clean bill of health for a list it never opened.
+foreach ($al in @('multipack-allowlist.json','coverage-gap-allowlist.json','basis-reconcile-allowlist.json')) {
+  $ap = Join-Path $root $al
+  if (-not (Test-Path $ap)) { continue }
+  try {
+    $ad = Get-Content $ap -Raw | ConvertFrom-Json
+    if ($ad.PSObject.Properties['allow'] -or $ad.PSObject.Properties['gaps']) { Ok "$al still exposes a recognised entry list" }
+    else { Bad "$al exposes neither .allow nor .gaps - guards' rot check is scanning ZERO entries from it" }
+  } catch { Bad "$al does not parse: $($_.Exception.Message)" }
+}
+
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2

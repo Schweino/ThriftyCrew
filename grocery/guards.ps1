@@ -164,17 +164,32 @@ try {
 # board would be the cries-wolf failure this file keeps re-learning.)
 try {
   $stale = 0; $undated = 0
-  foreach ($alf in @('multipack-allowlist.json', 'coverage-gap-allowlist.json')) {
+  # basis-reconcile-allowlist.json was NOT in this list, and it is the one that most needs to be. It suppresses
+  # FACTOR-level disagreements between our published per-unit and the store's own unit price - which is the
+  # class that decides which store the board calls cheapest. Its own readme is the sternest of the three ("a
+  # factor disagreement between two independent statements of the same quantity means one of them is a basis
+  # error, and basis errors are the class that lands on the cheapest-store verdict"), and it was the only
+  # allowlist under no expiry pressure at all: entries could age there forever without ever being re-verified.
+  foreach ($alf in @('multipack-allowlist.json', 'coverage-gap-allowlist.json', 'basis-reconcile-allowlist.json')) {
     $p = Join-Path $root $alf
     if (-not (Test-Path $p)) { continue }
     $doc = Get-Content $p -Raw | ConvertFrom-Json
+    # SCHEMA DRIFT MUST NOT READ AS CLEAN. This extraction knows exactly two key names; a file that used a
+    # third would yield @() and contribute ZERO stale entries, so the hygiene check would report a clean bill
+    # of health for a list it never opened. That is the same "no findings" / "nothing examined" collapse the
+    # zero-rows rule exists for, one level up: here the thing going blind is the expiry pressure itself.
+    $hasList = ($doc.PSObject.Properties['allow'] -ne $null) -or ($doc.PSObject.Properties['gaps'] -ne $null)
+    if (-not $hasList) {
+      [void]$warn.Add("$alf parses to NO recognised entry list (expected .allow or .gaps) - the allowlist-rot check scanned ZERO entries from it, so a stale suppression in that file is invisible")
+      continue
+    }
     $entries = if ($doc.PSObject.Properties['allow']) { @($doc.allow) } elseif ($doc.PSObject.Properties['gaps']) { @($doc.gaps) } else { @() }
     foreach ($e in $entries) {
       if (-not $e.PSObject.Properties['reviewed'] -or -not $e.reviewed) { $undated++; continue }
       try { if (([datetime]::Today - [datetime]$e.reviewed).TotalDays -gt 120) { $stale++ } } catch { $undated++ }
     }
   }
-  if (($stale + $undated) -gt 0) { [void]$warn.Add("allowlist hygiene: $stale entr(y/ies) reviewed >120 days ago + $undated with no 'reviewed' date - re-verify against the store and stamp 'reviewed: yyyy-MM-dd' (multipack-allowlist / coverage-gap-allowlist)") }
+  if (($stale + $undated) -gt 0) { [void]$warn.Add("allowlist hygiene: $stale entr(y/ies) reviewed >120 days ago + $undated with no 'reviewed' date - re-verify against the store and stamp 'reviewed: yyyy-MM-dd' (multipack-allowlist / coverage-gap-allowlist / basis-reconcile-allowlist)") }
   else { Say '  ok    allowlist entries all carry a fresh reviewed date' }
 } catch { Say ("  warn  allowlist hygiene check threw: " + $_.Exception.Message) }
 
