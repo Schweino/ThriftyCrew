@@ -29,6 +29,10 @@ $validSet = @{}; $unitMap = @{}; $pintMap = @{}; foreach ($c in $commod) { $vali
 
 $byId = [ordered]@{}
 $byUrl = [ordered]@{}
+# Rows dropped because the catalog slug and the commodity's canonical unit state different bases. Reported
+# below rather than silently swallowed: a dropped cell must always be a named decision, never a quiet gap.
+$basisConflicts = 0
+$basisConflictIds = @()
 foreach ($f in $In) {
   if (-not (Test-Path $f)) { continue }
   foreach ($r in (Get-Content $f -Raw -Encoding UTF8 | ConvertFrom-Json)) {
@@ -61,8 +65,30 @@ foreach ($f in $In) {
     # ~3x that); the band caught it and Fareway just vanished from the row. The slug is the catalog's
     # own statement of basis, so it outranks the tile text.
     if ($r.url -and "$($r.url)" -match '(?i)-1-lb(?:-|$)' -and $sz -eq 'each') { $sz = 'lb' }
+    # Did anything above establish a WEIGHT basis for this row? Either the tile's own unit rate ("$1.49/lb"),
+    # or the catalog slug. Both are the store stating that the price is per pound, not per item.
+    $weightBasis = ($sz -match '^(lb|oz|kg)$')
     # canonical-unit fixups so the engine can price the item in the commodity's unit
     $cu = if ($unitMap.ContainsKey($id)) { $unitMap[$id] } else { '' }
+    # A PER-POUND RATE MUST NEVER BE RELABELLED AS A PER-ITEM PRICE (2026-07-30).
+    # The $cu -eq 'each' branch below rewrites $sz to 'each' while KEEPING whatever $adp was parsed. When the
+    # tile stated a weight rate, $adp is that rate, and the rewrite silently turns "$1.49 per pound" into
+    # "$1.49 for one item". Honeydew is the live case: Fareway's capture reads price=5.96, per=package,
+    # unit=$1.49/lb, size="About 4.0 lb / package", url=.../17668522-honeydew-melon-1-lb. Every one of those
+    # says four pounds for $5.96. The board published $1.49 EACH, took the CROWN from Baker's genuine $2.99
+    # each, was written up with the store's own arithmetic on 2026-07-29, and was still the published cheapest
+    # price the day after.
+    # The fix is NOT to pick a winner between the two bases, and NOT to compute $5.96 x something here: the
+    # capture's own package price is right there, but re-deriving a published number from a plausible reading
+    # is the blind-swap trap that has twice removed correct data in this repo. Two statements of basis
+    # disagree, so the honest output is no number. The row is dropped and NAMED - a missing cell is visible on
+    # the page and a wrong crown is not.
+    # A counted pack ("12 ct") is NOT a conflict: the count is the quantity, not a weight claim.
+    if ($weightBasis -and $cu -eq 'each' -and $size -notmatch '\d+\s*ct\b') {
+      $basisConflicts++
+      $basisConflictIds += ("$id (" + $name + ")")
+      continue
+    }
     if ($cu -eq 'each') {
       # a loaf / avocado / ear / whole melon = one each; the current price IS the per-each price.
       # BUT a counted pack ("12 ct" buns/popsicles/tampons) must KEEP its count so the engine divides
@@ -150,6 +176,9 @@ if ($urlRows.Count) {
   Write-Output ("store-fareway1-urls.json: $($urlRows.Count) Fareway product links")
 }
 Write-Output ("fareway-regular-$asofS.json: $($deals.Count) commodities")
+if ($basisConflicts -gt 0) {
+  Write-Output ("  BASIS CONFLICT - dropped $basisConflicts row(s): the catalog slug says per-pound but the commodity is priced per-each, so the price could mean either a pound or a whole item. No number is honest here; these cells are absent by decision, not by accident: " + (($basisConflictIds | Sort-Object -Unique) -join ', '))
+}
 $deals | ForEach-Object { "  {0,-20} {1,-8} {2}" -f $_.item.Substring(0,[Math]::Min(20,$_.item.Length)), $_.ad_price, $_.size }
 # 2026-07-23: a partial storefront pull must not shrink the board - carry items the previous capture had
 # and this one missed (as_of-stamped, 14-day cap). See carry-forward-regular.ps1 for why these stores

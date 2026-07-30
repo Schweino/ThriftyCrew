@@ -1010,7 +1010,8 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\bbuns?\\b"
                     ]
     },
     {
@@ -4194,7 +4195,9 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\bcats?\\b",
+                        "\\bdogs?\\b"
                     ]
     },
     {
@@ -5280,7 +5283,8 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\bpuree\\b"
                     ]
     },
     {
@@ -27578,7 +27582,8 @@
                         "\\bpet\\b",
                         "detergent",
                         "\\bbar\\b",
-                        "\\bpowder\\b"
+                        "\\bpowder\\b",
+                        "toilet\\s+bowl"
                     ]
     },
     {
@@ -28962,7 +28967,8 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\bgraham\\b"
                     ]
     },
     {
