@@ -24,11 +24,27 @@ $ErrorActionPreference = 'Continue'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = Split-Path -Parent $root
 $log  = Join-Path $root 'local-daily-log.txt'
-# a locked log file must never kill the run it is logging - see the note in check-ad-cycles.ps1 (2026-07-28)
+# a locked log file must never kill the run it is logging - see the note in check-ad-cycles.ps1 (2026-07-28).
+# BUT IT MUST NOT SILENCE IT EITHER (2026-07-30). Some process took an exclusive handle on
+# local-daily-log.txt at 2026-07-25T08:30:03, mid-run, and never let go. Add-Content has failed on every
+# retry every day since; the fallback below was Write-Host, which in a wscript/scheduled-task run goes
+# NOWHERE. So the pipeline kept working and committing (bot commits landed 07-26 through 07-29) while the one
+# file that answers "did the 8:30 job run, and how far did it get" froze on the line "running
+# check-ad-cycles" - five days of a job that looked, from its own log, like it hung at the first stage.
+# A log nobody can write to is a job nobody can audit. Fall back to a DATED sidecar the run can always
+# create, name the failure in it, and let the once-per-day alert say so out loud.
 function Log($m) {
   $line = ("[" + (Get-Date).ToString('s') + "] ") + $m
   for ($i = 0; $i -lt 5; $i++) { try { Add-Content -Path $log -Value $line -ErrorAction Stop; return } catch { Start-Sleep -Milliseconds 120 } }
-  try { Write-Host ('[log locked, not written] ' + $line) } catch {}
+  # primary log unavailable: use a sidecar named for today, so a locked log costs one file, not the record
+  if (-not $script:logFallback) {
+    $script:logFallback = Join-Path $root ('local-daily-log.LOCKED-' + (Get-Date -Format 'yyyy-MM-dd') + '.txt')
+    try {
+      Add-Content -Path $script:logFallback -Value ("[" + (Get-Date).ToString('s') + "] local-daily-log.txt is LOCKED by another process - this run's log lives here. Find the holder (handle.exe / Get-Process) and release it, or the primary log stays frozen.") -ErrorAction Stop
+      & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject 'Grocery: local-daily-log.txt is locked - the daily pipeline cannot log' -Body ("run-daily-local.ps1 could not append to grocery\local-daily-log.txt (exclusive lock held by another process). The run itself continues and the board is unaffected, but the wrapper's audit trail is going to " + $script:logFallback + " instead. This exact lock sat unnoticed from 2026-07-25 to 2026-07-30 because the old fallback was Write-Host, which a scheduled task discards. Find and kill the holding process, then delete the sidecar.") | Out-Null
+    } catch { }
+  }
+  try { Add-Content -Path $script:logFallback -Value $line -ErrorAction Stop } catch { try { Write-Host ('[log locked, not written] ' + $line) } catch {} }
 }
 
 # ---- LOG ROTATION (1st of the month): the pipeline logs grow forever and every line rides every bot ----
