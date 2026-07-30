@@ -430,6 +430,30 @@ if ($r.rc -eq 0 -and $r.text -match 'priced cells scanned') { Ok 'food-category 
 else { Bad ('food-category clean twin failed (rc=' + $r.rc + ') - either live data is broken (page-worthy) or the edit broke the healthy path') }
 Remove-Item $fxAfc -Recurse -Force -ErrorAction SilentlyContinue
 
+# (d2) MUST-FIRE for the 2026-07-30 additions to category-excludes.json: the snack_carrier class and the
+# beverage class's mini-cans / lemon-lime tokens. Both are founding bugs, measured live on that day's board:
+# lemons was priced from "Lulu Platanitios Lemon Plantain Chips" (a snack) and limes from "Starry Mini Cans
+# Lemon Lime" (a soda). Neither name carries a token the old library knew, so the blocking guard passed them.
+# The rows are frozen literals here, NOT read from the board - regenerate them from live data and the bug
+# they encode disappears, which is the whole [[guard-fixture-rule]] failure mode.
+$fxSnk = NewFxDir 'afc-snack'
+$snackRow = '{"week_of":"2026-07-29","comparison":[{"commodity":"Lemons","id":"lemons","unit":"each","stores":[{"store":"Sam''s Club","per_unit":0.5413,"item":"Lulu Platanitios Lemon Plantain Chips, 2.5 oz., 30 pk."}]},{"commodity":"Limes","id":"limes","unit":"each","stores":[{"store":"Sam''s Club","per_unit":0.5327,"item":"Starry Mini Cans Lemon Lime, 7.5 fl. oz., 30 pk."}]}]}'
+Set-Content (Join-Path $fxSnk 'comparison-2026-07-29.json') $snackRow -Encoding UTF8
+$r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxSnk)
+if ($r.rc -eq 2 -and $r.text -match 'snack_carrier' -and $r.text -match 'beverage') {
+  Ok 'food-category MUST-FIRE: a snack on lemons and a soda on limes both hard-fail (exit 2)'
+} else {
+  Bad ('food-category did NOT catch the plantain-chips/mini-cans rows (rc=' + $r.rc + ') - the snack_carrier class or the beverage mini-cans/lemon-lime tokens are gone from category-excludes.json')
+}
+# CLEAN TWIN: the same two commodities priced from real produce must stay silent, or the new tokens are
+# eating legitimate cells (a guard that fails on correct data gets switched off, which is worse than no guard).
+$cleanRow = '{"week_of":"2026-07-29","comparison":[{"commodity":"Lemons","id":"lemons","unit":"each","stores":[{"store":"Walmart","per_unit":0.5,"item":"Fresh Lemon"}]},{"commodity":"Limes","id":"limes","unit":"each","stores":[{"store":"Walmart","per_unit":0.25,"item":"Fresh Lime"}]}]}'
+Set-Content (Join-Path $fxSnk 'comparison-2026-07-29.json') $cleanRow -Encoding UTF8
+$r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxSnk)
+if ($r.rc -eq 0) { Ok 'food-category clean twin: fresh lemon/lime rows stay silent under the new classes' }
+else { Bad ('food-category flagged REAL produce (rc=' + $r.rc + ') - a new token is too broad: ' + ($r.text -replace "`n", ' ')) }
+Remove-Item $fxSnk -Recurse -Force -ErrorAction SilentlyContinue
+
 # (e) audit-tile-integrity: ACCURACY BLIND + exit 3 when zero links were graded (an empty product-urls used
 # to certify "ACCURACY OK - every link that ships..." having examined nothing; prune-bad-links can empty the
 # set on a live daily path, which is exactly when the certificate would lie).
