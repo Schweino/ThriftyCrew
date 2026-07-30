@@ -183,8 +183,10 @@ if ($accRows.Count -gt 0) {
   Write-Output ''
   Write-Output ("tile-integrity: FAIL - " + $accRows.Count + " LINKED tile(s) disagree with the product/price they advertise.")
   Write-Output '  A wrong link is worse than no link: the shopper clicks, sees something else, and concludes the'
-  Write-Output '  board inflates its deals. Run prune-bad-links.ps1 to drop them - that is always available and'
-  Write-Output '  needs no browser.'
+  Write-Output '  board inflates its deals. Run  prune-bad-links.ps1 -Tol 0.32  to drop them - that is always'
+  Write-Output '  available and needs no browser. The tolerance is not decoration: it is the same factor rule'
+  Write-Output '  guard 4 uses, and it is what every automated call site passes. Anything tighter also deletes'
+  Write-Output '  RIGHT-product links whose stored price snapshot merely drifted a few cents.'
   foreach ($x in ($accRows | Select-Object -First 10)) { Write-Output ('    ' + $x.fault.PadRight(18) + ($x.id + ' | ' + $x.store).PadRight(34) + $x.detail) }
   $fail2 = $true
 }

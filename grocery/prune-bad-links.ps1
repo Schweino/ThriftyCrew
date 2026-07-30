@@ -17,8 +17,16 @@
   the rule that a pack count multiplies a WEIGHT only when it is in the SIZE field - "Applesauce Cups
   6 Count" with size "24 oz" is 24 oz TOTAL, not 6 x 24 - while for an 'each' commodity the pack count
   IS the quantity and may come from the name ("24 Pack" bottled water, size "each").
+
+  DEFAULT TOLERANCE IS 0.32, NOT 2%. Every automated call site (check-ad-cycles x2, weekly-post-capture)
+  passes -Tol 0.32, and audit-tile-integrity tells a HUMAN to "run prune-bad-links.ps1" with no arguments -
+  so the bare default is the one a person actually gets. At the old 0.02 default that instruction deleted
+  every RIGHT-product link whose stored price snapshot had merely drifted a few cents: measured 2026-07-30,
+  53 links at 0.02 versus 10 at 0.32, i.e. 43 correct links destroyed by following the printed advice.
+  A link is removed for being a different PRODUCT (any drift by a factor), never for a stale snapshot -
+  the same rule guard 4 uses (>=1.5x / <=0.67x). One tolerance, everywhere.
 #>
-param([double]$Tol = 0.02, [switch]$WhatIf)
+param([double]$Tol = 0.32, [switch]$WhatIf)
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 

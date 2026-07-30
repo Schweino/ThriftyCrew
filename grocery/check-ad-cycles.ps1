@@ -839,6 +839,17 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
               # construction. Net: a browser link pruned for drift is healed in the SAME pass and never stays a
               # gap. Heal-only (never overwrites a healthy link, so guard 4 keeps checking those independently).
               & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'sync-browser-links.ps1') | Out-Null
+              # REFRESH THE IDENTITY INPUT BEFORE ANYTHING READS IT. name-drift.json is the product-identity
+              # verdict that BOTH generate-board-overrides (it refuses to pin a flagged cell) and guards'
+              # tile-integrity WRONG-PRODUCT gate consume - and the prune+sync above just rewrote the links it
+              # describes. Left stale, every link the heal just CORRECTED still reads as wrong: measured
+              # 2026-07-30, five Walmart cells (balsamic-vinegar, hominy, diapers, oat-milk, tampons) whose
+              # healed link matched the board byte-for-byte kept failing the hard gate until name-drift was
+              # re-run, and it cleared to ACCURACY 0 the moment it was. A heal that fixes links must not leave
+              # the gate holding yesterday's opinion of them. -Phase links in weekly-post-capture.ps1 has
+              # always done this; this path is the one that was missing it.
+              & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-drift.ps1') | Out-Null
+              if ($LASTEXITCODE -eq 3) { Log 'name-drift BLIND after link repair - guards will grade WRONG-PRODUCT with no identity input' }
               # This repair path used to publish DIRECTLY, which would have bypassed the invariant gate.
               # Links just changed, so pins derived from them must be re-minted BEFORE guards re-check
               # (same publish-never-mints rule as the main gate above).

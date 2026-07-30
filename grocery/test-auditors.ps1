@@ -775,6 +775,67 @@ else { Bad 'check-ad-cycles blind email body regressed - a blackout would email 
 # missed stamp re-opened the gate into a silent daily 658 MB crash loop (post-batch review 2026-07-30).
 if ($cacSrc -match "run-test-guards-weekly\.ps1'\)\s*2>&1") { Bad 'check-ad-cycles captures run-test-guards-weekly with 2>&1 under EAP=Stop again - a crashing suite throws past the stamp and alert into a silent daily retry loop' }
 else { Ok 'check-ad-cycles weekly test-guards capture leaves stderr unredirected (crash still reaches the alert path)' }
+# (k1c) A HEAL MUST REFRESH THE GATE'S IDENTITY INPUT (2026-07-30). In check-ad-cycles' consistency
+# auto-repair, prune-bad-links + sync-browser-links rewrite the links, then generate-board-overrides and
+# guards' tile-integrity WRONG-PRODUCT gate both read name-drift.json - which still described the PRE-heal
+# links. Every link the heal had just corrected therefore still read as wrong: five Walmart cells whose healed
+# link matched the board byte-for-byte held the hard gate red, and re-running audit-name-drift cleared it to
+# ACCURACY 0 with no other change. Ordering is read out of the real source (positional), not asserted as a
+# phrase, and the fixture below deletes the refresh to prove the check can still see its own bug.
+function Test-RepairRefreshesDrift([string]$src) {
+  $bad = New-Object System.Collections.Generic.List[string]
+  $iSync = $src.IndexOf('sync-browser-links.ps1')
+  if ($iSync -lt 0) { $bad.Add('no sync-browser-links call found'); return $bad }
+  $iDrift = $src.IndexOf('audit-name-drift.ps1', $iSync)
+  $iPins  = $src.IndexOf('generate-board-overrides.ps1', $iSync)
+  $iGuard = $src.IndexOf('guards.ps1', $iSync)
+  if ($iDrift -lt 0) { $bad.Add('no audit-name-drift after sync-browser-links - the gate grades healed links on stale identity data') ; return $bad }
+  if ($iPins -ge 0 -and $iDrift -gt $iPins) { $bad.Add('name-drift refresh runs AFTER generate-board-overrides - pins are minted against stale drift flags') }
+  if ($iGuard -ge 0 -and $iDrift -gt $iGuard) { $bad.Add('name-drift refresh runs AFTER guards - the hard gate reads pre-heal identity') }
+  return $bad
+}
+$cacRepair = $cacSrc.Substring([Math]::Max(0, $cacSrc.IndexOf('consistency BREACH')))
+$rrReal = Test-RepairRefreshesDrift $cacRepair
+if ($rrReal.Count -eq 0) { Ok 'consistency auto-repair refreshes name-drift after the heal, before pins and guards' }
+else { Bad ('consistency auto-repair identity ordering broken: ' + ($rrReal -join '; ')) }
+# MUST-FIRE: strip the refresh exactly as it was before the fix, and the check has to go red.
+$rrFire = Test-RepairRefreshesDrift ($cacRepair -replace [regex]::Escape("'audit-name-drift.ps1'"), "'audit-links.ps1'")
+if ($rrFire.Count -ge 1) { Ok 'repair-refresh fixture fires when the name-drift refresh is removed (the 2026-07-30 bug)' }
+else { Bad 'repair-refresh fixture went blind - a repair path with no identity refresh now reads as correct' }
+# CLEAN TWIN: correct ordering must stay silent.
+$rrClean = Test-RepairRefreshesDrift "sync-browser-links.ps1 ... audit-name-drift.ps1 ... generate-board-overrides.ps1 ... guards.ps1"
+if ($rrClean.Count -eq 0) { Ok 'repair-refresh fixture stays silent on correct ordering (clean twin)' }
+else { Bad ('repair-refresh fixture false-positives on correct ordering: ' + ($rrClean -join '; ')) }
+# (k1b) THE PRUNE DEFAULT MUST MATCH THE CALL SITES (2026-07-30). prune-bad-links defaulted to -Tol 0.02 while
+# every automated caller passed 0.32, and audit-tile-integrity's failure text told a HUMAN to "run
+# prune-bad-links.ps1" with no arguments. Following the printed instruction therefore ran the 2% rule and
+# deleted every RIGHT-product link whose stored price snapshot had drifted a few cents: measured on the live
+# board that day, 53 links dropped at 0.02 versus 10 at 0.32 - 43 correct links destroyed by doing exactly what
+# the tool said. A default that no caller uses is only ever reached by a human following advice, so it is the
+# one that has to be safe. Decision extracted from the real files, and exercised below against a synthetic
+# 0.02 source so the check cannot pass while blind.
+function Test-PruneTolContract([string]$pruneSrc, [string]$tileSrc) {
+  $bad = New-Object System.Collections.Generic.List[string]
+  $m = [regex]::Match($pruneSrc, '(?m)^param\(\s*\[double\]\$Tol\s*=\s*([0-9.]+)')
+  if (-not $m.Success) { $bad.Add('prune-bad-links has no readable [double]$Tol default') }
+  elseif ([double]$m.Groups[1].Value -ne 0.32) { $bad.Add('prune-bad-links default Tol is ' + $m.Groups[1].Value + ', not 0.32 - a human running it bare deletes right-product links') }
+  if ($tileSrc -match 'Run prune-bad-links\.ps1 to drop them') { $bad.Add('audit-tile-integrity still tells a human to run prune-bad-links with no tolerance') }
+  if ($tileSrc -notmatch 'prune-bad-links\.ps1 -Tol 0\.32') { $bad.Add('audit-tile-integrity failure advice does not name -Tol 0.32') }
+  return $bad
+}
+$pruneSrc = Get-Content (Join-Path $root 'prune-bad-links.ps1') -Raw
+$tileSrc  = Get-Content (Join-Path $root 'audit-tile-integrity.ps1') -Raw
+$ptReal = Test-PruneTolContract $pruneSrc $tileSrc
+if ($ptReal.Count -eq 0) { Ok 'prune-bad-links defaults to the 0.32 factor rule and tile-integrity advises it explicitly' }
+else { Bad ('prune tolerance contract broken: ' + ($ptReal -join '; ')) }
+# MUST-FIRE: the founding bug (0.02 default + bare advice) has to come back red, or this check is decoration.
+$ptFire = Test-PruneTolContract "param([double]`$Tol = 0.02, [switch]`$WhatIf)" "  Run prune-bad-links.ps1 to drop them - that is always available"
+if ($ptFire.Count -ge 2) { Ok 'prune-tolerance fixture fires on the 2026-07-30 founding bug (0.02 default + untolerance advice)' }
+else { Bad 'prune-tolerance fixture went blind - the 0.02 default and bare advice no longer register as faults' }
+# CLEAN TWIN: correct source must stay silent, so the check cannot be a constant red.
+$ptClean = Test-PruneTolContract "param([double]`$Tol = 0.32, [switch]`$WhatIf)" "  Run  prune-bad-links.ps1 -Tol 0.32  to drop them"
+if ($ptClean.Count -eq 0) { Ok 'prune-tolerance fixture stays silent on a correct source (clean twin)' }
+else { Bad ('prune-tolerance fixture false-positives on correct source: ' + ($ptClean -join '; ')) }
 $wpcSrc = Get-Content (Join-Path $root 'weekly-post-capture.ps1') -Raw
 if ($wpcSrc -match 'tiPost -eq 3' -and $wpcSrc -match 'was BLIND on the live board' -and $wpcSrc -match 'prune-bad-links -Tol 0\.32 and re-run -Phase links NOW') { Ok 'weekly-post-capture separates BLIND from FAILED (prune advice stays on the real failure only)' }
 else { Bad 'weekly-post-capture lost the blind/FAILED split - a blind post-publish check would advise pruning harder' }

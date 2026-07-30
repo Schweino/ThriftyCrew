@@ -1,9 +1,36 @@
 ﻿{
     "readme":  "DERIVED by generate-board-overrides.ps1 - do not hand-edit. Per-cell EVERYDAY per-unit corrections: when a board price disagrees \u003e30% with the verified product its See-item link opens (and name-drift confirms the link is the right product), the board number is stale and is pinned here to the link\u0027s per-unit so price==link==shelf. build-deals-page applies these to EVERYDAY cells only (a live sale always wins) and survives daily regeneration. Sales, wrong-product links (name-drift), and ids present in both the staple+recipe board are intentionally excluded.",
-    "updated":  "2026-07-29",
+    "updated":  "2026-07-30",
     "tol":  0.3,
-    "count":  16,
+    "count":  19,
     "cells":  [
+                  {
+                      "id":  "bbq-sauce",
+                      "store":  "Family Fare",
+                      "per_unit":  0.1439,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.1106,
+                      "link_name":  "Kraft Slow Simmered Sweet Brown Sugar Barbecue Sauce 18 Oz",
+                      "set":  "2026-07-30"
+                  },
+                  {
+                      "id":  "frozen-lasagna",
+                      "store":  "Walmart",
+                      "per_unit":  0.2251,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.1717,
+                      "link_name":  "Great Value Italian-Style Three Meat Lasagna",
+                      "set":  "2026-07-30"
+                  },
+                  {
+                      "id":  "rice-vinegar",
+                      "store":  "Walmart",
+                      "per_unit":  0.2433,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.187,
+                      "link_name":  "Mizkan Rice Vinegar for Cooking, 12 fl oz",
+                      "set":  "2026-07-30"
+                  },
                   {
                       "id":  "boneless-skinless-chicken-thigh",
                       "store":  "Family Fare",
@@ -11,7 +38,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  7.19,
                       "link_name":  "Chicken Thighs, Boneless Gold N Plump",
-                      "set":  "2026-07-29"
+                      "set":  "2026-07-30"
                   },
                   {
                       "id":  "apple",
@@ -20,7 +47,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.9,
                       "link_name":  "Large Gala Apple - Each",
-                      "set":  "2026-07-29"
+                      "set":  "2026-07-30"
                   },
                   {
                       "id":  "ginger",
@@ -29,7 +56,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  4.49,
                       "link_name":  "Melissa Ginger Root",
-                      "set":  "2026-07-29"
+                      "set":  "2026-07-30"
                   },
                   {
                       "id":  "hickory-smoked-bacon",
@@ -38,7 +65,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  5.32,
                       "link_name":  "Jimmy Dean Premium Bacon Hickory Smoked",
-                      "set":  "2026-07-29"
+                      "set":  "2026-07-30"
                   },
                   {
                       "id":  "honey-dijon-mustard",
@@ -47,7 +74,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.2075,
                       "link_name":  "Hy-Vee Stone Ground Honey Dijon Mustard",
-                      "set":  "2026-07-29"
+                      "set":  "2026-07-30"
                   },
                   {
                       "id":  "light-sour-cream",
@@ -56,7 +83,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.18,
                       "link_name":  "Daisy Sour Cream, 48 oz",
-                      "set":  "2026-07-29"
+                      "set":  "2026-07-30"
                   },
                   {
                       "id":  "provolone-cheese",
@@ -65,7 +92,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.3125,
                       "link_name":  "Hy-Vee Sliced Provolone Cheese 10Ct",
-                      "set":  "2026-07-29"
+                      "set":  "2026-07-30"
                   },
                   {
                       "id":  "red-bell-pepper",
@@ -74,7 +101,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.83,
                       "link_name":  "Multi Bell Sweet Peppers",
-                      "set":  "2026-07-29"
+                      "set":  "2026-07-30"
                   },
                   {
                       "id":  "red-bell-pepper",
@@ -83,7 +110,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  2.5,
                       "link_name":  "Fresh Sweet Bell Pepper, Red Organic",
-                      "set":  "2026-07-29"
+                      "set":  "2026-07-30"
                   },
                   {
                       "id":  "rotini-pasta",
@@ -92,7 +119,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.09,
                       "link_name":  "Hy-Vee Rotini Pasta",
-                      "set":  "2026-07-29"
+                      "set":  "2026-07-30"
                   },
                   {
                       "id":  "white-mushrooms",
@@ -101,7 +128,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.54,
                       "link_name":  "Highline Whole White Mushrooms",
-                      "set":  "2026-07-29"
+                      "set":  "2026-07-30"
                   },
                   {
                       "id":  "penne-pasta",
@@ -110,7 +137,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.09,
                       "link_name":  "Hy-Vee Penne Rigate",
-                      "set":  "2026-07-29"
+                      "set":  "2026-07-30"
                   },
                   {
                       "id":  "zero-sugar-soda-2l",
@@ -119,7 +146,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.01,
                       "link_name":  "Diet Big K Cola No Calorie Soda Bottle",
-                      "set":  "2026-07-29"
+                      "set":  "2026-07-30"
                   },
                   {
                       "id":  "feta-cheese",
@@ -128,7 +155,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.8113,
                       "link_name":  "Athenos Feta Traditional Cheese Crumbles 4 Oz",
-                      "set":  "2026-07-29"
+                      "set":  "2026-07-30"
                   },
                   {
                       "id":  "au-jus-gravy-mix",
@@ -137,7 +164,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.99,
                       "link_name":  "Hy-Vee Au Jus Sauce Mix",
-                      "set":  "2026-07-29"
+                      "set":  "2026-07-30"
                   },
                   {
                       "id":  "white-wine-vinegar",
@@ -146,7 +173,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.1473,
                       "link_name":  "Gustare Vita White Wine Vinegar",
-                      "set":  "2026-07-29"
+                      "set":  "2026-07-30"
                   }
               ]
 }

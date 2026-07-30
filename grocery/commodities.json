@@ -2424,7 +2424,7 @@
                         "fuji\\s+apple"
                     ],
         "exclude":  [
-                        "(?<!pink\\s)\\blady\\s+apples?\\b",
+                        "(?\u003c!pink\\s)\\blady\\s+apples?\\b",
                         "pineapple",
                         "apple\\s+juice",
                         "applesauce",
@@ -3608,7 +3608,8 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\blatte\\b"
                     ]
     },
     {
@@ -16877,7 +16878,8 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\blatte\\b"
                     ]
     },
     {
@@ -17063,7 +17065,8 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\bchips?\\b"
                     ]
     },
     {
@@ -19399,7 +19402,8 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\bcookies?\\b"
                     ]
     },
     {
@@ -19766,7 +19770,8 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "epsom"
                     ]
     },
     {
