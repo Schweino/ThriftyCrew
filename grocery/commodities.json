@@ -13540,7 +13540,7 @@
         "band_min":  0.8,
         "band_max":  4.5,
         "include":  [
-                        "jalape[nÃ±]os?"
+                        "jalape[n\\u00f1]os?"
                     ],
         "exclude":  [
                         "\\bseasonings?\\b",
@@ -31500,7 +31500,7 @@
         "include":  [
                         "100%\\s+pumpkin",
                         "pure\\s+pumpkin",
-                        "pumpkin\\s+pur[eÃ©]e",
+                        "pumpkin\\s+pur[e\\u00e9]e",
                         "solid\\s+pack\\s+pumpkin"
                     ],
         "exclude":  [
@@ -34696,9 +34696,9 @@
         "label":  "Pickled Jalapenos (sliced)",
         "unit":  "oz",
         "include":  [
-                        "pickled\\s+jalape[nÃ±]os?",
-                        "jalape[nÃ±]o\\s+(?:slices|rings|nacho)",
-                        "(?:nacho|tamed|sliced|diced)\\s+(?:hot\\s+)?jalape[nÃ±]os?"
+                        "pickled\\s+jalape[n\\u00f1]os?",
+                        "jalape[n\\u00f1]o\\s+(?:slices|rings|nacho)",
+                        "(?:nacho|tamed|sliced|diced)\\s+(?:hot\\s+)?jalape[n\\u00f1]os?"
                     ],
         "exclude":  [
                         "green\\s+chil",
@@ -46714,7 +46714,7 @@
                         "noodles?",
                         "ravioli",
                         "risotto",
-                        "pur[eÃ©]e",
+                        "pur[e\\u00e9]e",
                         "\\bsoup\\b",
                         "\\bfrozen\\b",
                         "beverage",
@@ -49534,7 +49534,7 @@
                     ],
         "exclude":  [
                         "\\bcanned\\b",
-                        "pur[eÃ©]e",
+                        "pur[e\\u00e9]e",
                         "\\bfilling\\b",
                         "spice",
                         "seeds?",

@@ -193,6 +193,28 @@ try {
   else { Say '  ok    allowlist entries all carry a fresh reviewed date' }
 } catch { Say ("  warn  allowlist hygiene check threw: " + $_.Exception.Message) }
 
+# ---------------------------------------------------------------- 0d: no mojibake in the MATCHING RULES
+# Seven commodity patterns carried the two HALVES of a mangled accent as separate alternatives in a character
+# class - jalape[n<U+00C3><U+00B1>]os? and pur[e<U+00C3><U+00A9>]e. A character class matches ONE character, so
+# that class matched neither the real n-tilde (U+00F1) nor the two-char mojibake sequence: it only ever matched
+# the plain 'n'. Two-sided damage - "Jalapeno" spelled correctly could not match its own commodity, and
+# butternut-squash / pie-pumpkins could not EXCLUDE a "puree", so a puree could win a whole-vegetable row.
+# It mattered more after 2026-07-29, because capture-lib now repairs names on ingest, so correctly accented
+# text started flowing again and the rules were pointing at the side that had gone away.
+# U+00C3 / U+00C2 / U+00E2 are the lead bytes of UTF-8-read-as-Windows-1252 and are never legitimate inside a
+# hand-written rule - the same signature capture-lib.ps1 defines. Advisory: this is a rules-authoring mistake,
+# not unsafe data, and it should not block a board that is otherwise correct.
+try {
+  $cmRaw = [IO.File]::ReadAllText((Join-Path $root 'commodities.json'), [Text.Encoding]::UTF8)
+  $mojiPat = '[' + [char]0x00C3 + [char]0x00C2 + [char]0x00E2 + ']'
+  $mojiHits = @([regex]::Matches($cmRaw, '"[^"]*' + [regex]::Escape($mojiPat.Substring(1,1)) + '[^"]*"'))
+  $mojiAll = @([regex]::Matches($cmRaw, $mojiPat))
+  if ($mojiAll.Count -gt 0) {
+    $sample = @([regex]::Matches($cmRaw, '"[^"]{0,60}' + $mojiPat + '[^"]{0,60}"') | Select-Object -First 3 | ForEach-Object { $_.Value })
+    [void]$warn.Add("commodities.json carries $($mojiAll.Count) mojibake character(s) inside its matching rules - a class like jalape[n<C3><B1>]os? matches NEITHER the real accent nor the mangled pair, so the rule silently misses on both spellings. Use the \u00XX escape form. Samples: " + ($sample -join ' | '))
+  } else { Say '  ok    matching rules carry no mojibake (accented classes use the \u00XX escape form)' }
+} catch { Say ("  warn  rules-mojibake check threw: " + $_.Exception.Message) }
+
 # ---------------------------------------------------------------- 1 + 2: delegate to the existing audits
 foreach ($g in @(
     @{ f='audit-price-mode.ps1';        n='price-mode (in-store pricing)' },
