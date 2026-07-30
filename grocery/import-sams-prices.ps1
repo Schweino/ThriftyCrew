@@ -61,7 +61,7 @@ if (-not (Test-Path $rawF)) { throw "missing $rawF - run the browser capture fir
 $raw = Get-Content $rawF -Raw | ConvertFrom-Json
 $price = @{}
 foreach ($p in $raw.PSObject.Properties) { if ($p.Value -and ($null -ne $p.Value.cur)) { $price[[string]$p.Name] = $p.Value } }
-Write-Output ("Walmart prices captured from the store : " + $price.Count)
+Write-Output ("Sam's Club prices captured from the store : " + $price.Count)
 
 $pd = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
 $units = @{}
@@ -105,7 +105,7 @@ foreach ($d in $doc.deals) {
   if ($null -ne $pv.uv) { $wpu = Convert-UnitPrice ([double]$pv.uv) ([string]$pv.us) $unit }
   if ($null -eq $wpu -or $wpu -le 0) {
     $noBasis++
-    $refused.Add(('  {0,-46} no usable unit basis (Walmart says "{1}", our unit is {2}) - left alone' -f ([string]$d.item), ([string]$pv.us), $unit))
+    $refused.Add(('  {0,-46} no usable unit basis (Sam''s says "{1}", our unit is {2}) - left alone' -f ([string]$d.item), ([string]$pv.us), $unit))
     [void]$rows.Add($row); continue
   }
 
@@ -123,7 +123,7 @@ foreach ($d in $doc.deals) {
   $packQty = $cur / $wpu
   if (([math]::Abs($ourQty - 1.0) -gt 0.001) -and ([math]::Abs($packQty - $ourQty) -gt ($ourQty * 0.05))) {
     $packMismatch++
-    $refused.Add(('  {0,-46} our size says {1} {2}, Walmart''s pack is {3} {2} - different pack, price REFUSED' -f ([string]$d.item), [math]::Round($ourQty,2), $unit, [math]::Round($packQty,2)))
+    $refused.Add(('  {0,-46} our size says {1} {2}, Sam''s pack is {3} {2} - different pack, price REFUSED' -f ([string]$d.item), [math]::Round($ourQty,2), $unit, [math]::Round($packQty,2)))
     [void]$rows.Add($row); continue
   }
 

@@ -400,6 +400,15 @@ if ($SelfTest) {
   $r8c = Build-Row (_R 'Hefty Ultra Strong 13 Gallon Kitchen Drawstring Trash Bags' '$18.98' '$0.09/ea')
   if ($r8c.row -and $r8c.row.size -eq '211 ct' -and $r8c.row.qty_basis -match 'derived lp/up') { Write-Output "ok    keep-side: name silent in priced unit -> derived 211 ct kept ($($r8c.row.qty_basis))" }
   else { Write-Output "FAIL  keep-side fallback lost: $($r8c.err)$($r8c.row.size)"; $fail++ }
+  # CLEAN TWIN of build-walmart-deals.ps1's wrong-store assertion (2026-07-30). The Walmart fork inherited this
+  # file's store noun into its published qty_basis; the fix there was to name Walmart. This proves the correction
+  # is store-specific rather than a blanket scrub - THIS builder must go on crediting Sam's. $r7f (above) is the
+  # name-snap row, the ONLY branch that still stamps a store noun here since the Sazon rule turned the derived
+  # fallback into a reject, so a future fork that copies the Walmart wording back over this file fails here
+  # instead of shipping silently. ($r8c takes the derived branch and stamps no store at all, so asserting on it
+  # would pass either way - a gate that could never arm.)
+  if ($r7f -and $r7f.qty_basis -match "Sam" -and $r7f.qty_basis -notmatch 'Walmart') { Write-Output "ok    qty_basis still credits Sam's, not the store this builder was forked TO ($($r7f.qty_basis))" }
+  else { Write-Output "FAIL  qty_basis names the wrong store: $($r7f.qty_basis)"; $fail++ }
 
   # 9. rows the engine cannot price are REJECTED, not published
   foreach ($bad in @(@{r=(_R 'No Unit Price Item' '$5.00' ''); l='missing unitPrice'},

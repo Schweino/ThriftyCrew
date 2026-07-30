@@ -4,7 +4,7 @@
   Input CSV (pipe-delimited, from the in-page pull): q|n|lp|up|id
      q  = the search term        n  = product name
      lp = priceInfo.linePrice    ("$3.27")  - the price of the whole pack
-     up = priceInfo.unitPrice    ("$1.09/ea") - Sam's OWN price per unit of measure
+     up = priceInfo.unitPrice    ("$1.09/ea") - Walmart's OWN price per unit of measure
      id = usItemId
 
   *** WHY THIS SCRIPT EXISTS ***
@@ -40,8 +40,8 @@
   unitPrice. A row that fails is NOT published - it is written to the .rejects.json beside the output. This is
   what the quarantined capture had no way to detect.
 
-  Usage: .\build-sams-deals.ps1 -In <capture.csv> -Date 2026-07-17
-         .\build-sams-deals.ps1 -SelfTest
+  Usage: .\build-walmart-deals.ps1 -In <capture.csv> -Date 2026-07-17
+         .\build-walmart-deals.ps1 -SelfTest
 #>
 param(
   [string]$In = "",
@@ -50,13 +50,18 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\income\grocery' }
+# WHO AM I. This file is a fork of build-sams-deals.ps1 (capture-lib.ps1:14-19) and inherited that name in
+# every operator-facing string, so a Walmart failure sent you to the Sam's builder and the Sam's capture.
+# Read the name off the file itself so the next fork renames itself. Captured ONCE at script scope on
+# purpose: inside a function $MyInvocation.MyCommand.Name returns the FUNCTION name, not the file.
+$Me = $MyInvocation.MyCommand.Name
 . (Join-Path $root 'capture-lib.ps1')   # UTF-8 capture read + mojibake repair, shared by every builder
 
 # ---- lift the REAL pricing math out of the engine (it runs a pipeline on load, so we can't dot-source it) ----
 $engineSrc = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
 foreach ($fn in @('ConvertTo-DigitNumerals','Get-ItemPrice','Get-PackCount','Get-UnitPrice','Get-SizeAmount','Convert-ToUnit')) {
   $m = [regex]::Match($engineSrc, "(?ms)^function\s+$([regex]::Escape($fn))\s*\(.*?^\}")
-  if (-not $m.Success) { throw "build-sams-deals: could not lift $fn from compare-deals.ps1" }
+  if (-not $m.Success) { throw "${Me}: could not lift $fn from compare-deals.ps1" }
   Invoke-Expression $m.Value
 }
 
@@ -94,7 +99,7 @@ $script:UnitFamily = @{
 # is why it maps 1:1 here; under 'oz' the same token is a weight ounce. The tok we were priced by decides.
 
 # EVERY quantity the NAME could plausibly mean, expressed in the unit Sam's priced by. The caller picks the
-# one that reproduces Sam's own unit price - we do not guess here.
+# one that reproduces Walmart's own unit price - we do not guess here.
 #
 # WHY A LIST AND NOT ONE ANSWER: names put two counts in either order and mean different things by them.
 #   "Pampers ... 13 pk., 728 ct."          -> 728 is the total (the LAST count)
@@ -234,10 +239,10 @@ function Build-Row($raw) {
   foreach ($c in $cands) {
     if ($c -le 0) { continue }
     $err = [math]::Abs(($lp / $c) - $up)
-    if ($err -le 0.005001 -and $err -lt $bestErr) { $best = $c; $bestErr = $err }   # would display as Sam's up
+    if ($err -le 0.005001 -and $err -lt $bestErr) { $best = $c; $bestErr = $err }   # would display as Walmart's up
   }
-  if ($best) { $qty = $best; $basis = 'name (reproduces Sam''s unit price)' }
-  elseif ($cands.Count) { $basis = ('derived lp/up; no name quantity (' + (($cands | Select-Object -First 4) -join ', ') + ') reproduces Sam''s ' + $up) }
+  if ($best) { $qty = $best; $basis = 'name (reproduces Walmart''s unit price)' }
+  elseif ($cands.Count) { $basis = ('derived lp/up; no name quantity (' + (($cands | Select-Object -First 4) -join ', ') + ') reproduces Walmart''s ' + $up) }
   # A COUNT MUST BE A WHOLE NUMBER. You cannot buy 210.889 trash bags, and a fractional count is not merely
   # untidy - compare-deals' Get-PackCount regex reads the digits immediately before "ct", so size "210.889 ct"
   # is parsed as a pack of EIGHT HUNDRED EIGHTY-NINE and the price comes out 4x low. (The invariant check
@@ -272,7 +277,7 @@ function Build-Row($raw) {
   #     per-each marker ("...priced per pound"): Get-ItemPrice scans priceText+nameText, so that marker makes
   #     the engine read whatever ad_price is AS the per-lb price. With the package shape that publishes a
   #     ~4 lb tray at $10.35/LB instead of $2.88/lb - a real, correctly-dated, completely false number.
-  # We do not guess which applies: we ask the REAL engine and keep the shape that reproduces Sam's own
+  # We do not guess which applies: we ask the REAL engine and keep the shape that reproduces Walmart's own
   # unitPrice. A row where neither shape does is rejected, never published.
   $tries = @(
     @{ ad=('${0:N2}' -f $lp); size=$pkgSize; shape='package' },
@@ -284,7 +289,7 @@ function Build-Row($raw) {
     $got = Get-UnitPrice $d ([pscustomobject]@{ unit=$u.unit })
     if ($null -eq $got) { $errs += ($t.shape + ": engine returned null (size='" + $t.size + "')"); continue }
     $diff = [math]::Abs($got.unit_price - $up) / $up
-    if ($diff -gt $tol) { $errs += ($t.shape + ": engine " + [math]::Round($got.unit_price,4) + " vs Sam's " + $up + ' (' + [math]::Round($diff*100) + '% off)'); continue }
+    if ($diff -gt $tol) { $errs += ($t.shape + ": engine " + [math]::Round($got.unit_price,4) + " vs Walmart's " + $up + ' (' + [math]::Round($diff*100) + '% off)'); continue }
     return @{ row = [pscustomobject]@{
       store     = "Walmart"
       item      = [string]$raw.n
@@ -307,7 +312,7 @@ function Build-Row($raw) {
       engine_check  = ('' + [math]::Round($got.unit_price,4) + '/' + $u.unit + ' [' + $got.basis + ']')
     } }
   }
-  return @{ err=("INVARIANT: no shape reproduces Sam's " + $up + '/' + $u.tok + ' -> ' + ($errs -join ' | ')) }
+  return @{ err=("INVARIANT: no shape reproduces Walmart's " + $up + '/' + $u.tok + ' -> ' + ($errs -join ' | ')) }
 }
 
 # ---- multipack pre-filter: reject exactly what guards.ps1 guard 5 would reject, so the board never sees it ----
@@ -418,6 +423,17 @@ if ($SelfTest) {
   $r8 = Build-Row (_R 'Bogus Beans, 99 ct.' '$3.27' '$1.09/ea')
   if ($r8.row -and $r8.row.size -eq '3 ct' -and $r8.row.qty_basis -match 'no name quantity') { Write-Output "ok    name-vs-arithmetic conflict -> trusts lp/up ($($r8.row.qty_basis))" }
   else { Write-Output "FAIL  conflict row: $($r8.err)$($r8.row.size)"; $fail++ }
+  # MUST-FIRE (2026-07-30). qty_basis is the provenance a human reads when a Walmart price looks wrong, and it
+  # shipped on 2,531 of 2,784 rows crediting "Sam's" arithmetic - the noun this builder inherited when it was
+  # forked from build-sams-deals.ps1 - pointing the investigation at the wrong store's method doc. BOTH emitting
+  # branches are pinned, because they are separate literals: $r8 above takes the derived-fallback branch (205 of
+  # today's rows) and $r7f above takes the name-snap branch (2,326 rows), so asserting on only one would leave
+  # the other free to revert green. CLEAN TWIN: the mirrored assertion in build-sams-deals.ps1, which must keep
+  # saying Sam's - proving this is a store-specific fix and not "delete the word Sam's everywhere".
+  if ($r8.row -and $r8.row.qty_basis -match 'Walmart' -and $r8.row.qty_basis -notmatch 'Sam') { Write-Output 'ok    derived-fallback qty_basis credits Walmart, not the store this builder was forked from' }
+  else { Write-Output "FAIL  derived-fallback qty_basis names the wrong store: $($r8.row.qty_basis)"; $fail++ }
+  if ($r7f -and $r7f.qty_basis -match 'Walmart' -and $r7f.qty_basis -notmatch 'Sam') { Write-Output 'ok    name-snap qty_basis credits Walmart, not the store this builder was forked from' }
+  else { Write-Output "FAIL  name-snap qty_basis names the wrong store: $($r7f.qty_basis)"; $fail++ }
 
   # 9. rows the engine cannot price are REJECTED, not published
   foreach ($bad in @(@{r=(_R 'No Unit Price Item' '$5.00' ''); l='missing unitPrice'},
@@ -458,7 +474,7 @@ if ($SelfTest) {
 }
 
 # ---------------------------------------------------------------- build
-if (-not $In -or -not (Test-Path $In)) { throw "build-sams-deals: -In not found: $In" }
+if (-not $In -or -not (Test-Path $In)) { throw "${Me}: -In not found: $In" }
 if (-not $Date) { $Date = (Get-Date).ToString('yyyy-MM-dd') }
 $raw = Import-CaptureCsv -Path $In -Delimiter '|'   # UTF-8 + repairs names mangled by an upstream ANSI read
 if ($script:CaptureRepairCount -gt 0) { Write-Output ("  repaired $($script:CaptureRepairCount) mangled product name(s) on ingest (UTF-8 read as ANSI upstream)") }
@@ -506,7 +522,7 @@ if ($rejects.Count) {
   $rj = Join-Path $root ("out\walmart-rejects-$Date.json")
   $rejects | ConvertTo-Json -Depth 4 | Set-Content $rj -Encoding UTF8
 }
-Write-Output ("build-sams-deals: {0} raw -> {1} priced ({2} after de-dupe), {3} rejected -> {4}" -f $raw.Count, $rows.Count, $ded.Count, $rejects.Count, (Split-Path $outFile -Leaf))
+Write-Output ("${Me}: {0} raw -> {1} priced ({2} after de-dupe), {3} rejected -> {4}" -f $raw.Count, $rows.Count, $ded.Count, $rejects.Count, (Split-Path $outFile -Leaf))
 if ($rejects.Count) {
   Write-Output "  reject reasons:"
   $rejects | Group-Object { ($_.reason -split ':')[0] -replace '\d+','N' } | Sort-Object Count -Descending | Select-Object -First 8 | ForEach-Object { Write-Output ("   {0,4}x {1}" -f $_.Count, $_.Name) }

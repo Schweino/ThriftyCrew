@@ -663,5 +663,73 @@ $pdpSrc = Get-Content (Join-Path $root 'publish-deals-page.ps1') -Raw
 if ($pdpSrc -match 'price-mode: BLIND' -and $pdpSrc -match 'name-drift: BLIND') { Ok 'publish-deals-page surfaces exit 3 from its two direct audit calls' }
 else { Bad 'publish-deals-page lost a blind surface line - a blind audit falls through silently during publish' }
 
+# ---------------------------------------------------------------- N+6. no script may sign another script's name
+# 2026-07-30: build-walmart-deals.ps1 is a fork of build-sams-deals.ps1 (capture-lib.ps1:14-19) and inherited
+# that name in EVERY operator-facing string. A real pull printed "build-sams-deals: 4626 raw -> 3444 priced ->
+# walmart-regular-2026-07-29.json", and a missing -In threw "build-sams-deals: -In not found", which sends the
+# operator to the wrong script AND the wrong capture file. Line 2 of that header was hand-corrected once on
+# 2026-07-26 and the usage block two lines below it was missed - a hand fix does not close a copy-paste class.
+# The check reads BOTH the dictionary of script names and each file's own name off the filesystem, so there is
+# no hard-coded text that could pass by going stale. A script legitimately labels output from a child it RUNS
+# (check-ad-cycles logs 'prune-bad-links: ...'), so a name is only a lie when the file does not ALSO carry that
+# .ps1 as a bare path string. Measured on the live tree 2026-07-30: 3 findings, all real, and all 4 delegating
+# sites (check-ad-cycles x3, run-daily-local) stay silent - dropping the bare-path exemption raises the count
+# from 3 to 7, which is how we know that clause is load-bearing and not dead. Comments are not scanned, so
+# honest provenance notes ("ported from build-sams-deals") never cry wolf. Costs ~1.0s over 138 scripts.
+# NOT extended to STORE nouns on purpose: that variant was built and measured at 3 false positives out of 5
+# (audit-walmart-fullpull is deliberately dual-store, audit-ff-missing-products holds a store list, and
+# import-walmart-batch's Member's Mark name is inside a frozen fixture) - 60% cry-wolf, so it stays out.
+function Get-MisnamedEmitters([string]$scanDir) {
+  $own = @{}
+  foreach ($p in (Get-ChildItem (Join-Path $scanDir '*.ps1') -File -EA SilentlyContinue)) { $own[$p.BaseName.ToLower()] = $true }
+  $hits = New-Object System.Collections.ArrayList
+  foreach ($p in (Get-ChildItem (Join-Path $scanDir '*.ps1') -File -EA SilentlyContinue)) {
+    # ((Get-Content -Raw) + '') - [string]$null is $null, so .Trim() on a zero-byte script would throw
+    $src = ((Get-Content $p.FullName -Raw) + '')
+    if (-not $src.Trim()) { continue }
+    $perr = $null
+    $toks = @([System.Management.Automation.PSParser]::Tokenize($src, [ref]$perr) | Where-Object { $_.Type -eq 'String' })
+    # every script this file POINTS AT: a string token that is nothing but a .ps1 path
+    $points = @{}
+    foreach ($t in $toks) {
+      $c = ([string]$t.Content).Trim()
+      if ($c -match '\.ps1$' -and $c -notmatch '[\s:]') { $points[([IO.Path]::GetFileNameWithoutExtension($c)).ToLower()] = $true }
+    }
+    $me = $p.BaseName.ToLower()
+    foreach ($t in $toks) {
+      $m = [regex]::Match(([string]$t.Content), '^\s*\[?([A-Za-z][A-Za-z0-9]*(?:-[A-Za-z0-9]+)+)(?:\.ps1)?\s*(?::|\])')
+      if (-not $m.Success) { continue }
+      $said = $m.Groups[1].Value.ToLower()
+      if ($said -eq $me -or -not $own.ContainsKey($said) -or $points.ContainsKey($said)) { continue }
+      $null = $hits.Add(("{0}:{1} signs '{2}'" -f $p.Name, $t.StartLine, $said))
+    }
+  }
+  return @($hits.ToArray())
+}
+# MUST FIRE + CLEAN TWIN. Synthetic on purpose - three throwaway scripts, never derived from live source, so
+# the bug they encode cannot evaporate the way a regenerated fixture does. The honest twin carries BOTH silence
+# conditions at once (it signs its own name AND labels a child it really invokes), which is the exact shape of
+# the legitimate sites in the estate.
+$fxSg = Join-Path $env:TEMP ('ta-signs-' + [guid]::NewGuid().ToString('N').Substring(0,8))
+New-Item -ItemType Directory -Path $fxSg -Force | Out-Null
+Set-Content (Join-Path $fxSg 'fx-sams-twin.ps1') "Write-Output 'fx-sams-twin: 1 raw -> 1 priced'" -Encoding UTF8
+Set-Content (Join-Path $fxSg 'fx-forked-builder.ps1') @'
+if (-not $In) { throw "fx-sams-twin: -In not found: $In" }
+Write-Output ("fx-sams-twin: {0} raw -> {1} priced" -f 4626, 3444)
+'@ -Encoding UTF8
+Set-Content (Join-Path $fxSg 'fx-honest-builder.ps1') @'
+$out = & powershell -File (Join-Path $root 'fx-sams-twin.ps1')
+Write-Output ('fx-sams-twin: ' + $out)
+Write-Output ("fx-honest-builder: {0} raw -> {1} priced" -f 4626, 3444)
+'@ -Encoding UTF8
+$sg = @(Get-MisnamedEmitters $fxSg)
+if ((@($sg | Where-Object { $_ -like 'fx-forked-builder.ps1:*' }).Count -eq 2) -and (@($sg | Where-Object { $_ -like 'fx-honest-builder.ps1:*' }).Count -eq 0)) {
+  Ok 'signs-its-own-name FIRES on the forked builder and stays silent on the honest twin (self-label + labelling a child it runs)'
+} else { Bad ('signs-its-own-name fixture wrong - the checker cannot see its founding bug: ' + ($sg -join ' | ')) }
+Remove-Item $fxSg -Recurse -Force -ErrorAction SilentlyContinue
+$sgLive = @(Get-MisnamedEmitters $root)
+if ($sgLive.Count -eq 0) { Ok 'no grocery script signs another script''s name (the build-walmart-deals/build-sams-deals fork class)' }
+else { Bad ('a script emits under another script''s name - a failure sends the operator to the wrong script and the wrong capture file: ' + ($sgLive -join '; ')) }
+
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2
