@@ -70,6 +70,33 @@ try {
       Log 'PHASE compare DONE. Agent: judge verify-input entries (write verify-verdicts), review coverage/fallback/multibuy flags, then -Phase publish.'
     }
     'publish' {
+      # AUDIT THE BOARD THAT ACTUALLY SHIPS (2026-07-30). Both of these ran in -Phase compare ONLY, and the
+      # comparison this phase consumes is routinely NOT the one -Phase compare produced: the daily job and hand
+      # re-runs rewrite comparison-<week>.json between the two calls. On 2026-07-29 audit-coverage-gaps wrote
+      # gap_count=0 at 09:10, out\regular\aldi-regular-2026-07-29.json was rebuilt at 12:24, the comparison was
+      # rewritten at 12:29, and this phase shipped it at 12:58 - by then Aldi had dropped out of the bread row
+      # and the published row crowned Walmart at 1.48/each with Aldi's loaf at 1.45 in the same day's capture.
+      # They STAY in -Phase compare too: that is where the agent judges include-regex widenings, and these
+      # flags are the input to that judgement. Measured cost on today's data: 8.5s + 2.0s per publish attempt.
+      # They are pointed at the COMPARISON, never verified-<week>.json, on purpose. The verified board has had
+      # human verdicts and the MinStores-2 display filter applied, and both are DELIBERATE removals: measured
+      # on 2026-07-29, 20 gaps against comparison-2026-07-29.json but 44 against verified-2026-07-29.json, and
+      # all 24 extra are policy (19 on commodities MinStores 2 drops whole, 5 on verdict-dropped cells).
+      # Coverage is a question about the ENGINE's matching, so it is asked of the engine's own output.
+      $cmpPub = Get-ChildItem (Join-Path $root 'out\comparison-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
+      if (-not $cmpPub) { throw 'no out\comparison-*.json exists - there is no board to verify, gate or publish' }
+      $cgRc = RunChild (Join-Path $root 'audit-coverage-gaps.ps1') @('-CompareFile', $cmpPub.FullName) 1 'coverage' -NonFatal
+      $cgJ = try { Get-Content (Join-Path $root 'out\coverage-gaps.json') -Raw -Encoding UTF8 | ConvertFrom-Json } catch { $null }
+      if ($cgRc -eq 3) { Log ('PRE-PUBLISH coverage: BLIND - zero raw products parsed for EVERY store, so ' + $cmpPub.Name + ' is UNCHECKED for silently dropped stores. A no-gaps verdict on it would be an empty claim.') }
+      elseif (-not $cgJ) { Log ('PRE-PUBLISH coverage: audit-coverage-gaps exited ' + $cgRc + ' and out\coverage-gaps.json is missing or unreadable - ' + $cmpPub.Name + ' was NOT checked.') }
+      elseif ([int]$cgJ.gap_count -gt 0) { Log ('PRE-PUBLISH coverage: ' + [int]$cgJ.gap_count + ' store(s) carry an item but are off ' + $cmpPub.Name + ' - ' + ((@($cgJ.gaps | ForEach-Object { [string]$_.commodity + ' @ ' + [string]$_.store }) | Select-Object -First 12) -join '; ') + ' (full list out\coverage-gaps.json). ADVISORY - this is the board about to ship.') }
+      else { Log ('PRE-PUBLISH coverage: none on ' + $cmpPub.Name) }
+      if ($cgJ -and @($cgJ.stores_not_scanned | Where-Object { $_ }).Count) { Log ('PRE-PUBLISH coverage: NOT checked for ' + ((@($cgJ.stores_not_scanned | Where-Object { $_ })) -join ', ') + ' - zero raw products were parsed for them, so their absence from a commodity proves nothing.') }
+      $sfRc = RunChild (Join-Path $root 'audit-sale-fallback.ps1') @('-CompareFile', $cmpPub.FullName) 1 'fallback' -NonFatal
+      $sfJ = try { Get-Content (Join-Path $root 'out\sale-fallback-gaps.json') -Raw -Encoding UTF8 | ConvertFrom-Json } catch { $null }
+      if (-not $sfJ) { Log ('PRE-PUBLISH sale-fallback: audit-sale-fallback exited ' + $sfRc + ' and out\sale-fallback-gaps.json is missing or unreadable - ' + $cmpPub.Name + ' was NOT checked.') }
+      elseif ([int]$sfJ.gap_count -gt 0) { Log ('PRE-PUBLISH sale-fallback: ' + [int]$sfJ.gap_count + ' on-sale cell(s) on ' + $cmpPub.Name + ' have no everyday item to revert to - ' + ((@($sfJ.gaps | ForEach-Object { [string]$_.commodity + ' @ ' + [string]$_.store }) | Select-Object -First 12) -join '; ') + ' (full list out\sale-fallback-gaps.json). ADVISORY.') }
+      else { Log ('PRE-PUBLISH sale-fallback: none on ' + $cmpPub.Name) }
       $null = RunChild (Join-Path $root 'verify-apply.ps1') @() 2 'verify-apply'
       # Price history banks the VERIFIED board, never the raw comparison. Built at MinStores 1 into its own
       # file so the ~24 single-store long-tail commodities keep their history even though MinStores 2 keeps

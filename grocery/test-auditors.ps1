@@ -659,6 +659,40 @@ else { Ok 'check-ad-cycles weekly test-guards capture leaves stderr unredirected
 $wpcSrc = Get-Content (Join-Path $root 'weekly-post-capture.ps1') -Raw
 if ($wpcSrc -match 'tiPost -eq 3' -and $wpcSrc -match 'was BLIND on the live board' -and $wpcSrc -match 'prune-bad-links -Tol 0\.32 and re-run -Phase links NOW') { Ok 'weekly-post-capture separates BLIND from FAILED (prune advice stays on the real failure only)' }
 else { Bad 'weekly-post-capture lost the blind/FAILED split - a blind post-publish check would advise pruning harder' }
+# (k2) THE PHASE WIRING (2026-07-30). audit-coverage-gaps + audit-sale-fallback ran in -Phase compare ONLY, so
+# the weekly run graded coverage on a comparison the daily job then rewrote before -Phase publish shipped it:
+# on 2026-07-29 gap_count=0 was written at 09:10, out\regular\aldi-regular-2026-07-29.json was rebuilt at 12:24,
+# the comparison was rewritten at 12:29, and the 12:58 publish went out having lost the Aldi bread cell. They
+# must run in BOTH phases (compare feeds the agent's regex widenings, publish grades the board that ships) and
+# the publish call must name the file explicitly, or it silently follows whatever newest-comparison the audit's
+# own default picks - which is the race that started this. Not a source grep for a hard-coded phrase: the
+# checker below reads the phase branches out of the real file, and is exercised against a source with the
+# publish-phase calls deleted, so it cannot pass while blind.
+function Test-WpcPhaseAudits([string]$src) {
+  $bad = New-Object System.Collections.Generic.List[string]
+  foreach ($pair in @(@('compare','publish'), @('publish','links'))) {
+    $m = [regex]::Match($src, "(?s)\n    '" + $pair[0] + "' \{\r?\n(?<b>.*?)\r?\n    '" + $pair[1] + "' \{")
+    if (-not $m.Success) { $bad.Add('cannot locate the -Phase ' + $pair[0] + ' branch'); continue }
+    $body = $m.Groups['b'].Value
+    foreach ($a in @('audit-coverage-gaps.ps1','audit-sale-fallback.ps1')) {
+      if ($body -notmatch [regex]::Escape($a)) { $bad.Add($a + ' is not invoked in -Phase ' + $pair[0]) }
+      elseif ($pair[0] -eq 'publish' -and $body -notmatch ([regex]::Escape($a) + "'\)\s*@\('-CompareFile'")) { $bad.Add($a + ' runs in -Phase publish without an explicit -CompareFile') }
+    }
+  }
+  return $bad
+}
+# CLEAN TWIN: the live file must have nothing to report.
+$wpcLive = @(Test-WpcPhaseAudits $wpcSrc)
+if ($wpcLive.Count -eq 0) { Ok 'weekly-post-capture runs coverage-gaps + sale-fallback in BOTH -Phase compare and -Phase publish, pinned to an explicit -CompareFile' }
+else { Bad ('weekly-post-capture phase wiring broken - the publish phase would ship an unaudited board: ' + ($wpcLive -join '; ')) }
+# MUST FIRE: the 2026-07-29 shape, built by deleting the publish branch body from the live source. Injected by
+# construction rather than sampled, so it encodes the bug permanently; if the checker ever stops looking, this
+# case goes quiet and FAILS instead of passing.
+$wpcBrokeM = [regex]::Match($wpcSrc, "(?s)\n    'publish' \{\r?\n(?<b>.*?)\r?\n    'links' \{")
+$wpcBroke = if ($wpcBrokeM.Success) { $wpcSrc.Remove($wpcBrokeM.Groups['b'].Index, $wpcBrokeM.Groups['b'].Length).Insert($wpcBrokeM.Groups['b'].Index, '      # publish-phase audits deleted (fixture)') } else { '' }
+$wpcFired = @(Test-WpcPhaseAudits $wpcBroke)
+if ($wpcFired.Count -eq 2 -and @($wpcFired | Where-Object { $_ -eq 'audit-coverage-gaps.ps1 is not invoked in -Phase publish' }).Count -eq 1 -and @($wpcFired | Where-Object { $_ -eq 'audit-sale-fallback.ps1 is not invoked in -Phase publish' }).Count -eq 1) { Ok 'phase-wiring check FIRES on a source with the publish-phase audits stripped, and blames only the publish phase' }
+else { Bad ('phase-wiring check did NOT fire correctly on the stripped-publish fixture: [' + ($wpcFired -join '; ') + ']') }
 $pdpSrc = Get-Content (Join-Path $root 'publish-deals-page.ps1') -Raw
 if ($pdpSrc -match 'price-mode: BLIND' -and $pdpSrc -match 'name-drift: BLIND') { Ok 'publish-deals-page surfaces exit 3 from its two direct audit calls' }
 else { Bad 'publish-deals-page lost a blind surface line - a blind audit falls through silently during publish' }
