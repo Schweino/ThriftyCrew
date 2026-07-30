@@ -512,20 +512,66 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       if (Test-Path $fstateFile) {
         try { foreach ($p in ((Get-Content $fstateFile -Raw | ConvertFrom-Json).PSObject.Properties)) { $fstate[[string]$p.Name] = $p.Value } } catch { $fstate = @{} }
       }
+      # AN ACK IS HOW A REVIEWED FLAG GOES QUIET - not by being ignored long enough.
+      # out\review-ack.json: { "acks": [ { "key": "...", "reason": "...", "expires": "yyyy-MM-dd" } ] }
+      # An ack with no expires, or an unparseable one, is treated as EXPIRED: silencing a price flag forever
+      # on the strength of a typo is exactly the failure this whole block exists to prevent. The estate already
+      # works this way for coverage (coverage-ack.json), which re-arms on expiry.
+      $REARM_DAYS = 14
+      $ackOpen = @{}; $ackExpired = 0; $ackHit = 0; $reArmed = 0
+      $ackFile = Join-Path $OutDir 'review-ack.json'
+      if (Test-Path $ackFile) {
+        try {
+          foreach ($a in @((Get-Content $ackFile -Raw | ConvertFrom-Json).acks)) {
+            if (-not $a.key) { continue }
+            $exp = $null; try { $exp = [datetime]$a.expires } catch { $exp = $null }
+            if ($null -ne $exp -and $exp.Date -ge (Get-Date).Date) { $ackOpen[[string]$a.key] = $true } else { $ackExpired++ }
+          }
+        } catch { Log ('review-ack.json unreadable - treating every flag as unacknowledged: ' + $_.Exception.Message) }
+      }
       if ($flagParts.Count -gt 0) {
         Log ("REVIEW FLAGS: " + $flagParts.Count + " -> " + (($flagParts | Select-Object -First 4) -join ' ; '))
         $newIdx = @()
         for ($fi = 0; $fi -lt $flagParts.Count; $fi++) {
           $k = if ($fi -lt $flagKeys.Count) { [string]$flagKeys[$fi] } else { [string]$flagParts[$fi] }
           $isNew = $true
-          if ($fstate.ContainsKey($k)) {
+          if ($ackOpen.ContainsKey($k)) { $isNew = $false; $ackHit++ }      # explicitly acknowledged, not expired
+          elseif ($fstate.ContainsKey($k)) {
             # a flag that CLEARED and came back must page again - it is a new event, not the same one
-            try { if (((Get-Date) - [datetime]$fstate[$k].last_seen).TotalDays -le 7) { $isNew = $false } } catch { $isNew = $false }
+            $gap = $null
+            try { $gap = ((Get-Date) - [datetime]$fstate[$k].last_seen).TotalDays } catch { $gap = $null }
+            if ($null -eq $gap) { $isNew = $true }          # FAIL OPEN: see the note below
+            elseif ($gap -gt 7) { $isNew = $true }          # genuinely cleared and returned
+            else {
+              # STILL CONTINUOUSLY OPEN. This used to be an unconditional $isNew = $false, which made the
+              # 7-day test above unreachable: line ~542 refreshes last_seen for EVERY currently-flagged key on
+              # EVERY run, so the gap is always 0 and can never exceed 7. A flag present day after day paged
+              # exactly ONCE, ever, and then went quiet forever - no expiry, no escalation, nothing. A genuine
+              # parse bug flagged once and never fixed simply disappeared into the "already seen" count.
+              # Re-arm off last_alerted (which is NOT refreshed by mere presence) so an open flag pages again.
+              # Clock preference: last_alerted, else first_seen. The fallback matters - every one of the 63
+              # keys in alerted-flags.json today predates this field, and failing OPEN on a missing
+              # last_alerted would have paged all 63 in a single mail on the next run. An alert that dumps
+              # 63 items trains the reader to ignore it, which is the same wolf-crying this fix is meant to
+              # stop. first_seen is when the key was first recorded and therefore first paged, so it is an
+              # honest clock for keys created before the field existed: they re-arm 14 days after they
+              # appeared, not all at once tonight.
+              $la = $null
+              try { if ($fstate[$k].last_alerted) { $la = ((Get-Date) - [datetime]$fstate[$k].last_alerted).TotalDays } } catch { $la = $null }
+              if ($null -eq $la) { try { $la = ((Get-Date) - [datetime]$fstate[$k].first_seen).TotalDays } catch { $la = $null } }
+              if ($null -eq $la) { $isNew = $true }                                  # no usable clock -> fail OPEN
+              elseif ($la -ge $REARM_DAYS) { $isNew = $true; $reArmed++ }            # open and ignored too long
+              else { $isNew = $false }
+            }
           }
           if ($isNew) { $newIdx += $fi }
         }
         $stillOpen = $flagParts.Count - $newIdx.Count
-        $summary += ("REVIEW    $($flagParts.Count) price flag(s) on the board ($($newIdx.Count) new, $stillOpen already seen) - see guards-/flagged- json")
+        $extra = ''
+        if ($ackHit)     { $extra += ", $ackHit acknowledged" }
+        if ($reArmed)    { $extra += ", $reArmed RE-ARMED after $REARM_DAYS days open" }
+        if ($ackExpired) { $extra += ", $ackExpired ack(s) EXPIRED" }
+        $summary += ("REVIEW    $($flagParts.Count) price flag(s) on the board ($($newIdx.Count) new, $stillOpen already seen$extra) - see guards-/flagged- json")
         if ($newIdx.Count -gt 0 -and -not $NoAlert) {
           $newLines = @($newIdx | ForEach-Object { $flagParts[$_] })
           $body = "$($newIdx.Count) NEW price flag(s) on $asofS (these still published; verify they are real):`n`n" + ($newLines -join "`n") +
@@ -536,10 +582,21 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         }
         # mark everything currently flagged as seen (only the ones we actually alerted on get first_seen)
         $nowS = (Get-Date).ToString('s')
+        # last_alerted is the clock the re-arm above reads, so it must be stamped ONLY on keys this run
+        # actually paged about - never by mere presence, or it would refresh itself daily and reproduce the
+        # exact bug being fixed (last_seen does that, which is why it cannot be the re-arm clock).
+        $alertedKeys = @{}
+        if ($newIdx.Count -gt 0) {
+          foreach ($ai in $newIdx) { $alertedKeys[$(if ($ai -lt $flagKeys.Count) { [string]$flagKeys[$ai] } else { [string]$flagParts[$ai] })] = $true }
+        }
         for ($fi = 0; $fi -lt $flagParts.Count; $fi++) {
           $k = if ($fi -lt $flagKeys.Count) { [string]$flagKeys[$fi] } else { [string]$flagParts[$fi] }
           if (-not $fstate.ContainsKey($k)) { $fstate[$k] = [pscustomobject]@{ first_seen = $nowS; last_seen = $nowS; last_detail = [string]$flagParts[$fi] } }
           else { $fstate[$k].last_seen = $nowS; $fstate[$k].last_detail = [string]$flagParts[$fi] }
+          if ($alertedKeys.ContainsKey($k)) {
+            if ($fstate[$k].PSObject.Properties['last_alerted']) { $fstate[$k].last_alerted = $nowS }
+            else { $fstate[$k] | Add-Member -NotePropertyName last_alerted -NotePropertyValue $nowS -Force }
+          }
         }
       }
       # prune anything unseen for 30 days so the state file cannot grow forever
