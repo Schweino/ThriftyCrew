@@ -163,7 +163,14 @@ function Get-SizeAmount([string]$sizeText, [string]$unit) {
   # through to the plain first-number scan, and became 12 fl oz - so Liquid Death sparkling water priced at
   # $0.58/fl oz instead of $0.097, 5x its band, and Baker's dropped off the row. "6 pk 4 oz" matched fine, which
   # is exactly why it went unnoticed: the bug only bites the spelled-out, hyphenated form.
-  $mm = [regex]::Match($s, '(\d+(?:\.\d+)?)\s*[- ]?\s*(?:ct|count|pk|packs?)\D+(\d+(?:\.\d+)?)\s*(fl\s*oz|floz|oz|ml|l\b|gal|gallon|qt|quart|pt|pint|lbs?|pound)\b')
+  # 'x' (and the U+00D7 times sign) are the same count-first form with a different separator ("12 x 12 fl
+  # oz" - Hy-Vee's everyday feed): without them the scan slid to the SECOND number and priced a 144-floz
+  # case as 12 fl oz ($0.3933 vs true $0.0328 on soda|Hy-Vee, band-flagged 2026-07-29). The times sign
+  # rides as the × regex escape, NEVER a literal: this file is BOM-less, PS 5.1 reads it as ANSI, and
+  # a literal times sign saved as UTF-8 decodes to two ANSI chars, so that branch silently never matches
+  # (proven 2026-07-30; the cent sign in Get-ItemPrice's cents regex already has this exact mojibake).
+  # \D+? is lazy and the each-size group takes leading-dot decimals, so "6 pk .5 gal" reads 0.5, not 5.
+  $mm = [regex]::Match($s, '(\d+(?:\.\d+)?)\s*[- ]?\s*(?:ct|count|pk|packs?|x|×)\D+?(\d+(?:\.\d+)?|\.\d+)\s*(fl\s*oz|floz|oz|ml|l\b|gal|gallon|qt|quart|pt|pint|lbs?|pound)\b')
   if ($mm.Success -and ($unit -eq 'oz' -or $unit -eq 'floz' -or $unit -eq 'gallon' -or $unit -eq 'lb')) {
     $cnt = [double]$mm.Groups[1].Value; $each = [double]$mm.Groups[2].Value; $tok = $mm.Groups[3].Value
     $per = Convert-ToUnit $each $tok $unit
@@ -190,10 +197,20 @@ function Get-SizeAmount([string]$sizeText, [string]$unit) {
     $rc = Convert-ToUnit $hi $tok $unit; if ($rc -ne $null) { return $rc }
   }
   # first "<number> <unit-token>" occurrence
-  $m = [regex]::Match($s, '(\d+(?:\.\d+)?)\s*(fl\s*oz|floz|oz|ounce|ounces|lb|lbs|pound|pounds|#|gal|gallon|qt|quart|pt|pint|liter|litre|\bl\b|ml|g|gram|grams|dozen|doz|ct|count|ea|each|pk|pack|pkg|bunch|head|loaf)\b')
+  $m = [regex]::Match($s, '(\d+(?:\.\d+)?|\.\d+)\s*(fl\s*oz|floz|oz|ounce|ounces|lb|lbs|pound|pounds|#|gal|gallon|qt|quart|pt|pint|liter|litre|\bl\b|ml|g|gram|grams|dozen|doz|ct|count|ea|each|pk|pack|pkg|bunch|head|loaf)\b')
   if ($m.Success) {
     $num = [double]$m.Groups[1].Value; $tok = $m.Groups[2].Value
-    return (Convert-ToUnit $num $tok $unit)
+    $conv = Convert-ToUnit $num $tok $unit
+    # WEIGHT-FIRST multipack ("16 oz 6 pk", or "1.51 oz., 40 pk." via the name fallback): a pack count
+    # elsewhere in the string multiplies a WEIGHT/VOLUME size. pu-lib step 4 has always done this; the engine
+    # did not, so Bush's "16 oz 6 pk" priced as ONE can ($0.3988/oz, band-flagged) and Sam's grits PUBLISHED
+    # at $0.1049/oz off a ".98 oz., 46 pk." name (the leading-dot group above reads 0.98, not 98). Guarded to
+    # weight units + weight tokens so "12 pk" on an each/dozen commodity is never multiplied twice.
+    if ($conv -ne $null -and ($unit -eq 'oz' -or $unit -eq 'floz' -or $unit -eq 'lb' -or $unit -eq 'gallon') -and $tok -match '^(fl\s*oz|floz|oz|ounce|ounces|lb|lbs|pound|pounds|gal|gallon)$') {
+      $wf = [regex]::Match($s, '(\d+)\s*-?\s*(?:pk|pack)\b')
+      if ($wf.Success) { return $conv * [double]$wf.Groups[1].Value }
+    }
+    return $conv
   }
   # bare count like "1 ct" already caught; bare number with no unit -> treat as each count
   $m2 = [regex]::Match($s, '^\s*(\d+(?:\.\d+)?)\s*$')
@@ -454,6 +471,24 @@ if ($SelfTest) {
   # price != the stated rate -> it IS a package total and must still divide: $0.19 / 0.15 lb = $1.267/lb
   _Near 'package total w/ rate shown'     (Get-UnitPrice (_D '$0.19' 'B-Size Gold Potatoes' $null '0.15 lbs ($1.29/lb)') (_C 'lb')).unit_price 1.2667 0.001
 
+  # --- 11d: SIZE-PARSER DIVERGENCE FIXES (2026-07-30) - the engine vs pu-lib split, closed --------------
+  # Every case is a REAL row from 2026-07-29: Bush's beans band-flagged at $0.3988/oz, Hy-Vee Cola flagged
+  # at $0.3933/floz, Sam's grits PUBLISHED at $0.1049/oz (".98 oz" read as 98 oz), Kemps OJ band-dropped
+  # at $0.007/floz (".5 Gal." read as 5 gal). MUST-FIRE: cases 1,3,4,5 all fail on the pre-fix engine.
+  _Near 'weight-first pack "16 oz 6 pk"'   (Get-UnitPrice (_D '$6.38' "Bush's Garbanzo Beans, 6 pk" $null '16 oz 6 pk') (_C 'oz')).unit_price 0.0665 0.001
+  _Near 'pack-first order (must stay)'     (Get-UnitPrice (_D '$6.38' "Bush's Garbanzo Beans, 6 pk" $null '6 pk 16 oz') (_C 'oz')).unit_price 0.0665 0.001
+  _Near 'x-separator "12 x 12 fl oz"'      (Get-UnitPrice (_D '$4.72' 'Hy-Vee Cola 12Pk' $null '12 x 12 fl oz') (_C 'floz')).unit_price 0.0328 0.001
+  _Near 'leading-dot ".98 oz" + name pack' (Get-UnitPrice (_D '$10.28' 'Quaker Instant Grits, Variety Pack, .98 oz., 46 pk.' $null '46 ct') (_C 'oz')).unit_price 0.228 0.001
+  _Near 'leading-dot ".5 Gal." via name'   (Get-UnitPrice (_D '$4.49' 'Kemps 100% Pure Orange Juice From Concentrate .5 Gal. Jug' $null '0.5 gll') (_C 'floz')).unit_price 0.0702 0.001
+  # the 'snax' GLOBAL_EXCLUDE token (blocks snack TRAYS from winning real-commodity cells). $GLOBAL_EXCLUDE
+  # is defined AFTER this block exits, so read the token from this script's own source (the extraction regex
+  # audit-match-soundness.ps1 already uses) - a hard-coded 'snax' literal here would pass whether or not the
+  # engine still carries the token, i.e. a gate that can never arm. MUST-FIRE while the token is absent.
+  $gexBody = [regex]::Match((Get-Content $PSCommandPath -Raw), '\$GLOBAL_EXCLUDE = @\((?<b>[\s\S]*?)\r?\n\)').Groups['b'].Value
+  $snaxTok = [regex]::Match($gexBody, "'([^']*snax[^']*)'").Groups[1].Value
+  if ($snaxTok -and ('go2snax, hard salami, mild cheddar cheese' -match $snaxTok)) { Write-Output "ok    'snax' exclude catches the GO2snax tray" } else { Write-Output "FAIL  'snax' token absent from GLOBAL_EXCLUDE or no longer catches GO2snax"; $script:fail++ }
+  if ($snaxTok -and ("member's mark standard shredded mild yellow cheddar cheese 5 lbs." -notmatch $snaxTok)) { Write-Output "ok    real shredded cheese not excluded by 'snax'" } else { Write-Output "FAIL  'snax' wrongly excludes real cheese (or token absent)"; $script:fail++ }
+
   # --- 12-14: partial-pull coverage (reproduces the 2026-07-23 Walmart flood) -----------------------------
   # A throttled Walmart pull returns ~50 of 410 commodities. Under newest-file-wins that partial REPLACED the
   # last full capture and cut the store to 80 cells; the coverage guard blocked the publish and the un-deduped
@@ -640,6 +675,17 @@ $GLOBAL_EXCLUDE = @(
   '\bsoda\b','sparkling','seltzer','\bwater\b','energy\s*drink','sports\s*drink','tonic','lemonade','faygo','cocktail',
   'pop[\s-]?tart','pastr','toaster','\btart\b','cereal','granola\s*bar','fruit\s*snack',
   '\bmalt\b','spiked','\bbeer\b','\bale\b','\bgum\b','\bwine\b','liquor','vodka','whiskey','tequila','bourbon','hard\s+seltzer','\bmix\b(?!\s*(?:&|and)\s*match)',
+  # 'snax' (2026-07-30): GO2snax/PRO2snax are meat+cheese+candy snack TRAYS whose names contain a real
+  # commodity phrase ('Mild Cheddar Cheese', 'Red Grapes'), and the existing '\bsnack\b' token cannot match
+  # 'snax'. The GO2snax tray sat band-hidden at $0.7721/oz; the weight-first pack fix re-prices it at
+  # $0.1287/oz by dividing its $1.66 "each" (per-tray, Sam's unit-price feed) price across all 6 trays -
+  # a wrong basis on top of the wrong product - which would make a salami/caramel tray the published
+  # CHEAPEST shredded cheese. No staple ever contains 'snax' ('\bsnax\b' cannot match inside GO2snax -
+  # '2' is a word char - so the token is deliberately unanchored).
+  # NOTE: 'GO2snax...' -> shredded-cheese is pinned in out\audit\match-baseline.json, so the FIRST
+  # audit-match-soundness.ps1 run after this change reports it DROPPED and exits 2 (publish holds). That
+  # is the audit working as designed: review the snax drops, then bless via audit-match-soundness.ps1 -Accept.
+  'snax',
   # pet + baby food: no human staple is ever "dog food"/"cat litter"/"Beech Nut" - keep them out of every human
   # commodity (chicken/bacon/rice/sweet-corn were stealing dog food & baby food). The pet/baby commodities
   # relax_global exactly the token they need, so they still match their own products.

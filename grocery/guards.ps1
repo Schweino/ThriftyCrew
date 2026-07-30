@@ -103,6 +103,13 @@ $puCases = @(
   @{ size='lb';            unit='lb';   price=4.99; name='';              want=4.99     }  # bare unit
   @{ size='$0.07/oz';      unit='oz';   price=5.00; name='';              want=0.07     }  # explicit unit price
   @{ size='16 oz';         unit='each'; price=2.49; name='';              want=$null    }  # genuine unit mismatch -> null
+  # 2026-07-30 size-parser fixes - each want is the arithmetic truth; the pre-fix engine returned the
+  # bracketed WRONG value, so these are must-fire fixtures of their founding bugs (guard-fixture-rule):
+  @{ size='6-pack 12 fl oz'; unit='floz'; price=6.99; name='';              want=0.097083 }  # hyphenated pack-first [was 0.5825 - the Liquid Death 6x class]
+  @{ size='.98 oz';          unit='oz';   price=0.98; name='';              want=1.0      }  # leading-dot decimal [was 0.01 - 100x, the sams grits class]
+  @{ size='16 oz 6-pk';      unit='oz';   price=3.00; name='';              want=0.03125  }  # hyphenated weight-first [was 0.1875]
+  @{ size='each';            unit='each'; price=6.00; name='Water 24-Pack'; want=0.25     }  # hyphenated count-in-NAME [was 6.00 - whole pack as one item]
+  @{ size='12 x 12 fl oz';   unit='floz'; price=4.72; name='';              want=0.032778 }  # x-separator - worked before, pinned so it keeps working
 )
 $puBad = New-Object System.Collections.Generic.List[string]
 foreach ($c in $puCases) {

@@ -115,9 +115,11 @@ function Get-NameQtyCandidates([string]$name, [string]$tok) {
 
   $fam = $script:UnitFamily[$tok]
   if (-not $fam) { return $out }
-  foreach ($mm in [regex]::Matches($n, '(\d[\d.]*)\s*-?\s*(fl\.?\s*oz|floz|ounces?|oz|lbs?|pounds?|gallons?|gal|quarts?|qt|pints?|pt|liters?|l|ml|kg|grams?|g|dozen|doz|dz)\b')) {
+  # (\d[\d.]*|\.\d+): leading-dot decimals (".98 oz", ".59 oz") - ported from build-sams-deals 2026-07-30.
+  # A leading-digit-only pattern reads ".98" as "98" (100x); 6 live Walmart products carry the form today.
+  foreach ($mm in [regex]::Matches($n, '(\d[\d.]*|\.\d+)\s*-?\s*(fl\.?\s*oz|floz|ounces?|oz|lbs?|pounds?|gallons?|gal|quarts?|qt|pints?|pt|liters?|l|ml|kg|grams?|g|dozen|doz|dz)\b')) {
     $qtxt = ($mm.Groups[1].Value).TrimEnd('.')
-    if ($qtxt -notmatch '^\d+(\.\d+)?$') { continue }
+    if ($qtxt -notmatch '^(\d+(\.\d+)?|\.\d+)$') { continue }   # ".98" is a valid quantity too
     $nu = ($mm.Groups[2].Value -replace '\.','' -replace '\s+',' ')   # "fl. oz." -> "fl oz"
     if (-not $fam.ContainsKey($nu)) { continue }                       # a unit from another family - ignore
     $each = [double]$qtxt * [double]$fam[$nu]
@@ -157,8 +159,8 @@ function Get-NamePack([string]$name) {
   # a digit in between means the two figures belong to different facts. The contents-unit restriction above,
   # not the gap width, is what keeps a bag CAPACITY from being paired.
   foreach ($pat in @(
-    "(\d[\d.]*)\s*-?\s*$unit\b[^\d]{0,14}(\d+)\s*-?\s*$cnt\b",   # "3.2 oz., 32 ct."  /  "13.66 fl. oz. cans, 6 pk."
-    "(\d+)\s*-?\s*$cnt\b[^\d]{0,14}(\d[\d.]*)\s*-?\s*$unit\b"    # "4 ct., 32.4 oz."
+    "(\d[\d.]*|\.\d+)\s*-?\s*$unit\b[^\d]{0,14}(\d+)\s*-?\s*$cnt\b",   # "3.2 oz., 32 ct."  /  "13.66 fl. oz. cans, 6 pk."
+    "(\d+)\s*-?\s*$cnt\b[^\d]{0,14}(\d[\d.]*|\.\d+)\s*-?\s*$unit\b"    # "4 ct., 32.4 oz."
   )) {
     $m = [regex]::Match($n, $pat)
     if (-not $m.Success) { continue }
@@ -372,6 +374,14 @@ if ($SelfTest) {
   _Chk 'q-tips 1750 ct 3 pk (rounded $0.01/ea)' (_R 'Q-tips Cotton Swabs, 1750 ct., 3 pk.' '$9.34' '$0.01/ea') '1750 ct' '$9.34'
   #     ...and the opposite order must still take the LAST count. One rule, both names.
   _Chk 'pampers 13 pk., 728 ct.' (_R 'Pampers Aqua Pure Baby Wipes, 13 pk., 728 ct.' '$30.98' '$0.04/ea') '728 ct' '$30.98'
+
+  # 7k. LEADING-DOT DECIMALS (ported from build-sams-deals 2026-07-30): ".98 oz., 46 pk." must read 0.98,
+  #     not 98. MUST-FIRE: the old pattern gave name candidates [98, 4508]; neither reproduces $0.23/oz, so
+  #     the builder shipped a fractional lp/up-derived '44.696 oz' where the true 45.08 (0.98 x 46) was
+  #     invisible. (The sams grits case, alive in the walmart parser until today.)
+  _Chk 'grits .98 oz 46 pk (leading-dot)' (_R 'Quaker Instant Grits, Variety Pack, .98 oz., 46 pk.' '$10.28' '$0.23/oz') '45.08 oz' '$10.28'
+  #     clean twin: plain leading-dot single item - the name's 0.59 reproduces the unit price exactly
+  _Chk 'parsley .59 oz (leading-dot)' (_R 'Watkins Gourmet Organic Spice Jar, Parsley Flakes, .59 oz' '$7.70' '$13.05/oz') '0.59 oz' '$7.70'
 
   # 7g. THE NAME'S UNIT NEED NOT BE SAM'S UNIT. Milk is sold as "1 gal." but priced per fluid ounce, where a
   #     cent of rounding is +/-16% - lp/up derives 124 fl oz and publishes $3.84/gal for milk that costs

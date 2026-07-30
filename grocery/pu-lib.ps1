@@ -57,7 +57,7 @@ function Get-LinkPerUnit {
   #    a 144 fl oz case - a live 12x error on soda|Hy-Vee ($0.3933/floz published against a true $0.0328).
   #    Same bug family as the "6-pack 12 fl oz" hyphen case; only the separator differs.
   if ($unit -in @('oz','floz','lb','gallon')) {
-    $mp = [regex]::Match($s, '([0-9]+)\s*(?:pk|pack|x|×)\s*([0-9]+(?:\.[0-9]+)?)\s*(fl\s*oz|floz|oz|lbs?|pound|gal|gallon|qt|quart|ml|ltr|liters?|litres?|l)\b')
+    $mp = [regex]::Match($s, '([0-9]+)\s*-?\s*(?:pk|pack|x|×)\s*-?\s*([0-9]+(?:\.[0-9]+)?|\.[0-9]+)\s*(fl\s*oz|floz|oz|lbs?|pound|gal|gallon|qt|quart|ml|ltr|liters?|litres?|l)\b')
     if ($mp.Success) {
       $n = [double]$mp.Groups[1].Value * [double]$mp.Groups[2].Value
       $un = ($mp.Groups[3].Value -replace '\s','') -replace 'fl','' -replace '^gallon$','gal' -replace '^quart$','qt' -replace '^pound$','lb' -replace '^(ltr|liters?|litres?)$','l'
@@ -70,7 +70,7 @@ function Get-LinkPerUnit {
     # null and the cell went unpriced. Resolved here, in the one block that owns pack-first semantics.
     # The trailing weight is REQUIRED by the regex, so a bare "2 pk" (two CARTONS, count-per-carton unknown)
     # can never match - that shape stays with the generic rules exactly as before.
-    $mp = [regex]::Match($s, '([0-9]+)\s*(?:pk|pack|x|×)\s*([0-9]+(?:\.[0-9]+)?)\s*(fl\s*oz|floz|oz|lbs?|pound|gal|gallon|qt|quart|ml|ltr|liters?|litres?|l)\b')
+    $mp = [regex]::Match($s, '([0-9]+)\s*-?\s*(?:pk|pack|x|×)\s*-?\s*([0-9]+(?:\.[0-9]+)?|\.[0-9]+)\s*(fl\s*oz|floz|oz|lbs?|pound|gal|gallon|qt|quart|ml|ltr|liters?|litres?|l)\b')
     if ($mp.Success) {
       $cnt = [double]$mp.Groups[1].Value
       if ($cnt -gt 0) {
@@ -104,7 +104,7 @@ function Get-LinkPerUnit {
         $un = (($mf.Groups[3].Value -replace '\s','') -replace 'fl','') -replace '^(ltr|liters?|litres?)$','l'
       }
     }
-    $q = if ($null -eq $n) { [regex]::Match($s, '(\d+(?:\.\d+)?)\s*(fl\s*oz|floz|oz|lbs?|pound|ct|count|ea|pk|gal|gallon|qt|quart|dozen|doz|ml|ltr|liters?|litres?|l)\b') } else { $null }
+    $q = if ($null -eq $n) { [regex]::Match($s, '(\d+(?:\.\d+)?|\.\d+)\s*(fl\s*oz|floz|oz|lbs?|pound|ct|count|ea|pk|gal|gallon|qt|quart|dozen|doz|ml|ltr|liters?|litres?|l)\b') } else { $null }
     if ($null -ne $n) {
       # already resolved by the fractional branch
     } elseif ($q.Success) {
@@ -124,7 +124,7 @@ function Get-LinkPerUnit {
   # 4. multipack in the SIZE stated WEIGHT-FIRST ("16 oz 6 pk") multiplies a weight. Skipped when the
   #    pack-first branch already ran, so "6 pk 16 oz" is not multiplied by the pack count twice.
   if (-not $mpDone) {
-    $pk = [regex]::Match($s, '([0-9]+)\s*(pk|pack)\b')
+    $pk = [regex]::Match($s, '([0-9]+)\s*-?\s*(pk|pack)\b')
     if ($pk.Success -and $n -and ($un -match '^(oz|lbs?|gal)$')) { $n = $n * [double]$pk.Groups[1].Value }
   }
 
@@ -132,7 +132,7 @@ function Get-LinkPerUnit {
   #    1 - without this the whole pack price publishes as the per-item price (Fareway bottled water went out
   #    at $3.87 EACH). Only for 'each' commodities, and only when the size itself carries no count.
   if ($unit -eq 'each' -and $name -and (($null -eq $n) -or ($n -eq 1))) {
-    $pn = [regex]::Match(([string]$name).ToLower(), '([0-9]+)\s*(?:pk\b|pack\b|ct\b|count\b)')
+    $pn = [regex]::Match(([string]$name).ToLower(), '([0-9]+)\s*-?\s*(?:pk\b|pack\b|ct\b|count\b)')
     if ($pn.Success) {
       $cnt = [double]$pn.Groups[1].Value
       if ($cnt -gt 1) { return $price / $cnt }
