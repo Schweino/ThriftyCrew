@@ -277,7 +277,30 @@ function SeeLink([string]$id, [string]$store, [string]$boardItem, [double]$board
           # even at a plausible price). Band is REQUIRED here.
           if (-not $ident -and ($null -ne $lpu) -and ($lpu -ge $boardPU * 0.85) -and ($lpu -le $boardPU * 3.0) -and (CommodityIdent $id ([string]$lnk.name)) -and (NameMatch ([string]$lnk.name) $boardItem)) { $ident = $true }
           if (-not $ident) { $ok = $false }
-          elseif (($null -ne $lpu) -and ($lpu -lt $boardPU * 0.85 -or $lpu -gt $boardPU * 3.0)) { $ok = $false }
+          elseif (($null -ne $lpu) -and ($lpu -lt $boardPU * 0.85 -or $lpu -gt $boardPU * 3.0)) {
+            # PACK-BASIS AMBIGUITY on an 'each' commodity. "each" means one PACKAGE for some commodities
+            # (garlic bread, a bag of buns) and one ITEM for others (a bottle out of a 24-pack). compare-deals
+            # settles that per commodity; Get-LinkPerUnit cannot know, so it always DIVIDES a counted size
+            # ("8 ea") by the count. Where the board priced the PACK the two sides sit on different bases and
+            # the band rejects a byte-identical product: Family Fare garlic-bread, board $2.49 each vs the
+            # stored link "Our Family Slices Original Garlic Texas Toast 8 Ea" $2.89 for that same 8-ct pack
+            # -> lpu $0.36, a 1/8 artifact rather than a different product.
+            # The rescue is deliberately narrow. The size must state a count > 1 (no ambiguity otherwise); the
+            # PACK price must itself sit in the same sale band; and the names must be EQUAL after
+            # normalization - the 50%-word NameMatch above is far too weak to be the only thing between a
+            # shopper and a wrong product page ("Kroger Cheese Texas Toast 8 Ea" passes NameMatch against the
+            # Our Family board item). Missing still beats wrong.
+            $packOk = $false
+            if ($unit -eq 'each') {
+              $pkm = [regex]::Match(([string]$lnk.size).ToLower(), '^\s*([0-9]+)\s*(?:ea|each|ct|count|pk|pack)\s*$')
+              if ($pkm.Success -and ([double]$pkm.Groups[1].Value -gt 1) -and ($lprice -ge $boardPU * 0.85) -and ($lprice -le $boardPU * 3.0)) {
+                $nbNorm = (([string]$boardItem).ToLower() -replace '[^a-z0-9]',' ' -replace '\s+',' ').Trim()
+                $nlNorm = (([string]$lnk.name).ToLower() -replace '[^a-z0-9]',' ' -replace '\s+',' ').Trim()
+                $packOk = ($nbNorm -eq $nlNorm) -and $nbNorm
+              }
+            }
+            if (-not $packOk) { $ok = $false }
+          }
         }
         elseif ($null -ne $lpu -and ([math]::Abs($lpu - $boardPU) / $boardPU -gt 0.30)) {
           # >30% off the board on an EVERYDAY cell normally means a DIFFERENT product -> hide. The one exception is

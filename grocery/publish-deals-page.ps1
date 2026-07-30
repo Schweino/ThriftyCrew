@@ -133,21 +133,42 @@ try {
   # Chips live in public/board.json now (they are display:none until a row opens, and inlining them pushed the
   # Ghost upsert past its timeout). Counting them in the embed would find ZERO and report perfect coverage -
   # a blind check. Read the same rendered chip html from the feed the browser injects.
-  $nl = 0
+  $nl = 0; $tot = 0
+  $nlCells = New-Object System.Collections.Generic.List[string]
   $bfeed = Join-Path (Split-Path $root -Parent) 'public\board.json'
+  $chipRx = "<div class='pg-chip[^']*' data-store=`"([^`"]+)`" data-pu='[^']*'>(.*?)</div>"
   if (Test-Path $bfeed) {
     $bj = Get-Content $bfeed -Raw | ConvertFrom-Json
     foreach ($bp in $bj.PSObject.Properties) {
-      foreach ($cp in [regex]::Matches([string]$bp.Value, "<div class='pg-chip[^']*' data-store=`"[^`"]+`" data-pu='[^']*'>(.*?)</div>", 'Singleline')) { if ($cp.Groups[1].Value -notmatch 'pg-see') { $nl++ } }
+      $cid = ([string]$bp.Name) -replace '::r$',''
+      foreach ($cp in [regex]::Matches([string]$bp.Value, $chipRx, 'Singleline')) { $tot++; if ($cp.Groups[2].Value -notmatch 'pg-see') { $nl++; [void]$nlCells.Add($cid + '|' + ($cp.Groups[1].Value -replace '&#39;', "'")) } }
     }
   } else {
     $eh = Get-Content $embed -Raw
-    foreach ($rw in [regex]::Matches($eh, "data-id='[^']+'(.*?)</article>", 'Singleline')) {
-      foreach ($cp in [regex]::Matches($rw.Groups[1].Value, "<div class='pg-chip[^']*' data-store=`"[^`"]+`" data-pu='[^']*'>(.*?)</div>", 'Singleline')) { if ($cp.Groups[1].Value -notmatch 'pg-see') { $nl++ } }
+    foreach ($rw in [regex]::Matches($eh, "data-id='([^']+)'(.*?)</article>", 'Singleline')) {
+      $cid = [string]$rw.Groups[1].Value
+      foreach ($cp in [regex]::Matches($rw.Groups[2].Value, $chipRx, 'Singleline')) { $tot++; if ($cp.Groups[2].Value -notmatch 'pg-see') { $nl++; [void]$nlCells.Add($cid + '|' + ($cp.Groups[1].Value -replace '&#39;', "'")) } }
     }
   }
-  Write-Output ("link-coverage: $nl priced chip(s) with no See-item link")
-  if ($nl -gt 0) { Write-Output ("WARN: $nl chips missing links (target 0 - Brad's invariant: every price has a link) - check consistency-report.json no_link / product-urls / the identity gate in build-deals-page.ps1") }
+  # WHICH CLASS, because the two need opposite work: a cell that HAS a stored product URL the sale/identity
+  # gate hid is a link-quality problem in this repo; a cell with nothing recorded needs a browser resolve.
+  $nlStored = 0
+  try {
+    $puDoc = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
+    foreach ($k in $nlCells) {
+      $kp = $k -split '\|', 2
+      $ce = $puDoc.PSObject.Properties[$kp[0]]; if (-not $ce) { continue }
+      $se = $ce.Value.PSObject.Properties[$kp[1]]
+      if ($se -and $se.Value -and $se.Value.url) { $nlStored++ }
+    }
+  } catch { $nlStored = -1 }
+  # ZERO CHIPS IS NOT ZERO GAPS. Every count here comes from a regex over rendered chip markup, so the same
+  # render change that would break the markup also empties this check - and an empty examination printed "0
+  # chips with no link", which reads as perfect coverage. Say so instead.
+  if ($tot -eq 0) { Write-Output 'link-coverage: BLIND - examined ZERO priced chips (no board.json, and no chip markup in the embed), so the 0 below is an empty examination, not clean coverage.' }
+  $split = if ($nlStored -ge 0) { " ($nlStored of them HAVE a stored product URL the link gate suppressed; " + ($nl - $nlStored) + " have no URL recorded at all)" } else { '' }
+  Write-Output ("link-coverage: $nl of $tot priced chip(s) fall back to the weekly-ad pill instead of an exact See-item product link" + $split)
+  if ($nl -gt 0) { Write-Output ("NOTE: these are NOT linkless prices. Brad's every-price-has-a-link rule is enforced by the ALL-3 assertion inside build-deals-page.ps1, which hard-fails the build (exit 2) on any priced chip with no <a> and passed on this build - a flyer-only sale cell with no exact product page legitimately links to the store's weekly ad. Closing these means re-resolving the suppressed URLs (out\name-drift.json + the sale gate in SeeLink) and browser-resolving the rest.") }
 } catch {}
 
 # ---- ALL-STORES-SHOWN invariant (HARD gate): every staple commodity must render a tile for ALL 7 stores - a

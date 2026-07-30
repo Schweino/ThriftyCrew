@@ -76,11 +76,19 @@ $noLinkList = New-Object System.Collections.Generic.List[object]
 # perfect score - a blind guard is worse than no guard. So read the SAME rendered chip html from the feed: it
 # is byte-identical to what the browser injects, which is why the chip regex below is unchanged.
 $boardFeed = Join-Path (Split-Path $root -Parent) 'public\board.json'
+# COUNT WHAT WAS EXAMINED. "no-link=0" is the healthy answer AND the answer a blind run gives, and this check
+# has no other output to tell them apart. The header above already worried about this once (chips moved into
+# the feed on 2026-07-16 and auditing the embed would have "cheerfully reported a perfect score") but nothing
+# was ever added to prove the regex still matches anything. $chipsSeen is taken from the SAME MatchCollection
+# the check consumes - never a second pass over the html, which would only re-state the same assumption.
+$chipsSeen = 0
 if (Test-Path $boardFeed) {
   $bf = Get-Content $boardFeed -Raw | ConvertFrom-Json
   foreach ($p in $bf.PSObject.Properties) {
     $rid = $p.Name -replace '::r$',''    # '<id>::r' is the recipe row of a shared id; report the plain id
-    foreach ($ch in [regex]::Matches([string]$p.Value, "<div class='pg-chip[^']*' data-store=`"([^`"]+)`" data-pu='[^']*'>(.*?)</div>", 'Singleline')) {
+    $chips = [regex]::Matches([string]$p.Value, "<div class='pg-chip[^']*' data-store=`"([^`"]+)`" data-pu='[^']*'>(.*?)</div>", 'Singleline')
+    $chipsSeen += $chips.Count
+    foreach ($ch in $chips) {
       $cstore = $ch.Groups[1].Value -replace '&#39;',"'"
       $body = $ch.Groups[2].Value
       if ($body -notmatch 'pg-see' -and $body -notmatch 'pg-none') { $noLinkList.Add([pscustomobject]@{ id=$rid; store=$cstore }) }
@@ -91,7 +99,9 @@ if (Test-Path $boardFeed) {
   $html = Get-Content $Embed -Raw
   foreach ($row in [regex]::Matches($html, "data-id='([^']+)'(.*?)</article>", 'Singleline')) {
     $rid = $row.Groups[1].Value
-    foreach ($ch in [regex]::Matches($row.Groups[2].Value, "<div class='pg-chip[^']*' data-store=`"([^`"]+)`" data-pu='[^']*'>(.*?)</div>", 'Singleline')) {
+    $chips = [regex]::Matches($row.Groups[2].Value, "<div class='pg-chip[^']*' data-store=`"([^`"]+)`" data-pu='[^']*'>(.*?)</div>", 'Singleline')
+    $chipsSeen += $chips.Count
+    foreach ($ch in $chips) {
       $cstore = $ch.Groups[1].Value -replace '&#39;',"'"
       $body = $ch.Groups[2].Value
       if ($body -notmatch 'pg-see' -and $body -notmatch 'pg-none') { $noLinkList.Add([pscustomobject]@{ id=$rid; store=$cstore }) }
@@ -101,15 +111,25 @@ if (Test-Path $boardFeed) {
 $noLink = $noLinkList.Count
 $byStore = $noLinkList | Group-Object store | ForEach-Object { [pscustomobject]@{ store=$_.Name; count=$_.Count } } | Sort-Object count -Descending
 
-$report = [ordered]@{ generated=(Get-Date -Format 'yyyy-MM-dd HH:mm'); tol=$Tol; no_link_count=$noLink; max_no_link=$MaxNoLink; no_link_by_store=$byStore; no_link=$noLinkList; mismatch_count=$mismatch.Count; mismatch=$mismatch }
+$report = [ordered]@{ generated=(Get-Date -Format 'yyyy-MM-dd HH:mm'); tol=$Tol; chips_examined=$chipsSeen; no_link_count=$noLink; max_no_link=$MaxNoLink; no_link_by_store=$byStore; no_link=$noLinkList; mismatch_count=$mismatch.Count; mismatch=$mismatch }
 $report | ConvertTo-Json -Depth 6 | Set-Content (Join-Path $OutDir 'consistency-report.json') -Encoding UTF8
+
+# ZERO CHIPS EXAMINED IS NOT A CLEAN BOARD. Every no-link finding comes from one regex against the rendered
+# chip html; if the feed is missing, renamed, or the pg-chip markup drifts by one attribute, that regex
+# matches nothing and this guard reports its best possible score - and check-ad-cycles logs "consistency OK".
+# 3164 priced chips are examined on a healthy run, so this can never fire on real data. Exit 3 is this
+# estate's could-not-evaluate code (audit-coverage-gaps, audit-links, audit-script-census all use it).
+if ($chipsSeen -eq 0) {
+  Write-Output "consistency: BLIND - examined 0 priced chips (no feed at $boardFeed, or the pg-chip markup changed); no-link=0 out of 0 chips is not a pass"
+  exit 3
+}
 
 # Live-visible health = NO-LINK coverage (how many priced chips fall back to a name). A spike means links are
 # being wrongly suppressed (guard too tight / stale audit / bad data) OR data went missing. That's the breach
 # signal worth an alert. The mismatch backlog is reported for repair but is NOT live-harmful (all hidden).
 $breach = ($noLink -gt $MaxNoLink)
 $sev = if ($breach) { 'BREACH' } else { 'OK' }
-Write-Output ("consistency: $sev  no-link=$noLink (max $MaxNoLink)  mismatch-backlog=$($mismatch.Count)")
+Write-Output ("consistency: $sev  no-link=$noLink (max $MaxNoLink)  mismatch-backlog=$($mismatch.Count)  chips-examined=$chipsSeen")
 if ($breach) { exit 2 } else { exit 0 }
 
 

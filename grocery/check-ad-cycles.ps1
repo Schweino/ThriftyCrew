@@ -892,6 +892,12 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
                       if ($LASTEXITCODE -eq 0) { Set-Content -Path $csigF -Value $driftSig -Encoding UTF8; Log 'consistency drift alert sent' } } catch { Log ('consistency alert threw: ' + $_.Exception.Message) }
               } else { Log 'consistency drift unchanged since last alert - not re-alerting' }
             } else { Log 'consistency repaired - all shown links match their price'; if (Test-Path (Join-Path $OutDir 'consistency-alert.sig')) { Remove-Item (Join-Path $OutDir 'consistency-alert.sig') -ErrorAction SilentlyContinue } }
+          } elseif ($LASTEXITCODE -eq 3) {
+            # exit 3 = could-not-evaluate (P6). Before 2026-07-30 this branch did not exist, so a consistency
+            # run that examined ZERO chips - feed missing, or the pg-chip markup drifted - fell into the else
+            # below and was logged as "consistency OK": the guard's blindest state wearing its healthiest label.
+            Log 'consistency BLIND - the auditor examined 0 priced chips; "no-link=0" today means nothing (see chips_examined in out\consistency-report.json)'
+            $summary += 'REVIEW    board-consistency examined 0 chips - the price/link check is not running; check public\board.json and the pg-chip markup in build-deals-page.ps1'
           } else { Log 'consistency OK - every shown link matches its price' }
         } catch { Log ('consistency guard threw: ' + $_.Exception.Message) }
       }

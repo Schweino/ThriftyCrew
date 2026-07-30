@@ -140,12 +140,37 @@ try {
   }
 } finally { Remove-Item $nz -Force -ErrorAction SilentlyContinue }
 # source scan: no LIVE script may read a stamp file through the throwing idiom again (archive\ is frozen).
+function Test-HasThrowingIdiom([string]$path) {
+  # ONE definition of the scan, so the fixture below exercises the SAME expression the sweep uses.
+  # LINE-WISE AND COMMENT-SKIPPING ON PURPOSE. The -Raw version matched the COMMENT in
+  # publish-deals-page.ps1 that DOCUMENTS this trap (line 29; the code on line 31 is already the safe
+  # form), so test-guards reported "1 failed" on a completely healthy tree - measured 2026-07-30, the
+  # only failing case in the whole suite. A gate that cries wolf is a gate that gets switched off, and
+  # this one was crying wolf at the essay written to stop the bug.
+  $lines = @(Get-Content $path -ErrorAction SilentlyContinue)
+  return @($lines | Where-Object { $_ -notmatch '^\s*#' -and $_ -match '\(\[string\]\(Get-Content [^)]*\)\)\.Trim\(\)' }).Count -gt 0
+}
+# MUST-FIRE + CLEAN TWIN for the scan itself, on frozen synthetic files - the founding false positive and
+# the real bug it is supposed to catch, side by side. bad.ps1 going unflagged means the sweep below can no
+# longer fire at all; ok.ps1 getting flagged is the publish-deals-page false positive, reproduced.
+$scanDir = Join-Path $env:TEMP ('tg-scan-' + [guid]::NewGuid().ToString('N'))
+New-Item -ItemType Directory $scanDir | Out-Null
+try {
+  $scanBad = Join-Path $scanDir 'bad.ps1'
+  $scanOk  = Join-Path $scanDir 'ok.ps1'
+  $scanQ   = [char]39
+  Set-Content $scanBad -Value '$p = ([string](Get-Content $f -Raw)).Trim()' -Encoding ASCII
+  Set-Content $scanOk -Value @('# PS 5.1: ([string](Get-Content -Raw)).Trim() THROWS on a zero-byte stamp.', ('$p = ((Get-Content $f -Raw) + ' + $scanQ + $scanQ + ').Trim()')) -Encoding ASCII
+  if (Test-HasThrowingIdiom $scanBad) { Write-Output '  PASS  empty-stamp: the source scan still flags the throwing idiom in real CODE'; $script:pass++ }
+  else { Write-Output '  FAIL  empty-stamp: the source scan no longer flags the idiom in real code - the sweep below cannot fire'; $script:failed++ }
+  if (-not (Test-HasThrowingIdiom $scanOk)) { Write-Output '  PASS  empty-stamp: the source scan ignores the idiom quoted inside a COMMENT'; $script:pass++ }
+  else { Write-Output '  FAIL  empty-stamp: the source scan flags a COMMENT that merely documents the trap - the publish-deals-page false positive is back'; $script:failed++ }
+} finally { Remove-Item $scanDir -Recurse -Force -ErrorAction SilentlyContinue }
 $badIdiom = @()
 foreach ($f in (Get-ChildItem (Join-Path $root '*.ps1') -File)) {
   # this file is exempt by construction: the must-fire case above HAS to contain the throwing idiom to run it.
   if ($f.Name -eq 'test-guards.ps1') { continue }
-  $src = Get-Content $f.FullName -Raw
-  if ($src -match '\(\[string\]\(Get-Content [^)]*\)\)\.Trim\(\)') { $badIdiom += $f.Name }
+  if (Test-HasThrowingIdiom $f.FullName) { $badIdiom += $f.Name }
 }
 if ($badIdiom.Count -eq 0) { Write-Output '  PASS  empty-stamp: no live script reads a stamp file through the throwing idiom'; $script:pass++ }
 else { Write-Output ('  FAIL  empty-stamp: throwing idiom is back in ' + ($badIdiom -join ', ') + " - use ((Get-Content `$f -Raw) + '').Trim()"); $script:failed++ }
@@ -493,6 +518,158 @@ if (Test-Path $of) {
       Skip ('pin: could not make audit-name-drift flag ANY of the ' + $ndFxCand.Count + ' pin(s) it records having examined (out\name-drift.json examined_cells) - the WRONG-PRODUCT clause has nothing that can arm it, which IS the bug')
     }
   }
+}
+
+# ---- 15. guard 6: a THROTTLED capture must not become a store's source of truth ----------------------
+# THE FAMILY FARE COLLAPSE, FROM THE OTHER SIDE. Case 6 above covers guard 7 - the stray '.PARTIAL' NAME.
+# Guard 6 is the half that catches the same incident when the thin file is named CANONICALLY (a throttled
+# pull that wrote <store>-regular-<date>.json holding a fraction of the catalogue), and it had NO negative
+# test at all: 177 -> 55 rows is the founding bug of this whole file and nothing proved the check built for
+# it could still fire. Measured 2026-07-30 in a hermetic copy: truncating the newest capture to 10 rows
+# makes guards exit 2 with this text and nothing else.
+# THE VICTIM IS DERIVED, NEVER NAMED. This re-runs guard 6's own selection rule (2+ captures for the
+# prefix, best of the previous four > 100 rows) so the fixture cannot rot when the pull order or the store
+# set changes - the rotating-data trap the Skip() essay above condemns.
+$g6All = @(Get-ChildItem (Join-Path $root 'out\regular\*-regular-*.json') -ErrorAction SilentlyContinue |
+  Where-Object { $_.BaseName -match '^[a-z0-9-]+-regular-\d{4}-\d{2}-\d{2}$' })
+$g6Pick = $null
+foreach ($g6Grp in (@($g6All | Group-Object { ($_.BaseName -replace '-regular-.*$','') }) | Sort-Object Name)) {
+  $g6Ord = @($g6Grp.Group | Sort-Object Name -Descending)
+  if ($g6Ord.Count -lt 2) { continue }
+  $g6Best = 0
+  foreach ($g6Old in ($g6Ord | Select-Object -Skip 1 -First 4)) {
+    try { $g6N = @((Get-Content $g6Old.FullName -Raw | ConvertFrom-Json).deals).Count; if ($g6N -gt $g6Best) { $g6Best = $g6N } } catch {}
+  }
+  if ($g6Best -gt 100) { $g6Pick = $g6Ord[0]; break }
+}
+if ($g6Pick) {
+  $g6Prefix = ($g6Pick.BaseName -replace '-regular-.*$','')
+  $g6Bak = Backup $g6Pick.FullName
+  $g6Doc = $g6Bak | ConvertFrom-Json
+  $g6Doc.deals = @(@($g6Doc.deals) | Select-Object -First 10)   # 10 is under half of any >100-row history
+  ($g6Doc | ConvertTo-Json -Depth 8) | Set-Content $g6Pick.FullName -Encoding UTF8
+  Check ('store collapse: ' + $g6Prefix + "'s newest capture holds 10 rows against its own recent history") 2 ('store data collapsed\s+\[' + [regex]::Escape($g6Prefix) + '\]')
+  Set-Content $g6Pick.FullName $g6Bak -Encoding UTF8 -NoNewline
+} else {
+  Skip 'store collapse: no out\regular prefix has 2+ captures with a >100-row recent best, so guard 6 cannot be armed against this tree at all - which IS the finding'
+}
+
+# ---- 16. guard 9: a store nobody has looked at in over two weeks --------------------------------------
+# "SAFE IS NOT A SYNONYM FOR ACCURATE" is guards.ps1's own heading here, and its >14-day HARD FAIL had no
+# negative test. It is also the site most at risk of going quiet: guard 9's own header records how the
+# Sam's alt-feed redirect made this fail structurally unreachable for 60 rows behind 22 live board cells.
+# THIS CASE CREATES ITS OWN STORE. Every real store's newest capture is dated today or yesterday, so
+# ageing a real one means deleting a rotating number of real files - the depends-on-live-data trap. The
+# synthetic prefix is canonical so guard 7 stays quiet, carries ONE row because guard 9's zero-rows warn
+# `continue`s past the age test on an empty deals array, and stamps price_mode so audit-price-mode does
+# not co-fire. Measured 2026-07-30 in a hermetic copy: exit 2, this text, nothing else.
+$g9Date = (Get-Date).AddDays(-20).ToString('yyyy-MM-dd')
+$g9F = Join-Path $root ('out\regular\zzstaleguard-regular-' + $g9Date + '.json')
+if (Test-Path $g9F) {
+  Skip 'stale prices: the fixture path already exists on disk - refusing to overwrite it'
+} else {
+  MarkCreated $g9F
+  ([pscustomobject]@{
+    store = 'ZZ Stale Guard Fixture'; week_of = $g9Date; price_type = 'everyday'
+    price_mode = 'in-store'; mode_verified = $g9Date; deal_count = 1
+    deals = @([pscustomobject]@{ store = 'ZZ Stale Guard Fixture'; item = 'Negative Test Filler 16 oz'; ad_price = '$1.00'; size = '16 oz'; regular = $null; source_ad = 'NEGATIVE TEST FIXTURE' })
+  } | ConvertTo-Json -Depth 6) | Set-Content $g9F -Encoding UTF8
+  Check 'stale prices: a store whose newest capture is 20 days old' 2 'ZZ Stale Guard Fixture price data is 20 days old'
+  Remove-Item $g9F -Force -ErrorAction SilentlyContinue
+}
+
+# ---- 17. guard 12: the board must be built from TODAY'S ads -------------------------------------------
+# A TWO-DAY-OLD BOARD went to the live site on 2026-07-17. out\comparison-*.json is gitignored on purpose,
+# so `git pull` brings today's ADS and leaves yesterday's BOARD, and every downstream step then uses the
+# newest board it can SEE rather than the newest that EXISTS. This is the gate that refuses that, and it
+# had no negative test. Measured 2026-07-30 in a hermetic copy: exit 2, this text, nothing else.
+$g12Cmp = Get-ChildItem (Join-Path $root 'out\comparison-*.json') -ErrorAction SilentlyContinue |
+  Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Desc | Select-Object -First 1
+$g12Ads = Get-ChildItem (Join-Path $root 'out\ads-*.json') -ErrorAction SilentlyContinue |
+  Where-Object { $_.BaseName -match '^ads-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Desc | Select-Object -First 1
+if ($g12Cmp -and $g12Ads) {
+  $g12Date = ([datetime]($g12Cmp.BaseName -replace '^comparison-','')).AddDays(1).ToString('yyyy-MM-dd')
+  $g12F = Join-Path $root ('out\ads-' + $g12Date + '.json')
+  if (Test-Path $g12F) {
+    Skip 'stale board: an ads file already sits after the newest board, so guard 12 should already be red and this case can prove nothing'
+  } else {
+    MarkCreated $g12F
+    Copy-Item $g12Ads.FullName $g12F -Force
+    Check 'stale board: an ads file dated after the newest board' 2 ('the board is STALE - ads-' + [regex]::Escape($g12Date))
+    Remove-Item $g12F -Force -ErrorAction SilentlyContinue
+  }
+} else {
+  Skip 'stale board: no dated ads/comparison pair on disk to build the fixture from'
+}
+
+# ---- 18. delegated audit: a store QUIETLY LOSING coverage between boards ------------------------------
+# Sam's Club fell from 251 priced cells to 116 on a bare compare-deals re-run and every guard stayed green;
+# Brad found it by eye. audit-coverage-regression is the ONLY check that can see that class - the publish
+# gate enforces a FLOOR, which 116 clears - and nothing proved guards actually BLOCKS on it. Strip half of
+# one store's cells out of the newest board and prove the delegating wrapper turns it into a hard fail.
+# THE VICTIM IS THE LARGEST STORE NOT ALREADY ACKNOWLEDGED in out\coverage-ack.json: an acked store is
+# silenced by design (Family Fare carries a live ack today), so naming one builds a fixture that can never
+# fire. Measured 2026-07-30 in a hermetic copy: halving Fareway gives exit 2 with this text and nothing else.
+$g18F = (Get-ChildItem (Join-Path $root 'out\comparison-*.json') |
+  Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Desc | Select-Object -First 1).FullName
+$g18Bak = Backup $g18F
+$g18Rep = Join-Path $root 'out\coverage-regression.json'
+if (Test-Path $g18Rep) { $null = Backup $g18Rep }   # the audit rewrites its own report; put it back too
+$g18Acked = @{}
+$g18AckF = Join-Path $root 'out\coverage-ack.json'
+if (Test-Path $g18AckF) { foreach ($g18A in @((Get-Content $g18AckF -Raw | ConvertFrom-Json).acks)) { if ($g18A.store) { $g18Acked[[string]$g18A.store] = $true } } }
+$g18Doc = $g18Bak | ConvertFrom-Json
+$g18Count = @{}
+foreach ($g18R in $g18Doc.comparison) { foreach ($g18S in $g18R.stores) { $g18K = [string]$g18S.store; $g18Count[$g18K] = 1 + [int]$g18Count[$g18K] } }
+$g18Pick = @($g18Count.GetEnumerator() | Where-Object { -not $g18Acked.ContainsKey([string]$_.Key) -and [int]$_.Value -ge 40 } | Sort-Object Value -Descending | Select-Object -First 1)
+if ($g18Pick.Count) {
+  $g18Store = [string]$g18Pick[0].Key
+  $g18Target = [int][math]::Ceiling([int]$g18Pick[0].Value * 0.5)
+  $g18Gone = 0
+  foreach ($g18R in $g18Doc.comparison) {
+    if ($g18Gone -ge $g18Target) { break }
+    $g18Keep = @(); $g18Hit = $false
+    foreach ($g18S in $g18R.stores) { if (-not $g18Hit -and ([string]$g18S.store) -eq $g18Store) { $g18Hit = $true; $g18Gone++ } else { $g18Keep += $g18S } }
+    if ($g18Hit) { $g18R.stores = $g18Keep }
+  }
+  ($g18Doc | ConvertTo-Json -Depth 10) | Set-Content $g18F -Encoding UTF8
+  Check ('coverage regression: ' + $g18Store + ' loses half its priced cells between boards') 2 'HARD FAIL: no store lost coverage vs the previous board'
+  Set-Content $g18F $g18Bak -Encoding UTF8 -NoNewline
+} else {
+  Skip 'coverage regression: no un-acked store on the board carries 40+ priced cells to halve - inject a synthetic store into the board copy'
+}
+
+# ---- 19. a delegated audit writing to stderr must NOT disarm the gate ---------------------------------
+# MUST-FIRE fixture for the delegated-audit call in guards.ps1. It ran the child as
+#     & powershell ... -File $p 2>$null
+# and in PS 5.1 redirecting a NATIVE child's stderr wraps its first line in an ErrorRecord that
+# $ErrorActionPreference='Stop' turns into a TERMINATING throw - the exact trap RunGuardsOut and CheckWarn
+# in this very file are commented to avoid. That call is the ONE delegate invocation NOT inside a
+# try/catch, so any audit writing a single benign diagnostic line killed guards right there with exit 1:
+# its own HARD FAIL text never printed, and guards 3 through 12 never ran at all. MEASURED 2026-07-30 on a
+# GREEN hermetic tree - one injected stderr line -> exit 1; the same line plus a REAL price-mode violation
+# -> still exit 1, with no 'HARD FAIL: price-mode' anywhere. Fail-closed on the exit code, blind on
+# everything after it.
+# BOTH HALVES SHIP TOGETHER ON PURPOSE. The exit-0 half alone would also pass on a build that swallowed
+# the child's exit code; the exit-2 half is what proves the delegated hard fail still ARMS through stderr.
+$g19A = Join-Path $root 'audit-price-mode.ps1'
+$g19Src = Backup $g19A
+$g19Anchor = "`$ErrorActionPreference = 'Stop'"
+if ($g19Src.Contains($g19Anchor)) {
+  $g19At = $g19Src.IndexOf($g19Anchor) + $g19Anchor.Length
+  $g19Mut = $g19Src.Substring(0, $g19At) + "`r`n[Console]::Error.WriteLine('test-guards stderr probe - a delegated audit is allowed to write to stderr')" + $g19Src.Substring($g19At)
+  Set-Content $g19A $g19Mut -Encoding UTF8 -NoNewline
+  Check 'delegate stderr: a benign diagnostic line from a delegated audit must not crash the gate' 0 $null
+  $g19Aldi = (Get-ChildItem (Join-Path $root 'out\regular\aldi-regular-*.json') |
+    Where-Object { $_.BaseName -match '^aldi-regular-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Desc | Select-Object -First 1).FullName
+  $g19Bak = Backup $g19Aldi
+  $g19Doc = $g19Bak | ConvertFrom-Json; $g19Doc.price_mode = 'delivery'
+  ($g19Doc | ConvertTo-Json -Depth 8) | Set-Content $g19Aldi -Encoding UTF8
+  Check 'delegate stderr: the delegated HARD FAIL still arms while that audit writes to stderr' 2 'HARD FAIL: price-mode \(in-store pricing\)'
+  Set-Content $g19Aldi $g19Bak -Encoding UTF8 -NoNewline
+  Set-Content $g19A $g19Src -Encoding UTF8 -NoNewline
+} else {
+  Skip 'delegate stderr: audit-price-mode.ps1 no longer sets $ErrorActionPreference - re-anchor the stderr probe'
 }
 
 } finally {
