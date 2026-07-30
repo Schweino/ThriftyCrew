@@ -897,7 +897,13 @@ try {
   $tgLast = [datetime]'2000-01-01'
   if (Test-Path $tgStampF) { try { $tgLast = [datetime](Get-Content $tgStampF -TotalCount 1) } catch {} }
   if (((Get-Date) - $tgLast).TotalDays -ge 7) {
-    $tg = (& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'run-test-guards-weekly.ps1') 2>&1 | ForEach-Object { [string]$_ }) -join "`n"
+    # NO 2>&1: this script runs under EAP=Stop, and in PS 5.1 redirecting a native child's stderr wraps the
+    # first line in an ErrorRecord that THROWS - jumping past $tgRc, past the stamp, past the alert, into the
+    # catch. The crash case (the runner or its grandchildren dying with a stderr record) is EXACTLY the case
+    # this alert exists for, and the throw also re-opened the >=7-day gate so the 658 MB copy re-ran daily.
+    # The same batch commit measured and removed this exact trap inside test-guards.ps1, then reintroduced it
+    # here - caught by the post-batch review. Everything the alert body needs is stdout.
+    $tg = (& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'run-test-guards-weekly.ps1') | ForEach-Object { [string]$_ }) -join "`n"
     $tgRc = $LASTEXITCODE
     (Get-Date -Format 'yyyy-MM-dd') | Set-Content $tgStampF -Encoding ascii   # stamp even on failure: one alert per week, not one per day
     if ($tgRc -eq 0) { Log 'test-guards weekly: every hard invariant can still fail (hermetic run passed)' }

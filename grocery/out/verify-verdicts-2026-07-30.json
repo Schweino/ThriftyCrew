@@ -1,6 +1,6 @@
 {
   "week_of": "2026-07-30",
-  "note": "Single re-review verdict (latest-word-wins overturn of the 2026-07-17 drop). The 07-17 DROP judged an internal contradiction in the DATA - 'TruMoo Whole Chocolate Milk Half Gallon' with size recorded as 'gallon', halving the per-floz price - not a wrong product class. Measured 2026-07-30 across the live 14-day Walmart union: every capture since 07-23 derives the size from Walmart's own arithmetic (64.364 fl oz / 63.922 fl oz for the half gallon, the separate Gallon item at 126.744 fl oz), the sole bad row lives only in walmart-regular-2026-07-18.json which exits the union on 2026-08-01, and the ranker already prices the cell from the corrected newest rows. TruMoo chocolate milk IS chocolate milk; keeping the drop would suppress a now-correct cell.",
+  "note": "Single re-review verdict (latest-word-wins overturn of the 2026-07-17 drop). The 07-17 DROP judged an internal contradiction in the DATA - 'TruMoo Whole Chocolate Milk Half Gallon' with size recorded as 'gallon', halving the per-floz price - not a wrong product class. Measured across the live 14-day Walmart union (CORRECTED by the post-batch review 2026-07-30: the original note undercounted the exposure): every capture since 07-23 derives the size from Walmart's own arithmetic (64.364 fl oz / 63.922 fl oz for the half gallon, the separate Gallon item at 126.744 fl oz); the bad size='gallon' row lives in TWO files, walmart-regular-2026-07-15.json AND walmart-regular-2026-07-18.json - the 07-15 file was still inside the union of the board anchored at ads-today 2026-07-29 (|07-15 to 07-29| = 14.0, inclusive) and ages out at the 07-30 anchor, while the 07-18 file stays in-window through the 2026-08-01 board and first leaves on 2026-08-02 (the window test is inclusive -le 14). The per-commodity freshness ranker prices the cell from the corrected newest rows throughout, which is why no wrong price shipped. TruMoo chocolate milk IS chocolate milk; keeping the drop would suppress a now-correct cell.",
   "verdicts": [
     {
       "id": "chocolate-milk",
@@ -10,7 +10,7 @@
           "keep": true,
           "item": "TruMoo Whole Chocolate Milk Half Gallon",
           "annotation": "re-review: data bug fixed upstream, mapping is correct",
-          "reason": "Re-reviewed and KEPT. 'TruMoo Whole Chocolate Milk Half Gallon' is genuinely chocolate milk; the 2026-07-17 drop targeted a size mis-parse (size='gallon' on the half-gallon item) that no capture since 2026-07-23 reproduces - current union rows carry the engine-verified 64.364 fl oz and the one bad row ages out of the 14-day window on 2026-08-01."
+          "reason": "Re-reviewed and KEPT. 'TruMoo Whole Chocolate Milk Half Gallon' is genuinely chocolate milk; the 2026-07-17 drop targeted a size mis-parse (size='gallon' on the half-gallon item) that no capture since 2026-07-23 reproduces - current union rows carry the engine-verified 64.364 fl oz, the freshness ranker prices from them, and the two stale bad rows (07-15 and 07-18 files) age out of the inclusive 14-day window at the 07-30 and 2026-08-02 anchors respectively."
         }
       ]
     }

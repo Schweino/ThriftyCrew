@@ -166,11 +166,20 @@ function Get-SizeAmount([string]$sizeText, [string]$unit) {
   # 'x' (and the U+00D7 times sign) are the same count-first form with a different separator ("12 x 12 fl
   # oz" - Hy-Vee's everyday feed): without them the scan slid to the SECOND number and priced a 144-floz
   # case as 12 fl oz ($0.3933 vs true $0.0328 on soda|Hy-Vee, band-flagged 2026-07-29). The times sign
-  # rides as the × regex escape, NEVER a literal: this file is BOM-less, PS 5.1 reads it as ANSI, and
-  # a literal times sign saved as UTF-8 decodes to two ANSI chars, so that branch silently never matches
-  # (proven 2026-07-30; the cent sign in Get-ItemPrice's cents regex already has this exact mojibake).
-  # \D+? is lazy and the each-size group takes leading-dot decimals, so "6 pk .5 gal" reads 0.5, not 5.
-  $mm = [regex]::Match($s, '(\d+(?:\.\d+)?)\s*[- ]?\s*(?:ct|count|pk|packs?|x|×)\D+?(\d+(?:\.\d+)?|\.\d+)\s*(fl\s*oz|floz|oz|ml|l\b|gal|gallon|qt|quart|pt|pint|lbs?|pound)\b')
+  # rides as the \u00d7 regex escape, NEVER a literal: this file is BOM-less, PS 5.1 reads it as ANSI, and
+  # a literal times sign saved as UTF-8 decodes to two ANSI chars, so that branch silently never matches.
+  # (The 2026-07-30 batch SHIPPED exactly that literal despite documenting the trap - the branch was dead
+  # on arrival, caught by the post-batch review; the cent sign in Get-ItemPrice's cents regex still has the
+  # mojibake as a worked example. The self-test now carries a real [char]0x00D7 case so it cannot go dead
+  # silently again.)
+  # THE x/times BRANCH REQUIRES THE EACH-NUMBER IMMEDIATELY (whitespace/hyphen only, no \D+? gap): with the
+  # lazy gap, concentration-marketing tokens parse as pack counts - 'Fabuloso ... 2X Concentrated Formula,
+  # ..., 33.8 fl oz' read count=2, each=33.8 and HALVED the per-unit (4 live names measured, all currently
+  # masked by their parsable size_text; Hy-Vee ad rows are name-parsed and would have published it). The
+  # word tokens (ct/pk/...) keep the lazy gap for '6 pk of 12 oz' forms - a marketing word cannot follow
+  # them, only 'x' has that ambiguity.
+  # \D+? is lazy and both each-size groups take leading-dot decimals, so "6 pk .5 gal" reads 0.5, not 5.
+  $mm = [regex]::Match($s, '(\d+(?:\.\d+)?)\s*[- ]?\s*(?:(?:ct|count|pk|packs?)\D+?|(?:x|\u00d7)\s*-?\s*)(\d+(?:\.\d+)?|\.\d+)\s*(fl\s*oz|floz|oz|ml|l\b|gal|gallon|qt|quart|pt|pint|lbs?|pound)\b')
   if ($mm.Success -and ($unit -eq 'oz' -or $unit -eq 'floz' -or $unit -eq 'gallon' -or $unit -eq 'lb')) {
     $cnt = [double]$mm.Groups[1].Value; $each = [double]$mm.Groups[2].Value; $tok = $mm.Groups[3].Value
     $per = Convert-ToUnit $each $tok $unit
@@ -370,6 +379,19 @@ function Get-UnitPrice($deal, $cat) {
   }
   if ($unit -eq 'each') {
     $pk = Get-PackCount $deal.price_text; if (-not $pk) { $pk = Get-PackCount $deal.size_text }; if (-not $pk) { $pk = Get-PackCount $deal.name }
+    # PORTION COUNT INSIDE ONE PACKAGE IS NOT A PACK COUNT (2026-07-30, garlic bread).
+    # For most 'each' commodities the count IS the unit a shopper buys - a bagel, a bun, a popsicle, an ear of
+    # corn - so dividing is right, and 55 of the 56 each-commodities on the board price that way at every store.
+    # Garlic bread is the exception that proves the rule: Baker's "New York Bakery Texas Toast" lists "6 ct" (six
+    # SLICES baked into one package) and priced out at $1.165/each, while the SAME commodity at Fareway and
+    # Hy-Vee is a loaf/tray whose size carries no count at all and prices per PACKAGE ($3.99, $4.48). So the
+    # cheapest-store verdict was one slice against a whole loaf - a 3.4x wrong basis, published, and invisible
+    # to every band/freshness check because both numbers are REAL prices (the [[board-basis-ambiguity]] class).
+    # A commodity whose stores cannot all express the portion count must be compared on the coarser basis they
+    # ALL share: the package. Declared per commodity (same pattern as pint_oz above) so nothing else changes.
+    if ($pk -and $cat.PSObject.Properties['pack_is_package'] -and $cat.pack_is_package) {
+      return @{ unit_price=$pr.per_item; basis="per-package ($pk ct inside)"; note=$pr.note }
+    }
     if ($plain -and $pk)  { return @{ unit_price=($pr.per_item/$pk); basis="per-$pk-pack"; note=$pr.note } }
     # A Hy-Vee PERKS ad price is a single retail unit; with no pack count it prices per-each (a pack count above
     # still divides). Scoped to the Perks pattern so the general "bare package, unknown count -> drop" guard holds.
@@ -411,6 +433,8 @@ if ($SelfTest) {
   }
   function _D($price,$name,$reg,$size) { [pscustomobject]@{ price_text=$price; name=$name; regular=$reg; size_text=$size } }
   function _C($unit) { [pscustomobject]@{ unit=$unit } }
+  # a commodity carrying the pack_is_package declaration (see the 'each' branch of Get-UnitPrice)
+  function _CP($unit) { [pscustomobject]@{ unit=$unit; pack_is_package=$true } }
 
   # 1. soda-style Buy 2 Get 3 Free, regular $11.99/pack, 12-pack x 12 fl oz = 144 fl oz -> (2*11.99/5)/144
   _Near 'B2G3 soda /floz'        (Get-UnitPrice (_D 'Buy 2 Get 3 Free' 'Coca-Cola 12 pk' 11.99 '12 pk 12 fl oz') (_C 'floz')).unit_price 0.0333 0.0005
@@ -478,8 +502,26 @@ if ($SelfTest) {
   _Near 'weight-first pack "16 oz 6 pk"'   (Get-UnitPrice (_D '$6.38' "Bush's Garbanzo Beans, 6 pk" $null '16 oz 6 pk') (_C 'oz')).unit_price 0.0665 0.001
   _Near 'pack-first order (must stay)'     (Get-UnitPrice (_D '$6.38' "Bush's Garbanzo Beans, 6 pk" $null '6 pk 16 oz') (_C 'oz')).unit_price 0.0665 0.001
   _Near 'x-separator "12 x 12 fl oz"'      (Get-UnitPrice (_D '$4.72' 'Hy-Vee Cola 12Pk' $null '12 x 12 fl oz') (_C 'floz')).unit_price 0.0328 0.001
+  # the times-sign twin, built from [char]0x00D7 so this ASCII file never carries the literal. MUST-FIRE:
+  # the 2026-07-30 batch shipped the times branch as a literal in this BOM-less (ANSI-read) file - two
+  # mojibake chars that can never match a real U+00D7 - and every suite stayed green because only ASCII 'x'
+  # was fixtured. This case is the one that goes red if the escape ever regresses to a literal again.
+  _Near ('times-sign "12 ' + [char]0x00D7 + ' 12 fl oz"') (Get-UnitPrice (_D '$4.72' 'Hy-Vee Cola 12Pk' $null ('12 ' + [char]0x00D7 + ' 12 fl oz')) (_C 'floz')).unit_price 0.0328 0.001
+  # the x-branch must NOT read marketing '2X' as a pack count (the each-number is required immediately):
+  # with the lazy gap this halved 4 live cleaner names ('2X Concentrated ... 33.8 fl oz' -> 67.6).
+  _Near '2X-marketing not a pack count'     (Get-UnitPrice (_D '$4.24' 'cleaner' $null 'fabuloso multi-purpose cleaner, 2x concentrated formula, lavender, 33.8 fl oz') (_C 'floz')).unit_price 0.1254 0.001
   _Near 'leading-dot ".98 oz" + name pack' (Get-UnitPrice (_D '$10.28' 'Quaker Instant Grits, Variety Pack, .98 oz., 46 pk.' $null '46 ct') (_C 'oz')).unit_price 0.228 0.001
   _Near 'leading-dot ".5 Gal." via name'   (Get-UnitPrice (_D '$4.49' 'Kemps 100% Pure Orange Juice From Concentrate .5 Gal. Jug' $null '0.5 gll') (_C 'floz')).unit_price 0.0702 0.001
+  # --- 11e: pack_is_package - portion count inside ONE package (2026-07-30 garlic-bread basis bug) ---------
+  # The live row: Baker's "New York Bakery Gluten Free Texas Toast" $6.99 / "6 ct" published $1.165/each and
+  # took the cheapest slot from Fareway's whole $3.99 loaf. MUST-FIRE: with the declaration the price stays the
+  # PACKAGE price. CLEAN TWIN: the identical row on an undeclared commodity must still divide, because that is
+  # what every other each-commodity (bagels, buns, popsicles, corn) needs.
+  _Near 'pack_is_package: 6 ct stays per-package' (Get-UnitPrice (_D '$6.99' 'New York Bakery Texas Toast with Real Garlic' $null '6 ct') (_CP 'each')).unit_price 6.99 0.001
+  _Near 'undeclared commodity still divides'      (Get-UnitPrice (_D '$6.99' 'New York Bakery Texas Toast with Real Garlic' $null '6 ct') (_C  'each')).unit_price 1.165 0.001
+  # the declaration must not invent a basis where there is no count at all - a bare loaf is still per-each
+  _Near 'pack_is_package: no count -> per-each'   (Get-UnitPrice (_D '$3.99' 'Fareway Garlic Bread' $null 'each') (_CP 'each')).unit_price 3.99 0.001
+
   # the 'snax' GLOBAL_EXCLUDE token (blocks snack TRAYS from winning real-commodity cells). $GLOBAL_EXCLUDE
   # is defined AFTER this block exits, so read the token from this script's own source (the extraction regex
   # audit-match-soundness.ps1 already uses) - a hard-coded 'snax' literal here would pass whether or not the
@@ -682,6 +724,11 @@ $GLOBAL_EXCLUDE = @(
   # a wrong basis on top of the wrong product - which would make a salami/caramel tray the published
   # CHEAPEST shredded cheese. No staple ever contains 'snax' ('\bsnax\b' cannot match inside GO2snax -
   # '2' is a word char - so the token is deliberately unanchored).
+  # CORRECTION (post-batch review 2026-07-30): THREE snax products exist live, not the "exactly 2" the
+  # batch measured - 'Outlaw Snax Crazy Queso Flavored Tortilla Snack Chips' also sits in the Walmart
+  # regular files. It changes nothing here (its name never matched any include; pinned <unmatched> in the
+  # baseline), and a Snax-brand product that ever legitimately belongs to a snack commodity has the
+  # relax_global escape hatch, which waives exact global tokens per commodity.
   # NOTE: 'GO2snax...' -> shredded-cheese is pinned in out\audit\match-baseline.json, so the FIRST
   # audit-match-soundness.ps1 run after this change reports it DROPPED and exits 2 (publish holds). That
   # is the audit working as designed: review the snax drops, then bless via audit-match-soundness.ps1 -Accept.

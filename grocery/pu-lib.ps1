@@ -57,7 +57,7 @@ function Get-LinkPerUnit {
   #    a 144 fl oz case - a live 12x error on soda|Hy-Vee ($0.3933/floz published against a true $0.0328).
   #    Same bug family as the "6-pack 12 fl oz" hyphen case; only the separator differs.
   if ($unit -in @('oz','floz','lb','gallon')) {
-    $mp = [regex]::Match($s, '([0-9]+)\s*-?\s*(?:pk|pack|x|×)\s*-?\s*([0-9]+(?:\.[0-9]+)?|\.[0-9]+)\s*(fl\s*oz|floz|oz|lbs?|pound|gal|gallon|qt|quart|ml|ltr|liters?|litres?|l)\b')
+    $mp = [regex]::Match($s, '([0-9]+)\s*-?\s*(?:pk|pack|x|\u00d7)\s*-?\s*([0-9]+(?:\.[0-9]+)?|\.[0-9]+)\s*(fl\s*oz|floz|oz|lbs?|pound|gal|gallon|qt|quart|ml|ltr|liters?|litres?|l)\b')
     if ($mp.Success) {
       $n = [double]$mp.Groups[1].Value * [double]$mp.Groups[2].Value
       $un = ($mp.Groups[3].Value -replace '\s','') -replace 'fl','' -replace '^gallon$','gal' -replace '^quart$','qt' -replace '^pound$','lb' -replace '^(ltr|liters?|litres?)$','l'
@@ -70,7 +70,7 @@ function Get-LinkPerUnit {
     # null and the cell went unpriced. Resolved here, in the one block that owns pack-first semantics.
     # The trailing weight is REQUIRED by the regex, so a bare "2 pk" (two CARTONS, count-per-carton unknown)
     # can never match - that shape stays with the generic rules exactly as before.
-    $mp = [regex]::Match($s, '([0-9]+)\s*-?\s*(?:pk|pack|x|×)\s*-?\s*([0-9]+(?:\.[0-9]+)?|\.[0-9]+)\s*(fl\s*oz|floz|oz|lbs?|pound|gal|gallon|qt|quart|ml|ltr|liters?|litres?|l)\b')
+    $mp = [regex]::Match($s, '([0-9]+)\s*-?\s*(?:pk|pack|x|\u00d7)\s*-?\s*([0-9]+(?:\.[0-9]+)?|\.[0-9]+)\s*(fl\s*oz|floz|oz|lbs?|pound|gal|gallon|qt|quart|ml|ltr|liters?|litres?|l)\b')
     if ($mp.Success) {
       $cnt = [double]$mp.Groups[1].Value
       if ($cnt -gt 0) {

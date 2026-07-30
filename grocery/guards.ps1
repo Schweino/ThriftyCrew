@@ -110,6 +110,11 @@ $puCases = @(
   @{ size='16 oz 6-pk';      unit='oz';   price=3.00; name='';              want=0.03125  }  # hyphenated weight-first [was 0.1875]
   @{ size='each';            unit='each'; price=6.00; name='Water 24-Pack'; want=0.25     }  # hyphenated count-in-NAME [was 6.00 - whole pack as one item]
   @{ size='12 x 12 fl oz';   unit='floz'; price=4.72; name='';              want=0.032778 }  # x-separator - worked before, pinned so it keeps working
+  # times-sign separator, built from [char]0x00D7 so this file never carries the literal. MUST-FIRE: the
+  # 2026-07-30 batch shipped pu-lib's times branch as a raw UTF-8 literal in the BOM-less (ANSI-read) file -
+  # two mojibake chars that can never match a real times sign - and no suite noticed because only ASCII 'x'
+  # was fixtured. pu-lib now uses the regex escape; this case goes red if it ever regresses to a literal.
+  @{ size=('12 ' + [char]0x00D7 + ' 12 fl oz'); unit='floz'; price=4.72; name=''; want=0.032778 }
 )
 $puBad = New-Object System.Collections.Generic.List[string]
 foreach ($c in $puCases) {

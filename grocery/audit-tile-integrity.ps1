@@ -157,6 +157,18 @@ if (-not $Quiet) {
 
 $blF = Join-Path $OutDir 'tile-integrity-baseline.json'
 if ($Baseline) {
+  # A BLIND -Baseline is worse than a blind report: with zero links graded every priced tile is a NO-LINK
+  # coverage violation, so writing the baseline here sets the ratchet's high-water mark to the MAXIMUM
+  # possible value - the coverage-regression warn can then structurally never fire again - while exiting 0.
+  # And the blind state (product-urls emptied) is exactly the incident during which someone would reach for
+  # -Baseline. Refuse: same exit-3 contract as the default path, and the poisoned baseline is never written.
+  # (Post-batch review 2026-07-30: the original blind check lived only in the final exit expression, which
+  # this block and -Strict both exit BEFORE - two of three paths violated the file's own '3 = BLIND' header.)
+  if ($linked -le 0 -or $graded -le 0) {
+    Write-Output ''
+    Write-Output ('tile-integrity: -Baseline REFUSED - BLIND run (' + $linked + ' linked tiles, ' + $graded + ' graded). Writing a baseline now would pin every priced tile as the coverage high-water mark and permanently disarm the ratchet. Fix product-urls.json first; no baseline was written.')
+    exit 3
+  }
   (@{ set = (Get-Date -Format 'yyyy-MM-dd HH:mm'); by_store = $report.by_store } | ConvertTo-Json -Depth 5) | Set-Content $blF -Encoding UTF8
   Write-Output ''
   Write-Output ("baseline written: " + $rows.Count + " violation(s). From here the number may only go DOWN.")
@@ -185,8 +197,12 @@ else {
 # ---- COVERAGE: ratchets down. Closing these needs paced per-store browser passes. --------------------------
 if ($Strict) {
   if ($covRows.Count -gt 0) { Write-Output ("tile-integrity: STRICT - " + $covRows.Count + " priced tile(s) still have no link."); exit 2 }
+  # a real violation still wins with 2; otherwise a blind run must not read as the STRICT end-state
+  # (an empty board/product-urls satisfies "every priced tile has a link" vacuously - zero of anything)
+  if ($fail2) { Write-Output 'tile-integrity: STRICT - accuracy violations above.'; exit 2 }
+  if ($linked -le 0 -or $graded -le 0) { Write-Output ('tile-integrity: STRICT - BLIND (' + $linked + ' linked tiles, ' + $graded + ' graded); the every-tile-linked claim is vacuous, not achieved.'); exit 3 }
   Write-Output 'tile-integrity: STRICT - every priced tile also has a verified link.'
-  exit $(if ($fail2) { 2 } else { 0 })
+  exit 0
 }
 if (Test-Path $blF) {
   $bl = (Get-Content $blF -Raw | ConvertFrom-Json).by_store

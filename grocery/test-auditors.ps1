@@ -445,6 +445,22 @@ Set-Content (Join-Path $fxTi 'product-urls.json') '{"items":{"test-oats":{"Hy-Ve
 $r = RunPSAt $fxTi 'audit-tile-integrity.ps1' @('-OutDir', (Join-Path $fxTi 'out'))
 if ($r.rc -eq 0 -and $r.text -match 'ACCURACY OK - all 1 price-graded links') { Ok 'tile-integrity clean twin: one matching link grades and the OK line carries the count' }
 else { Bad ('tile-integrity clean twin failed (rc=' + $r.rc + ')') }
+# the -Baseline and -Strict paths must honor the same BLIND contract (post-batch review 2026-07-30: both
+# exited 0 on the blind state, and a blind -Baseline wrote every priced tile as the coverage high-water
+# mark - permanently disarming the ratchet with exit 0, during exactly the incident where someone would
+# reach for -Baseline). Must-fire: blind + -Baseline refuses (rc 3, NO baseline file); blind + -Strict rc 3.
+Set-Content (Join-Path $fxTi 'product-urls.json') '{"items":{}}' -Encoding UTF8
+Remove-Item (Join-Path $fxTi 'out\tile-integrity-baseline.json') -Force -ErrorAction SilentlyContinue
+$r = RunPSAt $fxTi 'audit-tile-integrity.ps1' @('-OutDir', (Join-Path $fxTi 'out'), '-Baseline')
+if ($r.rc -eq 3 -and $r.text -match 'Baseline REFUSED' -and -not (Test-Path (Join-Path $fxTi 'out\tile-integrity-baseline.json'))) { Ok 'tile-integrity -Baseline REFUSES a blind run (rc 3, poisoned baseline never written)' }
+else { Bad ('tile-integrity -Baseline accepted a BLIND run (rc=' + $r.rc + ', baseline written: ' + (Test-Path (Join-Path $fxTi 'out\tile-integrity-baseline.json')) + ') - the coverage ratchet can be silently disarmed') }
+# -Strict's blind shape is the EMPTY board (zero tiles): a NO-LINK tile is a real strict violation and
+# must stay exit 2, but zero-of-anything satisfies "every priced tile has a link" vacuously - that is the
+# shape that must read BLIND, not achieved.
+Set-Content (Join-Path $fxTi 'out\comparison-2026-01-01.json') '{"comparison":[]}' -Encoding UTF8
+$r = RunPSAt $fxTi 'audit-tile-integrity.ps1' @('-OutDir', (Join-Path $fxTi 'out'), '-Strict')
+if ($r.rc -eq 3) { Ok 'tile-integrity -Strict reports BLIND (rc 3) on an empty board instead of a vacuous every-tile-linked pass' }
+else { Bad ('tile-integrity -Strict returned rc=' + $r.rc + ' on a blind run - the end-state claim is vacuously satisfiable again') }
 Remove-Item $fxTi -Recurse -Force -ErrorAction SilentlyContinue
 
 # (f) audit-cell-drops: BLIND on both silent paths - fewer than 2 dated boards, and a baseline board that
@@ -549,6 +565,12 @@ if ($cacSrc -match 'walmart-fullpull BLIND' -and $cacSrc -match 'name-drift BLIN
 else { Bad 'check-ad-cycles lost an audit blind branch - a blind audit logs as routine again' }
 if ($cacSrc -match 'Not an early warning') { Ok 'check-ad-cycles blind email does not reuse the nothing-is-broken-yet body' }
 else { Bad 'check-ad-cycles blind email body regressed - a blackout would email "nothing is broken yet"' }
+# the weekly test-guards capture must NOT redirect the child's stderr: under this script's EAP=Stop, a
+# 2>&1 on a native child turns its first stderr line into a terminating throw that skips the exit-code
+# read, the stamp, and the alert - the suite-crash case is exactly what the alert exists for, and the
+# missed stamp re-opened the gate into a silent daily 658 MB crash loop (post-batch review 2026-07-30).
+if ($cacSrc -match "run-test-guards-weekly\.ps1'\)\s*2>&1") { Bad 'check-ad-cycles captures run-test-guards-weekly with 2>&1 under EAP=Stop again - a crashing suite throws past the stamp and alert into a silent daily retry loop' }
+else { Ok 'check-ad-cycles weekly test-guards capture leaves stderr unredirected (crash still reaches the alert path)' }
 $wpcSrc = Get-Content (Join-Path $root 'weekly-post-capture.ps1') -Raw
 if ($wpcSrc -match 'tiPost -eq 3' -and $wpcSrc -match 'was BLIND on the live board' -and $wpcSrc -match 'prune-bad-links -Tol 0\.32 and re-run -Phase links NOW') { Ok 'weekly-post-capture separates BLIND from FAILED (prune advice stays on the real failure only)' }
 else { Bad 'weekly-post-capture lost the blind/FAILED split - a blind post-publish check would advise pruning harder' }

@@ -137,6 +137,40 @@ function Convert-BatchRow($raw, [System.Collections.ArrayList]$log) {
   return @{ row = $row }
 }
 
+# REPLACE-by-identity merge, one home, self-tested. EVERY slot per identity is tracked, not just the
+# first: the base file can already hold two rows with the same identity (live today: item_id 13908573,
+# two Imperial Sugar rows at different prices, inherited from an old capture), and replacing only the
+# FIRST indexed slot left the stale sibling live and rank-eligible - the exact 'corrected row and the row
+# it corrects coexist' class this merge exists to kill (post-batch review 2026-07-30). A replacement takes
+# the first slot and NULLS every other slot with that identity; duplicate identities with NO correction
+# are preserved as-is (dropping data on a mere re-run is not this function's call to make).
+function Get-RowKey($r) { if ($r.PSObject.Properties['item_id'] -and $r.item_id) { return ('id:' + $r.item_id) } return ('nm:' + (([string]$r.item).ToLower())) }
+function Merge-IwbRows($prevDeals, $newRows) {
+  $merged = New-Object System.Collections.ArrayList; $idx = @{}
+  foreach ($r in @($prevDeals)) {
+    if ($null -eq $r) { continue }
+    $k = Get-RowKey $r
+    if (-not $idx.ContainsKey($k)) { $idx[$k] = New-Object System.Collections.ArrayList }
+    [void]$idx[$k].Add($merged.Count)
+    [void]$merged.Add($r)
+  }
+  $added = 0; $replaced = 0
+  foreach ($r in @($newRows)) {
+    $k = Get-RowKey $r
+    if ($idx.ContainsKey($k)) {
+      $slots = $idx[$k]
+      $merged[[int]$slots[0]] = $r; $replaced++
+      for ($si = 1; $si -lt $slots.Count; $si++) { $merged[[int]$slots[$si]] = $null }   # stale siblings die with the row they duplicate
+      $idx[$k] = New-Object System.Collections.ArrayList; [void]$idx[$k].Add([int]$slots[0])
+    } else {
+      $idx[$k] = New-Object System.Collections.ArrayList; [void]$idx[$k].Add($merged.Count); [void]$merged.Add($r); $added++
+    }
+  }
+  $out = New-Object System.Collections.ArrayList
+  foreach ($r in $merged) { if ($null -ne $r) { [void]$out.Add($r) } }
+  return @{ merged = $out; added = $added; replaced = $replaced }
+}
+
 if ($SelfTest) {
   # Pure computation, no writes. Locks (a) the 2026-07-25 one-decimal rounding bug through the builder
   # invariant, (b) the 2026-07-27 fish-sauce override ON TOP of Build-Row (Build-Row alone regresses it),
@@ -205,6 +239,20 @@ if ($SelfTest) {
   $s4 = Test-IwbSeller @('n','$1','$1/oz','1','','STORE') $false
   if ($s1.drop3p -and $s2.quarantine -and $s3.check -eq 'manual-trust' -and $s4.check -eq 'capture') { Write-Output 'ok    seller gate: 3P dropped, seller-less quarantined by default, -TrustNoSeller stamped, 6-field first-party passes' }
   else { Write-Output 'FAIL  seller gate'; $fail++ }
+  # merge: a corrective row must supersede EVERY stale sibling of its identity, not just the first slot
+  # (must-fire for the post-batch-review stale-sibling hole; the no-correction dupe pair is the clean twin)
+  $mPrev = @(
+    [pscustomobject]@{ item = 'Dup Sugar 32 oz'; item_id = '999'; ad_price = '$7.08' },
+    [pscustomobject]@{ item = 'Dup Sugar 32 oz'; item_id = '999'; ad_price = '$12.10' },
+    [pscustomobject]@{ item = 'Other Thing';     item_id = '111'; ad_price = '$1.00' }
+  )
+  $mr = Merge-IwbRows $mPrev @([pscustomobject]@{ item = 'Dup Sugar 32 oz'; item_id = '999'; ad_price = '$6.50' })
+  $mDup = @($mr.merged | Where-Object { $_.item_id -eq '999' })
+  if ($mr.merged.Count -eq 2 -and $mDup.Count -eq 1 -and $mDup[0].ad_price -eq '$6.50' -and $mr.replaced -eq 1 -and $mr.added -eq 0) { Write-Output 'ok    merge: correction supersedes ALL duplicate-identity siblings (stale twin cannot outlive its fix)' }
+  else { Write-Output "FAIL  merge left a stale sibling or wrong counts (total=$($mr.merged.Count) dup=$($mDup.Count) repl=$($mr.replaced) add=$($mr.added))"; $fail++ }
+  $mr2 = Merge-IwbRows $mPrev @()
+  if ($mr2.merged.Count -eq 3 -and $mr2.added -eq 0 -and $mr2.replaced -eq 0) { Write-Output 'ok    merge: uncorrected duplicate identities are preserved (no silent data drops on a bare re-run)' }
+  else { Write-Output "FAIL  merge altered rows with no corrections (total=$($mr2.merged.Count))"; $fail++ }
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
 }
 
@@ -258,17 +306,10 @@ if ($overrides.Count -gt 0) { Write-Output ("Walmart: {0} row(s) where the name 
 $prefix = 'walmart-regular'
 if (-not (Test-Path $regDir)) { New-Item -ItemType Directory -Path $regDir -Force | Out-Null }
 $prev = Get-ChildItem (Join-Path $regDir ($prefix + '-*.json')) -EA SilentlyContinue | Where-Object { $_.BaseName -match ('^' + $prefix + '-\d{4}-\d{2}-\d{2}$') } | Sort-Object Name -Descending | Select-Object -First 1
-function Get-RowKey($r) { if ($r.PSObject.Properties['item_id'] -and $r.item_id) { return ('id:' + $r.item_id) } return ('nm:' + (([string]$r.item).ToLower())) }
-$merged = New-Object System.Collections.ArrayList; $idx = @{}; $doc = $null
-if ($prev) {
-  $doc = Get-Content $prev.FullName -Raw -Encoding UTF8 | ConvertFrom-Json
-  foreach ($r in @($doc.deals)) { $k = Get-RowKey $r; if (-not $idx.ContainsKey($k)) { $idx[$k] = $merged.Count }; [void]$merged.Add($r) }
-}
-$added = 0; $replaced = 0
-foreach ($r in $rows) {
-  $k = Get-RowKey $r
-  if ($idx.ContainsKey($k)) { $merged[$idx[$k]] = $r; $replaced++ } else { $idx[$k] = $merged.Count; [void]$merged.Add($r); $added++ }
-}
+$doc = $null
+if ($prev) { $doc = Get-Content $prev.FullName -Raw -Encoding UTF8 | ConvertFrom-Json }
+$m = Merge-IwbRows @(if ($doc) { @($doc.deals) } else { @() }) $rows
+$merged = $m.merged; $added = $m.added; $replaced = $m.replaced
 $outFile = Join-Path $regDir ($prefix + "-$today.json")
 # file-level writer provenance: the copied header still says "built by build-walmart-deals.ps1, every row
 # verified" - batch_imports makes the second writer visible so a divergence is traceable in the file itself.
