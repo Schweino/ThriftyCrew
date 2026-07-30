@@ -1,0 +1,18 @@
+{
+  "week_of": "2026-07-30",
+  "note": "Single re-review verdict (latest-word-wins overturn of the 2026-07-17 drop). The 07-17 DROP judged an internal contradiction in the DATA - 'TruMoo Whole Chocolate Milk Half Gallon' with size recorded as 'gallon', halving the per-floz price - not a wrong product class. Measured 2026-07-30 across the live 14-day Walmart union: every capture since 07-23 derives the size from Walmart's own arithmetic (64.364 fl oz / 63.922 fl oz for the half gallon, the separate Gallon item at 126.744 fl oz), the sole bad row lives only in walmart-regular-2026-07-18.json which exits the union on 2026-08-01, and the ranker already prices the cell from the corrected newest rows. TruMoo chocolate milk IS chocolate milk; keeping the drop would suppress a now-correct cell.",
+  "verdicts": [
+    {
+      "id": "chocolate-milk",
+      "entries": [
+        {
+          "store": "Walmart",
+          "keep": true,
+          "item": "TruMoo Whole Chocolate Milk Half Gallon",
+          "annotation": "re-review: data bug fixed upstream, mapping is correct",
+          "reason": "Re-reviewed and KEPT. 'TruMoo Whole Chocolate Milk Half Gallon' is genuinely chocolate milk; the 2026-07-17 drop targeted a size mis-parse (size='gallon' on the half-gallon item) that no capture since 2026-07-23 reproduces - current union rows carry the engine-verified 64.364 fl oz and the one bad row ages out of the 14-day window on 2026-08-01."
+        }
+      ]
+    }
+  ]
+}

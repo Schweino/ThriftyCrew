@@ -2423,6 +2423,7 @@
                         "fuji\\s+apple"
                     ],
         "exclude":  [
+                        "(?<!pink\\s)\\blady\\s+apples?\\b",
                         "pineapple",
                         "apple\\s+juice",
                         "applesauce",
@@ -2580,6 +2581,7 @@
                         "\\bgrape(s)?\\b"
                     ],
         "exclude":  [
+                        "grape[\\s-]*nuts",
                         "grapefruit",
                         "grape\\s+juice",
                         "grape\\s+tomato",
@@ -6354,6 +6356,7 @@
                     ],
         "exclude":  [
                         "frittata",
+                        "birds\\s*eye",
                         "\\bbites\\b",
                         "\\bfrozen\\b",
                         "creamed",
@@ -10308,6 +10311,7 @@
                         "\\bfries\\b"
                     ],
         "exclude":  [
+                        "carrot",
                         "sweet\\s+potato",
                         "waffle\\s+fries",
                         "seasoned",
@@ -11433,7 +11437,7 @@
                     ],
         "exclude":  [
                         "\\bcanned\\b",
-                        "chunks",
+                        "chunks?",
                         "juice",
                         "rings?",
                         "crushed",
@@ -27704,6 +27708,7 @@
                         "cleaning\\s+wipes"
                     ],
         "exclude":  [
+                        "wipes\\s+or\\s+disinfectant",
                         "\\bbaby\\b",
                         "makeup",
                         "flushable",
@@ -28738,6 +28743,7 @@
                         "parsley"
                     ],
         "exclude":  [
+                        "^parsley\\s+[\\d.]+\\s*oz$",
                         "\\bfresh\\b",
                         "\\bplant\\b",
                         "\\bbunch\\b",
@@ -32453,6 +32459,7 @@
                         "coconut\\s+milk"
                     ],
         "exclude":  [
+                        "califia",
                         "refrigerated",
                         "\\bcarton\\b",
                         "cream\\s+of\\s+coconut",
