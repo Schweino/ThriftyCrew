@@ -258,7 +258,38 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       $summary += "ERROR     compare-deals failed (rc=$cmprc) - live page left at last good, not updated"
       if (-not $NoAlert) { try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery compare FAILED - $asofS" -Body "compare-deals.ps1 exited $cmprc on $asofS. The board was NOT recomputed or republished (left at last good). Check ad-cycle-log.txt." | Out-Null } catch {} }
     } else {
-      & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'update-history.ps1') | Out-Null
+      # BANK THE VERIFIED BOARD, NOT THE RAW ONE (2026-07-30). This ran update-history against the raw
+      # comparison that compare-deals had just written - the exact bug fixed in the WEEKLY path on 2026-07-29
+      # and left in place here, so the daily job kept doing it every single day.
+      # Why it matters: the week's "cheapest" is written into price-history BEFORE the semantic verify drops
+      # wrong-product winners, so every one of them sets a RECORD LOW on its way out (strawberries $0.0833
+      # from an applesauce, honey $0.1244 from hot dog buns). record_low is what the buy/wait badge reads, and
+      # update-history's compaction deliberately keeps each old week's MINIMUM forever - so a corrupt low
+      # never ages out on its own. It has to be hand-purged, which is what purge-bad-lows.ps1 is for.
+      # If the week has a verdict file, apply it and bank THAT. If it does not, no product has been judged, so
+      # the raw board IS the verified board and banking it directly is equivalent rather than a shortcut.
+      $histTarget = $null
+      try {
+        $cmpH = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
+        if ($cmpH) {
+          $wkH = [string](Get-Content $cmpH.FullName -Raw | ConvertFrom-Json).week_of
+          if ($wkH -and (Test-Path (Join-Path $OutDir ("verify-verdicts-" + $wkH + ".json")))) {
+            # -MinStores 1 so the ~24 single-store long-tail commodities keep their history even though
+            # MinStores 2 keeps them off the published page - same reasoning as weekly-post-capture.
+            & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'verify-apply.ps1') -MinStores 1 -OutFile 'verified-history.json' | Out-Null
+            $vh = Join-Path $OutDir 'verified-history.json'
+            if (Test-Path $vh) { $histTarget = $vh }
+            else { Log 'verify-apply produced no verified-history.json - banking history from the RAW board this run' }
+          }
+        }
+      } catch { Log ('verify-for-history threw, banking from the raw board: ' + $_.Exception.Message) }
+      if ($histTarget) {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'update-history.ps1') -CompareFile $histTarget | Out-Null
+        Log 'history banked from the VERIFIED board'
+      } else {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'update-history.ps1') | Out-Null
+        Log 'history banked from the raw board (no verdict file for this week - nothing judged, so raw == verified)'
+      }
       & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'sanity-check.ps1') | Out-Null   # exit 1 = flags (expected), not a crash -> guards-<week>.json
       # NOTE: the coverage-REGRESSION check (a store quietly shrinking between boards) is NOT run here. It is a
       # hard invariant, so it lives in guards.ps1 where a failure actually stops the publish. Setting $hardFail
