@@ -53,7 +53,7 @@ if ((Get-Date).Day -eq 1) {
   $arch = Join-Path $root 'logs-archive'
   if (-not (Test-Path $arch)) { New-Item -ItemType Directory -Path $arch -Force | Out-Null }
   $stamp = (Get-Date).AddMonths(-1).ToString('yyyy-MM')
-  foreach ($lf in @('ad-cycle-log.txt', 'alert-log.txt', 'local-daily-log.txt')) {
+  foreach ($lf in @('ad-cycle-log.txt', 'alert-log.txt', 'local-daily-log.txt', 'ff-sweep-log.txt')) {
     $src = Join-Path $root $lf
     $dst = Join-Path $arch ($lf -replace '\.txt$', "-$stamp.txt")
     if ((Test-Path $src) -and -not (Test-Path $dst)) { Move-Item $src $dst -Force -ErrorAction SilentlyContinue }
@@ -114,6 +114,7 @@ Log ("check-ad-cycles exit " + $LASTEXITCODE)
 # global git config). Stages mods+deletions+untracked under each path; paths filtered to existing.
 $paths = @('grocery/out', 'public',
            'grocery/ad-cycle-log.txt', 'grocery/alert-log.txt', 'grocery/local-daily-log.txt',
+           'grocery/ff-sweep-log.txt',
            'grocery/ad-schedule.json', 'grocery/price-history.json', 'grocery/product-urls.json',
            'grocery/sale-windows.json') | Where-Object { Test-Path (Join-Path $repo $_) }
 # alert-sent-*.txt rotate (created+deleted daily) - stage the pattern only if any exist or were deleted
