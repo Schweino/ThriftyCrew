@@ -576,8 +576,33 @@ foreach ($f in (RegFiles)) {
   if ($altGlob) {
     $alt = Get-ChildItem (Join-Path $root $altGlob) -ErrorAction SilentlyContinue |
            Where-Object { $_.BaseName -match '\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
-    if ($alt -and $alt.BaseName -match '(\d{4}-\d{2}-\d{2})$') {
-      try { $altDate = [datetime]$Matches[1]; if ($altDate -gt $fileDate) { $fileDate = $altDate } } catch {}
+    # [regex]::Match, not -match: $Matches is global and the next -match anywhere in this block would clobber
+    # the captured date out from under us. That trap is documented in this estate and has cost a run before.
+    $altDateStr = ''
+    if ($alt) { $am = [regex]::Match($alt.BaseName, '(\d{4}-\d{2}-\d{2})$'); if ($am.Success) { $altDateStr = $am.Groups[1].Value } }
+    if ($altDateStr) {
+      try {
+        $altDate = [datetime]$altDateStr
+        if ($altDate -gt $fileDate) {
+          $fileDate = $altDate
+          # TAKE THE ROWS FROM THAT FILE TOO - not just the date. The 2026-07-29 fix redirected only the AGE
+          # and left $rows/$dated/$unver reading out\regular, so Sam's freshness was still being measured on
+          # sams-regular-2026-07-14.json: a 60-row one-off hand-promotion that NOTHING refreshes, while the
+          # live feed it is standing in for holds 2,537 rows. The printed "60 rows | 0% re-verified" was
+          # therefore unfixable by definition - no successful pull could ever move it, because no pull writes
+          # that file. A number that cannot change is not a measurement, and guard 9's own warn text calls
+          # these percentages "the only thing standing between them and the basePrice bug".
+          try {
+            $altDoc = Get-Content $alt.FullName -Raw | ConvertFrom-Json
+            $altRows = @($altDoc.deals)
+            if ($altRows.Count) {
+              $rows  = $altRows
+              $dated = @($rows | Where-Object { $_.as_of })
+              $unver = @($rows | Where-Object { $_.not_reverified }).Count
+            }
+          } catch { [void]$warn.Add("guard 9 could not read $($alt.Name) for $store - freshness is still being measured on the stale out\regular file: " + $_.Exception.Message) }
+        }
+      } catch {}
     }
   }
 
@@ -587,7 +612,17 @@ foreach ($f in (RegFiles)) {
 
   $pct = 0
   if ($rows.Count -gt 0) { $pct = [math]::Round(100.0 * $verifiedToday / $rows.Count) }
-  $note = ("{0,-13} {1,4} rows | {2,3}% re-verified against the store TODAY | file {3}d old" -f $store, $rows.Count, $pct, $age)
+  # THE ZERO-ROWS RULE, APPLIED TO A PERCENTAGE. "0% re-verified" and "these rows carry no date to check"
+  # produce the same 0 and read identically - but one is a store that went unverified today and the other is a
+  # feed where verification CANNOT be expressed at all. Measured 2026-07-30: 0 of 2,537 Sam's rows, 0 of 29
+  # Baker's and 0 of 11 Fareway rows carry `as_of`, so their percentage is structurally zero forever and no
+  # successful pull can ever move it. Reporting that as "0% re-verified" invites someone to go fix a pull that
+  # is not broken; the actual fix is for those builders to stamp as_of, and this says so.
+  if ($dated.Count -eq 0) {
+    $note = ("{0,-13} {1,4} rows | NO as_of ON ANY ROW - freshness cannot be measured, only file age | file {2}d old" -f $store, $rows.Count, $age)
+  } else {
+    $note = ("{0,-13} {1,4} rows | {2,3}% re-verified against the store TODAY ({3} of {4} dated) | file {5}d old" -f $store, $rows.Count, $pct, $verifiedToday, $dated.Count, $age)
+  }
   if ($unver -gt 0) { $note += (" | {0} row(s) flagged unverified" -f $unver) }
   # Only stores that HAVE a regular/discounted split can suffer the Hy-Vee/Baker's bug. Aldi was checked and
   # cannot: it is everyday-low-price and its listings carry a single "Current price" with no was/now pair
