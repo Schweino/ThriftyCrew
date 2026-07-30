@@ -268,7 +268,18 @@ if ($prevMax -gt 100 -and @($deals).Count -lt ($prevMax * 0.5)) {
   try {
     $recent = @(Get-ChildItem (Join-Path $qDir 'family-fare-*.throttled.json') -ErrorAction SilentlyContinue |
                 Where-Object { $_.BaseName -match '(\d{4}-\d{2}-\d{2})' -and [datetime]$Matches[1] -ge (Get-Date).AddDays(-4) })
-    if ($recent.Count -ge 3) {
+    # ONE EMAIL PER DAY, NOT ONE PER RUN (2026-07-30). The term cursor above only buys ~60-70 terms per run,
+    # so the fix for a frozen store is MORE runs per day - and this alert fired on every one of them: the
+    # triage queue took SEVEN identical "Family Fare has been throttled" items on 2026-07-30 alone. Seven
+    # copies of one fact is how a real alert gets skimmed past, and the sweep cadence must not be taxed by
+    # the alerting. Stamp the day we sent, and stay quiet for the rest of it.
+    $alertStamp = Join-Path $OutDir 'ff-throttle-alert.stamp'
+    $sentToday = $false
+    if (Test-Path $alertStamp) { $sentToday = (((Get-Content $alertStamp -Raw) + '').Trim() -eq $todayS) }
+    if ($recent.Count -ge 3 -and $sentToday) {
+      Write-Warning ("Family Fare: throttle alert already sent today ($todayS) - not re-sending (one email per day; see the alert-spam note in this script).")
+    }
+    elseif ($recent.Count -ge 3) {
       $lastGood = @(Get-ChildItem (Join-Path $OutDir 'regular\family-fare-regular-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1)
       $lgName = if ($lastGood.Count) { $lastGood[0].Name } else { '(none)' }
       $body = "Family Fare's pull has hit the throttle-wipeout guard on $($recent.Count) of the last 4 days, so the board is still serving prices from $lgName.`n`n" +
@@ -276,6 +287,9 @@ if ($prevMax -gt 100 -and @($deals).Count -lt ($prevMax * 0.5)) {
               "Today's run collected $(@($deals).Count) items against a best-of-recent of $prevMax, with $(@($empty).Count) term(s) still empty after recovery. Diagnostic: $pfile`n`n" +
               "Freshop rate-limits several hundred sequential terms from one IP. The fix is fewer requests per window (shard the term list across the day), NOT slower pacing - a 2026-07-28 probe showed 20 terms at 200ms all succeed while a second burst all came back empty, so the budget is per-window request COUNT."
       & powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'send-alert.ps1') -Subject ("Grocery: Family Fare has been throttled " + $recent.Count + " of the last 4 days - prices frozen") -Body $body | Out-Null
+      # stamp only on a SENT alert: a failed send must be free to try again on the next run, or a transient
+      # mail error would buy the whole day's silence.
+      if ($LASTEXITCODE -eq 0) { Set-Content -Path $alertStamp -Value $todayS -Encoding ASCII }
     }
   } catch { Write-Warning ('family-fare throttle alert failed: ' + $_.Exception.Message) }
   # NO `return` HERE ANY MORE (2026-07-30). This block used to bail out, throwing the whole capture away.

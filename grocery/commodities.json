@@ -3329,6 +3329,8 @@
                         "peanut\\s+butter"
                     ],
         "exclude":  [
+                        "\\bsandwich\\b",
+                        "\\bstripes\\b",
                         "\\bcup",
                         "cookie",
                         "cracker",
@@ -4792,6 +4794,10 @@
                         "\\blemons?\\b"
                     ],
         "exclude":  [
+                        "lemon[\\s-]*lime",
+                        "\\bmini\\s+cans?\\b",
+                        "\\bchips?\\b",
+                        "\\bplantain",
                         "juice",
                         "\\bade\\b",
                         "pepper",
@@ -4952,6 +4958,9 @@
                         "\\blimes?\\b"
                     ],
         "exclude":  [
+                        "lemon[\\s-]*lime",
+                        "\\bmini\\s+cans?\\b",
+                        "\\bchips?\\b",
                         "juice",
                         "\\bade\\b",
                         "key\\s*lime\\s*pie",
@@ -8307,6 +8316,8 @@
                         "preserves"
                     ],
         "exclude":  [
+                        "\\bsandwich\\b",
+                        "\\bstripes\\b",
                         "\\bbeans?\\b",
                         "donut",
                         "\\broll\\b",
@@ -19674,6 +19685,8 @@
                         "coconut\\s+oil"
                     ],
         "exclude":  [
+                        "butter\\s+sticks?",
+                        "plant\\s*based\\s+butter",
                         "\\bhair\\b",
                         "\\bskin\\b",
                         "\\bsoap\\b",
@@ -27196,6 +27209,7 @@
         "id":  "garlic-bread",
         "label":  "Garlic Bread (frozen)",
         "unit":  "each",
+        "pack_is_package":  true,
         "band_min":  1,
         "band_max":  6,
         "relax_global":  [
@@ -35823,6 +35837,9 @@
                         "chili\\s+onion\\s+crunch"
                     ],
         "exclude":  [
+                        "gyoza",
+                        "dumplings?",
+                        "potstickers?",
                         "powder",
                         "flakes",
                         "\\bsnack\\b",
@@ -45080,7 +45097,7 @@
                         "habaneros?\\b"
                     ],
         "exclude":  [
-                        "salsa",
+                        "sals[ae]\\b",
                         "\\bhoney\\b",
                         "\\bsauce\\b",
                         "\\bsyrup\\b",

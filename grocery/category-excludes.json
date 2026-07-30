@@ -17,8 +17,23 @@
                                      "\\bnectar\\b",
                                      "capri\\s*sun",
                                      "kool[\\s-]?aid",
-                                     "frappuccino"
+                                     "frappuccino",
+                                     "\\bmini\\s+cans?\\b",
+                                     "lemon[\\s-]*lime",
+                                     "\\bstarry\\b",
+                                     "\\bcola\\b",
+                                     "\\bseltzer\\b"
                                  ],
+                    "snack_carrier":  [
+                                          "\\bchips?\\b",
+                                          "\\bcrisps?\\b",
+                                          "\\bcrackers?\\b",
+                                          "\\bpretzels?\\b",
+                                          "\\bjerky\\b",
+                                          "\\bpuffs?\\b",
+                                          "fruit\\s+snacks?",
+                                          "trail\\s+mix"
+                                      ],
                     "babyfood":  [
                                      "beech\\s*nut",
                                      "\\bgerber\\b",
@@ -159,6 +174,7 @@
                                       "bakery_carrier",
                                       "dairy_carrier",
                                       "candy",
+                                      "snack_carrier",
                                       "supplement"
                                   ]
                   },
@@ -190,6 +206,7 @@
                    "bakery_carrier":  "pumpkin",
                    "dairy_carrier":  "milk|yogurt|cheese|cream|butter",
                    "candy":  "",
+                   "snack_carrier":  "",
                    "supplement":  ""
                },
     "universal_for_unknown":  [

@@ -52,7 +52,7 @@ if (-not (Test-Path $embed) -or ((Get-Item $embed).Length -lt 2000)) { Write-Out
 # last published one (this ran unconditionally on every board publish - a pointless daily PUT).
 $sigFile = Join-Path $OutDir 'store-guide.sig'
 $sig = (Get-FileHash $embed -Algorithm MD5).Hash
-if ((Test-Path $sigFile) -and (([string](Get-Content $sigFile -Raw)).Trim() -eq $sig)) {
+if ((Test-Path $sigFile) -and (((Get-Content $sigFile -Raw) + '').Trim() -eq $sig)) {
   Write-Output ("CURRENT shop-smart-at-your-store (guide unchanged - upsert skipped)")
   exit 0
 }

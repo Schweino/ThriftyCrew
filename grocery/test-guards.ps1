@@ -113,6 +113,43 @@ function CheckScript($name, $expect, $script, $sig) {
   else { Write-Output ("  FAIL  {0}  exit {1} as expected BUT its own failure text /{2}/ is absent - a DIFFERENT check failed, this one proved nothing" -f $name, $rc, $sig); $script:failed++ }
 }
 
+# ---- 0. THE EMPTY-STAMP-FILE THROW (2026-07-30) ------------------------------------------------------
+# `[string]$null` is $null in PowerShell, NOT '' - so `([string](Get-Content $f -Raw)).Trim()` THROWS
+# "You cannot call a method on a null-valued expression" the moment $f is a ZERO-BYTE file. Eleven live
+# sites used that idiom to read stamp/signature files. Measured on 2026-07-29: meal-prep\db\cost-flags.txt
+# was empty, so check-ad-cycles logged 'cost-flag alert threw' and jumped the whole block - including the
+# stale-signature cleanup, which is what re-arms that alert. Two of the other sites sit in publish scripts
+# where the throw would take the publish down. An empty file is not an exotic state: it is what a crashed
+# or interrupted write leaves behind.
+# MUST-FIRE + CLEAN TWIN on a real zero-byte file, then a source scan so the idiom cannot creep back.
+# Runs BEFORE the guards baseline on purpose - it is independent of the board, so a red board must not
+# make it unevaluable.
+$nz = Join-Path $env:TEMP ('tg-empty-' + [guid]::NewGuid().ToString('N') + '.txt')
+Set-Content -Path $nz -Value '' -NoNewline -Encoding ASCII
+try {
+  if ((Get-Item $nz).Length -ne 0) { Write-Output '  FAIL  empty-stamp: fixture is not zero bytes - the case proves nothing'; $script:failed++ }
+  else {
+    $threw = $false
+    try { $null = ([string](Get-Content $nz -Raw)).Trim() } catch { $threw = $true }
+    if ($threw) { Write-Output '  PASS  empty-stamp: the OLD [string](...)  idiom still throws on a zero-byte file (case is live)'; $script:pass++ }
+    else { Write-Output '  FAIL  empty-stamp: the old idiom no longer throws - this fixture can no longer prove the bug'; $script:failed++ }
+    $safe = $null; $ok = $true
+    try { $safe = ((Get-Content $nz -Raw) + '').Trim() } catch { $ok = $false }
+    if ($ok -and $safe -eq '') { Write-Output '  PASS  empty-stamp: the shipped idiom returns empty string, no throw'; $script:pass++ }
+    else { Write-Output '  FAIL  empty-stamp: the shipped idiom did not survive a zero-byte file'; $script:failed++ }
+  }
+} finally { Remove-Item $nz -Force -ErrorAction SilentlyContinue }
+# source scan: no LIVE script may read a stamp file through the throwing idiom again (archive\ is frozen).
+$badIdiom = @()
+foreach ($f in (Get-ChildItem (Join-Path $root '*.ps1') -File)) {
+  # this file is exempt by construction: the must-fire case above HAS to contain the throwing idiom to run it.
+  if ($f.Name -eq 'test-guards.ps1') { continue }
+  $src = Get-Content $f.FullName -Raw
+  if ($src -match '\(\[string\]\(Get-Content [^)]*\)\)\.Trim\(\)') { $badIdiom += $f.Name }
+}
+if ($badIdiom.Count -eq 0) { Write-Output '  PASS  empty-stamp: no live script reads a stamp file through the throwing idiom'; $script:pass++ }
+else { Write-Output ('  FAIL  empty-stamp: throwing idiom is back in ' + ($badIdiom -join ', ') + " - use ((Get-Content `$f -Raw) + '').Trim()"); $script:failed++ }
+
 # baseline - and ABORT if it is dirty. Measured 2026-07-30: with a real coverage regression on the board
 # (Family Fare 256->208), guards exits 2 no matter what a case mutates, so 12 of the 13 expect-2 cases
 # 'passed' while proving nothing - the exit code cannot distinguish 'my mutation fired' from 'already

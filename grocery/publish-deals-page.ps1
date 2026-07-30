@@ -193,7 +193,7 @@ try {
     $wks=@(); foreach($c in $phd.commodities){ foreach($e in $c.history){ $wks += [string]$e.week_of } }
     if($wks.Count){ $curWk = (@($wks | Sort-Object))[-1] }
   } catch { Write-Output ("trend gate: could not derive the current week (" + $_.Exception.Message + ") - falling through to a full rebuild") }
-  $stampWk = if(Test-Path $tpStamp){ ([string](Get-Content $tpStamp -Raw)).Trim() } else { '' }
+  $stampWk = if(Test-Path $tpStamp){ ((Get-Content $tpStamp -Raw) + '').Trim() } else { '' }
   if($curWk -and $stampWk -eq $curWk){
     Write-Output "trend pages up to date for week $curWk - builds skipped"
   } else {

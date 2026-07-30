@@ -78,7 +78,7 @@ $newestWeek = (@($allWeeks | Sort-Object))[-1]
 
 if (-not $Force) {
   if (Test-Path $StampFile) {
-    $stamp = ([string](Get-Content $StampFile -Raw)).Trim()
+    $stamp = ((Get-Content $StampFile -Raw) + '').Trim()
     if ($stamp -eq $newestWeek) {
       Write-Host ('Trend pages already published for week {0} (stamp match). Nothing to do. Use -Force to republish.' -f $newestWeek)
       exit 0
