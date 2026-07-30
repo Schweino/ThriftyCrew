@@ -285,7 +285,12 @@ else { Bad 'EngineFileSet builds its own file set again instead of calling the s
 # and then SAVES the damage - the same bug that shipped 16 mangled board rows on 2026-07-29, 6 of them crowns.
 # Source-grep that they are wired, then PROVE the decode end to end on a real UTF-8-no-BOM file, because a
 # grep alone passes on an importer that dot-sources capture-lib and then ignores it.
-foreach ($imp in @('import-browser-batch.ps1','import-walmart-batch.ps1','import-instacart-batch.ps1','import-aldi-batch.ps1')) {
+# import-browser-batch.ps1 was ARCHIVED 2026-07-30 (0 surviving rows, 0 live board cells, 0 executable
+# references - Baker's is 100% kroger-api now), so it is off this list; a file in archive\ is not a live
+# importer and demanding it here would fail from the day it was archived. import-aldi-batch is now a SHIM
+# that forwards to import-instacart-batch, so it holds no capture read of its own - the read it must be
+# checked for lives in the file it forwards to, which is on this list in its own right.
+foreach ($imp in @('import-walmart-batch.ps1','import-instacart-batch.ps1')) {
   $ip = Join-Path $root $imp
   if (-not (Test-Path $ip)) { Bad ("$imp is missing - it was a live staples-expansion importer"); continue }
   $it = Get-Content $ip -Raw

@@ -40,6 +40,22 @@
   unitPrice. A row that fails is NOT published - it is written to the .rejects.json beside the output. This is
   what the quarantined capture had no way to detect.
 
+  *** THE FISH-SAUCE NAME-OVERRIDE IS DELIBERATELY *NOT* PORTED HERE (decided 2026-07-30) ***
+  import-walmart-batch.ps1 carries a rule that lets the product NAME beat Walmart's own unitPrice when the two
+  diverge >10%, added 2026-07-27 after a 6.8 fl oz bottle listed at 28.4 c/fl oz backed out to 10 fl oz.
+  Backlog item 27 proposed porting it into this builder. IT WAS MEASURED AND REFUSED, and the measurement is
+  the point: lifting Build-Row plus the six engine functions and running the override across the full live
+  capture (out\captures\walmart-capture-2026-07-29.csv, 4,626 rows, 3,444 built) fires it 74 times and APPLIES
+  it 74 times - zero rejections. Its "re-verify the overridden shape through the real engine" step is
+  CIRCULAR: for a plain "N unit" size on an lb/oz/floz commodity, Get-UnitPrice returns price/N, which is
+  exactly lp/nameQty, which is exactly the value being checked against. The only path that could disagree
+  (Get-PackCount) is excluded by Parse-NameSize's own pack guard, a strict subset of Get-PackCount's regex.
+  So the check cannot fail, and porting it would replace this builder's REAL invariant - engine output must
+  reproduce the store's own published unit price - with a rule that always says yes. That is a gate that can
+  never arm, on the one path in this file that decides a published size.
+  If it is ever ported, the re-verification must come from something the override does not derive from
+  (the store page, a second capture, a cross-store plausibility rail) - not from the name it just trusted.
+
   Usage: .\build-walmart-deals.ps1 -In <capture.csv> -Date 2026-07-17
          .\build-walmart-deals.ps1 -SelfTest
 #>

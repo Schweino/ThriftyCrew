@@ -8,6 +8,7 @@ jobs are in `one-off\`; consumed input data is in `data\`.
 
 - `import-walmart-prices.ps1` - folded Walmart browser-capture prices into walmart-regular files; carried the whole-pack-vs-per-unit trap docs. (now: `walmart-capture-reducer.js` + `import-walmart-batch.ps1` + `build-walmart-deals.ps1`)
 - `import-bakers-prices.ps1` - folded Baker's browser-capture (UPC-matched) prices into bakers-regular files. (now: `pull-regular-bakers-api.ps1` via the sanctioned Kroger API)
+- `import-browser-batch.ps1` - folded staples-expansion browser batch captures into Baker's (and nominally Walmart) regular files. DEAD, proven 2026-07-30: it wrote the 133 Baker's rows in bakers-regular-2026-07-{15,18}.json, of which 0 survive today (bakers-regular-2026-07-30.json is 6,936 rows, 100% source_ad=kroger-api), it feeds 0 live board cells, and it had 0 executable references. Its Walmart arm was never used - the "batch capture" Walmart rows in those files carry the OLD import-walmart-batch's one-decimal rounding fingerprint, not this script's. (now: `pull-regular-bakers-api.ps1` for Baker's, `import-walmart-batch.ps1` for Walmart)
 - `walmart-browser-pull.js` (was hyvee\) - in-tab __NEXT_DATA__ Walmart price capture. (now: `walmart-capture-reducer.js` + `import-walmart-batch.ps1` + `build-walmart-deals.ps1`)
 - `bakers-browser-pull.js` (was hyvee\) - in-tab Baker's shelf-price capture, BK.dump() workflow. (now: `pull-regular-bakers-api.ps1`)
 - `transform-bakers-links.ps1` - Baker's-only raw-link-download transformer. (now: generic `transform-store-links.ps1`)

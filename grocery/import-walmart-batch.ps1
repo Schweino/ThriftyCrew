@@ -61,13 +61,24 @@ $script:iwbAllow = Get-MpAllowKeys $root
 # the computed unit price every time we checked, so when the two disagree the NAME wins.
 function Parse-NameSize([string]$name) {
   if (-not $name) { return $null }
-  # packs legitimately multiply the stated unit size - no clean single-unit claim to trust
-  if ($name -match '(?i)\b\d+\s*(ct|count|pk|packs?)\b' -or $name -match '(?i)\b(twin|multi|variety|value)\s*pack\b') { return $null }
-  # weight RANGES ("1.0 - 3.0 lb") state no single size
-  if ($name -match '(?i)\d[\d.]*\s*-\s*\d[\d.]*\s*(fl\s*oz|floz|oz|lbs?)\b') { return $null }
-  # nutrition text ("16g Protein Per Serving", "4oz 112g") is not a pack size
-  $clean = $name -replace '(?i)\d+\s*g\b[^,]*?protein[^,]*', '' -replace '(?i)\bper\s+serving\b', ''
-  $ms = [regex]::Matches($clean, '(?i)(\d+(?:\.\d+)?)\s*(fl\s*oz|floz|oz|lbs?)\b')
+  # packs legitimately multiply the stated unit size - no clean single-unit claim to trust. Get-PackCount is
+  # the ENGINE'S own pack detector (lifted above), so this and compare-deals agree by construction; the extra
+  # lines are the shapes it cannot see. MEASURED 2026-07-30 on the 4,626-row live capture: the shipped guard
+  # let 46 multipacks through ("pack of 12", "(4 Cans)", "2 Blocks", "6-pack", "12 Bulk Pack").
+  $nsPk = Get-PackCount $name
+  if ($nsPk -and $nsPk -gt 1) { return $null }
+  if ($name -match '(?i)\bpacks?\s+of\s+\d+') { return $null }
+  if ($name -match '(?i)\b\d+\s*x\s*[\d.]+') { return $null }
+  if ($name -match '(?i)\b\d+\s+(?:cans?|bottles?|cups?|blocks?|bowls?|jars?|pouches|boxes|bars?|tubs?|trays?|sticks?|sleeves?)\b') { return $null }
+  if ($name -match '(?i)\b(twin|multi|variety|value|bulk)\s*pack\b') { return $null }
+  # weight RANGES ("1.0 - 3.0 lb", "2.1 to 3.4 lb") state no single size
+  if ($name -match '(?i)\d[\d.]*\s*(?:-|to)\s*\d[\d.]*\s*(fl\s*oz|floz|oz|lbs?)\b') { return $null }
+  # nutrition / serving text is not a pack size ("16g Protein Per Serving", "20 Grams of Protein per 4 oz Serving")
+  $clean = $name -replace '(?i)\d+\s*g\b[^,]*?protein[^,]*', '' -replace '(?i)\bper\s+serving\b', '' -replace '(?i)per\s+[\d.]+\s*(?:fl\s*oz|floz|oz|lbs?|g)\s*serving', ''
+  # LEADING-DOT DECIMAL. ".59 oz" read as 59 oz is a 100x error in the CHEAP direction - the phantom-cheapest
+  # shape. Item 15 fixed this in the other three size parsers; this one never got it. 6 of the 74 divergences
+  # measured on the 2026-07-29 capture were exactly that (Watkins Parsley Flakes .59 oz -> "59 oz").
+  $ms = [regex]::Matches($clean, '(?i)(\d+(?:\.\d+)?|\.\d+)\s*(fl\s*oz|floz|oz|lbs?)\b')
   if ($ms.Count -eq 0) { return $null }
   $m = $ms[$ms.Count - 1]          # the size conventionally trails the name
   $qty = [double]$m.Groups[1].Value
@@ -111,19 +122,17 @@ function Convert-BatchRow($raw, [System.Collections.ArrayList]$log) {
       $ozE = [double]$em.Groups[1].Value; if ($em.Groups[2].Value -eq 'lb') { $ozE *= 16 }
       $ozN = [double]$pn.Groups[1].Value; if ($pn.Groups[2].Value -eq 'lb') { $ozN *= 16 }
       if ($ozE -gt 0 -and $ozN -gt 0 -and [math]::Abs($ozN / $ozE - 1) -gt 0.10) {
-        # the overridden shape must STILL parse through the real engine to lp/nameQty - shape verification
-        # is unconditional even when we deliberately distrust Walmart's unit price
-        $lp = 0.0; [void][double]::TryParse((([string]$row.ad_price) -replace '[^0-9.]', ''), [ref]$lp)
-        $qtyN = [double]$pn.Groups[1].Value
-        $unit = $(if ($pn.Groups[2].Value -eq 'fl oz') { 'floz' } elseif ($pn.Groups[2].Value -eq 'lb') { 'lb' } else { 'oz' })
-        $want = $lp / $qtyN
-        $chk = Get-UnitPrice ([pscustomobject]@{ price_text = $row.ad_price; name = $row.item; size_text = $named; regular = $null }) ([pscustomobject]@{ unit = $unit })
-        if ($null -ne $chk -and $want -gt 0 -and ([math]::Abs($chk.unit_price - $want) / $want) -le 0.02) {
-          [void]$log.Add(("{0}  Walmart unit price implies [{1}] but the name states [{2}] - using the name" -f $row.item, $row.size, $named))
-          $row.size = $named
-          $row.qty_basis = ($row.qty_basis + '; OVERRIDDEN by name size ' + $named + ' (fish-sauce rule 2026-07-27: Walmart''s own unit price ' + $row.wm_unit_price + ' distrusted)')
-          $row.engine_check = ('' + [math]::Round($chk.unit_price, 4) + '/' + $unit + ' [' + $chk.basis + '] vs name-implied ' + [math]::Round($want, 4))
-        }
+        # FAIL CLOSED, 2026-07-30. This used to SILENTLY PICK THE NAME, "verified" by re-running the engine on
+        # the overridden shape. That check cannot reject: for a plain "N unit" size and a unit in
+        # lb/oz/floz, Get-UnitPrice returns price/N, which IS lp/nameQty, which IS $want - and the one path
+        # that could differ (Get-PackCount) is excluded by Parse-NameSize's own pack guard, which is a subset
+        # of Get-PackCount's regex. MEASURED on the 4,626-row 2026-07-29 capture: 74 divergences reached the
+        # check and 74 were accepted. 0 rejections. Of those 74, 6 were leading-dot decimals (100x low) and 46
+        # were multipacks whose name states ONE unit - so the "gate" was a rubber stamp on 52 wrong sizes.
+        # A >10% disagreement between the store's own arithmetic and the store's own name is not something this
+        # script can adjudicate. It is a REJECT: the row goes to out\walmart-batch-rejects-<date>.json for a
+        # human, and no number is published. Guessing here is worse than no cell (build-aldi-regular's rule).
+        return @{ err = ("name/unit-price divergence: Walmart's unit price " + $row.wm_unit_price + " implies [" + $row.size + "] but the name states [" + $named + "] - the store contradicts itself, verify by hand (fish-sauce class 2026-07-27)") }
       }
     }
   }
@@ -189,7 +198,7 @@ if ($SelfTest) {
     # when no name qty reproduces the unit price, the derived size stays EXACT (old path rounded 1.298 -> 1.3)
     @{ n='Tyson All Natural Chicken Livers, 1.25 lb';                  lp='$1.96';  up='$1.51/lb';                e='1.298 lb';   ad='$1.96'  }
     # 2026-07-27 fish-sauce incident: lp/up backs out 10 fl oz, the bottle says 6.8 - the NAME wins
-    @{ n='Kikkoman Gluten-Free Fish Sauce, 6.8 fl oz Glass Bottle';    lp='$2.84';  up=('28.4 ' + $CENT + '/fl oz'); e='6.8 fl oz'; ad='$2.84'; ovr=$true }
+    # (the 2026-07-27 fish-sauce incident now REJECTS instead of overriding - see the rejCases block)
     # clean twin: name agrees -> name-snap inside Build-Row, exact name size, NO override stamped
     @{ n='Thai Kitchen Gluten Free Premium Fish Sauce, 6.76 fl oz';    lp='$4.76';  up=('70.0 ' + $CENT + '/fl oz'); e='6.76 fl oz'; ad='$4.76' }
     # a WEIGHT name size must never override a VOLUME unit price (cross-family)
@@ -201,13 +210,20 @@ if ($SelfTest) {
     @{ n='Sanderson Farms Whole Chicken, 11.0 - 12.2 lb';              lp='$15.27'; up='$1.32/lb';                e='11.568 lb';  ad='$15.27' }
     # nutrition grams are not a pack size
     @{ n='Armour Corned Beef Hash, 16g Protein Per Serving, 14 oz';    lp='$2.72';  up=('19.4 ' + $CENT + '/oz'); e='14 oz';      ad='$2.72'  }
+    # CLEAN TWIN for the leading-dot fix: ".59 oz" must parse as 0.59 and AGREE with lp/up, so no divergence,
+    # no reject, exact size. Under the shipped parser this read "59 oz", diverged 100x, and was published at
+    # $0.1305/oz for a $13.05/oz spice jar - the phantom-cheapest shape.
+    @{ n='Watkins Gourmet Organic Spice Jar, Parsley Flakes, .59 oz';  lp='$7.70';  up='$13.05/oz';               e='0.59 oz';    ad='$7.70'  }
+    # CLEAN TWIN for the pack-guard fix: "4 oz Cup (Pack of 12)" states ONE cup's size. The shipped guard only
+    # sees a digit BEFORE a pack word, so it overrode Walmart's correct 48.105 oz to 4 oz - $0.19/oz published
+    # as $2.285/oz, 12x over. Fixed, the name is silent and Walmart's own arithmetic stands.
+    @{ n='Del Monte Diced Peaches Fruit Cup Snacks in 100% Fruit Juice, 4 oz Cup (Pack of 12)'; lp='$9.14'; up=('19.0 ' + $CENT + '/oz'); e='48.105 oz'; ad='$9.14' }
   )
   foreach ($c in $cases) {
     $r = Convert-BatchRow (_R $c.n $c.lp $c.up) $log
     if ($r.err) { Write-Output "FAIL  [$($c.n)] -> $($r.err)"; $fail++; continue }
-    $ovrStamped = ([string]$r.row.qty_basis -match 'OVERRIDDEN by name')
     if ($r.row.size -ne $c.e -or $r.row.ad_price -ne $c.ad) { Write-Output "FAIL  [$($c.n)] got ad=$($r.row.ad_price) size='$($r.row.size)' want ad=$($c.ad) size='$($c.e)'"; $fail++ }
-    elseif ([bool]$c.ovr -ne $ovrStamped) { Write-Output "FAIL  [$($c.n)] override stamped=$ovrStamped want $([bool]$c.ovr)"; $fail++ }
+    elseif ([string]$r.row.qty_basis -match 'OVERRIDDEN by name') { Write-Output "FAIL  [$($c.n)] still carries a silent name override - the rule is REJECT now, not override"; $fail++ }
     else { Write-Output "ok    [$($c.n)] -> ad=$($r.row.ad_price) size='$($r.row.size)'" }
   }
   # rows that must be REJECTED, never published
@@ -216,6 +232,9 @@ if ($SelfTest) {
     @{ n='(4 pack) Skinner Thin Spaghetti Pasta, 12-Ounce Bag';         lp='$4.75'; up=('9.9 ' + $CENT + '/oz');     want='multipack' }   # old importer SHIPPED this; guard 5 would have blocked the publish
     @{ n='Malformed Unit Price';                                        lp='$5.00'; up='1.2.3/oz';                   want='no unitPrice' } # old Parse-WMSize THREW here and EAP=Stop killed the whole import
     @{ n='Leading Dot Cents';                                           lp='$2.00'; up=('.9 ' + $CENT + '/oz');     want='no unitPrice' } # old path backed a fabricated 222.2 oz size out of this
+    # MUST-FIRE (2026-07-30): the fish-sauce shape. The store contradicts itself (unit price implies 10 fl oz,
+    # the bottle says 6.8) - neither number is publishable, so the row is quarantined for a human.
+    @{ n='Kikkoman Gluten-Free Fish Sauce, 6.8 fl oz Glass Bottle';    lp='$2.84';  up=('28.4 ' + $CENT + '/fl oz'); want='name/unit-price divergence' }
   )
   foreach ($c in $rejCases) {
     $r = Convert-BatchRow (_R $c.n $c.lp $c.up) $log
