@@ -1473,5 +1473,517 @@ $cacTx = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
 if ($cacTx -match 'audit-store-taxonomy\.ps1') { Ok 'the daily job still runs the store-taxonomy second opinion' }
 else { Bad 'check-ad-cycles no longer calls audit-store-taxonomy - the only check that does not inherit the include regex is dark, and the script census will call it an orphan' }
 
+# ---------------------------------------------------------------- 24. known-wrong blocklist (Component 2)
+# MUST FIRE: an adjudicated-wrong product is priced on the board again. FOUNDING BUG - audit findings lived
+# as PROSE in .md files, so honeydew was written up on 2026-07-29 with the store's own arithmetic and was
+# still the published crown the next morning, and Blue Buffalo cat food held the salmon crown at 20.8% under
+# the runner-up with every guard green. Fixtures are SYNTHETIC and frozen here: the product names are the
+# bug, so they must never be re-read from the live board.
+$fxKw = NewFxDir 'kw'
+New-Item -ItemType Directory -Force (Join-Path $fxKw 'out\regular') | Out-Null
+Set-Content (Join-Path $fxKw 'commodities.json') '[{"id":"salmon","label":"Salmon","unit":"lb"},{"id":"parmesan","label":"Parmesan","unit":"oz"},{"id":"coffee","label":"Coffee","unit":"oz"},{"id":"strawberries","label":"Strawberries","unit":"oz"}]' -Encoding UTF8
+Set-Content (Join-Path $fxKw 'stores.json') '{"stores":[{"name":"Walmart","order":1,"regular_prefix":"walmart"},{"name":"Aldi","order":2,"regular_prefix":"aldi"}]}' -Encoding UTF8
+# the Walmart feed the id-key re-derives today's spelling from: SAME item_id, DIFFERENT product name
+Set-Content (Join-Path $fxKw 'out\regular\walmart-regular-2026-01-02.json') '{"store":"Walmart","deals":[{"store":"Walmart","item":"Blue Buffalo Wilderness Adult Cat Salmon Recipe, 9.5 lb","item_id":"634625434","current_price":"$38.98","size":"9.5 lb"}]}' -Encoding UTF8
+$kwList = Join-Path $fxKw 'known-wrong.json'
+Set-Content $kwList @'
+{
+  "schema": 1,
+  "entries": [
+    { "key": "salmon|Walmart|blue-buffalo-cat-food", "commodity": "salmon", "store": "Walmart",
+      "names": ["Blue Buffalo Wilderness Natural High Protein Dry Food for Adult Cats, Salmon, 9.5-lb Bag"],
+      "product_id": "634625434", "verdict": "wrong-product",
+      "evidence": "dry cat food held the salmon crown at 20.8% under the runner-up",
+      "ruled_on": "2026-07-30", "ruled_by": "fixture", "retire_when": "ruling-reversed" },
+    { "key": "parmesan|Aldi|clancys-parmesan-garlic-pita-chips", "commodity": "parmesan", "store": "Aldi",
+      "names": ["Clancy's Parmesan Garlic Pita Chips 7.33 OZ"],
+      "product_id": "", "verdict": "wrong-product",
+      "evidence": "pita chips, not parmesan cheese; Aldi also strips the apostrophe",
+      "ruled_on": "2026-07-30", "ruled_by": "fixture", "retire_when": "ruling-reversed" },
+    { "key": "coffee|Walmart|onyx-latte", "commodity": "coffee", "store": "Walmart",
+      "names": ["Onyx Coffee Lab Salted Mocha Oat Milk Latte, 11 fl oz Can"],
+      "product_id": "", "verdict": "wrong-product",
+      "evidence": "ready-to-drink latte in the ground-coffee commodity",
+      "ruled_on": "2026-07-30", "ruled_by": "fixture", "retire_when": "ruling-reversed",
+      "reversed_on": "2026-07-30", "reversed_by": "fixture-reversal-test" },
+    { "key": "strawberries|Aldi|kroger-strawberry-applesauce", "commodity": "strawberries", "store": "Aldi",
+      "names": ["Kroger Strawberry Applesauce"],
+      "product_id": "", "verdict": "wrong-product",
+      "evidence": "applesauce cups held the fresh strawberries crown for six days",
+      "ruled_on": "2026-07-30", "ruled_by": "fixture", "retire_when": "ruling-reversed" },
+    { "key": "gone-commodity|Walmart|whatever", "commodity": "commodity-that-was-retired", "store": "Walmart",
+      "names": ["Some Product That No Longer Has A Commodity"],
+      "product_id": "", "verdict": "wrong-product",
+      "evidence": "exists only to prove the commodity-retired trigger can actually fire",
+      "ruled_on": "2026-07-30", "ruled_by": "fixture", "retire_when": "commodity-retired" }
+  ]
+}
+'@ -Encoding UTF8
+# DIRTY board: the ruled-wrong products are back, one of them under a DRIFTED name only the id can reach,
+# and one of them (coffee) under a ruling that was REVERSED and therefore must NOT block
+Set-Content (Join-Path $fxKw 'out\comparison-2026-01-02.json') @'
+{"comparison":[
+ {"id":"salmon","unit":"lb","cheapest_store":"Walmart","stores":[
+   {"store":"Walmart","per_unit":4.1032,"item":"Blue Buffalo Wilderness Adult Cat Salmon Recipe, 9.5 lb","ad":"$38.98","size":"9.5 lb"},
+   {"store":"Aldi","per_unit":5.18,"item":"Fremont Fish Market Atlantic Salmon Portions","ad":"$5.18","size":"lb"}]},
+ {"id":"parmesan","unit":"oz","cheapest_store":"Aldi","stores":[
+   {"store":"Aldi","per_unit":0.3124,"item":"Clancy S Parmesan Garlic Pita Chips 7.33 OZ","ad":"$2.29","size":"7.33 oz"}]},
+ {"id":"coffee","unit":"oz","cheapest_store":"Walmart","stores":[
+   {"store":"Walmart","per_unit":0.4518,"item":"Onyx Coffee Lab Salted Mocha Oat Milk Latte, 11 fl oz Can","ad":"$4.97","size":"11 fl oz"}]}
+]}
+'@ -Encoding UTF8
+$r = RunPS 'audit-known-wrong.ps1' @('-Root', $fxKw, '-ListFile', $kwList)
+if ($r.rc -eq 2 -and $r.text -match 'BLOCKED.*salmon') { Ok 'known-wrong FIRES (exit 2) when an adjudicated-wrong product is priced on the board again' }
+else { Bad ('known-wrong did NOT block a re-published adjudicated-wrong product (rc=' + $r.rc + '): ' + $r.text) }
+# the salmon cell in the dirty board carries the DRIFTED name, so the only way to reach it is the product id
+if ($r.text -match 'Blue Buffalo Wilderness Adult Cat Salmon Recipe') { Ok 'known-wrong id key works: a listed product renamed in the feed is still blocked (name re-derived from item_id)' }
+else { Bad 'known-wrong missed a listed product whose name drifted but whose item_id did not - the id key is dead' }
+if ($r.text -match 'BLOCKED.*Clancy S Parmesan Garlic Pita Chips') { Ok 'known-wrong normalizer works: the apostrophe-stripped Aldi spelling is BLOCKED by the adjudicated name' }
+else { Bad 'known-wrong missed the apostrophe-stripped spelling - the pipeline can rename its way past the blocklist' }
+if ($r.text -notmatch 'BLOCKED.*coffee') { Ok 'known-wrong stops enforcing a REVERSED ruling (the retire trigger can actually fire)' }
+else { Bad 'known-wrong still blocks a ruling that was reversed on the record - retire_when=ruling-reversed cannot fire' }
+if ($r.text -match 'RETIRE-READY.*commodity-retired') { Ok 'known-wrong retire trigger commodity-retired FIRES for an entry whose commodity is gone' }
+else { Bad 'known-wrong never reported commodity-retired - a moot entry can sit in the list forever (the allowlist bug)' }
+# CLEAN TWIN: same tree, same blocklist, right products - must go silent, not just quieter
+Set-Content (Join-Path $fxKw 'out\comparison-2026-01-02.json') @'
+{"comparison":[
+ {"id":"salmon","unit":"lb","cheapest_store":"Aldi","stores":[
+   {"store":"Aldi","per_unit":5.18,"item":"Fremont Fish Market Atlantic Salmon Portions","ad":"$5.18","size":"lb"}]},
+ {"id":"parmesan","unit":"oz","cheapest_store":"Aldi","stores":[
+   {"store":"Aldi","per_unit":0.4988,"item":"Happy Farms Grated Parmesan Cheese 8 OZ","ad":"$3.99","size":"8 oz"}]},
+ {"id":"coffee","unit":"oz","cheapest_store":"Walmart","stores":[
+   {"store":"Walmart","per_unit":0.2483,"item":"Great Value Classic Roast Ground Coffee, 30.5 oz","ad":"$7.57","size":"30.5 oz"}]},
+ {"id":"strawberries","unit":"oz","cheapest_store":"Aldi","stores":[
+   {"store":"Aldi","per_unit":0.0833,"item":"Kroger Strawberry Applesauce, 6 pk 4 oz","ad":"$2.00","size":"6 pk 4 oz"}]}
+]}
+'@ -Encoding UTF8
+$r = RunPS 'audit-known-wrong.ps1' @('-Root', $fxKw, '-ListFile', $kwList)
+if ($r.rc -eq 0 -and $r.text -match 'KNOWN-WRONG AUDIT OK' -and $r.text -notmatch '(?m)^\s+BLOCKED') { Ok 'known-wrong clean twin: the same blocklist is SILENT on a board carrying the right products' }
+else { Bad ('known-wrong clean twin failed (rc=' + $r.rc + ') - the blocklist fires on correct products, which would block every publish: ' + $r.text) }
+# the REVIEW tier must be able to fire, and must NOT set the exit code. The core-name key (same name with
+# the trailing size clause stripped) merges genuinely different pack sizes on real data - measured 435 such
+# groups over 35,362 cells, including "Daisy Sour Cream 14 oz 2 pk" vs "48 oz" - so it is a queue, not a gate.
+if ($r.text -match 'REVIEW.*Kroger Strawberry Applesauce, 6 pk 4 oz') { Ok 'known-wrong REVIEW tier fires on a size-variant of a blocked product' }
+else { Bad 'known-wrong REVIEW tier never fired on an obvious size-variant - the near-match queue is dead code' }
+if ($r.rc -eq 0) { Ok 'known-wrong REVIEW tier does NOT set the exit code (a 100%-precision gate plus a separate review queue, never one blended detector)' }
+else { Bad ('a REVIEW near-match turned the gate red (rc=' + $r.rc + ') - the low-precision key is gating the publish') }
+# the same clean twin must still report WHAT IT EXAMINED, or "no listed product is priced" is unfalsifiable
+if ($r.text -match 'entries evaluable against \d+ named priced cells') { Ok 'known-wrong reports how many entries it could evaluate and how many cells it examined' }
+else { Bad 'known-wrong reported a clean result without saying what it examined - "ok" from an unknown sample size' }
+# BLIND: no board at all. Must be exit 3, never a clean 0.
+$fxKwB = NewFxDir 'kw-blind'
+New-Item -ItemType Directory -Force (Join-Path $fxKwB 'out') | Out-Null
+Copy-Item $kwList (Join-Path $fxKwB 'known-wrong.json')
+$r = RunPS 'audit-known-wrong.ps1' @('-Root', $fxKwB, '-ListFile', (Join-Path $fxKwB 'known-wrong.json'))
+if ($r.rc -eq 3 -and $r.text -match 'BLIND') { Ok 'known-wrong goes BLIND (exit 3) with no board to examine instead of reporting a clean blocklist' }
+else { Bad ('known-wrong reported a result with zero cells examined (rc=' + $r.rc + ') - "0 wrong products" from zero examination') }
+# BLIND: the blocklist file itself is missing. Deleting the memory must be loud, not silent.
+Remove-Item (Join-Path $fxKwB 'known-wrong.json') -Force
+$r = RunPS 'audit-known-wrong.ps1' @('-Root', $fxKwB, '-ListFile', (Join-Path $fxKwB 'known-wrong.json'))
+if ($r.rc -eq 3 -and $r.text -match 'MISSING') { Ok 'known-wrong goes BLIND (exit 3) when the blocklist file is missing rather than passing an unguarded board' }
+else { Bad ('known-wrong passed with no blocklist file at all (rc=' + $r.rc + ') - the gate can be silently deleted') }
+# SCHEMA: a retire trigger outside the closed vocabulary is the allowlist bug - it can never be evaluated.
+$fxKwS = NewFxDir 'kw-schema'
+New-Item -ItemType Directory -Force (Join-Path $fxKwS 'out') | Out-Null
+Copy-Item (Join-Path $fxKw 'out\comparison-2026-01-02.json') (Join-Path $fxKwS 'out\comparison-2026-01-02.json')
+Copy-Item (Join-Path $fxKw 'commodities.json') (Join-Path $fxKwS 'commodities.json')
+Copy-Item (Join-Path $fxKw 'stores.json') (Join-Path $fxKwS 'stores.json')
+Set-Content (Join-Path $fxKwS 'known-wrong.json') '{"schema":1,"entries":[{"key":"salmon|Walmart|x","commodity":"salmon","store":"Walmart","names":["Whatever"],"product_id":"","verdict":"wrong-product","evidence":"e","ruled_on":"2026-07-30","ruled_by":"fixture","retire_when":"the store does not carry the item"}]}' -Encoding UTF8
+$r = RunPS 'audit-known-wrong.ps1' @('-Root', $fxKwS, '-ListFile', (Join-Path $fxKwS 'known-wrong.json'))
+if ($r.rc -eq 2 -and $r.text -match 'closed vocabulary') { Ok 'known-wrong REFUSES an entry whose retire trigger nobody can evaluate (the 2026-07-30 allowlist bug, rejected at the schema)' }
+else { Bad ('known-wrong accepted an unevaluable retire trigger (rc=' + $r.rc + ') - entries can be justified by claims no machine can check') }
+# UNEVALUABLE: a typo'd commodity id must be named, not silently counted as clean.
+Set-Content (Join-Path $fxKwS 'known-wrong.json') '{"schema":1,"entries":[{"key":"salmonn|Walmart|x","commodity":"salmonn","store":"Walmart","names":["Whatever"],"product_id":"","verdict":"wrong-product","evidence":"e","ruled_on":"2026-07-30","ruled_by":"fixture","retire_when":"ruling-reversed"}]}' -Encoding UTF8
+$r = RunPS 'audit-known-wrong.ps1' @('-Root', $fxKwS, '-ListFile', (Join-Path $fxKwS 'known-wrong.json'))
+if ($r.rc -eq 3 -and $r.text -match 'UNEVALUABLE') { Ok 'known-wrong names an entry it could not evaluate (typo commodity id) and goes blind rather than counting it clean' }
+else { Bad ('known-wrong counted an unevaluable entry as a pass (rc=' + $r.rc + ') - an entry can be permanently unfirable and look green') }
+# LIVE CLEAN TWIN: the real blocklist against the real board must be GREEN. It is a REGRESSION blocklist -
+# every seeded case is already fixed - so a red here means a fixed defect came back, which is page-worthy.
+$r = RunPS 'audit-known-wrong.ps1' @()
+if ($r.rc -eq 0 -and $r.text -match 'KNOWN-WRONG AUDIT OK') { Ok 'known-wrong live clean twin: the real blocklist is green on the real board' }
+else { Bad ('known-wrong is RED on the live board (rc=' + $r.rc + ') - an adjudicated-wrong product is published again: ' + $r.text) }
+Remove-Item $fxKw, $fxKwB, $fxKwS -Recurse -Force -ErrorAction SilentlyContinue
+
+# ---------------------------------------------------------------- (m) the COVERAGE LEDGER
+# FOUNDING BUGS, all three measured, all three the same shape: a check that examined nothing, or stopped
+# examining, and nothing anywhere remembered what it used to examine.
+#   1. guard 11 reconciled Baker's against a raw capture; its row filter (.upc + source_ad 'bakersplus')
+#      stopped matching when Baker's moved to the Kroger API, and it printed "ok ... (0 rows checked)" for
+#      FIVE DAYS on the board's largest store.
+#   2. guard 3's WRONG-PRODUCT clause examined 0 of 16 pins - its producer read only the staple board and
+#      every pin is a recipe-board id - while the ok line beside it said 16 checked.
+#   3. audit-ff-carry threw on its own report line before printing one word, so the Family Fare pull-drop
+#      watch was decorative for 17 days and 'ff-carry' appears ZERO times in 2,716 lines of ad-cycle-log.txt.
+# guards.ps1's OkUnlessBlind catches (1) and (2) WITHIN a run. It cannot catch (3) - absence is not a zero -
+# and it cannot catch a PARTIAL collapse, where a check falls from 2,435 rows to 400 and every in-run test
+# in this tree reads that as a pass. The ledger is the memory that makes both visible.
+# Everything below runs THE REAL SCRIPTS (a copy of audit-coverage-ledger.ps1 + coverage-lib.ps1 in a temp
+# dir, so $PSScriptRoot points at the fixture) against FROZEN synthetic state. Never regenerated from the
+# live board: the bug lives in these numbers.
+$covSrcG = Get-Content (Join-Path $root 'guards.ps1') -Raw
+foreach ($k in @('guards/11-bakers-provenance', 'guards/3-pin-identity', 'guards/4-factor', 'guards/10-store-charges')) {
+  if ($covSrcG -match ([regex]::Escape("Write-CoverageRecord -Check '" + $k + "'"))) { Ok ("guards.ps1 still records coverage for " + $k) }
+  else { Bad ("guards.ps1 stopped recording coverage for " + $k + " - the ratchet has nothing to compare and its baseline row goes NEVER-RECORDED") }
+}
+$covSrcF = Get-Content (Join-Path $root 'audit-food-category.ps1') -Raw
+if ($covSrcF -match "Write-CoverageRecord -Check 'audit-food-category'") { Ok 'audit-food-category still records what it scanned' }
+else { Bad 'audit-food-category no longer records its scan count - a shrinking wrong-class scan is invisible again' }
+if ($covSrcF -match '\$eligible\+\+') { Ok 'audit-food-category still counts the DENOMINATOR before its scoping tests (2,663 scanned of 3,196 priced cells)' }
+else { Bad 'audit-food-category lost its eligible counter - its ok line can shrink by hundreds of cells with no way to tell' }
+$covSrcC = Get-Content (Join-Path $root 'audit-ff-carry.ps1') -Raw
+if ($covSrcC -match 'Emit-Coverage \$emptyTerms\.Count \$probed') { Ok 'audit-ff-carry records its probe count BEFORE the report line that threw for 17 days' }
+else { Bad 'audit-ff-carry no longer records coverage before its report line - a repeat of the 17-day silent death leaves no trace again' }
+
+$fxCov = NewFxDir 'cov-ledger'
+New-Item -ItemType Directory -Force (Join-Path $fxCov 'out') | Out-Null
+Copy-Item (Join-Path $root 'audit-coverage-ledger.ps1') $fxCov
+Copy-Item (Join-Path $root 'coverage-lib.ps1') $fxCov
+$covEnc = New-Object Text.UTF8Encoding($false)
+# as_of is stamped with TODAY on purpose: STALE is measured against the clock, so a frozen calendar date
+# would make every non-stale case fail as soon as the fixture aged. The BUG is in the counts, not the date.
+$covNow = (Get-Date -Format 'yyyy-MM-dd') + ' 09:00:00'
+function CovLedger([hashtable]$rows) {
+  $c = [ordered]@{}
+  foreach ($k in ($rows.Keys | Sort-Object)) {
+    $v = $rows[$k]
+    $c[$k] = [ordered]@{ eligible = $v[0]; examined = $v[1]; skipped = ([math]::Max(0, $v[0] - $v[1])); blind = ($v[1] -le 0); as_of = $(if ($v.Count -gt 2) { $v[2] } else { $covNow }); detail = 'frozen fixture' }
+  }
+  [IO.File]::WriteAllText((Join-Path $fxCov 'out\coverage-ledger.json'), (([ordered]@{ schema = 1; updated = $covNow; checks = $c }) | ConvertTo-Json -Depth 6), $covEnc)
+}
+# FROZEN baseline: guard 11 at its pre-API row count, guard 3 at the 16 pins it had the day it went blind.
+[IO.File]::WriteAllText((Join-Path $fxCov 'coverage-baseline.json'), (@'
+{"schema":1,"set":"frozen fixture - do not regenerate","checks":{
+ "guards/11-bakers-provenance":{"examined":6960,"tolerance":0.25,"max_age_days":2,"phase":"publish"},
+ "guards/3-pin-identity":{"examined":16,"tolerance":0.5,"max_age_days":2,"phase":"publish"},
+ "guards/4-factor":{"examined":2435,"tolerance":0.1,"max_age_days":2,"phase":"publish"},
+ "audit-ff-carry":{"examined":464,"tolerance":1.0,"max_age_days":3,"phase":"cycle"}}}
+'@), $covEnc)
+$covHealthy = @{ 'guards/11-bakers-provenance' = @(6960, 6936); 'guards/3-pin-identity' = @(19, 9); 'guards/4-factor' = @(2435, 2435); 'audit-ff-carry' = @(464, 464) }
+
+# MUST FIRE 1 - the guard-11 founding bug: an ok over 0 of 6,960 rows.
+$h = $covHealthy.Clone(); $h['guards/11-bakers-provenance'] = @(6960, 0); CovLedger $h
+$r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all')
+if ($r.rc -eq 1 -and $r.text -match 'BLIND' -and $r.text -match 'guards/11-bakers-provenance') { Ok 'coverage-ledger FIRES on the guard-11 founding bug (0 of 6,960 rows examined)' }
+else { Bad ('coverage-ledger missed a check that examined ZERO of 6,960 rows (rc=' + $r.rc + '): ' + $r.text) }
+# and it must be able to BLOCK when armed - a gate that can never arm is no gate
+$r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all', '-Gate')
+if ($r.rc -eq 2) { Ok 'coverage-ledger -Gate goes RED on the pre-change state (exit 2)' }
+else { Bad ('coverage-ledger -Gate did NOT block on a blind check (rc=' + $r.rc + ') - the gate cannot arm') }
+# -Accept must REFUSE during the incident, or the high-water mark is pinned at zero forever
+$r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all', '-Accept')
+if ($r.rc -eq 3 -and $r.text -match 'REFUSED') { Ok 'coverage-ledger -Accept REFUSES on a blind ledger (accepting would disarm the ratchet permanently)' }
+else { Bad ('coverage-ledger -Accept wrote a baseline from a BLIND ledger (rc=' + $r.rc + ') - the tile-integrity -Baseline lesson was not learned') }
+
+# MUST FIRE 2 - the guard-3 founding bug: 0 of 16 pins identity-checked while the ok line said 16.
+$h = $covHealthy.Clone(); $h['guards/3-pin-identity'] = @(16, 0); CovLedger $h
+$r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all')
+if ($r.rc -eq 1 -and $r.text -match 'BLIND' -and $r.text -match 'guards/3-pin-identity') { Ok 'coverage-ledger FIRES on the guard-3 founding bug (0 of 16 pins identity-checked)' }
+else { Bad ('coverage-ledger missed guard 3 checking 0 of 16 pins (rc=' + $r.rc + '): ' + $r.text) }
+
+# MUST FIRE 3 - the audit-ff-carry founding bug: 17 days of no output at all, so no row.
+$h = $covHealthy.Clone(); $h.Remove('audit-ff-carry'); CovLedger $h
+$r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'cycle')
+if ($r.rc -eq 1 -and $r.text -match 'NEVER-RECORDED' -and $r.text -match 'audit-ff-carry') { Ok 'coverage-ledger FIRES on a rostered check that produced NO row at all (the 17-day ff-carry silence)' }
+else { Bad ('coverage-ledger did not notice a rostered check that never ran (rc=' + $r.rc + '): ' + $r.text) }
+# CLEAN TWIN: the same missing row in the PUBLISH phase must stay silent - ff-carry runs on the ad cycle, and
+# demanding a check that was never going to run this job is the cry-wolf failure this file keeps re-learning.
+$r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'publish')
+if ($r.rc -eq 0) { Ok 'coverage-ledger stays SILENT about a cycle-phase check during a publish-phase run' }
+else { Bad ('coverage-ledger demanded a cycle-phase row during a publish run (rc=' + $r.rc + ') - it would fire on every cloud run, where out\ starts empty') }
+
+# MUST FIRE 4 - the PARTIAL collapse. Not blind, 63% blind. Nothing else in this tree can see it.
+$h = $covHealthy.Clone(); $h['guards/4-factor'] = @(2435, 900); CovLedger $h
+$r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all')
+if ($r.rc -eq 1 -and $r.text -match 'REGRESSED' -and $r.text -match 'guards/4-factor') { Ok 'coverage-ledger FIRES when a check quietly halves its coverage (2,435 -> 900)' }
+else { Bad ('coverage-ledger let a check drop 63% of its coverage (rc=' + $r.rc + '): ' + $r.text) }
+
+# MUST FIRE 5 - eligible ZERO is not a pass. 22 of 492 commodities have exactly ONE priced cell and 58 have
+# <=3 (measured 2026-07-30), so any per-commodity rail is structurally inert across a fifth of the board.
+$h = $covHealthy.Clone(); $h['guards/4-factor'] = @(0, 0); CovLedger $h
+$r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all')
+if ($r.rc -eq 1 -and $r.text -match 'INERT') { Ok 'coverage-ledger calls a check with ZERO eligible rows INERT, not ok' }
+else { Bad ('coverage-ledger reported a clean result for a check with nothing eligible (rc=' + $r.rc + ')') }
+
+# MUST FIRE 6 - the auditor obeys its OWN zero-rows rule. '' | ConvertFrom-Json returns $null WITHOUT
+# throwing in PS 5.1, which is exactly how triage-due printed IDLE over 5 open alerts.
+[IO.File]::WriteAllText((Join-Path $fxCov 'out\coverage-ledger.json'), '', $covEnc)
+$r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all')
+if ($r.rc -eq 3 -and $r.text -match 'COULD NOT EVALUATE') { Ok 'coverage-ledger exits 3 on an empty/mid-write ledger instead of reporting a clean board' }
+else { Bad ('coverage-ledger FAILED OPEN on an empty ledger file (rc=' + $r.rc + ') - the PS 5.1 empty-string-to-null trap is back') }
+[IO.File]::WriteAllText((Join-Path $fxCov 'out\coverage-ledger.json'), '{"schema":1,"checks":{"a":{"exam', $covEnc)
+$r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all')
+if ($r.rc -eq 3) { Ok 'coverage-ledger exits 3 on truncated JSON' }
+else { Bad ('coverage-ledger did not fail closed on truncated JSON (rc=' + $r.rc + ')') }
+
+# CLEAN TWIN 1 - the healthy shape must be silent, or the whole thing gets switched off in a week.
+CovLedger $covHealthy
+$r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all')
+if ($r.rc -eq 0 -and $r.text -match 'coverage-ledger: ok') { Ok 'coverage-ledger SILENT on a healthy ledger' }
+else { Bad ('coverage-ledger fired on a healthy ledger (rc=' + $r.rc + '): ' + $r.text) }
+# CLEAN TWIN 2 - THE CRY-WOLF TWIN. -0.7% is the largest day-over-day DROP in the board's priced-cell count
+# across every retained board since 2026-07-18 (the whole retained history's worst is -5.0%, during the
+# 29 -> 492 commodity build-out). The 10% band was chosen from that measurement and must not fire here.
+$h = $covHealthy.Clone(); $h['guards/4-factor'] = @(2435, 2418); CovLedger $h
+$r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all')
+if ($r.rc -eq 0) { Ok 'coverage-ledger SILENT on a -0.7% move (the worst real day-over-day drop since 2026-07-18)' }
+else { Bad ('coverage-ledger fired on ordinary board movement (rc=' + $r.rc + ') - it will be switched off within a week: ' + $r.text) }
+# CLEAN TWIN 3 - ff-carry's count FALLS when the FF pull gets BETTER (fewer empty terms to re-probe), so its
+# ratchet is deliberately off. A watcher that fires when somebody fixes the thing it watches is worse than none.
+$h = $covHealthy.Clone(); $h['audit-ff-carry'] = @(12, 12); CovLedger $h
+$r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all')
+if ($r.rc -eq 0) { Ok 'coverage-ledger does NOT punish ff-carry for having fewer empty terms to re-probe' }
+else { Bad ('coverage-ledger fired when the FF pull IMPROVED (rc=' + $r.rc + ') - the tolerance-1.0 exemption was lost') }
+# CLEAN TWIN 4 - brand-new instrumentation must never turn the board red on the day it lands.
+$h = $covHealthy.Clone(); $h['audit-something-new'] = @(5, 5); CovLedger $h
+$r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all')
+if ($r.rc -eq 0 -and $r.text -match 'UNBASELINED') { Ok 'coverage-ledger reports an unbaselined new check as a note, never a finding' }
+else { Bad ('a brand-new instrumented check turned the ledger red (rc=' + $r.rc + ')') }
+# MUST FIRE 7 - a row that stopped being written. Same failure as (3) for a check that used to report.
+$h = $covHealthy.Clone(); $h['guards/4-factor'] = @(2435, 2435, ((Get-Date).AddDays(-9).ToString('yyyy-MM-dd') + ' 09:00:00')); CovLedger $h
+$r = RunPSAt $fxCov 'audit-coverage-ledger.ps1' @('-OutDir', (Join-Path $fxCov 'out'), '-Phase', 'all')
+if ($r.rc -eq 1 -and $r.text -match 'STALE') { Ok 'coverage-ledger FIRES on a check that stopped recording 9 days ago' }
+else { Bad ('coverage-ledger accepted a 9-day-old coverage row as current (rc=' + $r.rc + ')') }
+
+# THE EMITTER ITSELF must still round-trip, or every row above is fiction. Runs the REAL coverage-lib.ps1.
+$covEmitOk = $false
+try {
+  $covProbe = & {
+    . (Join-Path $fxCov 'coverage-lib.ps1')
+    $od = Join-Path $fxCov 'emit'
+    New-Item -ItemType Directory -Force $od | Out-Null
+    Write-CoverageRecord -Check 'fixture/real' -OutDir $od -Eligible 100 -Examined 40 -Detail 'fixture'
+    Write-CoverageRecord -Check 'fixture/blind' -OutDir $od -Eligible 100 -Examined 0 -Detail 'fixture'
+    Read-CoverageJson (Join-Path $od 'coverage-ledger.json')
+  }
+  $covEmitOk = ($covProbe -and $covProbe.checks.'fixture/real'.examined -eq 40 -and $covProbe.checks.'fixture/real'.skipped -eq 60 -and (-not $covProbe.checks.'fixture/real'.blind) -and $covProbe.checks.'fixture/blind'.blind)
+} catch { $covEmitOk = $false }
+if ($covEmitOk) { Ok 'coverage-lib records eligible/examined/skipped and marks a zero-examined row BLIND' }
+else { Bad 'coverage-lib no longer round-trips a record - every ledger row in this estate is fiction' }
+# and it must NOT write to the output stream: guards.ps1 and check-ad-cycles parse their own stdout.
+$covNoise = & { . (Join-Path $fxCov 'coverage-lib.ps1'); Write-CoverageRecord -Check 'fixture/noise' -OutDir (Join-Path $fxCov 'emit') -Eligible 1 -Examined 1 }
+if ($null -eq $covNoise -or @($covNoise).Count -eq 0) { Ok 'coverage-lib emits nothing to the output stream (it cannot pollute a caller''s stdout)' }
+else { Bad ('coverage-lib wrote ' + @($covNoise).Count + ' object(s) to the output stream - it will corrupt the stdout of every script that calls it') }
+Remove-Item $fxCov -Recurse -Force -ErrorAction SilentlyContinue
+
+# ---------------------------------------------------------------- N+10. the OUT-OF-BAND verification sample
+# FOUNDING BUG (2026-07-30): every accuracy number this estate prints is written by the code that wrote the
+# board. On the morning of 2026-07-30 "ACCURACY 0 of 1,844", "guards exit 0" and "2,640 cells scanned" were
+# all true as printed, and all three were sitting above a bag of cat food holding the SALMON crown. The
+# sampler exists to produce the one statement the board did not write about itself, and it has exactly two
+# ways to become worthless: hand the verifier OUR answer (then they confirm our price and never ask whether
+# the row is salmon), or quote a defect rate as a bare point estimate (then "3 of 30 = 10%" gets repeated as
+# fact when 3-of-30 is equally consistent with 2% and with 27%).
+# Both regions are extracted from the REAL scripts and executed against frozen synthetic input - a
+# transcribed copy would drift out of the shipping code the way the Lysol negative test did.
+$bvsPath = Join-Path $root 'build-verification-sample.ps1'
+$rsvPath = Join-Path $root 'record-sample-verdict.ps1'
+if (-not (Test-Path $bvsPath) -or -not (Test-Path $rsvPath)) {
+  Bad 'the out-of-band sampler scripts are MISSING - the only non-self-referential check on the board is gone, and this section EXAMINED NOTHING'
+} else {
+  $bvsTxt = ((Get-Content $bvsPath -Raw) + '')
+  $rsvTxt = ((Get-Content $rsvPath -Raw) + '')
+
+  # ---- (a) the DRAW: deterministic, seed-sensitive, and it must spill rather than shrink -----------------
+  $mDraw = [regex]::Match($bvsTxt, '# BEGIN-SAMPLE-DRAW[\s\S]*?# END-SAMPLE-DRAW')
+  if (-not $mDraw.Success) { Bad 'could not extract the BEGIN-SAMPLE-DRAW region from build-verification-sample.ps1 - the draw fixtures below CANNOT RUN' }
+  else {
+    $dr = & {
+      Invoke-Expression $mDraw.Value
+      [pscustomobject]@{
+        same     = ((Get-SampleScore '2026-07-30' 'salmon|Walmart') -eq (Get-SampleScore '2026-07-30' 'salmon|Walmart'))
+        seedDiff = ((Get-SampleScore '2026-07-30' 'salmon|Walmart') -ne (Get-SampleScore '2026-07-31' 'salmon|Walmart'))
+        keyDiff  = ((Get-SampleScore '2026-07-30' 'salmon|Walmart') -ne (Get-SampleScore '2026-07-30' 'salmon|Aldi'))
+        inRange  = ((Get-SampleScore '2026-07-30' 'salmon|Walmart') -ge 0 -and (Get-SampleScore '2026-07-30' 'salmon|Walmart') -lt 1)
+        # the live board shape on 2026-07-30: 492 crown cells, 2300 non-crown
+        live     = (Get-StratumAllocation 100 0.6 492 2300)
+        srs      = (Get-StratumAllocation 100 0.0 492 2300)
+        # MUST SPILL: a stratum too small for its share must not shrink the sample below what was asked for
+        thinCrown = (Get-StratumAllocation 100 0.6 10 2300)
+        thinOther = (Get-StratumAllocation 100 0.6 492 5)
+        overdraw  = (Get-StratumAllocation 5000 0.6 492 2300)
+      }
+    }
+    if ($dr.same -and $dr.seedDiff -and $dr.keyDiff -and $dr.inRange) { Ok 'sample draw is deterministic per (seed, cell), changes with the seed, and stays in [0,1)' }
+    else { Bad ("sample draw score is not a stable seeded uniform: same=$($dr.same) seedDiff=$($dr.seedDiff) keyDiff=$($dr.keyDiff) inRange=$($dr.inRange)") }
+    if ($dr.live.crown -eq 60 -and $dr.live.noncrown -eq 40 -and $dr.srs.crown -eq 0 -and $dr.srs.noncrown -eq 100 -and
+        $dr.thinCrown.drawn -eq 100 -and $dr.thinOther.drawn -eq 100 -and $dr.overdraw.drawn -eq 2792) {
+      Ok 'stratum allocation: 60/40 on the live shape, -CrownShare 0 gives a plain whole-board draw, a thin stratum SPILLS instead of shrinking the sample, and an over-large -N clamps to the population'
+    } else {
+      Bad ("stratum allocation wrong: live=$($dr.live.crown)/$($dr.live.noncrown) srs=$($dr.srs.crown)/$($dr.srs.noncrown) thinCrown=$($dr.thinCrown.drawn) thinOther=$($dr.thinOther.drawn) overdraw=$($dr.overdraw.drawn)")
+    }
+  }
+
+  # ---- (b) THE BLIND WORKLIST. The must-fire and the clean twin are the same run read two ways ----------
+  # MUST FIRE if the worklist ever carries the board's own answer; the TWIN proves the sealed key still has
+  # it, so the check cannot pass by the sampler simply writing nothing (an empty worklist leaks nothing).
+  $fxVs = NewFxDir 'verif-sample'
+  New-Item -ItemType Directory -Force (Join-Path $fxVs 'out') | Out-Null
+  Copy-Item $bvsPath (Join-Path $fxVs 'build-verification-sample.ps1')
+  Copy-Item $rsvPath (Join-Path $fxVs 'record-sample-verdict.ps1')
+  # FROZEN SYNTHETIC BOARD - never derived from the live board, so the bug it encodes cannot evaporate.
+  # zzz-salmon carries the founding defect verbatim: a bag of cat food holding the crown, 20.8% under the
+  # runner-up, with a real price and a plausible size. ZZQQ tokens exist only to be searched for.
+  $fxRows = New-Object System.Collections.ArrayList
+  [void]$fxRows.Add('{"id":"zzz-salmon","commodity":"ZZZ Salmon Fillet","unit":"lb","cheapest_store":"ZZZ-Mart","cheapest_price":1.23,"stores":[{"store":"ZZZ-Mart","per_unit":1.23,"unit":"lb","type":"everyday","item":"ZZQQ Dry Food for Adult Cats ZZQQ","size":"16 lb","ad":"$19.68"},{"store":"ZZZ-Grocer","per_unit":9.99,"unit":"lb","type":"everyday","item":"ZZQQ Atlantic Salmon Fillet ZZQQ","size":"lb","ad":"$9.99"}]}')
+  for ($fi = 1; $fi -le 49; $fi++) {
+    [void]$fxRows.Add('{"id":"zzz-item-' + $fi + '","commodity":"ZZZ Item ' + $fi + '","unit":"lb","cheapest_store":"ZZZ-Mart","cheapest_price":1.0,"stores":[{"store":"ZZZ-Mart","per_unit":1.0,"unit":"lb","type":"everyday","item":"ZZQQ Product ' + $fi + ' ZZQQ","size":"lb","ad":"$1.00"},{"store":"ZZZ-Grocer","per_unit":2.0,"unit":"lb","type":"everyday","item":"ZZQQ Other ' + $fi + ' ZZQQ","size":"lb","ad":"$2.00"}]}')
+  }
+  $fxBoard = '{"built_at":"2026-01-01T00:00:00","week_of":"2026-01-01","comparison":[' + (($fxRows.ToArray()) -join ',') + ']}'
+  $fxEnc = New-Object System.Text.UTF8Encoding($false)
+  [IO.File]::WriteAllText((Join-Path $fxVs 'out\comparison-2026-01-01.json'), $fxBoard, $fxEnc)
+
+  $oVs = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $fxVs 'build-verification-sample.ps1') -N 100 -Quiet 2>&1 | ForEach-Object { [string]$_ }
+  $rcVs = $LASTEXITCODE
+  $wlF = Join-Path $fxVs 'out\verification-worklist-2026-01-01.csv'
+  $kyF = Join-Path $fxVs 'out\verification-sample-2026-01-01.json'
+  if ($rcVs -eq 0 -and (Test-Path $wlF) -and (Test-Path $kyF)) {
+    $wlT = ((Get-Content $wlF -Raw) + '')
+    $kyT = ((Get-Content $kyF -Raw) + '')
+    $leaks = New-Object System.Collections.ArrayList
+    if ($wlT -match 'ZZQQ')  { [void]$leaks.Add('the board product NAME') }
+    if ($wlT -match '19\.68') { [void]$leaks.Add('the board PRICE') }
+    if ($wlT -match 'crown')  { [void]$leaks.Add('which cells are CROWNED') }
+    if ($leaks.Count -eq 0) { Ok 'the verification worklist is BLIND - it carries no product name, no price and no crown flag' }
+    else { Bad ('the verification worklist LEAKS ' + ($leaks -join ' + ') + ' - a verifier handed our own answer confirms it instead of checking it, which is the entire failure this sampler exists to escape') }
+    # CLEAN TWIN: the sealed key must hold everything the worklist withheld, or the test above passes on an
+    # empty file. It must also carry the stratum populations, without which no reweighting is possible.
+    if ($kyT -match 'ZZQQ' -and $kyT -match '19\.68' -and $kyT -match 'crown' -and $kyT -match '"population"') {
+      Ok 'the sealed key still holds the board answer + stratum populations (so the blind worklist is blind by omission, not by emptiness)'
+    } else { Bad 'the sealed key is missing the board answer or the stratum populations - nothing can be adjudicated or reweighted from it' }
+    # ORDERING IS A CHANNEL TOO. Drawn stratum by stratum, the worklist arrives as a crown block followed by
+    # a non-crown block, and the crown share is documented in the sampler's own header - so ROW POSITION
+    # alone would tell the verifier which cells the board calls cheapest. The column checks above cannot see
+    # that, because no column is wrong. Assert the two strata are actually shuffled together.
+    $kyO = ((Get-Content $kyF -Raw) + '') | ConvertFrom-Json
+    $seqStrat = @($kyO.cells | Sort-Object seq | ForEach-Object { [string]$_.stratum })
+    $runsN = 0
+    if ($seqStrat.Count -gt 0) { $runsN = 1; for ($si = 1; $si -lt $seqStrat.Count; $si++) { if ($seqStrat[$si] -ne $seqStrat[$si - 1]) { $runsN++ } } }
+    if ($runsN -ge 10) { Ok ('the worklist INTERLEAVES the strata (' + $runsN + ' runs over ' + $seqStrat.Count + ' rows) - row position does not publish the crown flag the columns withhold') }
+    else { Bad ('the worklist is ordered stratum-by-stratum (' + $runsN + ' runs over ' + $seqStrat.Count + ' rows) - row position ALONE tells the verifier which cells the board calls cheapest, which is the crown flag leaked through the ordering') }
+    if (@($wlT -split "`r?`n" | Where-Object { $_ -match '^"' }).Count -eq 100) { Ok 'the worklist holds exactly the 100 rows that were asked for' }
+    else { Bad ('the worklist row count is not the requested 100: ' + @($wlT -split "`r?`n" | Where-Object { $_ -match '^"' }).Count) }
+    # REPRODUCIBLE: same board, same seed, byte-identical worklist. A sample nobody can redraw is a sample
+    # nobody can audit, and Get-Random would silently make every past worklist unreproducible.
+    $h1 = (Get-FileHash $wlF).Hash
+    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $fxVs 'build-verification-sample.ps1') -N 100 -Force -Quiet 2>&1
+    if ((Get-FileHash $wlF).Hash -eq $h1) { Ok 'the draw is REPRODUCIBLE - re-running the sampler on the same board rebuilds a byte-identical worklist' }
+    else { Bad 'the draw is NOT reproducible - a disputed verdict can never be traced back to the cell it graded' }
+    # and it must REFUSE to silently redraw over a worklist somebody may already be verifying
+    $o2 = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $fxVs 'build-verification-sample.ps1') -N 100 2>&1 | ForEach-Object { [string]$_ }
+    if (($o2 -join ' ') -match 'already exists') { Ok 'the sampler refuses to overwrite an existing worklist without -Force (no redrawing until the answer is convenient)' }
+    else { Bad 'the sampler silently redrew over an existing sample - a sample you may redraw at will is not a sample' }
+  } else {
+    Bad ('build-verification-sample did not produce a worklist from a valid frozen board (rc=' + $rcVs + '): ' + ($oVs -join ' | '))
+  }
+  # BLIND: no board at all must be exit 3, never a cheerful empty sample.
+  $fxVsE = NewFxDir 'verif-sample-blind'
+  New-Item -ItemType Directory -Force (Join-Path $fxVsE 'out') | Out-Null
+  Copy-Item $bvsPath (Join-Path $fxVsE 'build-verification-sample.ps1')
+  $oE = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $fxVsE 'build-verification-sample.ps1') 2>&1 | ForEach-Object { [string]$_ }
+  if ($LASTEXITCODE -eq 3 -and ($oE -join ' ') -match 'BLIND') { Ok 'the sampler goes BLIND (exit 3) with no board to draw from, instead of reporting an empty sample' }
+  else { Bad ('the sampler returned ' + $LASTEXITCODE + ' with no board present - a sample of nothing must never read as a result') }
+
+  # ---- (c) THE ARITHMETIC. Frozen numbers, checked against hand-computed values -------------------------
+  $mSt = [regex]::Match($rsvTxt, '# BEGIN-SAMPLE-STATS[\s\S]*?# END-SAMPLE-STATS')
+  if (-not $mSt.Success) { Bad 'could not extract the BEGIN-SAMPLE-STATS region from record-sample-verdict.ps1 - the interval fixtures below CANNOT RUN' }
+  else {
+    $stx = & {
+      Invoke-Expression $mSt.Value
+      [pscustomobject]@{
+        # MUST FIRE: 0 defects must NOT produce a zero-width interval. This is the founding bug in one line -
+        # the Wald interval prints "0.0% +/- 0.0%" here, which is the false certainty of "ACCURACY 0 of 1,844".
+        clean30  = (Get-WilsonInterval 0 30)
+        clean100 = (Get-WilsonInterval 0 100)
+        # the n=30 vs n=100 argument, at a 20% rate: +/-13.9 points against +/-7.8
+        p20n30   = (Get-WilsonInterval 6 30)
+        p20n100  = (Get-WilsonInterval 20 100)
+        p02n100  = (Get-WilsonInterval 2 100)
+        # MUST FIRE: the crown-weighted raw fraction is NOT the board rate. 7 defects in 100 drawn 60/40 over
+        # a 492/2300 board is 7.0% raw and 3.8% reweighted - quote the raw one and the board is overstated 1.8x.
+        strat    = (Get-StratifiedEstimate @(
+                      [pscustomobject]@{ name = 'crown';    population = 492;  n = 60; x = 6 },
+                      [pscustomobject]@{ name = 'noncrown'; population = 2300; n = 40; x = 1 }))
+        # MUST FIRE: a stratum with ZERO verified cells contributes its whole weight as UNCERTAINTY. Dropping
+        # it would be the zero-rows lie wearing a percentage sign.
+        blindStratum = (Get-StratifiedEstimate @(
+                      [pscustomobject]@{ name = 'crown';    population = 492;  n = 60; x = 6 },
+                      [pscustomobject]@{ name = 'noncrown'; population = 2300; n = 0;  x = 0 }))
+        # CLEAN TWIN: a census leaves nothing unsampled, so the finite-population correction must drive the
+        # design-based half-width to EXACTLY zero. This is the twin that catches the FPC being silently
+        # disabled - which is what a $Nh/$nh name collision did to this function while it was being written.
+        census   = (Get-StratifiedEstimate @(
+                      [pscustomobject]@{ name = 'crown';    population = 492;  n = 492;  x = 20 },
+                      [pscustomobject]@{ name = 'noncrown'; population = 2300; n = 2300; x = 30 }))
+        need1pt  = (Get-RequiredN 0.02 0.01 2792)
+        need3pt  = (Get-RequiredN 0.02 0.03 2792)
+        needCensus = (Get-RequiredN 0.20 0.01 2792)
+        needBadTarget = (Get-RequiredN 0.20 0.0 2792)
+        refuse29 = (Test-CanQuoteRate 29 30)
+        refuse30 = (Test-CanQuoteRate 30 30)
+        refuse0  = (Test-CanQuoteRate 0 30)
+      }
+    }
+    if ($stx.clean30.hi -gt 0.10 -and $stx.clean30.hi -lt 0.13 -and $stx.clean100.hi -gt 0.03 -and $stx.clean100.hi -lt 0.04) {
+      Ok ('ZERO defects still yields a real upper bound (0/30 -> up to ' + ('{0:N1}' -f (100 * $stx.clean30.hi)) + '%, 0/100 -> up to ' + ('{0:N1}' -f (100 * $stx.clean100.hi)) + '%) - a clean sample is never certainty')
+    } else { Bad ('a zero-defect sample produced a collapsed interval (0/30 hi=' + $stx.clean30.hi + ', 0/100 hi=' + $stx.clean100.hi + ') - that is the Wald bug and it prints false certainty') }
+    if ([Math]::Abs($stx.p20n30.half - 0.1390) -lt 0.002 -and [Math]::Abs($stx.p20n100.half - 0.0777) -lt 0.002 -and [Math]::Abs($stx.p02n100.half - 0.0323) -lt 0.002) {
+      Ok 'Wilson half-widths match the hand-computed values (6/30 +/-13.9 pts, 20/100 +/-7.8, 2/100 +/-3.2) - the n=30 sample cannot tell a 10% board from a 30% board'
+    } else { Bad ("Wilson arithmetic drifted: 6/30 half=$($stx.p20n30.half) (want 0.1390), 20/100 half=$($stx.p20n100.half) (want 0.0777), 2/100 half=$($stx.p02n100.half) (want 0.0323)") }
+    if ([Math]::Abs($stx.strat.p - 0.0382) -lt 0.001 -and $stx.strat.p -lt 0.05 -and $stx.strat.x -eq 7 -and $stx.strat.n -eq 100) {
+      Ok ('the crown-weighted draw is REWEIGHTED to the board (7/100 raw = 7.0% becomes ' + ('{0:N1}' -f (100 * $stx.strat.p)) + '% whole-board) - quoting the raw sample fraction would overstate the board 1.8x')
+    } else { Bad ("the stratified reweighting is wrong or gone: p=$($stx.strat.p) (want 0.0382 from x=$($stx.strat.x)/n=$($stx.strat.n))") }
+    if ($stx.blindStratum.hi -gt 0.80) { Ok ('a stratum with zero verified cells blows the whole-board ceiling to ' + ('{0:N0}' -f (100 * $stx.blindStratum.hi)) + '% instead of being silently dropped') }
+    else { Bad ('an unsampled stratum was silently dropped from the interval (hi=' + $stx.blindStratum.hi + ') - 2,300 unchecked cells cannot read as agreement') }
+    if ([Math]::Abs($stx.strat.nWald - 0.0415) -lt 0.002 -and $stx.census.nWald -lt 1e-9) {
+      Ok 'the finite-population correction is live (60+40 of 2792 -> +/-4.2 pts design-based) and collapses to exactly zero on a census'
+    } else { Bad ("the finite-population correction is disabled or wrong: sample nWald=$($stx.strat.nWald) (want ~0.0415), census nWald=$($stx.census.nWald) (want 0)") }
+    if ($stx.need1pt -eq 594 -and $stx.need3pt -eq 82 -and $stx.needCensus -eq 1921 -and $stx.needBadTarget -eq -1) {
+      Ok 'required-n is honest about its own limits: +/-3 pts at a 2% rate needs 82 cells, +/-1 pt needs 594, +/-1 pt at a 20% rate needs 1,921 of 2,792 (69% of the board - a census in all but name), and an impossible target returns -1'
+    } else { Bad ("required-n arithmetic is wrong: 1pt@2%=$($stx.need1pt) 3pt@2%=$($stx.need3pt) 1pt@20%=$($stx.needCensus) badTarget=$($stx.needBadTarget) (want 594, 82, 1921, -1)") }
+    if ((-not $stx.refuse29) -and $stx.refuse30 -and (-not $stx.refuse0)) { Ok 'the rate refusal is armed: 29 verified rows quote nothing, 30 do, and zero rows never do' }
+    else { Bad ("the too-few-samples refusal is broken: 29=$($stx.refuse29) 30=$($stx.refuse30) 0=$($stx.refuse0)") }
+  }
+
+  # ---- (d) the recorder end to end, on the frozen sample it just drew ------------------------------------
+  if (Test-Path $kyF) {
+    function FxFill([string]$src, [string]$dst, [int]$howMany, [string]$verdict) {
+      $ls = @(Get-Content $src)
+      $acc = New-Object System.Collections.ArrayList
+      $seen = 0
+      foreach ($ln in $ls) {
+        if ($ln -match '^\s*#' -or $ln -like 'ticket,*') { [void]$acc.Add($ln); continue }
+        $seen++
+        $tk = [regex]::Match($ln, '^"([0-9A-F]+)"').Groups[1].Value
+        $v = if ($seen -le $howMany) { $verdict } else { '' }
+        [void]$acc.Add('"' + $tk + '",' + $seen + ',"x","lb","ZZZ-Mart",' + $v + ',,,')
+      }
+      [IO.File]::WriteAllText($dst, (($acc.ToArray()) -join "`r`n") + "`r`n", (New-Object System.Text.UTF8Encoding($false)))
+    }
+    # MUST REFUSE: 12 verified rows is not a rate.
+    FxFill $wlF (Join-Path $fxVs 'out\fx-few.csv') 12 'ok'
+    $oR = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $fxVs 'record-sample-verdict.ps1') -VerdictFile (Join-Path $fxVs 'out\fx-few.csv') -SampleFile $kyF 2>&1 | ForEach-Object { [string]$_ }
+    $rcR = $LASTEXITCODE
+    if ($rcR -eq 3 -and ($oR -join ' ') -match 'NO RATE QUOTED') { Ok 'the recorder REFUSES to quote a defect rate from 12 verified cells (exit 3, could-not-evaluate)' }
+    else { Bad ('the recorder quoted a rate from 12 cells (rc=' + $rcR + ') - a rate from 12 rows is not a small rate, it is not a rate: ' + ($oR -join ' | ')) }
+    # ...and must never print a bare point estimate once it CAN quote: every rate arrives with an interval.
+    FxFill $wlF (Join-Path $fxVs 'out\fx-all.csv') 100 'ok'
+    $oR2 = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $fxVs 'record-sample-verdict.ps1') -VerdictFile (Join-Path $fxVs 'out\fx-all.csv') -SampleFile $kyF 2>&1 | ForEach-Object { [string]$_ }
+    $rcR2 = $LASTEXITCODE
+    $txtR2 = ($oR2 -join ' ')
+    if ($rcR2 -eq 0 -and $txtR2 -match '95% CI' -and $txtR2 -match 'WHOLE BOARD' -and $txtR2 -match 'RESOLUTION') {
+      Ok 'the recorder quotes a whole-board rate only WITH its 95% interval and states what n would resolve it'
+    } else { Bad ('the recorder did not report an interval-bearing whole-board rate (rc=' + $rcR2 + '): ' + $txtR2) }
+    # a 100-of-100 CLEAN sample must still refuse to claim the board is clean
+    if ($txtR2 -match '95% CI 0\.0% to [1-9]') { Ok 'a 100-cell sample with ZERO defects still publishes a non-zero upper bound - "we found nothing" never becomes "there is nothing"' }
+    else { Bad ('a zero-defect sample reported a zero-width whole-board interval - that is the clean bill of health that has never once been true here: ' + $txtR2) }
+    # unverifiable rows must leave the DENOMINATOR, not pass as ok
+    FxFill $wlF (Join-Path $fxVs 'out\fx-unv.csv') 100 'unverifiable'
+    $oR3 = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $fxVs 'record-sample-verdict.ps1') -VerdictFile (Join-Path $fxVs 'out\fx-unv.csv') -SampleFile $kyF 2>&1 | ForEach-Object { [string]$_ }
+    if ($LASTEXITCODE -eq 3 -and ($oR3 -join ' ') -match 'proved NOTHING') { Ok 'an all-unverifiable sample (bot walls) reports that it proved NOTHING - it never counts as 100 passes' }
+    else { Bad ('an all-unverifiable sample was scored as a result (rc=' + $LASTEXITCODE + ') - a bot wall is not a clean cell: ' + ($oR3 -join ' | ')) }
+  }
+  Remove-Item $fxVs, $fxVsE -Recurse -Force -ErrorAction SilentlyContinue
+}
+
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2

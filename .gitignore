@@ -109,6 +109,12 @@ site-backups/*
 /grocery/out/consistency-report.json
 /grocery/out/category-coverage-report.json
 /grocery/out/coverage-regression.json
+# per-RUN coverage observations, rewritten by every guards / check-ad-cycles run. Regenerable output, and it
+# would rebase-conflict between the cloud job and the local browser agents exactly like comparison-*.json.
+# The ACCEPTED baseline it is judged against (grocery/coverage-baseline.json) is deliberately NOT here: that
+# is durable state, it must travel with the repo, and a ratchet whose high-water mark is machine-local is
+# not a ratchet.
+/grocery/out/coverage-ledger.json
 /meal-prep/db/published-hashes.json
 /meal-prep/pipeline/catalog-digest.json
 *.bak-*

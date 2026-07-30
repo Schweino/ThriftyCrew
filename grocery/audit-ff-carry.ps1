@@ -16,11 +16,31 @@ param([switch]$Alert, [string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
+# COVERAGE LEDGER. THE FOUNDING INCIDENT OF THIS WHOLE COMPONENT IS IN THIS FILE: the .ToArray() note ~30
+# lines down records that this script threw on its own report line on EVERY run since 2026-07-13 - after all
+# 464 Freshop probes had been made and BEFORE it printed one word - so 'ff-carry' appears ZERO times in 2,716
+# lines of ad-cycle-log.txt and the Family Fare pull-drop watch was decorative for 17 days. Nothing could
+# notice, because a check that produces no output produces nothing to be suspicious of either.
+# A ledger row is what makes that noticeable: no row, or a row several days old, is a finding in
+# audit-coverage-ledger.ps1 (NEVER-RECORDED / STALE) even though this script said nothing at all.
+# It is a function so every exit path can use it, and it returns nothing on purpose - Write-Output inside a
+# function pollutes the caller's stdout, and check-ad-cycles parses this script's stdout.
+function Emit-Coverage([int]$elig, [int]$exam, [string]$why) {
+  try {
+    $covLib = Join-Path $root 'coverage-lib.ps1'
+    if (Test-Path $covLib) {
+      . $covLib
+      if ($exam -le 0) { Write-CoverageRecord -Check 'audit-ff-carry' -OutDir $OutDir -Eligible $elig -Examined $exam -Detail $why -Blind }
+      else { Write-CoverageRecord -Check 'audit-ff-carry' -OutDir $OutDir -Eligible $elig -Examined $exam -Detail $why }
+    }
+  } catch { }
+}
+$probed = 0
 $ff = Get-ChildItem (Join-Path $OutDir 'regular\family-fare-regular-*.json') -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
-if (-not $ff) { Write-Output 'ff-carry: SKIP (no FF regular file)'; exit 0 }
+if (-not $ff) { $null = Emit-Coverage 0 0 'no family-fare-regular file to read empty_terms from - the FF pull-drop watch had nothing to work with'; Write-Output 'ff-carry: SKIP (no FF regular file)'; exit 0 }
 $doc = ConvertFrom-Json ([IO.File]::ReadAllText($ff.FullName))
 $emptyTerms = @($doc.empty_terms)
-if ($emptyTerms.Count -eq 0) { Write-Output 'ff-carry: OK  the FF pull left no empty terms'; exit 0 }
+if ($emptyTerms.Count -eq 0) { $null = Emit-Coverage 0 0 ('the FF pull left no empty terms in ' + $ff.Name + ' - nothing needed re-probing'); Write-Output 'ff-carry: OK  the FF pull left no empty terms'; exit 0 }
 
 $tmp = ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $root 'commodities.json'))); $commods = @($tmp)
 $terms = (ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $root 'commodity-search.json')))).terms
@@ -40,7 +60,12 @@ $victims = New-Object System.Collections.Generic.List[object]
 foreach ($term in $emptyTerms) {
   $c = $byId[$termToId[[string]$term]]
   $items = @()
-  try { $r = Invoke-RestMethod -Uri ("$b/products?app_key=$ak&store_id=$sid&q=" + [uri]::EscapeDataString([string]$term) + "&limit=15&fields=name,price,base_price") -Headers $UA -TimeoutSec 25; $items = @($r.items) } catch {}
+    # $probed is incremented INSIDE the try, after the call returns - so it counts probes that got a RESPONSE,
+  # not times round the loop. That is the whole distinction the coverage ledger exists for: a run where
+  # Freshop refuses every call would otherwise record 464 examined and look identical to a healthy run,
+  # when in truth it examined nothing and proved nothing. Counted this way it records 0 of 464, which the
+  # ledger reports as BLIND.
+  try { $r = Invoke-RestMethod -Uri ("$b/products?app_key=$ak&store_id=$sid&q=" + [uri]::EscapeDataString([string]$term) + "&limit=15&fields=name,price,base_price") -Headers $UA -TimeoutSec 25; $items = @($r.items); $probed++ } catch {}
   Start-Sleep -Milliseconds 400
   $good = @($items | Where-Object { $_.name -and (Match-Local $c ([string]$_.name)) -and ($_.base_price -or $_.price) })
   if ($good.Count) { $victims.Add([pscustomobject]@{ term = [string]$term; commodity = $termToId[[string]$term]; product = [string]$good[0].name }) }
@@ -55,6 +80,13 @@ foreach ($term in $emptyTerms) {
 # pull-drop watch (the 2026-07-13 ground-pork class) was decorative for its entire life.
 # ToArray() also keeps the JSON shape right at every size - [] at zero, [ {..} ] at one - where a bare list
 # double-wraps and ConvertTo-Json would unwrap a single victim into an object.
+# COVERAGE FIRST, REPORT SECOND - and that order is the whole point here. The very next line is the one that
+# threw on every run for 17 days (@( ) around a List[object]; see its own note below), and NOTHING after it
+# ran. Recording coverage BEFORE it means a repeat of that failure still leaves a row saying how many terms
+# were actually probed, instead of leaving no trace whatsoever.
+# $probed counts probes that got a RESPONSE, not loop iterations: a run where Freshop refuses every call is
+# 0 examined of N eligible, which the ledger reports as BLIND - not as a clean bill of health.
+$null = Emit-Coverage $emptyTerms.Count $probed ('empty FF search terms re-probed against Freshop from ' + $ff.Name)
 $report = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); empty_terms = $emptyTerms.Count; confirmed_victims = $victims.ToArray() }
 Set-Content (Join-Path $OutDir 'ff-carry-report.json') -Value ($report | ConvertTo-Json -Depth 4) -Encoding UTF8
 

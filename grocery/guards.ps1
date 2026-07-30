@@ -258,6 +258,17 @@ foreach ($g in @(
     # violate it today and nearly all need a paced per-store browser pass, so a gate that fails from day one is
     # a gate that gets switched off. It fails when a store gets WORSE than out\tile-integrity-baseline.json, so
     # the number can only go down. Flip -Strict on once it reaches zero and it becomes the hard invariant.
+        # known-wrong blocklist (2026-07-30, Component 2) - "no crown a reasoner has ruled wrong is on the page".
+    # Binary and 100% precision BY CONSTRUCTION: it fires only on a (commodity, store, product) that was
+    # already ADJUDICATED wrong, matched on the NORMALIZED product name at that exact commodity and store.
+    # It exists because findings used to live as PROSE in .md files - honeydew was written up on 2026-07-29
+    # with the store's own arithmetic ($1.49/lb x 4.0 lb = $5.96) and was still the published crown the next
+    # morning, because nothing in the publish path can read a paragraph. This is a REGRESSION gate, so it is
+    # GREEN today by design: all 19 seeded rulings are already fixed. Replayed against the 19 dated boards it
+    # goes red on 12 of them and blocks 44 cells, 33 of which were CROWNS, with zero false positives - so it
+    # is not a gate that can never arm. Exit 3 (blind - missing/empty/unevaluable list, or a board with no
+    # named priced cells) surfaces here as a WARN naming what went unproven, never as a silent pass.
+    @{ f='audit-known-wrong.ps1';       n='no product a reasoner already ruled wrong is priced on the board (known-wrong blocklist)' },
     @{ f='audit-tile-integrity.ps1';    n='ZERO shipped links disagree with their tile (hard), and no store regressed on coverage (ratchet)' })) {
   $p = Join-Path $root $g.f
   if (-not (Test-Path $p)) { [void]$fail.Add(("MISSING GUARD SCRIPT: " + $g.f)); continue }
@@ -971,7 +982,82 @@ catch {
   [void]$fail.Add('HARD FAIL: guard 12 (board freshness vs ads) ERRORED and therefore proved nothing: ' + $_.Exception.Message)
 }
 
+# ---------------------------------------------------------------- coverage ledger (record, do not judge)
+# EVERY NUMBER ABOVE IS THROWN AWAY THE MOMENT THIS SCRIPT EXITS. OkUnlessBlind forces "no violations" and
+# "nothing examined" apart WITHIN a run, and that is the fix that caught guard 11 saying ok over 0 of 6,960
+# Baker's rows. It cannot catch the two failures that need a memory:
+#   1. A check that DID NOT RUN leaves no output to be suspicious of. audit-ff-carry threw on its own report
+#      line before printing anything and 'ff-carry' appears ZERO times in 2,716 lines of ad-cycle-log.txt -
+#      the Family Fare pull-drop watch was decorative for 17 days and nothing here could tell.
+#   2. A PARTIAL collapse. Guard 4 falling from 2,435 compared cells to 400 is not blind, it is 84% blind,
+#      and every zero-rows test in this file reads that as a pass.
+# So write the counts down. This block RECORDS ONLY - it has no opinion, changes no verdict, and cannot fail
+# the board. audit-coverage-ledger.ps1 is what compares them to out\..\coverage-baseline.json.
+# IT DELIBERATELY TOUCHES NO EXISTING GUARD. Every number here is a variable the guards above already
+# compute; the one thing it derives for itself is the pin count, read straight from the overrides file, so
+# guard 3 did not have to grow a counter to be measured.
+# THE EMPTY CATCH IS THE POINT, NOT AN OVERSIGHT. If this block throws, the rows are MISSING, and a missing
+# row is exactly what audit-coverage-ledger reports as NEVER-RECORDED. The failure surfaces where it can be
+# acted on. It must NOT surface on stderr: this file runs under EAP=Stop and several harnesses pipe a native
+# child with 2>&1, where one stderr line becomes a terminating throw in the parent.
+try {
+  $covLib = Join-Path $root 'coverage-lib.ps1'
+  if (Test-Path $covLib) {
+    . $covLib
+    $covOut = Join-Path $root 'out'
+    $pinTotal = 0
+    $covOvrF = Join-Path $root 'board-price-overrides.json'
+    if (Test-Path $covOvrF) { try { $pinTotal = @((Get-Content $covOvrF -Raw | ConvertFrom-Json).cells).Count } catch { $pinTotal = 0 } }
+    $bkN = 0
+    if ($null -ne $bkRows) { $bkN = @($bkRows).Count }
+    $g6Skip = 0
+    if ($null -ne $g6NoHistory) { $g6Skip = @($g6NoHistory).Count }
+    Write-CoverageRecord -Check 'guards/3-pin-derivable' -OutDir $covOut -Eligible $pinTotal -Examined $pinChecked -Skipped $pinSkipped `
+      -Detail ('override pins re-derived from their own verified link; ' + $pinSkipped + ' could not be re-derived (id on neither board, or no usable unit basis)')
+    Write-CoverageRecord -Check 'guards/3-pin-identity' -OutDir $covOut -Eligible $pinTotal -Examined $pinDriftScannable `
+      -Detail 'pins whose link audit-name-drift actually examined (guard 3 WRONG-PRODUCT clause). Zero here means that hard fail is structurally unfirable, which is how it sat at 0 of 16 while the ok line said 16.'
+    Write-CoverageRecord -Check 'guards/4-factor' -OutDir $covOut -Eligible ($fcChecked + $unpriceable) -Examined $fcChecked -Skipped $unpriceable `
+      -Detail ('board cells compared against their linked product; ' + $unpriceable + ' linked cell(s) carried no usable unit basis. Cells skipped for a MISSING store link are NOT in this denominator - guard 4''s per-store blind warn owns that class.')
+    Write-CoverageRecord -Check 'guards/5-multipack' -OutDir $covOut -Eligible $mpSeen -Examined $mpSeen `
+      -Detail ('multipack verdicts formed; ' + $mpTotals + ' pack-total size(s) verified by arithmetic. Sam''s live feed (out\sams) and the Baker''s/Fareway deal files are outside this guard''s file loop entirely.')
+    Write-CoverageRecord -Check 'guards/6-collapse' -OutDir $covOut -Eligible ($g6Checked + $g6Skip) -Examined $g6Checked -Skipped $g6Skip `
+      -Detail ('stores compared against their own capture history; no history for: ' + (@($g6NoHistory | Sort-Object) -join ', '))
+    Write-CoverageRecord -Check 'guards/9-freshness' -OutDir $covOut -Eligible $aged -Examined $aged `
+      -Detail 'stores that completed a freshness note. Guard 10 names guard 9 as the ONLY staleness watch on Bakers, Fareway, Sams and Walmart.'
+    Write-CoverageRecord -Check 'guards/10-store-charges' -OutDir $covOut -Eligible $checked -Examined $checked `
+      -Detail ('rows verified against the store''s own current_price; stores recording no current_price at all: ' + (@($noContract.Keys | Sort-Object) -join ', '))
+    Write-CoverageRecord -Check 'guards/11-bakers-provenance' -OutDir $covOut -Eligible $bkN -Examined $bkN `
+      -Detail 'Bakers rows whose price provenance was checked (the founding bug of the ledger: ok over 0 of 6,960 rows for five days)'
+  }
+} catch { }
+
 # ---------------------------------------------------------------- report
+# ADVISORY, never blocks: the COVERAGE RATCHET. Every count recorded just above is compared against
+# coverage-baseline.json, and a check that examined materially fewer rows than its accepted floor - or that
+# recorded nothing at all - gets named here. This is the only thing in the estate that can see a check going
+# PARTLY blind (2,435 cells falling to 400 is a pass everywhere else) or a check that stopped running
+# entirely (audit-ff-carry printed nothing for 17 days; absence leaves no output to be suspicious of).
+# ADVISORY ON PURPOSE. It ships with a -Gate switch that test-auditors proves goes red on the pre-change
+# state, and it is deliberately not passed here yet: this is brand-new machinery, "the fix is the bug" is
+# the most expensive lesson in this tree, and a coverage watcher whose own bug can withhold correct prices
+# from shoppers is a bad trade on day one. Flip -Gate on after the ledger has a few weeks of real numbers
+# and the baseline has been -Accept'ed at least once against a known-good run.
+# Same exit-3 contract as the delegated audits above: 3 means COULD NOT EVALUATE, which is not a pass.
+# NO STDERR REDIRECT HERE, DELIBERATELY - see the long note at the delegated-audit loop above: in PS 5.1,
+# redirecting a native child's stderr under EAP=Stop turns its first line into a TERMINATING throw.
+try {
+  $clPath = Join-Path $root 'audit-coverage-ledger.ps1'
+  if (-not (Test-Path $clPath)) {
+    [void]$warn.Add('audit-coverage-ledger.ps1 is MISSING - the coverage counts above were recorded but nothing compared them to a baseline, so a check that quietly stopped looking at rows is invisible again')
+  } else {
+    $clOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $clPath -Phase publish -Quiet
+    $clTxt = ((@($clOut) | Where-Object { $_ } | ForEach-Object { ([string]$_).Trim() }) -join ' | ')
+    if ($LASTEXITCODE -eq 0) { Say ('  ok    ' + $clTxt) }
+    elseif ($LASTEXITCODE -eq 3) { [void]$warn.Add('the coverage ratchet could NOT be evaluated, so NO check''s coverage was compared to its baseline this run: ' + $clTxt) }
+    else { [void]$warn.Add('coverage ratchet: ' + $clTxt) }
+  }
+} catch { Say ('  warn  could not run audit-coverage-ledger: ' + $_.Exception.Message) }
+
 Say ''
 foreach ($w in $warn) { Say ("  warn  " + $w) }
 if ($fail.Count -gt 0) {

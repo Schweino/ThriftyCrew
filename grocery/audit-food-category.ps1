@@ -49,15 +49,37 @@ if (Test-Path $rb) { $files += $rb }
 
 $find = New-Object System.Collections.Generic.List[object]
 $scanned = 0
+# COVERAGE LEDGER DENOMINATOR. $scanned alone cannot tell "clean" from "out of scope": this audit prints
+# "ok - N priced cells scanned" and N silently EXCLUDES every cell whose commodity maps to no class list and
+# every cell carrying no product name. MEASURED 2026-07-30: 2,661 scanned of 3,194 priced cells - 372 skipped
+# for no class (their categories.json label resolves to an empty class list) and 161 for no name. So a
+# categories.json relabel can shrink the wrong-class guard's reach by hundreds of cells while the ok line
+# reads exactly the same. Count the denominator BEFORE the scoping tests so that is visible.
+$eligible = 0; $skipNoClass = 0; $skipNoName = 0
 foreach ($f in $files) {
   foreach ($it in (Get-Content $f -Raw | ConvertFrom-Json).comparison) {
     $id = [string]$it.id
     $classes = ClassesFor $cat[$id]
-    if (-not $classes -or @($classes).Count -eq 0) { continue }
+    # WAS: if (-not $classes -or @($classes).Count -eq 0) { continue }  - a whole-COMMODITY skip that hid its
+    # cells from every count. Identical decision, moved one level in so each cell is counted before it is
+    # skipped. The findings loop below is unchanged and still runs only for a classed, named, priced cell.
+    $noClass = ((-not $classes) -or (@($classes).Count -eq 0))
     foreach ($s in $it.stores) {
+      # NO-CLASS cells are counted for the denominator ONLY. Their per_unit is read through TryParse, not
+      # through [double], because this loop now reaches rows the old whole-commodity `continue` never cast:
+      # a non-numeric per_unit on a Household/Pet/Baby/Personal-Care row would throw under EAP=Stop, exit
+      # this audit non-zero, and guards would read that as a HARD FAIL - a coverage counter taking the board
+      # down. Measured 2026-07-30: every per_unit in all 19 retained boards + recipe-board is Decimal or
+      # Int32, so this costs nothing today and cannot cost anything later.
+      if ($noClass) {
+        $puNc = 0.0
+        if ([double]::TryParse(([string]$s.per_unit), [ref]$puNc) -and ($puNc -gt 0)) { $eligible++; $skipNoClass++ }
+        continue
+      }
       if ([double]$s.per_unit -le 0) { continue }
+      $eligible++
       $nm = [string]$s.item
-      if (-not $nm) { continue }
+      if (-not $nm) { $skipNoName++; continue }
       $scanned++
       foreach ($cl in $classes) {
         $ex = [string]$lib.exempt.$cl
@@ -77,6 +99,22 @@ foreach ($f in $files) {
   }
 }
 
+# COVERAGE LEDGER: record what this audit examined, on EVERY exit path (the hard fail below, the BLIND exit
+# and the clean ok), so a shrinking scan is visible tomorrow instead of hiding behind an unchanged ok line.
+# Recording only: it changes no verdict and no exit code.
+# Guarded by Test-Path with a bare catch ON PURPOSE. If the lib is missing or the write fails, the ROW IS
+# MISSING - and a missing row is exactly what audit-coverage-ledger.ps1 reports as NEVER-RECORDED, so the
+# failure surfaces where someone can act on it. It must NOT surface on stderr: guards.ps1 and
+# test-auditors.ps1 invoke this script as a NATIVE CHILD, and under EAP=Stop with 2>&1 a single stderr line
+# becomes a terminating throw in the parent.
+try {
+  $covLib = Join-Path $root 'coverage-lib.ps1'
+  if (Test-Path $covLib) {
+    . $covLib
+    Write-CoverageRecord -Check 'audit-food-category' -OutDir $OutDir -Eligible $eligible -Examined $scanned -Skipped ($skipNoClass + $skipNoName) `
+      -Detail ('priced cells scanned for a wrong-CLASS product across ' + @($files).Count + ' board file(s); ' + $skipNoClass + ' cell(s) skipped because their commodity''s category maps to no class list, ' + $skipNoName + ' because the cell carries no product name')
+  }
+} catch { }
 if ($find.Count) {
   Write-Output ("FOOD-CLASS AUDIT FAILED: " + $find.Count + " cell(s) publish a wrong-class product:")
   foreach ($x in $find) { Write-Output ("  BUG  {0,-22} [{1,-12}] class={2,-14} '{3}'" -f $x.id, $x.store, $x.class, $x.item) }

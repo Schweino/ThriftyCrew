@@ -197,6 +197,16 @@ try {
       $tiPost = RunChild (Join-Path $root 'audit-tile-integrity.ps1') @() 3 'post-publish-tiles' -NonFatal
       if($tiPost -eq 3){ Log 'POST-PUBLISH: audit-tile-integrity was BLIND on the live board (zero links graded) - product-urls.json is empty or unreadable, the live links are UNVERIFIED. prune-bad-links will NOT fix this; check product-urls.json first.' }
       elseif($tiPost -ne 0){ Log 'POST-PUBLISH: audit-tile-integrity FAILED on the board that just went live - run prune-bad-links -Tol 0.32 and re-run -Phase links NOW.' }
+            # ---- THE OUT-OF-BAND SAMPLE (2026-07-30). Everything above this line is the board checking itself:
+      # guards, audits and the publish gate are all written by the same code that wrote the numbers, and on
+      # 2026-07-30 every one of them said OK over a bag of cat food holding the salmon crown. This draws a
+      # blind, reproducible 100-cell worklist for a human or an agent with a browser to grade INDEPENDENTLY.
+      # Placed BEFORE push-data on purpose: the worklist and its sealed key are the audit record, and
+      # push-data's `git add -A` is what banks them. -NonFatal because a sampler must never be able to stop
+      # the weekly run - it makes a statement ABOUT the board, it is not a gate ON it. Re-running -Phase links
+      # is safe: the sampler refuses to redraw an existing worklist without -Force, so runs 2 and 3 of a
+      # links phase (three happened in one run on 2026-07-29) are no-ops that leave the first draw standing.
+      $null = RunChild (Join-Path $root 'build-verification-sample.ps1') @() 8 'verif-sample' -NonFatal
       $null = RunChild (Join-Path $root 'push-data.ps1') @() 1 'push'
       Log 'PHASE links DONE. Agent: report audit-links/name-drift residue; re-resolve any form-flips and re-run -Phase links if needed.'
     }
