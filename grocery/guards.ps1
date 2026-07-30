@@ -151,7 +151,9 @@ foreach ($st in @(
 # every gate run. A real expiry still fails CLOSED via the coverage-regression guard above.
 try {
   $wfp = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-walmart-fullpull.ps1') 2>$null
-  if ($LASTEXITCODE -eq 1) { [void]$warn.Add([string]$wfp) } else { Say ("  ok    " + [string]$wfp) }
+  if ($LASTEXITCODE -eq 0) { Say ("  ok    " + [string]$wfp) }
+  elseif ($LASTEXITCODE -eq 3) { [void]$warn.Add('walmart-fullpull examined ZERO captures for a union store, so it proves nothing this run: ' + [string]$wfp) }
+  else { [void]$warn.Add([string]$wfp) }
 } catch { Say ("  warn  could not run audit-walmart-fullpull: " + $_.Exception.Message) }
 
 # ADVISORY, never blocks: per-CELL drop detector (Brad caught Fareway's chicken breast missing by eye on
@@ -161,7 +163,9 @@ try {
 # names is a real, new leak.
 try {
   $cdOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-cell-drops.ps1') 2>$null
-  if ($LASTEXITCODE -eq 1) { [void]$warn.Add((@($cdOut) -join ' | ')) } else { Say ("  ok    " + (@($cdOut) | Select-Object -First 1)) }
+  if ($LASTEXITCODE -eq 0) { Say ("  ok    " + (@($cdOut) | Select-Object -First 1)) }
+  elseif ($LASTEXITCODE -eq 3) { [void]$warn.Add('cell-drops could NOT be evaluated, so it proves nothing this run: ' + ((@($cdOut) | Where-Object { $_ }) -join ' ')) }
+  else { [void]$warn.Add((@($cdOut) -join ' | ')) }
 } catch { Say ("  warn  could not run audit-cell-drops: " + $_.Exception.Message) }
 
 # ADVISORY, never blocks: allowlists rot. An entry in multipack-allowlist / coverage-gap-allowlist was
@@ -179,7 +183,7 @@ try {
   # allowlist under no expiry pressure at all: entries could age there forever without ever being re-verified.
   foreach ($alf in @('multipack-allowlist.json', 'coverage-gap-allowlist.json', 'basis-reconcile-allowlist.json')) {
     $p = Join-Path $root $alf
-    if (-not (Test-Path $p)) { continue }
+    if (-not (Test-Path $p)) { [void]$warn.Add("$alf is MISSING - the allowlist-rot check scanned ZERO entries from it, and its consumers just lost their exemptions too (a moved/renamed allowlist file, not a clean bill of health)"); continue }
     $doc = Get-Content $p -Raw | ConvertFrom-Json
     # SCHEMA DRIFT MUST NOT READ AS CLEAN. This extraction knows exactly two key names; a file that used a
     # third would yield @() and contribute ZERO stale entries, so the hygiene check would report a clean bill

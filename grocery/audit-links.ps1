@@ -74,7 +74,7 @@ function LinkPerUnit([string]$size, [string]$unit, [double]$price) {
 
 $pf = Join-Path $root 'product-urls.json'
 $pd = Get-Content $pf -Raw | ConvertFrom-Json
-$flags = @(); $ok = 0; $tot = 0
+$flags = @(); $ok = 0; $tot = 0; $skipped = 0
 foreach ($p in $pd.items.PSObject.Properties) {
   $id = [string]$p.Name
   foreach ($sp in $p.Value.PSObject.Properties) {
@@ -82,7 +82,7 @@ foreach ($p in $pd.items.PSObject.Properties) {
     $store = [string]$sp.Name; $lnk = $sp.Value
     if (-not $lnk.url) { continue }
     $tot++
-    if (-not $board.ContainsKey($id) -or -not $board[$id].ContainsKey($store)) { continue }
+    if (-not $board.ContainsKey($id) -or -not $board[$id].ContainsKey($store)) { $skipped++; continue }
     $occ = @($board[$id][$store])
     # try to match ANY board occurrence (weekly and/or recipe unit); keep the smallest delta seen
     $best = $null; $bestBpu = $null; $bestUnit = $null; $bestLpu = $null; $anyComputable = $false
@@ -110,8 +110,12 @@ foreach ($p in $pd.items.PSObject.Properties) {
 }
 $mism = @($flags | Where-Object { $_.reason -like 'mismatch*' })
 $unc  = @($flags | Where-Object { $_.reason -eq 'uncomputable' })
-$out = [ordered]@{ generated=(Get-Date -Format 'yyyy-MM-dd'); tolerance=$Tolerance; total_links=$tot; ok=$ok; mismatch=$mism.Count; uncomputable=$unc.Count; flags=$flags }
+$out = [ordered]@{ generated=(Get-Date -Format 'yyyy-MM-dd'); tolerance=$Tolerance; total_links=$tot; examined=($tot - $skipped); skipped=$skipped; ok=$ok; mismatch=$mism.Count; uncomputable=$unc.Count; flags=$flags }
 $out | ConvertTo-Json -Depth 6 | Set-Content (Join-Path $outDir 'link-audit.json') -Encoding UTF8
-Write-Output ("audited $tot links: $ok price-match, " + $mism.Count + " MISMATCH, " + $unc.Count + " uncomputable")
+Write-Output ("audited " + ($tot - $skipped) + " of $tot links: $ok price-match, " + $mism.Count + " MISMATCH, " + $unc.Count + " uncomputable ($skipped not on the board, unchecked)")
 Write-Output "--- MISMATCHES (link price does not match the board price shown) ---"
 $mism | Sort-Object { -$_.delta } | ForEach-Object { Write-Output ("  {0,-16} {1,-12} board={2,-7} link_pu={3,-7} `${4,-6} {5} | {6}" -f $_.id, $_.store, $_.board_pu, $_.link_pu, $_.link_price, ('['+$_.size+']'), $_.name) }
+if (($tot - $skipped) -eq 0) {
+  Write-Output ("audit-links: BLIND - examined ZERO of $tot links; not one link matched a board id/store (check that the comparison file still exposes .comparison and product-urls.json still exposes .items). The link-audit.json just written proves nothing.")
+  exit 3
+}

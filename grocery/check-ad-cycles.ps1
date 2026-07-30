@@ -314,6 +314,10 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
             try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: $($cg.gap_count) store(s) dropped from a commodity they carry - $asofS" -Body "audit-coverage-gaps found stores that HAVE a matching product but are missing from the board (usually a too-strict include regex): $cgList. Fix that commodity's include in commodities.json (or add a reviewed exception to coverage-gap-allowlist.json). Details: grocery/out/coverage-gaps.json." | Out-Null
                   if ($LASTEXITCODE -eq 0) { Set-Content -Path $cgF -Value $cgSig -Encoding UTF8; Log 'coverage-gap alert sent' } } catch { Log ('coverage-gap alert threw: ' + $_.Exception.Message) }
           } else { Log 'coverage-gaps unchanged since last alert - not re-alerting' }
+        } elseif ($cg -and @($cg.stores_not_scanned | Where-Object { $_ }).Count) {
+          $ns = (@($cg.stores_not_scanned | Where-Object { $_ }) -join ', ')
+          Log ("coverage-gaps BLIND for: " + $ns + " - zero raw products parsed; those stores were never checked")
+          $summary += "REVIEW    coverage-gaps scanned 0 products for $ns - the 'no gaps' result does not cover those stores"
         } else { if (Test-Path (Join-Path $OutDir 'coverage-gap-alert.sig')) { Remove-Item (Join-Path $OutDir 'coverage-gap-alert.sig') -ErrorAction SilentlyContinue } }
       } catch { Log ('coverage-gap guard threw: ' + $_.Exception.Message) }
       # ---- MATCHING-SOUNDNESS GUARD: a WRONG product landing in a commodity, or a rule change quietly moving/
@@ -463,6 +467,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       } catch { Log ('derive-links-from-prices threw: ' + $_.Exception.Message) }
       try {
         & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-tile-integrity.ps1') -Quiet | Out-Null
+        if ($LASTEXITCODE -eq 3) { Log 'tile-integrity BLIND (zero links graded) - the link layer is empty/unreadable; fix-links-ff is about to run against nothing' }
         & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'fix-links-ff.ps1') -Fresh -MaxCalls 30 | Out-Null
         $ffOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'fix-links-ff.ps1') -Apply
         Log ('family-fare link fill: ' + (@($ffOut | Where-Object { $_ -match 'APPLIED' })[-1]))
@@ -477,6 +482,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # honest. name-drift must run FIRST - it is the product-identity check the pruner reads.
       try {
         & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-drift.ps1') | Out-Null
+        if ($LASTEXITCODE -eq 3) { Log 'name-drift BLIND: examined ZERO cells - its count=0 output is not clean; prune-bad-links and the builder link suppression are running with no product-identity input'; $summary += 'REVIEW    audit-name-drift examined ZERO cells (product-urls/board mismatch) - wrong-product links are unguarded this run' }
         # -Tol 0.32, SAME as the repair path below and as guard 4's factor rule (>=1.5x / <=0.67x). I first
         # wired this with the default 2%, which deletes a RIGHT-product link the moment the store nudges its
         # price - eroding coverage a little every day to enforce a threshold the accuracy gate itself does not
@@ -733,6 +739,9 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         if ($LASTEXITCODE -eq 1) {
           Log ('walmart-fullpull ADVISORY: ' + [string]$wfpOut)
           try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: Walmart full capture aging - $asofS" -Body ("Early warning, nothing is broken yet: " + [string]$wfpOut + " When the last comprehensive capture leaves the 14-day union window, the coverage guard will HOLD the board (safe, but that day's Walmart refresh is lost). Run the full-worklist Walmart browser pull to reset the clock.") | Out-Null } catch {}
+        } elseif ($LASTEXITCODE -eq 3) {
+          Log ('walmart-fullpull BLIND: ' + [string]$wfpOut)
+          try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: a union store has NO captures in its window - $asofS" -Body ("Not an early warning - the fullpull watch examined ZERO capture files for at least one union store (Walmart/Sam's): " + [string]$wfpOut + " The coverage guard will HOLD that store at the cliff; run the full-worklist browser pull now.") | Out-Null } catch {}
         } else { Log ('walmart-fullpull: ' + [string]$wfpOut) }
       } catch { Log ('walmart-fullpull audit threw: ' + $_.Exception.Message) }
 

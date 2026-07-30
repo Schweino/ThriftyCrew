@@ -351,5 +351,210 @@ $iwSrc = Get-Content (Join-Path $root 'import-walmart-batch.ps1') -Raw
 if ($iwSrc -match "'Resolve-Unit','Get-NameQtyCandidates','Get-NamePack','Format-Qty','Build-Row'") { Ok 'import-walmart-batch still lifts Build-Row from build-walmart-deals (one home, no fork)' }
 else { Bad 'import-walmart-batch no longer lifts Build-Row - the second Walmart writer has re-forked the size math (the 2026-07-25 class)' }
 
+# ---------------------------------------------------------------- N+5. delegated audits must say BLIND (exit 3), never a false OK
+# Item 6 remainder (2026-07-30): every delegated/advisory audit used to print its OK line having examined
+# NOTHING when its input was empty or schema-drifted - the zero-rows collapse, one script at a time
+# (audit-price-mode printed "PRICE-MODE AUDIT OK" against an EMPTY out\regular; cell-drops printed the
+# positive ok line against an empty baseline board; tile-integrity certified ACCURACY OK having graded zero
+# links). Each now exits 3 = could-not-evaluate, which guards' delegate loop and advisory wrappers render as
+# a WARN - never a block, never an ok. These fixtures freeze each script's founding blind shape (must-fire)
+# next to a minimal clean twin, per the guard-fixture rule. Frozen/synthetic inputs only - never regenerated
+# from the live board (the two live clean-twins below are deliberate: a machine where they fail is itself
+# page-worthy).
+function NewFxDir([string]$tag) {
+  $d = Join-Path $env:TEMP ($tag + '-' + [guid]::NewGuid().ToString('N').Substring(0,8))
+  New-Item -ItemType Directory -Force $d | Out-Null
+  return $d
+}
+function RunPSAt([string]$dir, [string]$script, $argList) {
+  $out = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $dir $script) @argList 2>&1 | ForEach-Object { [string]$_ }
+  return [pscustomobject]@{ rc = $LASTEXITCODE; text = ($out -join "`n") }
+}
+
+# (a) audit-price-mode: BLIND when no mode-sensitive store file reaches the strict check (the state that
+# shipped 249 delivery-priced Aldi rows on 2026-07-14), and the anchored glob ignores a non-canonical twin.
+$fxApm = NewFxDir 'apm-blind'
+$r = RunPS 'audit-price-mode.ps1' @('-RegularDir', $fxApm)
+if ($r.rc -eq 3 -and $r.text -match 'BLIND' -and $r.text -match 'Aldi, Fareway') { Ok 'price-mode goes BLIND (exit 3) when zero mode-sensitive files reach it' }
+else { Bad ('price-mode did NOT go blind on an empty regular dir (rc=' + $r.rc + ') - "OK" from zero examination is back') }
+$r = RunPS 'audit-price-mode.ps1' @()
+if ($r.rc -eq 0 -and $r.text -match 'PRICE-MODE AUDIT OK') { Ok 'price-mode clean twin: live out\regular still passes with the counted OK line' }
+else { Bad ('price-mode clean twin failed (rc=' + $r.rc + ') - either live data is broken (page-worthy) or the edit broke the healthy path') }
+$fxApmT = NewFxDir 'apm-twin'
+Set-Content (Join-Path $fxApmT 'aldi-regular-2026-01-01.json') '{"store":"Aldi","price_mode":"in-store","mode_verified":"2026-01-01","items":[]}' -Encoding UTF8
+Set-Content (Join-Path $fxApmT 'fareway-regular-2026-01-01.json') '{"store":"Fareway","price_mode":"in-store","mode_verified":"2026-01-01","items":[]}' -Encoding UTF8
+Set-Content (Join-Path $fxApmT 'aldi-regular-2026-01-02.PARTIAL.json') '{"items":[]}' -Encoding UTF8
+$r = RunPS 'audit-price-mode.ps1' @('-RegularDir', $fxApmT)
+if ($r.rc -eq 0 -and $r.text -match 'OK\s+Aldi: in-store') { Ok 'price-mode anchored glob: a .PARTIAL twin cannot shadow the real capture (rc 0 AND the Aldi OK line present)' }
+else { Bad ('price-mode read the non-canonical twin or went blind past it (rc=' + $r.rc + ') - the family-fare PARTIAL incident class') }
+Remove-Item $fxApm, $fxApmT -Recurse -Force -ErrorAction SilentlyContinue
+
+# (b) audit-walmart-fullpull: BLIND when a union store has ZERO captures in its window (used to exit 0 and
+# guards printed "  ok    fullpull [Walmart]: no captures...").
+$fxWfp = NewFxDir 'wfp-blind'
+New-Item -ItemType Directory -Force (Join-Path $fxWfp 'out\regular') | Out-Null
+New-Item -ItemType Directory -Force (Join-Path $fxWfp 'out\sams') | Out-Null
+$r = RunPS 'audit-walmart-fullpull.ps1' @('-GroceryRoot', $fxWfp)
+if ($r.rc -eq 3 -and $r.text -match '\[Walmart\]: BLIND' -and $r.text -match "\[Sam's Club\]: BLIND") { Ok 'walmart-fullpull goes BLIND (exit 3) per store on an empty capture window' }
+else { Bad ('walmart-fullpull did NOT go blind on empty windows (rc=' + $r.rc + ')') }
+$fxD = [datetime]::Today.ToString('yyyy-MM-dd')
+Set-Content (Join-Path $fxWfp ('out\regular\walmart-regular-' + $fxD + '.json')) '{"pull_terms":400}' -Encoding UTF8
+Set-Content (Join-Path $fxWfp ('out\sams\sams-deals-' + $fxD + '.json')) '{"pull_terms":300}' -Encoding UTF8
+$r = RunPS 'audit-walmart-fullpull.ps1' @('-GroceryRoot', $fxWfp)
+if ($r.rc -eq 0 -and ([regex]::Matches($r.text, 'ok - newest comprehensive capture')).Count -eq 2) { Ok 'walmart-fullpull clean twin: fresh synthetic comprehensive captures read ok for both stores' }
+else { Bad ('walmart-fullpull clean twin failed (rc=' + $r.rc + ')') }
+Remove-Item $fxWfp -Recurse -Force -ErrorAction SilentlyContinue
+
+# (c) audit-household-in-food: BLIND at zero rows scanned (an existing-but-empty out\regular used to print
+# "scanned 0 rows" + AUDIT OK + exit 0). Copy-to-temp because the script has no dir param.
+$fxHif = NewFxDir 'hif-blind'
+foreach ($cf in @('audit-household-in-food.ps1','compare-deals.ps1','commodities.json','categories.json')) { Copy-Item (Join-Path $root $cf) (Join-Path $fxHif $cf) }
+New-Item -ItemType Directory -Force (Join-Path $fxHif 'out\regular') | Out-Null
+$r = RunPSAt $fxHif 'audit-household-in-food.ps1' @()
+if ($r.rc -eq 3 -and $r.text -match 'BLIND') { Ok 'household-in-food goes BLIND (exit 3) at zero rows scanned' }
+else { Bad ('household-in-food did NOT go blind on an empty out\regular (rc=' + $r.rc + ')') }
+Set-Content (Join-Path $fxHif 'out\regular\hyvee-regular-2026-01-01.json') '{"store":"Hy-Vee","deals":[{"item":"Bananas"}]}' -Encoding UTF8
+$r = RunPSAt $fxHif 'audit-household-in-food.ps1' @()
+if ($r.rc -eq 0 -and $r.text -match 'scanned 1 rows' -and $r.text -match 'AUDIT OK') { Ok 'household-in-food clean twin: one seeded row scans and passes' }
+else { Bad ('household-in-food clean twin failed (rc=' + $r.rc + ')') }
+Remove-Item $fxHif -Recurse -Force -ErrorAction SilentlyContinue
+
+# (d) audit-food-category: BLIND at zero priced cells (an empty -OutDir used to print "ok - ... (0 priced
+# cells scanned)" with exit 0 - reproduced by execution before the fix).
+$fxAfc = NewFxDir 'afc-blind'
+$r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxAfc)
+if ($r.rc -eq 3 -and $r.text -match 'FOOD-CLASS AUDIT BLIND') { Ok 'food-category goes BLIND (exit 3) at zero priced cells' }
+else { Bad ('food-category did NOT go blind on an empty OutDir (rc=' + $r.rc + ')') }
+$r = RunPS 'audit-food-category.ps1' @()
+if ($r.rc -eq 0 -and $r.text -match 'priced cells scanned') { Ok 'food-category clean twin: the live board still scans and passes' }
+else { Bad ('food-category clean twin failed (rc=' + $r.rc + ') - either live data is broken (page-worthy) or the edit broke the healthy path') }
+Remove-Item $fxAfc -Recurse -Force -ErrorAction SilentlyContinue
+
+# (e) audit-tile-integrity: ACCURACY BLIND + exit 3 when zero links were graded (an empty product-urls used
+# to certify "ACCURACY OK - every link that ships..." having examined nothing; prune-bad-links can empty the
+# set on a live daily path, which is exactly when the certificate would lie).
+$fxTi = NewFxDir 'ti-blind'
+foreach ($cf in @('audit-tile-integrity.ps1','pu-lib.ps1')) { Copy-Item (Join-Path $root $cf) (Join-Path $fxTi $cf) }
+New-Item -ItemType Directory -Force (Join-Path $fxTi 'out') | Out-Null
+Set-Content (Join-Path $fxTi 'product-urls.json') '{"items":{}}' -Encoding UTF8
+Set-Content (Join-Path $fxTi 'out\comparison-2026-01-01.json') '{"comparison":[{"id":"test-oats","unit":"oz","stores":[{"store":"Hy-Vee","per_unit":0.10,"type":"everyday","item":"Test Oats 16 oz"}]}]}' -Encoding UTF8
+$r = RunPSAt $fxTi 'audit-tile-integrity.ps1' @('-OutDir', (Join-Path $fxTi 'out'))
+if ($r.rc -eq 3 -and $r.text -match 'ACCURACY BLIND') { Ok 'tile-integrity goes ACCURACY BLIND (exit 3) when zero links were graded' }
+else { Bad ('tile-integrity did NOT go blind with an empty product-urls (rc=' + $r.rc + ') - the empty accuracy certificate is back') }
+Set-Content (Join-Path $fxTi 'product-urls.json') '{"items":{"test-oats":{"Hy-Vee":{"url":"https://example.test/oats","price":"$1.60","size":"16 oz","name":"Test Oats 16 oz"}}}}' -Encoding UTF8
+$r = RunPSAt $fxTi 'audit-tile-integrity.ps1' @('-OutDir', (Join-Path $fxTi 'out'))
+if ($r.rc -eq 0 -and $r.text -match 'ACCURACY OK - all 1 price-graded links') { Ok 'tile-integrity clean twin: one matching link grades and the OK line carries the count' }
+else { Bad ('tile-integrity clean twin failed (rc=' + $r.rc + ')') }
+Remove-Item $fxTi -Recurse -Force -ErrorAction SilentlyContinue
+
+# (f) audit-cell-drops: BLIND on both silent paths - fewer than 2 dated boards, and a baseline board that
+# parses to zero everyday cells (which used to print the POSITIVE "no everyday cell lost" ok line).
+$fxCd = NewFxDir 'cd-blind'
+Copy-Item (Join-Path $root 'audit-cell-drops.ps1') (Join-Path $fxCd 'audit-cell-drops.ps1')
+New-Item -ItemType Directory -Force (Join-Path $fxCd 'out') | Out-Null
+Set-Content (Join-Path $fxCd 'out\comparison-2026-01-08.json') '{"comparison":[{"id":"eggs","stores":[{"store":"Hy-Vee","type":"everyday","per_unit":2.50}]}]}' -Encoding UTF8
+$r = RunPSAt $fxCd 'audit-cell-drops.ps1' @()
+if ($r.rc -eq 3 -and $r.text -match 'BLIND - only 1 dated board') { Ok 'cell-drops goes BLIND (exit 3) with a single dated board' }
+else { Bad ('cell-drops did NOT go blind with one board (rc=' + $r.rc + ')') }
+Set-Content (Join-Path $fxCd 'out\comparison-2026-01-01.json') '{"comparison":[]}' -Encoding UTF8
+$r = RunPSAt $fxCd 'audit-cell-drops.ps1' @()
+if ($r.rc -eq 3 -and $r.text -match 'compared ZERO everyday cells') { Ok 'cell-drops goes BLIND (exit 3) on an empty-comparison baseline (the false positive-ok shape)' }
+else { Bad ('cell-drops printed a verdict against an EMPTY baseline board (rc=' + $r.rc + ')') }
+Set-Content (Join-Path $fxCd 'out\comparison-2026-01-01.json') '{"comparison":[{"id":"eggs","stores":[{"store":"Hy-Vee","type":"everyday","per_unit":2.50}]}]}' -Encoding UTF8
+$r = RunPSAt $fxCd 'audit-cell-drops.ps1' @()
+if ($r.rc -eq 0 -and $r.text -match '\(1 cells compared\)') { Ok 'cell-drops clean twin: kept cell reads ok with the examined count' }
+else { Bad ('cell-drops clean twin failed (rc=' + $r.rc + ')') }
+Set-Content (Join-Path $fxCd 'out\comparison-2026-01-08.json') '{"comparison":[]}' -Encoding UTF8
+$r = RunPSAt $fxCd 'audit-cell-drops.ps1' @()
+if ($r.rc -eq 1) { Ok 'cell-drops still detects a real drop (exit 1) - the founding Fareway-chicken shape' }
+else { Bad ('cell-drops lost its drop detection (rc=' + $r.rc + ')') }
+Remove-Item $fxCd -Recurse -Force -ErrorAction SilentlyContinue
+
+# (g) audit-name-drift: BLIND at zero cells tested; three consumers read its count=0 JSON as a positive
+# clean result, so a blind write must at least page.
+$fxNd = NewFxDir 'nd-blind'
+Copy-Item (Join-Path $root 'audit-name-drift.ps1') (Join-Path $fxNd 'audit-name-drift.ps1')
+New-Item -ItemType Directory -Force (Join-Path $fxNd 'out') | Out-Null
+Set-Content (Join-Path $fxNd 'product-urls.json') '{"items":{}}' -Encoding UTF8
+Set-Content (Join-Path $fxNd 'out\comparison-2026-01-01.json') '{"comparison":[{"id":"eggs","stores":[{"store":"Hy-Vee","item":"Grade A Eggs 12 ct"}]}]}' -Encoding UTF8
+$r = RunPSAt $fxNd 'audit-name-drift.ps1' @()
+$ndJson = try { Get-Content (Join-Path $fxNd 'out\name-drift.json') -Raw | ConvertFrom-Json } catch { $null }
+if ($r.rc -eq 3 -and $r.text -match 'BLIND' -and $ndJson -and [int]$ndJson.examined -eq 0) { Ok 'name-drift goes BLIND (exit 3) at zero cells and its JSON carries examined=0' }
+else { Bad ('name-drift did NOT go blind with an empty product-urls (rc=' + $r.rc + ')') }
+Set-Content (Join-Path $fxNd 'product-urls.json') '{"items":{"eggs":{"Hy-Vee":{"url":"https://example.test/eggs","price":"$2.50","size":"12 ct","name":"Grade A Eggs 12 ct"}}}}' -Encoding UTF8
+$r = RunPSAt $fxNd 'audit-name-drift.ps1' @()
+$ndJson = try { Get-Content (Join-Path $fxNd 'out\name-drift.json') -Raw | ConvertFrom-Json } catch { $null }
+if ($r.rc -eq 0 -and $r.text -match '0 of 1 cells tested' -and $ndJson -and [int]$ndJson.examined -eq 1) { Ok 'name-drift clean twin: one matching link is examined and reported' }
+else { Bad ('name-drift clean twin failed (rc=' + $r.rc + ')') }
+Remove-Item $fxNd -Recurse -Force -ErrorAction SilentlyContinue
+
+# (h) audit-links: BLIND when zero of the stored links matched a board id/store (a schema break in either
+# input used to print "audited N links: 0 price-match, 0 MISMATCH, 0 uncomputable" - flag-free JSON included).
+$fxAl = NewFxDir 'al-blind'
+Copy-Item (Join-Path $root 'audit-links.ps1') (Join-Path $fxAl 'audit-links.ps1')
+New-Item -ItemType Directory -Force (Join-Path $fxAl 'out') | Out-Null
+Set-Content (Join-Path $fxAl 'out\comparison-2026-01-01.json') '{"comparison":[{"id":"eggs","unit":"dozen","stores":[{"store":"Hy-Vee","per_unit":2.50}]}]}' -Encoding UTF8
+Set-Content (Join-Path $fxAl 'product-urls.json') '{"items":{"zzz-not-on-board":{"Hy-Vee":{"url":"https://example.test/z","price":"$5.00","size":"dozen","name":"Z"}}}}' -Encoding UTF8
+$r = RunPSAt $fxAl 'audit-links.ps1' @()
+if ($r.rc -eq 3 -and $r.text -match 'examined ZERO of 1 links') { Ok 'audit-links goes BLIND (exit 3) when no link matches the board' }
+else { Bad ('audit-links did NOT go blind with zero matchable links (rc=' + $r.rc + ')') }
+Set-Content (Join-Path $fxAl 'product-urls.json') '{"items":{"eggs":{"Hy-Vee":{"url":"https://example.test/eggs","price":"$2.50","size":"dozen","name":"Eggs"}}}}' -Encoding UTF8
+$r = RunPSAt $fxAl 'audit-links.ps1' @()
+if ($r.rc -eq 0 -and $r.text -match 'audited 1 of 1 links') { Ok 'audit-links clean twin: one computable link audits with the honest of-total summary' }
+else { Bad ('audit-links clean twin failed (rc=' + $r.rc + ')') }
+Remove-Item $fxAl -Recurse -Force -ErrorAction SilentlyContinue
+
+# (i) audit-coverage-gaps: BLIND only at TOTAL blindness (zero raw products for EVERY store); a partial
+# blind day is reported per-store in the JSON + qualified line but keeps exit 0/2 (a real finding must win).
+$fxCg = NewFxDir 'cg-blind'
+$fxCgBoard = Join-Path $fxCg 'fix-board.json'
+Set-Content $fxCgBoard '{"comparison":[{"id":"bananas","stores":[]}]}' -Encoding UTF8
+$r = RunPS 'audit-coverage-gaps.ps1' @('-OutDir', $fxCg, '-CompareFile', $fxCgBoard)
+$cgJson = try { Get-Content (Join-Path $fxCg 'coverage-gaps.json') -Raw | ConvertFrom-Json } catch { $null }
+if ($r.rc -eq 3 -and $r.text -match 'BLIND - ZERO raw products' -and $cgJson -and @($cgJson.stores_not_scanned).Count -eq 7) { Ok 'coverage-gaps goes BLIND (exit 3) at total blindness and names all 7 unscanned stores in its JSON' }
+else { Bad ('coverage-gaps did NOT go blind with zero raw products (rc=' + $r.rc + ')') }
+Set-Content (Join-Path $fxCg 'ads-2026-01-01.json') '{"deals":[{"store":"Hy-Vee","item":"zzzz"},{"store":"Aldi","item":"zzzz"},{"store":"Family Fare","item":"zzzz"},{"store":"Fareway","item":"zzzz"},{"store":"Baker''s","item":"zzzz"},{"store":"Sam''s Club","item":"zzzz"},{"store":"Walmart","item":"zzzz"}]}' -Encoding UTF8
+$r = RunPS 'audit-coverage-gaps.ps1' @('-OutDir', $fxCg, '-CompareFile', $fxCgBoard)
+if ($r.rc -eq 0 -and $r.text -match 'coverage-gaps: none - every store') { Ok 'coverage-gaps clean twin: all 7 stores seeded reads the plain none line' }
+else { Bad ('coverage-gaps clean twin failed (rc=' + $r.rc + ')') }
+Remove-Item $fxCg -Recurse -Force -ErrorAction SilentlyContinue
+
+# (j) guards' advisory wrappers: a child exiting non-0/non-1 must land in WARN, never in the ok Say line
+# (the bare else used to relabel any unrecognised exit - including the new exit 3 - as "  ok"). The chain
+# below is a copy of the post-edit wrapper shape; the source asserts pin guards.ps1 to it.
+$fxGw = NewFxDir 'gw-child'
+Set-Content (Join-Path $fxGw 'exit5.ps1') 'exit 5' -Encoding UTF8
+Set-Content (Join-Path $fxGw 'exit0.ps1') 'Write-Output "fine"; exit 0' -Encoding UTF8
+$fxGwWarn = New-Object System.Collections.ArrayList
+$fxGwOk = New-Object System.Collections.ArrayList
+foreach ($fxChild in @('exit5.ps1','exit0.ps1')) {
+  try {
+    $null = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $fxGw $fxChild) 2>$null
+    if ($LASTEXITCODE -eq 0) { [void]$fxGwOk.Add($fxChild) }
+    elseif ($LASTEXITCODE -eq 3) { [void]$fxGwWarn.Add($fxChild + ':blind') }
+    else { [void]$fxGwWarn.Add($fxChild) }
+  } catch { [void]$fxGwWarn.Add($fxChild + ':catch') }
+}
+if ($fxGwWarn -contains 'exit5.ps1' -and $fxGwOk -notcontains 'exit5.ps1' -and $fxGwOk -contains 'exit0.ps1' -and $fxGwWarn.Count -eq 1) { Ok 'wrapper chain: exit 5 lands in warn (not ok), exit 0 lands in ok' }
+else { Bad ('wrapper chain misroutes exit codes: warn=[' + ($fxGwWarn -join ',') + '] ok=[' + ($fxGwOk -join ',') + ']') }
+Remove-Item $fxGw -Recurse -Force -ErrorAction SilentlyContinue
+$gSrc = Get-Content (Join-Path $root 'guards.ps1') -Raw
+if (([regex]::Matches($gSrc, 'elseif \(\$LASTEXITCODE -eq 3\)')).Count -ge 2 -and $gSrc -match 'is MISSING - the allowlist-rot check scanned ZERO entries') { Ok 'guards.ps1 keeps both advisory-wrapper exit-3 branches and the missing-allowlist warn' }
+else { Bad 'guards.ps1 lost an advisory-wrapper exit-3 branch or the missing-allowlist warn - a blind child prints ok again' }
+
+# (k) the direct callers keep their blind branches (source asserts - house precedent for caller plumbing;
+# the behavioral exit-3s are covered by the producer fixtures above).
+$cacSrc = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
+if ($cacSrc -match 'walmart-fullpull BLIND' -and $cacSrc -match 'name-drift BLIND' -and $cacSrc -match 'coverage-gaps BLIND for' -and $cacSrc -match 'tile-integrity BLIND') { Ok 'check-ad-cycles keeps all four audit blind branches' }
+else { Bad 'check-ad-cycles lost an audit blind branch - a blind audit logs as routine again' }
+if ($cacSrc -match 'Not an early warning') { Ok 'check-ad-cycles blind email does not reuse the nothing-is-broken-yet body' }
+else { Bad 'check-ad-cycles blind email body regressed - a blackout would email "nothing is broken yet"' }
+$wpcSrc = Get-Content (Join-Path $root 'weekly-post-capture.ps1') -Raw
+if ($wpcSrc -match 'tiPost -eq 3' -and $wpcSrc -match 'was BLIND on the live board' -and $wpcSrc -match 'prune-bad-links -Tol 0\.32 and re-run -Phase links NOW') { Ok 'weekly-post-capture separates BLIND from FAILED (prune advice stays on the real failure only)' }
+else { Bad 'weekly-post-capture lost the blind/FAILED split - a blind post-publish check would advise pruning harder' }
+$pdpSrc = Get-Content (Join-Path $root 'publish-deals-page.ps1') -Raw
+if ($pdpSrc -match 'price-mode: BLIND' -and $pdpSrc -match 'name-drift: BLIND') { Ok 'publish-deals-page surfaces exit 3 from its two direct audit calls' }
+else { Bad 'publish-deals-page lost a blind surface line - a blind audit falls through silently during publish' }
+
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2

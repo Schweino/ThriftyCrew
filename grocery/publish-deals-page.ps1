@@ -48,6 +48,7 @@ if ($reasons.Count -gt 0 -and -not $Force) {
 try {
   & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-price-mode.ps1') | Out-Null
   if ($LASTEXITCODE -eq 2) { Write-Output "price-mode: an Instacart store is UNVERIFIED - compare-deals EXCLUDED it from the board. Re-capture In-Store + stamp mode_verified to restore it." }
+  elseif ($LASTEXITCODE -eq 3) { Write-Output "price-mode: BLIND - no canonical file for a mode-sensitive store reached the audit; nothing this run proves Aldi/Fareway are in-store priced (their board cells are also thin/absent, which the coverage gate above holds on)." }
 } catch {}
 
 # ---- refresh the link audits so the builder can suppress any wrong (form-flip) "See item" link ----
@@ -66,7 +67,8 @@ Remove-Item $embed -ErrorAction SilentlyContinue
 # wrong product (fresh->frozen etc.), which the builder uses to suppress that "See item" link. If it goes stale,
 # a link stays wrongly hidden after its URL is fixed (this bit us: chicken breast at Aldi/Sam's stayed unlinked
 # after the frozen->fresh fix until this audit was re-run). Running it here keeps suppression in sync every build.
-try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-drift.ps1') | Out-Null } catch {}
+try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-drift.ps1') | Out-Null
+      if ($LASTEXITCODE -eq 3) { Write-Output 'name-drift: BLIND (examined zero cells) - the builder is about to suppress links from an EMPTY drift table; wrong-product links will not be suppressed this build' } } catch {}
 # Board-price override pins are GENERATED UPSTREAM (check-ad-cycles runs generate-board-overrides.ps1 BEFORE
 # guards.ps1) and only APPLIED here. Publish must never mint a number the guards have not seen: on 2026-07-23
 # this script regenerated pins post-gate and shipped 37 wrong-basis prices (pack price pinned onto per-item

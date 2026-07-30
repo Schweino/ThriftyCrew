@@ -16,7 +16,7 @@
   capture we cannot judge, so that store stays silent rather than cry wolf (each store's watch arms
   itself at its first stamped comprehensive pull). Exit codes: 0 = all stores healthy/indeterminate;
   1 = ADVISORY, at least one store is aging (>= WarnAgeDays) or its window holds only stamped
-  partials. NEVER 2 - this must never block a publish; the coverage guard already fails closed at the
+  partials; 3 = BLIND, at least one store had ZERO captures in its window - the watch examined nothing and can prove nothing (blind outranks advisory). NEVER 2 - this must never block a publish; the coverage guard already fails closed at the
   cliff. ONE copy of this logic on purpose: guards.ps1 (warn) and check-ad-cycles.ps1 (deduped email)
   both call this script instead of re-implementing it.
 #>
@@ -34,7 +34,7 @@ $STORES = @(
   @{ label = "Sam's Club"; fullTerms = 150; glob = (Join-Path $root 'out\sams\sams-deals-*.json') }
 )
 
-$advisory = $false
+$advisory = $false; $blind = $false
 foreach ($st in $STORES) {
   $inWindow = @()
   foreach ($f in (Get-ChildItem $st.glob -ErrorAction SilentlyContinue)) {
@@ -48,7 +48,8 @@ foreach ($st in $STORES) {
     $inWindow += [pscustomobject]@{ date = $d; terms = $terms; name = $f.Name }
   }
   if (-not $inWindow.Count) {
-    Write-Output ("fullpull [{0}]: no captures in the {1}-day window at all (the coverage guard owns that failure)" -f $st.label, $WindowDays)
+    Write-Output ("fullpull [{0}]: BLIND - no captures in the {1}-day window at all; this watch examined ZERO files for {0} and can prove nothing about its coverage (the coverage guard still fails closed at the cliff). Run a full-worklist pull now." -f $st.label, $WindowDays)
+    $blind = $true
     continue
   }
   $newestFull    = $inWindow | Where-Object { $_.terms -ne $null -and $_.terms -ge $st.fullTerms } | Sort-Object date -Descending | Select-Object -First 1
@@ -86,4 +87,4 @@ foreach ($st in $STORES) {
   Write-Output ("fullpull [{0}]: ok - newest comprehensive capture {1} ({2} terms) is {3} day(s) old (warn at {4}, cliff at {5})" -f $st.label, $newestFull.name, $newestFull.terms, $age, $WarnAgeDays, $WindowDays)
 }
 
-if ($advisory) { exit 1 } else { exit 0 }
+if ($blind) { exit 3 } elseif ($advisory) { exit 1 } else { exit 0 }

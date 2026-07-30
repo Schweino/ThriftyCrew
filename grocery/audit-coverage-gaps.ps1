@@ -10,7 +10,8 @@
   gap to fix (usually by widening that commodity's include, exactly as we just did for pork-chops).
 
   Output: out\coverage-gaps-<date>.json { generated, gaps:[{commodity,store,candidate}] } + a one-line summary.
-  Exit 2 if any gaps (so publish/daily can surface + alert). This is what makes "a store that carries an item
+  Exit 2 if any gaps (so publish/daily can surface + alert); 3 = BLIND (zero raw products for every store).
+  This is what makes "a store that carries an item
   never silently disappears" a checkable invariant for ALL stores, not a thing we notice by eyeballing.
 #>
 param([string]$OutDir = "", [string]$CompareFile = "")
@@ -90,6 +91,7 @@ $gaps = New-Object System.Collections.Generic.List[object]
 # of it is on the critical path: -Phase compare cannot return until it finishes.
 $prodUniq = @{}
 foreach ($s in $prod.Keys) { $prodUniq[$s] = @($prod[$s] | Select-Object -Unique) }
+$noRaw = @($stores | Where-Object { -not $prod.ContainsKey($_) })
 
 foreach ($c in $commods) {
   $id = [string]$c.id
@@ -131,10 +133,11 @@ foreach ($c in $commods) {
   }
 }
 
-$report = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); gap_count = $gaps.Count; gaps = $gaps }
+$report = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); gap_count = $gaps.Count; stores_scanned = @($stores | Where-Object { $prod.ContainsKey($_) }); stores_not_scanned = $noRaw; gaps = $gaps }
 $report | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $OutDir 'coverage-gaps.json') -Encoding UTF8
 if ($gaps.Count) {
   Write-Output ("coverage-gaps: $($gaps.Count) store(s) DROPPED despite having a matching product:")
+  if ($noRaw.Count) { Write-Output ("  (NOTE: zero raw products for " + ($noRaw -join ', ') + " - those stores were NOT checked and may hide more gaps)") }
   # print EVERY candidate, not just the first - a reviewer allowlisting this pair is about to make a
   # factual claim about what the store carries, so put the whole evidence set in front of them.
   foreach ($gp in $gaps) {
@@ -145,4 +148,15 @@ if ($gaps.Count) {
     }
   }
   exit 2
-} else { Write-Output 'coverage-gaps: none - every store that carries a tracked item is on the board'; exit 0 }
+} else {
+  if ($noRaw.Count -eq $stores.Count) {
+    Write-Output 'coverage-gaps: BLIND - ZERO raw products parsed for EVERY store (no ads/regular/deals source yielded a name). Nothing was checked; a no-gaps verdict would be an empty claim.'
+    exit 3
+  }
+  if ($noRaw.Count) {
+    Write-Output ("coverage-gaps: none among the " + ($stores.Count - $noRaw.Count) + " store(s) scanned - but ZERO raw products for " + ($noRaw -join ', ') + "; those stores were never checked, so their absence from a commodity proves nothing (check stores.json deals_glob vs this script's hardcoded ads/regular/browser-store globs, and the store labels the files write).")
+  } else {
+    Write-Output 'coverage-gaps: none - every store that carries a tracked item is on the board'
+  }
+  exit 0
+}

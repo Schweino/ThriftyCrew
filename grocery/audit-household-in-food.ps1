@@ -71,6 +71,10 @@ foreach ($f in Get-ChildItem (Join-Path $root 'out\regular\*-regular-*.json')) {
 }
 Write-Output ''
 Write-Output ("scanned $scanned rows")
+if ($scanned -eq 0) {
+  Write-Output 'HOUSEHOLD-IN-FOOD AUDIT BLIND: examined ZERO rows - out\regular matched no canonical store file, or every newest-per-store pick carried no .deals rows (a puller renaming the deals array is the guard-11 failure mode). The cleaner-in-a-food-commodity invariant was NOT tested this run. Unknown is not a pass.'
+  exit 3
+}
 if ($bugs -eq 0) { Write-Output 'HOUSEHOLD-IN-FOOD AUDIT OK: no cleaning product is sitting in a food commodity.'; exit 0 }
 Write-Output ("HOUSEHOLD-IN-FOOD AUDIT FAILED: $bugs row(s). Board NOT safe to publish."); exit 2
 

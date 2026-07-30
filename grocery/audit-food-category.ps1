@@ -16,7 +16,8 @@
   ingredient is edible, so babyfood/pet/household tokens are always wrong there).
 
   food-class-allowlist.json is the reviewed-exception valve ([{id,store,pattern,reason}]) so a judged-legitimate
-  name can never deadlock the daily publish. Exit 0 = clean, 2 = wrong-class match found (do not publish).
+  name can never deadlock the daily publish. Exit 0 = clean, 2 = wrong-class match found (do not publish),
+  3 = BLIND (zero priced cells scanned - the guard proved nothing).
 #>
 param([string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
@@ -81,6 +82,11 @@ if ($find.Count) {
   foreach ($x in $find) { Write-Output ("  BUG  {0,-22} [{1,-12}] class={2,-14} '{3}'" -f $x.id, $x.store, $x.class, $x.item) }
   Write-Output "Fix the match (include/exclude in commodities.json + re-run compare-deals), or add a REVIEWED exception to food-class-allowlist.json."
   exit 2
+}
+if ($scanned -eq 0) {
+  $seen = if (@($files).Count) { ((@($files) | ForEach-Object { Split-Path $_ -Leaf }) -join ', ') } else { '(none)' }
+  Write-Output ("FOOD-CLASS AUDIT BLIND: examined ZERO priced cells. Board files read: " + $seen + " from '" + $OutDir + "'. Either no comparison-*.json/recipe-board.json was found (:45 swallows a missing dir with -ErrorAction SilentlyContinue), or the newest-by-NAME pick has an empty or renamed .comparison array (a stray non-dated comparison-*.json outranks every dated board). The blueberries-as-Bai-beverage guard checked nothing - unknown is not a pass.")
+  exit 3
 }
 Write-Output ("ok - no food commodity matched a beverage/baby-food/pet/household/bakery-carrier/dairy-carrier/candy product ($scanned priced cells scanned)")
 exit 0

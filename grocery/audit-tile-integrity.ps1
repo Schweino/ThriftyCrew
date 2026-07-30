@@ -31,6 +31,7 @@
   the single score look WORSE - the gate actively discouraged the honest fix.
 
   Exit: 0 = accuracy clean and no store regressed on coverage. 2 = ANY accuracy violation, or coverage regressed.
+  3 = BLIND (zero links were price-graded - the accuracy claim would be empty; a real violation still wins with 2).
 #>
 param(
   [string]$OutDir = "",
@@ -51,6 +52,7 @@ $ndF = Join-Path $OutDir 'name-drift.json'
 if (Test-Path $ndF) { foreach ($d in (Get-Content $ndF -Raw | ConvertFrom-Json).flags) { $drift[([string]$d.id + '|' + [string]$d.store)] = [string]$d.reason } }
 
 $rows = New-Object System.Collections.Generic.List[object]
+$graded = 0   # everyday linked tiles whose link price was actually compared to the board
 foreach ($r in $cmp) {
   $id = [string]$r.id; $unit = [string]$r.unit
   foreach ($s in $r.stores) {
@@ -75,6 +77,7 @@ foreach ($r in $cmp) {
     if ($null -eq $lpu -or $lpu -le 0) {
       $rows.Add([pscustomobject]@{ id = $id; store = $st; fault = 'LINK-UNPRICEABLE'; detail = ('link size "' + [string]$lnk.size + '" gives no per-unit in ' + $unit); board = [string]$s.item; link = [string]$lnk.name }); continue
     }
+    $graded++
     $off = [math]::Abs($lpu - $bpu) / $lpu
     # A STALE PRICE SNAPSHOT IS NOT A WRONG LINK - AND THIS GATE USED TO SAY IT WAS.
     # I first demanded 2%. That is wrong twice over:
@@ -128,10 +131,13 @@ $driftRows = @($rows | Where-Object { $_.fault -eq 'PRICE-DRIFT' })
 $covRows = @($rows | Where-Object { $_.fault -eq 'NO-LINK' })
 $report['accuracy_violations'] = $accRows.Count
 $report['coverage_violations'] = $covRows.Count
+$linked = [int]$report.total_tiles - $covRows.Count   # [int]: total_tiles is $null when $tiles is empty
+$report['linked_tiles'] = $linked
+$report['accuracy_graded'] = $graded
 ($report | ConvertTo-Json -Depth 6) | Set-Content (Join-Path $OutDir 'tile-integrity.json') -Encoding UTF8
 
 if (-not $Quiet) {
-  $linked = $report.total_tiles - $covRows.Count
+  # $linked hoisted above (persisted in the report; needed on the -Quiet path too)
   Write-Output ("ACCURACY  " + $accRows.Count + " of " + $linked + " LINKED tiles open a DIFFERENT product than advertised  <- must be ZERO; this is the only one that lies")
   Write-Output ("DRIFT     " + $driftRows.Count + " linked tiles whose stored price snapshot is stale (right product)  <- watch, do not block; the repair re-points these")
   Write-Output ("COVERAGE  " + $covRows.Count + " of " + $report.total_tiles + " priced tiles have no See-item link at all       <- incomplete, not dishonest; needs browser passes")
@@ -170,7 +176,11 @@ if ($accRows.Count -gt 0) {
   foreach ($x in ($accRows | Select-Object -First 10)) { Write-Output ('    ' + $x.fault.PadRight(18) + ($x.id + ' | ' + $x.store).PadRight(34) + $x.detail) }
   $fail2 = $true
 }
-else { Write-Output ''; Write-Output 'tile-integrity: ACCURACY OK - every link that ships opens the product the board names, at the price it shows.' }
+else {
+  Write-Output ''
+  if ($linked -le 0 -or $graded -le 0) { Write-Output ('tile-integrity: ACCURACY BLIND - zero links were price-graded (' + $linked + ' linked tiles, ' + $graded + ' graded). product-urls.json is empty/unreadable or every link was skipped; this proves NOTHING about link accuracy. NOT an OK.') }
+  else { Write-Output ('tile-integrity: ACCURACY OK - all ' + $graded + ' price-graded links (of ' + $linked + ' linked tiles) open the product the board names, at the price it shows.') }
+}
 
 # ---- COVERAGE: ratchets down. Closing these needs paced per-store browser passes. --------------------------
 if ($Strict) {
@@ -205,4 +215,4 @@ if (Test-Path $blF) {
   }
   else { Write-Output 'tile-integrity: COVERAGE OK - no store regressed against the baseline.' }
 }
-exit $(if ($fail2) { 2 } else { 0 })
+exit $(if ($fail2) { 2 } elseif ($linked -le 0 -or $graded -le 0) { 3 } else { 0 })

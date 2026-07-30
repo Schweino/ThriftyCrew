@@ -140,7 +140,8 @@ try {
       # first moment the shipped board can be graded against fresh drift flags. Advisory, not a gate: the board
       # is already live, and the honest move is to say so loudly rather than pretend the pre-check covered it.
       $tiPost = RunChild (Join-Path $root 'audit-tile-integrity.ps1') @() 3 'post-publish-tiles' -NonFatal
-      if($tiPost -ne 0){ Log 'POST-PUBLISH: audit-tile-integrity FAILED on the board that just went live - run prune-bad-links -Tol 0.32 and re-run -Phase links NOW.' }
+      if($tiPost -eq 3){ Log 'POST-PUBLISH: audit-tile-integrity was BLIND on the live board (zero links graded) - product-urls.json is empty or unreadable, the live links are UNVERIFIED. prune-bad-links will NOT fix this; check product-urls.json first.' }
+      elseif($tiPost -ne 0){ Log 'POST-PUBLISH: audit-tile-integrity FAILED on the board that just went live - run prune-bad-links -Tol 0.32 and re-run -Phase links NOW.' }
       $null = RunChild (Join-Path $root 'push-data.ps1') @() 1 'push'
       Log 'PHASE links DONE. Agent: report audit-links/name-drift residue; re-resolve any form-flips and re-run -Phase links if needed.'
     }

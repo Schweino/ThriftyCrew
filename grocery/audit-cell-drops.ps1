@@ -9,14 +9,14 @@
   off the ad cycle is correct; the sale-fallback machinery owns those) and Sam's Club is excluded (its
   slices age out by the 14-day policy on purpose; the fullpull watch owns that). What remains should be
   ZERO now that carry-forward walks the whole window - so anything listed is a real, new leak.
-  ADVISORY (exit 1, never 2): the board holding a true price matters more than perfect coverage.
+  ADVISORY (exit 1, never 2; exit 3 = BLIND, examined nothing): the board holding a true price matters more than perfect coverage.
 #>
 param([int]$CompareAgeDays = 5)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $outDir = Join-Path $root 'out'
 $boards = @(Get-ChildItem (Join-Path $outDir 'comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending)
-if ($boards.Count -lt 2) { Write-Output 'cell-drops: fewer than 2 dated boards - nothing to diff'; exit 0 }
+if ($boards.Count -lt 2) { Write-Output ('cell-drops: BLIND - only ' + $boards.Count + ' dated board(s) in out\, zero cells diffed; this detector proved NOTHING (comparison-*.json is gitignored, so a fresh clone / the cloud backup runner always lands here)'); exit 3 }
 $newF = $boards[0]
 $newDate = [datetime]([regex]::Match($newF.BaseName, '(\d{4}-\d{2}-\d{2})$').Groups[1].Value)
 $oldF = $boards | Where-Object { ([datetime]([regex]::Match($_.BaseName, '(\d{4}-\d{2}-\d{2})$').Groups[1].Value)) -le $newDate.AddDays(-$CompareAgeDays) } | Select-Object -First 1
@@ -27,19 +27,21 @@ $new = (Get-Content $newF.FullName -Raw | ConvertFrom-Json).comparison
 $old = (Get-Content $oldF.FullName -Raw | ConvertFrom-Json).comparison
 $nmap = @{}
 foreach ($r in $new) { $nmap[[string]$r.id] = @($r.stores | ForEach-Object { [string]$_.store }) }
-$drops = @()
+$drops = @(); $cells = 0
 foreach ($r in $old) {
   foreach ($s in @($r.stores)) {
     $st = [string]$s.store
     if ($st -eq "Sam's Club") { continue }              # 14-day slice policy; fullpull watch owns it
     if ([string]$s.type -eq 'sale') { continue }        # ended sales roll off correctly
+    $cells++
     $now = $nmap[[string]$r.id]
     if (-not $now -or ($now -notcontains $st)) {
       $drops += [pscustomobject]@{ id = [string]$r.id; store = $st; was = ('{0:N2}' -f [double]$s.per_unit) }
     }
   }
 }
-if ($drops.Count -eq 0) { Write-Output ("cell-drops: ok - no everyday cell lost vs " + $oldF.BaseName); exit 0 }
+if ($cells -eq 0) { Write-Output ("cell-drops: BLIND - compared ZERO everyday cells against " + $oldF.BaseName + " (that board parsed to no comparison rows, or stores[].store/.type renamed); 'no cell lost' would be an empty claim"); exit 3 }
+if ($drops.Count -eq 0) { Write-Output ("cell-drops: ok - no everyday cell lost vs " + $oldF.BaseName + " (" + $cells + " cells compared)"); exit 0 }
 # Wording fixed 2026-07-28. It used to assert "carry-forward should have prevented it", which sent every
 # reader hunting for a carry-forward bug in Baker's and Walmart - stores that run COMPREHENSIVE pulls and
 # deliberately have no carry-forward at all. For those the usual cause is a search term that failed during

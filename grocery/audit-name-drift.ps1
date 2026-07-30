@@ -15,7 +15,7 @@ $c    = (Get-Content $cmp.FullName -Raw | ConvertFrom-Json).comparison
 $purls = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
 # commodity + generic words that appear in both names, so are NOT distinctive of the specific product
 $stop = 'boneless|skinless|chicken|breast|breasts|thigh|thighs|drumstick|drumsticks|ground|beef|turkey|pork|bacon|fresh|frozen|large|whole|family|pack|natural|all|lean|value|brand|each|lb|lbs|oz|count|ct|bag|tray|organic|cage|free|grade|sweet|original|classic|the|and|with|for|from|our|certified|the|of|per|shredded|cheese|milk|eggs|butter|sour|cream|juice|orange|apple|apples|banana|bananas|potato|potatoes|russet|onion|onions|bread|coffee|sugar|brown|tomato|tomatoes|sauce|paste|beans|kidney|garbanzo|cannellini|olives|pineapple|chunks|strawberries|blueberries|grapes|avocado|avocados|watermelon|corn|cabbage|carrots|ginger|honey|mustard|dijon|vinegar|balsamic|white|red|wine|soy|hoisin|sesame|oil|tahini|paprika|curry|powder|cornstarch|starch|rotini|pasta|marinara|spinach|peas|green|hominy|tomatillos|cashews|peanut|maple|syrup|yogurt|greek|cottage|provolone|cheddar|colby|jack|mozzarella|fries|crumbs|loin|chop|chops|thick|cut|roll|spread|soft|low|fat|pint|package|bowl'
-$flags = @()
+$flags = @(); $examined = 0; $exByStore = @{}
 foreach ($it in $c) {
   $id = [string]$it.id
   if (-not $purls.$id) { continue }
@@ -24,6 +24,7 @@ foreach ($it in $c) {
     if (-not $item) { continue }
     $lnk = $purls.$id.$store
     if (-not $lnk -or -not $lnk.url) { continue }
+    $examined++; if (-not $exByStore.ContainsKey($store)) { $exByStore[$store] = 0 }; $exByStore[$store]++
     $lname = ([string]$lnk.name).ToLower()
     # FORM FLIP AND COUNT MISMATCH ARE INDEPENDENT OF THE TOKEN TEST, so compute them BEFORE the token bail-out.
     # The old order checked distinctive tokens first and `continue`d when there were none - and a board item named
@@ -58,6 +59,10 @@ foreach ($it in $c) {
     }
   }
 }
-([ordered]@{ generated=(Get-Date -Format 'yyyy-MM-dd'); count=$flags.Count; flags=$flags } | ConvertTo-Json -Depth 5) | Set-Content (Join-Path $out 'name-drift.json') -Encoding UTF8
-Write-Output ("name/form-drift suspects: " + $flags.Count + " (REVIEW - some are just brand differences)")
+([ordered]@{ generated=(Get-Date -Format 'yyyy-MM-dd'); count=$flags.Count; examined=$examined; examined_by_store=$exByStore; flags=$flags } | ConvertTo-Json -Depth 5) | Set-Content (Join-Path $out 'name-drift.json') -Encoding UTF8
+Write-Output ("name/form-drift suspects: " + $flags.Count + " of $examined cells tested (REVIEW - some are just brand differences)")
 $flags | Sort-Object reason, store, id | ForEach-Object { Write-Output ("  [{0}] {1,-14} {2}`n     BOARD: {3}`n     LINK : {4}" -f $_.reason, $_.store, $_.id, $_.board_item, $_.link_name) }
+if ($examined -eq 0) {
+  Write-Output 'name-drift: BLIND - examined ZERO cells (product-urls.json has no id/store matching this board; check .items). The count=0 name-drift.json just written is blind, not clean: build-deals-page link suppression, guard 3, and tile-integrity WRONG-PRODUCT all read it as clean.'
+  exit 3
+}
