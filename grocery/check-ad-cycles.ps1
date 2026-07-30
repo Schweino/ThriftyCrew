@@ -329,6 +329,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         if (-not $NoAlert) { $msArgs += '-Alert' }
         & powershell @msArgs | ForEach-Object { Log ('match-soundness: ' + $_) }
         if ($LASTEXITCODE -eq 2) { $summary += 'REVIEW    commodity matching changed vs baseline (a product MOVED/DROPPED) - see out\audit\soundness-report.json; publish will HOLD until reviewed + audit-match-soundness.ps1 -Accept' }
+        elseif ($LASTEXITCODE -eq 3) { Log 'match-soundness BLIND: ingested ZERO products - no store feed reached this audit, so its silence is not a clean board'; $summary += 'REVIEW    audit-match-soundness ingested ZERO products - commodity matching is UNGUARDED this run (check out\regular\ and out\ads-*.json)' }
       } catch { Log ('match-soundness guard threw: ' + $_.Exception.Message) }
       # ---- CATEGORY-COVERAGE GUARD: a commodity filed into NO category renders in no department/filter (invisible).
       # HARD publish gate + daily alert so adding a new item can never silently skip a filter.

@@ -29,6 +29,9 @@
 /grocery/out/link-audit.json
 /grocery/out/name-drift.json
 /grocery/out/url-worklist.json
+# input-fingerprint stamp for audit-match-soundness: a pure function of files already in the repo, rewritten
+# whenever any of them changes, and 1.24 MB a time - regenerable output, never a source of truth
+/grocery/out/audit/match-sweep-cache.json
 /grocery/out/smp-feed.json
 /grocery/out/recipe-board-everyday.bak-*.json
 # rolling local archive of aged out\ snapshots (run-daily-local.ps1 retention moves files in and later

@@ -161,6 +161,7 @@ if ($LASTEXITCODE -eq 2 -and -not $Force) { Write-Output 'HELD: a staple commodi
 # and runs `audit-match-soundness.ps1 -Accept`. Steady state (no rule change) => 0 changes => passes. -Force overrides.
 & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-match-soundness.ps1') -OutDir $OutDir
 if ($LASTEXITCODE -eq 2 -and -not $Force) { Write-Output 'HELD: commodity matching changed vs the reviewed baseline (see out\audit\soundness-report.json). A product MOVED/DROPPED commodity. Review, then `audit-match-soundness.ps1 -Accept` (or -Force to override).'; exit 2 }
+elseif ($LASTEXITCODE -eq 3) { Write-Output 'match-soundness: BLIND - it ingested ZERO products, so nothing this build proves any commodity matching is sound; the matching gate above passed on an empty examination, not on a clean result.' }
 
 # ---- CATEGORY-COVERAGE gate (HARD): every commodity must be filed into exactly one category, else it renders in
 # NO department/filter (invisible). This is what makes "add a new item" safe: forget to categorize it and the

@@ -725,7 +725,7 @@ else { Bad 'guards.ps1 lost an advisory-wrapper exit-3 branch or the missing-all
 # (k) the direct callers keep their blind branches (source asserts - house precedent for caller plumbing;
 # the behavioral exit-3s are covered by the producer fixtures above).
 $cacSrc = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
-if ($cacSrc -match 'walmart-fullpull BLIND' -and $cacSrc -match 'name-drift BLIND' -and $cacSrc -match 'coverage-gaps BLIND for' -and $cacSrc -match 'tile-integrity BLIND') { Ok 'check-ad-cycles keeps all four audit blind branches' }
+if ($cacSrc -match 'walmart-fullpull BLIND' -and $cacSrc -match 'name-drift BLIND' -and $cacSrc -match 'coverage-gaps BLIND for' -and $cacSrc -match 'tile-integrity BLIND' -and $cacSrc -match 'match-soundness BLIND') { Ok 'check-ad-cycles keeps all five audit blind branches' }
 else { Bad 'check-ad-cycles lost an audit blind branch - a blind audit logs as routine again' }
 if ($cacSrc -match 'Not an early warning') { Ok 'check-ad-cycles blind email does not reuse the nothing-is-broken-yet body' }
 else { Bad 'check-ad-cycles blind email body regressed - a blackout would email "nothing is broken yet"' }
@@ -773,7 +773,7 @@ $wpcFired = @(Test-WpcPhaseAudits $wpcBroke)
 if ($wpcFired.Count -eq 2 -and @($wpcFired | Where-Object { $_ -eq 'audit-coverage-gaps.ps1 is not invoked in -Phase publish' }).Count -eq 1 -and @($wpcFired | Where-Object { $_ -eq 'audit-sale-fallback.ps1 is not invoked in -Phase publish' }).Count -eq 1) { Ok 'phase-wiring check FIRES on a source with the publish-phase audits stripped, and blames only the publish phase' }
 else { Bad ('phase-wiring check did NOT fire correctly on the stripped-publish fixture: [' + ($wpcFired -join '; ') + ']') }
 $pdpSrc = Get-Content (Join-Path $root 'publish-deals-page.ps1') -Raw
-if ($pdpSrc -match 'price-mode: BLIND' -and $pdpSrc -match 'name-drift: BLIND') { Ok 'publish-deals-page surfaces exit 3 from its two direct audit calls' }
+if ($pdpSrc -match 'price-mode: BLIND' -and $pdpSrc -match 'name-drift: BLIND' -and $pdpSrc -match 'match-soundness: BLIND') { Ok 'publish-deals-page surfaces exit 3 from all three of its direct audit calls' }
 else { Bad 'publish-deals-page lost a blind surface line - a blind audit falls through silently during publish' }
 
 # ---------------------------------------------------------------- publish-deals-page CHANGE GATE
@@ -870,6 +870,94 @@ Remove-Item $fxSg -Recurse -Force -ErrorAction SilentlyContinue
 $sgLive = @(Get-MisnamedEmitters $root)
 if ($sgLive.Count -eq 0) { Ok 'no grocery script signs another script''s name (the build-walmart-deals/build-sams-deals fork class)' }
 else { Bad ('a script emits under another script''s name - a failure sends the operator to the wrong script and the wrong capture file: ' + ($sgLive -join '; ')) }
+
+# ---------------------------------------------------------------- N+9. the match-soundness sweep cache
+# audit-match-soundness re-derived its whole name->commodity sweep on every invocation: 51.5s of a 53.0s run,
+# ~75% of every publish, and it ran 15 times on 2026-07-29 (14 publish-deals-page invocations in
+# out\logs\weekly-post-capture-2026-07.log plus the daily check-ad-cycles call) on inputs that mostly had not
+# changed. It now stamps a SHA1 of its closed input set next to match-baseline.json and reuses the sweep.
+# A cache is a gate that must arm: if the stamp ever matches when an input HAS changed, this audit silently
+# reports last run's answer, and it is the gate that decides whether the publish HOLDs.
+# The fixture never re-implements the hash - it takes the fingerprint the script itself wrote and corrupts
+# only the ANSWER under it, so "the cache was consulted" and "the cache was rejected" are visible in stdout.
+$fxMs = NewFxDir 'ms-cache'
+New-Item -ItemType Directory -Force (Join-Path $fxMs 'out\audit') | Out-Null
+New-Item -ItemType Directory -Force (Join-Path $fxMs 'out\regular') | Out-Null
+Copy-Item (Join-Path $root 'audit-match-soundness.ps1') (Join-Path $fxMs 'audit-match-soundness.ps1')
+Copy-Item (Join-Path $root 'verdict-lib.ps1') (Join-Path $fxMs 'verdict-lib.ps1')
+Set-Content (Join-Path $fxMs 'commodities.json') '[{"id":"lemons","include":["lemon"],"exclude":[]},{"id":"limes","include":["lime"],"exclude":[]}]' -Encoding UTF8
+Set-Content (Join-Path $fxMs 'compare-deals.ps1') "`$GLOBAL_EXCLUDE = @(`n  'scented candle'`n)`n" -Encoding UTF8
+Set-Content (Join-Path $fxMs 'out\regular\hyvee-regular-2026-01-01.json') '{"deals":[{"item":"Fresh Lemon 1 ct"},{"item":"Fresh Lime 1 ct"}]}' -Encoding UTF8
+$msBaseJson = '{"generated":"2026-01-01 00:00","names":{"Fresh Lemon 1 ct":"lemons","Fresh Lime 1 ct":"limes"},"contested":[]}'
+Set-Content (Join-Path $fxMs 'out\audit\match-baseline.json') $msBaseJson -Encoding UTF8
+$msCache = Join-Path $fxMs 'out\audit\match-sweep-cache.json'
+function MsPoison() {
+  $cj = ConvertFrom-Json ([IO.File]::ReadAllText($script:msCache))
+  $nk = @($cj.names_k); $nv = @($cj.names_v)
+  $pv = New-Object System.Collections.Generic.List[string]
+  for ($i = 0; $i -lt $nk.Count; $i++) { if ([string]$nk[$i] -eq 'Fresh Lemon 1 ct') { [void]$pv.Add('limes') } else { [void]$pv.Add([string]$nv[$i]) } }
+  Set-Content $script:msCache -Value ([ordered]@{ fp = [string]$cj.fp; count = [int]$cj.count; names_k = $nk; names_v = $pv.ToArray(); contest_k = @($cj.contest_k); contest_v = @($cj.contest_v) } | ConvertTo-Json -Depth 4 -Compress) -Encoding UTF8
+}
+$r = RunPSAt $fxMs 'audit-match-soundness.ps1' @()
+if ($r.rc -eq 0 -and $r.text -match 'MOVED=0  DROPPED=0') { Ok 'match-soundness cold run agrees with its frozen baseline' }
+else { Bad ('match-soundness cold run did not match the frozen baseline (rc=' + $r.rc + '): ' + $r.text) }
+if (-not (Test-Path $msCache)) { Bad 'no sweep cache was stamped - the input fingerprint is gone, so the 51s sweep reruns on every publish again' }
+else {
+  # CLEAN TWIN: byte-identical inputs must HIT (the poisoned answer is what surfaces).
+  MsPoison
+  $r = RunPSAt $fxMs 'audit-match-soundness.ps1' @()
+  if ($r.rc -eq 2 -and $r.text -match 'MOVED    lemons -> limes') { Ok 'byte-identical inputs HIT the sweep cache' }
+  else { Bad ('byte-identical inputs did NOT hit the sweep cache (rc=' + $r.rc + ') - the fingerprint never matches and the cache is dead weight: ' + $r.text) }
+  # MUST FIRE: a one-byte, semantically NEUTRAL change to ANY input must MISS, so the true answer returns.
+  foreach ($inp in @(
+      @{ n = 'the script itself'; f = (Join-Path $fxMs 'audit-match-soundness.ps1'); add = "`n# fixture byte`n" },
+      @{ n = 'commodities.json';  f = (Join-Path $fxMs 'commodities.json');          add = ' ' },
+      @{ n = 'compare-deals.ps1'; f = (Join-Path $fxMs 'compare-deals.ps1');         add = "`n# fixture byte`n" },
+      @{ n = 'verdict-lib.ps1';   f = (Join-Path $fxMs 'verdict-lib.ps1');           add = "`n# fixture byte`n" },
+      @{ n = 'a store feed file'; f = (Join-Path $fxMs 'out\regular\hyvee-regular-2026-01-01.json'); add = ' ' })) {
+    $keep = [IO.File]::ReadAllBytes($inp.f)
+    RunPSAt $fxMs 'audit-match-soundness.ps1' @() | Out-Null
+    MsPoison
+    [IO.File]::WriteAllText($inp.f, ([IO.File]::ReadAllText($inp.f) + $inp.add))
+    $r = RunPSAt $fxMs 'audit-match-soundness.ps1' @()
+    if ($r.rc -eq 0 -and $r.text -match 'MOVED=0  DROPPED=0') { Ok ('a one-byte change to ' + $inp.n + ' MISSES the sweep cache') }
+    else { Bad ('a one-byte change to ' + $inp.n + ' still served the STALE sweep (rc=' + $r.rc + ') - that input is not in the fingerprint: ' + $r.text) }
+    [IO.File]::WriteAllBytes($inp.f, $keep)
+  }
+  # -Accept snapshots $names into the baseline and everything in it goes invisible to this audit forever
+  # after, so it must never read a cached sweep - nor write one.
+  RunPSAt $fxMs 'audit-match-soundness.ps1' @() | Out-Null
+  MsPoison
+  $msCacheTicks = (Get-Item $msCache).LastWriteTime.Ticks
+  $r = RunPSAt $fxMs 'audit-match-soundness.ps1' @('-Accept')
+  $msNewBase = ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $fxMs 'out\audit\match-baseline.json')))
+  if ($r.rc -eq 0 -and ([string]$msNewBase.names.'Fresh Lemon 1 ct') -eq 'lemons') { Ok '-Accept ignores the sweep cache and baselines a freshly swept truth' }
+  else { Bad ('-Accept blessed a CACHED mapping into the permanent baseline (got ' + [string]$msNewBase.names.'Fresh Lemon 1 ct' + ') - a stale sweep is now invisible forever') }
+  if ((Get-Item $msCache).LastWriteTime.Ticks -eq $msCacheTicks) { Ok '-Accept does not write the sweep cache either (write path skipped entirely)' }
+  else { Bad '-Accept wrote the sweep cache - the write path is not skipped' }
+  # An unusable stamp must fall through to the real sweep ('' | ConvertFrom-Json returns $null WITHOUT throwing).
+  Set-Content (Join-Path $fxMs 'out\audit\match-baseline.json') $msBaseJson -Encoding UTF8
+  foreach ($junk in @('', '   ', '{"fp":"deadbeef","count":2', '{"fp":"deadbeef","count":0,"names_k":[],"names_v":[],"contest_k":[],"contest_v":[]}')) {
+    Set-Content $msCache -Value $junk -Encoding UTF8
+    $r = RunPSAt $fxMs 'audit-match-soundness.ps1' @()
+    if ($r.rc -eq 0 -and $r.text -match 'MOVED=0  DROPPED=0') { Ok ('an unusable sweep stamp (len ' + $junk.Length + ') falls through to the real sweep') }
+    else { Bad ('an unusable sweep stamp (len ' + $junk.Length + ') changed the verdict (rc=' + $r.rc + '): ' + $r.text) }
+  }
+  # BLIND: zero ingested products must never be stamped, must not read as all-clear, and must not be
+  # baselined (-Accept over an empty sweep erased 18,123 names -> 129 bytes and exited 0 on 2026-07-30).
+  Remove-Item $msCache -Force -ErrorAction SilentlyContinue
+  Remove-Item (Join-Path $fxMs 'out\regular\hyvee-regular-2026-01-01.json') -Force
+  $msBaseSize = (Get-Item (Join-Path $fxMs 'out\audit\match-baseline.json')).Length
+  $r = RunPSAt $fxMs 'audit-match-soundness.ps1' @()
+  if ($r.rc -eq 3 -and $r.text -match 'BLIND') { Ok 'match-soundness reports BLIND (exit 3) when ZERO products were ingested' }
+  else { Bad ('match-soundness returned rc=' + $r.rc + ' having ingested NOTHING - a zero-product run still reads as a clean board: ' + $r.text) }
+  if (-not (Test-Path $msCache)) { Ok 'a sweep that read ZERO products is never stamped (cannot be replayed as all-clear)' }
+  else { Bad 'an empty sweep was cached - "0 products, all clear" can now be served forever' }
+  $r = RunPSAt $fxMs 'audit-match-soundness.ps1' @('-Accept')
+  if ($r.rc -eq 3 -and (Get-Item (Join-Path $fxMs 'out\audit\match-baseline.json')).Length -eq $msBaseSize) { Ok '-Accept REFUSES an empty sweep (the reviewed baseline survives intact)' }
+  else { Bad ('-Accept baselined an EMPTY sweep (rc=' + $r.rc + ', baseline now ' + (Get-Item (Join-Path $fxMs 'out\audit\match-baseline.json')).Length + ' bytes) - this audit is blinded permanently and the empty map is a TRACKED file') }
+}
+Remove-Item $fxMs -Recurse -Force -ErrorAction SilentlyContinue
 
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2

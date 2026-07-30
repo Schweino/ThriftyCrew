@@ -59,15 +59,85 @@ function Ingest([string]$item) {
   $names[$item] = if ($e.Count) { [string]$e[0] } else { '<unmatched>' }
   if ($e.Count -gt 1) { $contest[$item] = ($e -join ' > ') }
 }
+# The FEED SELECTION happens once, here, and is the SINGLE source of truth for both the sweep below and the
+# fingerprint that guards it. Deriving the hash from a second, hand-maintained file list is exactly how a
+# cache key silently stops covering an input it is supposed to cover.
+$feedFiles = New-Object System.Collections.Generic.List[object]
 Get-ChildItem (Join-Path $OutDir 'regular\*.json') -EA SilentlyContinue | Group-Object { ($_.BaseName -replace '-regular-.*$', '') } | ForEach-Object {
-  $f = ($_.Group | Sort-Object Name -Descending | Select-Object -First 1)
-  foreach ($d in (ConvertFrom-Json ([IO.File]::ReadAllText($f.FullName))).deals) { Ingest ([string]$d.item) }
+  [void]$feedFiles.Add(($_.Group | Sort-Object Name -Descending | Select-Object -First 1))
 }
 $adsF = Get-ChildItem (Join-Path $OutDir 'ads-*.json') -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
-if ($adsF) { foreach ($d in (ConvertFrom-Json ([IO.File]::ReadAllText($adsF.FullName))).deals) { Ingest ([string]$d.item) } }
-foreach ($g in @('bakers\bakers-deals-*.json', 'sams\sams-deals-*.json', 'fareway\fareway-deals-*.json')) {
-  $f = Get-ChildItem (Join-Path $OutDir $g) -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
-  if ($f) { foreach ($d in (ConvertFrom-Json ([IO.File]::ReadAllText($f.FullName))).deals) { Ingest ([string]$d.item) } }
+if ($adsF) { [void]$feedFiles.Add($adsF) }
+foreach ($pat in @('bakers\bakers-deals-*.json', 'sams\sams-deals-*.json', 'fareway\fareway-deals-*.json')) {
+  $df = Get-ChildItem (Join-Path $OutDir $pat) -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
+  if ($df) { [void]$feedFiles.Add($df) }
+}
+
+# ---- INPUT FINGERPRINT ----------------------------------------------------------------------------------
+# The Ingest sweep below is 97% of this script's runtime (measured 2026-07-30: 51.5s of a 53.0s run) and it is
+# a PURE FUNCTION of a closed input set, so re-deriving it on byte-identical inputs is wasted wall clock in
+# the publish critical path - and this script is the gate the agent waits on to learn whether publish HOLDs.
+# The hash covers every file that can change $names/$contest:
+#   * THIS SCRIPT and the lib it dot-sources. A cache keyed on data but not on code is a gate that can never
+#     arm after a logic change: edit the matcher, get yesterday's answer back.
+#   * commodities.json and compare-deals.ps1. Only the $GLOBAL_EXCLUDE block of compare-deals is parsed, but
+#     the WHOLE file is hashed: over-keying costs at most an extra miss, under-keying returns a WRONG answer.
+#   * every feed file actually selected above (not a re-listed guess at them).
+# Deliberately NOT in the key, because they are never served from cache: candidates-*.json (the self-check
+# below always re-runs live, so the matcher-vs-engine assertion can never be skipped) and match-baseline.json
+# + verify-verdicts-*.json (the baseline diff and the -Accept verdict gate always run live).
+$msCacheF = Join-Path $audDir 'match-sweep-cache.json'
+$fpFiles = New-Object System.Collections.Generic.List[string]
+$selfF = if ($PSCommandPath) { $PSCommandPath } else { Join-Path $root 'audit-match-soundness.ps1' }
+foreach ($sf in @($selfF, (Join-Path $root 'verdict-lib.ps1'), (Join-Path $root 'commodities.json'), (Join-Path $root 'compare-deals.ps1'))) { [void]$fpFiles.Add([string]$sf) }
+foreach ($ffi in $feedFiles) { [void]$fpFiles.Add([string]$ffi.FullName) }
+$fp = ''
+try {
+  $fpSha = [Security.Cryptography.SHA1]::Create()
+  $fpAcc = New-Object Text.StringBuilder
+  foreach ($fpp in ($fpFiles | Sort-Object)) {
+    $fps = [IO.File]::OpenRead($fpp); try { $fph = $fpSha.ComputeHash($fps) } finally { $fps.Dispose() }
+    [void]$fpAcc.Append($fpp).Append('=').Append([BitConverter]::ToString($fph).Replace('-', '')).Append(';')
+  }
+  $fp = [BitConverter]::ToString($fpSha.ComputeHash([Text.Encoding]::UTF8.GetBytes($fpAcc.ToString()))).Replace('-', '')
+} catch { $fp = '' }   # could not hash an input => cannot prove it unchanged => no cache, run the real sweep
+
+# CACHE READ. Skipped entirely for -Accept/-ForceAccept: those WRITE the baseline out of $names and a wrong
+# $names there is permanent and invisible afterwards. Any doubt at all - no stamp, unreadable stamp, a stamp
+# whose '' parses to $null WITHOUT throwing, a count that does not survive the round trip - falls through to
+# the real sweep, because a skip that cannot prove its inputs are unchanged must run the real thing.
+$msHit = $false
+if ($fp -and -not $Accept -and -not $ForceAccept -and (Test-Path $msCacheF)) {
+  try {
+    $cj = ConvertFrom-Json ([IO.File]::ReadAllText($msCacheF))
+    if ($cj -and ([string]$cj.fp) -eq $fp -and ([int]$cj.count) -gt 0) {
+      $nk = @($cj.names_k); $nv = @($cj.names_v); $ck = @($cj.contest_k); $cv = @($cj.contest_v)
+      if ($nk.Count -eq ([int]$cj.count) -and $nv.Count -eq $nk.Count -and $ck.Count -eq $cv.Count) {
+        for ($i = 0; $i -lt $nk.Count; $i++) { $names[[string]$nk[$i]] = [string]$nv[$i] }
+        for ($i = 0; $i -lt $ck.Count; $i++) { $contest[[string]$ck[$i]] = [string]$cv[$i] }
+        # names are stored as PARALLEL ARRAYS, never as JSON object keys: PSObject property names are
+        # case-INSENSITIVE, so two products differing only in case would silently merge on reload. The count
+        # check below is the belt to that braces - a map that did not survive the round trip is discarded.
+        if ($names.Count -eq ([int]$cj.count) -and $contest.Count -eq $ck.Count) { $msHit = $true }
+      }
+    }
+  } catch { }
+  if (-not $msHit) { $names = @{}; $contest = @{} }
+}
+
+if (-not $msHit) {
+  foreach ($ffr in $feedFiles) { foreach ($d in (ConvertFrom-Json ([IO.File]::ReadAllText($ffr.FullName))).deals) { Ingest ([string]$d.item) } }
+  # Never cache an EMPTY sweep. A stamp saying "0 products, all clear" would let a run that read nothing be
+  # served back forever as a clean bill of health.
+  if ($fp -and $names.Count -gt 0 -and -not $Accept -and -not $ForceAccept) {
+    try {
+      $nkL = New-Object System.Collections.Generic.List[string]; $nvL = New-Object System.Collections.Generic.List[string]
+      foreach ($kv in $names.GetEnumerator()) { [void]$nkL.Add([string]$kv.Key); [void]$nvL.Add([string]$kv.Value) }
+      $ckL = New-Object System.Collections.Generic.List[string]; $cvL = New-Object System.Collections.Generic.List[string]
+      foreach ($kv in $contest.GetEnumerator()) { [void]$ckL.Add([string]$kv.Key); [void]$cvL.Add([string]$kv.Value) }
+      Set-Content $msCacheF -Value ([ordered]@{ fp = $fp; count = $names.Count; names_k = $nkL.ToArray(); names_v = $nvL.ToArray(); contest_k = $ckL.ToArray(); contest_v = $cvL.ToArray() } | ConvertTo-Json -Depth 4 -Compress) -Encoding UTF8
+    } catch { }
+  }
 }
 
 # ---- SELF-CHECK: matcher vs the engine's candidates (must be 0 disagreements) ----
@@ -76,6 +146,20 @@ try {
   $candF = Get-ChildItem (Join-Path $OutDir 'candidates-*.json') | Sort-Object Name -Descending | Select-Object -First 1
   if ($candF) { foreach ($cm in @((ConvertFrom-Json ([IO.File]::ReadAllText($candF.FullName))).commodities)) { foreach ($cd in @($cm.candidates)) { $nm = [string]$cd.name; if ($names.ContainsKey($nm) -and $names[$nm] -ne [string]$cm.id) { $drift++ } } } }
 } catch {}
+
+# ---- BLIND GUARD: a check that examined NOTHING must say so ----------------------------------------------
+# With every feed missing this script used to print "MOVED=0  DROPPED=0" and exit 0 - a clean bill of health
+# over zero products - because the report loop only walks names it actually ingested. Worse, -Accept in that
+# state rewrote the baseline as an EMPTY map (measured 2026-07-30: 18,123 names / 1.70 MB -> 0 names / 129
+# bytes, "baseline ACCEPTED (0 product names)", exit 0). match-baseline.json is a TRACKED file, so that empty
+# map commits, and every later run diffs against nothing and reports all-clear forever.
+# Exit 3 is the estate's could-not-evaluate code. On today's real inputs $names.Count is 18,123, so this can
+# only fire on a genuinely empty read - no cry-wolf on a healthy run.
+if ($names.Count -eq 0) {
+  Write-Output 'match-soundness: BLIND - ZERO products were ingested, so nothing this run proves about any commodity matching. This is NOT a clean board: check out\regular\, out\ads-*.json and the per-store deals files.'
+  if ($Accept -or $ForceAccept) { Write-Output 'ACCEPT REFUSED - baselining an empty sweep would erase the reviewed baseline and blind this audit permanently.' }
+  exit 3
+}
 
 # ---- ACCEPT: write current as baseline ----
 if ($Accept -or $ForceAccept) {
