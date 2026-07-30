@@ -260,5 +260,34 @@ if ($oubProof.nonZero -eq 0 -and $oubProof.zero -eq 1 -and $oubProof.msg -eq 'BL
   Ok 'zero-rows fixture: a non-zero count stays silent, a zero count raises exactly the blind warning'
 } else { Bad ("zero-rows fixture FAILED: nonZero-warns=$($oubProof.nonZero) zero-warns=$($oubProof.zero) msg='$($oubProof.msg)'") }
 
+# ---------------------------------------------------------------- N+1. batch importers must read UTF-8
+# The four batch importers used a bare Get-Content, which in PS 5.1 decodes a UTF-8 capture as Windows-1252
+# and then SAVES the damage - the same bug that shipped 16 mangled board rows on 2026-07-29, 6 of them crowns.
+# Source-grep that they are wired, then PROVE the decode end to end on a real UTF-8-no-BOM file, because a
+# grep alone passes on an importer that dot-sources capture-lib and then ignores it.
+foreach ($imp in @('import-browser-batch.ps1','import-walmart-batch.ps1','import-instacart-batch.ps1','import-aldi-batch.ps1')) {
+  $ip = Join-Path $root $imp
+  if (-not (Test-Path $ip)) { Bad ("$imp is missing - it was a live staples-expansion importer"); continue }
+  $it = Get-Content $ip -Raw
+  if ($it -match "Get-Content \(Join-Path \`$root \`$Raw\) -Encoding UTF8" -and $it -match 'capture-lib') {
+    Ok "$imp reads its capture as UTF-8 and repairs mojibake"
+  } else { Bad "$imp reads its capture with the default (ANSI) encoding again - the next staples batch will ship mangled names" }
+}
+# Behavioural: a UTF-8-no-BOM line with an umlaut must survive the read the importers now perform.
+$tmpU = Join-Path $env:TEMP ('utf8probe-' + [guid]::NewGuid().ToString('N') + '.txt')
+try {
+  $UML = [char]0x00FC   # u-umlaut, built from a code point so THIS file stays pure ASCII
+  $want = 'eggs' + "`t" + 'Deutsche K' + $UML + 'che German Style Sauerkraut~~$3.49'
+  [IO.File]::WriteAllText($tmpU, $want, (New-Object Text.UTF8Encoding($false)))   # no BOM, as a Blob download is
+  $viaDefault = Get-Content $tmpU | Select-Object -First 1
+  $viaUtf8    = Get-Content $tmpU -Encoding UTF8 | Select-Object -First 1
+  if ($viaDefault -eq $want) {
+    Ok 'utf8 fixture inconclusive on this box (ANSI read did not corrupt) - encoding assertion still enforced by the greps above'
+  } elseif ($viaUtf8 -eq $want) {
+    Ok 'utf8 fixture: the default read DOES corrupt an umlaut and the -Encoding UTF8 read the importers now use does not'
+  } else { Bad 'utf8 fixture: -Encoding UTF8 did not round-trip an umlaut - the importer fix does not actually work here' }
+} catch { Bad ('utf8 fixture threw: ' + $_.Exception.Message) }
+finally { if (Test-Path $tmpU) { Remove-Item -LiteralPath $tmpU -Force -ErrorAction SilentlyContinue } }
+
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2

@@ -33,7 +33,21 @@ function GetSize([string]$field, [string]$name) {
 # a name is garbage if it has no run of >=3 letters (e.g. leftover "Original Price" junk stripped to symbols)
 function GoodName([string]$n) { return ($n -and $n.Length -ge 3 -and ($n -match '[A-Za-z]{3,}')) }
 
-$lines = Get-Content (Join-Path $root $Raw)
+# READ THE CAPTURE AS UTF-8, AND REPAIR ANYTHING ALREADY MANGLED UPSTREAM.
+# A browser Blob download is UTF-8; PowerShell 5.1's Get-Content defaults to the system ANSI codepage
+# (Windows-1252 here), so a bare read corrupts every non-ASCII byte and then the row is SAVED that way - the
+# damage is baked into the bytes, so reading correctly later does not undo it. That shipped 16 mangled board
+# rows on 2026-07-29, 6 of them CROWNS ("Member(junk)s Mark Wildflower Pure Premium Honey" was the first thing
+# a shopper read on the honey row). capture-lib.ps1 fixed the four live builders; these four batch importers
+# were missed, so the next staples expansion would have re-introduced it.
+# Measured on the staged batch files: walmart 50 of 50 lines corrupted by the default read, bakers 40 of 50,
+# aldi 2 of 49, fareway 2 of 50. Walmart hits EVERY line because its unit price carries a cent glyph - so the
+# corruption lands in the PRICE field, not just the name.
+# Repair-Mojibake is applied per LINE rather than per parsed name: it is a no-op on clean text (it fires only
+# on a mojibake signature that round-trips through a THROWING UTF-8 decoder), so this is uniform across all
+# four importers and cannot damage good data.
+. (Join-Path $PSScriptRoot 'capture-lib.ps1')
+$lines = @(Get-Content (Join-Path $root $Raw) -Encoding UTF8) | ForEach-Object { Repair-Mojibake $_ }
 $rows = New-Object System.Collections.ArrayList; $seen = @{}; $skip = 0
 foreach ($ln in $lines) {
   if (-not ($ln -match "`t")) { continue }
