@@ -87,6 +87,17 @@ try {
       # Change quinoa microwave pouch at $3.76/lb. Later passes caught 4-gallon bin liners winning the
       # 13-GALLON kitchen-bag row and liquid cold brew crowning ground coffee. Two paths to publish must not
       # have two definitions of "safe".
+      # REFRESH THE GATE'S OWN INPUTS BEFORE THE GATE READS THEM (2026-07-29, found the hard way).
+      # guards.ps1:188 runs audit-tile-integrity, whose WRONG-PRODUCT verdicts come from out\name-drift.json -
+      # and until now the only thing that regenerated that file was publish-deals-page.ps1:69, which runs AFTER
+      # guards. So the gate graded the new board against a PREVIOUS run's drift flags, and the publish then
+      # refreshed them. Tonight that shipped six Walmart links pointing at the wrong product (butter, chickpeas,
+      # egg-whites by name-drift; storage-bags, laundry-pods, soda by count-mismatch): the 2,726 fresh Walmart
+      # rows changed which product wins those cells, guards saw stale flags and said OK, and the defect only
+      # surfaced when guards was re-run by hand afterwards. A gate that reads an input its own subject rebuilds
+      # is one publish behind by construction.
+      $null = RunChild (Join-Path $root 'audit-links.ps1') @() 3 'pre-gate-links' -NonFatal
+      $null = RunChild (Join-Path $root 'audit-name-drift.ps1') @() 3 'pre-gate-drift' -NonFatal
       $gc = RunChild (Join-Path $root 'guards.ps1') @() 4 'guards' -NonFatal
       if($gc -eq 2){ Log 'publish HELD by guards.ps1 - a HARD invariant is violated (see the guards lines above). Fix the data, then re-run -Phase publish.'; exit 2 }
       if($gc -ne 0){ throw "guards.ps1 exited $gc" }
@@ -100,11 +111,36 @@ try {
       $null = RunChild (Join-Path $root 'merge-product-urls.ps1') @() 2 'merge'
       $null = RunChild (Join-Path $root 'resolve-worklist.ps1') @() 2 'reflag'
       $null = RunChild (Join-Path $root 'stamp-board-pu.ps1') @() 2 'stamp'
+      # THIS PHASE PUBLISHES THE BOARD AND IT IS THE LAST PUBLISH OF THE WEEKLY RUN, so it needs the SAME
+      # repair-then-gate chain the daily job has run since check-ad-cycles.ps1:671-693. It had none: it merged
+      # links, re-stamped pins and republished, with no prune and no guards. A link merged during the browser
+      # resolution step that is off by a factor, or that moves a pin's source so the pin is no longer derivable,
+      # went straight to the live board - and then sat there until the next morning's daily job hard-failed and
+      # refused to publish, leaving the ungated weekly board live overnight.
+      # Order matters and mirrors the daily chain exactly:
+      #   prune   - drop links that drifted by a FACTOR (0.32 = everything guards would hard-fail on, nothing
+      #             more, so the repair can never deadlock the publish on a normal price nudge)
+      #   sync    - immediately re-create any browser link the prune just dropped whose row still carries the
+      #             product identity, so a pruned link is healed in the same pass instead of leaving a gap
+      #   pins    - links just changed, so pins derived from them must be re-minted BEFORE guards re-checks
+      #   audits  - refresh name-drift/links, which are the gate's OWN inputs (see the note in -Phase publish)
+      #   guards  - and only publish if it passes
+      $null = RunChild (Join-Path $root 'prune-bad-links.ps1') @('-Tol','0.32') 3 'prune' -NonFatal
+      $null = RunChild (Join-Path $root 'sync-browser-links.ps1') @() 3 'sync-links' -NonFatal
+      $null = RunChild (Join-Path $root 'generate-board-overrides.ps1') @() 3 'pins' -NonFatal
+      $null = RunChild (Join-Path $root 'audit-links.ps1') @() 3 'audit-links' -NonFatal
+      $null = RunChild (Join-Path $root 'audit-name-drift.ps1') @() 3 'name-drift' -NonFatal
+      $lg = RunChild (Join-Path $root 'guards.ps1') @() 4 'guards' -NonFatal
+      if($lg -eq 2){ Log 'links HELD by guards.ps1 - the link merge broke a hard invariant. The live board is UNCHANGED (last good). Fix the links, then re-run -Phase links.'; exit 2 }
+      if($lg -ne 0){ throw "guards.ps1 exited $lg" }
       $rc = RunChild (Join-Path $root 'publish-deals-page.ps1') @() 3 'republish' -NonFatal
       if($rc -eq 2){ Log 'republish HELD by coverage gate (unusual at this stage) - investigate.'; exit 2 }
       if($rc -ne 0){ throw "publish-deals-page exited $rc" }
-      $null = RunChild (Join-Path $root 'audit-links.ps1') @() 3 'audit-links' -NonFatal
-      $null = RunChild (Join-Path $root 'audit-name-drift.ps1') @() 3 'name-drift' -NonFatal
+      # POST-PUBLISH VERIFICATION. publish-deals-page regenerates name-drift.json as it builds, so this is the
+      # first moment the shipped board can be graded against fresh drift flags. Advisory, not a gate: the board
+      # is already live, and the honest move is to say so loudly rather than pretend the pre-check covered it.
+      $tiPost = RunChild (Join-Path $root 'audit-tile-integrity.ps1') @() 3 'post-publish-tiles' -NonFatal
+      if($tiPost -ne 0){ Log 'POST-PUBLISH: audit-tile-integrity FAILED on the board that just went live - run prune-bad-links -Tol 0.32 and re-run -Phase links NOW.' }
       $null = RunChild (Join-Path $root 'push-data.ps1') @() 1 'push'
       Log 'PHASE links DONE. Agent: report audit-links/name-drift residue; re-resolve any form-flips and re-run -Phase links if needed.'
     }
