@@ -59,6 +59,22 @@ foreach ($id in $ids) {
   } else { $ok++ }
 }
 
+# ZERO-ROWS-IS-NOT-A-PASS. Every staple is located by a regex against the rendered embed:
+#   [regex]::Match($html, "data-id='<id>'.*?</article>")
+# Anything it misses is pushed to $absent and `continue`d, and $absent is only a parenthetical WARN below. So if
+# build-deals-page ever emits data-id="..." with double quotes, renames the wrapper element, or the embed is
+# truncated, ALL of the staples land in $absent: $ok = 0, $violations = 0, and this HARD publish gate prints
+# "store-coverage: OK  all 0 on-board staples show every one of the 7 stores" and exits 0. The audit exists to
+# catch a render regression, and a render regression is precisely what empties its set.
+# Routed through $violations rather than a bare `exit 2` on purpose: that way it lands in
+# store-coverage-report.json, the existing FAIL branch prints and exits 2, and check-ad-cycles builds a stable
+# NON-EMPTY alert signature from it - a bare exit 2 with an empty violations list is swallowed by that
+# signature de-dup and emails nobody. Requiring $violations.Count -eq 0 keeps the message truthful when every
+# row is present but failing. Cannot cry wolf: $ok is 469 on a healthy run.
+if ($ok -eq 0 -and $violations.Count -eq 0 -and $ids.Count -gt 0) {
+  $violations.Add([pscustomobject]@{ commodity = '*ALL-ROWS-ABSENT*'; missing = ('row matcher found 0 of ' + $ids.Count + ' staples in the embed - the data-id row markup changed or the build is truncated; zero rows examined is not a pass'); dupes = '' })
+}
+
 $report = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); stores = $stores.Count; checked = $ids.Count; ok = $ok; absent = $absent; violations = $violations }
 $report | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $OutDir 'store-coverage-report.json') -Encoding UTF8
 $warn = if ($absent.Count) { "  (WARN " + $absent.Count + " staple not on board: " + ($absent -join ', ') + ")" } else { "" }

@@ -39,13 +39,13 @@ function BoardFiles {
     Where-Object { $_.BaseName -match 'comparison-(\d{4}-\d{2}-\d{2})$' } | Sort-Object Name -Descending
 }
 $files = @(BoardFiles)
-if (-not $New) { if (-not $files.Count) { Write-Output 'coverage-regression: no board files; nothing to check.'; exit 0 }; $New = $files[0].FullName }
+if (-not $New) { if (-not $files.Count) { Write-Output 'coverage-regression: no board files; nothing to check.'; exit 3 }; $New = $files[0].FullName }
 $newDate = if ([IO.Path]::GetFileNameWithoutExtension($New) -match '(\d{4}-\d{2}-\d{2})$') { $Matches[1] } else { '' }
 if (-not $Prev) {
   # baseline = newest board from a DIFFERENT (earlier) date. Same-date rebuilds must not be their own baseline,
   # or a regression introduced by today's second run would compare clean against today's first run.
   $p = @($files | Where-Object { $_.BaseName -notmatch [regex]::Escape($newDate) + '$' } | Select-Object -First 1)
-  if (-not $p.Count) { Write-Output 'coverage-regression: no earlier board to compare against; nothing to check.'; exit 0 }
+  if (-not $p.Count) { Write-Output 'coverage-regression: no earlier board to compare against; nothing to check.'; exit 3 }
   $Prev = $p[0].FullName
 }
 
@@ -55,8 +55,20 @@ function StoreCounts($path) {
   foreach ($r in $j.comparison) { foreach ($s in $r.stores) { $k = [string]$s.store; if (-not $h.ContainsKey($k)) { $h[$k] = 0 }; $h[$k]++ } }
   return @{ stores = $h; rows = @($j.comparison).Count }
 }
+# EXIT 3 = "could not evaluate", distinct from 0 = "evaluated, all good". guards.ps1 ran this with | Out-Null
+# and relabelled every exit 0 as "ok  no store lost coverage vs the previous board" - so the two honest
+# "nothing to check" sentences above were DISCARDED and reported as a pass. Not exotic: guard 12's own essay
+# notes out\comparison-*.json is gitignored on purpose, so a fresh clone or a cloud runner has exactly ONE
+# board and the second bail-out fires every single time. This is the only guard that can see the Sam's
+# 251 -> 116 class; the publish gate itself only enforces a floor.
 $a = StoreCounts $Prev
 $b = StoreCounts $New
+# THIRD zero-examination path, downstream of both bail-outs and easy to miss: StoreCounts does not throw on a
+# board whose `comparison` array is empty or renamed - `foreach ($r in $null)` iterates zero times - so a
+# degenerate baseline yields $was = 0 for every store, every drop negative, no failures, exit 0. Reproduced
+# with a {"comparison":[]} baseline: every store printed as "0 -> 334 ... ok", then "OK - no store lost
+# coverage." A fix that only patches the two bail-outs above leaves this path wide open.
+if ($a.stores.Count -eq 0) { Write-Output 'coverage-regression: baseline board has ZERO priced cells; nothing to compare against.'; exit 3 }
 
 # acks: [{ store, reason, expires:'YYYY-MM-DD' }]
 $ackPath = Join-Path $OutDir 'coverage-ack.json'

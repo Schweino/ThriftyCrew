@@ -202,8 +202,15 @@ foreach ($g in @(
     @{ f='audit-tile-integrity.ps1';    n='ZERO shipped links disagree with their tile (hard), and no store regressed on coverage (ratchet)' })) {
   $p = Join-Path $root $g.f
   if (-not (Test-Path $p)) { [void]$fail.Add(("MISSING GUARD SCRIPT: " + $g.f)); continue }
-  & powershell -NoProfile -ExecutionPolicy Bypass -File $p | Out-Null
-  if ($LASTEXITCODE -ne 0) { [void]$fail.Add(("HARD FAIL: " + $g.n + " (see " + $g.f + ")")) }
+  # CAPTURE the output instead of discarding it: a delegated audit that says "nothing to check" was exiting 0,
+  # and this loop relabelled that as "ok  <invariant holds>". EXIT 3 now means "could not evaluate" and becomes
+  # a WARN naming what went unproven. Deliberately NOT a hard fail: the no-baseline case fires on every cloud
+  # run by construction (out\comparison-*.json is gitignored), so failing on it would turn a blind spot into a
+  # missed board on exactly the days the local run was already missed - the cry-wolf outcome that matters most
+  # here. Capturing is harmless for the other delegated audits; only exit 3 is special-cased.
+  $o = & powershell -NoProfile -ExecutionPolicy Bypass -File $p 2>$null
+  if ($LASTEXITCODE -eq 3) { [void]$warn.Add($g.n + ' could NOT be evaluated, so it proves nothing this run: ' + ((@($o) | Where-Object { $_ }) -join ' ')) }
+  elseif ($LASTEXITCODE -ne 0) { [void]$fail.Add(("HARD FAIL: " + $g.n + " (see " + $g.f + ")")) }
   else { Say ("  ok    " + $g.n) }
 }
 
@@ -544,7 +551,7 @@ if ($staleSale -eq 0) { Say '  ok    no undated stale discount is being publishe
 # cannot be checked is a store that is quietly drifting, and that has to be visible on every single run
 # rather than discovered by a reader clicking a link.
 $today = [datetime](Get-Date -Format 'yyyy-MM-dd')
-$stale = 0
+$stale = 0; $aged = 0
 foreach ($f in (RegFiles)) {
   $prefix = ($f.BaseName -replace '-regular-.*$','')
   $newest = RegFiles ($prefix + '-regular-*.json') | Sort-Object Name -Desc | Select-Object -First 1
@@ -552,7 +559,16 @@ foreach ($f in (RegFiles)) {
   $doc = Get-Content $f.FullName -Raw | ConvertFrom-Json
   $store = [string]$doc.store
   $rows = @($doc.deals)
-  if (-not $rows.Count) { continue }
+  if (-not $rows.Count) {
+    # ZERO-ROWS RULE. A store whose newest file parses to no deals used to be skipped in silence - it produced
+    # neither its freshness note nor its >14-day HARD FAIL, so nothing was watching its clock at all. That is
+    # exactly the throttled-partial class (a 0-row PARTIAL file), and guard 6 also misses it whenever the store
+    # has fewer than 2 files. Named by \ (from the FILENAME) and not \, which is read from the
+    # very document whose deals array is empty and can therefore be '' - naming nobody is the one failure this
+    # rule exists to prevent.
+    [void]$warn.Add(("{0}: newest price file '{1}' parsed to ZERO rows - neither the freshness note nor the >14-day staleness test could run for this store, and nothing else is watching its clock" -f $prefix, $f.Name))
+    continue
+  }
 
   # how many rows carry a date, and how old is the freshest?
   $dated = @($rows | Where-Object { $_.as_of })
@@ -632,6 +648,7 @@ foreach ($f in (RegFiles)) {
     $note += '  <-- NOT price-verified today: this store CAN discount, so it may be publishing regular prices (the Hy-Vee/Baker''s bug)'
   }
   [void]$warn.Add($note)
+  $aged++   # a store that completed its freshness note - this is the count the ok line below gates on
 
   # a store nobody has looked at in over two weeks is not "safe", it is unknown
   if ($age -gt 14) {
@@ -639,7 +656,13 @@ foreach ($f in (RegFiles)) {
     [void]$fail.Add(("HARD FAIL: {0} price data is {1} days old - a stale price is a wrong price" -f $store, $age))
   }
 }
-if ($stale -eq 0) { Say '  ok    no store''s price data is older than 14 days' }
+# The $stale -eq 0 wrapper STAYS: OkUnlessBlind prints ok whenever the count is non-zero, so dropping it would
+# announce "no store's price data is older than 14 days" on the very run where a 15-day-old store just filed
+# the HARD FAIL above. Same shape guard 11 uses.
+if ($stale -eq 0) {
+  OkUnlessBlind $aged "no store's price data is older than 14 days ($aged store(s) aged)" `
+    'guard 9 aged ZERO stores - out\regular yielded no readable per-store data, so NOTHING checked any store''s clock. Guard 10''s own header names guard 9 as the only staleness watch on Baker''s, Fareway, Sam''s and Walmart.'
+}
 
 # ---------------------------------------------------------------- 10: never publish the REGULAR price
 # THE BUG THIS WHOLE SESSION WAS ABOUT, TURNED INTO AN INVARIANT.
