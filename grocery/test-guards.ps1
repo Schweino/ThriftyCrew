@@ -442,6 +442,57 @@ if (Test-Path $of) {
   } else {
     Skip 'pin: overrides file has no cells - inject a synthetic derivable pin, then hand-edit it'
   }
+
+  # ---- 14. guard 3's WRONG-PRODUCT clause, END TO END --------------------------------------------------
+  # Until 2026-07-30 this clause could not fire AT ALL: audit-name-drift read out\comparison-*.json only while
+  # every pin is a recipe-board-only id, so $pinDrift never held a key matching a pin and guards printed
+  # "ok ... 16 checked" with the product-identity half proving nothing. Nothing is hand-injected into
+  # name-drift.json here - that would pass on the OLD code too and prove nothing. The mutation is on the LINK,
+  # and the REAL audit has to turn it into a flag. Only the NAME changes, so the pin still derives from its own
+  # link and the only new fault is product identity. Both mutated files are registered with Backup, so the
+  # finally-block RestoreAll puts them back on any exit path (out\name-drift.json is gitignored + regenerable).
+  #
+  # WHY THE NAME SAYS "FROZEN", AND WHY THE CANDIDATE IS NOT JUST cand[0]: audit-name-drift only flags a
+  # token mismatch when the BOARD item has a distinctive (non-commodity) word to miss. Measured 2026-07-30,
+  # au-jus-gravy-mix/Hy-Vee is a live pin whose board item is "Hy-Vee Au Jus Sauce Mix" - every word is a stop
+  # word or <=3 chars, so $btoks is empty, the audit says "no opinion", and renaming its link to an unrelated
+  # product produces NO flag at all. cand[0] is whichever pin sorts first in a file that regenerates daily,
+  # so a fixture that picked it blindly would go RED on healthy code the day the pin set shifts - the same
+  # depends-on-rotating-data trap this file's own Skip() essay condemns. "Frozen" routes through the FORM-FLIP
+  # clause, which is deliberately independent of the token test (that independence IS the Aldi blueberry fix),
+  # and the loop then PROVES the audit flagged the cell before asserting on guards. Measured: the frozen
+  # rename flags all 6 of today's examinable pins, au-jus included.
+  $ndFx = Join-Path $root 'out\name-drift.json'
+  if (Test-Path $ndFx) {
+    $ndFxBak = Backup $ndFx
+    $ndFxScanned = @{}
+    foreach ($k in @(($ndFxBak | ConvertFrom-Json).examined_cells)) { if ($k) { $ndFxScanned[[string]$k] = $true } }
+    $ndFxCand = @(@((Get-Content $of -Raw | ConvertFrom-Json).cells) | Where-Object { $ndFxScanned.ContainsKey([string]$_.id + '|' + [string]$_.store) })
+    $ndFxFired = $false
+    if ($ndFxCand.Count -gt 0) {
+      $pfx = Join-Path $root 'product-urls.json'
+      $pfxBak = Backup $pfx
+      foreach ($ndFxPin in $ndFxCand) {
+        $pfxDoc = $pfxBak | ConvertFrom-Json
+        $pfxDoc.items.([string]$ndFxPin.id).([string]$ndFxPin.store).name = 'Zzz Frozen Unrelated Fixture Product'
+        ($pfxDoc | ConvertTo-Json -Depth 8) | Set-Content $pfx -Encoding UTF8
+        & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-drift.ps1') | Out-Null
+        $ndFxKey = [string]$ndFxPin.id + '|' + [string]$ndFxPin.store
+        $ndFxNow = try { (Get-Content $ndFx -Raw | ConvertFrom-Json) } catch { $null }
+        $ndFxHit = @(@($ndFxNow.flags) | Where-Object { $_ -and ([string]$_.id + '|' + [string]$_.store) -eq $ndFxKey }).Count
+        if ($ndFxHit -gt 0) {
+          Check ('pin: ' + $ndFxKey + ' pinned to a link that is now a DIFFERENT product') 2 'pin derived from a WRONG-PRODUCT link'
+          $ndFxFired = $true
+        }
+        Set-Content $pfx $pfxBak -Encoding UTF8 -NoNewline
+        if ($ndFxFired) { break }
+      }
+      & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-drift.ps1') | Out-Null
+    }
+    if (-not $ndFxFired) {
+      Skip ('pin: could not make audit-name-drift flag ANY of the ' + $ndFxCand.Count + ' pin(s) it records having examined (out\name-drift.json examined_cells) - the WRONG-PRODUCT clause has nothing that can arm it, which IS the bug')
+    }
+  }
 }
 
 } finally {

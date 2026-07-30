@@ -11,11 +11,24 @@ $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $out  = Join-Path $root 'out'
 $cmp  = (Get-ChildItem (Join-Path $out 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1)
-$c    = (Get-Content $cmp.FullName -Raw | ConvertFrom-Json).comparison
+# BOTH BOARDS. This read was comparison-*.json ONLY, and that is what made the WRONG-PRODUCT half of guards.ps1
+# guard 3 structurally unfirable: generate-board-overrides pins across the staple AND the recipe board, every
+# one of today's 16 pins is a recipe-board-only id, so guard 3's $pinDrift map could never hold a key matching
+# any pin while the guard printed "ok ... 16 checked". MEASURED 2026-07-30: staple 492 rows / recipe 80 rows /
+# 0 ids in common; the union adds 243 examinable cells (2,435 -> 2,678) and exactly 3 new flags, none of them
+# on a pinned cell, so no pin, page tile or pruned link changes today. Recipe rows whose id ALSO exists on the
+# staple board are dropped: the same id carries a different unit basis on the two boards and one link cannot be
+# right for both - the same collision rule generate-board-overrides.ps1 applies before it pins anything.
+$c    = @((Get-Content $cmp.FullName -Raw | ConvertFrom-Json).comparison)
+$stapleIds = @{}; foreach ($sr in $c) { $stapleIds[[string]$sr.id] = $true }
+$rbF  = Join-Path $out 'recipe-board.json'
+if (Test-Path $rbF) {
+  $c = @($c) + @(@((Get-Content $rbF -Raw | ConvertFrom-Json).comparison) | Where-Object { -not $stapleIds.ContainsKey([string]$_.id) })
+}
 $purls = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
 # commodity + generic words that appear in both names, so are NOT distinctive of the specific product
 $stop = 'boneless|skinless|chicken|breast|breasts|thigh|thighs|drumstick|drumsticks|ground|beef|turkey|pork|bacon|fresh|frozen|large|whole|family|pack|natural|all|lean|value|brand|each|lb|lbs|oz|count|ct|bag|tray|organic|cage|free|grade|sweet|original|classic|the|and|with|for|from|our|certified|the|of|per|shredded|cheese|milk|eggs|butter|sour|cream|juice|orange|apple|apples|banana|bananas|potato|potatoes|russet|onion|onions|bread|coffee|sugar|brown|tomato|tomatoes|sauce|paste|beans|kidney|garbanzo|cannellini|olives|pineapple|chunks|strawberries|blueberries|grapes|avocado|avocados|watermelon|corn|cabbage|carrots|ginger|honey|mustard|dijon|vinegar|balsamic|white|red|wine|soy|hoisin|sesame|oil|tahini|paprika|curry|powder|cornstarch|starch|rotini|pasta|marinara|spinach|peas|green|hominy|tomatillos|cashews|peanut|maple|syrup|yogurt|greek|cottage|provolone|cheddar|colby|jack|mozzarella|fries|crumbs|loin|chop|chops|thick|cut|roll|spread|soft|low|fat|pint|package|bowl'
-$flags = @(); $examined = 0; $exByStore = @{}
+$flags = @(); $examined = 0; $exByStore = @{}; $exCells = New-Object System.Collections.Generic.List[string]
 foreach ($it in $c) {
   $id = [string]$it.id
   if (-not $purls.$id) { continue }
@@ -25,6 +38,12 @@ foreach ($it in $c) {
     $lnk = $purls.$id.$store
     if (-not $lnk -or -not $lnk.url) { continue }
     $examined++; if (-not $exByStore.ContainsKey($store)) { $exByStore[$store] = 0 }; $exByStore[$store]++
+    # WHICH cells, not just how many. guards.ps1 guard 3 has to know whether the pin it is about to bless was
+    # actually product-identity-checked, and it CANNOT re-derive that: 161 of the recipe board's 404 cells
+    # record no .item at all, so "the id is on a board" is NOT "the cell was examined" - that re-derivation
+    # prints 16 of 16 when the true answer is 6 (measured 2026-07-30). Publish the examined set so the
+    # consumer reads a fact instead of keeping a second, drifting copy of this loop's admission test.
+    [void]$exCells.Add($id + '|' + $store)
     $lname = ([string]$lnk.name).ToLower()
     # FORM FLIP AND COUNT MISMATCH ARE INDEPENDENT OF THE TOKEN TEST, so compute them BEFORE the token bail-out.
     # The old order checked distinctive tokens first and `continue`d when there were none - and a board item named
@@ -59,7 +78,7 @@ foreach ($it in $c) {
     }
   }
 }
-([ordered]@{ generated=(Get-Date -Format 'yyyy-MM-dd'); count=$flags.Count; examined=$examined; examined_by_store=$exByStore; flags=$flags } | ConvertTo-Json -Depth 5) | Set-Content (Join-Path $out 'name-drift.json') -Encoding UTF8
+([ordered]@{ generated=(Get-Date -Format 'yyyy-MM-dd'); count=$flags.Count; examined=$examined; examined_by_store=$exByStore; examined_cells=@($exCells); flags=$flags } | ConvertTo-Json -Depth 5) | Set-Content (Join-Path $out 'name-drift.json') -Encoding UTF8
 Write-Output ("name/form-drift suspects: " + $flags.Count + " of $examined cells tested (REVIEW - some are just brand differences)")
 $flags | Sort-Object reason, store, id | ForEach-Object { Write-Output ("  [{0}] {1,-14} {2}`n     BOARD: {3}`n     LINK : {4}" -f $_.reason, $_.store, $_.id, $_.board_item, $_.link_name) }
 if ($examined -eq 0) {

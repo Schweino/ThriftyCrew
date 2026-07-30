@@ -668,6 +668,41 @@ if ($r.rc -eq 0 -and $r.text -match '0 of 1 cells tested' -and $ndJson -and [int
 else { Bad ('name-drift clean twin failed (rc=' + $r.rc + ')') }
 Remove-Item $fxNd -Recurse -Force -ErrorAction SilentlyContinue
 
+# (g2) audit-name-drift MUST be able to see a RECIPE-BOARD cell. Founding bug (2026-07-30): it read
+# out\comparison-*.json only, so guards.ps1 guard 3's WRONG-PRODUCT clause - which looks a pin up in
+# name-drift.json by id|store - could not fire for ANY pin, because all 16 pins in board-price-overrides.json
+# are recipe-board-only ids. MUST-FIRE: a wrong-product link on a recipe-only id is flagged AND its id|store
+# lands in examined_cells (the key guard 3 reads). CLEAN TWIN: the same fixture with a matching link name stays
+# silent while the cell is still IN scope - the union must add coverage, not noise. Third assertion: an id on
+# BOTH boards is scanned ONCE (the staple row wins), because the two boards carry different unit bases and one
+# link cannot be judged against both. Frozen synthetic data - never regenerated from the live board.
+$fxNdU = NewFxDir 'nd-union'
+Copy-Item (Join-Path $root 'audit-name-drift.ps1') (Join-Path $fxNdU 'audit-name-drift.ps1')
+New-Item -ItemType Directory -Force (Join-Path $fxNdU 'out') | Out-Null
+Set-Content (Join-Path $fxNdU 'out\comparison-2026-01-01.json') '{"comparison":[{"id":"eggs","unit":"dozen","stores":[{"store":"Hy-Vee","per_unit":2.50,"type":"everyday","item":"Grade A Eggs 12 ct"}]},{"id":"shared-oats","unit":"oz","stores":[{"store":"Hy-Vee","per_unit":0.10,"type":"everyday","item":"Quaker Oats 42 oz"}]}]}' -Encoding UTF8
+Set-Content (Join-Path $fxNdU 'out\recipe-board.json') '{"comparison":[{"id":"pinned-paprika","unit":"oz","stores":[{"store":"Hy-Vee","per_unit":0.99,"type":"everyday","item":"Simply Organic Smoked Paprika 2.72 oz"}]},{"id":"shared-oats","unit":"oz","stores":[{"store":"Hy-Vee","per_unit":0.10,"type":"everyday","item":"Bobs Redmill Steelcut Groats 24 oz"}]}]}' -Encoding UTF8
+$ndUPu = '{"items":{"eggs":{"Hy-Vee":{"url":"https://example.test/eggs","price":"$2.50","size":"12 ct","name":"Grade A Eggs 12 ct"}},"shared-oats":{"Hy-Vee":{"url":"https://example.test/oats","price":"$4.20","size":"42 oz","name":"Quaker Oats 42 oz"}},"pinned-paprika":{"Hy-Vee":{"url":"https://example.test/p","price":"$2.69","size":"2.72 oz","name":"{LINK}"}}}}'
+Set-Content (Join-Path $fxNdU 'product-urls.json') ($ndUPu -replace '\{LINK\}','Badia Garlic Powder') -Encoding UTF8
+$r = RunPSAt $fxNdU 'audit-name-drift.ps1' @()
+$ndU = try { Get-Content (Join-Path $fxNdU 'out\name-drift.json') -Raw | ConvertFrom-Json } catch { $null }
+$ndUCells = @($ndU.examined_cells)
+if ($r.rc -eq 0 -and $ndU -and [int]$ndU.count -eq 1 -and @($ndU.flags)[0].id -eq 'pinned-paprika' -and ($ndUCells -contains 'pinned-paprika|Hy-Vee')) {
+  Ok 'name-drift MUST-FIRE: a wrong-product link on a RECIPE-board-only id is flagged and recorded in examined_cells (guard 3 can arm)'
+} else {
+  Bad ('name-drift did NOT flag the recipe-board-only wrong product (rc=' + $r.rc + ', count=' + [int]$ndU.count + ', examined_cells lists pinned-paprika: ' + ($ndUCells -contains 'pinned-paprika|Hy-Vee') + ') - guard 3''s WRONG-PRODUCT clause is unfirable again')
+}
+if (@($ndUCells | Where-Object { $_ -eq 'shared-oats|Hy-Vee' }).Count -eq 1) { Ok 'name-drift scans a two-board id ONCE (staple row wins; the recipe row''s different unit basis is not re-judged against the same link)' }
+else { Bad ('name-drift recorded ' + @($ndUCells | Where-Object { $_ -eq 'shared-oats|Hy-Vee' }).Count + ' scans of the colliding id (expected 1) - either examined_cells is missing entirely, or one link is being judged against two different unit bases') }
+Set-Content (Join-Path $fxNdU 'product-urls.json') ($ndUPu -replace '\{LINK\}','Simply Organic Smoked Paprika 2.72 oz') -Encoding UTF8
+$r = RunPSAt $fxNdU 'audit-name-drift.ps1' @()
+$ndU = try { Get-Content (Join-Path $fxNdU 'out\name-drift.json') -Raw | ConvertFrom-Json } catch { $null }
+if ($r.rc -eq 0 -and $ndU -and [int]$ndU.count -eq 0 -and (@($ndU.examined_cells) -contains 'pinned-paprika|Hy-Vee')) {
+  Ok 'name-drift CLEAN TWIN: the recipe cell is in scope and a matching link stays unflagged (the union adds coverage, not noise)'
+} else {
+  Bad ('name-drift clean twin failed (rc=' + $r.rc + ', count=' + [int]$ndU.count + ') - the union is manufacturing flags')
+}
+Remove-Item $fxNdU -Recurse -Force -ErrorAction SilentlyContinue
+
 # (h) audit-links: BLIND when zero of the stored links matched a board id/store (a schema break in either
 # input used to print "audited N links: 0 price-match, 0 MISMATCH, 0 uncomputable" - flag-free JSON included).
 $fxAl = NewFxDir 'al-blind'

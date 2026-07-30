@@ -346,10 +346,27 @@ if (Test-Path $ovrF) {
   # read BOTH boards, $pinDrift was left riding on a producer that still reads one.
   # Root fix is in audit-name-drift.ps1 (union recipe-board.json into its input, as done here at :227-228);
   # until then, say out loud that the identity half proved nothing.
-  $ndScope = @{}; foreach ($nr in $cmp.comparison) { $ndScope[[string]$nr.id] = $true }
-  $pinDriftScannable = @(@($ovr.cells) | Where-Object { $ndScope.ContainsKey([string]$_.id) }).Count
+  # THE SCOPE COMES FROM THE PRODUCER, NOT FROM A SECOND COPY OF ITS ADMISSION TEST. This used to rebuild
+  # "what name-drift can see" out of $cmp.comparison alone - the same staple-only assumption that made the
+  # clause unfirable - and the obvious repair (test the pin id against BOTH boards) would have printed
+  # "16 of 16" when the true answer is 6: MEASURED 2026-07-30, 161 of the recipe board's 404 cells carry no
+  # .item at all, and audit-name-drift skips a cell with no board item because there is no product name to
+  # compare the link against. So read the set of cells the audit RECORDS having examined. No list at all =
+  # the audit did not run or predates the field: unknown, not covered, and the zero warn below says so.
+  $ndCells = @{}
+  if (Test-Path $ndF) {
+    $ndDoc = Get-Content $ndF -Raw | ConvertFrom-Json
+    foreach ($k in @($ndDoc.examined_cells)) { if ($k) { $ndCells[[string]$k] = $true } }
+  }
+  $pinDriftScannable = @(@($ovr.cells) | Where-Object { $ndCells.ContainsKey([string]$_.id + '|' + [string]$_.store) }).Count
+  $pinDriftBlind = @(@($ovr.cells) | Where-Object { -not $ndCells.ContainsKey([string]$_.id + '|' + [string]$_.store) })
   if (@($ovr.cells).Count -gt 0 -and $pinDriftScannable -eq 0) {
-    [void]$warn.Add(("guard 3's WRONG-PRODUCT clause examined ZERO of {0} pins - every pin is a recipe-board id and audit-name-drift.ps1 scans only comparison-*.json, so the hard fail at guards.ps1:244 cannot fire for any pin in the file and NO product-identity check covers the links these pins derive from. Fix: union out\recipe-board.json into audit-name-drift's input." -f @($ovr.cells).Count))
+    [void]$warn.Add(("guard 3's WRONG-PRODUCT clause examined ZERO of {0} pins - out\name-drift.json records no examined cell matching any pin, so that hard fail cannot fire and NO product-identity check covers the links these pins derive from. Check audit-name-drift.ps1 ran, and that it still scans BOTH boards (out\comparison-*.json + out\recipe-board.json)." -f @($ovr.cells).Count))
+  }
+  elseif ($pinDriftBlind.Count -gt 0) {
+    # NOT the zero case: some pins ARE identity-checked. These cannot be, because their board cell records no
+    # product NAME - there is nothing to compare the link against. Measured 2026-07-30: 10 of 16 pins.
+    [void]$warn.Add(("guard 3 could not product-identity-check {0} of {1} pins - their board cell carries no product name, so nothing can check that the pinned link is the product the board priced: {2}. Fix at the source: give these recipe-board cells an .item." -f $pinDriftBlind.Count, @($ovr.cells).Count, (($pinDriftBlind | ForEach-Object { [string]$_.id + '/' + [string]$_.store }) -join ', ')))
   }
 }
 if ($rogue -eq 0) { Say ("  ok    every override pin is derivable from its own link ($pinChecked checked for derivability; product identity checked on $pinDriftScannable of them)") }
