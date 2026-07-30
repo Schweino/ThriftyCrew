@@ -470,6 +470,7 @@
                         "\\bbacon\\b"
                     ],
         "exclude":  [
+                        "\\bbeans?\\b",
                         "\\bmacaroni\\b",
                         "\\bmac\\s+(?:and|\u0026)\\s+cheese\\b",
                         "\\bpork\\s+loin\\b",

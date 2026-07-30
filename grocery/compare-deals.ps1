@@ -405,6 +405,37 @@ function Get-UnitPrice($deal, $cat) {
 # (Plain "N for $M" is NOT included here - it prices on its own without a regular.)
 function Test-IsMultibuy([string]$t) { return ((ConvertTo-DigitNumerals ("" + $t)) -match '(?i)buy\s*\d+\s*,?\s*get\s*\d+') }
 
+function Get-RegularSrcDate([string]$store, [string]$baseName) {
+  # WHICH out\regular ROWS CARRY THEIR CAPTURE DATE. src_date is what lets the ranker below keep, per
+  # commodity, only the FRESHEST capture that covers it. A row with no src_date is exempt from that test
+  # forever, so this one decision is the difference between "a 16-day-old price" and "a 16-day-old price
+  # that OUT-RANKS today's".
+  #   Walmart  - unions several captures, so every row must be dated or the union has no ordering.
+  #   Sam's    - the ONE store with a SECOND everyday source. Its prices reach the board through
+  #              out\sams\sams-deals-*.json (dated), while out\regular\sams-regular-2026-07-14.json is a
+  #              60-row hand-promotion nothing refreshes. Left date-less it was exempt from the ranker, and
+  #              "cheapest row per store" then let the 16-day-old copy BEAT today's real price. Measured on
+  #              the 2026-07-30 board: 5 cells, and the onions verdict published Sam's $0.737/lb while Sam's
+  #              own 07-29 feed says $0.8267/lb and Aldi was actually cheapest at $0.7967/lb.
+  #   everyone else - their out\regular file is their ONLY everyday source and their alt feed is the weekly
+  #              AD, a different KIND of price. Dating them would let the ad's date filter the everyday rows
+  #              out from under the store. That is the near-miss this rule must not cross; case 23 pins it.
+  if (@('Walmart', "Sam's Club") -notcontains $store) { return '' }
+  $m = [regex]::Match($baseName, '(\d{4}-\d{2}-\d{2})$')   # [regex]::Match, never -match: $Matches is global
+  if (-not $m.Success) { return '' }
+  return $m.Groups[1].Value
+}
+
+function Select-FreshestCaptureRows($rows) {
+  # THE FRESHEST CAPTURE THAT COVERS A COMMODITY WINS IT OUTRIGHT, and only then does its cheapest row win.
+  # Rows with NO src_date are a store's only source and are never filtered. Extracted verbatim from the
+  # ranker so the self-test runs the REAL decision instead of a transcribed copy of it.
+  $dated = @($rows | Where-Object { $_.src_date })
+  if (-not $dated.Count) { return @($rows) }
+  $newest = @($dated | ForEach-Object { [string]$_.src_date } | Sort-Object -Descending)[0]
+  return @($rows | Where-Object { -not $_.src_date -or [string]$_.src_date -eq $newest })
+}
+
 # ---------------------------------------------------------------- SELF-TEST (provable multibuy math; -SelfTest exits here)
 # Which everyday-price files (out\regular\<store>-regular-<date>.json) to load per store. EVERYDAY-ONLY stores
 # (Walmart) run no weekly ad cycle, so a partial daily refresh (a throttled ~50-item pull) must UNION with the
@@ -600,6 +631,41 @@ if ($SelfTest) {
     else { Write-Output ('FAIL  union window drift: -WalmartMaxAgeDays default is ' + $WalmartMaxAgeDays + ' but regular-fileset-lib says ' + (Get-RegularUnionDays) + ' - guards would iterate a different window than the engine'); $script:fail++ }
   }
 
+  # --- 21-24: a stale out\regular capture must not out-rank the store's own live feed ---------------------
+  # FROZEN FOUNDING BUG (2026-07-30). out\regular\sams-regular-2026-07-14.json is a 60-row hand-promotion
+  # that NOTHING refreshes. It loaded date-less, so Select-FreshestCaptureRows could never filter it, and
+  # "cheapest row per store" handed 5 board cells to a 16-day-old price - including the ONIONS verdict,
+  # published as Sam's $0.737/lb while Sam's own 2026-07-29 feed says $0.8267/lb and Aldi was cheapest at
+  # $0.7967/lb. Synthetic and FROZEN: the pair below is the real founding case, never re-read from the board.
+  # These compose the REAL loader decision with the REAL ranker filter, so neither can quietly stop being used.
+  function _Eq($label, $got, $want) {
+    if (("" + $got) -eq ("" + $want)) { Write-Output "ok    $label" }
+    else { Write-Output ("FAIL  $label  got '" + $got + "' want '" + $want + "'"); $script:fail++ }
+  }
+  function _Row($n,$up,$sd) { [pscustomobject]@{ name=$n; unit_price=$up; src_date=$sd } }
+  # 21. MUST FIRE: the Sam's out\regular capture carries its own capture date.
+  _Eq "Sam's out\regular capture is dated" (Get-RegularSrcDate "Sam's Club" 'sams-regular-2026-07-14') '2026-07-14'
+  # 22. MUST FIRE: dated, the 07-14 onions row LOSES to the 07-29 feed even though it is the cheaper number.
+  $onion = @(Select-FreshestCaptureRows @(
+    (_Row 'Yellow Onions, 10 lbs.' 0.737  (Get-RegularSrcDate "Sam's Club" 'sams-regular-2026-07-14')),
+    (_Row 'Sweet Onions, 6 lbs.'   0.8267 '2026-07-29')
+  ) | Sort-Object unit_price | Select-Object -First 1)
+  _Eq "stale Sam's capture loses to today's feed" $onion.name 'Sweet Onions, 6 lbs.'
+  # 23. CLEAN TWIN: a store whose out\regular file is its ONLY everyday source stays date-less, so its rows
+  #     survive beside a newer weekly-AD row. Dating Baker's here would filter its whole everyday catalogue.
+  _Eq "Baker's out\regular stays date-less" (Get-RegularSrcDate "Baker's" 'bakers-regular-2026-07-30') ''
+  $bk = @(Select-FreshestCaptureRows @(
+    (_Row 'Kroger 80/20 Ground Beef Roll 3 LB' 5.99 (Get-RegularSrcDate "Baker's" 'bakers-regular-2026-07-30')),
+    (_Row "Baker's weekly ad row"              6.49 '2026-07-30')
+  ))
+  _Eq 'a single-source everyday store is never filtered out' $bk.Count 2
+  # 24. CLEAN TWIN: with no fresher capture the stale rows are still the only Sam's price we have and must
+  #     stay on the board - this fix corrects a stale-LOW, it must never silently drop coverage.
+  $only = @(Select-FreshestCaptureRows @(
+    (_Row "Member's Mark Whole Pork Tenderloins, Cryovac" 2.98 (Get-RegularSrcDate "Sam's Club" 'sams-regular-2026-07-14'))
+  ))
+  _Eq 'sole stale capture still prices its commodity' $only.Count 1
+
   Write-Output ('-'*54)
   if ($script:fail -eq 0) { Write-Output 'SELF-TEST PASS  (all multibuy / BOGO cases correct)'; exit 0 }
   else { Write-Output ("SELF-TEST FAIL: $script:fail case(s)"); exit 1 }
@@ -739,10 +805,10 @@ if (Test-Path $regDir) {
       continue
     }
     $pt = if ($ex.price_type) { [string]$ex.price_type } else { 'everyday' }
-    # Only Walmart's rows get a src_date (it unions multiple captures); everyone else loads one file and must
-    # stay date-less so the ranker never filters their single source out from under them.
-    $sd = ''
-    if ([string]$ex.store -eq 'Walmart') { $mm = [regex]::Match($rf.BaseName, '(\d{4}-\d{2}-\d{2})$'); if ($mm.Success) { $sd = $mm.Groups[1].Value } }
+    # WHICH out\regular rows carry their capture date: see Get-RegularSrcDate. Walmart unions captures, and
+    # Sam's has a SECOND everyday source (out\sams) that its out\regular copy has to be ranked against; every
+    # other store's out\regular file is its only everyday source and stays date-less.
+    $sd = Get-RegularSrcDate ([string]$ex.store) ([string]$rf.BaseName)
     foreach ($d in $ex.deals) { Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt $sd }
   }
 }
@@ -903,12 +969,7 @@ foreach ($g in ($matched | Where-Object { $_.unit_price -ne $null } | Group-Obje
   # Rows with NO src_date (weekly ads, out\regular\ everyday files) are never filtered out - they are a store's
   # only source and carry no capture-date to compare, so they always stay eligible alongside the newest capture.
   $byStore = $priced | Group-Object store | ForEach-Object {
-    $rows = $_.Group
-    $dated = @($rows | Where-Object { $_.src_date })
-    if ($dated.Count) {
-      $newest = @($dated | ForEach-Object { [string]$_.src_date } | Sort-Object -Descending)[0]
-      $rows = @($rows | Where-Object { -not $_.src_date -or [string]$_.src_date -eq $newest })
-    }
+    $rows = Select-FreshestCaptureRows $_.Group
     $rows | Sort-Object unit_price | Select-Object -First 1
   }
   $ranked = @($byStore | Sort-Object unit_price)
