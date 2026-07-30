@@ -514,7 +514,19 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # queue instead of a log nobody reads. Advisory here by design - a store's own unit price is evidence,
       # not gospel (Walmart's is provably wrong sometimes), so these ask for a decision, they do not block.
       try {
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-basis-reconcile.ps1') | Out-Null
+        # SURFACE THE FINDINGS. This was piped to Out-Null, so a genuine basis conflict - the class that moves
+        # a price by a FACTOR and therefore lands preferentially on the cheapest-store verdict - was computed
+        # and then discarded. It is also the ONLY independent price proof Baker's has (see guards.ps1 invariant
+        # 11, retired 2026-07-30 in its favour), so throwing its output away left the board's largest store
+        # effectively unwatched. Advisory by design; what changes is that it is now READ.
+        $brOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-basis-reconcile.ps1') 2>$null
+        $brSummary = @($brOut) | Where-Object { $_ -match 'basis-reconcile:' } | Select-Object -First 1
+        if ($brSummary) { Log ([string]$brSummary) }
+        $brFindings = @($brOut) | Where-Object { $_ -match 'CONFLICT|disagree' }
+        if ($brFindings.Count) {
+          Log ('basis-reconcile: ' + $brFindings.Count + ' factor-level conflict(s) between our per-unit and the store''s own')
+          $summary += ('REVIEW    basis-reconcile: ' + $brFindings.Count + ' cell(s) disagree with the store''s own unit price by a FACTOR - see out\basis-reconcile-report.json')
+        }
         $brF = Join-Path $OutDir 'basis-reconcile.json'
         if (Test-Path $brF) {
           $brJ = Get-Content $brF -Raw | ConvertFrom-Json

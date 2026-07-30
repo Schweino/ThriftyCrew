@@ -763,83 +763,47 @@ if ($noContract.Count) {
   [void]$warn.Add(("these stores do NOT record the store's current price on their rows, so guard 10 CANNOT check them: " + (($noContract.Keys | Sort-Object) -join ', ') + " - until their pullers record current_price, guard 9's freshness numbers are the only thing standing between them and the basePrice bug"))
 }
 
-# ---------------------------------------------------------------- 11: Baker's price reconciles with the raw capture
-# Guard 10 asserts ad_price == current_price - but BOTH are our own numbers, so it cannot catch a current_price
-# that was COMPUTED wrong. That is exactly the 2026-07-14 milk bug: Baker's prints its unit price coarsely
-# ("$0.02/fl oz"), the importer rebuilt per-gallon as 0.02 x 128 = $2.56 and published it against the $3.19 the
-# store actually charges (its exact pack price `cur`). $2.56 equalled its own current_price, so guard 10 was
-# happy. This invariant brings in the INDEPENDENT truth - the raw capture's exact `cur` - and asserts that when
-# the store's pack IS our size (cur falls inside the band the rounded unit price allows for our size), the
-# published price MUST equal cur. Runs only when a fresh capture (out\bakers-prices-raw.csv) is present, and any
-# error in the check itself degrades to a warning (a new guard must never block the board by crashing).
+# ---------------------------------------------------------------- 11: Baker's price PROVENANCE
+# RETIRED AND REPLACED 2026-07-30. What used to live here was a reconcile against out\bakers-prices-raw.csv,
+# built for the 2026-07-14 milk bug: bakersplus printed its unit price coarsely ("$0.02/fl oz"), the importer
+# rebuilt per-gallon as 0.02 x 128 = $2.56 and published it against the $3.19 the store charges. That bug was
+# a property of SCRAPING A ROUNDED UNIT PRICE OFF A PAGE. Baker's moved to the sanctioned Kroger API on
+# 2026-07-24, where current_price is it.price.promo/regular taken verbatim - nothing is reconstructed, so that
+# reconstruction cannot happen. The check had also been silently dead since that switch (it filtered on .upc
+# and source_ad 'bakersplus'; the API writes product_id and 'kroger-api'), examining ZERO of 6,960 rows while
+# printing ok, until the zero-rows rule caught it earlier today.
+#
+# ITS JOB IS NOW DONE BETTER ELSEWHERE. audit-basis-reconcile.ps1 gives Baker's an independent price proof
+# from Kroger's own itemInformation.netWeight - a field independent of every size string WE parse - and it
+# checks the SHIPPED CELL rather than the captured row, so it also catches corruption introduced downstream by
+# carry-forward, an override or a board merge. Guard 11 could never see any of that.
+# Its coverage is deliberately narrow (compound "4 pk 16 oz" shapes only): trusting netWeight on plain labels
+# was MEASURED on 6,857 rows and was wrong in every adjudicable case - apples labelled "5 Pound" report a 3 lb
+# netWeight, a 12 oz tuna can reports its 5 oz drained weight. Narrow and right beats broad and noisy.
+#
+# WHAT REMAINS WORTH ASSERTING is the premise all of that rests on: that Baker's prices still arrive verbatim
+# from the sanctioned API. If the capture ever reverts to scraping a page, the milk-bug class comes back and a
+# real reconcile is needed again - so this warns loudly rather than silently inheriting an assumption.
 try {
-  $rawBk = Join-Path $root 'out\bakers-prices-raw.csv'
-  if (Test-Path $rawBk) {
-    function ConvBk([double]$v, [string]$of, [string]$u) {
-      if ($v -le 0) { return $null }
-      $b = (([string]$of).ToLower() -replace '\s',''); if (-not $b) { return $null }
-      switch ($u) {
-        'lb'     { if ($b -eq 'lb') { return $v }; if ($b -eq 'oz') { return ($v*16) }; return $null }
-        'oz'     { if ($b -eq 'oz') { return $v }; if ($b -eq 'lb') { return ($v/16) }; return $null }
-        'floz'   { if ($b -eq 'floz') { return $v }; return $null }
-        'gallon' { if ($b -eq 'floz') { return ($v*128) }; return $null }
-        'each'   { if ($b -match '^(ea|ct)$') { return $v }; return $null }
-        'dozen'  { if ($b -match '^(ea|ct)$') { return ($v*12) }; return $null }
-        default  { return $null }
-      }
+  $bkNewest = RegFiles 'bakers-regular-*.json' | Sort-Object Name -Desc | Select-Object -First 1
+  if ($bkNewest) {
+    $bkDoc = Get-Content $bkNewest.FullName -Raw | ConvertFrom-Json
+    $bkRows = @($bkDoc.deals)
+    $bkApi = @($bkRows | Where-Object { ([string]$_.source_ad) -eq 'kroger-api' }).Count
+    $bkCur = @($bkRows | Where-Object { $null -ne $_.current_price }).Count
+    if ($bkRows.Count -gt 0 -and $bkApi -lt $bkRows.Count) {
+      [void]$warn.Add(("Baker's price provenance CHANGED: only {0} of {1} rows carry source_ad='kroger-api'. Prices no longer arrive verbatim from the sanctioned API, so the reconstructed-unit-price class (the 2026-07-14 milk bug) is possible again and audit-basis-reconcile's netWeight proof may not cover the new source. Re-establish a reconcile before trusting this store." -f $bkApi, $bkRows.Count))
+    } else {
+      OkUnlessBlind $bkRows.Count `
+        ("Baker's prices arrive verbatim from the sanctioned Kroger API ($bkApi rows, $bkCur carrying current_price); independent proof is audit-basis-reconcile's netWeight check") `
+        "guard 11 examined ZERO Baker's rows - the newest bakers-regular file parsed to nothing, so the provenance of the board's largest store is unverified"
     }
-    $rawP = @{}
-    foreach ($ln in (Get-Content $rawBk)) {
-      $c = ([string]$ln) -split ','; if ($c.Count -lt 6) { continue }
-      $u0 = $c[0].Trim(); if (-not $u0) { continue }
-      $cu = 0.0; [void][double]::TryParse((($c[1]) -replace '[^0-9.]',''), [ref]$cu)
-      $uv0 = 0.0; [void][double]::TryParse((($c[3]) -replace '[^0-9.]',''), [ref]$uv0)
-      if ($cu -gt 0) { $rawP[$u0] = [pscustomobject]@{ cur=$cu; uv=$uv0; uof=$c[4].Trim() } }
-    }
-    $pdRaw = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
-    $unitById = @{}; foreach ($cc in (Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json)) { $unitById[[string]$cc.id] = [string]$cc.unit }
-    $unitByBkName = @{}
-    foreach ($p in $pdRaw.PSObject.Properties) { $e = $p.Value.'Baker''s'; if ($e -and $e.name -and $unitById.ContainsKey([string]$p.Name)) { $unitByBkName[([string]$e.name).ToLower().Trim()] = $unitById[[string]$p.Name] } }
-
-    $bkFile = RegFiles ('bakers-regular-*.json') | Sort-Object Name -Desc | Select-Object -First 1
-    $bkChecked = 0; $bkBad = 0
-    if ($bkFile) {
-      $bkDoc = Get-Content $bkFile.FullName -Raw | ConvertFrom-Json
-      foreach ($d in $bkDoc.deals) {
-        if (-not $d.upc -or ($null -eq $d.current_price)) { continue }
-        if (([string]$d.source_ad) -notmatch 'bakersplus') { continue }        # only rows priced from the capture
-        $pv = $rawP[[string]$d.upc]; if (-not $pv) { continue }
-        if (($null -eq $pv.uv) -or ([double]$pv.uv -le 0)) { continue }         # weighted rows checked by guards 4/10
-        $unit = $unitByBkName[([string]$d.item).ToLower().Trim()]; if (-not $unit) { continue }
-        $pu1 = Get-LinkPerUnit -size ([string]$d.size) -unit $unit -price 1 -name ([string]$d.item)
-        if (($null -eq $pu1) -or ([double]$pu1 -le 0)) { continue }
-        $ourQty = 1.0 / [double]$pu1
-        $lo = ConvBk ([math]::Max(0.0001, [double]$pv.uv - 0.005)) ([string]$pv.uof) $unit
-        $hi = ConvBk ([double]$pv.uv + 0.005) ([string]$pv.uof) $unit
-        if (($null -eq $lo) -or ($null -eq $hi)) { continue }
-        $loP = $lo * $ourQty; $hiP = $hi * $ourQty
-        $cur = [double]$pv.cur
-        $cp = 0.0; [void][double]::TryParse((([string]$d.current_price) -replace '[^0-9.]',''), [ref]$cp)
-        # only when the pack IS our size (cur sits in the band) is cur the exact our-size price we must publish
-        if (($cur -ge ($loP - 0.011)) -and ($cur -le ($hiP + 0.011))) {
-          $bkChecked++
-          if ([math]::Abs($cp - $cur) -gt 0.02) {
-            $bkBad++
-            [void]$fail.Add(("HARD FAIL: Baker's published price is not the store's exact shelf price  [{0}]  we publish `${1}, the store charges `${2} (unit {3}/{4}) - a rounded-unit-price reconstruction slipped past, not the exact price (the milk bug)" -f [string]$d.item, $cp, $cur, $pv.uv, $pv.uof))
-          }
-        }
-      }
-    }
-    if ($bkBad -eq 0) {
-      OkUnlessBlind $bkChecked `
-        ("Baker's prices reconcile with the raw store capture ($bkChecked pack=our-size rows checked against the exact cur)") `
-        ("guard 11 examined ZERO Baker's rows and therefore proves NOTHING - it is the only independent statement of Baker's price on the board (guard 10 compares two of our own numbers). Its row filter wants `$d.upc + source_ad matching 'bakersplus'; the Kroger API puller writes product_id + source_ad='kroger-api', so nothing qualifies. Re-point it at the Kroger feed, or the milk bug ships unseen on the board's largest store.")
-    }
+  } else {
+    [void]$warn.Add("guard 11: no bakers-regular-<date>.json at all - Baker's price provenance is unverified and audit-basis-reconcile has nothing to index")
   }
 } catch {
-  [void]$warn.Add("guard 11 (Baker's raw-capture cross-check) errored and was skipped: " + $_.Exception.Message)
+  [void]$warn.Add("guard 11 (Baker's price provenance) errored and was skipped: " + $_.Exception.Message)
 }
-
 # ---------------------------------------------------------------- 12: the board must be built from TODAY'S ads
 # I published a TWO-DAY-OLD BOARD to the live site on 2026-07-17 and only caught it afterwards.
 # WHY IT IS SO EASY: out\comparison-*.json is gitignored ON PURPOSE (it is regenerable, and not tracking it is
