@@ -18,8 +18,12 @@ $stamp = (Get-Date -Format 'yyyy-MM-dd HH:mm')
 
 $out = & powershell -ExecutionPolicy Bypass -File publish-deals-page.ps1 2>&1
 
-if ($out -match 'PUBLISHED omaha-grocery-prices') {
-  Add-Content $log ("{0}  SUCCESS - board published; Fareway's marked-up prices are OFF the live board. Retry task removing itself." -f $stamp)
+# CURRENT counts as success too (2026-07-30): publish-deals-page now short-circuits its Ghost upsert when the
+# page it built is byte-identical to the live one. That means the board IS live and this task's job is done.
+# Without this branch the task would never delete itself - it would keep retrying every 20 minutes until
+# something in the board happened to change.
+if ($out -match 'PUBLISHED omaha-grocery-prices' -or $out -match 'CURRENT omaha-grocery-prices') {
+  Add-Content $log ("{0}  SUCCESS - board is live (published, or already identical to what we would publish). Retry task removing itself." -f $stamp)
   & schtasks /Delete /TN "TC-BoardPublishRetry" /F | Out-Null
   exit 0
 }

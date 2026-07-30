@@ -776,6 +776,33 @@ $pdpSrc = Get-Content (Join-Path $root 'publish-deals-page.ps1') -Raw
 if ($pdpSrc -match 'price-mode: BLIND' -and $pdpSrc -match 'name-drift: BLIND') { Ok 'publish-deals-page surfaces exit 3 from its two direct audit calls' }
 else { Bad 'publish-deals-page lost a blind surface line - a blind audit falls through silently during publish' }
 
+# ---------------------------------------------------------------- publish-deals-page CHANGE GATE
+# The MUST-FIRE / CLEAN-TWIN pair lives in that script's own -SelfTest (frozen synthetic signatures, never
+# regenerated from the live board). Founding bug 2026-07-29: 13 invocations pushed the SAME week's board to
+# Ghost 12 times. Run it daily so a DEAD short-circuit (every run upserts again) and, far worse, a
+# short-circuit that started skipping REAL changes (a price move that never ships) both surface here.
+# READ THE SOURCE BEFORE INVOKING IT. publish-deals-page is a SIMPLE script (no [CmdletBinding()]), so an
+# unknown -SelfTest does NOT error: PowerShell drops the string into $args and the script runs its normal
+# path - measured - and the admin key resolves from meal-prep\.ghostkey, so a publish-deals-page that lost
+# its -SelfTest handler would make this daily fixture suite perform a REAL Ghost publish. Prove the hermetic
+# handler exists AND sits ahead of the first live step (the admin-key resolution) before running it; if it
+# does not, fail loudly and invoke nothing.
+$pdpSelfIdx = $pdpSrc.IndexOf('if ($SelfTest) {')
+$pdpKeyIdx  = $pdpSrc.IndexOf('Ghost admin key missing')
+if (($pdpSrc -notmatch '\[switch\]\$SelfTest') -or $pdpSelfIdx -lt 0 -or $pdpKeyIdx -lt 0 -or $pdpSelfIdx -gt $pdpKeyIdx) {
+  Bad 'publish-deals-page has no hermetic -SelfTest handler ahead of its admin-key step - the change-gate fixture could not be run, and must NOT be invoked (an unknown -SelfTest lands in $args and the script performs a REAL publish)'
+} else {
+  $r = RunPS 'publish-deals-page.ps1' @('-SelfTest')
+  if ($r.rc -eq 0 -and $r.text -match 'SELFTEST PASS') { Ok 'publish-deals-page change gate still skips an unchanged board and still publishes a one-byte change' }
+  else { Bad ('publish-deals-page -SelfTest failed or lost its change-gate fixture: ' + ((($r.text -split "`n") | Select-Object -Last 3) -join ' | ')) }
+}
+# ...and the two callers that must understand a skip (source asserts - house precedent for caller plumbing).
+$prtSrc = Get-Content (Join-Path $root 'publish-retry-until-live.ps1') -Raw
+if ($prtSrc -match 'CURRENT omaha-grocery-prices') { Ok 'publish-retry-until-live counts a short-circuited (CURRENT) board as success, so the retry task can still delete itself' }
+else { Bad 'publish-retry-until-live accepts only PUBLISHED - against the change gate it would retry every 20 min forever on a board that is already live' }
+if ($pdpSrc -match 'guide unchanged') { Ok 'publish-deals-page tells a store-guide upsert apart from a store-guide skip' }
+else { Bad 'publish-deals-page prints "store guide republished" on any rc=0 again - publish-store-guide also exits 0 when it skips, which is how the 07-29 audit counted 12 phantom guide upserts' }
+
 # ---------------------------------------------------------------- N+6. no script may sign another script's name
 # 2026-07-30: build-walmart-deals.ps1 is a fork of build-sams-deals.ps1 (capture-lib.ps1:14-19) and inherited
 # that name in EVERY operator-facing string. A real pull printed "build-sams-deals: 4626 raw -> 3444 priced ->

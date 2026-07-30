@@ -5,14 +5,64 @@
   (slug omaha-grocery-prices) PRESERVING its current visibility (so a weekly refresh never un-gates a
   page Brad later set to paid).
 
-  Exit codes:  0 = published   2 = HELD (coverage gate failed; caller should alert)   1 = error
-  Params: -CompareFile <path> (default newest)  -MinCommodities 25  -MinPerStore 15  -Force (skip gate)  -Draft
+  Exit codes:  0 = published, or CURRENT (page identical to the live one, upsert skipped)
+               2 = HELD (a publish gate failed; caller should alert)   1 = error
+  Params: -CompareFile <path> (default newest)  -MinCommodities 25  -MinPerStore 15  -Draft
+          -Force (skips the coverage gate AND the change gate)
+          -SelfTest (hermetic fixture for the change gate; touches no data, publishes nothing)
 #>
-param([string]$CompareFile = "", [int]$MinCommodities = 25, [int]$MinPerStore = 15, [switch]$Force, [switch]$Draft)
+param([string]$CompareFile = "", [int]$MinCommodities = 25, [int]$MinPerStore = 15, [switch]$Force, [switch]$Draft, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $OutDir = Join-Path $root 'out'
 $slug   = 'omaha-grocery-prices'
+
+# ---- CHANGE-GATE DECISION (2026-07-30). Kept pure and file-only so -SelfTest can prove it BOTH fires and
+# stays out of the way. Returns $true when the Ghost upsert MUST run. Every uncertain case returns $true:
+# this gate may only ever skip work it can PROVE is already live.
+function Test-UpsertNeeded {
+  param([string]$Sig, [string]$SigFile, [bool]$LiveSeen, [bool]$ForceFlag, [bool]$DraftFlag)
+  if ($ForceFlag -or $DraftFlag) { return $true }        # -Force / -Draft always publish
+  if (-not $LiveSeen) { return $true }                   # never read the live post -> cannot claim it is current
+  if ([string]::IsNullOrWhiteSpace($Sig)) { return $true }
+  $prev = ''
+  # PS 5.1: [string]$null is $null, so ([string](Get-Content -Raw)).Trim() THROWS on a zero-byte stamp.
+  # (x + '') keeps it a string. A locked/unreadable stamp is a publish, never a skip.
+  try { if (Test-Path $SigFile) { $prev = ((Get-Content $SigFile -Raw) + '').Trim() } } catch { return $true }
+  if (-not $prev) { return $true }                       # missing or empty stamp -> publish
+  return ($prev -ne $Sig)
+}
+
+if ($SelfTest) {
+  # MUST-FIRE + CLEAN-TWIN fixture for the change gate. Founding bug (2026-07-29): 13 invocations of this
+  # script pushed the SAME week's board to Ghost 12 times, ~7 MB of lexical payload for one week's data.
+  # The signatures below are FROZEN SYNTHETIC strings - never regenerate them from the live board.
+  $t = Join-Path $env:TEMP ('pdp-selftest-' + [guid]::NewGuid().ToString('N'))
+  New-Item -ItemType Directory -Force -Path $t | Out-Null
+  $sf = Join-Path $t 'deals-page.sig'
+  $A = '0123456789ABCDEF0123456789ABCDEF|public'   # the page we last published
+  $B = '0123456789ABCDEF0123456789ABCDEE|public'   # same page, ONE byte of rendered html different
+  $P = '0123456789ABCDEF0123456789ABCDEF|paid'     # same page, the post was flipped to paid
+  $fails = @()
+  Set-Content -Path $sf -Value $A -Encoding ASCII
+  if (Test-UpsertNeeded -Sig $A -SigFile $sf -LiveSeen $true -ForceFlag $false -DraftFlag $false) { $fails += 'MUST-FIRE: an unchanged board still upserts (the short-circuit is dead)' }
+  if (-not (Test-UpsertNeeded -Sig $B -SigFile $sf -LiveSeen $true -ForceFlag $false -DraftFlag $false)) { $fails += 'CLEAN TWIN: a one-byte content change was skipped (a price change would never ship)' }
+  if (-not (Test-UpsertNeeded -Sig $P -SigFile $sf -LiveSeen $true -ForceFlag $false -DraftFlag $false)) { $fails += 'CLEAN TWIN: a visibility flip was skipped (the paywall schema would never follow it)' }
+  if (-not (Test-UpsertNeeded -Sig $A -SigFile $sf -LiveSeen $false -ForceFlag $false -DraftFlag $false)) { $fails += 'skipped although the live post was never read' }
+  if (-not (Test-UpsertNeeded -Sig $A -SigFile $sf -LiveSeen $true -ForceFlag $true -DraftFlag $false)) { $fails += '-Force did not bypass the change gate' }
+  if (-not (Test-UpsertNeeded -Sig $A -SigFile $sf -LiveSeen $true -ForceFlag $false -DraftFlag $true)) { $fails += '-Draft did not bypass the change gate' }
+  [IO.File]::WriteAllText($sf, '')
+  if (-not (Test-UpsertNeeded -Sig $A -SigFile $sf -LiveSeen $true -ForceFlag $false -DraftFlag $false)) { $fails += 'a ZERO-BYTE stamp skipped the publish' }
+  Remove-Item $sf -Force -ErrorAction SilentlyContinue
+  if (-not (Test-UpsertNeeded -Sig $A -SigFile $sf -LiveSeen $true -ForceFlag $false -DraftFlag $false)) { $fails += 'a MISSING stamp skipped the publish' }
+  # A fixture that passes with the gate REMOVED is worthless. Assert the decision is actually wired into the
+  # publish path: the live-post handle is passed at exactly one place, the real call site.
+  if ([IO.File]::ReadAllText($PSCommandPath) -notmatch '-LiveSeen \(\[bool\]\$ex\)') { $fails += 'Test-UpsertNeeded is defined but never called by the publish path' }
+  Remove-Item $t -Recurse -Force -ErrorAction SilentlyContinue
+  if ($fails.Count) { Write-Output ('SELFTEST FAIL - ' + ($fails -join ' | ')); exit 1 }
+  Write-Output 'SELFTEST PASS - change gate: unchanged board skips; one-byte and visibility changes publish; missing, empty or unreadable stamp publishes; unread live post publishes; -Force/-Draft bypass.'
+  exit 0
+}
 # Ghost admin key: env var (CI secret) or gitignored .ghostkey; apiUrl stays the ghost.io admin host.
 $adminKey = if ($env:GHOST_ADMIN_KEY) { $env:GHOST_ADMIN_KEY }
   elseif (Test-Path (Join-Path $root '.ghostkey')) { (Get-Content (Join-Path $root '.ghostkey') -Raw).Trim() }
@@ -126,32 +176,54 @@ function New-GhostJWT { Get-GhostJWT -Key $adminKey }
 # Brad set to paid). Only fall back to 'public' when there is genuinely no prior value (first publish).
 $visFile = Join-Path $OutDir 'last-visibility.txt'
 $vis = $null
+$ex  = $null   # stays $null unless the live post was actually READ this run - the change gate below refuses
+               # to skip on a post it never saw (deleted, renamed or unreachable = republish, never assume)
 try {
   $jwt = New-GhostJWT $adminKey
   $ex = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?fields=id,visibility" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -TimeoutSec 30).posts[0]
   if ($ex -and $ex.visibility) { $vis = [string]$ex.visibility }
-} catch {}
+} catch { $ex = $null }
 if ($vis) { Set-Content -Path $visFile -Value $vis -Encoding ASCII }
 elseif (Test-Path $visFile) { $vis = (Get-Content $visFile -Raw).Trim(); Write-Output ("WARN: visibility read failed - reusing last-known '$vis' (not defaulting to public)") }
 else { $vis = 'public' }
 
-# ---- republish (publish-resource.ps1 upserts by slug) ----
-$pubArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'publish-resource.ps1'),
-  '-Title',"Omaha's Cheapest Groceries This Week",
-  '-Slug',$slug,
-  '-HtmlFile',$embed,
-  '-Excerpt',"Every grocery staple, compared across seven Omaha stores and ranked cheapest to priciest. Updated weekly.",
-  '-MetaTitle',"Omaha's Cheapest Groceries This Week | Thrifty Crew",
-  '-MetaDesc',"See the cheapest Omaha store for milk, eggs, chicken, produce and more this week. Hundreds of staples compared across Aldi, Walmart, Hy-Vee, Baker's, Fareway, Sam's Club and Family Fare.",
-  '-Visibility',$vis)
-if ($Draft) { $pubArgs += '-Draft' }
-& powershell @pubArgs
-$prc = $LASTEXITCODE
-if ($prc -ne 0) {
-  Write-Output ("ERROR: Ghost upsert FAILED (rc=$prc) - live page NOT updated (change not published)")
-  exit 1
+# ---- CHANGE GATE (2026-07-30): never push a page to Ghost that is byte-identical to the one already there.
+# Same shape as publish-store-guide.ps1's guide gate, one layer up. On 2026-07-29 this script ran 13 times
+# and upserted the same week's board 12 times (out\logs\weekly-post-capture-2026-07.log).
+# THE RENDERED EMBED IS THE HASH TARGET, not a list of inputs: it is what actually ships, so it covers every
+# input including the ones an input list would forget - and it carries the SHA1 cache-bust of public\board.json
+# and public\price-history.json, so a change anywhere inside either 2 MB feed changes this hash too.
+# VISIBILITY is folded in because publish-resource.ps1 writes the paywall JSON-LD from it: a paid<->public
+# flip with identical prices IS a content change.
+# FAIL TOWARD DOING THE WORK - see Test-UpsertNeeded: a missing, empty or unreadable stamp, or a live post we
+# could not read, all publish. This gate may only ever skip work it can prove is already live.
+$sigFile = Join-Path $OutDir 'deals-page.sig'
+$sig = (Get-FileHash $embed -Algorithm MD5).Hash + '|' + $vis
+if (-not (Test-UpsertNeeded -Sig $sig -SigFile $sigFile -LiveSeen ([bool]$ex) -ForceFlag ([bool]$Force) -DraftFlag ([bool]$Draft))) {
+  Write-Output ("CURRENT omaha-grocery-prices  (visibility=$vis, $commCount commodities, week " + [string]$doc.week_of + ") - built page is identical to the live one; Ghost upsert skipped (-Force to republish)")
+} else {
+
+  # ---- republish (publish-resource.ps1 upserts by slug) ----
+  $pubArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'publish-resource.ps1'),
+    '-Title',"Omaha's Cheapest Groceries This Week",
+    '-Slug',$slug,
+    '-HtmlFile',$embed,
+    '-Excerpt',"Every grocery staple, compared across seven Omaha stores and ranked cheapest to priciest. Updated weekly.",
+    '-MetaTitle',"Omaha's Cheapest Groceries This Week | Thrifty Crew",
+    '-MetaDesc',"See the cheapest Omaha store for milk, eggs, chicken, produce and more this week. Hundreds of staples compared across Aldi, Walmart, Hy-Vee, Baker's, Fareway, Sam's Club and Family Fare.",
+    '-Visibility',$vis)
+  if ($Draft) { $pubArgs += '-Draft' }
+  & powershell @pubArgs
+  $prc = $LASTEXITCODE
+  if ($prc -ne 0) {
+    Write-Output ("ERROR: Ghost upsert FAILED (rc=$prc) - live page NOT updated (change not published)")
+    exit 1
+  }
+  # Stamp ONLY after a confirmed upsert, and never for a draft: a failed upsert or a draft must leave the
+  # stamp as it was so the next run republishes. A stamp we cannot write is also a republish next time.
+  if (-not $Draft) { try { Set-Content -Path $sigFile -Value $sig -Encoding ASCII } catch { Write-Output ("WARN: could not write $sigFile - the next run will republish (" + $_.Exception.Message + ")") } }
+  Write-Output ("PUBLISHED omaha-grocery-prices  (visibility=$vis, $commCount commodities, week " + [string]$doc.week_of + ")")
 }
-Write-Output ("PUBLISHED omaha-grocery-prices  (visibility=$vis, $commCount commodities, week " + [string]$doc.week_of + ")")
 
 # ---- dynamic og:image: shared links preview THIS WEEK'S real drops, not a static logo. The week param
 # makes scrapers (Reddit/FB cache per-URL) re-fetch when the week changes. Non-fatal on failure. ----
@@ -171,9 +243,17 @@ try {
 
 # ---- companion page: the per-store guide rides every board publish (non-fatal; its own coverage gate applies) ----
 try {
-  & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-store-guide.ps1') | Out-Null
-  if ($LASTEXITCODE -eq 0) { Write-Output "store guide republished alongside the board" }
-  else { Write-Output ("store guide HELD/skipped (rc=$LASTEXITCODE) - board publish unaffected") }
+  # Capture stdout so this line can tell PUBLISHED from SKIPPED. It printed "republished" on rc=0, but
+  # publish-store-guide also exits 0 when its own change gate skips the upsert - which is how the 2026-07-29
+  # audit counted 12 store-guide upserts from 12 log lines. Do NOT add 2>&1 here: this block runs under
+  # EAP=Stop, where redirecting a native child's stderr turns its first stderr line into a terminating throw.
+  $sgOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-store-guide.ps1')
+  $sgRc = $LASTEXITCODE
+  if ($sgRc -eq 0) {
+    if ((@($sgOut) -join ' ') -match 'guide unchanged') { Write-Output "store guide already current - upsert skipped" }
+    else { Write-Output "store guide republished alongside the board" }
+  }
+  else { Write-Output ("store guide HELD/skipped (rc=$sgRc) - board publish unaffected") }
 } catch { Write-Output ("store guide publish threw: " + $_.Exception.Message + " - board publish unaffected") }
 
 # ---- trend pages: WEEKLY. 2026-07-26 efficiency fix: only the PUBLISHER was stamp-gated, so the two
