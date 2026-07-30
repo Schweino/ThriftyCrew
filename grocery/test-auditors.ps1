@@ -1030,5 +1030,49 @@ else { Bad 'weekly-post-capture stopped taking the weekly lock - the daily has n
 if ($wpcLk -match "weekly-run-lock\.ps1'\) @\('-Release'") { Bad 'weekly-post-capture releases the lock mid-run again - on 2026-07-29 a links phase finished at 08:01:34 and the next phase was 08:46:24, so releasing hands grocery\out back 28 min before the 08:30 daily fires. The lock expires on its own TTL; nothing in the weekly may hand it back.' }
 else { Ok 'weekly-post-capture never hands the tree back mid-run (the lock expires on its own TTL)' }
 
+# ---------------------------------------------------------------- N+6. script census: is every file in this
+# directory still reachable? 2026-07-30: 33 of the 144 .ps1 in grocery\ (out\ and archive\ aside) were named
+# by no other executable file in the repo, and another 37 sat inside out\ - the pipeline's own OUTPUT
+# directory. At that ratio a live weekly-by-hand script is indistinguishable from a finished one-shot that
+# would clobber a backup if you ran it. audit-script-census.ps1 holds that line with a recorded SET of
+# deliberate entry points plus a recorded COUNT for out\; its header names them all.
+# DO NOT NAME A GROCERY SCRIPT IN THIS COMMENT. The census greps filenames across executable files, so a
+# mention here is indistinguishable from a call and would silently retire that script from the census (it
+# already happened once while this block was being written). Fixtures are synthetic zzz-* trees only.
+$r = RunPS 'audit-script-census.ps1' @()
+# The live twin asserts TWO things, because "clean" alone is exactly what a self-defeated census reports.
+# The census must not count ITSELF as a source: its own KNOWN table quotes every recorded name, so the day
+# that exclusion is dropped the census reports 0 uncalled, prints "no unrecorded orphan", and exits 0
+# forever. The uncalled count is read from the guard's own output, never hard-coded here: it can never
+# legitimately reach 0 while the SKILL-launched and Task-Scheduler-launched entry points exist.
+$scM = [regex]::Match($r.text, '(\d+) uncalled, (\d+) recorded as deliberate')
+if ($r.rc -eq 0 -and $r.text -match 'no unrecorded orphan' -and $scM.Success -and [int]$scM.Groups[1].Value -gt 0) { Ok ('script-census clean twin: no unrecorded orphan, out\ at baseline, and it still SEES its recorded set (' + $scM.Groups[1].Value + ' uncalled)') }
+else { Bad ('script-census fires on the live tree, or reported an EMPTY census (rc=' + $r.rc + ') - either a new orphan landed, or the self-exclusion that stops its own KNOWN table from marking everything "called" was removed: ' + $r.text) }
+$fxSc = NewFxDir 'sc-orphan'
+Set-Content (Join-Path $fxSc 'zzz-new-thing.ps1') 'Write-Output "new"' -Encoding UTF8
+Set-Content (Join-Path $fxSc 'zzz-caller.ps1') '& (Join-Path $PSScriptRoot "zzz-helper.ps1")' -Encoding UTF8
+Set-Content (Join-Path $fxSc 'zzz-helper.ps1') 'Write-Output "helper"' -Encoding UTF8
+Set-Content (Join-Path $fxSc 'zzz-wire.js') '// nightly: zzz-caller.ps1' -Encoding UTF8
+$r = RunPS 'audit-script-census.ps1' @('-Root', $fxSc, '-ScanRoot', $fxSc)
+if ($r.rc -eq 2 -and $r.text -match 'ORPHAN zzz-new-thing\.ps1') { Ok 'script-census FIRES on a script no executable file names' }
+else { Bad ('script-census missed a brand-new orphan (rc=' + $r.rc + '): ' + $r.text) }
+Set-Content (Join-Path $fxSc 'zzz-run.cmd') 'powershell -File zzz-new-thing.ps1' -Encoding UTF8
+$r = RunPS 'audit-script-census.ps1' @('-Root', $fxSc, '-ScanRoot', $fxSc)
+if ($r.rc -eq 0 -and $r.text -match '0 uncalled') { Ok 'script-census SILENT once that script is wired in (a .cmd launcher counts as a caller)' }
+else { Bad ('script-census still fires after the orphan was wired in (rc=' + $r.rc + '): ' + $r.text) }
+New-Item -ItemType Directory -Force (Join-Path $fxSc 'out') | Out-Null
+Set-Content (Join-Path $fxSc 'out\zzz-oneoff.ps1') 'Write-Output "one-off"' -Encoding UTF8
+$r = RunPS 'audit-script-census.ps1' @('-Root', $fxSc, '-ScanRoot', $fxSc, '-OutBaseline', '0')
+if ($r.rc -eq 2 -and $r.text -match 'OUTPUT directory') { Ok 'script-census ratchet FIRES when a one-off is written into out\' }
+else { Bad ('script-census let out\ grow past its recorded baseline (rc=' + $r.rc + '): ' + $r.text) }
+$r = RunPS 'audit-script-census.ps1' @('-Root', $fxSc, '-ScanRoot', $fxSc, '-OutBaseline', '1')
+if ($r.rc -eq 0) { Ok 'script-census ratchet SILENT at the recorded baseline (a ratchet, not a hard zero)' }
+else { Bad ('script-census ratchet fires at its own recorded baseline (rc=' + $r.rc + ') - it would fail from day one') }
+$fxScB = NewFxDir 'sc-blind'
+$r = RunPS 'audit-script-census.ps1' @('-Root', $fxScB, '-ScanRoot', $fxScB)
+if ($r.rc -eq 3 -and $r.text -match 'BLIND') { Ok 'script-census goes BLIND (exit 3) with nothing to examine instead of reporting a clean zero' }
+else { Bad ('script-census reported a result from an empty tree (rc=' + $r.rc + ') - "0 orphans" from zero examination is back') }
+Remove-Item $fxSc, $fxScB -Recurse -Force -ErrorAction SilentlyContinue
+
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2

@@ -25,6 +25,7 @@ that drives the still-open R300 capture worklist. Archive it when that worklist 
 ## one-off\ - completed one-shot jobs (kept for the record; safe to read, pointless to run)
 
 - `add-cheaper-verified.ps1` - promoted two genuinely-cheaper linked products into the regular files so their pins could die.
+- `add-search-terms.ps1` - one-shot that gave the 22 commodities added 2026-07-14 their Family Fare search terms. All 22 are in commodity-search.json (526 terms, 0 missing); re-running it adds nothing and overwrites out\commodity-search.backup-2026-07-14.json.
 - `apply-newitem-fills.ps1` - wrote the validated new-item fills (out\newitem-accepted.json) into each store's regular file.
 - `assemble-batch2.ps1` ... `assemble-batch14.ps1` (13 files) - brand-pilot batch assemblers, one per config/bucket slice of the brands run.
 - `assemble-cross.ps1` - cross-store assembly for the brand pilot (FF + Walmart/Sam's buckets).
@@ -34,6 +35,7 @@ that drives the still-open R300 capture worklist. Archive it when that worklist 
 - `backfill-restored-for.ps1` - stamped `restored_for` onto restored rows written before heal-missing-products recorded it.
 - `build-board-v2.ps1` - the browse-first A/B redesign board (rendered to a beta page, never replaced the live board).
 - `dedup-candidates.ps1` - cleaned the staples-500 candidate list of already-covered items before registration.
+- `drop-stale-overrides.ps1` - one-shot that removed the three wrong-match pins (gelatin/Walmart, gelatin/Hy-Vee, yeast/Fareway) on 2026-07-14. All three are gone (16 cells, 0 match); re-running it removes nothing and overwrites out\board-price-overrides.backup-2026-07-14.json.
 - `fill-newitems-ff.ps1` - filled Family Fare gaps for the 27 new 2026-07-14 commodities via Freshop.
 - `find-six.ps1` / `fix-remaining-six.ps1` - located and fixed the six broken cells on the published tracker page.
 - `fix-bakers-verified.ps1` - corrected Baker's cells verified in-store at Saddlecreek (regular-vs-discount disease).
