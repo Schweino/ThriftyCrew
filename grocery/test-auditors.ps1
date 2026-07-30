@@ -319,20 +319,22 @@ if ($ms -match 'ACCEPT REFUSED' -and $ms -match 'verify-verdicts-\*\.json') { Ok
 else { Bad 'audit-match-soundness -Accept lost its DROP-verdict gate - it is a rubber stamp again' }
 if ($ms -match '\$ForceAccept') { Ok 'the override is the explicit -ForceAccept switch, not silence' }
 else { Bad '-ForceAccept is gone - either the gate cannot be overridden at all (people will edit it out) or it no longer exists' }
-# Behavioural: the SCRIPT'S OWN quote pattern must capture a full apostrophe-bearing product name. Extract the
-# two pattern lines from the source and evaluate them, so this tests what ships rather than a copy of it - a
-# naive [^']+ capture truncates "Member's ..." at the possessive and fails SILENT (gate under-blocks on
-# exactly the Member's Mark rows the founding bug was about).
-$qlines = [regex]::Match($ms, '(?m)^\s*\$q1 = .+$\r?\n\s*\$quotePat = .+$')
-if ($qlines.Success) {
+# Behavioural: the SHARED quote recovery must capture a full apostrophe-bearing product name. The pattern
+# lives in verdict-lib.ps1 (shared by the -Accept gate AND verify-apply's suppressions - both must agree on
+# what "the same item" means), so the fixture dot-sources the lib and calls the REAL function rather than a
+# copy. A naive [^']+ capture truncates "Member's ..." at the possessive and fails SILENT - the gate
+# under-blocks on exactly the Member's Mark rows the founding bug was about.
+if (-not (Test-Path (Join-Path $root 'verdict-lib.ps1'))) { Bad 'verdict-lib.ps1 is missing - the -Accept gate and verify-apply have lost their shared item-identity definition' }
+else {
   $probe = & {
-    Invoke-Expression $qlines.Value
-    $r = "TEST: 'Member's Mark Pinto Beans 12 lbs.' is a 12-lb bag of DRY pinto beans."
-    return [regex]::Match($r, $quotePat).Groups[1].Value
+    . (Join-Path $root 'verdict-lib.ps1')
+    return (Get-VerdictQuotedItem "TEST: 'Member's Mark Pinto Beans 12 lbs.' is a 12-lb bag of DRY pinto beans.")
   }
-  if ($probe -eq "Member's Mark Pinto Beans 12 lbs.") { Ok 'verdict-gate quote capture survives an apostrophe in the product name' }
-  else { Bad ("verdict-gate quote capture truncates at the apostrophe again - captured '" + $probe + "'") }
-} else { Bad 'could not locate the verdict-gate quote pattern in audit-match-soundness.ps1 - the fixture cannot see it' }
+  if ($probe -eq "Member's Mark Pinto Beans 12 lbs.") { Ok 'verdict-lib quote capture survives an apostrophe in the product name' }
+  else { Bad ("verdict-lib quote capture truncates at the apostrophe again - captured '" + $probe + "'") }
+  if ($ms -match 'verdict-lib\.ps1') { Ok 'the -Accept gate sources verdict-lib (one definition of item identity)' }
+  else { Bad 'audit-match-soundness no longer sources verdict-lib - the gate and verify-apply can disagree on what "the same item" means' }
+}
 
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2

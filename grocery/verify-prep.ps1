@@ -20,7 +20,17 @@ foreach ($row in $doc.comparison) {
   }
   $commodities.Add([ordered]@{ id=$row.id; label=$row.commodity; unit=$row.unit; entries=$entries.ToArray() })
 }
-$out = [ordered]@{ week_of=$week; unit_note="unit_price is per the commodity's unit"; commodities=$commodities.ToArray() }
+# verdict_schema is read by the AGENT that judges this file. `item` in each verdict entry is what makes a
+# drop safely applicable and PERMANENT: verify-apply refuses to apply a drop to a cell holding a different
+# product than was judged (the board is rebuilt between judgment and apply routinely), and it records
+# confirmed drops into verdict-suppressions.json so the same wrong product never needs re-judging. Without
+# `item`, identity falls back to the name quoted in the reason - which 39 of the first 81 drops did not have.
+$out = [ordered]@{
+  week_of=$week
+  unit_note="unit_price is per the commodity's unit"
+  verdict_schema="Write verify-verdicts-<week>.json as { week_of, verdicts: [ { id, entries: [ { store, item: <copy the EXACT item string you judged from this file>, keep: bool, annotation: string|null, reason: string } ] } ] }. The item field is REQUIRED on every entry you write: it is the witness that lets a drop apply safely and persist."
+  commodities=$commodities.ToArray()
+}
 $file = Join-Path $OutDir ("verify-input-"+$week+".json")
 ($out | ConvertTo-Json -Depth 8) | Set-Content $file -Encoding UTF8
 Write-Output ("verify input: " + $commodities.Count + " commodities -> " + $file)

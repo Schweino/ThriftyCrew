@@ -1,0 +1,375 @@
+﻿{
+    "readme":  "Every confirmed DROP verdict ever made, keyed (id, store, normalised item), applied by verify-apply on EVERY run regardless of which week produced it. Exists because only the current week\u0027s verdict file used to be read, so the same wrong products returned as soon as their week rolled over - 18 previously-dropped cells were live again on 2026-07-29, three as crowns. Entries are added automatically when a drop\u0027s item identity is CONFIRMED (verdict item field or reason quote matches the cell), and removed automatically when a later keep verdict overturns one. Do not hand-edit item_norm; it is Get-VerdictNorm\u0027s output (verdict-lib.ps1).",
+    "updated":  "2026-07-30T03:36:22",
+    "suppressions":  [
+                         {
+                             "id":  "apple-juice",
+                             "store":  "Sam\u0027s Club",
+                             "item_norm":  "snapple juice drink variety pack",
+                             "item":  "Snapple Juice Drink Variety Pack",
+                             "week":  "2026-07-17",
+                             "reason":  "\u0027Snapple Juice Drink Variety Pack\u0027 is an assorted juice-drink beverage multipack, not apple juice.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "apples",
+                             "store":  "Family Fare",
+                             "item_norm":  "lady apples",
+                             "item":  "Lady Apples",
+                             "week":  "2026-07-17",
+                             "reason":  "\u0027Lady Apples\u0027 are a tiny ornamental/specialty crabapple-type variety, not the eating apples a shopper means.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "avocados",
+                             "store":  "Sam\u0027s Club",
+                             "item_norm":  "cucumber avocado roll 15 pcs",
+                             "item":  "Cucumber Avocado Roll, 15 pcs",
+                             "week":  "2026-07-17",
+                             "reason":  "\u0027Cucumber Avocado Roll, 15 pcs\u0027 is prepared sushi, not avocados.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "bacon",
+                             "store":  "Sam\u0027s Club",
+                             "item_norm":  "pork loin filet",
+                             "item":  "Pork Loin Filet",
+                             "week":  "2026-07-15",
+                             "reason":  "Smithfield \u0027Pork Loin Filet\u0027 is a marinated pork loin, not sliced bacon",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "bacon",
+                             "store":  "Sam\u0027s Club",
+                             "item_norm":  "smithfield applewood smoked bacon fresh pork loin filet",
+                             "item":  "Smithfield Applewood Smoked Bacon Fresh Pork Loin Filet",
+                             "week":  "2026-07-17",
+                             "reason":  "\u0027Smithfield Applewood Smoked Bacon Fresh Pork Loin Filet\u0027 is a seasoned pork loin filet, not sliced bacon.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "black-pepper",
+                             "store":  "Baker\u0027s",
+                             "item_norm":  "simple truth protein black pepper lentils brown rice and ancient grains whole grain blend",
+                             "item":  "Simple Truth Protein Black Pepper Lentils Brown Rice and Ancient Grains Whole Grain Blend",
+                             "week":  "2026-07-29",
+                             "reason":  "Not black pepper. \u0027Simple Truth Protein Black Pepper Lentils Brown Rice and Ancient Grains Whole Grain Blend\u0027 is a seasoned grain side dish; \u0027black pepper\u0027 is a flavour word in its name. It was crowning the spice at $0.34/oz.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "broccoli",
+                             "store":  "Sam\u0027s Club",
+                             "item_norm":  "broccoli normandy",
+                             "item":  "Broccoli Normandy",
+                             "week":  "2026-07-17",
+                             "reason":  "\u0027Broccoli Normandy\u0027 is a mixed vegetable blend (broccoli, cauliflower, carrots), not fresh broccoli.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "canned-pineapple",
+                             "store":  "Hy-Vee",
+                             "item_norm":  "hy vee short cuts pineapple chunks",
+                             "item":  "Hy-Vee Short Cuts pineapple chunks",
+                             "week":  "2026-07-29",
+                             "reason":  "Fresh-cut produce, not canned. \u0027Hy-Vee Short Cuts pineapple chunks\u0027 is the refrigerated cut-fruit tub, and the captured line is a fuel-saver ad string quoting $4.99 lb.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "canned-pinto-beans",
+                             "store":  "Sam\u0027s Club",
+                             "item_norm":  "member s mark pinto beans 12 lbs",
+                             "item":  "Member\u0027s Mark Pinto Beans 12 lbs.",
+                             "week":  "2026-07-17",
+                             "reason":  "\u0027Member\u0027s Mark Pinto Beans 12 lbs.\u0027 is a 12-lb bag of DRY pinto beans, not canned beans. No 192 oz can exists. Dry beans are not per-oz comparable to canned and it is currently the cheapest entry.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "cat-food",
+                             "store":  "Family Fare",
+                             "item_norm":  "friskies prime filets with chicken tuna in gravy 5 5 oz",
+                             "item":  "Friskies Prime Filets with Chicken \u0026 Tuna in Gravy 5.5 Oz",
+                             "week":  "2026-07-17",
+                             "reason":  "\u0027Friskies Prime Filets with Chicken \u0026 Tuna in Gravy 5.5 Oz\u0027 is WET canned cat food; commodity is Cat Food (dry).",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "cheese-crackers",
+                             "store":  "Hy-Vee",
+                             "item_norm":  "cheez it club toasted or town house crackers 12 to 21 oz",
+                             "item":  "Cheez-It, Club, Toasted or Town House crackers, 12 to 21 oz.",
+                             "week":  "2026-07-17",
+                             "reason":  "Combined multi-product ad line: \u0027Cheez-It, Club, Toasted or Town House crackers, 12 to 21 oz.\u0027 Club/Town House/Toasted are plain buttery crackers, not cheese crackers, and the size range makes the unit price arbitrary.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "cheese-tortellini",
+                             "store":  "Hy-Vee",
+                             "item_norm":  "hy vee ravioli or tortellini 42 or 48 oz 5 99",
+                             "item":  "Hy-Vee ravioli or tortellini, 42 or 48 oz., $5.99",
+                             "week":  "2026-07-29",
+                             "reason":  "Combined A-or-B ad line with a size range: \u0027Hy-Vee ravioli or tortellini, 42 or 48 oz., $5.99\u0027. Neither which product nor which size is determinable, so the per-ounce price is a coin flip.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "chocolate-milk",
+                             "store":  "Walmart",
+                             "item_norm":  "trumoo whole chocolate milk half gallon",
+                             "item":  "TruMoo Whole Chocolate Milk Half Gallon",
+                             "week":  "2026-07-17",
+                             "reason":  "Internal contradiction: item is \u0027TruMoo Whole Chocolate Milk Half Gallon\u0027 but size recorded as \u0027gallon\u0027, so the per-floz price is halved (0.0255/floz = $1.63 a half gallon, well below market). Bad size parse makes it the false cheapest.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "cocktail-sauce",
+                             "store":  "Sam\u0027s Club",
+                             "item_norm":  "member s mark shrimp tray with cocktail sauce priced per pound",
+                             "item":  "Member\u0027s Mark Shrimp Tray with Cocktail Sauce, priced per pound",
+                             "week":  "2026-07-17",
+                             "reason":  "\u0027Member\u0027s Mark Shrimp Tray with Cocktail Sauce, priced per pound\u0027 is a shrimp platter, not a bottle of cocktail sauce; price is per lb of shrimp.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "coconut-milk-canned",
+                             "store":  "Fareway",
+                             "item_norm":  "califia farms organic coconut milk",
+                             "item":  "Califia Farms Organic Coconut Milk",
+                             "week":  "2026-07-29",
+                             "reason":  "Carton beverage, not canned cooking milk. \u0027Califia Farms Organic Coconut Milk\u0027 is the refrigerated drinking carton; this commodity is the thick canned milk used for cooking. Different products, different per-ounce economics.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "coffee",
+                             "store":  "Aldi",
+                             "item_norm":  "stok cold brew coffee black unsweetened 48 fl oz",
+                             "item":  "Stok Cold Brew Coffee Black Unsweetened 48 FL OZ",
+                             "week":  "2026-07-29",
+                             "reason":  "Liquid, not ground. \u0027Stok Cold Brew Coffee Black Unsweetened 48 FL OZ\u0027 is ready-to-drink cold brew; comparing its fluid ounces against ground coffee\u0027s dry ounces is why it read 66% under the runner-up.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "corn-dogs",
+                             "store":  "Family Fare",
+                             "item_norm":  "corn dogs hot",
+                             "item":  "Corn Dogs Hot",
+                             "week":  "2026-07-17",
+                             "reason":  "\u0027Corn Dogs Hot\u0027 1 ea is a hot deli/prepared corn dog, not the frozen packaged product the commodity means.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "crackers",
+                             "store":  "Sam\u0027s Club",
+                             "item_norm":  "lance variety pack sandwich crackers",
+                             "item":  "Lance Variety Pack Sandwich Crackers",
+                             "week":  "2026-07-17",
+                             "reason":  "\u0027Lance Variety Pack Sandwich Crackers\u0027 are filled cracker sandwiches (peanut butter/cheese), a different snack product than saltine/buttery crackers.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "disinfecting-wipes",
+                             "store":  "Hy-Vee",
+                             "item_norm":  "lysol wipes or disinfectant spray 80 ct or 12 5 oz 5 99",
+                             "item":  "Lysol wipes or disinfectant spray, 80 ct. or 12.5 oz., $5.99",
+                             "week":  "2026-07-17",
+                             "reason":  "\u0027Lysol wipes or disinfectant spray, 80 ct. or 12.5 oz., $5.99\u0027 is a combined multi-product ad line (wipes OR spray); per-wipe price is an assumption, not a stated wipes price.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "dried-parsley",
+                             "store":  "Aldi",
+                             "item_norm":  "parsley 2 oz",
+                             "item":  "Parsley 2 OZ",
+                             "week":  "2026-07-29",
+                             "reason":  "Cannot tell fresh from dried. The captured name is just \u0027Parsley 2 OZ\u0027 with no brand - Aldi sells both a Stonemill dried jar and a fresh clamshell in that weight, and at 76% under the runner-up the two readings give very different answers. Dropped rather than publish a guess; dried-parsley still has six other stores.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "fresh-green-beans",
+                             "store":  "Aldi",
+                             "item_norm":  "happy harvest french green beans 14 5 oz",
+                             "item":  "Happy Harvest French Green Beans 14.5 OZ",
+                             "week":  "2026-07-29",
+                             "reason":  "Canned, not fresh. \u0027Happy Harvest French Green Beans 14.5 OZ\u0027 is Aldi\u0027s canned-vegetable label; this commodity is fresh green beans priced per pound. It was 49% under the runner-up because a can of beans is not a pound of produce.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "frozen-fries",
+                             "store":  "Family Fare",
+                             "item_norm":  "frozen carrots crinkle cut",
+                             "item":  "Frozen Carrots, Crinkle Cut",
+                             "week":  "2026-07-15",
+                             "reason":  "\u0027Frozen Carrots, Crinkle Cut\u0027 is CARROTS, not french fries",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "frozen-fries",
+                             "store":  "Family Fare",
+                             "item_norm":  "frozen carrots crinkle cut our family steamable",
+                             "item":  "Frozen Carrots, Crinkle Cut Our Family Steamable",
+                             "week":  "2026-07-17",
+                             "reason":  "Item is \u0027Frozen Carrots, Crinkle Cut Our Family Steamable\u0027 - crinkle-cut CARROTS, not French fries. Wrong product matched on \u0027crinkle cut\u0027.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "garlic",
+                             "store":  "Sam\u0027s Club",
+                             "item_norm":  "seeds of change certified organic quinoa and brown rice with garlic",
+                             "item":  "Seeds of Change Certified Organic Quinoa and Brown Rice with Garlic",
+                             "week":  "2026-07-17",
+                             "reason":  "\u0027Seeds of Change Certified Organic Quinoa and Brown Rice with Garlic\u0027 is a heat-and-eat rice pouch multipack, not fresh garlic bulbs.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "garlic-bread",
+                             "store":  "Hy-Vee",
+                             "item_norm":  "bellatoria ultra thin pizza or garlic bread 11 81 to 19 41 oz 2 10",
+                             "item":  "Bellatoria ultra thin pizza or garlic bread, 11.81 to 19.41 oz., 2/$10",
+                             "week":  "2026-07-17",
+                             "reason":  "\u0027Bellatoria ultra thin pizza or garlic bread, 11.81 to 19.41 oz., 2/$10\u0027 is a combined multi-product ad line (pizza OR garlic bread) with an ambiguous size; not a clean garlic-bread price.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "grapes",
+                             "store":  "Sam\u0027s Club",
+                             "item_norm":  "grape nuts original 64 oz",
+                             "item":  "Grape Nuts Original, 64 oz.",
+                             "week":  "2026-07-15",
+                             "reason":  "\u0027Grape Nuts Original, 64 oz.\u0027 is breakfast CEREAL, not fresh grapes",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "honey",
+                             "store":  "Baker\u0027s",
+                             "item_norm":  "kroger rich n honey hot dog buns",
+                             "item":  "Kroger Rich N Honey Hot Dog Buns",
+                             "week":  "2026-07-29",
+                             "reason":  "Not honey. \u0027Kroger Rich N Honey Hot Dog Buns\u0027 is bread that matched on the word honey.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "jalapenos",
+                             "store":  "Baker\u0027s",
+                             "item_norm":  "la costena whole jalapeno peppers",
+                             "item":  "La Costena Whole Jalapeno Peppers",
+                             "week":  "2026-07-29",
+                             "reason":  "Canned, not fresh. \u0027La Costena Whole Jalapeno Peppers\u0027 is the canned pepper; fresh jalapenos are the commodity here and pickled/canned ones already have their own row (pickled-jalapenos).",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "pesto",
+                             "store":  "Aldi",
+                             "item_norm":  "mama cozzis pesto burrata",
+                             "item":  "Mama Cozzis Pesto Burrata",
+                             "week":  "2026-07-29",
+                             "reason":  "Not pesto. \u0027Mama Cozzis Pesto Burrata\u0027 is a refrigerated pizza/burrata item, and its captured size (1815 OZ) is a mangled decimal we could not prove, so the per-ounce price is unsound as well.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "pickles",
+                             "store":  "Family Fare",
+                             "item_norm":  "mild jalapeno slices",
+                             "item":  "Mild Jalapeno Slices",
+                             "week":  "2026-07-15",
+                             "reason":  "Mt Olive \u0027Mild Jalapeno Slices\u0027 are pickled jalapenos, not dill pickles",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "pineapple",
+                             "store":  "Baker\u0027s",
+                             "item_norm":  "dole pineapple 8 oz",
+                             "item":  "Dole Pineapple, 8 oz",
+                             "week":  "2026-07-17",
+                             "reason":  "\u0027Dole Pineapple, 8 oz\u0027 at $1 is a packaged/canned pineapple cup, not a whole fresh pineapple (commodity unit is each, whole). It was winning the cell at $1 vs ~$1.89-$4.99 for real whole pineapples.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "pineapple",
+                             "store":  "Fareway",
+                             "item_norm":  "fareway chunk pineapple",
+                             "item":  "Fareway Chunk Pineapple",
+                             "week":  "2026-07-29",
+                             "reason":  "Cut/canned chunks, not a whole pineapple. This commodity is a whole pineapple priced per each; \u0027Fareway Chunk Pineapple\u0027 is a container of pieces.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "queso",
+                             "store":  "Hy-Vee",
+                             "item_norm":  "frito lay snacks salsa or queso dip 8 25 to 24 oz 3 99 ea with purchase of 3",
+                             "item":  "Frito-Lay snacks, salsa or queso dip, 8.25 to 24 oz., $3.99 ea. with purchase of 3",
+                             "week":  "2026-07-17",
+                             "reason":  "Combined multi-product ad line: \u0027Frito-Lay snacks, salsa or queso dip, 8.25 to 24 oz., $3.99 ea. with purchase of 3\u0027 - not a single queso product, size is a range, and price requires buying 3.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "queso",
+                             "store":  "Hy-Vee",
+                             "item_norm":  "pace salsa picante sauce or queso bowls 11 to 22 oz 2 5 00",
+                             "item":  "Pace salsa, picante sauce or queso bowls, 11 to 22 oz., 2/ $5.00",
+                             "week":  "2026-07-29",
+                             "reason":  "Combined A-or-B-or-C ad line with a size range: \u0027Pace salsa, picante sauce or queso bowls, 11 to 22 oz., 2/ $5.00\u0027. Two of the three products are not queso and the size spans 2x.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "raspberries",
+                             "store":  "Baker\u0027s",
+                             "item_norm":  "bomb pop extremes super sour blue raspberry ice pops",
+                             "item":  "Bomb Pop Extremes Super Sour Blue Raspberry Ice Pops",
+                             "week":  "2026-07-29",
+                             "reason":  "Not fruit. \u0027Bomb Pop Extremes Super Sour Blue Raspberry Ice Pops\u0027 is a freezer novelty that matched on \u0027raspberry\u0027.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "spinach",
+                             "store":  "Hy-Vee",
+                             "item_norm":  "birds eye chopped spinach",
+                             "item":  "Birds Eye Chopped Spinach",
+                             "week":  "2026-07-29",
+                             "reason":  "Frozen, not fresh. \u0027Birds Eye Chopped Spinach\u0027 is a freezer box; this commodity is fresh spinach. Frozen spinach is several times denser per ounce, so it undercuts fresh on a per-ounce board without being the same purchase.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "strawberries",
+                             "store":  "Baker\u0027s",
+                             "item_norm":  "kroger strawberry applesauce",
+                             "item":  "Kroger Strawberry Applesauce",
+                             "week":  "2026-07-29",
+                             "reason":  "Not fruit. \u0027Kroger Strawberry Applesauce\u0027 matched on \u0027strawberry\u0027 and was crowning fresh berries at $0.083/oz.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "sun-dried-tomatoes",
+                             "store":  "Hy-Vee",
+                             "item_norm":  "mission sun dried tomato basil wraps 6ct",
+                             "item":  "Mission Sun-Dried Tomato Basil Wraps 6Ct",
+                             "week":  "2026-07-29",
+                             "reason":  "Not sun-dried tomatoes. \u0027Mission Sun-Dried Tomato Basil Wraps 6Ct\u0027 is flavoured tortillas.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "toasted-sesame-seeds",
+                             "store":  "Hy-Vee",
+                             "item_norm":  "ball park sesame seed burger buns 8 count",
+                             "item":  "Ball Park Sesame Seed Burger Buns, 8 Count",
+                             "week":  "2026-07-29",
+                             "reason":  "Not sesame seeds. \u0027Ball Park Sesame Seed Burger Buns, 8 Count\u0027 is bread.",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "tomatoes",
+                             "store":  "Hy-Vee",
+                             "item_norm":  "hy vee tomatoes 28 or 29 oz",
+                             "item":  "Hy-Vee tomatoes, 28 or 29 oz.",
+                             "week":  "2026-07-17",
+                             "reason":  "\u0027Hy-Vee tomatoes, 28 or 29 oz.\u0027 is the standard CANNED tomato size - canned product under a fresh-tomato (per lb) commodity",
+                             "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "tortillas",
+                             "store":  "Sam\u0027s Club",
+                             "item_norm":  "tortilla style",
+                             "item":  "Tortilla Style",
+                             "week":  "2026-07-15",
+                             "reason":  "Quest \u0027Tortilla Style\u0027 Protein Chips are snack chips, not flour tortillas; false winner at $0.11",
+                             "source":  "quote-backfill"
+                         }
+                     ]
+}

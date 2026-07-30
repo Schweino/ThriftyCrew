@@ -97,9 +97,11 @@ if ($Accept -or $ForceAccept) {
   # false block teaches people to reach for -ForceAccept, which un-teaches the whole gate.
   # LATEST WORD WINS: files are walked oldest -> newest, so a later verdict on the same (commodity, item)
   # overrides an earlier one - a drop that was re-reviewed and kept stops blocking.
-  $q1 = [char]0x0027; $q2 = [char]0x2018; $q3 = [char]0x2019; $q4 = [char]0x201C; $q5 = [char]0x201D
-  $quotePat = "[$q1$q2$q4](.{6,}?)[$q1$q3$q5](?=\s|$|[,.;:!?)\]])"
-  function NormName2([string]$s) { return (($s.ToLower() -replace '[^a-z0-9]+', ' ').Trim()) }
+  # Normalisation + quote recovery live in verdict-lib.ps1, SHARED with verify-apply's suppression logic.
+  # Both must agree on what "the same item" means, or a product suppressed by one is invisible to the other.
+  . (Join-Path $root 'verdict-lib.ps1')
+  $quotePat = Get-VerdictQuotePattern
+  function NormName2([string]$s) { return (Get-VerdictNorm $s) }
   $verdictByKey = @{}   # "<commodity>|<normalised item>" -> latest verdict info
   foreach ($vf in (Get-ChildItem (Join-Path $OutDir 'verify-verdicts-*.json') -EA SilentlyContinue | Sort-Object Name)) {
     try { $vj = ConvertFrom-Json ([IO.File]::ReadAllText($vf.FullName)) } catch { continue }

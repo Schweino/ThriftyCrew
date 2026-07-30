@@ -6,13 +6,33 @@
   confirmed stores. Prints a change report (winners that moved, items dropped, annotations added).
 
   Verdict file shape:
-    { week_of, verdicts: [ { id, entries: [ { store, keep: bool, annotation: string|null, reason: string } ] } ] }
+    { week_of, verdicts: [ { id, entries: [ { store, keep: bool, annotation: string|null, reason: string,
+                                              item: string (RECOMMENDED - the exact judged item name; without
+                                              it a drop can only be applied blind, see the drift gate below) } ] } ] }
+
+  VERDICT PERSISTENCE (2026-07-30). A confirmed DROP now outlives its week: it is recorded in
+  verdict-suppressions.json keyed (id, store, normalised item) and re-applied on EVERY future run. Before
+  this, only the current week's verdict file was read, so the same wrong products returned as soon as their
+  week rolled over - 18 previously-dropped cells were live again on 2026-07-29, three as CROWNS (a pork loin
+  filet as bacon, a frozen mixed-veg blend as broccoli, a 12-lb dry bag as canned pinto beans), each of which
+  an LLM had already judged wrong in up to three separate weeks. A judgment that has to be re-made weekly is
+  not a judgment, it is a tax - and any unattended week publishes the thing it already rejected.
+
+  THE DRIFT GATE, equally important: this script used to drop by (id|store) BLIND. The board is rebuilt
+  between judgment and apply routinely, so it dropped whatever occupied the cell at apply time - judged or
+  not. A drop is now applied only when the verdict's item identity (its `item` field, or the name quoted in
+  its reason) matches the cell; a mismatch WARNS and leaves the cell alone, because deleting a product nobody
+  judged is the same bug promote-verdicts nearly shipped as permanent excludes. A verdict with NO recoverable
+  identity still drops blind (legacy files), which dies out as verdict files start carrying `item`.
+
+  A human overturn wins: a keep=true verdict whose identity matches a suppressed item REMOVES the suppression.
 #>
 param([string]$CompareFile = "", [string]$VerdictFile = "", [string]$OutDir = "", [int]$MinStores = 2,
       # Write somewhere other than verified-<week>.json. Used to build a SECOND, MinStores-1 verified board
       # purely as the price-history input: history must bank verified numbers, but it must also keep tracking
       # the ~24 single-store long-tail commodities that MinStores 2 legitimately keeps off the published page.
-      [string]$OutFile = "")
+      [string]$OutFile = "",
+      [string]$SuppressionsFile = "")
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
@@ -26,6 +46,23 @@ $verdicts = Get-Content $VerdictFile -Raw | ConvertFrom-Json
 $vlook = @{}
 foreach ($c in $verdicts.verdicts) { foreach ($e in $c.entries) { $vlook[("$($c.id)|$($e.store)")] = $e } }
 
+# ---- durable suppressions: every confirmed DROP ever made, keyed (id, store, normalised item) ----
+. (Join-Path $root 'verdict-lib.ps1')   # Get-VerdictNorm / Get-VerdictQuotedItem - SHARED with the -Accept gate
+if (-not $SuppressionsFile) { $SuppressionsFile = Join-Path $root 'verdict-suppressions.json' }
+$supp = @{}          # "id|store|item_norm" -> entry object
+$suppDirty = $false
+if (Test-Path $SuppressionsFile) {
+  try { foreach ($se in @((Get-Content $SuppressionsFile -Raw | ConvertFrom-Json).suppressions)) {
+          $supp[(([string]$se.id) + '|' + ([string]$se.store) + '|' + ([string]$se.item_norm))] = $se } }
+  catch { Write-Warning ("verdict-suppressions.json unreadable - persistence is OFF this run: " + $_.Exception.Message) }
+}
+function Get-VerdictIdentity($entry) {
+  # the judged item, best evidence first: an explicit item field, else the name quoted in the reason.
+  if ($entry.PSObject.Properties['item'] -and $entry.item) { return [string]$entry.item }
+  return (Get-VerdictQuotedItem ([string]$entry.reason))
+}
+$suppApplied = 0; $suppAdded = 0; $suppRemoved = 0; $driftSkipped = 0
+
 $verified = New-Object System.Collections.Generic.List[object]
 $changes  = New-Object System.Collections.Generic.List[object]
 foreach ($row in $doc.comparison) {
@@ -33,7 +70,41 @@ foreach ($row in $doc.comparison) {
   $ord = 0
   foreach ($s in $row.stores) {
     $v = $vlook[("$($row.id)|$($s.store)")]
-    if ($v -and ($v.keep -eq $false)) { $changes.Add("DROP    $($row.commodity): $($s.store) `"$($s.item)`" - $($v.reason)"); continue }
+    $cellNorm = Get-VerdictNorm ([string]$s.item)
+    $suppKey = ([string]$row.id) + '|' + ([string]$s.store) + '|' + $cellNorm
+    if ($v -and ($v.keep -eq $false)) {
+      $judged = Get-VerdictIdentity $v
+      if ($judged -and ((Get-VerdictNorm $judged) -ne $cellNorm)) {
+        # THE DRIFT GATE. The verdict names a product and the cell no longer holds it - the board was rebuilt
+        # between judgment and apply. Dropping the current occupant would delete a product NOBODY judged.
+        $driftSkipped++
+        $changes.Add("DRIFT   $($row.commodity): $($s.store) verdict judged `"$judged`" but the cell now holds `"$($s.item)`" - NOT dropped (re-judge if the new item is also wrong)")
+      } else {
+        if ($judged) {
+          # identity confirmed -> this drop is PERMANENT from now on
+          if (-not $supp.ContainsKey($suppKey)) {
+            $supp[$suppKey] = [pscustomobject]@{ id = [string]$row.id; store = [string]$s.store; item_norm = $cellNorm; item = [string]$s.item; week = $week; reason = [string]$v.reason; source = 'apply-confirmed' }
+            $suppDirty = $true; $suppAdded++
+          }
+        }
+        $changes.Add("DROP    $($row.commodity): $($s.store) `"$($s.item)`" - $($v.reason)")
+        continue
+      }
+    }
+    if ($v -and ($v.keep -ne $false)) {
+      # a human overturn beats persistence: an explicit KEEP for this exact item removes its suppression
+      $judged = Get-VerdictIdentity $v
+      if ($judged -and ((Get-VerdictNorm $judged) -eq $cellNorm) -and $supp.ContainsKey($suppKey)) {
+        $supp.Remove($suppKey); $suppDirty = $true; $suppRemoved++
+        $changes.Add("UNSUPPRESS $($row.commodity): $($s.store) `"$($s.item)`" - keep verdict overturns the standing suppression")
+      }
+    }
+    if ($supp.ContainsKey($suppKey)) {
+      # VERDICT PERSISTENCE: judged wrong in some past week, still the same product -> still wrong.
+      $suppApplied++
+      $changes.Add("SUPPRESS $($row.commodity): $($s.store) `"$($s.item)`" - standing DROP from $($supp[$suppKey].week): $($supp[$suppKey].reason)")
+      continue
+    }
     $ann = if ($v) { $v.annotation } else { $null }
     if ($ann) { $changes.Add("NOTE    $($row.commodity): $($s.store) - $ann") }
     # keep ad + note: SaleBadge's flash-window parser reads them, and publish PREFERS this verified board -
@@ -56,7 +127,21 @@ $out = [ordered]@{ built_at=(Get-Date).ToString('s'); week_of=$week; verified_fr
 $file = if ($OutFile) { if ([IO.Path]::IsPathRooted($OutFile)) { $OutFile } else { Join-Path $OutDir $OutFile } } else { Join-Path $OutDir ("verified-"+$week+".json") }
 ($out | ConvertTo-Json -Depth 8) | Set-Content $file -Encoding UTF8
 
+# persist suppression changes atomically (tmp + move): verify-apply runs 2-3x per publish cycle and the
+# dedupe by key makes re-runs no-ops, so the file only churns when a judgment actually changed.
+if ($suppDirty) {
+  $sObj = [ordered]@{
+    readme = "Every confirmed DROP verdict ever made, keyed (id, store, normalised item), applied by verify-apply on EVERY run regardless of which week produced it. Exists because only the current week's verdict file used to be read, so the same wrong products returned as soon as their week rolled over - 18 previously-dropped cells were live again on 2026-07-29, three as crowns. Entries are added automatically when a drop's item identity is CONFIRMED (verdict item field or reason quote matches the cell), and removed automatically when a later keep verdict overturns one. Do not hand-edit item_norm; it is Get-VerdictNorm's output (verdict-lib.ps1)."
+    updated = (Get-Date).ToString('s')
+    suppressions = @($supp.Values | Sort-Object id, store, item_norm)
+  }
+  $tmpS = $SuppressionsFile + '.tmp'
+  ($sObj | ConvertTo-Json -Depth 5) | Set-Content $tmpS -Encoding UTF8
+  Move-Item $tmpS $SuppressionsFile -Force
+}
+
 Write-Output ("VERIFIED  week $week   commodities kept: " + $verified.Count + " / " + @($doc.comparison).Count)
+Write-Output ("suppressions: " + $suppApplied + " standing drop(s) applied, " + $suppAdded + " newly recorded, " + $suppRemoved + " overturned by keep verdicts, " + $driftSkipped + " drifted verdict(s) NOT applied (cell holds a different product than was judged)")
 Write-Output ("=" * 70)
 if ($changes.Count -gt 0) { foreach ($c in $changes.ToArray()) { Write-Output $c } } else { Write-Output "no changes - every published winner passed semantic verification" }
 Write-Output ""

@@ -8397,6 +8397,8 @@
                         "\\bhoney\\b"
                     ],
         "exclude":  [
+                        "\\bplums?\\b",
+                        "\\bclamshells?\\b",
                         "\\bham\\b",
                         "mustard",
                         "teriyaki",
@@ -11586,6 +11588,8 @@
                         "raspberr"
                     ],
         "exclude":  [
+                        "\\bshave\\s+cream\\b",
+                        "\\bshaving\\s+cream\\b",
                         "\\bfrozen\\b",
                         "\\bjam\\b",
                         "preserves",
@@ -35709,6 +35713,8 @@
                         "sesame\\s+seeds?"
                     ],
         "exclude":  [
+                        "\\bnut.?thins?\\b",
+                        "\\bcrackers?\\b",
                         "\\bbagel\\b",
                         "candy",
                         "\\bsnap\\b",
