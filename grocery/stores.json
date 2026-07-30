@@ -88,6 +88,7 @@
     { "file": "import-browser-batch.ps1", "contains": "switch ($Store)", "reason": "store->prefix switch whose 'default' arm covers the unnamed stores" },
     { "file": "sync-browser-links.ps1", "contains": "$hostOf = @{", "reason": "operates only on the 3 stores with direct product-URL hosts" },
     { "file": "sync-browser-links.ps1", "contains": "$regGlob = @{", "reason": "operates only on the 3 stores with direct product-URL hosts" },
-    { "file": "sync-browser-links.ps1", "contains": "foreach ($store in @('Walmart'", "reason": "operates only on the 3 stores with direct product-URL hosts" }
+    { "file": "sync-browser-links.ps1", "contains": "foreach ($store in @('Walmart'", "reason": "operates only on the 3 stores with direct product-URL hosts" },
+    { "file": "guards.ps1", "contains": "names guard 9 as the only staleness watch", "reason": "blind-message prose: names the 4 stores guard 9 is the sole staleness watch for, which is the point of the sentence" }
   ]
 }

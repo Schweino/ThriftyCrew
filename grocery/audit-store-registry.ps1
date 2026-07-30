@@ -71,7 +71,13 @@ foreach ($f in $scanFiles) {
     $idx = $line.IndexOf(' # '); $code = if ($idx -ge 0) { $line.Substring(0, $idx) } else { $line }
     $hit = 0; $missing = @()
     foreach ($n in $names) {
-      $variants = @($n, ($n -replace "'", '&#39;'), ($n -replace "'", '&rsquo;'))
+      # The PowerShell-escaped form ("Baker''s" inside a single-quoted string) has to be in here: this
+      # scanner reads .ps1 source, so '' is the MOST likely way a store name appears, and it was the one
+      # variant missing. test-auditors.ps1 seeds all 7 stores into a fixture on one line, five of them
+      # plainly and Baker's/Sam's Club escaped - so the guard reported "names 5 store(s) but is missing
+      # Baker's, Sam's Club" against a line that names every store. A drift guard that is permanently red
+      # on correct code teaches people to ignore it, which is worse than not having it.
+      $variants = @($n, ($n -replace "'", "''"), ($n -replace "'", '&#39;'), ($n -replace "'", '&rsquo;'))
       $found = $false; foreach ($v in $variants) { if ($code.IndexOf($v, [StringComparison]::Ordinal) -ge 0) { $found = $true; break } }
       if ($found) { $hit++ } else { $missing += $n }
     }
