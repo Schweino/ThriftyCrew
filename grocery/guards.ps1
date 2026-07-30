@@ -41,6 +41,28 @@ $fail = New-Object System.Collections.ArrayList
 $warn = New-Object System.Collections.ArrayList
 function Say($s) { if (-not $Quiet) { Write-Output $s } }
 
+function OkUnlessBlind([int]$checked, [string]$okMsg, [string]$blindMsg) {
+  <#
+    THE ZERO-ROWS RULE: a check that examined NOTHING must WARN, never print ok.
+
+    Founding bug (2026-07-24, found 2026-07-29). Guard 11 reconciles Baker's published price against the raw
+    store capture. It filters rows on `$d.upc` and `source_ad -match 'bakersplus'`. When Baker's moved to the
+    sanctioned Kroger API the puller started writing `product_id` and `source_ad = kroger-api`, so ZERO of
+    6,960 rows matched - and because its bug counter was still 0, it printed:
+        ok    Baker's prices reconcile with the raw store capture (0 pack=our-size rows checked ...)
+    It said ok for five days while checking nothing. It is the ONLY independent statement of Baker's price on
+    the board (guards.ps1 says so itself at the guard-10 header: guard 10 compares two of OUR OWN numbers, so
+    it cannot catch a current_price that was COMPUTED wrong), and Baker's is the largest store on the board.
+
+    "No violations found" and "no rows examined" produce the SAME zero. This helper forces them apart: pass the
+    number of rows the check actually looked at, and an empty examination becomes a warn naming what went blind.
+    Guard 10 already did this by hand - it warns by name for stores that record no current_price. This makes it
+    the house rule rather than one guard's good manners.
+  #>
+  if ($checked -gt 0) { Say ('  ok    ' + $okMsg) }
+  else { [void]$warn.Add($blindMsg) }
+}
+
 # Canonical store data files ONLY. Guard 7 below explains why: a non-canonical name in out\regular can
 # outsort the real data in a "newest by name" lookup, so every such lookup in this script filters by NAME,
 # not just by glob. (A '*-regular-*.json' glob happily matches 'family-fare-regular-<date>.PARTIAL.json'.)
@@ -631,7 +653,11 @@ try {
         }
       }
     }
-    if ($bkBad -eq 0) { Say ("  ok    Baker's prices reconcile with the raw store capture ($bkChecked pack=our-size rows checked against the exact cur)") }
+    if ($bkBad -eq 0) {
+      OkUnlessBlind $bkChecked `
+        ("Baker's prices reconcile with the raw store capture ($bkChecked pack=our-size rows checked against the exact cur)") `
+        ("guard 11 examined ZERO Baker's rows and therefore proves NOTHING - it is the only independent statement of Baker's price on the board (guard 10 compares two of our own numbers). Its row filter wants `$d.upc + source_ad matching 'bakersplus'; the Kroger API puller writes product_id + source_ad='kroger-api', so nothing qualifies. Re-point it at the Kroger feed, or the milk bug ships unseen on the board's largest store.")
+    }
   }
 } catch {
   [void]$warn.Add("guard 11 (Baker's raw-capture cross-check) errored and was skipped: " + $_.Exception.Message)
