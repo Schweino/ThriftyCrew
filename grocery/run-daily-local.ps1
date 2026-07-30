@@ -108,9 +108,15 @@ if ($last -eq $today -and $env:SMP_FORCE -ne '1') {
 # started a link auto-repair and republish on top of it (09:14:23), and threw all 46 minutes away.
 # GATE 1 above cannot see the weekly at all: the weekly ends in push-data.ps1, which commits under Brad's
 # own identity, so "the bot committed today" is false the whole time the weekly is running.
-# STANDING DOWN IS NOT A LOST DAY. With no bot commit today, daily.yml's 16:00 UTC backup finds no bot
-# commit in its 16h window and runs the full pipeline in a clean clone (feed, recipes, alerts, publish)
-# hours after the weekly is done - the exact case that backup exists for. It costs cloud minutes, not data.
+# STANDING DOWN IS NOT A LOST DAY, but be precise about why (corrected by the post-batch review
+# 2026-07-30 - the first version of this comment claimed the backup runs "hours after the weekly is done",
+# and that is false). daily.yml fires at 16:00 UTC = 11:00 CDT, which on 2026-07-29 was INSIDE the weekly
+# window (that run's phases spanned 07:17 to 19:07). So the backup is not guaranteed to land after the
+# weekly finishes. What actually makes standing down safe is narrower and still true: the backup runs in a
+# CLEAN CLONE, so it cannot collide with the local tree the weekly is editing, and it re-derives the board
+# from whatever the weekly has pushed by then. If it lands mid-weekly it may publish a board the weekly
+# later supersedes - wasteful, not wrong - and the weekly's own publish phase is the authority either way.
+# The real cost of standing down is therefore at most one redundant cloud run, never lost prices.
 # THE LOCK EXPIRES ON ITS OWN TERMS: weekly-run-lock.ps1 stamps expires INTO the file and reads it back, so
 # a weekly that crashes costs at most one daily tick and never disables this job. exit 3 = could-not-read,
 # and we run anyway (fail open). SMP_FORCE=1 overrides, same as GATE 1.

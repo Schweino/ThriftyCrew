@@ -41,7 +41,7 @@ $ScanRoot = $ScanRoot.TrimEnd('\')
 # FROZEN 2026-07-30: measured count of .ps1 under grocery\out\. May only go DOWN (archive them).
 if ($OutBaseline -lt 0) { $OutBaseline = 37 }
 
-# FROZEN 2026-07-30 - the 33 scripts nothing in the repo calls, each with the reason it stays. An entry that
+# FROZEN 2026-07-30 - the 25 scripts nothing in the repo calls, each with the reason it stays. An entry that
 # stops being uncalled (wired in, or archived) prints a note telling you to delete the line; it never fails.
 $KNOWN = [ordered]@{
   # -- launched by hand from a scheduled-agent SKILL under ~\.claude\scheduled-tasks\ (not in this repo)

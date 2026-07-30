@@ -824,17 +824,22 @@ $rfSrc = [IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))
 # [regex]::Match into a LOCAL - $Matches is global and gets clobbered.
 $rfD = [regex]::Match($rfSrc, '(?s)<<REVIEW-DECISION-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<REVIEW-DECISION-END>>')
 $rfS = [regex]::Match($rfSrc, '(?s)<<REVIEW-STAMP-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<REVIEW-STAMP-END>>')
-if (-not $rfD.Success -or -not $rfS.Success) {
+$rfA = [regex]::Match($rfSrc, '(?s)<<REVIEW-ACKLOAD-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<REVIEW-ACKLOAD-END>>')
+if (-not $rfD.Success -or -not $rfS.Success -or -not $rfA.Success) {
   Bad 'review-flag re-arm regions are GONE from check-ad-cycles.ps1 - this check EXAMINED NOTHING, the re-arm logic is untested'
 } else {
   $RF_DECISION = $rfD.Groups[1].Value
   $RF_STAMP    = $rfS.Groups[1].Value
+  $RF_ACKLOAD  = $rfA.Groups[1].Value
   # FROZEN synthetic state - never regenerated from out\alerted-flags.json, the bug lives in these dates.
   $rfOpen  = 'SANITY|FIXTURE Widget|outlier'      # open every day since T0-30, never re-paged
   $rfAck   = 'MULTIBUY|FIXTURE Store|fx-2'        # acked until T0+3
   $rfFresh = 'SANITY|FIXTURE Fresh|outlier'       # paged yesterday - must stay quiet
   $rfT0 = [datetime]'2026-03-02'
   $rfAckDoc = [pscustomobject]@{ acks = @([pscustomobject]@{ key = $rfAck; reason = 'frozen fixture'; expires = $rfT0.AddDays(3).ToString('yyyy-MM-dd') }) }
+  # the REAL loader reads $OutDir\review-ack.json, so the frozen ack doc goes on disk in a temp dir
+  $rfTmp = NewFxDir 'rf-ack'
+  Set-Content (Join-Path $rfTmp 'review-ack.json') ($rfAckDoc | ConvertTo-Json -Depth 5) -Encoding UTF8
   function RfNewState {
     $h = @{}
     $h[$rfOpen]  = [pscustomobject]@{ first_seen = $rfT0.AddDays(-30).ToString('s'); last_seen = $rfT0.AddDays(-1).ToString('s'); last_detail = 'x' }
@@ -855,14 +860,13 @@ if (-not $rfD.Success -or -not $rfS.Success) {
     $NoAlert = $noAlert
     $flagKeys  = @($rfOpen, $rfAck, $rfFresh)          # all three flagged EVERY day - the backlog scenario
     $flagParts = @($flagKeys | ForEach-Object { $_ + '|detail' })
-    $REARM_DAYS = 14
-    $ackOpen = @{}; $ackUntil = @{}; $ackExpired = 0; $ackHit = 0; $reArmed = 0; $ackReArmed = 0
-    foreach ($a in @($rfAckDoc.acks)) {
-      if (-not $a.key) { continue }
-      $exp = $null; try { $exp = [datetime]$a.expires } catch { $exp = $null }
-      if ($null -ne $exp -and $exp.Date -ge $now.Date) { $ackOpen[[string]$a.key] = $true }
-      else { $ackExpired++; if ($null -ne $exp) { $ackUntil[[string]$a.key] = $exp.Date } }
-    }
+    # RUN THE REAL ACK LOADER, not a transcription of it (post-batch review 2026-07-30). This block used to
+    # carry its own copy of the loop and its own $REARM_DAYS = 14, so production's $ackUntil line - half of
+    # DEFECT 2 - could be deleted and all ten checks stayed green; changing production's re-arm window was
+    # equally invisible. The loader is now a sentinelled region and is executed here, so both are covered.
+    # $OutDir points at the temp dir holding the frozen review-ack.json, and Get-Date is shadowed above.
+    $OutDir = $rfTmp
+    Invoke-Expression $RF_ACKLOAD
     $newIdx = @()
     Invoke-Expression $RF_DECISION
     $due = @($newIdx | ForEach-Object { [string]$flagKeys[$_] })

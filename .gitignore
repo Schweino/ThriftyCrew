@@ -32,6 +32,10 @@
 # input-fingerprint stamp for audit-match-soundness: a pure function of files already in the repo, rewritten
 # whenever any of them changes, and 1.24 MB a time - regenerable output, never a source of truth
 /grocery/out/audit/match-sweep-cache.json
+# machine-local runtime lock: it is HELD while the weekly run is in flight, and -Phase links ends in
+# push-data's `git add -A`, so tracking it would commit a live lock (pid + 4h expiry) to the shared repo and
+# rebase-conflict with every other machine - the same reason triage-queue.json is ignored
+/grocery/out/weekly-run.lock
 /grocery/out/smp-feed.json
 /grocery/out/recipe-board-everyday.bak-*.json
 # rolling local archive of aged out\ snapshots (run-daily-local.ps1 retention moves files in and later

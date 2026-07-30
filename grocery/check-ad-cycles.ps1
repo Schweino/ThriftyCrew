@@ -574,6 +574,11 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # An ack with no expires, or an unparseable one, is treated as EXPIRED: silencing a price flag forever
       # on the strength of a typo is exactly the failure this whole block exists to prevent. The estate already
       # works this way for coverage (coverage-ack.json), which re-arms on expiry.
+      # <<REVIEW-ACKLOAD-BEGIN>> test-auditors.ps1 extracts this region too and runs it against frozen state.
+      # It used to sit OUTSIDE the extracted region while the fixture kept its own transcribed copy of the
+      # loop, so deleting the $ackUntil line below reverted half of DEFECT 2 in production while all ten
+      # checks stayed green - measured by the post-batch review. $REARM_DAYS lives in here for the same
+      # reason: the harness hard-coded 14, so changing production's window was equally invisible.
       $REARM_DAYS = 14
       $ackOpen = @{}; $ackUntil = @{}; $ackExpired = 0; $ackHit = 0; $reArmed = 0; $ackReArmed = 0
       $ackFile = Join-Path $OutDir 'review-ack.json'
@@ -593,6 +598,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           }
         } catch { Log ('review-ack.json unreadable - treating every flag as unacknowledged: ' + $_.Exception.Message) }
       }
+      # <<REVIEW-ACKLOAD-END>>
       if ($flagParts.Count -gt 0) {
         Log ("REVIEW FLAGS: " + $flagParts.Count + " -> " + (($flagParts | Select-Object -First 4) -join ' ; '))
         $newIdx = @()

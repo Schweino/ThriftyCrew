@@ -181,8 +181,16 @@ $ex  = $null   # stays $null unless the live post was actually READ this run - t
                # to skip on a post it never saw (deleted, renamed or unreachable = republish, never assume)
 try {
   $jwt = New-GhostJWT $adminKey
-  $ex = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?fields=id,visibility" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -TimeoutSec 30).posts[0]
+  # STATUS is fetched, not just visibility (post-batch review 2026-07-30). The change gate proves "already
+  # live" from the signature plus [bool]$ex, and a DRAFT post returns a perfectly good $ex - so a -Draft run
+  # followed by a normal run reported CURRENT and skipped the upsert forever, leaving the board permanently
+  # unpublished. A post that is not status=published is NOT the page we would ship, whatever its bytes say.
+  $ex = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?fields=id,visibility,status" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -TimeoutSec 30).posts[0]
   if ($ex -and $ex.visibility) { $vis = [string]$ex.visibility }
+  if ($ex -and ([string]$ex.status) -ne 'published') {
+    Write-Output ("live post status is '" + [string]$ex.status + "', not 'published' - the change gate will NOT skip (a draft is not a live board)")
+    $ex = $null
+  }
 } catch { $ex = $null }
 if ($vis) { Set-Content -Path $visFile -Value $vis -Encoding ASCII }
 elseif (Test-Path $visFile) { $vis = (Get-Content $visFile -Raw).Trim(); Write-Output ("WARN: visibility read failed - reusing last-known '$vis' (not defaulting to public)") }

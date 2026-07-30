@@ -78,7 +78,7 @@ function Invoke-VerdictPurge($doc, $rejects, $names) {
     $names   "week|id|store|price" -> item, plus "id|store|price" -> item (any-week fallback)
     returns  @{ changes; skipped; unknown; unresolved }
   #>
-  $changes = @(); $skipped = @(); $script:unknown = 0; $script:unresolved = @()
+  $changes = @(); $skipped = @(); $script:unknown = 0; $script:unresolved = @(); $emptied = @()
   foreach ($c in @($doc.commodities)) {
     $id = [string]$c.id
     $rowsAll = @($c.history | Where-Object { $null -ne $_.cheapest_price })
@@ -161,13 +161,25 @@ function Invoke-VerdictPurge($doc, $rejects, $names) {
       $c.record_low.store   = [string]$rem[0].cheapest_store
       $c.record_low.week_of = [string]$rem[0].week_of
     }
+    else {
+      # EVERY row was purged, so there is no honest low left to promote (a single-store commodity whose
+      # one store is the rejected one). Leaving record_low pointing at the price we just deleted would keep
+      # the rejected wrong-product number on the board FOREVER, and the emptied history means the guard at
+      # the top of the loop skips this commodity on every future run - so it could never self-heal.
+      # (post-batch review 2026-07-30). Clear it and say so: an absent record low is honest, a retained
+      # rejected one is not. The commodity re-earns a low the next time it prices legitimately.
+      $c.record_low.price   = $null
+      $c.record_low.store   = ''
+      $c.record_low.week_of = ''
+      $emptied += ,$id
+    }
     $changes += [pscustomobject]@{
       id = $id; unit = [string]$c.unit; hits = $hits
       before = $before
       after  = [pscustomobject]@{ price = [double]$c.record_low.price; store = [string]$c.record_low.store; week = [string]$c.record_low.week_of }
     }
   }
-  return @{ changes = $changes; skipped = $skipped; unknown = $script:unknown; unresolved = $script:unresolved }
+  return @{ changes = $changes; skipped = $skipped; unknown = $script:unknown; unresolved = $script:unresolved; emptied = $emptied }
 }
 
 # ---------------------------------------------------------------- loaders
@@ -182,7 +194,27 @@ function Remove-OverturnedRejects($rej, $overturns) {
   foreach ($k in @($rej.Keys)) {
     $keepList = @()
     foreach ($e in @($rej[$k])) {
-      if ($overturns.ContainsKey($k + '|' + $e.judged_norm)) { $dropped += ,($k + '|' + $e.judged_norm) }
+      # THE OVERTURN MUST USE THE SAME MATCHING RULE AS THE DROP (post-batch review 2026-07-30).
+      # The drop side matches a history cell by TOKEN CONTAINMENT (Test-IdentityMatch), because a
+      # suppression identity is often a quote FRAGMENT - that is the whole reason containment exists. This
+      # side compared the KEEP verdict by EXACT normalised identity, so for any fragment-backfilled
+      # suppression (about a third of this purge's targets) a human's KEEP verdict, written the way
+      # verify-apply writes them (the full shipped product name), could never cancel the reject. The
+      # human-overturn safety net could not arm for exactly the entries most likely to need it.
+      # Containment is tried BOTH ways round: the verdict may name the full product while the suppression
+      # holds the fragment, or the reverse.
+      # NB the overturn key is "<id>|<store>|<norm>" and $k is ALREADY "<id>|<store>", so the identity is
+      # everything AFTER the "$k|" prefix - splitting on the first pipe would hand back "<store>|<norm>"
+      # and silently stop matching, which is how the first draft of this fix made a human-KEPT row
+      # purgeable again. Prefix-strip, never split.
+      $isOverturned = $false
+      $pfx = $k + '|'
+      foreach ($ok in @($overturns.Keys)) {
+        if (-not $ok.StartsWith($pfx)) { continue }
+        $keptNorm = $ok.Substring($pfx.Length)
+        if ((Test-IdentityMatch $keptNorm $e.judged_norm) -or (Test-IdentityMatch $e.judged_norm $keptNorm)) { $isOverturned = $true; break }
+      }
+      if ($isOverturned) { $dropped += ,($k + '|' + $e.judged_norm) }
       else { $keepList += ,$e }
     }
     if ($keepList.Count) { $rej[$k] = $keepList } else { $rej.Remove($k) }
@@ -342,6 +374,51 @@ if ($SelfTest) {
   T (@($r4.changes).Count -eq 0 -and @($r4.skipped).Count -eq 1 -and [math]::Abs(([double](@($d4.commodities)[0].record_low.price)) - 3.79) -lt 0.0001) `
     'MUST-FIRE: a commodity whose record_low is already held above its minimum is SKIPPED, not silently re-lowered'
 
+  # MUST FIRE (post-batch review 2026-07-30): a commodity whose ENTIRE history is rejected - a single-store
+  # commodity whose one store is the rejected one - used to keep record_low pointing at the price just
+  # deleted, forever: the emptied history made the guard at the top of the loop skip it on every future run,
+  # so it could never self-heal, and the run still exited 0 saying "record_low moved: 0".
+  $d6 = [pscustomobject]@{ commodities = @([pscustomobject]@{
+      id = 'solo-thing'; unit = 'lb'
+      record_low = [pscustomobject]@{ price = 1.11; store = "Sam's Club"; week_of = '2026-07-15' }
+      history = @([pscustomobject]@{ week_of = '2026-07-15'; cheapest_price = 1.11; cheapest_store = "Sam's Club"
+                                     per_store = [pscustomobject]@{ "Sam's Club" = 1.11 } })
+    }) }
+  $soloRej = @{ "solo-thing|Sam's Club" = @(@{ judged_norm = (Get-VerdictNorm 'Bogus Solo Product'); judged = 'Bogus Solo Product'; week = '2026-07-15'; reason = 'wrong product' }) }
+  $r6 = Invoke-VerdictPurge $d6 $soloRej @{ "2026-07-15|solo-thing|Sam's Club|1.11" = 'Bogus Solo Product' }
+  T ((@($r6.emptied) -contains 'solo-thing') -and ($null -eq (@($d6.commodities)[0].record_low.price))) `
+    'MUST-FIRE: a commodity whose whole history is purged has its record_low CLEARED, not left on the deleted price'
+
+  # CLEAN TWIN: the same shape with a SURVIVING row must promote that row, never clear.
+  $d7 = [pscustomobject]@{ commodities = @([pscustomobject]@{
+      id = 'duo-thing'; unit = 'lb'
+      record_low = [pscustomobject]@{ price = 1.11; store = "Sam's Club"; week_of = '2026-07-15' }
+      history = @(
+        [pscustomobject]@{ week_of = '2026-07-15'; cheapest_price = 1.11; cheapest_store = "Sam's Club"; per_store = [pscustomobject]@{ "Sam's Club" = 1.11 } },
+        [pscustomobject]@{ week_of = '2026-07-16'; cheapest_price = 2.22; cheapest_store = 'Aldi';       per_store = [pscustomobject]@{ 'Aldi' = 2.22 } })
+    }) }
+  $duoRej = @{ "duo-thing|Sam's Club" = @(@{ judged_norm = (Get-VerdictNorm 'Bogus Solo Product'); judged = 'Bogus Solo Product'; week = '2026-07-15'; reason = 'wrong product' }) }
+  $r7 = Invoke-VerdictPurge $d7 $duoRej @{ "2026-07-15|duo-thing|Sam's Club|1.11" = 'Bogus Solo Product' }
+  T ((@($r7.emptied).Count -eq 0) -and ([math]::Abs(([double](@($d7.commodities)[0].record_low.price)) - 2.22) -lt 0.0001)) `
+    'CLEAN TWIN: a surviving row is promoted to record_low rather than the low being cleared'
+
+  # MUST FIRE (post-batch review 2026-07-30): the human overturn must use the SAME containment rule as the
+  # drop. A suppression identity is often a quote FRAGMENT, so a KEEP verdict naming the FULL product name
+  # could never cancel it under exact-equality - the safety net could not arm for a third of the targets.
+  $d8 = & $mkDoc 3.607
+  $fullKeep = @{ ("bacon|Sam's Club|" + (Get-VerdictNorm 'Smithfield Applewood Smoked Bacon Fresh Pork Loin Filet, 23 oz, 2 Pk.')) = $true }
+  $rejFrag = @{ "bacon|Sam's Club" = @(@{ judged_norm = (Get-VerdictNorm 'Pork Loin Filet'); judged = 'Pork Loin Filet'; week = '2026-07-15'; reason = 'marinated pork loin, not bacon' }) }
+  $dropped = Remove-OverturnedRejects $rejFrag $fullKeep
+  T (@($dropped).Count -eq 1 -and $rejFrag.Count -eq 0) `
+    'MUST-FIRE: a KEEP verdict naming the FULL product overturns a suppression held as a quote FRAGMENT'
+
+  # CLEAN TWIN: an unrelated KEEP at the same (id,store) must NOT cancel the rejection.
+  $rejFrag2 = @{ "bacon|Sam's Club" = @(@{ judged_norm = (Get-VerdictNorm 'Pork Loin Filet'); judged = 'Pork Loin Filet'; week = '2026-07-15'; reason = 'marinated pork loin, not bacon' }) }
+  $otherKeep = @{ ("bacon|Sam's Club|" + (Get-VerdictNorm "Member's Mark Thick Cut Bacon 3 lb")) = $true }
+  $dropped2 = Remove-OverturnedRejects $rejFrag2 $otherKeep
+  T (@($dropped2).Count -eq 0 -and $rejFrag2.Count -eq 1) `
+    'CLEAN TWIN: a KEEP on a DIFFERENT product at the same store leaves the rejection standing'
+
   if ($fail -eq 0) { Write-Host 'SELF-TEST PASS'; exit 0 }
   Write-Host ('SELF-TEST FAIL (' + $fail + ')'); exit 2
 }
@@ -362,7 +439,7 @@ if ($rejects.Count -eq 0 -or $names.Count -eq 0) {
 }
 
 $res = Invoke-VerdictPurge $doc $rejects $names
-$changes = @($res.changes); $skipped = @($res.skipped)
+$changes = @($res.changes); $skipped = @($res.skipped); $emptiedIds = @($res.emptied)
 
 foreach ($ch in $changes) {
   Write-Host ''
@@ -377,6 +454,9 @@ foreach ($ch in $changes) {
 $removed = 0; foreach ($ch in $changes) { $removed += @($ch.hits).Count }
 Write-Host ''
 Write-Host ('commodities changed: ' + $changes.Count + '   entries removed: ' + $removed + '   record_low moved: ' + @($changes | Where-Object { [math]::Abs($_.before.price - $_.after.price) -gt 0.00005 }).Count + '   cells at a rejected (id,store) with no price-exact name evidence, left alone: ' + [int]$res.unknown)
+if ($emptiedIds.Count) {
+  Write-Host ('record_low CLEARED (every history row was rejected, so there is no honest low left to promote; the commodity re-earns one when it next prices legitimately): ' + (($emptiedIds | Sort-Object) -join ', '))
+}
 if ($skipped.Count) {
   Write-Host ''
   Write-Host ('SKIPPED - a record_low refusal is already in effect on ' + $skipped.Count + ' affected commodit(ies); recomputing would undo it. Resolve by hand:')
@@ -387,7 +467,12 @@ if ($unres.Count) {
   Write-Host ''
   Write-Host ('COULD NOT EVALUATE - ' + $unres.Count + ' winning cell(s) sit at a store this commodity has had a product rejected at, but no board still on disk prices that store at that number, so the product cannot be named. NOT purged, NOT cleared:')
   foreach ($u in ($unres | Sort-Object id, week)) { Write-Host ('    ' + $u.id.PadRight(22) + $u.store.PadRight(13) + $u.week + '  ' + $u.price + $(if ($u.is_record_low) { '   <- this IS the commodity record low' } else { '' })) }
-  ([ordered]@{ generated = (Get-Date).ToString('s'); note = 'winning history cells at a verdict-rejected (commodity,store) whose product could not be identified from any surviving board; neither purged nor cleared'; cells = $unres } | ConvertTo-Json -Depth 5) | Set-Content (Join-Path $OutDir 'purge-verdict-lows-unresolved.json') -Encoding UTF8
+  # WRITE ONLY ON -Apply. The header promises the dry run "writes nothing", and it wrote this tracked file
+  # before ever reaching the dry-run branch - so a look-don't-touch invocation dirtied the repo (post-batch
+  # review 2026-07-30). The list is printed above either way, so the dry run loses no information.
+  if ($Apply) {
+    ([ordered]@{ generated = (Get-Date).ToString('s'); note = 'winning history cells at a verdict-rejected (commodity,store) whose product could not be identified from any surviving board; neither purged nor cleared'; cells = $unres } | ConvertTo-Json -Depth 5) | Set-Content (Join-Path $OutDir 'purge-verdict-lows-unresolved.json') -Encoding UTF8
+  }
 }
 
 if (-not $Apply) { Write-Host ''; Write-Host 'DRY RUN - pass -Apply to write.'; if ($skipped.Count) { exit 3 }; exit 0 }
