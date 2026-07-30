@@ -34,6 +34,53 @@ $script:REGFILESET_EVERYDAY_ONLY = @('walmart')
 
 function Get-EverydayOnlyStores { return @($script:REGFILESET_EVERYDAY_ONLY) }
 
+# THE UNION WINDOW, SINGLE-SOURCED. compare-deals takes it as -WalmartMaxAgeDays (default 14) and guards.ps1
+# repeated the literal 14 next to it. Two copies of the window length is the same class of bug this file was
+# written to kill, one size smaller: nothing on either side notices when one of them moves. compare-deals'
+# -SelfTest asserts its own param default still equals this, and guards.ps1 runs that self-test as a BLOCKING
+# invariant (guard 0b), so the drift cannot reach a publish.
+$script:REGFILESET_UNION_DAYS = 14
+function Get-RegularUnionDays { return $script:REGFILESET_UNION_DAYS }
+
+function Resolve-BoardAsOf($boardFileObjs, [datetime]$wallClock) {
+  <#
+    THE AS-OF THE ENGINE ACTUALLY USED, read off the artifact instead of re-derived from the clock.
+    compare-deals resolves the union against $today = $ads.today, and it NAMES the board it writes with that
+    same value (comparison-<$today>.json), so the board's own filename IS the engine's as-of, exactly.
+    guards.ps1's first version of this used (Get-Date).Date. Those two differ on any run that builds or
+    re-checks a board on a LATER calendar day than the ads it was built from - which is what the repair /
+    triage loop does every time it fixes a rule and rebuilds yesterday's board this morning.
+    MEASURED 2026-07-30 08:19: comparison-2026-07-29.json was rebuilt from ads-2026-07-29, so the engine's
+    as-of was 07-29 and guards' was 07-30, and walmart-regular-2026-07-15.json - 711 rows, 20 of them
+    pack-shaped, 323 of them carrying current_price, every one priced into that board - fell outside guard 5
+    and guard 10. That is the item-9 hole, reopened exactly one day wide by the line that closed it.
+    No board on disk -> the wall clock. That state is not silently accepted: guard 12 hard-fails it on its own.
+  #>
+  $b = $boardFileObjs |
+    Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } |
+    Sort-Object Name -Descending | Select-Object -First 1
+  if (-not $b) { return $wallClock }
+  # [regex]::Match into a local, never -match: $Matches is global and the next -match anywhere clobbers it.
+  $m = [regex]::Match($b.BaseName, '(\d{4}-\d{2}-\d{2})$')
+  if (-not $m.Success) { return $wallClock }
+  return [datetime]$m.Groups[1].Value
+}
+
+function Select-EngineRegularFiles([string]$outDir, [datetime]$wallClock) {
+  <#
+    THE ONE production entry point guards.ps1 calls: the out\regular files the board ON DISK was priced from.
+    Deliberately a single function taking $outDir, so the self-test can point it at a synthetic tree and
+    exercise the REAL path - a fixture that tested Resolve-BoardAsOf and Select-RegularFileSet separately
+    would still pass on the day the caller stopped using one of them.
+    compare-deals does NOT call this, on purpose: its as-of is $ads.today, the source of truth, and an engine
+    that resolved its own inputs from the board it is about to overwrite would have no source of truth left.
+  #>
+  $boards = Get-ChildItem (Join-Path $outDir 'comparison-*.json') -ErrorAction SilentlyContinue
+  $asof = Resolve-BoardAsOf $boards $wallClock
+  $regs = Get-ChildItem (Join-Path $outDir 'regular\*-regular-*.json') -ErrorAction SilentlyContinue
+  return @(Select-RegularFileSet $regs $asof (Get-RegularUnionDays))
+}
+
 function Select-RegularFileSet($fileObjs, [datetime]$asof, [int]$unionMaxAgeDays) {
   <#
     Given candidate out\regular file objects, return the ones the board prices from:

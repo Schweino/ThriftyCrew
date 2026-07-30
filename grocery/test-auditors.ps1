@@ -245,6 +245,11 @@ if ($mOub.Success -and $mOub.Value -match '\$checked -gt 0' -and $mOub.Value -ma
 $oubCalls = ([regex]::Matches($gs, 'OkUnlessBlind\s+\$')).Count
 if ($oubCalls -ge 2) { Ok ("zero-rows rule is wired into $oubCalls guard(s)") }
 else { Bad ("OkUnlessBlind is called by only $oubCalls guard(s) - the conversions were reverted") }
+# guard 10 specifically. It is the ONLY check that compares what we PUBLISH to what the store CHARGES, and it
+# was the last converted-era guard still printing its ok line with a bare Say - so it could announce
+# "(0 rows verified)" as a pass. MUST-FIRE: this reads Bad against any guards.ps1 where that call is gone.
+if ($gs -match 'OkUnlessBlind \$checked') { Ok 'guard 10 (the only what-we-publish-vs-what-the-store-charges check) cannot print ok on zero rows' }
+else { Bad 'guard 10 prints its ok line with a bare Say again - it can announce "0 rows verified" as a pass, which is the guard-11 class' }
 # BEHAVIOURAL fixture, not just a source grep: run the real helper both ways in an isolated scope.
 $oubProof = & {
   $warn = New-Object System.Collections.ArrayList
@@ -259,6 +264,21 @@ $oubProof = & {
 if ($oubProof.nonZero -eq 0 -and $oubProof.zero -eq 1 -and $oubProof.msg -eq 'BLIND-0') {
   Ok 'zero-rows fixture: a non-zero count stays silent, a zero count raises exactly the blind warning'
 } else { Bad ("zero-rows fixture FAILED: nonZero-warns=$($oubProof.nonZero) zero-warns=$($oubProof.zero) msg='$($oubProof.msg)'") }
+
+# ---------------------------------------------------------------- Nb. guards must iterate the ENGINE's file set
+# Item 9 (2026-07-30): compare-deals unions Walmart across 14 days; guards.ps1 answered "which files does the
+# board price from?" with "newest per store", leaving 332 live Walmart cells outside guards 5 and 10 - the two
+# gates written to stop a 2x pack price and a price the store is not charging. The fix put the answer in ONE
+# shared function, and then reopened itself one day wide by re-deriving the AS-OF from the wall clock while the
+# engine resolves it against $ads.today (measured 2026-07-30 08:19: walmart-regular-2026-07-15.json, 711 rows,
+# was priced into comparison-2026-07-29 and skipped by both guards). compare-deals -SelfTest proves the
+# BEHAVIOUR; what can still rot is the WIRING, so check that here, the same way the zero-rows rule is checked.
+$gsFs = Get-Content (Join-Path $root 'guards.ps1') -Raw
+if ($gsFs -match 'Select-EngineRegularFiles') { Ok 'guards.ps1 still resolves its file set through the shared engine definition' }
+else { Bad 'guards.ps1 no longer calls Select-EngineRegularFiles - guards 5 and 10 are back to guarding a different file set than the board was priced from (item 9, and its one-day-wide reopening)' }
+$mEfs = [regex]::Match($gsFs, 'function EngineFileSet[\s\S]{0,1500}?\r?\n\}')
+if ($mEfs.Success -and $mEfs.Value -notmatch 'Select-RegularFileSet') { Ok 'EngineFileSet does not re-derive the file set or its as-of locally' }
+else { Bad 'EngineFileSet builds its own file set again instead of calling the shared definition - that is exactly how the engine''s 14-day union and the guards'' window drifted apart in the first place' }
 
 # ---------------------------------------------------------------- N+1. batch importers must read UTF-8
 # The four batch importers used a bare Get-Content, which in PS 5.1 decodes a UTF-8 capture as Windows-1252

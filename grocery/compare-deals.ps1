@@ -558,6 +558,48 @@ if ($SelfTest) {
   if (-not (Test-Floor 'lb' 0.03))    { Write-Output 'ok    floor drops $0.03/lb decimal-drop' } else { Write-Output 'FAIL  floor let a $0.03/lb price through'; $script:fail++ }
   if (Test-Floor 'each' 0.0043)       { Write-Output "ok    'each' exempt (500-ct swab box legitimately sub-cent)" } else { Write-Output "FAIL  'each' should be unfloored"; $script:fail++ }
 
+  # --- 16-19: the file set GUARDS iterate must be the one the BOARD was priced from ------------------------
+  # Item 9 (2026-07-30) gave guards.ps1 this function; it then reopened its own hole by re-deriving the AS-OF
+  # from (Get-Date).Date while the engine resolves it against $ads.today - the value it also NAMES the board
+  # with. FROZEN founding bug, measured 2026-07-30 08:19: comparison-2026-07-29.json was rebuilt from
+  # ads-2026-07-29 on 07-30, so walmart-regular-2026-07-15.json (711 rows, 323 carrying current_price) was
+  # priced into the shipped board and sat outside guard 5's and guard 10's file set. These cases run the REAL
+  # entry point guards.ps1 calls, over a synthetic out\ tree in TEMP, so they cannot pass while the production
+  # path stops using it. Synthetic and frozen - never regenerated from the live board.
+  $sd = Join-Path $env:TEMP ('regfileset-selftest-' + [guid]::NewGuid())
+  New-Item -ItemType Directory (Join-Path $sd 'regular') -Force | Out-Null
+  foreach ($n in @('walmart-regular-2026-07-15','walmart-regular-2026-07-29','hyvee-regular-2026-07-15','hyvee-regular-2026-07-29')) {
+    '{}' | Set-Content (Join-Path $sd ('regular\' + $n + '.json')) -Encoding UTF8
+  }
+  try {
+    # 16. MUST FIRE: board dated 07-29, clock 07-30 -> the capture the board WAS priced from stays in reach.
+    '{}' | Set-Content (Join-Path $sd 'comparison-2026-07-29.json') -Encoding UTF8
+    $g1 = @(Select-EngineRegularFiles $sd ([datetime]'2026-07-30') | ForEach-Object { $_.BaseName })
+    if ($g1 -contains 'walmart-regular-2026-07-15') { Write-Output 'ok    guards as-of follows the BOARD, not the wall clock' }
+    else { Write-Output 'FAIL  guards as-of re-derived from the clock - a file the board WAS priced from is out of guard 5/10 reach again'; $script:fail++ }
+    # 17. CLEAN TWIN: board dated 07-30 -> that same capture really is 15 days old and must stay OUT. Proves
+    #     the fix follows the board's own date rather than widening the window unconditionally.
+    '{}' | Set-Content (Join-Path $sd 'comparison-2026-07-30.json') -Encoding UTF8
+    $g2 = @(Select-EngineRegularFiles $sd ([datetime]'2026-07-30') | ForEach-Object { $_.BaseName })
+    if ($g2 -notcontains 'walmart-regular-2026-07-15') { Write-Output 'ok    a capture outside the BOARD''s own window stays excluded' }
+    else { Write-Output 'FAIL  the guards file set widened unconditionally - a 15-day-old capture is being guarded as live'; $script:fail++ }
+    # 18. an ad-cycling store is still newest-only whatever the as-of (unioning one would guard expired sales)
+    if ($g1 -notcontains 'hyvee-regular-2026-07-15') { Write-Output 'ok    ad-cycling store stays newest-only under the board as-of' }
+    else { Write-Output 'FAIL  a non-everyday store started unioning - expired sale prices would be guarded as live'; $script:fail++ }
+    # 19. no board on disk -> the wall clock (guard 12 hard-fails that state on its own)
+    Remove-Item (Join-Path $sd 'comparison-*.json') -Force
+    $g3 = @(Select-EngineRegularFiles $sd ([datetime]'2026-07-30') | ForEach-Object { $_.BaseName })
+    if ($g3 -notcontains 'walmart-regular-2026-07-15') { Write-Output 'ok    no board on disk falls back to the wall clock' }
+    else { Write-Output 'FAIL  the no-board fallback did not use the wall clock'; $script:fail++ }
+  } finally { Remove-Item $sd -Recurse -Force -ErrorAction SilentlyContinue }
+
+  # --- 20: the union WINDOW is single-sourced too ----------------------------------------------------------
+  # guards.ps1 repeated the literal 14 next to this param's default, and nothing noticed if one of them moved.
+  if (-not $PSBoundParameters.ContainsKey('WalmartMaxAgeDays')) {
+    if ($WalmartMaxAgeDays -eq (Get-RegularUnionDays)) { Write-Output 'ok    union window single-sourced (compare-deals default == regular-fileset-lib)' }
+    else { Write-Output ('FAIL  union window drift: -WalmartMaxAgeDays default is ' + $WalmartMaxAgeDays + ' but regular-fileset-lib says ' + (Get-RegularUnionDays) + ' - guards would iterate a different window than the engine'); $script:fail++ }
+  }
+
   Write-Output ('-'*54)
   if ($script:fail -eq 0) { Write-Output 'SELF-TEST PASS  (all multibuy / BOGO cases correct)'; exit 0 }
   else { Write-Output ("SELF-TEST FAIL: $script:fail case(s)"); exit 1 }

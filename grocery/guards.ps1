@@ -47,9 +47,15 @@ function Say($s) { if (-not $Quiet) { Write-Output $s } }
 # Walmart cells were priced from files guards 5 and 10 never opened.
 . (Join-Path $root 'regular-fileset-lib.ps1')
 function EngineFileSet {
-  # Mirrors compare-deals' own call: every canonical out\regular capture, resolved against today.
-  $all = Get-ChildItem (Join-Path $root 'out\regular\*-regular-*.json') -ErrorAction SilentlyContinue
-  return @(Select-RegularFileSet $all (Get-Date).Date 14)
+  # ONE call into the shared definition - the file list AND the as-of. compare-deals resolves the union
+  # against $today = $ads.today and NAMES the board it writes with that same value, so comparison-<date>.json
+  # IS the engine's as-of; this used to re-derive it from (Get-Date).Date instead. The two differ on every run
+  # that builds or re-checks a board on a later calendar day than its ads - which is what the repair/triage
+  # loop does routinely. MEASURED 2026-07-30 08:19: the board on disk was comparison-2026-07-29 (rebuilt from
+  # ads-2026-07-29) while the clock said 07-30, so walmart-regular-2026-07-15.json - 711 rows, 20 pack-shaped,
+  # 323 carrying current_price, every one of them priced into that board - was outside guards 5 and 10 again.
+  # The item-9 hole, reopened one day wide by the line that closed it. See regular-fileset-lib.ps1.
+  return @(Select-EngineRegularFiles (Join-Path $root 'out') (Get-Date).Date)
 }
 $script:ENGINE_FILES = @{}
 foreach ($ef in (EngineFileSet)) { $script:ENGINE_FILES[$ef.FullName] = $true }
@@ -774,7 +780,17 @@ foreach ($f in (RegFiles)) {
   }
   if (-not $any) { $noContract[$store] = $true }
 }
-if ($mismatch -eq 0) { Say ("  ok    every price we publish is the price the store charges ($checked rows verified against their own current_price)") }
+if ($mismatch -eq 0) {
+  # ZERO-ROWS RULE. $noContract only catches a store whose rows carry NO current_price at all: $any is set
+  # TRUE before the price parse, so a store whose rows carry current_price but no parseable ad_price escapes
+  # $noContract AND contributes nothing to $checked - and this line would print "ok ... (0 rows verified)"
+  # with no warn anywhere. That is guard 11's founding bug (ok for five days on zero rows) living in the guard
+  # that took over its job. Widening the file set to the engine's union makes what "zero" means change with
+  # the captures, which is exactly when an unguarded zero gets shipped.
+  OkUnlessBlind $checked `
+    "every price we publish is the price the store charges ($checked rows verified against their own current_price)" `
+    'guard 10 verified ZERO rows against a store''s own current_price - no capture in the engine file set carried both a current_price and a parseable ad_price, so the basePrice bug (publishing the REGULAR price over a live discount) was asserted against without examining anything. This is the ONLY check that compares what we publish to what the store charges.'
+}
 if ($noContract.Count) {
   [void]$warn.Add(("these stores do NOT record the store's current price on their rows, so guard 10 CANNOT check them: " + (($noContract.Keys | Sort-Object) -join ', ') + " - until their pullers record current_price, guard 9's freshness numbers are the only thing standing between them and the basePrice bug"))
 }
