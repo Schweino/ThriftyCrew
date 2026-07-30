@@ -151,6 +151,31 @@ function Ingest-Items($items) {
 }
 # flatten terms to an ordered array so a wall-clock break can queue the REMAINING terms for recovery
 $termList = @($terms.PSObject.Properties | ForEach-Object { [string]$_.Value })
+
+# ROTATE THE START (2026-07-30) - the term-budget cursor.
+# The 3b-ii retest settled what Freshop's limit actually is: a per-window REQUEST BUDGET of roughly 60-70
+# search terms, after which q= answers HTTP 400 outright (measured: 775 fresh rows then "API said: HTTP 400
+# x169"; the 45s cooldowns demonstrably do NOT reset it). Every run used to start at term 0, so the SAME
+# first ~60 terms were refreshed daily and the ~466-term tail was NEVER reached - 13 straight days of "466
+# terms still empty" was not the API refusing those terms, it was us never getting to them before the budget
+# died. Starting each run where the previous run's successes ENDED makes the budget sweep the whole catalogue
+# across runs instead of re-buying the same prefix: full coverage in ~8 daily runs, faster if the pull is
+# scheduled more than once a day (each extra run advances the cursor another budget's worth - that cadence is
+# a scheduling decision, not a code one). Absent terms stay covered by carry-forward exactly as before.
+# The cursor file failing to parse starts the run at 0 - fail toward the old behaviour, never toward skipping.
+$cursorFile = Join-Path $OutDir 'ff-term-cursor.json'
+$startIdx = 0
+if (Test-Path $cursorFile) {
+  try {
+    $cj = Get-Content $cursorFile -Raw | ConvertFrom-Json
+    $ci = [int]$cj.next_index
+    if ($ci -ge 0 -and $ci -lt $termList.Count) { $startIdx = $ci }
+  } catch {}
+}
+if ($startIdx -gt 0) {
+  $termList = @($termList[$startIdx..($termList.Count-1)]) + @($termList[0..($startIdx-1)])
+  Write-Output ("Family Fare: term cursor at #$startIdx of $($termList.Count) - this run's budget starts there and wraps")
+}
 $empty = New-Object System.Collections.Generic.List[string]
 # GIVE UP WHEN THE API IS CLEARLY REFUSING US, instead of spending the whole budget proving it.
 # The cooldown below (15 empties -> sleep 45s -> reset) is a THROTTLE-RIDE, not an exit: under a hard shutout
@@ -161,7 +186,7 @@ $empty = New-Object System.Collections.Generic.List[string]
 # because a cooldown that does not help is itself the evidence. Any successful term resets it.
 $ABORT_EMPTY_RUN = 60      # sustained refusal after we had been getting data
 $ABORT_COLD_START = 30     # refused from the very first term - nothing has EVER come back this run
-$streak = 0; $emptyRun = 0; $aborted = $false
+$streak = 0; $emptyRun = 0; $aborted = $false; $lastSuccessRot = -1
 for ($i = 0; $i -lt $termList.Count; $i++) {
   if (Over-Cap) { for ($j = $i; $j -lt $termList.Count; $j++) { $empty.Add($termList[$j]) }; Write-Output 'Family Fare: wall-clock cap hit in main pass; remaining terms deferred to recovery'; break }
   $term = $termList[$i]
@@ -179,7 +204,18 @@ for ($i = 0; $i -lt $termList.Count; $i++) {
       break
     }
     if ($streak -ge 15) { Write-Output ("Family Fare: throttle streak ($streak empties) - cooling down 45s..."); Start-Sleep -Seconds 45; $streak = 0 }
-  } else { $streak = 0; $emptyRun = 0; Ingest-Items $items }
+  } else { $streak = 0; $emptyRun = 0; $lastSuccessRot = $i; Ingest-Items $items }
+}
+# Advance the cursor past the contiguous stretch the budget actually bought. Only main-pass successes move it:
+# recovery-pass hits are re-tries of earlier empties and would drag the cursor backwards. No successes at all
+# (a cold shutout) leaves the cursor where it was - re-attempting the same slice next run is correct, because
+# those terms were REFUSED, not absent.
+if ($lastSuccessRot -ge 0) {
+  $nextIdx = ($startIdx + $lastSuccessRot + 1) % $termList.Count
+  try {
+    ([ordered]@{ next_index = $nextIdx; updated = (Get-Date).ToString('s'); note = 'index into the commodity-search term order where the NEXT Family Fare run starts; see the term-budget cursor comment in pull-regular-familyfare.ps1' } | ConvertTo-Json) | Set-Content $cursorFile -Encoding UTF8
+    Write-Output ("Family Fare: term cursor advanced to #$nextIdx (this run bought terms #$startIdx..#$(($startIdx + $lastSuccessRot) % $termList.Count))")
+  } catch { Write-Warning ('Family Fare: could not write term cursor (next run restarts at #' + $startIdx + '): ' + $_.Exception.Message) }
 }
 # RECOVERY PASSES: empties are rate-limit victims; wait out the throttle and retry ONCE each, up to 2 passes,
 # still under the wall-clock cap. Single query per term (no inner backoff) so a hard throttle can't blow up.
