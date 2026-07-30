@@ -94,5 +94,18 @@ foreach ($st in $targets) {
   $t2 = @($ordered | Where-Object { $_.tier -eq 2 }).Count
   $t3 = @($ordered | Where-Object { $_.tier -eq 3 }).Count
   $t4 = @($ordered | Where-Object { $_.tier -eq 4 }).Count
-  Write-Output ("{0,-12} terms={1,4}   T1 core={2,4}  T2 held={3,4}  T3 gain={4,4}  T5 tail={5,4}   SAFE STOP after {6} terms (covers every cell this store publishes today)  -> {7}" -f $st, $ordered.Count, $t1, $t2, $t3, $t4, ($t1 + $t2), (Split-Path $file -Leaf))
+  # THE SAFE STOP IS A POSITION IN *THIS* FILE, NOT A TIER TOTAL (fixed 2026-07-30).
+  # It printed T1+T2 - the COUNT of commodities this store publishes - but the sort key is history DEPTH,
+  # not tier, so a published cell on a recently added commodity sorts into the tail. The two numbers are
+  # only equal if every published commodity happens to be deeper than every unpublished one, which the
+  # board has never been. Measured on the live 2026-07-29 board: stopping at the printed T1+T2 left 20
+  # published Walmart cells unpulled - brown-gravy-mix (position 449), corned-beef-brisket (457),
+  # diced-ham (458), rye-bread (461), turkey-breast (463), chicken-livers (469), eggplant (470),
+  # poultry-seasoning (472) among them, every one an r300 commodity whose only Walmart row now lives in a
+  # single capture - and 38-69 cells for each of the other six stores. An operator who trusted the number
+  # stopped early and lost exactly the cells the number promised to cover. Read the position out of the
+  # order this file actually emits instead of recomputing it from a field the sort ignores.
+  $safe = 0
+  for ($i = 0; $i -lt $ordered.Count; $i++) { if ($ordered[$i].has -eq 1) { $safe = $i + 1 } }
+  Write-Output ("{0,-12} terms={1,4}   T1 core={2,4}  T2 held={3,4}  T3 gain={4,4}  T5 tail={5,4}   SAFE STOP after {6} lines (the LAST line in this file that is a cell {0} publishes today)  -> {7}" -f $st, $ordered.Count, $t1, $t2, $t3, $t4, $safe, (Split-Path $file -Leaf))
 }

@@ -397,13 +397,54 @@ New-Item -ItemType Directory -Force (Join-Path $fxWfp 'out\sams') | Out-Null
 $r = RunPS 'audit-walmart-fullpull.ps1' @('-GroceryRoot', $fxWfp)
 if ($r.rc -eq 3 -and $r.text -match '\[Walmart\]: BLIND' -and $r.text -match "\[Sam's Club\]: BLIND") { Ok 'walmart-fullpull goes BLIND (exit 3) per store on an empty capture window' }
 else { Bad ('walmart-fullpull did NOT go blind on empty windows (rc=' + $r.rc + ')') }
-$fxD = [datetime]::Today.ToString('yyyy-MM-dd')
-Set-Content (Join-Path $fxWfp ('out\regular\walmart-regular-' + $fxD + '.json')) '{"pull_terms":400}' -Encoding UTF8
-Set-Content (Join-Path $fxWfp ('out\sams\sams-deals-' + $fxD + '.json')) '{"pull_terms":300}' -Encoding UTF8
+$fxD   = [datetime]::Today.ToString('yyyy-MM-dd')
+$fxD11 = [datetime]::Today.AddDays(-11).ToString('yyyy-MM-dd')
+# The clean twin needs a BOARD as well as captures: since 2026-07-30 this auditor also runs a per-CELL
+# expiry watch, and a tree with no comparison-*.json is a tree where that watch can prove nothing - which
+# it must say out loud (exit 1), never swallow. So the healthy fixture is captures AND a board whose every
+# cell comes from today's capture.
+function _WfpSeed([string]$dir, [string]$wmToday, [string]$wmOld, [string]$cmpRows) {
+  Set-Content (Join-Path $dir ('out\regular\walmart-regular-' + $fxD + '.json')) ('{"pull_terms":400,"deals":[' + $wmToday + ']}') -Encoding UTF8
+  if ($wmOld) { Set-Content (Join-Path $dir ('out\regular\walmart-regular-' + $fxD11 + '.json')) ('{"pull_terms":400,"deals":[' + $wmOld + ']}') -Encoding UTF8 }
+  Set-Content (Join-Path $dir ('out\sams\sams-deals-' + $fxD + '.json')) '{"pull_terms":300,"deals":[{"item":"Sams Row","ad_price":"$5.00"}]}' -Encoding UTF8
+  Set-Content (Join-Path $dir ('out\comparison-' + $fxD + '.json')) ('{"comparison":[' + $cmpRows + ']}') -Encoding UTF8
+}
+$fxSams  = '{"id":"sams-thing","cheapest_store":"Sam''s Club","stores":[{"store":"Sam''s Club","item":"Sams Row","ad":"$5.00"}]}'
+$fxFresh = '{"id":"fresh-thing","cheapest_store":"Walmart","stores":[{"store":"Walmart","item":"Fresh Row","ad":"$9.99"}]}'
+$fxOld   = '{"id":"old-thing","cheapest_store":"Walmart","stores":[{"store":"Walmart","item":"Old Row","ad":"$1.00"}]}'
+_WfpSeed $fxWfp '{"item":"Fresh Row","ad_price":"$9.99"},{"item":"Old Row","ad_price":"$1.00"}' '{"item":"Old Row","ad_price":"$1.00"}' ($fxFresh + ',' + $fxOld + ',' + $fxSams)
 $r = RunPS 'audit-walmart-fullpull.ps1' @('-GroceryRoot', $fxWfp)
-if ($r.rc -eq 0 -and ([regex]::Matches($r.text, 'ok - newest comprehensive capture')).Count -eq 2) { Ok 'walmart-fullpull clean twin: fresh synthetic comprehensive captures read ok for both stores' }
-else { Bad ('walmart-fullpull clean twin failed (rc=' + $r.rc + ')') }
+if ($r.rc -eq 0 -and ([regex]::Matches($r.text, 'ok - newest comprehensive capture')).Count -eq 2 -and ([regex]::Matches($r.text, 'cells: ok')).Count -eq 2) { Ok 'walmart-fullpull clean twin: fresh comprehensive captures AND a board whose cells all come from them read ok for both stores' }
+else { Bad ('walmart-fullpull clean twin failed (rc=' + $r.rc + '): ' + $r.text) }
 Remove-Item $fxWfp -Recurse -Force -ErrorAction SilentlyContinue
+
+# (b2) MUST FIRE - the 2026-07-30 bug this watch was written for. Watch 1 said "ok - newest comprehensive
+# capture ... is 0 day(s) old" while 207 of 432 live Walmart cells (47.9%, 58 CROWNS) hung off
+# walmart-regular-2026-07-18.json, 2 days from leaving the union. Frozen small, same shape: a fresh
+# comprehensive capture that does NOT carry Old Row, and an 11-day-old capture that is its only source.
+# The assertion names the CELLS line and requires watch 1 to still read ok, so it cannot pass on watch 1.
+$fxCell = NewFxDir 'wfp-cellexpiry'
+New-Item -ItemType Directory -Force (Join-Path $fxCell 'out\regular') | Out-Null
+New-Item -ItemType Directory -Force (Join-Path $fxCell 'out\sams') | Out-Null
+_WfpSeed $fxCell '{"item":"Fresh Row","ad_price":"$9.99"}' '{"item":"Old Row","ad_price":"$1.00"}' ($fxFresh + ',' + $fxOld + ',' + $fxSams)
+$r = RunPS 'audit-walmart-fullpull.ps1' @('-GroceryRoot', $fxCell)
+if ($r.rc -eq 1 -and $r.text -match '\[Walmart\] cells: WARNING - 1 of 2' -and $r.text -match 'CROWNS' -and $r.text -match 'ok - newest comprehensive capture walmart') { Ok 'walmart-fullpull FIRES on a board cell whose only source is about to leave the union window, while watch 1 still reads ok' }
+else { Bad ('walmart-fullpull cell-expiry watch MISSED its founding bug (rc=' + $r.rc + '): ' + $r.text) }
+Remove-Item $fxCell -Recurse -Force -ErrorAction SilentlyContinue
+
+# (b3) CLEAN TWIN for the percent floor. A few trailing cells are normal (a product out of stock, a term
+# that returned nothing that morning) - Sam's carried 11 of them on 2026-07-29 with nothing wrong. One
+# aging cell in 40 (2.5%) must stay SILENT, or the watch becomes a permanent alarm and gets ignored.
+$fxPct = NewFxDir 'wfp-cellpct'
+New-Item -ItemType Directory -Force (Join-Path $fxPct 'out\regular') | Out-Null
+New-Item -ItemType Directory -Force (Join-Path $fxPct 'out\sams') | Out-Null
+$pFresh = @(); $pCmp = @()
+foreach ($i in 1..39) { $pFresh += ('{"item":"Row ' + $i + '","ad_price":"$' + $i + '.00"}'); $pCmp += ('{"id":"c' + $i + '","cheapest_store":"Walmart","stores":[{"store":"Walmart","item":"Row ' + $i + '","ad":"$' + $i + '.00"}]}') }
+_WfpSeed $fxPct ($pFresh -join ',') '{"item":"Old Row","ad_price":"$1.00"}' (($pCmp -join ',') + ',' + $fxOld + ',' + $fxSams)
+$r = RunPS 'audit-walmart-fullpull.ps1' @('-GroceryRoot', $fxPct)
+if ($r.rc -eq 0 -and $r.text -match '\[Walmart\] cells: ok - 1 of 40') { Ok 'walmart-fullpull cell watch stays SILENT at 1 aging cell in 40 (2.5%, under the 5% floor) - the trailing-cell noise floor' }
+else { Bad ('walmart-fullpull cell watch cried wolf on the 2.5% noise floor (rc=' + $r.rc + '): ' + $r.text) }
+Remove-Item $fxPct -Recurse -Force -ErrorAction SilentlyContinue
 
 # (c) audit-household-in-food: BLIND at zero rows scanned (an existing-but-empty out\regular used to print
 # "scanned 0 rows" + AUDIT OK + exit 0). Copy-to-temp because the script has no dir param.
