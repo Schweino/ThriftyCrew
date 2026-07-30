@@ -223,5 +223,42 @@ if ($rtSrc -match 'CommoditiesFile' -and $rtSrc -match 'BandsFile') { Ok 'regres
 else { Bad 'regression-test.ps1 no longer passes -CommoditiesFile/-BandsFile from regression-inputs - the hermetic seal is broken and the guard will drift red on ordinary rule edits again, which is how it stopped being read the first time' }
 
 Write-Output ''
+# ---------------------------------------------------------------- N. the ZERO-ROWS rule must stay armed
+# guards.ps1 guard 11 printed "ok ... (0 rows checked)" for five days after Baker's moved to the Kroger API and
+# its row filter stopped matching anything. "No violations found" and "no rows examined" are the same zero, so
+# the estate's cheapest anti-blindness rule is: a check that examined nothing must WARN. OkUnlessBlind enforces
+# it. If that helper is deleted, loses its warn branch, or stops being CALLED, every converted guard silently
+# reverts to passing on an empty examination - so this fixture is the watcher over the anti-blindness rule.
+$gs = Get-Content (Join-Path $root 'guards.ps1') -Raw
+if ($gs -match 'function OkUnlessBlind') { Ok 'guards.ps1 still defines OkUnlessBlind (the zero-rows rule)' }
+else { Bad 'guards.ps1 LOST OkUnlessBlind - a guard that examines zero rows can print ok again (the guard-11 class)' }
+# the helper must still WARN on empty, not just print a different ok
+$mOub = [regex]::Match($gs, 'function OkUnlessBlind[\s\S]{0,2000}?\r?\n\}')
+if ($mOub.Success -and $mOub.Value -match '\$checked -gt 0' -and $mOub.Value -match '\$warn\.Add') {
+  Ok 'OkUnlessBlind still gates on the examined count and warns when it is zero'
+} else { Bad 'OkUnlessBlind no longer warns on a zero examined count - the rule is present but toothless' }
+# and it must still be WIRED to the guards that were converted. A helper nothing calls protects nothing.
+# Count CALL sites only: a call passes its count as a variable ("OkUnlessBlind $mpSeen"), while the definition
+# is "function OkUnlessBlind([int]$checked..." with no space before the paren. Matching on the space-then-$
+# form excludes the definition without a fudge subtraction (the first version subtracted 1 for a definition
+# that was never in the count, and reported 1 when there were 2).
+$oubCalls = ([regex]::Matches($gs, 'OkUnlessBlind\s+\$')).Count
+if ($oubCalls -ge 2) { Ok ("zero-rows rule is wired into $oubCalls guard(s)") }
+else { Bad ("OkUnlessBlind is called by only $oubCalls guard(s) - the conversions were reverted") }
+# BEHAVIOURAL fixture, not just a source grep: run the real helper both ways in an isolated scope.
+$oubProof = & {
+  $warn = New-Object System.Collections.ArrayList
+  $Quiet = $true
+  function Say($s) { }
+  Invoke-Expression $mOub.Value
+  OkUnlessBlind 5 'examined something' 'BLIND-5'
+  $afterNonZero = $warn.Count
+  OkUnlessBlind 0 'examined nothing' 'BLIND-0'
+  [pscustomobject]@{ nonZero = $afterNonZero; zero = $warn.Count; msg = [string]$warn[0] }
+}
+if ($oubProof.nonZero -eq 0 -and $oubProof.zero -eq 1 -and $oubProof.msg -eq 'BLIND-0') {
+  Ok 'zero-rows fixture: a non-zero count stays silent, a zero count raises exactly the blind warning'
+} else { Bad ("zero-rows fixture FAILED: nonZero-warns=$($oubProof.nonZero) zero-warns=$($oubProof.zero) msg='$($oubProof.msg)'") }
+
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2

@@ -218,7 +218,9 @@ $pu   = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Js
 # from a mis-resolved link) without failing the pin for doing its job. Checked across BOTH boards, with pu-lib -
 # the same math build-deals-page publishes with.
 $ovrF = Join-Path $root 'board-price-overrides.json'
-$rogue = 0; $pinChecked = 0; $pinSkipped = 0
+$rogue = 0; $pinChecked = 0; $pinSkipped = 0; $pinDriftScannable = 0   # declared here: the ok line at the end
+                                                                      # reads $pinDriftScannable even when the
+                                                                      # overrides file does not exist
 if (Test-Path $ovrF) {
   $ovr = Get-Content $ovrF -Raw | ConvertFrom-Json
   # unit per id, from BOTH boards
@@ -256,8 +258,21 @@ if (Test-Path $ovrF) {
       [void]$fail.Add(("HARD FAIL: pin does NOT match its own link  {0} / {1}  pin={2} link={3} ('{4}') - a derived pin must equal the link it came from; this one was hand-edited or its link moved" -f $id, $st, [math]::Round($pin, 4), [math]::Round($lpu, 4), [string]$lnk.name))
     }
   }
+  # ZERO-ROWS RULE, applied to this guard's OTHER half. The WRONG-PRODUCT clause above only has an opinion on
+  # ids that audit-name-drift actually scans, and audit-name-drift.ps1:13-14 reads out\comparison-*.json ONLY -
+  # never out\recipe-board.json. Every one of today's 16 pins is a recipe-board-only id, so $pinDrift can never
+  # hold a key matching ANY pin and that hard fail is structurally unfirable, while :260 prints ok with
+  # $pinChecked=16. This is verbatim the fail-open this guard's own header describes: $unitById was fixed to
+  # read BOTH boards, $pinDrift was left riding on a producer that still reads one.
+  # Root fix is in audit-name-drift.ps1 (union recipe-board.json into its input, as done here at :227-228);
+  # until then, say out loud that the identity half proved nothing.
+  $ndScope = @{}; foreach ($nr in $cmp.comparison) { $ndScope[[string]$nr.id] = $true }
+  $pinDriftScannable = @(@($ovr.cells) | Where-Object { $ndScope.ContainsKey([string]$_.id) }).Count
+  if (@($ovr.cells).Count -gt 0 -and $pinDriftScannable -eq 0) {
+    [void]$warn.Add(("guard 3's WRONG-PRODUCT clause examined ZERO of {0} pins - every pin is a recipe-board id and audit-name-drift.ps1 scans only comparison-*.json, so the hard fail at guards.ps1:244 cannot fire for any pin in the file and NO product-identity check covers the links these pins derive from. Fix: union out\recipe-board.json into audit-name-drift's input." -f @($ovr.cells).Count))
+  }
 }
-if ($rogue -eq 0) { Say ("  ok    every override pin is derivable from its own verified link ($pinChecked checked)") }
+if ($rogue -eq 0) { Say ("  ok    every override pin is derivable from its own link ($pinChecked checked for derivability; product identity checked on $pinDriftScannable of them)") }
 if ($pinSkipped -gt 0) { [void]$warn.Add("$pinSkipped pin(s) could NOT be re-derived (id on neither board, or the link carries no usable unit basis) - not a pass, an unknown") }
 
 # ---------------------------------------------------------------- 4: factor mismatch (board vs its own link)
@@ -330,7 +345,7 @@ if ($unpriceable -gt 0) { [void]$warn.Add("$unpriceable linked cell(s) carry no 
 # is a row this guard accepts, by construction. The essay above stays here because THIS is where the
 # design was learned; the lib is deliberately just the math.
 $allow = Get-MpAllowKeys $root
-$mp = 0; $mpTotals = 0; $mpUnknown = 0
+$mp = 0; $mpTotals = 0; $mpSeen = 0
 foreach ($f in (RegFiles)) {
   $prefix = ($f.BaseName -replace '-regular-.*$','')
   $newest = RegFiles ($prefix + '-regular-*.json') | Sort-Object Name -Desc | Select-Object -First 1
@@ -342,8 +357,8 @@ foreach ($f in (RegFiles)) {
     if ($verdict -eq 'not-multipack') { continue }
     # the size already IS the pack total -> the row is correct, not a bug. Do the multiplication rather than
     # demanding a human confirm it (see the note above).
-    if ($verdict -eq 'pack-total')  { $mpTotals++; continue }
-    if ($verdict -eq 'allowlisted') { continue }
+    if ($verdict -eq 'pack-total')  { $mpTotals++; $mpSeen++; continue }
+    if ($verdict -eq 'allowlisted') { $mpSeen++; continue }
     # NOTHING TO MULTIPLY -> STILL A HARD FAIL. This gate fails CLOSED, on purpose.
     # I first made this case an "unknown" (count it, warn, move on), because 109 of Walmart's 711 board item
     # names are TRUNCATED AT EXACTLY 60 CHARS and the per-unit weight lives at the END of a grocery name, so it
@@ -361,11 +376,25 @@ foreach ($f in (RegFiles)) {
     # 60. It was baked in by a historical capture whose code is gone. So there is no live bleed to stop, the
     # full names are NOT recoverable locally (0 of 109 can be prefix-matched against any name we hold), and the
     # only real fix is a fresh Walmart capture. The slice was fixed anyway - it was the same mistake, smaller.
-    $mp++
+    $mp++; $mpSeen++
     [void]$fail.Add(("HARD FAIL: multipack size  [{0}] '{1}' size=[{2}] records ONE unit (name says a pack count and its stated weight does not reconcile with the size)" -f $doc.store, $name, $size))
   }
 }
-if ($mp -eq 0) { Say ("  ok    no multipack row prices a pack as a single unit ($mpTotals pack-total size(s) verified by arithmetic)") }
+# ZERO-ROWS RULE. $mpSeen counts rows this guard formed an actual VERDICT about, not rows it looped over
+# (15,706 today - that can only be 0 if out\regular is empty, so it would never fire). The distinction matters
+# because the loop above reads RegFiles() ONLY, and Sam's live feed is out\sams\sams-deals-<date>.json - the
+# only Sam's rows this guard sees come from the 60-row sams-regular-2026-07-14 orphan that guards.ps1 itself
+# documents as unrefreshed. So this guard's OWN founding bug - Sam's "ReaLemon 100% Lemon Juice (2 pk)" with
+# size "48 fl oz", quoted 20 lines up - now arrives through a file it never opens.
+# Do NOT simply widen the loop to out\sams: multipack-lib.ps1 cannot parse "8 fl. oz., 24 pk." and that change
+# emits 242 hard fails from CORRECT rows. Teaching the unit regex is a separate, advisory-first change.
+# $mpSeen is 121 today (all Walmart) and was 0 for every newest-Walmart file from 2026-07-05 to 07-14, so a
+# terser Walmart capture silently turns this invariant into a no-op - which is exactly what this warn catches.
+if ($mp -eq 0) {
+  OkUnlessBlind $mpSeen `
+    ("no multipack row prices a pack as a single unit ($mpTotals pack-total size(s) verified by arithmetic out of $mpSeen pack-shaped row(s))") `
+    'guard 5 formed ZERO multipack verdicts this run - no row in out\regular declared a pack count its size could be tested against, so this invariant was asserted without examining anything. Sam''s live feed (out\sams) and the Baker''s/Fareway deal files are outside this guard''s file loop entirely.'
+}
 
 
 # ---------------------------------------------------------------- 6: a store's data collapsed
