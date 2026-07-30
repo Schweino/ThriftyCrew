@@ -422,13 +422,6 @@
                                                        "verified":  "2026-07-30",
                                                        "board_pu":  0.6869
                                                    },
-                                  "Family Fare":  {
-                                                      "url":  "https://www.shopfamilyfare.com/shop/pantry/snacks/nuts/blue_diamond_hot_honey_almonds_6_oz/p/1564405684716877169",
-                                                      "price":  4.69,
-                                                      "size":  "6 oz",
-                                                      "name":  "Blue Diamond Hot Honey Almonds 6 Oz",
-                                                      "board_pu":  0.7817
-                                                  },
                                   "Fareway":  {
                                                   "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/21344009-fareway-whole-almonds-low-sodium-roasted-and-salted-16-oz",
                                                   "price":  8.98,
@@ -1178,14 +1171,7 @@
                                                                "price":  "$36.98",
                                                                "size":  "48 oz",
                                                                "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                           },
-                                       "Walmart":  {
-                                                       "url":  "https://www.walmart.com/ip/Enfamil-Powder-Baby-Formula-with-Iron-12-5-oz-Can/16940594",
-                                                       "name":  "Enfamil Infant Powder Baby Formula with Iron",
-                                                       "board_pu":  1.68,
-                                                       "price":  21,
-                                                       "size":  "12.5 oz"
-                                                   }
+                                                           }
                                    },
                   "baby-wipes":  {
                                      "commodity":  "baby-wipes",
@@ -1630,14 +1616,7 @@
                                                   "price":  1,
                                                   "size":  "1 ct",
                                                   "verified":  "2026-07-20 Hy-Vee GraphQL (storeId 1465, current shelf price)"
-                                              },
-                                   "Walmart":  {
-                                                   "url":  "https://www.walmart.com/ip/Dial-Antibacterial-Deodorant-Bar-Soap-Advanced-Clean-Gold-4-oz-4-Bars/113888326",
-                                                   "price":  4.97,
-                                                   "size":  "4 ct",
-                                                   "name":  "Dial Gold Antibacterial Deodorant Bar Soap",
-                                                   "board_pu":  1.2425
-                                               }
+                                              }
                                },
                   "batteries":  {
                                     "commodity":  "batteries",
@@ -1677,14 +1656,7 @@
                                                             "size":  "66 ct",
                                                             "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
                                                             "board_pu":  0.28
-                                                        },
-                                    "Walmart":  {
-                                                    "url":  "https://www.walmart.com/ip/Great-Value-AA-Batteries-8-Pack-Double-A-Alkaline-Batteries/14317516644",
-                                                    "name":  "Great Value Alkaline AA Batteries",
-                                                    "board_pu":  0.4712,
-                                                    "price":  3.77,
-                                                    "size":  "8 ct"
-                                                }
+                                                        }
                                 },
                   "bay-leaves":  {
                                      "commodity":  "Bay Leaves",
@@ -2535,14 +2507,7 @@
                                                             "price":  14.98,
                                                             "size":  "18 ct",
                                                             "name":  "Johnsonville Brats Original Pork Bratwurst Links"
-                                                        },
-                                    "Walmart":  {
-                                                    "url":  "https://www.walmart.com/ip/Marketside-Beer-N-Bratwurst-5-Links-1-lb-3-oz-Fresh/105413616",
-                                                    "price":  2.97,
-                                                    "size":  "19 oz",
-                                                    "name":  "Marketside Beer \u0027N Bratwurst 5 Links",
-                                                    "board_pu":  2.5011
-                                                }
+                                                        }
                                 },
                   "bread":  {
                                 "commodity":  "Bread (loaf)",
@@ -4857,14 +4822,7 @@
                                                            "size":  "2 pk 20 lb",
                                                            "name":  "Kingsford Original Charcoal Briquets",
                                                            "board_pu":  0.587
-                                                       },
-                                   "Walmart":  {
-                                                   "url":  "https://www.walmart.com/ip/Kingsford-Original-Charcoal-Briquettes-BBQ-Charcoal-for-Grilling-16-Pounds/987796704",
-                                                   "name":  "Kingsford Original Charcoal Briquettes",
-                                                   "board_pu":  0.6831,
-                                                   "price":  10.93,
-                                                   "size":  "16 lb"
-                                               }
+                                                       }
                                },
                   "cheddar-cheese":  {
                                          "commodity":  "Cheddar Cheese",
@@ -4977,13 +4935,6 @@
                                                                "verified":  "2026-07-30",
                                                                "board_pu":  0.2331
                                                            },
-                                          "Family Fare":  {
-                                                              "url":  "https://www.shopfamilyfare.com/shop/pantry/crackers/cheese/cheez_it_cheese_crackers_original_12_4_oz/p/19432",
-                                                              "price":  4.19,
-                                                              "size":  "12.4 oz",
-                                                              "name":  "Cheez It Cheese Crackers, Original 12.4 Oz",
-                                                              "board_pu":  0.3379
-                                                          },
                                           "Fareway":  {
                                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/220757-stauffer-s-baked-snack-crackers-whales-7-00-oz",
                                                           "price":  1.78,
@@ -6536,12 +6487,6 @@
                                                        "verified":  "2026-07-30",
                                                        "board_pu":  0.1492
                                                    },
-                                  "Family Fare":  {
-                                                      "url":  "https://www.shopfamilyfare.com/shop/bakery/cookies/10_ct_signature_chocolate_dipped_peanut_butter_cookies/p/1564405684713024856",
-                                                      "price":  5.99,
-                                                      "size":  "15 oz",
-                                                      "name":  "10 Ct Signature Chocolate Dipped Peanut Butter Cookies"
-                                                  },
                                   "Fareway":  {
                                                   "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/22152890-fareway-cookies-chocolate-chip-12-oz",
                                                   "price":  1.99,
@@ -6687,13 +6632,6 @@
                                                          "verified":  "2026-07-30",
                                                          "board_pu":  0.4994
                                                      },
-                                    "Family Fare":  {
-                                                        "url":  "https://www.shopfamilyfare.com/shop/deli/ready_to_go_hot/corn_dogs_hot/p/1564405684714636918",
-                                                        "name":  "Corn Dogs Hot",
-                                                        "price":  1.49,
-                                                        "size":  "1 ea",
-                                                        "board_pu":  1.49
-                                                    },
                                     "Fareway":  {
                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/73335-state-fair-classic-corn-dogs-frozen-16-onz",
                                                     "name":  "State Fair Fully Cooked Classic Corn Dogs, Frozen, 6 Count",
@@ -6715,14 +6653,7 @@
                                                             "size":  "30 ct",
                                                             "name":  "State Fair Classic Corn Dogs, Frozen",
                                                             "board_pu":  0.449
-                                                        },
-                                    "Walmart":  {
-                                                    "url":  "https://www.walmart.com/ip/State-Fair-Classic-Corn-Dogs-with-Honey-Sweetened-Batter-16-oz-6-Count-Frozen/17352572",
-                                                    "price":  4.84,
-                                                    "size":  "6 ct",
-                                                    "name":  "State Fair Classic Corn Dogs",
-                                                    "board_pu":  0.8067
-                                                }
+                                                        }
                                 },
                   "corned-beef-brisket":  {
                                               "commodity":  "Corned Beef Brisket (raw)",
@@ -7050,13 +6981,6 @@
                                                         "verified":  "2026-07-30",
                                                         "board_pu":  0.1181
                                                     },
-                                   "Family Fare":  {
-                                                       "url":  "https://www.shopfamilyfare.com/shop/pantry/crackers/other_crackers/triscuit_crackers_avocado_cilantro_lime_8_5_oz/p/1564405684702198823",
-                                                       "name":  "Triscuit Crackers, Avocado, Cilantro \u0026 Lime 8.5 Oz",
-                                                       "price":  "$4.49",
-                                                       "size":  "8.5 oz",
-                                                       "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                                   },
                                    "Fareway":  {
                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20673277-fareway-crackers-saltines-16-oz",
                                                    "price":  1.99,
@@ -7333,14 +7257,7 @@
                                                              "size":  "12 ct",
                                                              "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
                                                              "board_pu":  0.455
-                                                         },
-                                     "Walmart":  {
-                                                     "url":  "https://www.walmart.com/ip/Marketside-All-Butter-Whole-Croissants-9-17-oz-4-Count/747667210",
-                                                     "price":  4.98,
-                                                     "size":  "4 ct",
-                                                     "name":  "Marketside All Butter Whole Croissants",
-                                                     "board_pu":  1.245
-                                                 }
+                                                         }
                                  },
                   "crushed-tomatoes":  {
                                            "commodity":  "Crushed Tomatoes",
@@ -8130,14 +8047,7 @@
                                                              "price":  "$13.98",
                                                              "size":  "15 lb",
                                                              "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                         },
-                                     "Walmart":  {
-                                                     "url":  "https://www.walmart.com/ip/Canine-Carry-Outs-Steak-Bites-Beef-Flavor-Dog-Treats-4-5oz-Bag/174315218",
-                                                     "price":  1.24,
-                                                     "size":  "4.5 oz",
-                                                     "name":  "Canine Carry Outs Steak Bites Beef Flavor Dog Treats",
-                                                     "board_pu":  0.2756
-                                                 }
+                                                         }
                                  },
                   "donuts":  {
                                  "commodity":  "donuts",
@@ -8215,14 +8125,7 @@
                                                                 "size":  "160 fl oz",
                                                                 "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
                                                                 "board_pu":  0.0804
-                                                            },
-                                        "Walmart":  {
-                                                        "url":  "https://www.walmart.com/ip/Mister-Plumber-32oz-Drain-Opener/22142294",
-                                                        "name":  "Mister Plumber 32oz Drain Opener",
-                                                        "price":  1.38,
-                                                        "size":  "32 fl oz",
-                                                        "board_pu":  0.0431
-                                                    }
+                                                            }
                                     },
                   "dried-ancho-chiles":  {
                                              "commodity":  "Dried Ancho Chiles",
@@ -8954,14 +8857,7 @@
                                                                   "size":  "236 fl oz",
                                                                   "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
                                                                   "board_pu":  0.0542
-                                                              },
-                                          "Walmart":  {
-                                                          "url":  "https://www.walmart.com/ip/Snuggle-39-4oz-1-16L-FSL-Blu-Sprkl-CUF/14611861809",
-                                                          "price":  4.47,
-                                                          "size":  "39.4 fl oz",
-                                                          "name":  "Snuggle Blue Sparkle Liquid Fabric Softener",
-                                                          "board_pu":  0.1135
-                                                      }
+                                                              }
                                       },
                   "facial-tissues":  {
                                          "commodity":  "facial-tissues",
@@ -8986,14 +8882,7 @@
                                                                  "price":  "$14.98",
                                                                  "size":  "1498 ct",
                                                                  "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                             },
-                                         "Walmart":  {
-                                                         "url":  "https://www.walmart.com/ip/Great-Value-Everyday-Soft-Facial-Tissues-1-Flat-Carton-160-Tissues-per-Flat-2-Ply/883374873",
-                                                         "price":  1.64,
-                                                         "size":  "160 ct",
-                                                         "name":  "Great Value Everyday Soft Facial Tissues",
-                                                         "board_pu":  0.0102
-                                                     }
+                                                             }
                                      },
                   "fajita-seasoning":  {
                                            "commodity":  "Fajita Seasoning Packet",
@@ -9573,14 +9462,7 @@
                                                                     "size":  "2 lb",
                                                                     "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
                                                                     "board_pu":  2.385
-                                                                },
-                                            "Walmart":  {
-                                                            "url":  "https://www.walmart.com/ip/Fresh-Green-Beans/44391023",
-                                                            "name":  "Fresh Green Beans",
-                                                            "board_pu":  1.62,
-                                                            "price":  1.62,
-                                                            "size":  "lb"
-                                                        }
+                                                                }
                                         },
                   "fresh-mint":  {
                                      "commodity":  "Mint (fresh)",
@@ -9910,14 +9792,7 @@
                                                          "price":  1.5,
                                                          "size":  "4.25 oz",
                                                          "name":  "Jimmy Dean Bacon, Egg \u0026 Cheese Breakfast Burrito, 1 ct"
-                                                     },
-                                          "Walmart":  {
-                                                          "url":  "https://www.walmart.com/ip/Tina-s-Big-Burrito-Beef-Bean-Packaged-Burrito-9-oz-1-Count/573898069",
-                                                          "price":  1,
-                                                          "size":  "each",
-                                                          "name":  "Tina\u0027s Big Burrito Beef \u0026 Bean",
-                                                          "board_pu":  1
-                                                      }
+                                                     }
                                       },
                   "frozen-chopped-spinach":  {
                                                  "commodity":  "Frozen Chopped Spinach",
@@ -10434,14 +10309,7 @@
                                                                  "size":  "72 ct",
                                                                  "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
                                                                  "board_pu":  0.1649
-                                                             },
-                                         "Walmart":  {
-                                                         "url":  "https://www.walmart.com/ip/Eggo-Homestyle-Original-Waffles-Frozen-Breakfast-12-3-oz-10-Count-Regular/10891827",
-                                                         "price":  2.87,
-                                                         "size":  "10 ct",
-                                                         "name":  "Eggo Homestyle Waffles",
-                                                         "board_pu":  0.287
-                                                     }
+                                                             }
                                      },
                   "fruit-cocktail":  {
                                          "commodity":  "Canned Fruit Cocktail",
@@ -11057,14 +10925,7 @@
                                                                   "size":  "57.6 oz",
                                                                   "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
                                                                   "board_pu":  0.1559
-                                                              },
-                                          "Walmart":  {
-                                                          "url":  "https://www.walmart.com/ip/Honey-Maid-Honey-Graham-Crackers-14-4-oz/10292699",
-                                                          "price":  3.97,
-                                                          "size":  "14.4 oz",
-                                                          "name":  "Honey Maid Honey Graham Crackers",
-                                                          "board_pu":  0.2757
-                                                      }
+                                                              }
                                       },
                   "granola":  {
                                   "commodity":  "granola",
@@ -12241,14 +12102,7 @@
                                                                  "size":  "67.6 fl oz",
                                                                  "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
                                                                  "board_pu":  0.1173
-                                                             },
-                                         "Walmart":  {
-                                                         "url":  "https://www.walmart.com/ip/Germ-X-Original-Hand-Sanitizer-Gel-62-Ethyl-Alcohol-with-Vitamin-E-Scented-Travel-Size-8-fl-oz/17210302684",
-                                                         "price":  1.97,
-                                                         "size":  "8 fl oz",
-                                                         "name":  "Germ-X Original Hand Sanitizer Gel",
-                                                         "board_pu":  0.2462
-                                                     }
+                                                             }
                                      },
                   "hand-soap":  {
                                     "commodity":  "hand-soap",
@@ -13181,14 +13035,7 @@
                                                       "size":  "17.5 oz",
                                                       "verified":  "2026-07-16 DERIVED from the price row (same record the board priced)",
                                                       "board_pu":  0.3994
-                                                  },
-                                       "Walmart":  {
-                                                       "url":  "https://www.walmart.com/ip/Raid-Defend-Indoor-Defense-System-Roach-and-Ant-Killer-Spray-Value-Size-20-oz/839151551",
-                                                       "name":  "Raid Defend Ant \u0026 Roach Killer, Indoor Insecticide, Lemon Scent, 20 oz",
-                                                       "price":  5.98,
-                                                       "size":  "20 oz",
-                                                       "board_pu":  0.299
-                                                   }
+                                                  }
                                    },
                   "instant-coffee":  {
                                          "commodity":  "instant-coffee",
@@ -13267,14 +13114,7 @@
                                                                           "size":  "52 oz",
                                                                           "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
                                                                           "board_pu":  0.1688
-                                                                      },
-                                                  "Walmart":  {
-                                                                  "url":  "https://www.walmart.com/ip/Idahoan-Buttery-Homestyle-Mashed-Potatoes-4-oz/10312430",
-                                                                  "price":  1.48,
-                                                                  "size":  "4 oz",
-                                                                  "name":  "Idahoan Buttery Homestyle Mashed Potatoes",
-                                                                  "board_pu":  0.37
-                                                              }
+                                                                      }
                                               },
                   "italian-dressing":  {
                                            "commodity":  "italian-dressing",
@@ -13312,14 +13152,7 @@
                                                                    "price":  "$9.48",
                                                                    "size":  "128 fl oz",
                                                                    "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                               },
-                                           "Walmart":  {
-                                                           "url":  "https://www.walmart.com/ip/Great-Value-Zesty-Italian-Dressing-Marinade-16-fl-oz/10452366",
-                                                           "price":  2.32,
-                                                           "size":  "16 fl oz",
-                                                           "name":  "Great Value Zesty Italian Dressing \u0026 Marinade",
-                                                           "board_pu":  0.145
-                                                       }
+                                                               }
                                        },
                   "italian-sausage":  {
                                           "commodity":  "italian-sausage",
@@ -14087,14 +13920,7 @@
                                                            "size":  "405.6 fl oz",
                                                            "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
                                                            "board_pu":  0.0258
-                                                       },
-                                   "Walmart":  {
-                                                   "url":  "https://www.walmart.com/ip/Simply-Non-GMO-All-Natural-Lemonade-Juice-52-fl-oz-Bottle/757977763",
-                                                   "name":  "Simply Lemonade",
-                                                   "board_pu":  0.0569,
-                                                   "price":  2.96,
-                                                   "size":  "52 fl oz"
-                                               }
+                                                       }
                                },
                   "lemongrass-paste":  {
                                            "commodity":  "Lemongrass Paste",
@@ -14466,14 +14292,7 @@
                                                          "size":  "33.8 fl oz",
                                                          "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
                                                          "board_pu":  0.2598
-                                                     },
-                                 "Walmart":  {
-                                                 "url":  "https://www.walmart.com/ip/Aveeno-Daily-Moisturizing-Body-Lotion-and-Facial-Moisturizer-for-Face-Body-and-Dry-Skin-18-oz/10818473",
-                                                 "price":  9.97,
-                                                 "size":  "18 fl oz",
-                                                 "name":  "Aveeno Daily Moisturizing Body Lotion",
-                                                 "board_pu":  0.5539
-                                             }
+                                                     }
                              },
                   "mac-and-cheese":  {
                                          "commodity":  "mac-and-cheese",
@@ -14726,14 +14545,7 @@
                                                                "size":  "46 oz",
                                                                "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
                                                                "board_pu":  0.1713
-                                                           },
-                                       "Walmart":  {
-                                                       "url":  "https://www.walmart.com/ip/Jet-Puffed-Marshmallows-12-oz-Bag/826143995",
-                                                       "price":  2.17,
-                                                       "size":  "12 oz",
-                                                       "name":  "Jet-Puffed Marshmallows",
-                                                       "board_pu":  0.1808
-                                                   }
+                                                           }
                                    },
                   "mayonnaise":  {
                                      "commodity":  "mayonnaise",
@@ -14843,13 +14655,6 @@
                                                                  "size":  "12 pk 3 oz",
                                                                  "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
                                                              },
-                                            "Family Fare":  {
-                                                                "url":  "https://www.shopfamilyfare.com/shop/pantry/snacks/popping_corn/sweet_salty_kettle_corn_microwave_popcorn_cousin_willies_6_ct/p/1564405684689184887",
-                                                                "name":  "Sweet \u0026 Salty Kettle Corn Microwave Popcorn Cousin Willies (6 Ct)",
-                                                                "price":  5.19,
-                                                                "size":  "6 ct",
-                                                                "board_pu":  0.865
-                                                            },
                                             "Sam\u0027s Club":  {
                                                                     "url":  "https://www.samsclub.com/ip/13627121756",
                                                                     "name":  "Orville Redenbacher\u0027s Movie Butter Microwave Popcorn, Mini Bags, 1.5 oz., 36 pk.",
@@ -14857,14 +14662,7 @@
                                                                     "size":  "36 ct 1.5 oz",
                                                                     "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
                                                                     "board_pu":  0.2633
-                                                                },
-                                            "Walmart":  {
-                                                            "url":  "https://www.walmart.com/ip/Great-Value-Extra-Butter-Flavored-Microwave-Popcorn-2-55-oz-12-Count/812120929",
-                                                            "price":  4.97,
-                                                            "size":  "12 ct",
-                                                            "name":  "Great Value Extra Butter Flavored Microwave Popcorn",
-                                                            "board_pu":  0.4142
-                                                        }
+                                                                }
                                         },
                   "milk":  {
                                "commodity":  "Milk (gallon)",
@@ -15078,13 +14876,6 @@
                                                           "verified":  "2026-07-30",
                                                           "board_pu":  0.4359
                                                       },
-                                     "Family Fare":  {
-                                                         "url":  "https://www.shopfamilyfare.com/shop/pantry/snacks/mixed_nuts/regal_health_foods_deluxe_mixed_nuts/p/1764405684716074300",
-                                                         "price":  12,
-                                                         "size":  "16 oz",
-                                                         "name":  "Regal Health Foods Deluxe Mixed Nuts",
-                                                         "board_pu":  0.75
-                                                     },
                                      "Hy-Vee":  {
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/24375/hy-vee-deluxe-lightly-salted-mixed-nuts",
                                                     "name":  "Hy-Vee Deluxe Lightly Salted Mixed Nuts",
@@ -16793,14 +16584,7 @@
                                                           "price":  "$6.34",
                                                           "size":  "126.8 oz",
                                                           "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                      },
-                                  "Walmart":  {
-                                                  "url":  "https://www.walmart.com/ip/Great-Value-Kosher-Spears-Dill-Pickle-Fresh-Pack-24-fl-oz-Jar/548915008",
-                                                  "price":  2.64,
-                                                  "size":  "24 fl oz",
-                                                  "name":  "Great Value Kosher Spears Dill Pickle Fresh Pack",
-                                                  "board_pu":  0.11
-                                              }
+                                                      }
                               },
                   "pigeon-peas":  {
                                       "commodity":  "Pigeon Peas / Gandules (canned)",
@@ -17666,13 +17450,6 @@
                                                         "verified":  "2026-07-30",
                                                         "board_pu":  0.1667
                                                     },
-                                   "Family Fare":  {
-                                                       "url":  "https://www.shopfamilyfare.com/shop/pantry/snacks/pretzels/snyder_s_of_hanover_seasoned_twisted_pretzel_sticks_12_000_oz/p/1564405684704966525",
-                                                       "name":  "Snyder\u0027s Of Hanover® Seasoned Twisted Pretzel Sticks 12.000 Oz",
-                                                       "price":  4.79,
-                                                       "size":  "12.000 oz",
-                                                       "board_pu":  0.3992
-                                                   },
                                    "Fareway":  {
                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20207086-shultz-mini-pretzel-twists-16-oz",
                                                    "price":  2.49,
@@ -17733,14 +17510,7 @@
                                                                "price":  "$11.98",
                                                                "size":  "30 ct",
                                                                "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                           },
-                                       "Walmart":  {
-                                                       "url":  "https://www.walmart.com/ip/Great-Value-Peanut-Butter-Dark-Chocolate-Protein-Bars-21-1-oz-15-Count/509480237",
-                                                       "price":  7.92,
-                                                       "size":  "15 ct",
-                                                       "name":  "Great Value Peanut Butter and Dark Chocolate Protein Bars",
-                                                       "board_pu":  0.528
-                                                   }
+                                                           }
                                    },
                   "provolone-cheese":  {
                                            "commodity":  "Provolone Cheese",
@@ -17883,13 +17653,6 @@
                                                      "verified":  "2026-07-30",
                                                      "board_pu":  0.1993
                                                  },
-                                "Family Fare":  {
-                                                    "url":  "https://www.shopfamilyfare.com/shop/pantry/snacks/snack_dips/tostitos_medium_salsa_con_queso_dip_15_oz/p/21521",
-                                                    "price":  5.99,
-                                                    "size":  "15 oz",
-                                                    "name":  "Tostitos Medium Salsa Con Queso Dip 15 Oz",
-                                                    "board_pu":  0.3993
-                                                },
                                 "Fareway":  {
                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/40413-tostitos-salsa-con-queso-medium-23-oz",
                                                 "name":  "Tostitos Medium Con Queso Salsa Dip",
@@ -19376,14 +19139,7 @@
                                                                 "price":  "$9.73",
                                                                 "size":  "580 ct",
                                                                 "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                            },
-                                        "Walmart":  {
-                                                        "url":  "https://www.walmart.com/ip/Great-Value-Double-Zipper-Sandwich-Bags-100-Count/2471694270",
-                                                        "name":  "Great Value Double Zipper Sandwich Bags",
-                                                        "board_pu":  0.023,
-                                                        "price":  2.3,
-                                                        "size":  "100 ct"
-                                                    }
+                                                            }
                                     },
                   "sandwich-cookies":  {
                                            "commodity":  "sandwich-cookies",
@@ -19402,13 +19158,6 @@
                                                                 "verified":  "2026-07-30",
                                                                 "board_pu":  0.1116
                                                             },
-                                           "Family Fare":  {
-                                                               "url":  "https://www.shopfamilyfare.com/shop/pantry/cookies/oreo_sandwich_cookies_chocolate_double_stuff_family_size_20_oz/p/4272",
-                                                               "price":  5.79,
-                                                               "size":  "20 oz",
-                                                               "name":  "Oreo Sandwich Cookies, Chocolate, Double Stuff, Family Size 20 Oz",
-                                                               "board_pu":  0.2795
-                                                           },
                                            "Fareway":  {
                                                            "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/22160452-fareway-sandwich-cookies-lemon-cremes-25-oz",
                                                            "price":  2.78,
@@ -19649,13 +19398,6 @@
                                                        "verified":  "2026-07-30",
                                                        "board_pu":  0.0927
                                                    },
-                                  "Family Fare":  {
-                                                      "url":  "https://www.shopfamilyfare.com/shop/health_beauty/grooming_hygiene/shampoo_conditioner/suave_shampoo_smoothing_avocado_olive_oil_28_oz/p/7301137",
-                                                      "name":  "Suave Shampoo, Smoothing, Avocado + Olive Oil 28 Oz",
-                                                      "price":  6.59,
-                                                      "size":  "28 oz",
-                                                      "board_pu":  0.2354
-                                                  },
                                   "Fareway":  {
                                                   "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/82401404-ocean-breeze-shampoo",
                                                   "price":  1.97,
@@ -20623,14 +20365,7 @@
                                                                 "size":  "112.75 fl oz",
                                                                 "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)",
                                                                 "board_pu":  0.1169
-                                                            },
-                                        "Walmart":  {
-                                                        "url":  "https://www.walmart.com/ip/16096312367",
-                                                        "name":  "OxiClean White Revive Whitener \u0026 Stain Remover Liquid Additive, 45 fl oz",
-                                                        "price":  "$7.98",
-                                                        "size":  "45 fl oz",
-                                                        "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                                    }
+                                                            }
                                     },
                   "steak-sauce":  {
                                       "commodity":  "Steak Sauce (A.1. style)",
@@ -21244,14 +20979,7 @@
                                                     "size":  "12 oz",
                                                     "verified":  "2026-07-27 DERIVED from the price row (same record the board priced)",
                                                     "board_pu":  0.1667
-                                                },
-                                     "Walmart":  {
-                                                     "url":  "https://www.walmart.com/ip/836700756",
-                                                     "price":  3.66,
-                                                     "size":  "9 oz",
-                                                     "name":  "HERDEZ TAQUERIA STREET LIQUID SAUCE Roja Taco Sauce, 9 oz Bo",
-                                                     "board_pu":  0.4067
-                                                 }
+                                                }
                                  },
                   "taco-seasoning":  {
                                          "commodity":  "Taco Seasoning (packet)",
@@ -21572,14 +21300,7 @@
                                                           "size":  "3 lb",
                                                           "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)",
                                                           "board_pu":  4.88
-                                                      },
-                                  "Walmart":  {
-                                                  "url":  "https://www.walmart.com/ip/Marketside-Farm-Raised-Skinless-Tilapia-Fillets-Fresh-Never-Frozen-0-8-1-25-lb/155158056",
-                                                  "price":  7.98,
-                                                  "size":  "lb",
-                                                  "name":  "Marketside Farm Raised Skinless Tilapia Fillets",
-                                                  "board_pu":  7.98
-                                              }
+                                                      }
                               },
                   "toasted-sesame-seeds":  {
                                                "commodity":  "Sesame Seeds",
@@ -22104,14 +21825,7 @@
                                                                "price":  "$12.97",
                                                                "size":  "8 ct",
                                                                "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                           },
-                                       "Walmart":  {
-                                                       "url":  "https://www.walmart.com/ip/EQ-Manual-Toothbrush-6ct-Soft/15662806819",
-                                                       "price":  1,
-                                                       "size":  "6 ct",
-                                                       "name":  "Equate Manual Toothbrushes Soft",
-                                                       "board_pu":  0.1667
-                                                   }
+                                                           }
                                    },
                   "toothpaste":  {
                                      "commodity":  "toothpaste",
@@ -22317,14 +22031,7 @@
                                                              "price":  "$14.98",
                                                              "size":  "160 ct",
                                                              "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                         },
-                                     "Walmart":  {
-                                                     "url":  "https://www.walmart.com/ip/Great-Value-13-Gallon-Drawstring-Tall-Kitchen-Trash-Bags-Unscented-40-Bags/344638043",
-                                                     "price":  6.48,
-                                                     "size":  "40 ct",
-                                                     "name":  "Great Value 13-Gallon Drawstring Tall Kitchen Trash Bags 40 Count",
-                                                     "board_pu":  0.162
-                                                 }
+                                                         }
                                  },
                   "turkey-bacon":  {
                                        "commodity":  "turkey-bacon",
@@ -22800,14 +22507,7 @@
                                                        "price":  1.18,
                                                        "size":  "8 oz",
                                                        "verified":  "2026-07-27 Hy-Vee GraphQL (storeId 1465, current shelf price)"
-                                                   },
-                                        "Walmart":  {
-                                                        "url":  "https://www.walmart.com/ip/Great-Value-Original-Dairy-Whipped-Topping-13-oz/44030496",
-                                                        "price":  2.56,
-                                                        "size":  "13 oz",
-                                                        "name":  "Great Value Original Dairy Whipped Topping",
-                                                        "board_pu":  0.1969
-                                                    }
+                                                   }
                                     },
                   "white-mushrooms":  {
                                           "commodity":  "White Mushrooms",
