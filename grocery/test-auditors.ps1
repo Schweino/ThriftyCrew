@@ -1416,5 +1416,62 @@ if ($r.rc -eq 3 -and $r.text -match 'BLIND') { Ok 'script-census goes BLIND (exi
 else { Bad ('script-census reported a result from an empty tree (rc=' + $r.rc + ') - "0 orphans" from zero examination is back') }
 Remove-Item $fxSc, $fxScB -Recurse -Force -ErrorAction SilentlyContinue
 
+# ---------------------------------------------------------------- N. arrivals desk (build-arrivals-docket)
+# MUST FIRE: 2026-07-28. "Dr Teal's Foaming Bath with Pure Epsom Salt, Nourish & Protect with Coconut Oil"
+# arrived in coconut-oil at Baker's and took the crown at 17c/oz. It carried a real Kroger product_id, a real
+# price and a working link, so every identity, basis, band and link check passed it. The ONLY thing wrong was
+# that the product is not the commodity, and nothing on the board records that decision.
+# THE POINT OF THIS FIXTURE is the head cut. Scoring the FULL product name matches "Coconut Oil" in the tail
+# and the bath soap scores a PERFECT 0.00 divergence - measured, along with the cat-food-as-salmon case
+# falling off the docket entirely. If someone "simplifies" Get-ArrivalHead to score the whole name, this test
+# is what stops it, so do not relax it to a rank or a substring of the item text.
+$r = RunPS 'build-arrivals-docket.ps1' @('-CompareFile', (Join-Path $fix 'arrivals-mustfire-board.json'), '-BaselineDir', (Join-Path $fix 'arrivals-baseline'), '-CommoditiesFile', (Join-Path $fix 'arrivals-commodities.json'), '-OutFile', (Join-Path $env:TEMP ('arrdock-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json')))
+if ($r.text -match 'FLAG#1' -and $r.text -match 'coconut-oil' -and $r.text -match 'div=1\.00' -and $r.text -match 'CROWN') { Ok 'arrivals-docket RANKS the bath-soap-as-coconut-oil crown arrival FIRST' }
+else { Bad ('arrivals-docket MISSED its founding bug (head cut broken, or crowns no longer ranked first): ' + $r.text) }
+# MUST FIRE: a commodity with ONE other priced cell cannot be scored at all. 41 of 492 commodities are in that
+# state, and "no flag" from an unscorable row is the exact silence this estate has been burned by.
+if ($r.text -match 'BLIND' -and $r.text -match 'harissa-paste' -and $r.text -match 'thin-cohort') { Ok 'arrivals-docket reports a 1-cell cohort BLIND instead of passing it' }
+else { Bad ('arrivals-docket silently passed an unscorable thin cohort: ' + $r.text) }
+# MUST BE SILENT: the SAME arrival, the SAME crown, the SAME 17c/oz - with a real coconut oil. If this flags,
+# the score is tracking novelty or cheapness rather than divergence and the whole docket is noise.
+$r2 = RunPS 'build-arrivals-docket.ps1' @('-CompareFile', (Join-Path $fix 'arrivals-clean-board.json'), '-BaselineDir', (Join-Path $fix 'arrivals-baseline'), '-CommoditiesFile', (Join-Path $fix 'arrivals-commodities.json'), '-OutFile', (Join-Path $env:TEMP ('arrdock-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json')))
+if ($r2.text -match 'FLAGGED at div >= 0\.75: 0') { Ok 'arrivals-docket SILENT on the same crown arrival with the right product' }
+else { Bad ('arrivals-docket flagged a correct new product - it is scoring novelty, not divergence: ' + $r2.text) }
+if ($r2.text -match 'harissa-paste' -and $r2.text -match 'thin-cohort') { Ok 'arrivals-docket still reports the thin cohort BLIND on the clean board' }
+else { Bad 'arrivals-docket dropped its BLIND report on a clean board - BLIND must describe the cohort, not the verdict' }
+# MUST FIRE: with no baseline there is no delta, and "every cell is an arrival" is not a review queue. A check
+# that examined nothing must say so rather than emit 2,792 rows that read like findings.
+$r3 = RunPS 'build-arrivals-docket.ps1' @('-CompareFile', (Join-Path $fix 'arrivals-mustfire-board.json'), '-BaselineDir', (Join-Path $fix 'arrivals-baseline'), '-CommoditiesFile', (Join-Path $fix 'arrivals-commodities.json'), '-OutFile', (Join-Path $env:TEMP ('arrdock-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json')), '-N', '0')
+if ($r3.rc -eq 3 -and $r3.text -match 'ZERO baseline boards') { Ok 'arrivals-docket exits 3 when it has NO baseline to diff against' }
+else { Bad ('arrivals-docket claimed a usable delta with zero baseline (rc=' + $r3.rc + ')') }
+
+# ---------------------------------------------------------------- (u) store-taxonomy: the second opinion
+# The ONLY watcher that does not inherit the include regex's premise. Its founding bug is the class that
+# produced 47 of the 99 wrong numbers in 22 days: Family Fare's own catalogue files "Blue Buffalo Natural
+# Puppy Chicken And Brown Rice Recipe Food For Puppies" under pets_wildlife/dog/dry_dog_food while our
+# brown-rice include claims it is brown rice. Its fixtures are frozen strings from 2026-07-30 and must never
+# be regenerated from a later board.
+$r = RunPS 'audit-store-taxonomy.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'MUST-FIRE' -and $r.text -match 'SELF-TEST PASS') { Ok 'store-taxonomy -SelfTest passes with its founding-bug fixtures armed' }
+else { Bad ('store-taxonomy -SelfTest failed or lost its founding-bug fixtures: ' + ((($r.text -split "`n") | Select-Object -Last 3) -join ' | ')) }
+$stSrc = Get-Content (Join-Path $root 'audit-store-taxonomy.ps1') -Raw
+if ($stSrc -match 'blue_buffalo_natural_puppy') { Ok 'the Blue Buffalo dog-food-as-brown-rice row is still the must-fire fixture' }
+else { Bad 'store-taxonomy lost its Blue Buffalo fixture - the wrong-product class it was written for is no longer proven catchable' }
+if ($stSrc -match 'kraft_grated_cheese_parmesan_cheese_8_oz') { Ok 'the taxonomy-less-URL trap (3 live rows) is still pinned - a slug must never be read as a department' }
+else { Bad 'store-taxonomy lost the taxonomy-less-URL fixture - it can invent a department for a row that carries none' }
+if ($stSrc -match 'protein-bars') { Ok 'the protein-bars clean twin is still present (the one measured legitimate non-food crossing)' }
+else { Bad 'store-taxonomy lost the protein-bars clean twin - the allowlist valve is untested and the audit drops to 50% precision' }
+# BLIND twin: an empty out\ must say could-not-evaluate, never report a clean zero.
+$fxTx = NewFxDir 'taxonomy-blind'
+New-Item -ItemType Directory -Force (Join-Path $fxTx 'regular') | Out-Null
+$r = RunPS 'audit-store-taxonomy.ps1' @('-OutDir', $fxTx, '-ReportDir', $fxTx)
+if ($r.rc -eq 3 -and $r.text -match 'BLIND') { Ok 'store-taxonomy goes BLIND (exit 3) with no store feed to read, instead of a clean zero' }
+else { Bad ('store-taxonomy reported a result from an empty out\ (rc=' + $r.rc + ') - "0 disagreements" from zero examination is back') }
+Remove-Item $fxTx -Recurse -Force -ErrorAction SilentlyContinue
+# a green self-test cannot tell you the tool is still being CALLED
+$cacTx = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
+if ($cacTx -match 'audit-store-taxonomy\.ps1') { Ok 'the daily job still runs the store-taxonomy second opinion' }
+else { Bad 'check-ad-cycles no longer calls audit-store-taxonomy - the only check that does not inherit the include regex is dark, and the script census will call it an orphan' }
+
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2

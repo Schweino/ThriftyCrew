@@ -28,6 +28,11 @@
 /grocery/out/deals-page*.html
 /grocery/out/link-audit.json
 /grocery/out/name-drift.json
+# the arrivals desk's daily docket: a pure function of the comparison-*.json boards (themselves ignored above)
+# plus commodities.json, rewritten from scratch every run at 35-45 KB. push-data.ps1 ends in `git add -A`, so
+# without this line every daily and weekly run would commit a churning derived file that nothing reads back -
+# the same regenerable-output rule that already covers name-drift.json and link-audit.json directly above.
+/grocery/out/arrivals-docket.json
 /grocery/out/url-worklist.json
 # input-fingerprint stamp for audit-match-soundness: a pure function of files already in the repo, rewritten
 # whenever any of them changes, and 1.24 MB a time - regenerable output, never a source of truth

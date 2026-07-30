@@ -1,4 +1,4 @@
-﻿<#
+<#
   pull-regular-hyvee.ps1 - refresh Hy-Vee to the CURRENT Omaha #01 shelf price. Headless; no browser needed.
 
   WHY THIS EXISTS. Hy-Vee was the only priced store with no automated pull. Its everyday file was refreshed by
@@ -268,8 +268,24 @@ foreach ($w in $work) {
           # guard goes blind - which is exactly the state Baker's, Fareway, Sam's and Walmart are still in.
           current_price=[double]$sp.price
           source_ad='Aisles Online current shelf price (storeId 1465, Omaha #01)'
-          as_of=$todayS; product_id=[int]$w.pid
+                    as_of=$todayS; product_id=[int]$w.pid
         }
+        # THE STORE'S OWN SHELF, RECORDED AT LAST. The persisted GraphQL document in hyvee\query-b64.txt has
+        # ALWAYS asked for these - it selects departmentGroup{name}, department{name} and category{name} on
+        # storeProducts, which is the exact object $sp is - and this row threw all three away, the same way
+        # Freshop's canonical_url was thrown away by a fields= whitelist until 2026-07-16.
+        # WHY IT MATTERS: there is exactly one statement anywhere in this estate about what commodity a
+        # product IS, the include regex, and every guard inherits it. 47 of the 99 wrong numbers that reached
+        # shoppers in 22 days were that one premise being wrong, and SKU identity cannot help - all four of
+        # the 2026-07-30 wrong products had a verified first-party product id. Hy-Vee saying "Health &
+        # Beauty" over our saying "coconut oil" is a genuinely independent second opinion, and it costs zero
+        # extra requests: the fields are already in the response we already parse.
+        # ADDITIVE ONLY: three optional properties. A product Hy-Vee returns no department for simply does
+        # not get them, and audit-store-taxonomy.ps1 reports the covered-row count out loud rather than
+        # treating an uncovered store as a clean one.
+        if ($sp.department -and $sp.department.name)           { $row['store_department']       = [string]$sp.department.name }
+        if ($sp.departmentGroup -and $sp.departmentGroup.name) { $row['store_department_group'] = [string]$sp.departmentGroup.name }
+        if ($sp.category -and $sp.category.name)               { $row['store_category']         = [string]$sp.category.name }
         # RECORD THE MULTIBUY DIVISOR, or the contract above compares two different bases and the guard fires on
         # correct data. `price` is the MULTIBUY TOTAL ("3 for $4" -> sp.price=4, priceMultiple=3) and we publish
         # the per-item $1.3333, so ad_price and current_price legitimately differ by exactly $mult. Guard 10 was

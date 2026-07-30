@@ -1,4 +1,4 @@
-﻿<#
+<#
   pull-regular-bakers-api.ps1 - Baker's everyday/current shelf prices from KROGER'S OWN PUBLIC API
   (developer.kroger.com), Omaha Saddlecreek store. Built 2026-07-24.
 
@@ -273,6 +273,32 @@ function Clean-Name([string]$s) {
   return (($t -replace '\s{2,}', ' ').Trim())
 }
 
+function Get-KrogerTaxonomy($p) {
+  # THE STORE'S OWN CLAIM ABOUT WHAT THIS PRODUCT IS - the one thing the estate has never recorded.
+  # Every check we run inherits ONE premise: that the include regex in commodities.json identified the
+  # product correctly. 47 of the 99 wrong numbers that reached shoppers in 22 days were that premise being
+  # wrong, and nothing downstream could see it because nothing downstream had a second source. Kroger's
+  # product payload carries the store's own merchandising taxonomy alongside the price we already take, so
+  # recording it costs ZERO extra requests - it is the same response, read one field wider. (Precisely how
+  # Freshop's canonical_url sat unread inside a fields= whitelist until 2026-07-16.)
+  #
+  # IT REFUSES RATHER THAN GUESSES. This runs against a payload shape we have never inspected on disk: the
+  # pull writes only the fields it uses, so no raw Kroger response in out\ shows what `categories` or
+  # `aisleLocations` actually contain here. So: a value is recorded ONLY when it is a non-empty STRING in
+  # the shape we expect. An object, a number, an empty array or a missing property all yield NOTHING - and
+  # nothing is the honest output, because audit-store-taxonomy.ps1 reports "0 rows carried a department"
+  # out loud instead of calling an unchecked store clean.
+  $cats = New-Object System.Collections.Generic.List[string]
+  foreach ($cv in @($p.categories)) { if (($cv -is [string]) -and ([string]$cv).Trim()) { $cats.Add(([string]$cv).Trim()) } }
+  $aisle = ''
+  foreach ($av in @($p.aisleLocations)) {
+    if (-not $av) { continue }
+    $dv = $av.description
+    if (($dv -is [string]) -and ([string]$dv).Trim()) { $aisle = ([string]$dv).Trim(); break }
+  }
+  return @{ category = (($cats.ToArray()) -join ' > '); aisle = $aisle }
+}
+
 # ---------------------------------------------------------------- self-test (no credentials, no network)
 # Fixtures are REAL rows read off the Saddlecreek store on 2026-07-24 - every case is a known answer, and
 # several are the exact products that produced the 4x Kerrygold underprice this resolver exists to prevent.
@@ -345,6 +371,26 @@ if ($SelfTest) {
   T 'clean-name: plain ASCII is untouched'                 (Clean-Name 'Kroger 80/20 Ground Beef Roll 1 LB') 'Kroger 80/20 Ground Beef Roll 1 LB'
   # a glyph with no letter form must still become a space, not vanish into a joined word
   T 'clean-name: non-letter glyph becomes a space'          (Clean-Name ("Fresh Natural" + [string][char]0x2038 + "Chicken")) 'Fresh Natural Chicken'
+
+    # STORE-TAXONOMY CAPTURE (the second opinion). These fixtures are the ONLY thing standing between this
+  # puller and a fabricated department, because the Kroger payload shape is not on disk anywhere to check
+  # against - see Get-KrogerTaxonomy's header.
+  # MUST-FIRE: the founding class. Family Fare's own taxonomy files "Blue Buffalo ... Brown Rice Recipe Food
+  # For Puppies" under pets_wildlife/dog while our brown-rice include claims it is brown rice; the same
+  # product at Baker's must come back carrying Kroger's Pet category so audit-store-taxonomy can see it.
+  $fxPet = New-Object psobject -Property @{ categories = @('Pet Care', 'Dog Food'); aisleLocations = @((New-Object psobject -Property @{ description = 'PET FOOD' })) }
+  T 'taxonomy MUST-FIRE: Kroger categories join'   (Get-KrogerTaxonomy $fxPet).category 'Pet Care > Dog Food'
+  T 'taxonomy MUST-FIRE: aisle description'        (Get-KrogerTaxonomy $fxPet).aisle    'PET FOOD'
+  # CLEAN TWIN: an ordinary grocery row records its own department and nothing else changes.
+  $fxOk = New-Object psobject -Property @{ categories = @('Dairy'); aisleLocations = @((New-Object psobject -Property @{ description = 'DAIRY' })) }
+  T 'taxonomy CLEAN: a food row carries its department' (Get-KrogerTaxonomy $fxOk).category 'Dairy'
+  # REFUSALS - the shapes we have never seen and must never invent from. Each must yield an EMPTY string, so
+  # the row simply has no department and the audit says so out loud, rather than a type name being published
+  # as a "department".
+  T 'taxonomy REFUSES a missing property'   (Get-KrogerTaxonomy (New-Object psobject)).category ''
+  T 'taxonomy REFUSES an empty array'       (Get-KrogerTaxonomy (New-Object psobject -Property @{ categories = @() })).category ''
+  T 'taxonomy REFUSES non-string elements'  (Get-KrogerTaxonomy (New-Object psobject -Property @{ categories = @((New-Object psobject -Property @{ id = 7 })) })).category ''
+  T 'taxonomy REFUSES a blank aisle'        (Get-KrogerTaxonomy (New-Object psobject -Property @{ aisleLocations = @((New-Object psobject -Property @{ description = '   ' })) })).aisle ''
 
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output ("SELF-TEST FAIL: " + $fail + " case(s)"); exit 1 }
 }
@@ -428,8 +474,13 @@ foreach ($tp in $pending) {
       # soldBy rides along because it decides whether netWeight means anything: on a per-pound card it is the
       # random tray weight (Tyson breast reads 22.56 lb) and must be ignored, exactly as rule 1 does above.
       net_weight  = $nwRaw
-      sold_by     = [string]$it.soldBy
+            sold_by     = [string]$it.soldBy
     }
+    # THE SECOND OPINION, CARRIED. Additive only: two optional properties, nothing else on this row changes,
+    # and a row Kroger tells us nothing about simply does not get them. See Get-KrogerTaxonomy.
+    $ktx = Get-KrogerTaxonomy $p
+    if ($ktx.category) { $row['store_category'] = $ktx.category }
+    if ($ktx.aisle)    { $row['store_aisle']    = $ktx.aisle }
     if ($link) { $row['link_url'] = $link }
     if ($promo -gt 0 -and $reg -gt $promo) { $row['base_price'] = $reg; $row['marked_down'] = $true; $stats.promo++ }
     $deals.Add([pscustomobject]$row)

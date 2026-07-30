@@ -1,0 +1,46 @@
+{
+  "built_at": "2026-01-02T00:00:00",
+  "week_of": "2026-01-01",
+  "source": "FROZEN FIXTURE - CLEAN TWIN. Byte-for-byte the must-fire board except Baker's arrives in coconut-oil with a REAL coconut oil, still brand new to that slot and still taking the crown at the same 17c/oz. Every arrival, crown and price movement of the must-fire case is still here; only the product identity is right. If this board produces a FLAG, the docket is scoring novelty or cheapness instead of divergence and its 14 flags a day are noise. harissa-paste must still report BLIND here - a thin cohort is unscorable whether or not anything is wrong. NEVER regenerate from the live board.",
+  "comparison": [
+    {
+      "commodity": "Coconut Oil",
+      "id": "coconut-oil",
+      "unit": "oz",
+      "cheapest_store": "Baker's",
+      "cheapest_price": 0.1762,
+      "stores": [
+        { "store": "Baker's", "per_unit": 0.1762, "unit": "oz", "type": "everyday", "item": "Kroger Organic Refined Coconut Oil, 14 oz", "size": "14 oz" },
+        { "store": "Walmart", "per_unit": 0.2119, "unit": "oz", "type": "everyday", "item": "Great Value Organic Virgin Coconut Oil, 14 oz", "size": "14 oz" },
+        { "store": "Hy-Vee", "per_unit": 0.2312, "unit": "oz", "type": "everyday", "item": "LouAna 100% Pure Coconut Oil", "size": "16 oz" },
+        { "store": "Aldi", "per_unit": 0.2437, "unit": "oz", "type": "everyday", "item": "Simply Nature Organic Coconut Oil 16 OZ", "size": "16 oz" },
+        { "store": "Fareway", "per_unit": 0.2699, "unit": "oz", "type": "everyday", "item": "Spectrum Refined Coconut Oil", "size": "14 oz" },
+        { "store": "Family Fare", "per_unit": 0.2812, "unit": "oz", "type": "everyday", "item": "Our Family Coconut Oil 14 Oz", "size": "14 oz" }
+      ]
+    },
+    {
+      "commodity": "Harissa Paste",
+      "id": "harissa-paste",
+      "unit": "oz",
+      "cheapest_store": "Walmart",
+      "cheapest_price": 0.6990,
+      "stores": [
+        { "store": "Walmart", "per_unit": 0.6990, "unit": "oz", "type": "everyday", "item": "Mina Harissa Mild Sauce, Homestyle Moroccan Red Pepper Harissa Paste, 10 oz", "size": "10 oz" },
+        { "store": "Hy-Vee", "per_unit": 0.7712, "unit": "oz", "type": "everyday", "item": "Mina Harissa Traditional Red Pepper Sauce", "size": "10 oz" }
+      ]
+    },
+    {
+      "commodity": "Salmon",
+      "id": "salmon",
+      "unit": "lb",
+      "cheapest_store": "Aldi",
+      "cheapest_price": 5.99,
+      "stores": [
+        { "store": "Aldi", "per_unit": 5.99, "unit": "lb", "type": "everyday", "item": "Atlantic Salmon Fillets 16 OZ", "size": "16 oz" },
+        { "store": "Walmart", "per_unit": 6.48, "unit": "lb", "type": "everyday", "item": "Fresh Atlantic Salmon Fillet", "size": "lb" },
+        { "store": "Hy-Vee", "per_unit": 7.99, "unit": "lb", "type": "everyday", "item": "Fish Market Atlantic Salmon Fillet", "size": "lb" }
+      ]
+    }
+  ]
+}
+

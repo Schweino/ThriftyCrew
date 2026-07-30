@@ -124,7 +124,15 @@ try {
       # -NonFatal because exit 3 here means "a record_low refusal blocks a recompute, a human decides", not a
       # failed step; it must not hold the publish.
       $null = RunChild (Join-Path $root 'purge-verdict-lows.ps1') @('-Apply') 3 'purge-verdict-lows' -NonFatal
-      $null = RunChild (Join-Path $root 'sanity-check.ps1') @() 4 'sanity' -NonFatal
+            $null = RunChild (Join-Path $root 'sanity-check.ps1') @() 4 'sanity' -NonFatal
+      # ---- ARRIVALS DESK. The weekly run is the day the most NEW products enter - the browser stores are all
+      # re-captured at once, so arrivals jump from ~30 on a quiet day to 521 (2026-07-29). That is exactly the
+      # day the most wrong products enter, and exactly the day a fixed-size review misses them, so the docket
+      # must be produced here too and not only on the daily path. -NonFatal: this is a REVIEW QUEUE at 5-15%
+      # measured precision and it must never hold the weekly publish; exit 3 means "could not evaluate the
+      # delta", which is a note for the agent, not a failed step. The ranked docket is out\arrivals-docket.json;
+      # read the CROWN block first, a wrong product is 4x more likely to hold a crown.
+      $null = RunChild (Join-Path $root 'build-arrivals-docket.ps1') @() 3 'arrivals' -NonFatal
       $g = Join-Path $root ('out\guards-' + (Get-Date -Format 'yyyy-MM-dd') + '.json')
       if(Test-Path $g){ Log ('sanity flags file present: ' + $g + ' - REVIEW before trusting the board.') }
       # THE SAME GATE THE DAILY JOB USES (added 2026-07-29). guards.ps1 was wired into check-ad-cycles only, so

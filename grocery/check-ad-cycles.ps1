@@ -368,7 +368,74 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         if (-not $NoAlert) { $srArgs += '-Alert' }
         & powershell @srArgs | ForEach-Object { Log ('store-registry: ' + $_) }
         if ($LASTEXITCODE -eq 2) { $summary += 'REVIEW    store-registry drift: a hardcoded store list disagrees with stores.json - fix the script or document the subset in stores.json allowed_subsets' }
-      } catch { Log ('store-registry guard threw: ' + $_.Exception.Message) }
+                  } catch { Log ('store-registry guard threw: ' + $_.Exception.Message) }
+      # ---- ARRIVALS DESK (REVIEW QUEUE, NEVER A GATE). The 47-of-99 bug class - a commodity's include regex
+      # matching a product that is NOT the commodity - is invisible to every hard invariant above it: those
+      # products carry a real first-party product id, a real price and a working link, so identity, basis,
+      # band, freshness and link checks all pass them. Measured 2026-07-30: 85% of cells trace to a first-party
+      # id and all four of that morning's wrong products were top-of-ladder verified. NOTHING on the board
+      # records "this product belongs to this commodity", so nothing can check it - only a reader can.
+      # The delta is small enough to read: 99.3% of cells are byte-identical day to day, ~196 products arrive
+      # per cycle and ~44 take a crown, and a wrong product is 4x more likely to hold a crown. This ranks the
+      # day's new (commodity, store, product) triples by how far each name diverges from its own cohort,
+      # crowns first, and writes out\arrivals-docket.json.
+      # ADVISORY BY CONSTRUCTION. Measured precision on the flag tier is 5-15% (2026-07-30: 14 flags, 1 real
+      # defect), so it is a queue for an agent, not a gate. The script exits only 0 or 3 and this block turns
+      # every outcome into a $summary line. Do NOT promote it to a publish hold on that precision.
+      try {
+        # No 2>&1 on the child: under EAP=Stop a native child's first stderr line becomes a TERMINATING throw,
+        # which would swallow the docket into the catch below and log it as "threw" with no docket written.
+        $adOut = @(& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-arrivals-docket.ps1'))
+        $adRc  = $LASTEXITCODE
+        @($adOut | Where-Object { $_ -match 'ARRIVALS |FLAGGED at|DEGRADED|^  FLAG#' }) | ForEach-Object { Log ('arrivals: ' + $_) }
+        if ($adRc -eq 3) {
+          Log 'arrivals-docket BLIND: no usable baseline (missing, or too thin to diff against) - the day''s NEW products were NOT reviewed against history, and its arrival count is the board growing rather than products arriving'
+          $summary += 'REVIEW    arrivals-docket could not evaluate the delta (no/thin baseline) - the day''s NEW products are unreviewed'
+        } else {
+          $adF = Join-Path $OutDir 'arrivals-docket.json'
+          if (-not (Test-Path $adF)) {
+            $summary += 'REVIEW    arrivals-docket exited 0 but wrote no docket - the day''s NEW products are unreviewed'
+          } else {
+            # ((Get-Content -Raw) + '') - [string]$null is $null so .Trim() THROWS on a zero-byte file, and
+            # '' | ConvertFrom-Json returns $null WITHOUT throwing. Both have produced silent wrong answers here.
+            $adJ = ((Get-Content $adF -Raw) + '').Trim() | ConvertFrom-Json
+            if ($null -eq $adJ) { $summary += 'REVIEW    out\arrivals-docket.json is empty or unparseable - the day''s NEW products are unreviewed' }
+            elseif ([int]$adJ.flagged_count -gt 0 -or [int]$adJ.blind_count -gt 0) {
+              $summary += ('REVIEW    arrivals-docket: ' + [int]$adJ.flagged_count + ' of ' + [int]$adJ.arrivals + ' new product(s) diverge from their own cohort, ' + [int]$adJ.blind_count + ' unscorable - read out\arrivals-docket.json, CROWN rows first (review queue, ~1 in 7 is real)')
+            }
+          }
+        }
+      } catch { Log ('arrivals-docket threw: ' + $_.Exception.Message) }
+      # ---- STORE-TAXONOMY SECOND OPINION (2026-07-30): the ONLY check in the estate that does not inherit the
+      # include regex's premise. It compares what OUR rules say a product is against what the STORE'S OWN feed
+      # says (Family Fare's canonical_url carries /shop/<department>/... on 3489 products today). 47 of the 99
+      # wrong numbers that reached shoppers in 22 days were the include matching a product that is not the
+      # commodity, and no name rule, band, or SKU check can see that class - the store's own shelf can.
+      # ADVISORY, AND DELIBERATELY NOT A GATE. Measured 2026-07-30: 17 disagreements, 17/17 adjudicated wrong
+      # by hand, but ZERO of them were rankable and ZERO were live board cells (same on 07-25 and 07-26). It
+      # has 100% precision and no proven catch on a PUBLISHED number, so it earns a review queue, not a hold.
+      # -FailOnFlag exists for the day that record changes and is deliberately not passed here.
+      # NO EMAIL, DELIBERATELY. The queue is ~17 near-identical items that barely move day to day; a daily
+      # alert would be the Family Fare throttle spam all over again (seven identical triage items in one day).
+      # The queue lives in the log and in out\taxonomy-disagreements-<date>.json. Only a LIVE CELL - a wrong
+      # product actually on the board - earns a line in the summary Brad reads.
+      try {
+        $txArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-store-taxonomy.ps1'),'-OutDir',$OutDir)
+        # capture FIRST, then read $LASTEXITCODE, then log - piping the call straight into ForEach-Object
+        # loses the child's exit code (the audit-ff-carry lesson, pinned in test-auditors).
+        $txOut = & powershell @txArgs
+        $txRc = $LASTEXITCODE
+        foreach ($l in @($txOut)) { Log ('taxonomy: ' + $l) }
+        if ($txRc -eq 3) {
+          Log 'store-taxonomy BLIND: judged ZERO rows - no store feed carried a department, so its silence says nothing about the board'
+          $summary += 'REVIEW    audit-store-taxonomy judged ZERO rows - the wrong-product second opinion is UNAVAILABLE this run (check Family Fare canonical_url coverage in out\regular\)'
+        } else {
+          $txM = [regex]::Match(([string[]]@($txOut) -join "`n"), '(\d+) LIVE CELL disagreement')
+          if ($txM.Success -and ([int]$txM.Groups[1].Value) -gt 0) {
+            $summary += ('REVIEW    ' + $txM.Groups[1].Value + ' live board cell(s) hold a product the STORE ITSELF files in a non-food department - see out\taxonomy-disagreements-*.json')
+          }
+        }
+      } catch { Log ('store-taxonomy guard threw: ' + $_.Exception.Message) }
       # ---- SALE-FALLBACK GUARD: an on-sale cell with NO everyday item to revert to VANISHES when the sale ends.
       # audit-sale-fallback flags them; FF self-heals daily (researched above), browser-store gaps go to
       # research-worklist.json for the weekly agent to research the next-cheapest everyday item. De-duped alert.

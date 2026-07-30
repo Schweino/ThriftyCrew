@@ -1,0 +1,39 @@
+{
+  "note": "THE SECOND OPINION. Every other statement in this estate about what commodity a product is descends from the include regex in commodities.json - so every downstream check inherits that one premise. This file records what the STORE ITSELF says a product is, taken from the store's own feed, and names the departments the store uses for non-edible goods. It is DATA, not a rule library: the department names are quoted verbatim from the store's own taxonomy, never invented. audit-store-taxonomy.ps1 reads it.",
+  "rule": "A department that appears in a store's feed but is listed in NEITHER food_departments NOR nonfood_departments is reported as UNKNOWN and its rows are NOT judged. Never add a department here without reading the store's own products in it - guessing turns this file back into the 40:1 rule library it exists to replace.",
+  "stores": {
+    "Family Fare": {
+      "field": "canonical_url",
+      "shape": "https://www.shopfamilyfare.com/shop/<department>/<category>[/<subcategory>]/<slug>/p/<product_id>",
+      "example": "https://www.shopfamilyfare.com/shop/pets_wildlife/dog/dry_dog_food/blue_buffalo_natural_puppy_chicken_and_brown_rice_recipe_food_for_puppies_5_lb/p/1564405684712559689",
+      "captured": "2026-07-30",
+      "vocabulary_source": "3492 of 3671 rows in out\\regular\\family-fare-regular-2026-07-30.json carried canonical_url; the 13 department names below are the complete observed vocabulary",
+      "food_departments": [
+        "pantry",
+        "beverages",
+        "dairy",
+        "meat",
+        "freezer",
+        "fresh_fruits_vegetables",
+        "deli",
+        "bakery",
+        "seasonal_special_occasion",
+        "beer_wine_spirits"
+      ],
+      "nonfood_departments": [
+        "health_beauty",
+        "household",
+        "pets_wildlife"
+      ]
+    }
+  },
+  "commodity_department_allow": [
+    {
+      "id": "protein-bars",
+      "store": "Family Fare",
+      "department": "health_beauty",
+      "reason": "Family Fare shelves protein/meal bars in health_beauty/adult_nutrition, so the whole protein-bars commodity legitimately lives in a non-food department. Measured 2026-07-30: without this entry the audit flags 34 candidate rows of which 17 are correct products; with it, 17 flags and 17 were adjudicated wrong by hand. This is the ONLY commodity in the 2870-row Family Fare sample that legitimately sits in a non-food department."
+    }
+  ]
+}
+
