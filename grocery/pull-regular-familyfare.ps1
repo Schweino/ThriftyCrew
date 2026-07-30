@@ -4,7 +4,7 @@
   Output: out\regular\family-fare-regular-<date>.json  (price_type = "everyday"), which compare-deals
   ingests alongside the weekly-ad data so the true cheapest (sale OR everyday) wins.
 #>
-param([string]$OutDir = "")
+param([string]$OutDir = "", [int]$MaxMinutes = 9)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
@@ -43,7 +43,16 @@ try {
 # down ONCE, then does at most 2 recovery passes for the empties - all under a hard wall-clock cap so it can never
 # run away. NO-TOKEN queries work fine.
 $startTime = Get-Date
-$MAXMIN = 9    # hard wall-clock cap for the whole pull
+# HARD WALL-CLOCK CAP for the whole pull. Now a PARAMETER (-MaxMinutes) rather than a constant.
+# WHY (2026-07-30): this cap, not Freshop's rate limit, turned out to be the binding constraint on Family Fare
+# coverage. Two full passes ran 9.1 and 9.7 minutes - both hit the 9-minute cap and deferred the rest - and each
+# reported ~460 "empty" terms. Those terms were largely never REQUESTED, not refused: the run simply ran out of
+# budget partway through ~500 terms. A second pass 90 minutes later added only 106 fresh rows and moved board
+# coverage by zero cells, which is the tell - re-running the same truncated prefix cannot reach the tail.
+# The cap itself is correct for the DAILY job (an earlier retry-happy version ran ~45 min under a throttle, and
+# an unbounded pull in a scheduled task is how a job silently eats a morning). So the default stays 9. A manual
+# catch-up run passes a bigger number deliberately.
+$MAXMIN = $MaxMinutes
 function Over-Cap { return (((Get-Date) - $startTime).TotalMinutes -gt $MAXMIN) }
 # ASK FOR THE PRODUCT'S IDENTITY. `fields=` is a WHITELIST, and it used to list only name/size/price - i.e. we
 # explicitly told Freshop NOT to send canonical_url or id, and then ran a SEPARATE search to guess back which
@@ -78,6 +87,18 @@ function Get-FreshopItems($term) {
         }
         catch { }   # both failed -> it is the throttle, not the whitelist; fall through to the normal retry
       }
+      # RECORD THE STATUS CODE. This catch used to swallow the response entirely and return @(), which made an
+      # API REFUSAL indistinguishable from "this store genuinely does not carry that term". That single
+      # conflation is why 13 days of Family Fare degradation was diagnosed as "throttled" without anyone ever
+      # seeing a status code - and the truth, measured 2026-07-30, is that the search endpoint answers HTTP
+      # 400, not 429 and not an empty 200. Browse (no q=) and /stores both return 200 the whole time, so we
+      # are NOT ip-blocked; it is the q= search specifically. A tally of what the API actually said is the
+      # difference between diagnosing this in one run and guessing at it for a fortnight.
+      $sc = 0
+      try { if ($_.Exception.Response) { $sc = [int]$_.Exception.Response.StatusCode } } catch {}
+      $key = if ($sc) { "HTTP $sc" } else { 'no response/timeout' }
+      if (-not $script:apiStatus) { $script:apiStatus = @{} }
+      $script:apiStatus[$key] = 1 + [int]$script:apiStatus[$key]
       Start-Sleep -Milliseconds 400
     }
   }
@@ -131,7 +152,16 @@ function Ingest-Items($items) {
 # flatten terms to an ordered array so a wall-clock break can queue the REMAINING terms for recovery
 $termList = @($terms.PSObject.Properties | ForEach-Object { [string]$_.Value })
 $empty = New-Object System.Collections.Generic.List[string]
-$streak = 0
+# GIVE UP WHEN THE API IS CLEARLY REFUSING US, instead of spending the whole budget proving it.
+# The cooldown below (15 empties -> sleep 45s -> reset) is a THROTTLE-RIDE, not an exit: under a hard shutout
+# it just loops - 15 empties, sleep, 15 more, sleep - until the wall-clock cap fires. On 2026-07-30 a run with
+# a 30-minute budget did exactly that and returned ZERO items across all 526 terms: half an hour of requests,
+# nothing to show, and the API pushed further away for the next caller.
+# $emptyRun counts CONSECUTIVE empties and is deliberately NOT reset by a cooldown - that is the whole point,
+# because a cooldown that does not help is itself the evidence. Any successful term resets it.
+$ABORT_EMPTY_RUN = 60      # sustained refusal after we had been getting data
+$ABORT_COLD_START = 30     # refused from the very first term - nothing has EVER come back this run
+$streak = 0; $emptyRun = 0; $aborted = $false
 for ($i = 0; $i -lt $termList.Count; $i++) {
   if (Over-Cap) { for ($j = $i; $j -lt $termList.Count; $j++) { $empty.Add($termList[$j]) }; Write-Output 'Family Fare: wall-clock cap hit in main pass; remaining terms deferred to recovery'; break }
   $term = $termList[$i]
@@ -139,14 +169,24 @@ for ($i = 0; $i -lt $termList.Count; $i++) {
   $items = @(); foreach ($q in $queries) { $items += (Get-FreshopItems $q) }
   Start-Sleep -Milliseconds 200
   if (@($items).Count -eq 0) {
-    $empty.Add($term); $streak++
+    $empty.Add($term); $streak++; $emptyRun++
+    $limit = if (@($script:deals).Count -eq 0) { $ABORT_COLD_START } else { $ABORT_EMPTY_RUN }
+    if ($emptyRun -ge $limit) {
+      for ($j = $i + 1; $j -lt $termList.Count; $j++) { $empty.Add($termList[$j]) }
+      $apiSay = if ($script:apiStatus -and $script:apiStatus.Count) { ' API said: ' + (($script:apiStatus.GetEnumerator() | Sort-Object Value -Descending | ForEach-Object { "$($_.Key) x$($_.Value)" }) -join ', ') + '.' } else { ' API returned 200 with zero items (terms genuinely not carried, NOT a refusal).' }
+      Write-Output ("Family Fare: ABORTING - " + $emptyRun + " consecutive empty terms" + $(if (@($script:deals).Count -eq 0) { ' from the first request (hard shutout)' } else { ' after ' + @($script:deals).Count + ' rows' }) + "." + $apiSay + " Continuing would burn time for nothing and push the limit out further. Carrying forward and writing what we have.")
+      $aborted = $true
+      break
+    }
     if ($streak -ge 15) { Write-Output ("Family Fare: throttle streak ($streak empties) - cooling down 45s..."); Start-Sleep -Seconds 45; $streak = 0 }
-  } else { $streak = 0; Ingest-Items $items }
+  } else { $streak = 0; $emptyRun = 0; Ingest-Items $items }
 }
 # RECOVERY PASSES: empties are rate-limit victims; wait out the throttle and retry ONCE each, up to 2 passes,
 # still under the wall-clock cap. Single query per term (no inner backoff) so a hard throttle can't blow up.
+# If the main pass ABORTED on a shutout, skip recovery entirely. Recovery exists to re-ask terms that were
+# rate-limit victims; when the window budget is already spent, re-asking 500 of them is the same mistake again.
 $pass = 0
-while ($empty.Count -gt 0 -and $pass -lt 2 -and -not (Over-Cap)) {
+while (-not $aborted -and $empty.Count -gt 0 -and $pass -lt 2 -and -not (Over-Cap)) {
   $pass++
   Write-Output ("Family Fare: recovery pass $pass for " + $empty.Count + " empty term(s)...")
   Start-Sleep -Seconds 20

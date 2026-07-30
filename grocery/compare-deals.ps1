@@ -374,23 +374,13 @@ function Test-IsMultibuy([string]$t) { return ((ConvertTo-DigitNumerals ("" + $t
 # dating its everyday rows would let today's everyday price filter a still-valid sale out of the freshness
 # ranker - so they stay newest-file-only. PURE function (operates on a passed file list, reads no disk) so
 # `compare-deals.ps1 -SelfTest` can prove the union never silently regresses to newest-only.
-$EVERYDAY_ONLY_STORES = @('walmart')   # out\regular stores with no ad cycle; safe (and required) to union
-function Select-RegularFileSet($fileObjs, [datetime]$asof, [int]$unionMaxAgeDays) {
-  $fileObjs |
-    Where-Object { $_.BaseName -match '^[a-z0-9-]+-regular-\d{4}-\d{2}-\d{2}$' } |
-    Group-Object { ($_.BaseName -replace '-regular-.*$','') } |
-    ForEach-Object {
-      $grp = $_.Group | Sort-Object Name -Descending
-      if ($EVERYDAY_ONLY_STORES -contains $_.Name) {
-        $grp | Where-Object {
-          $m = [regex]::Match($_.BaseName, '(\d{4}-\d{2}-\d{2})$')
-          $m.Success -and [math]::Abs(([datetime]$m.Groups[1].Value - $asof).TotalDays) -le $unionMaxAgeDays
-        }
-      } else {
-        $grp | Select-Object -First 1
-      }
-    }
-}
+# Select-RegularFileSet + the everyday-only store list now live in regular-fileset-lib.ps1, shared with
+# guards.ps1. They used to be here only, and guards.ps1 answered "which files does the board price from?"
+# with its own simpler "newest per store" - which is a DIFFERENT answer for Walmart, the one store this
+# function unions. 332 live Walmart cells were priced from files guards 5 and 10 never opened. A guard must
+# iterate the same file set the engine priced from, or it is guarding a different board than the one that
+# ships. The self-test cases below still exercise it through the lib.
+. (Join-Path $PSScriptRoot 'regular-fileset-lib.ps1')
 
 if ($SelfTest) {
   $script:fail = 0

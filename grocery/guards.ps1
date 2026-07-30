@@ -1,4 +1,4 @@
-﻿<#
+<#
   guards.ps1 - the BLOCKING invariant gate. Run before every publish; a hard failure means the board
   must NOT go live.
 
@@ -40,6 +40,20 @@ $root = $PSScriptRoot
 $fail = New-Object System.Collections.ArrayList
 $warn = New-Object System.Collections.ArrayList
 function Say($s) { if (-not $Quiet) { Write-Output $s } }
+
+# THE SAME FILE SET THE ENGINE PRICES FROM. See regular-fileset-lib.ps1 for why this is shared rather than
+# re-derived here: guards used to answer "which files does the board price from?" with "the newest per store",
+# which is a different answer for Walmart - the one store compare-deals unions across 14 days. 332 live
+# Walmart cells were priced from files guards 5 and 10 never opened.
+. (Join-Path $root 'regular-fileset-lib.ps1')
+function EngineFileSet {
+  # Mirrors compare-deals' own call: every canonical out\regular capture, resolved against today.
+  $all = Get-ChildItem (Join-Path $root 'out\regular\*-regular-*.json') -ErrorAction SilentlyContinue
+  return @(Select-RegularFileSet $all (Get-Date).Date 14)
+}
+$script:ENGINE_FILES = @{}
+foreach ($ef in (EngineFileSet)) { $script:ENGINE_FILES[$ef.FullName] = $true }
+function InEngineSet([string]$fullName) { return $script:ENGINE_FILES.ContainsKey($fullName) }
 
 function OkUnlessBlind([int]$checked, [string]$okMsg, [string]$blindMsg) {
   <#
@@ -348,8 +362,11 @@ $allow = Get-MpAllowKeys $root
 $mp = 0; $mpTotals = 0; $mpSeen = 0
 foreach ($f in (RegFiles)) {
   $prefix = ($f.BaseName -replace '-regular-.*$','')
-  $newest = RegFiles ($prefix + '-regular-*.json') | Sort-Object Name -Desc | Select-Object -First 1
-  if ($f.FullName -ne $newest.FullName) { continue }
+  # ITERATE THE FILE SET THE ENGINE PRICED FROM, not just the newest file per store. compare-deals unions
+  # Walmart across 14 days (it has no ad cycle, so a partial capture must not replace a full one), and this
+  # guard used to open only the newest file - leaving 332 live Walmart cells, about a third of the store,
+  # structurally unreachable by guard 5 (multipack size). Shared definition: regular-fileset-lib.ps1.
+  if (-not (InEngineSet $f.FullName)) { continue }
   $doc = Get-Content $f.FullName -Raw | ConvertFrom-Json
   foreach ($d in $doc.deals) {
     $name = [string]$d.item; $size = [string]$d.size
@@ -578,8 +595,11 @@ if ($stale -eq 0) { Say '  ok    no store''s price data is older than 14 days' }
 $mismatch = 0; $checked = 0; $noContract = @{}
 foreach ($f in (RegFiles)) {
   $prefix = ($f.BaseName -replace '-regular-.*$','')
-  $newest = RegFiles ($prefix + '-regular-*.json') | Sort-Object Name -Desc | Select-Object -First 1
-  if ($f.FullName -ne $newest.FullName) { continue }
+  # ITERATE THE FILE SET THE ENGINE PRICED FROM, not just the newest file per store. compare-deals unions
+  # Walmart across 14 days (it has no ad cycle, so a partial capture must not replace a full one), and this
+  # guard used to open only the newest file - leaving 332 live Walmart cells, about a third of the store,
+  # structurally unreachable by guard 10 (never publish the REGULAR price). Shared definition: regular-fileset-lib.ps1.
+  if (-not (InEngineSet $f.FullName)) { continue }
   $doc = Get-Content $f.FullName -Raw | ConvertFrom-Json
   $store = [string]$doc.store
   $any = $false
