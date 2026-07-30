@@ -885,6 +885,33 @@ try {
   } else { Log 'watchers ok: every guard still fires on its own founding bug' }
 } catch { Log ('test-auditors threw: ' + $_.Exception.Message) }
 
+# ---- WEEKLY: prove each BLOCKING invariant can still FAIL (test-guards, hermetically) ----
+# test-auditors above proves the watchers fire on frozen fixtures; test-guards proves guards.ps1 itself
+# still exits 2 when an invariant is broken on purpose. It mutates live data to do it (16 windows, 9
+# git-tracked files; measured 2026-07-30: a hard kill runs neither finally nor PowerShell.Exiting, and a
+# foreign commit landed DURING the measured run), so it must never run against production. The runner
+# copies the whole tree to %TEMP% (1.1s for 658 MB; every script roots at $PSScriptRoot) and runs there.
+# Stamp-gated on >=7 days, not a weekday, so a missed week self-heals on the next daily run.
+try {
+  $tgStampF = Join-Path $root 'test-guards-weekly-stamp.txt'
+  $tgLast = [datetime]'2000-01-01'
+  if (Test-Path $tgStampF) { try { $tgLast = [datetime](Get-Content $tgStampF -TotalCount 1) } catch {} }
+  if (((Get-Date) - $tgLast).TotalDays -ge 7) {
+    $tg = (& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'run-test-guards-weekly.ps1') 2>&1 | ForEach-Object { [string]$_ }) -join "`n"
+    $tgRc = $LASTEXITCODE
+    (Get-Date -Format 'yyyy-MM-dd') | Set-Content $tgStampF -Encoding ascii   # stamp even on failure: one alert per week, not one per day
+    if ($tgRc -eq 0) { Log 'test-guards weekly: every hard invariant can still fail (hermetic run passed)' }
+    else {
+      Log ('test-guards weekly rc=' + $tgRc)
+      $summary += 'INVARIANTS a blocking guard may no longer be able to fire - see test-guards weekly alert'
+      if (-not $NoAlert) {
+        $tgSubject = if ($tgRc -eq 3) { 'Grocery: test-guards could not evaluate (guards already red on the unmutated board)' } elseif ($tgRc -eq 4) { 'Grocery: test-guards weekly did not run (hermetic copy failed)' } else { 'Grocery: a BLOCKING invariant can no longer fail (test-guards weekly)' }
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject $tgSubject -Body ("run-test-guards-weekly.ps1 breaks each hard invariant inside a scratch COPY of the grocery tree and asserts guards.ps1 exits 2 with that guard's own failure text. Exit " + $tgRc + ": 1 = a broken invariant did NOT fail guards (that guard is decorative until fixed - do not trust a quiet board on it); 3 = baseline already red, nothing proven (the daily run is already alerting on the real failure); 4 = the hermetic copy failed. Production files are never touched by this job.`n`n" + $tg) | Out-Null
+      }
+    }
+  }
+} catch { Log ('test-guards weekly threw: ' + $_.Exception.Message) }
+
 # ---- report ----
 $pullNote = if ($serverDue) { '   (server pull ran)' } else { '   (nothing due)' }
 Write-Output ("Ad-cycle check  -  " + $asofS + $pullNote)
