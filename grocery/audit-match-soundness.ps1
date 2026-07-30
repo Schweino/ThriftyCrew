@@ -17,7 +17,13 @@
           -Accept    bless the CURRENT state as the new baseline (run after an intended rule change)
           -Alert     send-alert.ps1 once per NEW issue-set (signature de-dup) - for the daily pipeline
 #>
-param([switch]$Accept, [switch]$Alert, [string]$OutDir = "")
+param([switch]$Accept, [switch]$Alert, [string]$OutDir = "",
+  # -ForceAccept: bless the baseline EVEN OVER outstanding DROP verdicts. The gate below exists because
+  # -Accept used to be a rubber stamp: on 2026-07-29 it baselined "Smithfield ... Pork Loin Filet -> bacon"
+  # and "Member's Mark Broccoli Normandy -> broccoli" AFTER the verify pass had already rejected both, which
+  # made them permanently invisible to this audit - and they published as crowns. Forcing must be a loud,
+  # deliberate act, never the default.
+  [switch]$ForceAccept)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
@@ -72,7 +78,69 @@ try {
 } catch {}
 
 # ---- ACCEPT: write current as baseline ----
-if ($Accept) {
+if ($Accept -or $ForceAccept) {
+  # ---- THE VERDICT GATE: -Accept must not bless a mapping a DROP verdict already rejected ----
+  # -Accept snapshots name -> commodity wholesale, and everything in the snapshot becomes invisible to this
+  # audit forever after (it is a CHANGE detector). So one careless accept converts "judged wrong last week"
+  # into "reviewed and correct". That happened: bacon/Sam's and broccoli/Sam's were dropped by the verify pass
+  # in THREE separate weeks, got baselined anyway, and sailed through publish as crowns on 2026-07-29.
+  #
+  # A verdict names (commodity, store) but NOT the item - the judged item has to be recovered from the quote
+  # inside the reason text. Two hard-won details in that recovery:
+  #  * The closing quote is only a closing quote when followed by space/punctuation/end. Product names carry
+  #    apostrophes ("Member's Mark ..."), and a naive [^']+ capture truncates at the possessive - which fails
+  #    SILENT (the truncated name matches nothing, the drop is skipped, the gate under-blocks on exactly the
+  #    Member's Mark rows the founding bug was about).
+  #  * Matching is on a NORMALISED name (lowercase, alphanumerics only), because the feed and the reason
+  #    spell the same product with and without commas ("Pinto Beans, 12 lbs." vs "Pinto Beans 12 lbs.").
+  # A drop with NO recoverable quote is skipped rather than guessed at: this gate blocks a human action, so a
+  # false block teaches people to reach for -ForceAccept, which un-teaches the whole gate.
+  # LATEST WORD WINS: files are walked oldest -> newest, so a later verdict on the same (commodity, item)
+  # overrides an earlier one - a drop that was re-reviewed and kept stops blocking.
+  $q1 = [char]0x0027; $q2 = [char]0x2018; $q3 = [char]0x2019; $q4 = [char]0x201C; $q5 = [char]0x201D
+  $quotePat = "[$q1$q2$q4](.{6,}?)[$q1$q3$q5](?=\s|$|[,.;:!?)\]])"
+  function NormName2([string]$s) { return (($s.ToLower() -replace '[^a-z0-9]+', ' ').Trim()) }
+  $verdictByKey = @{}   # "<commodity>|<normalised item>" -> latest verdict info
+  foreach ($vf in (Get-ChildItem (Join-Path $OutDir 'verify-verdicts-*.json') -EA SilentlyContinue | Sort-Object Name)) {
+    try { $vj = ConvertFrom-Json ([IO.File]::ReadAllText($vf.FullName)) } catch { continue }
+    foreach ($vc in @($vj.verdicts)) {
+      foreach ($ve in @($vc.entries)) {
+        $qm = [regex]::Match([string]$ve.reason, $quotePat)
+        if (-not $qm.Success) { continue }
+        $vkey = ([string]$vc.id) + '|' + (NormName2 $qm.Groups[1].Value)
+        $verdictByKey[$vkey] = @{ keep = ($ve.keep -ne $false); week = [string]$vj.week_of; store = [string]$ve.store; judged = $qm.Groups[1].Value }
+      }
+    }
+  }
+  $normToNames = @{}
+  foreach ($nk in $names.Keys) {
+    $nn = NormName2 $nk
+    if (-not $normToNames.ContainsKey($nn)) { $normToNames[$nn] = New-Object System.Collections.ArrayList }
+    [void]$normToNames[$nn].Add($nk)
+  }
+  $blocked = New-Object System.Collections.ArrayList
+  foreach ($kv in $verdictByKey.GetEnumerator()) {
+    if ($kv.Value.keep) { continue }
+    $vid, $nitem = $kv.Key -split '\|', 2
+    if (-not $normToNames.ContainsKey($nitem)) { continue }         # product gone from every feed
+    foreach ($actual in $normToNames[$nitem]) {
+      # outstanding = the judged item STILL maps to the very commodity it was dropped from. If the rules have
+      # since moved it elsewhere (or to <unmatched>), the verdict was honoured and there is nothing to block.
+      if ([string]$names[$actual] -eq $vid) {
+        [void]$blocked.Add([pscustomobject]@{ commodity = $vid; item = $actual; store = $kv.Value.store; week = $kv.Value.week })
+      }
+    }
+  }
+  if ($blocked.Count -gt 0 -and -not $ForceAccept) {
+    Write-Output ("match-soundness: ACCEPT REFUSED - $($blocked.Count) mapping(s) an outstanding DROP verdict already judged WRONG would be blessed into the baseline and become invisible to this audit:")
+    foreach ($b in ($blocked | Sort-Object commodity)) { Write-Output ("  [{0}] '{1}'  (dropped {2}, {3})" -f $b.commodity, $b.item, $b.week, $b.store) }
+    Write-Output 'Fix the rules so these products stop matching (add an exclude), or re-review the verdict. If the VERDICT is the thing that is wrong, -ForceAccept overrides - loudly and on your judgment.'
+    exit 2
+  }
+  if ($blocked.Count -gt 0) {
+    Write-Output ("match-soundness: FORCE-ACCEPT overriding $($blocked.Count) outstanding DROP verdict(s):")
+    foreach ($b in ($blocked | Sort-Object commodity)) { Write-Output ("  [{0}] '{1}'  (dropped {2}, {3})" -f $b.commodity, $b.item, $b.week, $b.store) }
+  }
   $obj = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); names = $names; contested = @($contest.Keys | Sort-Object) }
   Set-Content $baseF -Value ($obj | ConvertTo-Json -Depth 4) -Encoding UTF8
   Write-Output ("match-soundness: baseline ACCEPTED ($($names.Count) product names, $($contest.Count) contested). drift-vs-engine=$drift")
