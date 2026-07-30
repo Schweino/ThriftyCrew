@@ -45,7 +45,17 @@ foreach ($term in $emptyTerms) {
   $good = @($items | Where-Object { $_.name -and (Match-Local $c ([string]$_.name)) -and ($_.base_price -or $_.price) })
   if ($good.Count) { $victims.Add([pscustomobject]@{ term = [string]$term; commodity = $termToId[[string]$term]; product = [string]$good[0].name }) }
 }
-$report = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); empty_terms = $emptyTerms.Count; confirmed_victims = @($victims) }
+# .ToArray(), NOT @($victims). In Windows PowerShell 5.1 the array-subexpression @( ) around a
+# System.Collections.Generic.List[object] throws "ArgumentException: Argument types do not match" - it is fine
+# around a List[string] and fine around the bare list, which is why this reads as harmless. It is not: this
+# line threw on EVERY run since the script was wired into check-ad-cycles on 2026-07-13, after all 464 Freshop
+# probes had already been made, and before the report, the OK line and the -Alert branch. check-ad-cycles pipes
+# only stdout and a native child's crash is not a PowerShell exception, so its try/catch never fired and the
+# failure printed nothing at all: 'ff-carry' appears 0 times in 2,716 lines of ad-cycle-log.txt. The FF
+# pull-drop watch (the 2026-07-13 ground-pork class) was decorative for its entire life.
+# ToArray() also keeps the JSON shape right at every size - [] at zero, [ {..} ] at one - where a bare list
+# double-wraps and ConvertTo-Json would unwrap a single victim into an object.
+$report = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); empty_terms = $emptyTerms.Count; confirmed_victims = $victims.ToArray() }
 Set-Content (Join-Path $OutDir 'ff-carry-report.json') -Value ($report | ConvertTo-Json -Depth 4) -Encoding UTF8
 
 if ($victims.Count -eq 0) { Write-Output ("ff-carry: OK  " + $emptyTerms.Count + " empty term(s) re-probed, none are actually carried by FF (genuinely not stocked)"); exit 0 }

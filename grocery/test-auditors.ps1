@@ -775,6 +775,46 @@ else { Bad 'check-ad-cycles blind email body regressed - a blackout would email 
 # missed stamp re-opened the gate into a silent daily 658 MB crash loop (post-batch review 2026-07-30).
 if ($cacSrc -match "run-test-guards-weekly\.ps1'\)\s*2>&1") { Bad 'check-ad-cycles captures run-test-guards-weekly with 2>&1 under EAP=Stop again - a crashing suite throws past the stamp and alert into a silent daily retry loop' }
 else { Ok 'check-ad-cycles weekly test-guards capture leaves stderr unredirected (crash still reaches the alert path)' }
+# (k1a) A GUARD THAT CANNOT FINISH, AND A CALLER THAT CANNOT NOTICE (2026-07-30). audit-ff-carry.ps1 wrapped a
+# System.Collections.Generic.List[object] in @( ) to build its report - which throws "ArgumentException:
+# Argument types do not match" in Windows PowerShell 5.1 (it is fine around a List[string], and fine around the
+# bare list, which is why it reads as harmless). It threw on EVERY run since the script was wired into
+# check-ad-cycles on 2026-07-13, AFTER all 464 Freshop probes and BEFORE the report, the OK line and the -Alert
+# branch. Nobody saw it because the caller piped the child straight into Log, so a child that dies before its
+# first Write-Output logs nothing: 'ff-carry' appears 0 times in 2,716 lines of ad-cycle-log.txt. Two failures,
+# two checks - the crash itself, and the caller's inability to see a crash. The @( ) case is executed for real
+# against a live List[object], not pattern-matched, so it tracks the language rather than the spelling.
+$ffcSrc = Get-Content (Join-Path $root 'audit-ff-carry.ps1') -Raw
+$ffcList = New-Object System.Collections.Generic.List[object]
+$ffcList.Add([pscustomobject]@{ term = 't' })
+$ffcThrows = $false
+try { $null = @($ffcList) } catch { $ffcThrows = $true }
+if ($ffcThrows) { Ok 'PS 5.1 still throws on @(List[object]) - the founding hazard is real, not a historical quirk' }
+else { Bad 'PS 5.1 no longer throws on @(List[object]) - this fixture no longer proves anything; re-derive it' }
+if ($ffcSrc -match 'confirmed_victims\s*=\s*@\(\$victims\)') { Bad 'audit-ff-carry wraps its List[object] in @( ) again - it will throw after all 464 probes and log nothing' }
+else { Ok 'audit-ff-carry builds its report without @(List[object]) (it can reach its own report line)' }
+if ($ffcSrc -notmatch 'confirmed_victims\s*=\s*\$victims\.ToArray\(\)') { Bad 'audit-ff-carry no longer uses .ToArray() - check the JSON shape stays [] at zero and [ {..} ] at one' }
+else { Ok 'audit-ff-carry serialises its victims with .ToArray() (array shape holds at 0, 1 and many)' }
+# The CALLER must capture and check, not pipe-and-hope. Decision extracted from the real region.
+function Test-FfCarryCallerSees([string]$src) {
+  $i = $src.IndexOf('$fcArgs')
+  if ($i -lt 0) { return @('no ff-carry invocation found') }
+  $seg = $src.Substring($i, [Math]::Min(1400, $src.Length - $i))
+  $bad = New-Object System.Collections.Generic.List[string]
+  if ($seg -match '&\s*powershell\s*@fcArgs\s*\|') { $bad.Add('ff-carry is piped straight into Log - a crash before first output logs nothing') }
+  if ($seg -notmatch 'LASTEXITCODE') { $bad.Add('ff-carry exit code is never read') }
+  if ($seg -match '@fcArgs\s*2>&1') { $bad.Add('ff-carry child is captured with 2>&1 under EAP=Stop - first stderr line throws past the check') }
+  return $bad
+}
+$ffcReal = Test-FfCarryCallerSees $cacSrc
+if ($ffcReal.Count -eq 0) { Ok 'check-ad-cycles captures ff-carry, logs its output, and reads its exit code' }
+else { Bad ('ff-carry caller is blind again: ' + ($ffcReal -join '; ')) }
+$ffcFire = Test-FfCarryCallerSees '$fcArgs = @(1); & powershell @fcArgs | ForEach-Object { Log $_ }'
+if ($ffcFire.Count -ge 2) { Ok 'ff-carry-caller fixture fires on the pipe-and-hope form that hid the crash for 17 days' }
+else { Bad 'ff-carry-caller fixture went blind - piping with no exit-code check now reads as correct' }
+$ffcClean = Test-FfCarryCallerSees '$fcArgs = @(1); $o = & powershell @fcArgs; $rc = $LASTEXITCODE; foreach($l in @($o)){ Log $l }'
+if ($ffcClean.Count -eq 0) { Ok 'ff-carry-caller fixture stays silent on capture-then-check (clean twin)' }
+else { Bad ('ff-carry-caller fixture false-positives on correct form: ' + ($ffcClean -join '; ')) }
 # (k1c) A HEAL MUST REFRESH THE GATE'S IDENTITY INPUT (2026-07-30). In check-ad-cycles' consistency
 # auto-repair, prune-bad-links + sync-browser-links rewrite the links, then generate-board-overrides and
 # guards' tile-integrity WRONG-PRODUCT gate both read name-drift.json - which still described the PRE-heal

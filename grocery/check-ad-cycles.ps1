@@ -140,7 +140,21 @@ if ($serverDue) {
     try {
       $fcArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-ff-carry.ps1'),'-OutDir',$OutDir)
       if (-not $NoAlert) { $fcArgs += '-Alert' }
-      & powershell @fcArgs | ForEach-Object { Log ('ff-carry: ' + $_) }
+      # CAPTURE, THEN LOG, THEN CHECK THE EXIT CODE. Piping the child straight into Log means a child that
+      # dies before its first Write-Output logs NOTHING - and a guard that says nothing is indistinguishable
+      # from one that was never wired up. That is not hypothetical: audit-ff-carry threw on its report line
+      # on every run from 2026-07-13, and the string 'ff-carry' appears 0 times in 2,716 lines of
+      # ad-cycle-log.txt. A native child's crash is not a PowerShell exception, so the catch below never saw
+      # it either. This guard prints exactly one line whenever it completes, so zero lines IS the failure.
+      # No 2>&1: $ErrorActionPreference is 'Stop' here, and redirecting a native child's stderr under Stop
+      # turns its first stderr line into a terminating throw that would skip this very check.
+      $fcOut = & powershell @fcArgs
+      $fcRc  = $LASTEXITCODE
+      foreach ($l in @($fcOut)) { Log ('ff-carry: ' + $l) }
+      if ($fcRc -ne 0 -or @($fcOut).Count -eq 0) {
+        Log ("ff-carry: DID NOT RUN - exit $fcRc with " + @($fcOut).Count + ' output line(s); the FF pull-drop watch is blind this cycle (see stderr)')
+        $summary += 'REVIEW    audit-ff-carry did not complete - FF pull-drop victims went unchecked this cycle'
+      }
     } catch { Log ('ff-carry guard threw: ' + $_.Exception.Message) }
   }
   # read verification from TODAY's file (real runs); in -NoPull test mode fall back to the newest ads file
