@@ -182,7 +182,7 @@ if ($prevMax -gt 100 -and @($deals).Count -lt ($prevMax * 0.5)) {
   if (-not (Test-Path $qDir)) { New-Item -ItemType Directory -Path $qDir -Force | Out-Null }
   $pfile = Join-Path $qDir ("family-fare-$todayS.throttled.json")
   ([ordered]@{ store='Family Fare'; week_of=$todayS; price_type='everyday'; throttled=$true; deal_count=@($deals).Count; empty_terms=@($empty); deals=$deals } | ConvertTo-Json -Depth 6) | Set-Content $pfile -Encoding UTF8
-  Write-Warning ("Family Fare: THROTTLE-WIPEOUT guard tripped - got only " + @($deals).Count + " items vs " + $prevMax + " in the last good file. NOT overwriting; wrote " + $pfile + ". Last good FF prices stay live.")
+  Write-Warning ("Family Fare: throttled - got only " + @($deals).Count + " items vs " + $prevMax + " in the last good file. Diagnostic copy: " + $pfile + ". These rows are REAL and are being MERGED (today's prices win, everything else carries forward).")
   # ALERT ON A CONSECUTIVE RUN OF THROTTLED DAYS (2026-07-28). The guard above is correct and does its job -
   # it refuses to let a throttled partial overwrite good prices. But it did that SILENTLY, and a throttled
   # file has been written on 8 of the last 8 days: out\throttled\ holds family-fare-2026-07-21 through -28.
@@ -202,7 +202,27 @@ if ($prevMax -gt 100 -and @($deals).Count -lt ($prevMax * 0.5)) {
       & powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'send-alert.ps1') -Subject ("Grocery: Family Fare has been throttled " + $recent.Count + " of the last 4 days - prices frozen") -Body $body | Out-Null
     }
   } catch { Write-Warning ('family-fare throttle alert failed: ' + $_.Exception.Message) }
-  return
+  # NO `return` HERE ANY MORE (2026-07-30). This block used to bail out, throwing the whole capture away.
+  #
+  # THAT WAS AN ALL-OR-NOTHING DECISION ABOUT A PARTIAL PULL. A throttled response is not a WRONG response -
+  # it is a SHORTER one. Every row in it was fetched from Freshop today and is fully identity-bearing
+  # (773/773 carried canonical_url + product_id + current_price on 2026-07-29, against 963/2011 on the file
+  # the board was actually serving). Binning it discarded 32 price CORRECTIONS and 36 new products, and 5 of
+  # those 32 were live board cells: sour cream $2.99 -> $3.29, strawberries $3.99 -> $4.49, lemons, chipotle
+  # adobo, zucchini. The estate published prices it had already been told were wrong, 13 days running.
+  #
+  # THE CARRY-FORWARD BLOCK BELOW ALREADY DOES THE RIGHT THING, and this `return` was jumping over it:
+  # "today's price ALWAYS wins for a product this run returned; a product it did NOT return is carried
+  # forward at its last verified price, stamped with the date that price was captured". That IS the union
+  # Walmart gets. The wipeout guard predates it and was still defending against a danger the carry-forward
+  # had already removed - even a ZERO-row pull now yields a fully carried file rather than a blank store.
+  #
+  # It also fixes a second bug: the 14-day cap is applied at BUILD time, so freezing the file froze the cap
+  # with it. The board was serving 20 rows captured 2026-07-13 - seventeen days old under a fourteen-day
+  # policy - purely because nothing rebuilt the file. Falling through re-applies the cap every day.
+  #
+  # The detection and the alert above are KEPT: "Family Fare is being throttled" is real news worth sending.
+  # What changes is that being throttled no longer means being ignored.
 }
 # CARRY-FORWARD: a pull that returns FEWER products than last time has NOT proved those products are gone.
 # Freshop rate-limits us into partial catalogues routinely, and a partial pull is a plain overwrite: on
