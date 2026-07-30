@@ -520,7 +520,29 @@ if ($mp -eq 0) {
 # The pull scripts have their own wipeout guards, but a guard you can walk around is not a guard - so the
 # publish gate re-checks it independently: the newest file per store must not be a fraction of what that
 # store had in its recent history.
+function Get-CollapseVerdict([int]$fileCount, [int]$curr, [int]$best) {
+  <#
+    Guard 6's per-store decision, factored out of the loop so it can be FIXTURED. Returns:
+      'no-history' - fewer than 2 captures for this store, so there is no history to compare against. This
+                     used to be a bare `continue`: the store was dropped in SILENCE and guard 6 still printed
+                     "ok  no store's newest data file collapsed vs its recent history". "No collapse found"
+                     and "no store examined" are the same zero - the zero-rows rule says they must be told
+                     apart, and this was the one place in guard 6 that never did.
+                     Measured 2026-07-30: exactly ONE store hits this - sams, whose live feed is out\sams and
+                     whose single out\regular capture is the 2026-07-14 promotion. So the store guard 6 covers
+                     least is precisely the one nobody was ever told about.
+      'collapsed'  - the founding bug: a throttled/partial newest file worth less than half the store's
+                     recent best (family-fare-regular-<date>.PARTIAL.json, 177 rows -> 55).
+      'ok'         - compared and healthy, or under the 100-row floor where the ratio is noise.
+    Thresholds are UNCHANGED from the original inline test.
+  #>
+  if ($fileCount -lt 2) { return 'no-history' }
+  if ($best -gt 100 -and $curr -lt ($best * 0.5)) { return 'collapsed' }
+  return 'ok'
+}
 $thin = 0
+$g6Checked = 0
+$g6NoHistory = New-Object System.Collections.ArrayList
 $prefixes = @{}
 foreach ($f in (RegFiles)) {
   $p = ($f.BaseName -replace '-regular-.*$','')
@@ -528,7 +550,8 @@ foreach ($f in (RegFiles)) {
 }
 foreach ($p in $prefixes.Keys) {
   $files = @(RegFiles ($p + '-regular-*.json') | Sort-Object Name -Descending)
-  if ($files.Count -lt 2) { continue }
+  # THE SKIP IS NOW A REPORTED VERDICT, NOT A SILENT `continue`. Same threshold, same file reads.
+  if ((Get-CollapseVerdict $files.Count 0 0) -eq 'no-history') { [void]$g6NoHistory.Add($p); continue }
   $newest = $files[0]
   $curr = 0
   try { $curr = @((Get-Content $newest.FullName -Raw | ConvertFrom-Json).deals).Count } catch {}
@@ -536,12 +559,20 @@ foreach ($p in $prefixes.Keys) {
   foreach ($old in ($files | Select-Object -Skip 1 -First 4)) {
     try { $c = @((Get-Content $old.FullName -Raw | ConvertFrom-Json).deals).Count; if ($c -gt $best) { $best = $c } } catch {}
   }
-  if ($best -gt 100 -and $curr -lt ($best * 0.5)) {
+  $g6Checked++
+  if ((Get-CollapseVerdict $files.Count $curr $best) -eq 'collapsed') {
     $thin++
     [void]$fail.Add(("HARD FAIL: store data collapsed  [{0}] newest file '{1}' has {2} rows vs {3} recently - a throttled/partial pull must not become the source of truth" -f $p, $newest.Name, $curr, $best))
   }
 }
-if ($thin -eq 0) { Say '  ok    no store''s newest data file collapsed vs its recent history' }
+if ($thin -eq 0) {
+  OkUnlessBlind $g6Checked `
+    "no store's newest data file collapsed vs its recent history ($g6Checked store(s) compared against their own history)" `
+    'guard 6 compared ZERO stores against their own history - no out\regular prefix holds 2+ captures, so the throttled-partial collapse class went entirely unwatched this run'
+}
+if ($g6NoHistory.Count) {
+  [void]$warn.Add("guard 6 could NOT evaluate these store(s) - fewer than 2 captures in out\regular, so there is no history to compare a thin or throttled file against and a collapse there would look normal: " + (($g6NoHistory | Sort-Object) -join ', '))
+}
 
 # ---------------------------------------------------------------- 7: no stray files in out\regular
 # THE ROOT CAUSE of the Family Fare collapse, and the only check that catches it at the source.
@@ -609,6 +640,33 @@ if ($staleSale -eq 0) { Say '  ok    no undated stale discount is being publishe
 # So: every store reports how old its prices are and how many of them we could not re-verify. A store that
 # cannot be checked is a store that is quietly drifting, and that has to be visible on every single run
 # rather than discovered by a reader clicking a link.
+function Test-MaskedStaleCapture([datetime]$regDate, [datetime]$altDate, [datetime]$today, [bool]$inEngineSet, [int]$cliffDays) {
+  <#
+    THE MASKED-AGE RULE. Guard 9 redirects a store's freshness to its alt feed (out\sams, out\bakers,
+    out\fareway) whenever that feed is newer than the store's out\regular capture. That redirect was written
+    on the belief that the out\regular file it leaves behind is an unused orphan.
+    FOR SAM'S THAT BELIEF IS WRONG, AND IT WAS NEVER MEASURED. Select-RegularFileSet (regular-fileset-lib.ps1)
+    hands the engine the NEWEST dated capture for EVERY store in out\regular, not just the ones with a live
+    puller - and sams has exactly ONE such capture, so sams-regular-2026-07-14.json IS its newest and sits in
+    the engine's file set beside the out\sams feed. Measured on the 2026-07-29 AND 2026-07-30 boards alike:
+    29 published Sam's cells name a product that exists in that 60-row capture and NOWHERE in the 2,475-row
+    live out\sams feed, so nothing else could have priced them, and 9 of those commodities publish Sam's as
+    CHEAPEST (baking-powder, corn-dogs, lemon-juice, oven-cleaner, pork-tenderloin, rotisserie-chicken,
+    tater-tots, vanilla-extract, onions).
+    Because the redirect overwrites $fileDate wholesale, guard 9 printed "Sam's Club ... file 1d old" for a
+    price set captured 16 days earlier, and its own >14-day HARD FAIL became structurally unreachable for
+    those rows: no pull writes that file, so no successful run can ever age it out or refresh it. A price
+    with no clock is not a fresh price, it is an unmeasured one.
+    So: if the capture is STILL IN THE ENGINE'S FILE SET, its own age must still be tested, even though the
+    freshness numbers now come from somewhere else. If it is NOT in the file set it is a true orphan and
+    ageing it would be crying wolf.
+    Pure decision, no I/O - test-auditors.ps1 extracts this function from guards.ps1 and runs it against the
+    founding case and its clean twins.
+  #>
+  if (-not $inEngineSet) { return $false }       # not priced from -> a true orphan, nothing to age
+  if ($altDate -le $regDate) { return $false }   # no redirect happened -> the ordinary age test already ran
+  return ([int](($today - $regDate).TotalDays) -gt $cliffDays)
+}
 $today = [datetime](Get-Date -Format 'yyyy-MM-dd')
 $stale = 0; $aged = 0
 foreach ($f in (RegFiles)) {
@@ -659,6 +717,21 @@ foreach ($f in (RegFiles)) {
       try {
         $altDate = [datetime]$altDateStr
         if ($altDate -gt $fileDate) {
+          # MEASURE THE FILE WE ARE ABOUT TO STOP MEASURING. $fileDate is overwritten on the next line, so
+          # this is the LAST point at which the out\regular capture's own age still exists. $rows is still
+          # that file's rows here (the swap below happens after). See Test-MaskedStaleCapture for why a
+          # redirected out\regular file is not automatically an unused orphan.
+          if (Test-MaskedStaleCapture $fileDate $altDate $today (InEngineSet $f.FullName) 14) {
+            $maskKeys = @{}
+            foreach ($mrow in $rows) { $maskKeys[(([string]$mrow.item).Trim() + '|' + ([string]$mrow.ad_price).Trim())] = $true }
+            $maskCells = 0
+            foreach ($brd in $cmp.comparison) {
+              foreach ($bcell in $brd.stores) {
+                if (([string]$bcell.store) -eq $store -and $maskKeys.ContainsKey((([string]$bcell.item).Trim() + '|' + ([string]$bcell.ad).Trim()))) { $maskCells++ }
+              }
+            }
+            [void]$warn.Add(("{0}: the freshness line below is measured from {1}, but out\regular\{2} is STILL IN THE ENGINE'S FILE SET and is {3} days old ({4} rows; {5} live board cell(s) trace to it by name+price). Nothing writes that file, so its age can never improve and guard 9's >14-day HARD FAIL can never reach those rows. Fix it by refreshing those items into the store's own feed - do NOT simply delete the capture, because guard 9 reaches this store ONLY through its out\regular file (the loop above is over RegFiles), so deleting it drops the store out of guard 9 altogether while the aged count stays non-zero and the ok line still prints. Until then, do NOT read the file-age number below as covering these rows." -f $store, $alt.Name, $f.Name, [int](($today - $fileDate).TotalDays), $rows.Count, $maskCells))
+          }
           $fileDate = $altDate
           # TAKE THE ROWS FROM THAT FILE TOO - not just the date. The 2026-07-29 fix redirected only the AGE
           # and left $rows/$dated/$unver reading out\regular, so Sam's freshness was still being measured on

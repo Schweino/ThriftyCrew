@@ -330,6 +330,85 @@ foreach ($al in @('multipack-allowlist.json','coverage-gap-allowlist.json','basi
   } catch { Bad "$al does not parse: $($_.Exception.Message)" }
 }
 
+# ---------------------------------------------------------------- N+2b. guard 6 must NAME the stores it skipped
+# FOUNDING BUG (found 2026-07-30): guard 6 ("a store's data collapsed") opened with `if ($files.Count -lt 2)
+# { continue }` - a SILENT skip - and then printed "ok  no store's newest data file collapsed vs its recent
+# history". On the live tree that skipped exactly one store, sams, whose single out\regular capture
+# (sams-regular-2026-07-14.json, 60 rows) is IN the engine's file set and is the only possible source of 29
+# published Sam's cells, 9 of them crowned CHEAPEST. So the one store guard 6 could not evaluate was the one
+# carrying unrefreshable prices, and its own ok line said so to nobody. Same zero-rows collapse as guard 11:
+# "no collapse found" and "no store examined" read identically.
+# The decision now lives in Get-CollapseVerdict so it can be exercised directly. Frozen synthetic inputs only.
+if ($gtxt -match 'function Get-CollapseVerdict') { Ok 'guards.ps1 defines Get-CollapseVerdict (guard 6''s decision is testable)' }
+else { Bad 'guards.ps1 LOST Get-CollapseVerdict - guard 6''s <2-capture skip is unfixtured again' }
+if (([regex]::Matches($gtxt, 'Get-CollapseVerdict\s+\$')).Count -ge 2) { Ok 'Get-CollapseVerdict is wired into guard 6 for BOTH the skip and the collapse decision' }
+else { Bad 'Get-CollapseVerdict is not called twice by guard 6 - the silent `continue` or the collapse test was inlined again' }
+if ($gtxt -match 'g6NoHistory' -and $gtxt -match 'OkUnlessBlind \$g6Checked') { Ok 'guard 6 reports its examined count and names the stores it could not evaluate' }
+else { Bad 'guard 6 no longer reports g6Checked / g6NoHistory - it can print ok again while skipping a store in silence' }
+$mCv = [regex]::Match($gtxt, 'function Get-CollapseVerdict[\s\S]{0,4000}?\r?\n\}')
+if (-not $mCv.Success) { Bad 'could not extract Get-CollapseVerdict from guards.ps1 - the behavioural fixture below cannot run' }
+else {
+  $cv = & {
+    Invoke-Expression $mCv.Value
+    [pscustomobject]@{
+      # MUST-FIRE 1: the founding silent skip - one capture, no history (the live sams shape).
+      noHistory = (Get-CollapseVerdict 1 0 0)
+      # MUST-FIRE 2: the founding collapse - family-fare-regular-<date>.PARTIAL.json, 177 rows -> 55.
+      collapsed = (Get-CollapseVerdict 5 55 177)
+      # CLEAN TWIN 1: an ordinary healthy refresh must stay silent.
+      healthy   = (Get-CollapseVerdict 5 170 177)
+      # CLEAN TWIN 2: under the 100-row floor the ratio is noise - must NOT be called a collapse.
+      belowFloor = (Get-CollapseVerdict 5 20 60)
+    }
+  }
+  if ($cv.noHistory -eq 'no-history' -and $cv.collapsed -eq 'collapsed' -and $cv.healthy -eq 'ok' -and $cv.belowFloor -eq 'ok') {
+    Ok 'guard-6 fixture: a single capture reports no-history (was a silent skip), a halved file collapses, a healthy file and a below-floor file stay silent'
+  } else {
+    Bad ("guard-6 fixture FAILED: noHistory='$($cv.noHistory)' collapsed='$($cv.collapsed)' healthy='$($cv.healthy)' belowFloor='$($cv.belowFloor)'")
+  }
+}
+
+# ---------------------------------------------------------------- N+2c. guard 9 must not let an ALT FEED mask a live capture's age
+# FOUNDING BUG (found 2026-07-30): guard 9 redirects a store's freshness to its alt feed when that feed is
+# newer (the 2026-07-29 fix, so Sam's would stop being aged on out\regular). It overwrote $fileDate wholesale,
+# on the stated belief that the out\regular file left behind is an unused orphan. It is not: Select-RegularFileSet
+# hands the engine the NEWEST dated capture for every store in out\regular and sams has exactly ONE, so
+# sams-regular-2026-07-14.json is in the engine's file set. Guard 9 therefore printed "Sam's Club ... file 1d
+# old" for a 16-day-old price set, and its >14-day HARD FAIL could never reach those rows - no pull writes that
+# file, so no successful run could ever age or refresh it.
+# Measured on the 2026-07-29 AND 2026-07-30 boards alike: 29 published Sam's cells name a product that exists
+# in that capture and nowhere in the 2,475-row live out\sams feed, and 9 of those commodities crown Sam's
+# CHEAPEST - so the rows are load-bearing and the masked age was a real, published staleness.
+if ($gtxt -match 'function Test-MaskedStaleCapture') { Ok 'guards.ps1 defines Test-MaskedStaleCapture (the masked-age rule)' }
+else { Bad 'guards.ps1 LOST Test-MaskedStaleCapture - a live out\regular capture can be aged by its alt feed again' }
+if ($gtxt -match 'Test-MaskedStaleCapture \$') { Ok 'the masked-age rule is CALLED from guard 9''s redirect branch' }
+else { Bad 'Test-MaskedStaleCapture is defined but never called - the rule is present and toothless' }
+$mMs = [regex]::Match($gtxt, 'function Test-MaskedStaleCapture[\s\S]{0,4000}?\r?\n\}')
+if (-not $mMs.Success) { Bad 'could not extract Test-MaskedStaleCapture from guards.ps1 - the behavioural fixture below cannot run' }
+else {
+  $t0 = [datetime]'2026-07-30'
+  $ms2 = & {
+    Invoke-Expression $mMs.Value
+    [pscustomobject]@{
+      # MUST-FIRE: the founding case. A 2026-07-14 capture, still priced from, masked by a 2026-07-29 feed.
+      founding = (Test-MaskedStaleCapture ([datetime]'2026-07-14') ([datetime]'2026-07-29') $t0 $true 14)
+      # CLEAN TWIN 1: same dates, but the file is NOT in the engine's file set - a true orphan. Ageing it
+      # would be crying wolf, and this is the twin that proves we do not.
+      trueOrphan = (Test-MaskedStaleCapture ([datetime]'2026-07-14') ([datetime]'2026-07-29') $t0 $false 14)
+      # CLEAN TWIN 2: the live Baker's/Fareway shape - regular and alt captured the same day, no redirect at
+      # all, so the ordinary age test already covered it. Measured 2026-07-30: both stores look exactly so.
+      noRedirect = (Test-MaskedStaleCapture ([datetime]'2026-07-29') ([datetime]'2026-07-29') $t0 $true 14)
+      # CLEAN TWIN 3: redirected AND live, but inside the 14-day cliff - not stale, must stay silent.
+      withinCliff = (Test-MaskedStaleCapture ([datetime]'2026-07-25') ([datetime]'2026-07-29') $t0 $true 14)
+    }
+  }
+  if ($ms2.founding -and (-not $ms2.trueOrphan) -and (-not $ms2.noRedirect) -and (-not $ms2.withinCliff)) {
+    Ok 'guard-9 masked-age fixture: a still-priced-from capture masked by a newer alt feed is aged, while a true orphan, an unredirected store and a within-cliff capture all stay silent'
+  } else {
+    Bad ("guard-9 masked-age fixture FAILED: founding=$($ms2.founding) trueOrphan=$($ms2.trueOrphan) noRedirect=$($ms2.noRedirect) withinCliff=$($ms2.withinCliff)")
+  }
+}
+
 # ---------------------------------------------------------------- N+3. -Accept must respect DROP verdicts
 # audit-match-soundness -Accept used to bless the current name->commodity map wholesale, converting "judged
 # wrong last week" into "reviewed and correct" - which is how bacon/Sam's and broccoli/Sam's, each dropped by
