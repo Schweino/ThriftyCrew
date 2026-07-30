@@ -91,6 +91,13 @@
                       "why":  "TOTAL: 24 oz / 12 = 2 oz, Lipton Recipe Secrets\u0027 box size. Name truncated at 60 chars. Reviewed 2026-07-16. DELETE THIS ENTRY once a fresh Walmart capture restores the full name - the guard will then verify it by arithmetic and need no human. CORRECTION 2026-07-16: I first blamed hyvee\\browser-link-resolve.js .slice(0,60) for this truncation and it is NOT the cause. That slice writes product-urls LINK names, and Walmart link names are not truncated (458 names, only 6 at exactly 60, max 85). The truncation lives in out\\regular\\walmart-regular - 109 of 711 names at exactly 60, against 32 at 59 and 4 at 61 - and no script in this repo caps at 60. A historical capture baked it in and its code is gone. The full names cannot be recovered from anything we hold (0 of 109 prefix-match a name we have), so only a fresh capture fixes it.",
                       "reviewed":  "2026-07-16",
                       "reviewed_source":  "prose (transcribed 2026-07-28, never independently re-verified)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Frigo Whole Milk String Cheese, Mozzarella, 12 Pack 10 Oz",
+                      "why":  "TOTAL: the 10 oz in the name is the PACKAGE weight, not the per-stick weight - 12 sticks x 0.83 oz = 10 oz, which is the real Frigo Cheese Heads stick size. Verified first-party against Freshop 2026-07-30 (app_key family_fare, store_id 6401, product 1564405684715396619): the store\u0027s own catalog record reads name=\"Frigo Whole Milk String Cheese, Mozzarella, 12 Pack 10 Oz\", size=\"10 oz\", base_price=5.99, so the captured row is byte-faithful to the source. Guard 5 cannot tell this shape from \"12 Pack 1 Oz\" where the weight IS per-unit (Test-MpClassify returns reject for both), and it is right not to guess. Price check both ways: 5.99/10 oz = $0.599/oz, which sits correctly ABOVE all six store brands on the board ($0.197-$0.333/oz) for a branded whole-milk product; the 12x reading would be $0.0499/oz, four times cheaper than the cheapest store, and would falsely crown the commodity.",
+                      "reviewed":  "2026-07-30",
+                      "reviewed_source":  "Freshop API product record (first-party), re-verified independently this session"
                   }
               ]
 }
