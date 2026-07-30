@@ -888,8 +888,8 @@
                   {
                       "commodity":  "papaya",
                       "store":  "Baker\u0027s",
-                      "reviewed":  "2026-07-27",
-                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Dole Pineapple \u0026 Papaya Tropical Fruit 15.25 oz\" - canned tropical fruit, not fresh papaya. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                      "reviewed":  "2026-07-30",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, re-verified 2026-07-30): this store DOES carry the real item. bakers-regular-2026-07-30.json holds \"Mexican Papayas\", current_price 1.99, size \"lb\", sold_by WEIGHT. The commodity is priced per EACH, so pricing this cell would mean inventing a papaya count from a per-pound rate, and the engine correctly refuses - the same shape as chayote at this store. The 2026-07-27 text this replaces said \"the only thing at this store matching the include regex is Dole Pineapple \u0026 Papaya Tropical Fruit 15.25 oz\"; the fresh papaya sits in the same feed, so that sentence was false AND its own delete-trigger (\"if the store starts carrying the real item\") could never fire. Delete this entry if Baker\u0027s publishes a per-each papaya price, or if the commodity is re-based to lb."
                   },
                   {
                       "commodity":  "fresh-cranberries",
@@ -924,8 +924,8 @@
                   {
                       "commodity":  "habanero-peppers",
                       "store":  "Baker\u0027s",
-                      "reviewed":  "2026-07-27",
-                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"ROTEL Hot Diced Tomatoes with Habaneros\" - canned diced tomatoes, not fresh habanero peppers. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                      "reviewed":  "2026-07-30",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, re-verified 2026-07-30): this store DOES carry the real item. bakers-regular-2026-07-30.json holds \"Fresh Habanero Peppers\", current_price 0.25, size \"1 ct\", sold_by UNIT. The commodity is priced per LB, so pricing this cell would mean inventing a peppers-per-pound count, and the engine correctly refuses. The 2026-07-27 text this replaces said \"the only thing at this store matching the include regex is ROTEL Hot Diced Tomatoes with Habaneros\"; the fresh peppers sit in the same feed, so that sentence was false AND its own delete-trigger (\"if the store starts carrying the real item\") could never fire. Delete this entry if Baker\u0027s publishes a per-pound habanero price, or if the commodity is re-based to each."
                   },
                   {
                       "commodity":  "sugar-snap-peas",
