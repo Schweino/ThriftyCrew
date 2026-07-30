@@ -313,6 +313,23 @@ if (Test-Path $pinF) {
 }
 $unpriceable = 0
 $factorBugs = 0; $drift = 0; $pinned = 0
+# ZERO-ROWS RULE for the factor guard. Both lookups below - `$link = $pu.($row.id)` and `$e = $link.($s.store)`
+# - `continue` in SILENCE, so every way this guard can go blind is invisible in its own output. It was the only
+# numbered guard reporting no coverage figure of any kind, after its own header essay twice condemned exactly
+# that. Measured 2026-07-29: 493 board rows, 2,653 everyday cells on linked rows, 2,341 actually COMPARED -
+# 312 cells skipped for a missing store link and 3 rows with no product-urls entry at all, none of it reported.
+# product-urls.json is a rebuilt artifact: rename its `items` wrapper, or let a store key drift ("Bakers" vs
+# "Baker's"), and this guard silently compares nothing while still printing ok. There is no Set-StrictMode in
+# this tree, so `$null.($row.id)` returns $null rather than throwing - the failure is quiet by construction.
+$fcChecked = 0; $fcByStore = @{}; $fcBoardStores = @{}
+# Presence pass, deliberately SEPARATE from the main loop: which stores have at least one EVERYDAY cell on the
+# board at all? It cannot be counted inside the loop below, because the `-not $link` continue at row level
+# skips every store on that row before they are ever seen.
+foreach ($row in $cmp.comparison) {
+  foreach ($s in $row.stores) {
+    if (([string]$s.type) -eq 'everyday') { $fcBoardStores[[string]$s.store] = 1 + [int]$fcBoardStores[[string]$s.store] }
+  }
+}
 foreach ($row in $cmp.comparison) {
   $link = $pu.($row.id)
   if (-not $link) { continue }
@@ -327,6 +344,9 @@ foreach ($row in $cmp.comparison) {
     $k = [string]$row.id + '|' + [string]$s.store
     $bpu = if ($pin.ContainsKey($k)) { $pinned++; $pin[$k] } else { [double]$s.per_unit }
     if ($bpu -le 0 -or $lpu -le 0) { continue }
+    # Counted HERE, past every silent `continue`, so it is the number of cells actually compared - not the
+    # number looked at. That distinction is the whole point of the rule.
+    $fcChecked++; $fcByStore[[string]$s.store] = 1 + [int]$fcByStore[[string]$s.store]
     $ratio = $lpu / $bpu
     if ($ratio -ge 1.5 -or $ratio -le 0.67) {
       $factorBugs++
@@ -334,7 +354,20 @@ foreach ($row in $cmp.comparison) {
     } elseif ([math]::Abs($ratio - 1) -gt 0.02) { $drift++ }
   }
 }
-if ($factorBugs -eq 0) { Say ('  ok    no board cell differs from its linked product by a factor' + $(if ($pinned) { " ($pinned pinned cell(s) graded at the pin - the number the page prints - and cross-checked by invariant 3)" } else { '' })) }
+# The helper sits INSIDE the $factorBugs -eq 0 conditional, exactly as guard 11 does: dropping that wrapper
+# would print the ok line on runs that hard-fail.
+if ($factorBugs -eq 0) {
+  OkUnlessBlind $fcChecked `
+    ('no board cell differs from its linked product by a factor (' + $fcChecked + ' cells compared)' + $(if ($pinned) { " ($pinned pinned cell(s) graded at the pin - the number the page prints - and cross-checked by invariant 3)" } else { '' })) `
+    'guard 4 compared ZERO board cells against their links and therefore proves NOTHING - check that product-urls.json still parses to .items and that its store keys still match the board''s store names'
+}
+# PER-STORE blindness, the guard-10 pattern: the whole guard can be healthy while one store's slice is gone.
+# Losing a store's product-urls entries entirely would leave $fcChecked large and that store unchecked.
+# Guarded on $fcChecked -gt 0 so a fully-blind run raises the message above rather than both.
+$fcBlind = @($fcBoardStores.Keys | Where-Object { [int]$fcByStore[$_] -eq 0 } | Sort-Object)
+if ($fcChecked -gt 0 -and $fcBlind.Count) {
+  [void]$warn.Add("guard 4 compared ZERO cells for these stores, so their board prices are unchecked against their own links: " + ($fcBlind -join ', ') + " - their product-urls slice is missing, or its store key drifted from the board's store name")
+}
 if ($drift -gt 0) { [void]$warn.Add("$drift cell(s) drift from their link by <50% (ordinary price movement; the daily consistency repair handles it)") }
 # SAY WHAT WAS NOT CHECKED. The previous version skipped unparseable cells in silence, so its clean result
 # covered 91% of the board while reading as though it covered all of it. Coverage a gate does not report is
