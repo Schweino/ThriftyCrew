@@ -1476,7 +1476,7 @@
                     {
                         "name":  "Slow Cooker Salsa Chicken Burrito Bowl",
                         "slug":  "slow-cooker-salsa-chicken-bowl",
-                        "visibility":"public",
+                        "visibility":"paid",
                         "cuisine":  "Mexican",
                         "method":  "slow cooker",
                         "servings":  14,
@@ -30469,7 +30469,7 @@
                     {
                         "name":  "Chicken with 40 Cloves of Garlic",
                         "slug":  "chicken-40-cloves-garlic",
-                        "visibility":  "paid",
+                        "visibility":"public",
                         "cuisine":  "French",
                         "servings":  14,
                         "ingredients":  [

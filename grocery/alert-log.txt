@@ -93,3 +93,11 @@
 [2026-07-30T09:02:22] SENT 'Grocery: store-registry drift - 1 issue(s)' -> schweino68@gmail.com (id 19fb355563eaa972)
 [2026-07-30T09:04:45] SENT 'Grocery: 13 NEW price flag(s) - 2026-07-30' -> schweino68@gmail.com (id 19fb357872415563)
 [2026-07-30T09:17:29] SENT 'Grocery: board-link price drift (21 chips) - 2026-07-30' -> schweino68@gmail.com (id 19fb3632c09c6e06)
+[2026-07-31T01:05:53] SENT 'Grocery: Family Fare has been throttled 4 of the last 4 days - prices frozen' -> schweino68@gmail.com (id 19fb6c771162f1aa)
+[2026-07-31T06:10:27] SENT 'Grocery: 26 store(s) dropped from a commodity they carry - 2026-07-31' -> schweino68@gmail.com (id 19fb7de47ff2109b)
+[2026-07-31T06:11:31] SENT 'Grocery matching soundness - review needed' -> schweino68@gmail.com (id 19fb7df4181369e6)
+[2026-07-31T06:11:33] SENT 'Grocery: store-registry drift - 3 issue(s)' -> schweino68@gmail.com (id 19fb7df4c7ac0624)
+[2026-07-31T06:11:44] SENT 'Grocery: 1 on-sale item(s) have no everyday fallback - 2026-07-31' -> schweino68@gmail.com (id 19fb7df743a88662)
+[2026-07-31T06:14:37] SENT 'Grocery: 9 NEW price flag(s) - 2026-07-31' -> schweino68@gmail.com (id 19fb7e21bd2e4f77)
+[2026-07-31T06:17:57] SENT 'Grocery: board-link price drift (20 chips) - 2026-07-31' -> schweino68@gmail.com (id 19fb7e5276fa2e14)
+[2026-07-31T06:20:34] SEND FAILED 'Grocery: a GUARD has gone blind (test-auditors failed)': The remote server returned an error: (400) Bad Request.

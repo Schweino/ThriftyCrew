@@ -12,7 +12,7 @@
   Advisory (does NOT hard-gate publish - a transient throttle should not take the board down; the pull's recovery
   passes are the primary defense). -Alert emails once per NEW victim-set.
 #>
-param([switch]$Alert, [string]$OutDir = "")
+param([switch]$Alert, [switch]$SelfTest, [string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
@@ -36,11 +36,20 @@ function Emit-Coverage([int]$elig, [int]$exam, [string]$why) {
   } catch { }
 }
 $probed = 0
-$ff = Get-ChildItem (Join-Path $OutDir 'regular\family-fare-regular-*.json') -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
-if (-not $ff) { $null = Emit-Coverage 0 0 'no family-fare-regular file to read empty_terms from - the FF pull-drop watch had nothing to work with'; Write-Output 'ff-carry: SKIP (no FF regular file)'; exit 0 }
-$doc = ConvertFrom-Json ([IO.File]::ReadAllText($ff.FullName))
-$emptyTerms = @($doc.empty_terms)
-if ($emptyTerms.Count -eq 0) { $null = Emit-Coverage 0 0 ('the FF pull left no empty terms in ' + $ff.Name + ' - nothing needed re-probing'); Write-Output 'ff-carry: OK  the FF pull left no empty terms'; exit 0 }
+$ff = $null; $doc = $null; $emptyTerms = @()
+# THE SELF-TEST MUST NOT DEPEND ON PULL STATE. Both early exits below sit ABOVE the fixture block, so a
+# -SelfTest run on any day with no FF file - or with no empty terms, which is the HEALTHY state - printed
+# SKIP/OK and exited 0 without executing a single fixture. A self-test that reports success without running
+# is worse than none: test-auditors would read it green forever. Skipping the pull-state gates under
+# -SelfTest is what makes the fixtures reachable in every data state. ($ffDeals on line ~71 is already
+# $doc-null-safe, and the fixture block exits before the probe loop ever reads $emptyTerms.)
+if (-not $SelfTest) {
+  $ff = Get-ChildItem (Join-Path $OutDir 'regular\family-fare-regular-*.json') -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
+  if (-not $ff) { $null = Emit-Coverage 0 0 'no family-fare-regular file to read empty_terms from - the FF pull-drop watch had nothing to work with'; Write-Output 'ff-carry: SKIP (no FF regular file)'; exit 0 }
+  $doc = ConvertFrom-Json ([IO.File]::ReadAllText($ff.FullName))
+  $emptyTerms = @($doc.empty_terms)
+  if ($emptyTerms.Count -eq 0) { $null = Emit-Coverage 0 0 ('the FF pull left no empty terms in ' + $ff.Name + ' - nothing needed re-probing'); Write-Output 'ff-carry: OK  the FF pull left no empty terms'; exit 0 }
+}
 
 $tmp = ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $root 'commodities.json'))); $commods = @($tmp)
 $terms = (ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $root 'commodity-search.json')))).terms

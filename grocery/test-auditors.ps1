@@ -1459,6 +1459,36 @@ if ($stSrc -match 'blue_buffalo_natural_puppy') { Ok 'the Blue Buffalo dog-food-
 else { Bad 'store-taxonomy lost its Blue Buffalo fixture - the wrong-product class it was written for is no longer proven catchable' }
 if ($stSrc -match 'kraft_grated_cheese_parmesan_cheese_8_oz') { Ok 'the taxonomy-less-URL trap (3 live rows) is still pinned - a slug must never be read as a department' }
 else { Bad 'store-taxonomy lost the taxonomy-less-URL fixture - it can invent a department for a row that carries none' }
+
+# ---------------------------------------------------------------- (u2) ff-carry: the fixtures nobody could reach
+# 2026-07-31. audit-ff-carry got a full frozen fixture block (own-feed-coverage MUST-FIRE/CLEAN-TWIN, plus the
+# multi-buy cheapest-pick pair) guarded by `if ($SelfTest)` - and the matching `[switch]$SelfTest` never landed
+# on its param(). $SelfTest was permanently $null, so the block was unreachable dead code. Worse, under -File
+# an undeclared -SelfTest does NOT error (it lands in $args), so `audit-ff-carry.ps1 -SelfTest` quietly ran the
+# LIVE network audit and looked like it worked. Second half of the same bug: the pull-state early exits sat
+# ABOVE the block, so even once reachable, a -SelfTest run on a day with no FF file - or no empty terms, the
+# HEALTHY state - printed SKIP/OK and exited 0 having executed zero fixtures.
+# Both halves are checked structurally BEFORE invoking, because the invocation alone cannot tell the
+# difference between "fixtures passed" and "fixtures were skipped" if the script regresses to exiting early.
+$ffcS = Get-Content (Join-Path $root 'audit-ff-carry.ps1') -Raw
+if ($ffcS -match '\[switch\]\$SelfTest') { Ok 'audit-ff-carry declares [switch]$SelfTest (its fixture block is reachable at all)' }
+else { Bad 'audit-ff-carry has an if ($SelfTest) block with no [switch]$SelfTest on param() - the fixtures are dead code again, and -SelfTest silently runs the LIVE audit instead of erroring' }
+$ffcSelfIdx = $ffcS.IndexOf('if ($SelfTest) {')
+$ffcGateIdx = $ffcS.IndexOf('ff-carry: SKIP (no FF regular file)')
+if ($ffcSelfIdx -ge 0 -and $ffcGateIdx -ge 0 -and $ffcGateIdx -lt $ffcSelfIdx -and $ffcS -notmatch 'if \(-not \$SelfTest\) \{') {
+  Bad 'audit-ff-carry pull-state exits are back above its fixture block and no longer skipped under -SelfTest - a self-test run on a healthy day exits 0 without running one fixture'
+} else { Ok 'audit-ff-carry skips its pull-state exits under -SelfTest (fixtures run in every data state)' }
+# Hermetic: -OutDir points at an empty scratch dir, so a PASS here proves the fixtures ran WITHOUT an FF file
+# present. That is precisely the state that used to fake a pass, so it doubles as the regression test.
+$ffcOut = Join-Path $env:TEMP ('ffc-selftest-' + [guid]::NewGuid().ToString('N').Substring(0,8))
+$null = New-Item -ItemType Directory -Path $ffcOut -Force
+$r = RunPS 'audit-ff-carry.ps1' @('-SelfTest', '-OutDir', $ffcOut)
+if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'ff-carry -SelfTest passes with NO FF file present (fixtures are data-state independent)' }
+else { Bad ('ff-carry -SelfTest failed or skipped with no FF file: rc=' + $r.rc + ' ' + ((($r.text -split "`n") | Select-Object -Last 3) -join ' | ')) }
+if ($ffcS -match 'Our Family Chili Beans') { Ok 'the chili-beans own-feed-coverage fixture is still armed (the 15-of-24 false-positive class)' }
+else { Bad 'ff-carry lost its chili-beans fixture - the "already priced in this very pull" false-positive class is no longer proven catchable' }
+if ($ffcS -match '4 for \$5\.00') { Ok 'the multi-buy cheapest-pick fixture is still armed ("4 for $5.00" must not read as 45)' }
+else { Bad 'ff-carry lost the multi-buy fixture - the digit-stripping bug that made $5.00 look like $45 is unguarded' }
 if ($stSrc -match 'protein-bars') { Ok 'the protein-bars clean twin is still present (the one measured legitimate non-food crossing)' }
 else { Bad 'store-taxonomy lost the protein-bars clean twin - the allowlist valve is untested and the audit drops to 50% precision' }
 # BLIND twin: an empty out\ must say could-not-evaluate, never report a clean zero.
