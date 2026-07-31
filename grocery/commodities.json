@@ -6373,6 +6373,7 @@
                         "spinach"
                     ],
         "exclude":  [
+                        "\\bpictsweet\\b",
                         "frittata",
                         "birds\\s*eye",
                         "\\bbites\\b",
@@ -6529,6 +6530,8 @@
                         "cremini"
                     ],
         "exclude":  [
+                        "pieces\\s+stems",
+                        "stems\\s+pieces",
                         "\\bcanned\\b",
                         "\\bsoup\\b",
                         "stuffed",
@@ -6684,6 +6687,7 @@
                         "\\byams?\\b"
                     ],
         "exclude":  [
+                        "\\bpictsweet\\b",
                         "fries",
                         "\\bcanned\\b",
                         "casserole",
@@ -7120,6 +7124,7 @@
                         "\\brice\\b"
                     ],
         "exclude":  [
+                        "chicken\\s+rice",
                         "\\bready\\s+rice\\b",
                         "\\bready\\s+to\\s+heat\\b",
                         "\\bpouch\\b",
@@ -13577,6 +13582,7 @@
                         "jalape[n\\u00f1]os?"
                     ],
         "exclude":  [
+                        "\\bsan\\s*marcos\\b",
                         "\\bseasonings?\\b",
                         "\\brubs?\\b",
                         "\\bchophouse\\b",

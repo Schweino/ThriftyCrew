@@ -370,5 +370,13 @@
         "lp":  "$6.87",
         "up":  "",
         "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Almond Breeze Almondmilk, Unsweetened Original 32 oz (Pack of 12)",
+        "lp":  "$54.47",
+        "up":  "$1.65/ea",
+        "was_size":  "33 ct",
+        "reason":  "name/unit-price divergence: Walmart\u0027s unit price $1.65/ea derives 33 but the name states 12 x 32 oz (= 384, neither reading) - the store contradicts itself, verify by hand (fish-sauce class 2026-07-27)",
+        "removed_from":  "walmart-regular-2026-07-31.json"
     }
 ]

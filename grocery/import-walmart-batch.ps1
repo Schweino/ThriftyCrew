@@ -28,7 +28,8 @@
   metro). Usage: .\import-walmart-batch.ps1 [-TrustNoSeller] ; then compare-deals -> diff-board -> vet.
   -OutRoot writes out\regular + the itemid map under a different root (sandbox testing; default = live).
 #>
-param([string]$Raw = 'out\staples500\walmart-batch1-raw.txt', [switch]$SelfTest, [switch]$TrustNoSeller, [string]$OutRoot = '')
+param([string]$Raw = 'out\staples500\walmart-batch1-raw.txt', [switch]$SelfTest, [switch]$TrustNoSeller, [string]$OutRoot = '',
+      [switch]$Reheal, [string]$Shape = '(?i)\bpacks?\s+of\s+\d+')
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 $today = (Get-Date).ToString('yyyy-MM-dd')
@@ -218,6 +219,14 @@ if ($SelfTest) {
     # sees a digit BEFORE a pack word, so it overrode Walmart's correct 48.105 oz to 4 oz - $0.19/oz published
     # as $2.285/oz, 12x over. Fixed, the name is silent and Walmart's own arithmetic stands.
     @{ n='Del Monte Diced Peaches Fruit Cup Snacks in 100% Fruit Juice, 4 oz Cup (Pack of 12)'; lp='$9.14'; up=('19.0 ' + $CENT + '/oz'); e='48.105 oz'; ad='$9.14' }
+    # MUST-FIRE (2026-07-31), FROZEN from walmart-regular-2026-07-31.json: Walmart's "/ea" denominator on this
+    # 12 x 3.5 oz pack is provably OUNCES (16.24/0.387 = 42 = 12 x 3.5). Stamped "42 ct" it CROWNED
+    # achiote-paste at $4.64/oz - 12x the real $0.3867/oz - because a ct size on an oz commodity sends the
+    # engine back to the name's single 3.5 oz jar while keeping the whole pack's price. Run through the
+    # importer (not just Build-Row) this ALSO proves the guard-5 multipack lockstep accepts the restamped row.
+    @{ n='Chef Merito Achiote Condimentado Spiced Annatto Seed Paste, 3.5 oz, (Pack of 12)'; lp='$16.24'; up=('38.7 ' + $CENT + '/ea'); e='42 oz'; ad='$16.24' }
+    # CLEAN TWIN, same shape, count is REAL: derived 50 equals the stated Pack of 50, so ct must survive.
+    @{ n='Great Value Uncoated White Paper Plates, 6 Inch, Pack of 50'; lp='$2.12'; up='$4.24/100 ct'; e='50 ct'; ad='$2.12' }
   )
   foreach ($c in $cases) {
     $r = Convert-BatchRow (_R $c.n $c.lp $c.up) $log
@@ -235,6 +244,10 @@ if ($SelfTest) {
     # MUST-FIRE (2026-07-30): the fish-sauce shape. The store contradicts itself (unit price implies 10 fl oz,
     # the bottle says 6.8) - neither number is publishable, so the row is quarantined for a human.
     @{ n='Kikkoman Gluten-Free Fish Sauce, 6.8 fl oz Glass Bottle';    lp='$2.84';  up=('28.4 ' + $CENT + '/fl oz'); want='name/unit-price divergence' }
+    # MUST-FIRE (2026-07-31), FROZEN from walmart-regular-2026-07-31.json: 54.47/1.65 derives 33, which is
+    # neither the stated 12-pack nor its 384 oz total. The store contradicts itself on both readings, so no
+    # number here is publishable - quarantine beats guessing (build-aldi-regular's rule).
+    @{ n='Almond Breeze Almondmilk, Unsweetened Original 32 oz (Pack of 12)'; lp='$54.47'; up='$1.65/ea'; want='name/unit-price divergence' }
   )
   foreach ($c in $rejCases) {
     $r = Convert-BatchRow (_R $c.n $c.lp $c.up) $log
@@ -273,6 +286,70 @@ if ($SelfTest) {
   if ($mr2.merged.Count -eq 3 -and $mr2.added -eq 0 -and $mr2.replaced -eq 0) { Write-Output 'ok    merge: uncorrected duplicate identities are preserved (no silent data drops on a bare re-run)' }
   else { Write-Output "FAIL  merge altered rows with no corrections (total=$($mr2.merged.Count))"; $fail++ }
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
+}
+
+# ---- -Reheal: re-emit ALREADY-WRITTEN rows through the fixed row builder, from the row's own recorded numbers ----
+# A row carries everything Build-Row was given: item (name), ad_price (the linePrice, for the 'package' shape)
+# and wm_unit_price (the raw unit-price string). So a builder fix can be applied to rows that are already in the
+# file WITHOUT re-running a capture - which matters, because re-running build-walmart-deals over a PARTIAL raw
+# capture would overwrite a comprehensive everyday file with a slice (the partial-overwrite rule) and that is a
+# far bigger accident than the bug being fixed.
+# SCOPED ON PURPOSE. It touches only rows matching -Shape, so the change set is the measured blast radius and
+# nothing else; a whole-file re-heal would re-decide 4,864 rows nobody reviewed. It is also FAIL-CLOSED on the
+# per-unit shape: there ad_price is the UNIT price, the linePrice is not recoverable from the row, and guessing
+# it would invent a number. Rows the fixed builder now REJECTS are removed and written to the rejects file -
+# a rejected row is one the store contradicts itself about, and a wrong cell is worse than no cell.
+if ($Reheal) {
+  $regDirR = Join-Path $outRootDir 'out\regular'
+  $prevR = Get-ChildItem (Join-Path $regDirR 'walmart-regular-*.json') -EA SilentlyContinue |
+             Where-Object { $_.BaseName -match '^walmart-regular-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
+  if (-not $prevR) { Write-Output 'reheal: no walmart-regular file to heal'; exit 0 }
+  $docR = Get-Content $prevR.FullName -Raw -Encoding UTF8 | ConvertFrom-Json
+  $log2 = New-Object System.Collections.ArrayList
+  $kept = New-Object System.Collections.ArrayList
+  $healed = 0; $tossed = 0; $same = 0; $skipped = 0
+  $rejR = New-Object System.Collections.ArrayList
+  foreach ($r in @($docR.deals)) {
+    if ($null -eq $r -or ([string]$r.item) -notmatch $Shape -or -not $r.wm_unit_price) { [void]$kept.Add($r); continue }
+    if (([string]$r.qty_basis) -notmatch '^package') {
+      Write-Output ("  skip (per-unit shape, linePrice not recoverable from the row): " + $r.item); $skipped++; [void]$kept.Add($r); continue
+    }
+    $res = Convert-BatchRow ([pscustomobject]@{ q=''; n=[string]$r.item; lp=[string]$r.ad_price; up=[string]$r.wm_unit_price; id=[string]$r.item_id }) $log2
+    if ($res.err) {
+      Write-Output ("  REJECT " + $r.item + "`n         was size='" + $r.size + "' -> " + $res.err)
+      [void]$rejR.Add([pscustomobject]@{ name=[string]$r.item; lp=[string]$r.ad_price; up=[string]$r.wm_unit_price; was_size=[string]$r.size; reason=$res.err; removed_from=$prevR.Name })
+      $tossed++; continue
+    }
+    $new = $res.row
+    # carry forward every field the builder does not emit (as_of, seller_check, product_url, ...) so a re-heal
+    # never silently drops provenance or a verified link
+    foreach ($p in $r.PSObject.Properties) { if (-not $new.PSObject.Properties[$p.Name]) { $new | Add-Member -NotePropertyName $p.Name -NotePropertyValue $p.Value -Force } }
+    $new.source_ad = $r.source_ad          # keep the original capture's provenance string
+    if ([string]$new.size -eq [string]$r.size) { $same++ } else {
+      Write-Output ("  healed " + $r.item + "`n         size '" + $r.size + "' -> '" + $new.size + "'  (" + $r.engine_check + ' -> ' + $new.engine_check + ')')
+      $healed++
+    }
+    [void]$kept.Add($new)
+  }
+  if ($healed -or $tossed) {
+    $docR.deals = $kept.ToArray()
+    if ($docR.PSObject.Properties['deal_count']) { $docR.deal_count = $kept.Count }
+    $stampR = [pscustomobject]@{ date=$today; raw=('reheal:' + $Shape); added=0; replaced=$healed; quarantined=0; rejected=$tossed; by='import-walmart-batch.ps1 -Reheal' }
+    if ($docR.PSObject.Properties['batch_imports']) { $docR.batch_imports = @(@($docR.batch_imports) + $stampR) } else { $docR | Add-Member batch_imports @($stampR) -Force }
+    ($docR | ConvertTo-Json -Depth 6) | Set-Content $prevR.FullName -Encoding UTF8
+    if ($rejR.Count) {
+      $rf = Join-Path $outRootDir ("out\walmart-batch-rejects-$today.json")
+      # ASSIGN FIRST, THEN WRAP. `@(Get-Content | ConvertFrom-Json)` does NOT unroll a bare top-level JSON
+      # array in PS 5.1 - it yields ONE element that is the array - so appending to it nests the old rejects
+      # inside the new file instead of extending it. test-auditors greps for this exact shape; it caught this
+      # line the first time it ran. (Same trap, same fix, as add-known-wrong.ps1.)
+      $existing = @()
+      if (Test-Path $rf) { $prevRej = Get-Content $rf -Raw -Encoding UTF8 | ConvertFrom-Json; $existing = @($prevRej) }
+      ((@($existing) + @($rejR)) | ConvertTo-Json -Depth 4) | Set-Content $rf -Encoding UTF8
+    }
+  }
+  Write-Output ("reheal[$Shape] on $($prevR.Name): $healed healed, $tossed rejected+removed, $same unchanged, $skipped skipped, $($kept.Count) rows remain")
+  exit 0
 }
 
 # Raw row format (~~-delimited): name~~linePrice~~unitPrice~~usItemId[~~sellerName~~fulfillmentType]

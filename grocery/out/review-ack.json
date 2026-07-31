@@ -1,4 +1,4 @@
-﻿{
+{
     "note":  "ACKNOWLEDGED price-review flags. A flag listed here with a FUTURE `expires` date is not paged. Anything else pages: an ack with no `expires`, an unparseable one, or a past one is treated as EXPIRED, because silencing a price flag forever on the strength of a typo is exactly the failure the review-flag system exists to prevent. Read by check-ad-cycles.ps1; mirrors how coverage-ack.json works for coverage regressions. WHY THIS FILE EXISTS: before 2026-07-30 a flag that stayed open simply went quiet after its first page - last_seen was refreshed on every run, so the 7-day novelty test could never elapse. Being ignored long enough was indistinguishable from being reviewed. Now an open flag RE-ARMS after 14 days and an ack is the only way to make one quiet, with a date on which someone has to look again.",
     "how_to_ack":  "Add { \"key\": \"\u003cthe flag key from out\\\\alerted-flags.json\u003e\", \"reason\": \"why this is not a bug - be specific, a future reader needs to re-verify it\", \"expires\": \"yyyy-MM-dd\" }. Keep expiries short (weeks, not months): the expiry is the whole point, it forces the question again. Do NOT ack a flag you have not actually checked against the store.",
     "acks":  [
@@ -306,6 +306,106 @@
                      "key":  "MULTIBUY|Family Fare|soda",
                      "reason":  "Family Fare \u0027Buy 2 get 1 free\u0027 on 12-packs DOES carry a regular (\\.99 / \\.29) but its size is \u002712 ea\u0027 / \u002712pk can\u0027 with no volume, so there is no unit basis. We will not assume 12 x 12 fl oz - mini-can 12-packs exist (see the Starry 7.5 oz row this same run). Dropped, not published; a real size from the store fixes it.",
                      "expires":  "2026-08-13"
+                 },
+                 {
+                     "key":  "SANITY|Coleslaw Mix|outlier",
+                     "reason":  "REAL BULK ECONOMICS. Sam\u0027s Club coleslaw 2 lb bag \\.34 = \\.0731/oz against Baker\u0027s \\.16/oz. A club-size 32 oz bag against grocery-size 14 oz bags is the whole point of the store; the arithmetic reproduces exactly. Verified against the winning row in comparison-2026-07-30.",
+                     "expires":  "2026-08-14"
+                 },
+                 {
+                     "key":  "SANITY|Dog Treats|outlier",
+                     "reason":  "REAL BULK ECONOMICS. Sam\u0027s Club Milk-Bone 15 lb box \\.98 = \\.0582/oz against Baker\u0027s \\.18/oz. A 240 oz box versus retail 24-36 oz boxes. Arithmetic exact; verified against the winning row in comparison-2026-07-30.",
+                     "expires":  "2026-08-14"
+                 },
+                 {
+                     "key":  "SANITY|Dried Cranberries|outlier",
+                     "reason":  "REAL BULK ECONOMICS. Sam\u0027s Club Craisins 48 oz \\.62 = \\.1588/oz against Baker\u0027s \\.26/oz. Standard club-pack spread on a shelf-stable dried fruit. Verified against the winning row in comparison-2026-07-30.",
+                     "expires":  "2026-08-14"
+                 },
+                 {
+                     "key":  "SANITY|Floor Cleaner|outlier",
+                     "reason":  "REAL BULK ECONOMICS. Sam\u0027s Club Member\u0027s Mark floor cleaner 1 gallon \\.98 = \\.0545/fl oz against Walmart \\.14. A gallon jug against 32-64 oz retail bottles. Verified against the winning row in comparison-2026-07-30.",
+                     "expires":  "2026-08-14"
+                 },
+                 {
+                     "key":  "SANITY|Glass Cleaner|outlier",
+                     "reason":  "REAL STORE-BRAND SPREAD. Walmart Great Value glass cleaner 32 fl oz \\.74 = \\.0544/fl oz against Fareway \\.09. Store brand against national brand on a commodity cleaner; no parse involved, the size is on the bottle. Verified against the winning row in comparison-2026-07-30.",
+                     "expires":  "2026-08-14"
+                 },
+                 {
+                     "key":  "SANITY|Gochujang (Korean Chili Paste)|outlier",
+                     "reason":  "REAL STORE-BRAND SPREAD. Walmart bettergoods gochujang 12.5 oz \\.26 = \\.2608/oz against Hy-Vee \\.42. Walmart\u0027s own new premium line undercutting imported jars is expected. Verified against the winning row in comparison-2026-07-30.",
+                     "expires":  "2026-08-14"
+                 },
+                 {
+                     "key":  "SANITY|Ground Cinnamon|wow",
+                     "reason":  "REAL REPRICE, NOT A PARSE. The cheapest moved 0.27 -\u003e 0.42/oz because Sam\u0027s Club repriced its bulk cinnamon to \\.4433/oz, which handed the crown to Aldi Stonemill 2.37 oz \\.99 = \\.4177/oz. Both numbers read off their raw rows; the move is the market, not the math.",
+                     "expires":  "2026-08-14"
+                 },
+                 {
+                     "key":  "SANITY|Microwave Popcorn|outlier",
+                     "reason":  "REAL BULK ECONOMICS, and proven by the store\u0027s own per-each price. Sam\u0027s Club Orville Redenbacher\u0027s Movie Butter 1.5 oz., 36 pk. \\.48, sams_unit_price \\.26/ea, and 0.26 x 36 = 9.36 reproduces the line price - so \\.48 IS the 36-pack total and \\.26/each is correct 36-pack economics against Walmart\u0027s \\.41. Same row and same proof as the PACKBASIS flag on this product.",
+                     "expires":  "2026-08-14"
+                 },
+                 {
+                     "key":  "SANITY|Peanuts|outlier",
+                     "reason":  "REAL BULK ECONOMICS. Sam\u0027s Club in-shell peanuts 5 lb \\.98 = \\.0748/oz against Aldi \\.14. An 80 oz bag against retail 16 oz bags. Verified against the winning row in comparison-2026-07-30.",
+                     "expires":  "2026-08-14"
+                 },
+                 {
+                     "key":  "SANITY|Pickles (dill)|outlier",
+                     "reason":  "REAL BULK ECONOMICS, corroborated across stores. Sam\u0027s Club Mt. Olive dill pickles 1 gallon \\.34 = \\.0495/oz against Baker\u0027s \\.09. Walmart\u0027s own 128 fl oz Mt. Olive at \\.0623/oz corroborates the gallon basis, so this is jug-versus-jar, not a size parse.",
+                     "expires":  "2026-08-14"
+                 },
+                 {
+                     "key":  "PACKBASIS|hummus|Sam\u0027s Club",
+                     "reason":  "CORRECT PACK BASIS, proven by Sam\u0027s own arithmetic. \u0027Member\u0027s Mark Classic Hummus Singles 2.5 oz., 16 ct.\u0027 \\.58 carries sams_unit_price \\.35/ea, and 16 x 0.35 = 5.60 reproduces the line price - so \\.58 IS the 16-pack total, 40 oz of hummus, and \\.1395/oz is real bulk economics rather than a pack count multiplied into the size. The audit was right to hold it for review; the review says the number is sound.",
+                     "expires":  "2026-08-14"
+                 },
+                 {
+                     "key":  "PACKBASIS|microwave-popcorn|Sam\u0027s Club",
+                     "reason":  "CORRECT PACK BASIS, proven by Sam\u0027s own arithmetic. \u0027Orville Redenbacher\u0027s Movie Butter, 1.5 oz., 36 pk.\u0027 \\.48 carries a \\.26/ea unit price, and 0.26 x 36 = 9.36 reproduces the line price - so \\.48 IS the 36-pack total and the per-bag basis is right. Held for review correctly; reviewed and sound.",
+                     "expires":  "2026-08-14"
+                 },
+                 {
+                     "key":  "SANITY|Baby Wipes|wow",
+                     "reason":  "REAL, and the arithmetic is exact. Sam\u0027s Club Pampers 924 ct \\.48 = \\.02/wipe. The 44% \u0027move\u0027 is rounding noise on a two-cent unit (0.01 -\u003e 0.02 displayed), not a price event. Verified against the winning row in comparison-2026-07-30.",
+                     "expires":  "2026-08-14"
+                 },
+                 {
+                     "key":  "SANITY|Dill Weed (dried)|wow",
+                     "reason":  "REAL, caused by a capture change rather than a price change. Last week\u0027s cheaper Walmart jar left the capture, so the crown fell to Great Value dill weed 0.75 oz \\.18 = \\.9067/oz. That arithmetic is exact. The board is right; the previous week\u0027s cheaper row is simply no longer available to it.",
+                     "expires":  "2026-08-14"
+                 },
+                 {
+                     "key":  "SANITY|Drain Cleaner|wow",
+                     "reason":  "REAL STORE-BRAND PRICE. Walmart Great Value drain cleaner 80 fl oz \\.77 = \\.0721/fl oz. Size is on the bottle, arithmetic exact. Verified against the winning row in comparison-2026-07-30.",
+                     "expires":  "2026-08-14"
+                 },
+                 {
+                     "key":  "SANITY|Honeydew Melon|wow",
+                     "reason":  "REAL, a lapsed sale. Baker\u0027s whole honeydew is \\.99 each at regular price; last week\u0027s \\.49 was a sale that expired. The board correctly shows the regular price now. Verified against the winning row in comparison-2026-07-30.",
+                     "expires":  "2026-08-14"
+                 },
+                 {
+                     "key":  "SANITY|Onion Soup Mix (dry packets)|outlier",
+                     "reason":  "REAL STORE-BRAND SPREAD, same package shape both sides. Family Fare \u0027Beefy Onion Soup Mix Our Family (2 Ct)\u0027 2.2 oz \\.29 = \\.5864/oz against Hy-Vee\u0027s IDENTICAL 2.2 oz shape at \\.99. Identical sizes, different brands - a pure store-brand spread with no basis difference to misread.",
+                     "expires":  "2026-08-14"
+                 },
+                 {
+                     "key":  "SANITY|Steak Sauce (A.1. style)|wow",
+                     "reason":  "REAL, corroborated twice. Aldi Burman\u0027s steak sauce 10 oz \\.99 = \\.199/oz, corroborated by That\u0027s Smart at \\.78 and by A.1. 2-pack \\.68/30 oz. The -50% move is Aldi\u0027s store brand entering the cell, not a parse.",
+                     "expires":  "2026-08-14"
+                 },
+                 {
+                     "key":  "SANITY|Toothbrushes|wow",
+                     "reason":  "REAL, caused by a capture change. Walmart Reach 2 ct \\.00 = \\.50/each; last week\u0027s \\.17/each 6-pack left the capture. Arithmetic exact on the row that remains.",
+                     "expires":  "2026-08-14"
+                 },
+                 {
+                     "key":  "SANITY|Vegetable / Vegetable Beef Soup (canned)|wow",
+                     "reason":  "REAL, and corroborated by two other stores. Walmart Progresso 19 oz \\.48 = \\.1305/oz, with Fareway and Hy-Vee both at \\.1319/oz. Three stores within 1% of each other is not a parse error.",
+                     "expires":  "2026-08-14"
                  }
              ]
 }

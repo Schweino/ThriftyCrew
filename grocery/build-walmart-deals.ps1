@@ -285,6 +285,51 @@ function Build-Row($raw) {
   }
   if ($qty -le 0) { return @{ err='bad qty' } }
 
+  # A "/ea" DENOMINATOR THAT IS NOT AN EACH (2026-07-31). Walmart's own unit-price LABEL lies on weight-priced
+  # multipacks. "Chef Merito Achiote ... Paste, 3.5 oz, (Pack of 12)" at $16.24 quotes "38.7 c/ea", and
+  # 16.24/0.387 = 42 - which is 12 x 3.5 OUNCES, not 42 jars. Stamped "42 ct" the row is internally consistent
+  # for a COUNT commodity and catastrophically wrong for a WEIGHT one: the engine, handed a ct size on an oz
+  # commodity, falls back to the NAME's single-jar "3.5 oz" while keeping the whole 12-pack price, and
+  # publishes $4.64/oz for a $0.3867/oz paste - 12x over. It held the CROWN on that cell (sole store).
+  # This is the fish-sauce rule one level down: the store's own unit price is evidence, not gospel, and the
+  # product NAME wins. We do not prefer one reading, we PROVE the denominator by the name's arithmetic:
+  #   derived ~= N              -> the count is real, keep ct       (GV Paper Plates, Pack of 50 -> 50 ct)
+  #   derived ~= N x unit-size  -> denominator is the NAME's UNIT   (achiote: 42 = 12 x 3.5 -> 42 oz)
+  #   neither                   -> the store contradicts itself     (Almond Breeze: 33 vs 12 vs 384 -> REJECT)
+  # The restamped quantity is the NAME's product (12 x 3.5), not the rounded quotient: lp/up is only as good
+  # as Walmart's cent rounding, and the name's arithmetic reproduces the displayed unit price exactly.
+  # Measured 2026-07-31 over all 4,864 rows of the live capture: exactly 4 rows carry this shape, and they are
+  # one of each branch plus the beef broth (385 -> 384 oz, a loser either way).
+  if ($u.tok -eq 'ct' -and $qty -gt 1) {
+    $mpN = [regex]::Match(([string]$raw.n), '(?i)\bpacks?\s+of\s+(\d+)\b')
+    $mpS = [regex]::Matches(([string]$raw.n), '(?i)(\d+(?:\.\d+)?|\.\d+)\s*(fl\s*\.?\s*oz|floz|oz|lbs?)\b')
+    if ($mpN.Success -and $mpS.Count -gt 0) {
+      $mpCount = [double]$mpN.Groups[1].Value
+      $mpLast  = $mpS[$mpS.Count - 1]                       # the size conventionally trails the name
+      $mpEach  = [double]$mpLast.Groups[1].Value
+      $mpUnit  = Resolve-Unit ($mpLast.Groups[2].Value -replace '\s+','')
+      $mpTotal = $mpCount * $mpEach
+      if ($mpCount -gt 1 -and $mpEach -gt 0 -and $mpUnit) {
+        if ([math]::Abs($qty - $mpCount) -le 1.0) {
+          # the derived quantity IS the stated pack count - a true count row, nothing to restamp
+        }
+        elseif ([math]::Abs($qty - $mpTotal) / $mpTotal -le 0.02) {
+          $u     = $mpUnit
+          $qty   = $mpTotal
+          $basis = ($basis + '; denominator proven by name arithmetic (' + (Format-Qty $mpCount) + ' x ' +
+                    (Format-Qty $mpEach) + ' ' + $mpUnit.tok + ' = ' + (Format-Qty $mpTotal) +
+                    ') - Walmart labelled this per-' + $u.unit + ' price "/ea"')
+        }
+        else {
+          return @{ err = ("name/unit-price divergence: Walmart's unit price " + $upm.Groups[0].Value.Trim() +
+                    ' derives ' + (Format-Qty $qty) + ' but the name states ' + (Format-Qty $mpCount) + ' x ' +
+                    (Format-Qty $mpEach) + ' ' + $mpUnit.tok + ' (= ' + (Format-Qty $mpTotal) +
+                    ', neither reading) - the store contradicts itself, verify by hand (fish-sauce class 2026-07-27)') }
+        }
+      }
+    }
+  }
+
   # size = the quantity + its unit. qty 1 -> the bare unit token, which the engine reads as "priced per that unit".
   $bare = if ($u.tok -eq 'ct') { 'each' } else { $u.tok }
   $pkgSize = if ([math]::Abs($qty - 1) -lt 0.0005) { $bare } else { (Format-Qty $qty) + ' ' + $u.tok }
@@ -466,6 +511,28 @@ if ($SelfTest) {
   else { Write-Output "FAIL  derived-fallback qty_basis names the wrong store: $($r8.row.qty_basis)"; $fail++ }
   if ($r7f -and $r7f.qty_basis -match 'Walmart' -and $r7f.qty_basis -notmatch 'Sam') { Write-Output 'ok    name-snap qty_basis credits Walmart, not the store this builder was forked from' }
   else { Write-Output "FAIL  name-snap qty_basis names the wrong store: $($r7f.qty_basis)"; $fail++ }
+
+  # 8b. THE "/ea" DENOMINATOR THAT IS NOT AN EACH (2026-07-31). All three rows are FROZEN from the live
+  #     2026-07-31 Walmart capture (name / linePrice / unitPrice copied verbatim), one per branch.
+  #     MUST-FIRE: the achiote row held the CROWN on achiote-paste at $4.64/oz - 12x its real $0.3867/oz -
+  #     because "38.7 c/ea" is per OUNCE and the derived 42 was stamped as a COUNT. Drop the branch and this
+  #     goes back to '42 ct', which is exactly how the bug shipped.
+  $r8d = (Build-Row (_R 'Chef Merito Achiote Condimentado Spiced Annatto Seed Paste, 3.5 oz, (Pack of 12)' '$16.24' ('38.7 ' + [string][char]0x00A2 + '/ea'))).row
+  if ($r8d -and $r8d.size -eq '42 oz' -and $r8d.ad_price -eq '$16.24' -and $r8d.qty_basis -match 'proven by name arithmetic') {
+    $achOz = Get-UnitPrice ([pscustomobject]@{price_text=$r8d.ad_price;name=$r8d.item;size_text=$r8d.size;regular=$null}) ([pscustomobject]@{unit='oz'})
+    if ([math]::Abs($achOz.unit_price - 0.3867) -lt 0.001) { Write-Output ("ok    pack-of-N '/ea' proven to be OUNCES: 12 x 3.5 = 42 oz -> " + [math]::Round($achOz.unit_price,4) + '/oz (shipped as $4.64/oz)') }
+    else { Write-Output "FAIL  achiote restamped but prices $($achOz.unit_price)/oz, want 0.3867"; $fail++ }
+  } else { Write-Output "FAIL  achiote MUST-FIRE: size='$($r8d.size)' basis='$($r8d.qty_basis)' - want '42 oz' proven by name arithmetic"; $fail++ }
+  # CLEAN TWIN: derived 50 equals the stated Pack of 50, so the count is REAL and ct must survive. If the
+  # branch were written as "a pack of N is never a count", this row would break.
+  $r8e = (Build-Row (_R 'Great Value Uncoated White Paper Plates, 6 Inch, Pack of 50' '$2.12' '$4.24/100 ct')).row
+  if ($r8e -and $r8e.size -eq '50 ct' -and $r8e.qty_basis -notmatch 'proven by name arithmetic') { Write-Output "ok    clean twin: derived 50 = Pack of 50, the count is real -> '50 ct' untouched" }
+  else { Write-Output "FAIL  paper plates clean twin: size='$($r8e.size)' basis='$($r8e.qty_basis)' - want '50 ct', no restamp"; $fail++ }
+  # REJECT: 33 is neither the 12-pack count nor the 384 oz pack total. The store contradicts itself and
+  # neither number is publishable - quarantine beats guessing (build-aldi-regular's rule).
+  $r8f = Build-Row (_R 'Almond Breeze Almondmilk, Unsweetened Original 32 oz (Pack of 12)' '$54.47' '$1.65/ea')
+  if ($r8f.err -and $r8f.err -match 'name/unit-price divergence') { Write-Output "ok    rejects an unprovable pack denominator -> $($r8f.err)" }
+  else { Write-Output "FAIL  almond breeze should have been rejected, got size='$($r8f.row.size)'"; $fail++ }
 
   # 9. rows the engine cannot price are REJECTED, not published
   foreach ($bad in @(@{r=(_R 'No Unit Price Item' '$5.00' ''); l='missing unitPrice'},

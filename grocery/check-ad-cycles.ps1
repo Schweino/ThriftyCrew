@@ -1053,8 +1053,18 @@ try {
     $ta = (& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'test-auditors.ps1') 2>&1 | ForEach-Object { [string]$_ }) -join "`n"
     Log 'WATCHERS FAILED: test-auditors could not prove a guard still sees its own bug'
     $summary += 'WATCHERS  a guard can no longer see its own founding bug - see test-auditors output'
+    # PERSIST THE WHOLE THING BEFORE ALERTING (2026-07-31). send-alert truncates its body, and on
+    # 2026-07-31T06:20 that truncation ate the only copy of WHICH case failed: the email carried the first
+    # ~28 PASS lines and stopped, the log line says only "a guard has gone blind", and by the time anyone
+    # read it the mid-edit working tree that produced the failure had been committed over. The failing case
+    # was unrecoverable - a page about a blind guard that cannot say which guard. The file is written first
+    # so it survives even if the send throws, and it is dated so consecutive failures do not overwrite each
+    # other's evidence.
+    $taF = Join-Path $OutDir ('test-auditors-fail-' + (Get-Date -Format 'yyyy-MM-dd') + '.txt')
+    try { Set-Content -Path $taF -Value $ta -Encoding UTF8; Log ('WATCHERS: full test-auditors output saved to ' + $taF) }
+    catch { Log ('WATCHERS: could not save test-auditors output: ' + $_.Exception.Message) }
     if (-not $NoAlert) {
-      & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject 'Grocery: a GUARD has gone blind (test-auditors failed)' -Body ("test-auditors.ps1 replays each watcher's founding bug against a frozen fixture. At least one watcher no longer fires on it, which means any quiet report from that guard is unproven - including a clean board.`n`n" + $ta) | Out-Null
+      & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject 'Grocery: a GUARD has gone blind (test-auditors failed)' -Body ("test-auditors.ps1 replays each watcher's founding bug against a frozen fixture. At least one watcher no longer fires on it, which means any quiet report from that guard is unproven - including a clean board.`n`nFULL OUTPUT (this email is truncated): " + $taF + "`n`n" + $ta) | Out-Null
     }
   } else { Log 'watchers ok: every guard still fires on its own founding bug' }
 } catch { Log ('test-auditors threw: ' + $_.Exception.Message) }

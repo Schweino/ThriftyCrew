@@ -788,7 +788,7 @@
                   {
                       "commodity":  "doubanjiang",
                       "store":  "Hy-Vee",
-                      "why":  "FALSE FUZZY-MATCH (re-derived 2026-07-31). The audit loosens the include \"chili\\s+bean\\s+sauce\" into \"chili.{0,25}bean.{0,25}sauce\", which matches American canned CHILI BEANS. Two corrections to the 2026-07-27 text. First, it said \"its only match is chili beans\" and named one product; there are EIGHT in hyvee-regular-2026-07-30.json - Mrs. Grimes Original 15 oz $1.48, Spicy Hot 15 oz $1.48, Black 15.5 oz $1.48, White 15.5 oz $1.48, No Salt Added 15 oz $1.48, and Bush's Red 16 oz $1.99, Kidney 16 oz $1.99, Medium 16 oz $1.99 - all the same false shape. Second, the regex it quoted was gibberish because the audit's own substituted product name had been pasted into the middle of the pattern before transcription; the pattern above is the real one. The verdict is unchanged: no real fermented broad-bean chili paste at this store, and doubanjiang has no cell at any store, so the board is unaffected. DELETE-TRIGGER: delete when a Hy-Vee storeId-1465 search for \"doubanjiang\" or \"chili bean sauce\" returns a real fermented broad-bean paste (Lee Kum Kee, Pixian).",
+                      "why":  "FALSE FUZZY-MATCH (re-derived 2026-07-31). The audit loosens the include \"chili\\s+bean\\s+sauce\" into \"chili.{0,25}bean.{0,25}sauce\", which matches American canned CHILI BEANS. Two corrections to the 2026-07-27 text. First, it said \"its only match is chili beans\" and named one product; there are EIGHT in hyvee-regular-2026-07-30.json - Mrs. Grimes Original 15 oz $1.48, Spicy Hot 15 oz $1.48, Black 15.5 oz $1.48, White 15.5 oz $1.48, No Salt Added 15 oz $1.48, and Bush\u0027s Red 16 oz $1.99, Kidney 16 oz $1.99, Medium 16 oz $1.99 - all the same false shape. Second, the regex it quoted was gibberish because the audit\u0027s own substituted product name had been pasted into the middle of the pattern before transcription; the pattern above is the real one. The verdict is unchanged: no real fermented broad-bean chili paste at this store, and doubanjiang has no cell at any store, so the board is unaffected. DELETE-TRIGGER: delete when a Hy-Vee storeId-1465 search for \"doubanjiang\" or \"chili bean sauce\" returns a real fermented broad-bean paste (Lee Kum Kee, Pixian).",
                       "reviewed":  "2026-07-31",
                       "reviewed_source":  "RE-DERIVED 2026-07-31 against hyvee-regular-2026-07-30.json"
                   },
@@ -836,14 +836,14 @@
                       "store":  "Baker\u0027s",
                       "reviewed":  "2026-07-31",
                       "reviewed_source":  "RE-DERIVED 2026-07-31 against bakers-regular-2026-07-30.json + the sanctioned Kroger API (locationId 61500319)",
-                      "why":  "NOT IN OUR PULL (re-derived 2026-07-31, first-party). The 2026-07-27 claim is FALSE twice over: \"Popsicle SpongeBob SquarePants Frozen Confection Bars\" is not in bakers-regular-2026-07-30.json at all, and the two rows that actually reach the commodity are Scrub Daddy dishwand hardware - \"Scrub Daddy Dish Daddy Silver Dishwand\" 1 ct $8.99 and \"Scrub Daddy Dish Daddy Scratch-Free Dishwand Replacement Heads\" 2 ct $4.79 ($2.395/each) - both far outside the $0.53 to $1.00 per each the board pays. Baker's does sell plain cleaning sponges: the Kroger API at locationId 61500319, term \"sponge\", returns \"Kroger Heavy Duty Scrub Sponge\" 3 ct $1.99 ($0.6633/each, which would rank 4th of 6) and \"Kroger Non-Scratch Scrubber Sponges\" 3 ct $1.99, neither of which is in our Baker's feed. This is a PULL-TERM gap, not a matching bug. DELETE-TRIGGER: delete the moment bakers-regular-*.json contains a row matching \"scrub(ber)?\\s+sponge\"."
+                      "why":  "NOT IN OUR PULL (re-derived 2026-07-31, first-party). The 2026-07-27 claim is FALSE twice over: \"Popsicle SpongeBob SquarePants Frozen Confection Bars\" is not in bakers-regular-2026-07-30.json at all, and the two rows that actually reach the commodity are Scrub Daddy dishwand hardware - \"Scrub Daddy Dish Daddy Silver Dishwand\" 1 ct $8.99 and \"Scrub Daddy Dish Daddy Scratch-Free Dishwand Replacement Heads\" 2 ct $4.79 ($2.395/each) - both far outside the $0.53 to $1.00 per each the board pays. Baker\u0027s does sell plain cleaning sponges: the Kroger API at locationId 61500319, term \"sponge\", returns \"Kroger Heavy Duty Scrub Sponge\" 3 ct $1.99 ($0.6633/each, which would rank 4th of 6) and \"Kroger Non-Scratch Scrubber Sponges\" 3 ct $1.99, neither of which is in our Baker\u0027s feed. This is a PULL-TERM gap, not a matching bug. DELETE-TRIGGER: delete the moment bakers-regular-*.json contains a row matching \"scrub(ber)?\\s+sponge\"."
                   },
                   {
                       "commodity":  "cake-mix",
                       "store":  "Baker\u0027s",
                       "reviewed":  "2026-07-31",
                       "reviewed_source":  "RE-DERIVED 2026-07-31 against bakers-regular-2026-07-30.json + the sanctioned Kroger API (locationId 61500319)",
-                      "why":  "UNPRICEABLE (UNIT-MISMATCH, re-derived 2026-07-31). The 2026-07-27 claim that the only include match is \"Kodiak Chip Power Cakes Flapjack and Waffle Mix Chocolate Chip\" is FALSE - that row is killed by the commodity's own \"pancake\" token, and bakers-regular-2026-07-30.json carries EIGHT real yellow cake mixes that pass every filter: Pillsbury Moist Supreme Yellow 15.25 oz $1.69, Duncan Hines Perfectly Moist Classic Yellow 15.250 oz $2.29, Betty Crocker Super Moist Yellow 13.25 oz $2.49, Betty Crocker Butter Recipe Yellow 13.25 oz $2.49, Duncan Hines Dolly Parton Favorite Yellow 15.250 oz $3.29, Pillsbury Zero Sugar Yellow 16 oz $3.49, Bob's Red Mill Classic Yellow 15.5 oz $3.99, Miss Jones Gluten-Free Yellow 19 oz $5.49. The REAL reason there is no cell: cake-mix is priced per EACH and every one of those Kroger rows publishes a WEIGHT size (\"15.25 oz\", size_basis label, sold_by UNIT) with no count, so the engine cannot call one box one each without inventing the count - the same shape as papaya at this store. Fareway is the lone cell only because its own size string is literally \"each\". DELETE-TRIGGER: delete when Baker's publishes a count-bearing size (\"1 ct\") on a cake mix, or when the commodity is re-based to oz."
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, re-derived 2026-07-31). The 2026-07-27 claim that the only include match is \"Kodiak Chip Power Cakes Flapjack and Waffle Mix Chocolate Chip\" is FALSE - that row is killed by the commodity\u0027s own \"pancake\" token, and bakers-regular-2026-07-30.json carries EIGHT real yellow cake mixes that pass every filter: Pillsbury Moist Supreme Yellow 15.25 oz $1.69, Duncan Hines Perfectly Moist Classic Yellow 15.250 oz $2.29, Betty Crocker Super Moist Yellow 13.25 oz $2.49, Betty Crocker Butter Recipe Yellow 13.25 oz $2.49, Duncan Hines Dolly Parton Favorite Yellow 15.250 oz $3.29, Pillsbury Zero Sugar Yellow 16 oz $3.49, Bob\u0027s Red Mill Classic Yellow 15.5 oz $3.99, Miss Jones Gluten-Free Yellow 19 oz $5.49. The REAL reason there is no cell: cake-mix is priced per EACH and every one of those Kroger rows publishes a WEIGHT size (\"15.25 oz\", size_basis label, sold_by UNIT) with no count, so the engine cannot call one box one each without inventing the count - the same shape as papaya at this store. Fareway is the lone cell only because its own size string is literally \"each\". DELETE-TRIGGER: delete when Baker\u0027s publishes a count-bearing size (\"1 ct\") on a cake mix, or when the commodity is re-based to oz."
                   },
                   {
                       "commodity":  "poblano-peppers",
@@ -862,7 +862,7 @@
                       "store":  "Family Fare",
                       "reviewed":  "2026-07-31",
                       "reviewed_source":  "RE-DERIVED 2026-07-31 against family-fare-regular-2026-07-31.json + a first-party Freshop query (app_key=family_fare, store_id=6401)",
-                      "why":  "NOT CARRIED / OUT OF SEASON (re-derived 2026-07-31, first-party). The count was wrong: THREE rows match the include in family-fare-regular-2026-07-31.json - a Softsoap body wash and a Vitaminwater, both killed by the commodity's own excludes, leaving \"Brookside Pomegranate Flavor Dark Chocolate\" as the only survivor. The verdict holds on store evidence: a live Freshop query (store_id=6401, q=pomegranate) returns 23 products, all juice, sports drinks, soap, tea and candy, and no whole fresh pomegranate. DELETE-TRIGGER: delete when a Freshop q=pomegranate query at store_id=6401 returns a whole fresh pomegranate sold by the each."
+                      "why":  "NOT CARRIED / OUT OF SEASON (re-derived 2026-07-31, first-party). The count was wrong: THREE rows match the include in family-fare-regular-2026-07-31.json - a Softsoap body wash and a Vitaminwater, both killed by the commodity\u0027s own excludes, leaving \"Brookside Pomegranate Flavor Dark Chocolate\" as the only survivor. The verdict holds on store evidence: a live Freshop query (store_id=6401, q=pomegranate) returns 23 products, all juice, sports drinks, soap, tea and candy, and no whole fresh pomegranate. DELETE-TRIGGER: delete when a Freshop q=pomegranate query at store_id=6401 returns a whole fresh pomegranate sold by the each."
                   },
                   {
                       "commodity":  "papaya",
@@ -899,7 +899,7 @@
                       "store":  "Aldi",
                       "reviewed":  "2026-07-31",
                       "reviewed_source":  "RE-DERIVED 2026-07-31 against aldi-regular-2026-07-29.json only - Aldi has no sanctioned first-party API in this estate",
-                      "why":  "NOT CARRIED (re-derived 2026-07-31). Doubly stale: the named \"Barissimo Coconut Creme or Cinnamon Roll Creamer\" is no longer a candidate at all - the engine GLOBAL_EXCLUDE token \"creamer\" now kills it - and 16 rows match the include in aldi-regular-2026-07-29.json, of which exactly ONE survives: \"Simply Nature Organic Coconut Chia 12.3 OZ\" $2.95, a chia pudding. No whole or young coconut appears anywhere in the Aldi feed. HONEST LIMIT: this was re-derived from our own newest feed only, because Aldi is an Instacart storefront with no sanctioned first-party API here, so \"not carried\" is weaker evidence than the Baker's and Hy-Vee entries. DELETE-TRIGGER: delete when any aldi-regular-*.json row matching \"coconuts?\\b\" is a whole or young coconut priced per each."
+                      "why":  "NOT CARRIED (re-derived 2026-07-31). Doubly stale: the named \"Barissimo Coconut Creme or Cinnamon Roll Creamer\" is no longer a candidate at all - the engine GLOBAL_EXCLUDE token \"creamer\" now kills it - and 16 rows match the include in aldi-regular-2026-07-29.json, of which exactly ONE survives: \"Simply Nature Organic Coconut Chia 12.3 OZ\" $2.95, a chia pudding. No whole or young coconut appears anywhere in the Aldi feed. HONEST LIMIT: this was re-derived from our own newest feed only, because Aldi is an Instacart storefront with no sanctioned first-party API here, so \"not carried\" is weaker evidence than the Baker\u0027s and Hy-Vee entries. DELETE-TRIGGER: delete when any aldi-regular-*.json row matching \"coconuts?\\b\" is a whole or young coconut priced per each."
                   },
                   {
                       "commodity":  "coconut",
@@ -924,14 +924,14 @@
                       "store":  "Hy-Vee",
                       "reviewed":  "2026-07-31",
                       "reviewed_source":  "RE-DERIVED 2026-07-31 against hyvee-regular-2026-07-30.json + a first-party Hy-Vee storeId-1465 product search",
-                      "why":  "NOT IN OUR PULL - COSTS A CROWN (re-derived 2026-07-31, first-party). The 2026-07-27 claim that \"the only thing at this store matching the include regex is Gustare Vita Grilled Artichokes\" is FALSE: TEN rows in hyvee-regular-2026-07-30.json match the include, nine of them jarred \"hearts\" killed by the commodity's own token, leaving the Gustare Vita jar as the sole survivor. Worse, the store DOES sell the real item: a Hy-Vee storeId-1465 product search for \"artichoke\" returns \"Artichoke\", unitOfMeasure \"1 ct\", tagPrice $2.99, productId 8655. That is 14.3% UNDER the current cheapest cell (Baker's $3.49/each) and would take the artichokes crown. The row is simply absent from our 1,538-row Hy-Vee everyday file, so this is a PULL-DEPTH gap, not a matching bug - and a false review note has been hiding it since 2026-07-27. DELETE-TRIGGER: delete the moment hyvee-regular-*.json contains a row whose item is exactly \"Artichoke\"; until then treat this entry as an OPEN TODO on the Hy-Vee pull worklist, not a closed verdict."
+                      "why":  "NOT IN OUR PULL - COSTS A CROWN (re-derived 2026-07-31, first-party). The 2026-07-27 claim that \"the only thing at this store matching the include regex is Gustare Vita Grilled Artichokes\" is FALSE: TEN rows in hyvee-regular-2026-07-30.json match the include, nine of them jarred \"hearts\" killed by the commodity\u0027s own token, leaving the Gustare Vita jar as the sole survivor. Worse, the store DOES sell the real item: a Hy-Vee storeId-1465 product search for \"artichoke\" returns \"Artichoke\", unitOfMeasure \"1 ct\", tagPrice $2.99, productId 8655. That is 14.3% UNDER the current cheapest cell (Baker\u0027s $3.49/each) and would take the artichokes crown. The row is simply absent from our 1,538-row Hy-Vee everyday file, so this is a PULL-DEPTH gap, not a matching bug - and a false review note has been hiding it since 2026-07-27. DELETE-TRIGGER: delete the moment hyvee-regular-*.json contains a row whose item is exactly \"Artichoke\"; until then treat this entry as an OPEN TODO on the Hy-Vee pull worklist, not a closed verdict."
                   },
                   {
                       "commodity":  "fresh-dill",
                       "store":  "Baker\u0027s",
                       "reviewed":  "2026-07-31",
                       "reviewed_source":  "RE-DERIVED 2026-07-31 against bakers-regular-2026-07-30.json + the sanctioned Kroger API (locationId 61500319)",
-                      "why":  "INCLUDE TOO STRICT (re-derived 2026-07-31, first-party). The 2026-07-27 claim is FALSE: three rows reach the audit, not one, and the named \"Fresh Gourmet Crispy Dillies\" only ever matched the AUDIT's loosened probe, never the real include. The finding that matters: bakers-regular-2026-07-30.json ALREADY HOLDS \"Simple Truth Organic Baby Dill\", 0.5 oz, $2.49, product_id 0001111001816, sold_by UNIT - genuine fresh dill herb, confirmed live by the Kroger API at locationId 61500319 - and the include \"fresh\\s+dill|dill\\s+(?:bunch|clamshell|sprigs?)\" cannot reach it because the name says \"Baby Dill\". At $4.98/oz it would be the second cell on a commodity that has exactly one (Hy-Vee $3.9867/oz), so no crown moves. This is a commodities.json include fix, NOT an unpriceable store. DELETE-TRIGGER: delete the moment the fresh-dill include reaches \"Simple Truth Organic Baby Dill\"."
+                      "why":  "INCLUDE TOO STRICT (re-derived 2026-07-31, first-party). The 2026-07-27 claim is FALSE: three rows reach the audit, not one, and the named \"Fresh Gourmet Crispy Dillies\" only ever matched the AUDIT\u0027s loosened probe, never the real include. The finding that matters: bakers-regular-2026-07-30.json ALREADY HOLDS \"Simple Truth Organic Baby Dill\", 0.5 oz, $2.49, product_id 0001111001816, sold_by UNIT - genuine fresh dill herb, confirmed live by the Kroger API at locationId 61500319 - and the include \"fresh\\s+dill|dill\\s+(?:bunch|clamshell|sprigs?)\" cannot reach it because the name says \"Baby Dill\". At $4.98/oz it would be the second cell on a commodity that has exactly one (Hy-Vee $3.9867/oz), so no crown moves. This is a commodities.json include fix, NOT an unpriceable store. DELETE-TRIGGER: delete the moment the fresh-dill include reaches \"Simple Truth Organic Baby Dill\"."
                   },
                   {
                       "commodity":  "cantaloupe",
@@ -1160,6 +1160,139 @@
                       "commodity":  "broccolini",
                       "why":  "UNIT MISMATCH (reviewed 2026-07-29): \"Bimi Baby Broccoli, 1.5 lbs.\" genuinely IS broccolini and matches the include, but this commodity is priced per BUNCH/each and a 1.5 lb club bag states no bunch count. Deriving one would be inventing it.",
                       "store":  "Sam\u0027s Club"
+                  },
+                  {
+                      "commodity":  "cherries",
+                      "store":  "Family Fare",
+                      "why":  "FALSE FUZZY-MATCH: the only candidate is \"Finest Reserve Cherry Habanero Pepper Jelly 9 Oz\" - a pepper jelly whose name carries the word cherry. Not fresh cherries. Correctly excluded; the board is unaffected.",
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "REVIEWED 2026-07-31 against out\\coverage-gaps.json (06:10) + the store captures named in each entry (plan-2026-07-31.json item f3fd16)"
+                  },
+                  {
+                      "commodity":  "grapefruit",
+                      "store":  "Sam\u0027s Club",
+                      "why":  "FALSE FUZZY-MATCH: the only candidate is \"NatureWell Bergamot \u0026 Grapefruit Moisturizing Cream, 16 oz., 2 pk.\" - a SKIN CREAM. Not produce. Correctly excluded.",
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "REVIEWED 2026-07-31 against out\\coverage-gaps.json (06:10) + the store captures named in each entry (plan-2026-07-31.json item f3fd16)"
+                  },
+                  {
+                      "commodity":  "jalapenos",
+                      "store":  "Sam\u0027s Club",
+                      "why":  "FALSE FUZZY-MATCH: all three candidates are processed goods flavoured with jalapeno - \"Member\u0027s Mark Smoked Sausage Made with Bacon, Jalapeno \u0026 Monterey Jack Cheese\", \"Member\u0027s Mark Jalapeno Grassfed Beef Sticks\" and \"Member\u0027s Mark Jalapeno Flakes\" (a dried spice). None is a fresh pepper. Correctly excluded.",
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "REVIEWED 2026-07-31 against out\\coverage-gaps.json (06:10) + the store captures named in each entry (plan-2026-07-31.json item f3fd16)"
+                  },
+                  {
+                      "commodity":  "oat-milk",
+                      "store":  "Sam\u0027s Club",
+                      "why":  "FALSE SUBSTRING MATCH: the only candidate is \"Bubs Goat Milk Toddler Nutritional Drink, 20 oz., 3 pk.\" - the audit\u0027s loosened matcher finds \"oat milk\" inside \"G-OAT MILK\". It is goat milk for toddlers, not oat milk. Correctly excluded.",
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "REVIEWED 2026-07-31 against out\\coverage-gaps.json (06:10) + the store captures named in each entry (plan-2026-07-31.json item f3fd16)"
+                  },
+                  {
+                      "commodity":  "teriyaki-sauce",
+                      "store":  "Family Fare",
+                      "why":  "FALSE FUZZY-MATCH: the only candidate is \"Pineapple Teriyaki Brats 4 Ct.\" - fresh sausage flavoured with teriyaki, not a bottle of sauce. This commodity is priced per FL OZ of sauce. Correctly excluded.",
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "REVIEWED 2026-07-31 against out\\coverage-gaps.json (06:10) + the store captures named in each entry (plan-2026-07-31.json item f3fd16)"
+                  },
+                  {
+                      "commodity":  "doubanjiang",
+                      "store":  "Family Fare",
+                      "why":  "FALSE FUZZY-MATCH, the known chili-beans class (already allowlisted for Hy-Vee, Fareway, Baker\u0027s and Walmart on 2026-07-27; extended to Family Fare here). The audit loosens the include \"chili\\s+bean\\s+sauce\" - correct for real doubanjiang / Lee Kum Kee chili bean sauce - into a pattern that matches American canned CHILI BEANS. All four candidates are exactly that: \"Mrs. Grimes Original Chili Beans In Chili Sauce 40 Oz\", \"Bush\u0027s Best Chili Beans Mild Chili Sauce Red Beans 16 Oz\", the Pinto twin, and \"Our Family Chili Beans, In Mild Chili Sauce 15.5 Oz\". This mainstream Omaha store carries no fermented broad-bean chili paste; doubanjiang has no cell at any store, so the board is unaffected. DELETE-TRIGGER: delete when a Family Fare search for \"doubanjiang\" or \"chili bean sauce\" returns a real fermented broad-bean paste (Lee Kum Kee, Pixian).",
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "REVIEWED 2026-07-31 against out\\coverage-gaps.json (06:10) + the store captures named in each entry (plan-2026-07-31.json item f3fd16)"
+                  },
+                  {
+                      "commodity":  "coconut",
+                      "store":  "Family Fare",
+                      "why":  "FALSE FUZZY-MATCH: the only candidate is \"Hostess Coconut \u0026 Marshmallow Snoballs 2 Ea\" - a snack cake. Not coconut. Correctly excluded.",
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "REVIEWED 2026-07-31 against out\\coverage-gaps.json (06:10) + the store captures named in each entry (plan-2026-07-31.json item f3fd16)"
+                  },
+                  {
+                      "commodity":  "coconut",
+                      "store":  "Sam\u0027s Club",
+                      "why":  "FALSE FUZZY-MATCH: candidates are \"Red Bull Energy Coconut Edition 8.4 oz., 24 pk.\" (an energy drink) and \"Ava Organics Coconut Crispy Rollers, 14.1 oz.\" (a wafer snack). Neither is coconut. Correctly excluded.",
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "REVIEWED 2026-07-31 against out\\coverage-gaps.json (06:10) + the store captures named in each entry (plan-2026-07-31.json item f3fd16)"
+                  },
+                  {
+                      "commodity":  "coconut",
+                      "store":  "Walmart",
+                      "why":  "FALSE FUZZY-MATCH, known shape: candidates are \"nutpods Dairy-Free Half and Half Alternative Almond Coconut Blend, 16 fl oz\" (a coffee creamer) and \"Pillsbury Creamy Supreme Coconut Pecan Frosting, 15 oz Tub\" (frosting). Coconut-FLAVOURED processed goods, not coconut. Correctly excluded.",
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "REVIEWED 2026-07-31 against out\\coverage-gaps.json (06:10) + the store captures named in each entry (plan-2026-07-31.json item f3fd16)"
+                  },
+                  {
+                      "commodity":  "dried-cranberries",
+                      "store":  "Walmart",
+                      "why":  "FALSE FUZZY-MATCH: the only candidate is \"Sargento Balanced Breaks Sharp Cheddar Cheese, Cashews, Cherry Infused Dried Cranberries\" - a cheese-and-nut snack tray priced as a tray, not plain dried cranberries. Same shape as the Aldi trail-mix entry reviewed 2026-07-29. Correctly excluded.",
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "REVIEWED 2026-07-31 against out\\coverage-gaps.json (06:10) + the store captures named in each entry (plan-2026-07-31.json item f3fd16)"
+                  },
+                  {
+                      "commodity":  "refrigerated-biscuits",
+                      "store":  "Sam\u0027s Club",
+                      "why":  "WRONG FORM: the only candidate is \"Pillsbury Southern Style Biscuits 2 oz., 24 pk.\" - Sam\u0027s sells this as a FROZEN case, not the refrigerated dough tube this commodity prices. Correctly excluded; allowlisting rather than widening the include, which would mix two different products in one cell.",
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "REVIEWED 2026-07-31 against out\\coverage-gaps.json (06:10) + the store captures named in each entry (plan-2026-07-31.json item f3fd16)"
+                  },
+                  {
+                      "commodity":  "hamburger-buns",
+                      "store":  "Aldi",
+                      "why":  "CAPTURE CARRIES NO COUNT (not a matching bug): \"L Oven Fresh Hamburger Buns 12 OZ\" is stamped size \"11 oz\" in aldi-regular-2026-07-29.json. hamburger-buns is an EACH commodity, and a net weight states no bun count, so the engine correctly refuses to price it - defaulting a count would be inventing the number. Walmart\u0027s \"Great Value White Hamburger Buns, 11 oz, 8 Count\" prices fine at $0.185/each off the count in ITS name, which is the proof the engine is right and the capture is short a field. Queued for the Wednesday browser pass to read the real pack count off the product page (believed 8 ct - VERIFY, never assume).",
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "REVIEWED 2026-07-31 against out\\coverage-gaps.json (06:10) + the store captures named in each entry (plan-2026-07-31.json item f3fd16)"
+                  },
+                  {
+                      "commodity":  "hot-dog-buns",
+                      "store":  "Aldi",
+                      "why":  "CAPTURE CARRIES NO COUNT (not a matching bug): candidates \"L Oven Fresh Hot Dog Buns 12 OZ\" and \"Specially Selected Brioche Hot Dog Buns 9.52 OZ\" carry net weight only. hot-dog-buns is an EACH commodity, so with no count the engine correctly refuses to price per bun. Count queued for the Wednesday browser pass.",
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "REVIEWED 2026-07-31 against out\\coverage-gaps.json (06:10) + the store captures named in each entry (plan-2026-07-31.json item f3fd16)"
+                  },
+                  {
+                      "commodity":  "bottled-water",
+                      "store":  "Aldi",
+                      "why":  "CAPTURE CARRIES NO COUNT (not a matching bug): \"Puraqua Purified Water 16.9 FL OZ\" is priced $3.19, which is a 24-PACK total wearing one bottle\u0027s size. bottled-water is an EACH commodity so nothing publishes today, and that refusal is the only reason a wrong number did not ship: if this commodity were priced per FL OZ, the same row would have published $0.189/fl oz off a pack total. Pack count queued for the Wednesday browser pass; the other four Puraqua/Ozarka candidates share the shape.",
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "REVIEWED 2026-07-31 against out\\coverage-gaps.json (06:10) + the store captures named in each entry (plan-2026-07-31.json item f3fd16)"
+                  },
+                  {
+                      "commodity":  "microwave-popcorn",
+                      "store":  "Aldi",
+                      "why":  "CAPTURE CARRIES NO COUNT (not a matching bug): \"Clancy S Movie Theater Butter Microwave Popcorn 2.5 OZ\" at $4.49 is a multi-bag BOX priced as one 2.5 oz bag. microwave-popcorn is an EACH commodity and the capture states no bag count, so the engine correctly refuses. Count queued for the Wednesday browser pass.",
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "REVIEWED 2026-07-31 against out\\coverage-gaps.json (06:10) + the store captures named in each entry (plan-2026-07-31.json item f3fd16)"
+                  },
+                  {
+                      "commodity":  "gelatin",
+                      "store":  "Aldi",
+                      "why":  "CAPTURE CARRIES NO COUNT (not a matching bug): \"Baker S Corner Strawberry Gelatin 3 OZ\" and the Orange twin carry net weight only; gelatin is an EACH commodity. Engine correctly refuses to price per box without a count. Queued for the Wednesday browser pass.",
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "REVIEWED 2026-07-31 against out\\coverage-gaps.json (06:10) + the store captures named in each entry (plan-2026-07-31.json item f3fd16)"
+                  },
+                  {
+                      "commodity":  "taco-sauce",
+                      "store":  "Sam\u0027s Club",
+                      "why":  "PARKED FOR BRAD - a what-should-this-commodity-MEAN question, not a bug. The candidate \"Taco Bell Mild Sauce, 25 oz.\" $4.98 genuinely IS taco sauce, but no workable include token admits it without also dragging in the Fire/Diablo/Hot Sauce bottles: the estate carries ~21 distinct Taco Bell products (seasonings, Verde Salsa, Salsa Con Queso, and the heat-level sauce bottles) across 4+ stores. Widening the include is a decision about what the commodity is FOR, so it is Brad\u0027s call, not the developer\u0027s. Allowlisted as a REVIEWED GAP meanwhile - the cell stays empty rather than filled with a guess. Open question recorded in plan-2026-07-31.json open_questions_for_brad.",
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "REVIEWED 2026-07-31 against out\\coverage-gaps.json (06:10) + the store captures named in each entry (plan-2026-07-31.json item f3fd16)"
+                  },
+                  {
+                      "commodity":  "teriyaki-sauce",
+                      "store":  "Fareway",
+                      "why":  "WRONG FORM, by the product\u0027s own name: the only candidate is \"Kikkoman Teriyaki Original BBQ Sauce\" - Kikkoman names this a BBQ sauce, and it is formulated and priced as one. Allowlisted rather than widening the teriyaki include, which would let every teriyaki-flavoured BBQ and marinade bottle into the cell and make the crown meaningless.",
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "REVIEWED 2026-07-31 against out\\coverage-gaps.json (06:10) + the store captures named in each entry (plan-2026-07-31.json item f3fd16)"
+                  },
+                  {
+                      "commodity":  "sponges",
+                      "store":  "Family Fare",
+                      "why":  "FALSE FUZZY-MATCH on a BRAND NAME, the known SpongeBob class (already allowlisted for Baker\u0027s). The only row matching /sponge/ in family-fare-regular-2026-07-31.json is \"Popsicle Confection Bars, Fruit Punch \u0026 Cotton Candy, Sponge Bob Square Pants 6 Ea\" $7.49 - a box of ice pops, verified as the sole match. Family Fare carries no cleaning sponge in our feed at all, so this is a PULL-TERM gap wearing a false candidate, not a matching bug. DELETE-TRIGGER: delete the moment family-fare-regular-*.json contains a row matching \"scrub(ber)?\\s+sponge\" or \"cleaning\\s+sponge\".",
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "REVIEWED 2026-07-31 against out\\coverage-gaps.json (06:10) + the store captures named in each entry (plan-2026-07-31.json item f3fd16)"
                   }
               ]
 }

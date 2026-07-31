@@ -4,9 +4,97 @@
   Output: out\regular\family-fare-regular-<date>.json  (price_type = "everyday"), which compare-deals
   ingests alongside the weekly-ad data so the true cheapest (sale OR everyday) wins.
 #>
-param([string]$OutDir = "", [int]$MaxMinutes = 9)
+param([string]$OutDir = "", [int]$MaxMinutes = 9, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+
+# ---------------------------------------------------------------------------------------------------------
+# TWO PURE RULES, LIFTED OUT SO THEY CAN BE TESTED (2026-07-31).
+# Both of these were inline expressions buried in the middle of a network-driven script, which meant the only
+# way to exercise them was to run the real pull against the real store. That is why nobody ever noticed the
+# alert condition below had become structurally impossible to satisfy: there was no way to ask it a question.
+# ---------------------------------------------------------------------------------------------------------
+
+# WHERE THE NEXT RUN STARTS. $lastSuccessRot is the ROTATED index of the last term that returned products, so
+# the absolute term after it is where this budget stopped buying - which, when the run aborted on a wall of
+# consecutive empties, is exactly the FIRST TERM OF THAT WALL. The walled tail is therefore re-attempted at
+# the top of the next window rather than skipped, and a term that is answered but genuinely product-less does
+# not pin the cursor (it never becomes $lastSuccessRot, so the next success advances straight past it).
+# Returns $null when nothing was bought at all: a cold shutout must leave the cursor exactly where it was,
+# because those terms were REFUSED, not answered.
+function Get-FfNextCursor([int]$startIdx, [int]$lastSuccessRot, [int]$termCount) {
+  if ($termCount -le 0) { return $null }
+  if ($lastSuccessRot -lt 0) { return $null }
+  return (($startIdx + $lastSuccessRot + 1) % $termCount)
+}
+
+# IS THE CATALOG ACTUALLY DEGRADING? (re-keyed 2026-07-31, plan item 30a1a8)
+# The old alert asked "did ONE run capture the whole store", comparing this run's raw collection against the
+# best deal_count of recent MERGED files. That was the right question at one pull per day. Under the 3-hourly
+# sharded sweep it is a question that can NEVER be answered yes - a run buys ~85 of 526 terms BY DESIGN - so
+# it paged every single day about an architecture that was working: catalog 1909 -> 3974 items across 8
+# sweeps, 0 expired, 358 board cells against a 256-cell pre-freeze baseline.
+# So ask about OUTCOMES instead, on the MERGED catalog, where "Family Fare stopped refreshing" is actually
+# visible. Any one of these is real news:
+#   - rows are aging out of the 14-day carry (expired > 0): the catalog is losing products it cannot replace
+#   - almost nothing has been re-verified against the store in the last 24-48h: the sweep is not buying
+#   - the merged catalog itself shrank materially against the best of recent files
+# The recently-verified window is TWO DAYS on purpose: as_of is a date, not a timestamp, and the day's FIRST
+# sweep would otherwise be judged on its own slice alone and page every morning - the same shape of bug being
+# fixed here. A genuinely frozen store falls to ~0 across two days regardless.
+function Test-FfCatalogDegraded([int]$mergedCount, [int]$prevMax, [int]$expired, [int]$recentVerified) {
+  $reasons = @()
+  if ($expired -gt 0) { $reasons += ("$expired row(s) aged out past the 14-day carry - the catalog is losing products the sweep is not replacing") }
+  if ($recentVerified -lt 500) { $reasons += ("only $recentVerified row(s) re-verified against the store in the last 48h - the sweep is not buying terms") }
+  if ($prevMax -gt 100 -and $mergedCount -lt ($prevMax * 0.80)) { $reasons += ("merged catalog is $mergedCount items against a best-of-recent $prevMax - it shrank by more than 20%") }
+  return @{ degraded = ($reasons.Count -gt 0); reasons = $reasons }
+}
+
+if ($SelfTest) {
+  # Reachable BY CONSTRUCTION: declared on param() (an undeclared [switch] silently lands in $args and the
+  # script runs its normal live path looking like a passing self-test - the 2026-07-29 class, re-proven in
+  # commit 3014ab5c), and placed above every network call and every piece of pull state, so no data condition
+  # can skip it. Pure computation, no writes, no requests.
+  $fail = 0
+  function _T([string]$label, [bool]$cond) { if ($cond) { Write-Output "ok    $label" } else { Write-Output "FAIL  $label"; $script:fail++ } }
+
+  # ---- CURSOR. Frozen from the real 2026-07-31T04:00 sweep: started #154, bought through #243, then hit a
+  # 60-term wall of HTTP 400s. termCount 526, so lastSuccessRot = 243 - 154 = 89.
+  # THE INVARIANT: the next run must resume at #244, the FIRST term of the wall - not past it. This is a
+  # REGRESSION PIN, not a fix: today's code already satisfies it (verified against ff-sweep-log.txt, where
+  # the 07:00 run started at #244 and came back with 773 rows). It is pinned because the triage plan believed
+  # the opposite, and an invariant nobody can test is one anybody can quietly break.
+  _T 'cursor resumes at the FIRST term of the wall after an abort (#154 + 89 successes -> #244)' ((Get-FfNextCursor 154 89 526) -eq 244)
+  # clean twin: a run with NO wall still advances to last-attempted+1
+  _T 'cursor with no wall advances to last-attempted + 1 (#100 + 89 -> #190)' ((Get-FfNextCursor 100 89 526) -eq 190)
+  # a term answered-but-empty cannot pin the cursor: it never becomes lastSuccessRot, so the next success passes it
+  _T 'an answered-but-product-less term does not pin the cursor (success at rot 5 past an empty at rot 3)' ((Get-FfNextCursor 100 5 526) -eq 106)
+  # a cold shutout must NOT move the cursor: re-attempting the refused slice is correct
+  _T 'a cold shutout (no successes) leaves the cursor untouched' ($null -eq (Get-FfNextCursor 154 -1 526))
+  # the wrap is real - the 2026-07-30T22:00 run started at #508 and wrapped to #70
+  _T 'cursor wraps around the end of the term list (#508 + 87 of 526 -> #70)' ((Get-FfNextCursor 508 87 526) -eq 70)
+
+  # ---- ALERT CONDITION. MUST-FIRE and its clean twin are both frozen from real runs.
+  # CLEAN TWIN, and the whole point of the change: the 2026-07-31T04:00 sweep. One shard of a healthy catalog
+  # (4269 merged items, 0 expired, 1259 re-verified in the window). The OLD trigger paged on this every day
+  # because the run's own 566-row collection is under half the merged 4269 - by design. It must be silent.
+  $ok = Test-FfCatalogDegraded 4269 4269 0 1259
+  _T 'a healthy sharded sweep does NOT page (4269 items, 0 expired, 1259 re-verified) - the false daily alert' (-not $ok.degraded)
+  # MUST-FIRE 1: rows aging out of the carry. This is what a genuinely frozen store looks like first.
+  $d1 = Test-FfCatalogDegraded 4269 4269 24 1259
+  _T 'FIRES when rows age out past the 14-day carry (24 expired)' ($d1.degraded -and ($d1.reasons -join ' ') -match 'aged out')
+  # MUST-FIRE 2: the sweep has stopped buying terms at all
+  $d2 = Test-FfCatalogDegraded 4269 4269 0 12
+  _T 'FIRES when almost nothing was re-verified against the store (12 rows)' ($d2.degraded -and ($d2.reasons -join ' ') -match 're-verified')
+  # MUST-FIRE 3: the merged catalog itself collapsed - the original freeze, which bottomed at 207 board cells
+  $d3 = Test-FfCatalogDegraded 1909 3974 0 1259
+  _T 'FIRES when the merged catalog shrinks >20% against best-of-recent (1909 vs 3974)' ($d3.degraded -and ($d3.reasons -join ' ') -match 'shrank')
+  # and it must not fire on a catalog that merely grew slower than its best day
+  _T 'does NOT fire on a catalog within 20% of its best (3800 vs 3974)' (-not (Test-FfCatalogDegraded 3800 3974 0 1259).degraded)
+
+  if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
+}
+
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $regDir = Join-Path $OutDir 'regular'
 if (-not (Test-Path $regDir)) { New-Item -ItemType Directory -Force $regDir | Out-Null }
@@ -226,8 +314,11 @@ for ($i = 0; $i -lt $termList.Count; $i++) {
 # recovery-pass hits are re-tries of earlier empties and would drag the cursor backwards. No successes at all
 # (a cold shutout) leaves the cursor where it was - re-attempting the same slice next run is correct, because
 # those terms were REFUSED, not absent.
-if ($lastSuccessRot -ge 0) {
-  $nextIdx = ($startIdx + $lastSuccessRot + 1) % $termList.Count
+# The arithmetic itself lives in Get-FfNextCursor at the top of this file so -SelfTest can exercise it; this
+# is the only caller. When the run ABORTED, the term after the last success IS the first term of the wall, so
+# next_index lands on the wall's start and the walled tail gets first claim on the next window's budget.
+$nextIdx = Get-FfNextCursor $startIdx $lastSuccessRot $termList.Count
+if ($null -ne $nextIdx) {
   try {
     ([ordered]@{ next_index = $nextIdx; updated = (Get-Date).ToString('s'); note = 'index into the commodity-search term order where the NEXT Family Fare run starts; see the term-budget cursor comment in pull-regular-familyfare.ps1' } | ConvertTo-Json) | Set-Content $cursorFile -Encoding UTF8
     Write-Output ("Family Fare: term cursor advanced to #$nextIdx (this run bought terms #$startIdx..#$(($startIdx + $lastSuccessRot) % $termList.Count))")
@@ -275,39 +366,13 @@ if ($prevMax -gt 100 -and @($deals).Count -lt ($prevMax * 0.5)) {
   $pfile = Join-Path $qDir ("family-fare-$todayS.throttled.json")
   ([ordered]@{ store='Family Fare'; week_of=$todayS; price_type='everyday'; throttled=$true; deal_count=@($deals).Count; empty_terms=@($empty); deals=$deals } | ConvertTo-Json -Depth 6) | Set-Content $pfile -Encoding UTF8
   Write-Warning ("Family Fare: throttled - got only " + @($deals).Count + " items vs " + $prevMax + " in the last good file. Diagnostic copy: " + $pfile + ". These rows are REAL and are being MERGED (today's prices win, everything else carries forward).")
-  # ALERT ON A CONSECUTIVE RUN OF THROTTLED DAYS (2026-07-28). The guard above is correct and does its job -
-  # it refuses to let a throttled partial overwrite good prices. But it did that SILENTLY, and a throttled
-  # file has been written on 8 of the last 8 days: out\throttled\ holds family-fare-2026-07-21 through -28.
-  # A store whose prices quietly freeze is exactly the failure the whole estate is built to prevent, and the
-  # one signal that it is happening was a Write-Warning nobody reads. One day of throttling is routine
-  # weather; several in a row means the store has stopped refreshing and the board is serving old prices.
-  try {
-    $recent = @(Get-ChildItem (Join-Path $qDir 'family-fare-*.throttled.json') -ErrorAction SilentlyContinue |
-                Where-Object { $_.BaseName -match '(\d{4}-\d{2}-\d{2})' -and [datetime]$Matches[1] -ge (Get-Date).AddDays(-4) })
-    # ONE EMAIL PER DAY, NOT ONE PER RUN (2026-07-30). The term cursor above only buys ~60-70 terms per run,
-    # so the fix for a frozen store is MORE runs per day - and this alert fired on every one of them: the
-    # triage queue took SEVEN identical "Family Fare has been throttled" items on 2026-07-30 alone. Seven
-    # copies of one fact is how a real alert gets skimmed past, and the sweep cadence must not be taxed by
-    # the alerting. Stamp the day we sent, and stay quiet for the rest of it.
-    $alertStamp = Join-Path $OutDir 'ff-throttle-alert.stamp'
-    $sentToday = $false
-    if (Test-Path $alertStamp) { $sentToday = (((Get-Content $alertStamp -Raw) + '').Trim() -eq $todayS) }
-    if ($recent.Count -ge 3 -and $sentToday) {
-      Write-Warning ("Family Fare: throttle alert already sent today ($todayS) - not re-sending (one email per day; see the alert-spam note in this script).")
-    }
-    elseif ($recent.Count -ge 3) {
-      $lastGood = @(Get-ChildItem (Join-Path $OutDir 'regular\family-fare-regular-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1)
-      $lgName = if ($lastGood.Count) { $lastGood[0].Name } else { '(none)' }
-      $body = "Family Fare's pull has hit the throttle-wipeout guard on $($recent.Count) of the last 4 days, so the board is still serving prices from $lgName.`n`n" +
-              "Nothing is WRONG on the board - the guard is refusing to let a throttled partial overwrite good prices, which is correct. The problem is that Family Fare has effectively stopped refreshing, and until now that happened silently.`n`n" +
-              "Today's run collected $(@($deals).Count) items against a best-of-recent of $prevMax, with $(@($empty).Count) term(s) still empty after recovery. Diagnostic: $pfile`n`n" +
-              "Freshop rate-limits several hundred sequential terms from one IP. The fix is fewer requests per window (shard the term list across the day), NOT slower pacing - a 2026-07-28 probe showed 20 terms at 200ms all succeed while a second burst all came back empty, so the budget is per-window request COUNT."
-      & powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'send-alert.ps1') -Subject ("Grocery: Family Fare has been throttled " + $recent.Count + " of the last 4 days - prices frozen") -Body $body | Out-Null
-      # stamp only on a SENT alert: a failed send must be free to try again on the next run, or a transient
-      # mail error would buy the whole day's silence.
-      if ($LASTEXITCODE -eq 0) { Set-Content -Path $alertStamp -Value $todayS -Encoding ASCII }
-    }
-  } catch { Write-Warning ('family-fare throttle alert failed: ' + $_.Exception.Message) }
+  # THE ALERT USED TO LIVE HERE AND IT HAS MOVED (2026-07-31, plan item 30a1a8).
+  # Writing the diagnostic is the GUARD and it stays exactly as it is. What was wrong was ALERTING off it:
+  # this branch tests ONE RUN's raw collection against the best of recent MERGED files, and under the 3-hourly
+  # sharded sweep a run buys ~85 of 526 terms BY DESIGN, so the branch is now permanently true and paged every
+  # day about a pipeline that had taken the catalog from 1909 to 3974 items with 0 expired rows.
+  # A trigger that can never be false is not a signal. The alert is re-keyed on the MERGED catalog's outcomes
+  # and now sits after the carry-forward merge below, which is the first point those numbers exist.
   # NO `return` HERE ANY MORE (2026-07-30). This block used to bail out, throwing the whole capture away.
   #
   # THAT WAS AN ALL-OR-NOTHING DECISION ABOUT A PARTIAL PULL. A throttled response is not a WRONG response -
@@ -384,3 +449,42 @@ $deals = $rows.ToArray()
 $out = [ordered]@{ store='Family Fare'; week_of=$todayS; price_type='everyday'; source='Freshop catalog base_price (store_id 6401, Omaha), NOT Instacart'; deal_count=@($deals).Count; fresh_count=(@($deals).Count - $carried); carried_count=$carried; expired_count=$expired; max_carry_days=$MaxCarryDays; empty_terms=@($empty); deals=$deals }
 ($out | ConvertTo-Json -Depth 6) | Set-Content $file -Encoding UTF8
 Write-Output ("Family Fare everyday prices: " + @($deals).Count + " catalog items (" + (@($deals).Count - $carried) + " fresh, " + $carried + " carried forward, " + $expired + " expired past $MaxCarryDays d; " + $empty.Count + " terms still empty) -> " + $file)
+
+# ---- IS FAMILY FARE ACTUALLY FREEZING? (re-keyed 2026-07-31, plan item 30a1a8) ----
+# This is the alert that used to live inside the throttle-wipeout branch above, asking a question the sharded
+# sweep made permanently unanswerable ("did ONE run capture the whole store?"). It now runs on every pull,
+# reads the MERGED catalog it just wrote, and asks whether the catalog is actually degrading - see
+# Test-FfCatalogDegraded at the top of this file for the three outcome tests and why each one is real news.
+# The once-per-day stamp is KEPT verbatim: 9 sweeps a day must not become 9 emails, and it was seven identical
+# items in the triage queue on 2026-07-30 that proved it.
+try {
+  $recentVerified = 0
+  $cutoff = ([datetime]$todayS).AddDays(-1)
+  foreach ($d in @($deals)) {
+    try { if (([datetime][string]$d.as_of) -ge $cutoff) { $recentVerified++ } } catch {}
+  }
+  $ffState = Test-FfCatalogDegraded @($deals).Count $prevMax $expired $recentVerified
+  if ($ffState.degraded) {
+    $alertStamp = Join-Path $OutDir 'ff-throttle-alert.stamp'
+    $sentToday = $false
+    if (Test-Path $alertStamp) { $sentToday = (((Get-Content $alertStamp -Raw) + '').Trim() -eq $todayS) }
+    if ($sentToday) {
+      Write-Warning ("Family Fare: catalog-degradation alert already sent today ($todayS) - not re-sending (one email per day).")
+    } else {
+      $qDirA = Join-Path $OutDir 'throttled'
+      $recent = @(Get-ChildItem (Join-Path $qDirA 'family-fare-*.throttled.json') -ErrorAction SilentlyContinue |
+                  Where-Object { $_.BaseName -match '(\d{4}-\d{2}-\d{2})' -and [datetime]$Matches[1] -ge (Get-Date).AddDays(-4) })
+      $body = "Family Fare's MERGED everyday catalog is degrading, not just throttled.`n`n" +
+              "What tripped it:`n  - " + (($ffState.reasons) -join "`n  - ") + "`n`n" +
+              "Merged catalog: $(@($deals).Count) items ($(@($deals).Count - $carried) fresh this run, $carried carried forward, $expired expired past $MaxCarryDays days, $recentVerified re-verified in the last 48h) against a best-of-recent of $prevMax. File: $file`n`n" +
+              "Throttled diagnostics written on $($recent.Count) of the last 4 days - that alone is NORMAL under the 3-hourly sharded sweep (a run buys ~85 of 526 terms by design) and is no longer what this alert keys on. It fires only when the merged catalog is actually losing ground.`n`n" +
+              "Freshop rate-limits several hundred sequential terms from one IP. The fix is fewer requests per window (shard the term list across the day), NOT slower pacing - a 2026-07-28 probe showed 20 terms at 200ms all succeed while a second burst all came back empty, so the budget is per-window request COUNT."
+      & powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'send-alert.ps1') -Subject ("Grocery: Family Fare catalog is degrading - " + $ffState.reasons.Count + " signal(s)") -Body $body | Out-Null
+      # stamp only on a SENT alert: a failed send must be free to try again on the next run, or a transient
+      # mail error would buy the whole day's silence.
+      if ($LASTEXITCODE -eq 0) { Set-Content -Path $alertStamp -Value $todayS -Encoding ASCII }
+    }
+  } else {
+    Write-Output ("Family Fare: catalog healthy - " + @($deals).Count + " items, $expired expired, $recentVerified re-verified in 48h (no alert)")
+  }
+} catch { Write-Warning ('family-fare catalog-degradation check failed: ' + $_.Exception.Message) }

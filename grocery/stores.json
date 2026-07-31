@@ -89,6 +89,9 @@
     { "file": "sync-browser-links.ps1", "contains": "$hostOf = @{", "reason": "operates only on the 3 stores with direct product-URL hosts" },
     { "file": "sync-browser-links.ps1", "contains": "$regGlob = @{", "reason": "operates only on the 3 stores with direct product-URL hosts" },
     { "file": "sync-browser-links.ps1", "contains": "foreach ($store in @('Walmart'", "reason": "operates only on the 3 stores with direct product-URL hosts" },
-    { "file": "guards.ps1", "contains": "names guard 9 as the only staleness watch", "reason": "blind-message prose: names the 4 stores guard 9 is the sole staleness watch for, which is the point of the sentence" }
+    { "file": "guards.ps1", "contains": "names guard 9 as the only staleness watch", "reason": "blind-message prose: names the 4 stores guard 9 is the sole staleness watch for, which is the point of the sentence" },
+    { "file": "test-auditors.ps1", "contains": "$asrFive", "reason": "deliberate 5-store MUST-FIRE fixture proving the drift scanner still fires on a genuine hardcoded subset; it must keep naming a strict subset forever. SELF-REFERENTIAL: any must-fire fixture for a code-scanning guard gets flagged by the live guard unless it is registered here - register yours when you write one" },
+    { "file": "add-known-wrong.ps1", "contains": "-Store is required (exact name from stores.json", "reason": "example store names inside an error prompt; the code immediately below validates -Store against stores.json itself" },
+    { "file": "add-known-wrong.ps1", "contains": "expected at Aldi, Sam", "reason": "prose naming only the three stores whose captures carry no product id" }
   ]
 }

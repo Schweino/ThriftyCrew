@@ -1,4 +1,4 @@
-<#
+﻿<#
   test-auditors.ps1 - proves the WATCHERS still work. Complements test-guards.ps1, which breaks a live
   invariant and asserts guards.ps1 exits 2; this one tests the auditors and alert plumbing that guards.ps1
   does not own, using FROZEN FIXTURES instead of mutating live data.
@@ -33,18 +33,31 @@ function RunPS($script, $argList) {
 
 Write-Output 'test-auditors: can each watcher still see the bug it was written for?'
 
+# A FIXTURE RUN MUST NOT WRITE WHERE THE LIVE RUN WRITES (2026-07-31).
+# audit-basis-reconcile and audit-pack-basis take the board to examine as -CompareFile, but the path they
+# write their REPORT to was hardcoded to out\. So every run of this harness overwrote out\basis-reconcile.json
+# and out\pack-basis-audit.json with a FIXTURE's result: measured after the 06:47 run, out\pack-basis-audit.json
+# said compare_file='packbasis-legit-bulk-board.json', finding_count 0 - a synthetic clean board's report
+# parked exactly where a human, and the next reader, looks for the real board's. A harness that proves the
+# guards work must not damage the evidence the guards produced.
+# Both audits now take -ReportDir (default out\, so live behaviour is untouched) and every fixture call below
+# points it here. Temp, not the fixture folder itself: fixtures are FROZEN, and a run that writes into them
+# is how a frozen fixture stops being frozen.
+$fixRep = Join-Path $env:TEMP ('taudit-rep-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+$null = New-Item -ItemType Directory -Path $fixRep -Force
+
 # ---------------------------------------------------------------- 1. basis reconciler
 # MUST FIRE: Hy-Vee published $3.15/lb for corned beef brisket while the store's own size text printed
 # "($8.99/lb)" right there on the same row.
-$r = RunPS 'audit-basis-reconcile.ps1' @('-CompareFile', (Join-Path $fix 'basis-conflict-board.json'))
+$r = RunPS 'audit-basis-reconcile.ps1' @('-CompareFile', (Join-Path $fix 'basis-conflict-board.json'), '-ReportDir', $fixRep)
 if ($r.text -match 'corned-beef-brisket' -and $r.text -match 'disagree') { Ok 'basis-reconcile FIRES on the per-lb-rate conflict' }
 else { Bad ('basis-reconcile MISSED its founding bug: ' + $r.text) }
 # MUST BE SILENT: same board with the cell corrected to the store's own rate.
-$r = RunPS 'audit-basis-reconcile.ps1' @('-CompareFile', (Join-Path $fix 'basis-clean-board.json'))
+$r = RunPS 'audit-basis-reconcile.ps1' @('-CompareFile', (Join-Path $fix 'basis-clean-board.json'), '-ReportDir', $fixRep)
 if ($r.text -match 'ok - every checkable cell agrees') { Ok 'basis-reconcile SILENT on the corrected board' }
 else { Bad ('basis-reconcile false-positived on a clean board: ' + $r.text) }
 # MUST NOT trip on sub-cent rounding (a store publishing "$0.01/ea" against our $0.0053 is rounding, not conflict)
-$r = RunPS 'audit-basis-reconcile.ps1' @('-CompareFile', (Join-Path $fix 'basis-rounding-board.json'))
+$r = RunPS 'audit-basis-reconcile.ps1' @('-CompareFile', (Join-Path $fix 'basis-rounding-board.json'), '-ReportDir', $fixRep)
 if ($r.text -match 'ok - every checkable cell agrees') { Ok 'basis-reconcile ignores whole-cent rounding noise' }
 else { Bad ('basis-reconcile tripped on cent rounding: ' + $r.text) }
 
@@ -53,11 +66,11 @@ else { Bad ('basis-reconcile tripped on cent rounding: ' + $r.text) }
 # statement available for the estate's largest store. MUST FIRE on the 2026-07-24 Kerrygold class: reading
 # "4 ct / 16 oz" as 16 oz PER STICK priced the pack 4x under and no band blinked.
 $rawFx = Join-Path $fix 'bakers-raw'
-$r = RunPS 'audit-basis-reconcile.ps1' @('-CompareFile', (Join-Path $fix 'bakers-netweight-conflict-board.json'), '-RawDir', $rawFx)
+$r = RunPS 'audit-basis-reconcile.ps1' @('-CompareFile', (Join-Path $fix 'bakers-netweight-conflict-board.json'), '-RawDir', $rawFx, '-ReportDir', $fixRep)
 if ($r.text -match 'butter' -and $r.text -match 'netWeight') { Ok "basis-reconcile FIRES when Baker's size disagrees with Kroger's own netWeight" }
 else { Bad ('basis-reconcile missed the netWeight conflict: ' + $r.text) }
 # MUST BE SILENT once the size is read correctly...
-$r2 = RunPS 'audit-basis-reconcile.ps1' @('-CompareFile', (Join-Path $fix 'bakers-netweight-clean-board.json'), '-RawDir', $rawFx)
+$r2 = RunPS 'audit-basis-reconcile.ps1' @('-CompareFile', (Join-Path $fix 'bakers-netweight-clean-board.json'), '-RawDir', $rawFx, '-ReportDir', $fixRep)
 if ($r2.text -match 'ok - every checkable cell agrees') { Ok 'basis-reconcile SILENT when the pack size matches netWeight' }
 else { Bad ('basis-reconcile false-positived on a correct netWeight board: ' + $r2.text) }
 # ...and must IGNORE a soldBy=WEIGHT row, whose netWeight is the random tray weight (Tyson reads 22.56 lb).
@@ -71,18 +84,18 @@ else { Bad 'basis-reconcile is reading netWeight on a soldBy=WEIGHT row - that i
 # ("Kroger Original Cream Cheese" is both an 8 oz brick and a 2 ct / 8 oz pack; Sam's listed one Pledge
 # 3-pack twice). The cell here is CORRECT at $3.29/16 oz, so silence proves the join picked the right row -
 # a name-only join would compare it to the 8 oz single at $0.411/oz and flag.
-$r = RunPS 'audit-basis-reconcile.ps1' @('-CompareFile', (Join-Path $fix 'bakers-namecollision-board.json'), '-RawDir', (Join-Path $fix 'bakers-raw-collision'))
+$r = RunPS 'audit-basis-reconcile.ps1' @('-CompareFile', (Join-Path $fix 'bakers-namecollision-board.json'), '-RawDir', (Join-Path $fix 'bakers-raw-collision'), '-ReportDir', $fixRep)
 if ($r.text -match 'ok - every checkable cell agrees' -and $r.text -match 'checked 1 cell') { Ok 'basis-reconcile picks the right row when two products share one name' }
 else { Bad ('basis-reconcile cross-matched two products sharing a name: ' + $r.text) }
 
 # ---------------------------------------------------------------- 2. pack-basis heuristic
 # MUST FIRE: Sam's Pledge 3-pack whose 29 oz TOTAL was multiplied into an 87 oz each-size, making it the
 # cheapest furniture polish in Omaha at a third of its real price.
-$r = RunPS 'audit-pack-basis.ps1' @('-CompareFile', (Join-Path $fix 'packbasis-board.json'))
+$r = RunPS 'audit-pack-basis.ps1' @('-CompareFile', (Join-Path $fix 'packbasis-board.json'), '-ReportDir', $fixRep)
 if ($r.text -match 'furniture-polish' -and $r.text -match 'multiplied') { Ok 'pack-basis FIRES on the Pledge pack-total bug' }
 else { Bad ('pack-basis MISSED its founding bug: ' + $r.text) }
 # MUST BE SILENT on genuine bulk: 24 ct x 16.9 fl oz water and a 3 pk x 5 lb grits really are that cheap.
-$r = RunPS 'audit-pack-basis.ps1' @('-CompareFile', (Join-Path $fix 'packbasis-legit-bulk-board.json'))
+$r = RunPS 'audit-pack-basis.ps1' @('-CompareFile', (Join-Path $fix 'packbasis-legit-bulk-board.json'), '-ReportDir', $fixRep)
 if ($r.text -match 'ok - no multipack cell') { Ok 'pack-basis SILENT on legitimate bulk multipacks' }
 else { Bad ('pack-basis false-positived on real bulk: ' + $r.text) }
 

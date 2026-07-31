@@ -51,7 +51,11 @@
 
   Usage: audit-basis-reconcile.ps1 [-CompareFile <path>] [-Factor 1.5] [-Strict]
 #>
-param([string]$CompareFile = "", [string]$RawDir = "", [double]$Factor = 1.5, [switch]$Strict)
+# -ReportDir: where basis-reconcile.json is written. Defaults to out\, which is the live daily behaviour and
+# is unchanged. It exists so a FIXTURE run can park its report beside its fixture instead of overwriting the
+# live one: test-auditors passes fixture boards via -CompareFile but the report path was hardcoded, so every
+# harness run replaced the real board's reconciliation with a fixture's.
+param([string]$CompareFile = "", [string]$RawDir = "", [double]$Factor = 1.5, [switch]$Strict, [string]$ReportDir = "")
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $OutDir = Join-Path $root 'out'
@@ -257,7 +261,7 @@ foreach ($r in $doc.comparison) {
   }
 }
 
-$rep = Join-Path $OutDir 'basis-reconcile.json'
+$rep = Join-Path $(if ($ReportDir) { $ReportDir } else { $OutDir }) 'basis-reconcile.json'
 ([pscustomobject]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); compare_file = (Split-Path $CompareFile -Leaf)
                     unit_prices_indexed = $scanned; cells_checked = $checked; allowlisted = $allowed
                     factor_threshold = $Factor; finding_count = $findings.Count; findings = $findings } |

@@ -1095,8 +1095,9 @@
                       "current_price":  "$7.62",
                       "wm_unit_price":  "$4.89/lb",
                       "item_id":  "129054055",
-                      "qty_basis":  "package; qty derived lp/up; no name quantity (0.78125) reproduces Sam\u0027s 4.89",
-                      "engine_check":  "4.8909/lb [size 1.558 lb]"
+                      "qty_basis":  "package; qty derived lp/up; no name quantity (0.78125) reproduces Walmart\u0027s 4.89",
+                      "engine_check":  "4.8909/lb [size 1.558 lb]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -1221,8 +1222,9 @@
                       "current_price":  "$8.37",
                       "wm_unit_price":  "$7.41/lb",
                       "item_id":  "1991799554",
-                      "qty_basis":  "package; qty derived lp/up; no name quantity (0.28125) reproduces Sam\u0027s 7.41",
-                      "engine_check":  "7.4071/lb [size 1.13 lb]"
+                      "qty_basis":  "package; qty derived lp/up; no name quantity (0.28125) reproduces Walmart\u0027s 7.41",
+                      "engine_check":  "7.4071/lb [size 1.13 lb]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -4121,15 +4123,16 @@
                       "store":  "Walmart",
                       "item":  "Pacific Low Sodium Organic Beef Broth, 32 oz, (Pack of 12)",
                       "ad_price":  "$50.07",
-                      "size":  "385 ct",
+                      "size":  "384 oz",
                       "regular":  null,
                       "source_ad":  "everyday shelf price",
                       "price_type":  "everyday",
                       "current_price":  "$50.07",
                       "wm_unit_price":  "13.0 ¢/ea",
                       "item_id":  "29472983",
-                      "qty_basis":  "package; qty derived lp/up",
-                      "engine_check":  "0.1301/each [per-385-pack]"
+                      "qty_basis":  "package; qty derived lp/up; denominator proven by name arithmetic (12 x 32 oz = 384) - Walmart labelled this per-oz price \"/ea\"",
+                      "engine_check":  "0.1304/oz [size 384 oz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -4156,8 +4159,9 @@
                       "current_price":  "$4.97",
                       "wm_unit_price":  "7.9 ¢/oz",
                       "item_id":  "176956371",
-                      "qty_basis":  "package; qty derived lp/up; no name quantity (15.8) reproduces Sam\u0027s 0.079",
-                      "engine_check":  "0.079/oz [size 62.911 oz]"
+                      "qty_basis":  "package; qty derived lp/up; no name quantity (15.8) reproduces Walmart\u0027s 0.079",
+                      "engine_check":  "0.079/oz [size 62.911 oz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -6844,8 +6848,9 @@
                       "current_price":  "$5.42",
                       "wm_unit_price":  "9.0 ¢/oz",
                       "item_id":  "41581071",
-                      "qty_basis":  "package; qty derived lp/up; no name quantity (15) reproduces Sam\u0027s 0.09",
-                      "engine_check":  "0.09/oz [size 60.222 oz]"
+                      "qty_basis":  "package; qty derived lp/up; no name quantity (15) reproduces Walmart\u0027s 0.09",
+                      "engine_check":  "0.09/oz [size 60.222 oz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -9594,8 +9599,9 @@
                       "current_price":  "$5.12",
                       "wm_unit_price":  "$5.12/lb",
                       "item_id":  "10451869",
-                      "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "5.12/lb [size 1 lb]"
+                      "qty_basis":  "package; qty name (reproduces Walmart\u0027s unit price)",
+                      "engine_check":  "5.12/lb [size 1 lb]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -11274,8 +11280,9 @@
                       "current_price":  "$5.42",
                       "wm_unit_price":  "8.9 ¢/oz",
                       "item_id":  "41581070",
-                      "qty_basis":  "package; qty derived lp/up; no name quantity (15.25) reproduces Sam\u0027s 0.089",
-                      "engine_check":  "0.089/oz [size 60.899 oz]"
+                      "qty_basis":  "package; qty derived lp/up; no name quantity (15.25) reproduces Walmart\u0027s 0.089",
+                      "engine_check":  "0.089/oz [size 60.899 oz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -17836,8 +17843,9 @@
                       "current_price":  "$29.49",
                       "wm_unit_price":  "5.2 ¢/fl oz",
                       "item_id":  "934869878",
-                      "qty_basis":  "package; qty derived lp/up; no name quantity (23.7) reproduces Sam\u0027s 0.052",
-                      "engine_check":  "0.052/floz [size 567.115 floz]"
+                      "qty_basis":  "package; qty derived lp/up; no name quantity (23.7) reproduces Walmart\u0027s 0.052",
+                      "engine_check":  "0.052/floz [size 567.115 floz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -17990,8 +17998,9 @@
                       "current_price":  "$19.99",
                       "wm_unit_price":  "7.5 ¢/fl oz",
                       "item_id":  "5413484465",
-                      "qty_basis":  "package; qty derived lp/up; no name quantity (11.15862, 11.15) reproduces Sam\u0027s 0.075",
-                      "engine_check":  "0.075/floz [size 266.533 floz]"
+                      "qty_basis":  "package; qty derived lp/up; no name quantity (11.15862, 11.15) reproduces Walmart\u0027s 0.075",
+                      "engine_check":  "0.075/floz [size 266.533 floz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -18564,8 +18573,9 @@
                       "current_price":  "$26.37",
                       "wm_unit_price":  "82.4 ¢/fl oz",
                       "item_id":  "865871102",
-                      "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.8241/floz [size 32 floz]"
+                      "qty_basis":  "package; qty name (reproduces Walmart\u0027s unit price)",
+                      "engine_check":  "0.8241/floz [size 32 floz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -18597,20 +18607,6 @@
                   },
                   {
                       "store":  "Walmart",
-                      "item":  "Almond Breeze Almondmilk, Unsweetened Original 32 oz (Pack of 12)",
-                      "ad_price":  "$54.47",
-                      "size":  "33 ct",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
-                      "price_type":  "everyday",
-                      "current_price":  "$54.47",
-                      "wm_unit_price":  "$1.65/ea",
-                      "item_id":  "22389200",
-                      "qty_basis":  "package; qty derived lp/up",
-                      "engine_check":  "1.6506/each [per-33-pack]"
-                  },
-                  {
-                      "store":  "Walmart",
                       "item":  "(4 pack) Orgain Organic 10g Plant Based Protein Almondmilk, Unsweetened Vanilla 32oz, 1ct",
                       "ad_price":  "$15.92",
                       "size":  "4 ct",
@@ -18634,8 +18630,9 @@
                       "current_price":  "$54.99",
                       "wm_unit_price":  "14.3 ¢/fl oz",
                       "item_id":  "22389189",
-                      "qty_basis":  "package; qty derived lp/up; no name quantity (32) reproduces Sam\u0027s 0.143",
-                      "engine_check":  "0.143/floz [size 384.545 floz]"
+                      "qty_basis":  "package; qty derived lp/up; no name quantity (32) reproduces Walmart\u0027s 0.143",
+                      "engine_check":  "0.143/floz [size 384.545 floz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -19572,8 +19569,9 @@
                       "current_price":  "$9.12",
                       "wm_unit_price":  "15.2 ¢/oz",
                       "item_id":  "297727979",
-                      "qty_basis":  "package; qty derived lp/up; no name quantity (15) reproduces Sam\u0027s 0.152",
-                      "engine_check":  "0.152/oz [size 60 oz]"
+                      "qty_basis":  "package; qty derived lp/up; no name quantity (15) reproduces Walmart\u0027s 0.152",
+                      "engine_check":  "0.152/oz [size 60 oz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -21502,8 +21500,9 @@
                       "current_price":  "$17.97",
                       "wm_unit_price":  "$1.02/oz",
                       "item_id":  "19319107687",
-                      "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "1.021/oz [size 17.6 oz]"
+                      "qty_basis":  "package; qty name (reproduces Walmart\u0027s unit price)",
+                      "engine_check":  "1.021/oz [size 17.6 oz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -29228,8 +29227,9 @@
                       "current_price":  "$13.37",
                       "wm_unit_price":  "7.0 ¢/fl oz",
                       "item_id":  "3885354524",
-                      "qty_basis":  "package; qty derived lp/up; no name quantity (32) reproduces Sam\u0027s 0.07",
-                      "engine_check":  "0.07/floz [size 191 floz]"
+                      "qty_basis":  "package; qty derived lp/up; no name quantity (32) reproduces Walmart\u0027s 0.07",
+                      "engine_check":  "0.07/floz [size 191 floz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -31751,8 +31751,9 @@
                       "current_price":  "$7.48",
                       "wm_unit_price":  "3.9 ¢/fl oz",
                       "item_id":  "116833342",
-                      "qty_basis":  "package; qty derived lp/up; no name quantity (16) reproduces Sam\u0027s 0.039",
-                      "engine_check":  "0.039/floz [size 191.795 floz]"
+                      "qty_basis":  "package; qty derived lp/up; no name quantity (16) reproduces Walmart\u0027s 0.039",
+                      "engine_check":  "0.039/floz [size 191.795 floz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -31863,8 +31864,9 @@
                       "current_price":  "$10.94",
                       "wm_unit_price":  "22.8 ¢/oz",
                       "item_id":  "940729811",
-                      "qty_basis":  "package; qty derived lp/up; no name quantity (4) reproduces Sam\u0027s 0.228",
-                      "engine_check":  "0.228/oz [size 47.982 oz]"
+                      "qty_basis":  "package; qty derived lp/up; no name quantity (4) reproduces Walmart\u0027s 0.228",
+                      "engine_check":  "0.228/oz [size 47.982 oz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -31891,8 +31893,9 @@
                       "current_price":  "$3.86",
                       "wm_unit_price":  "24.1 ¢/oz",
                       "item_id":  "10295277",
-                      "qty_basis":  "package; qty derived lp/up; no name quantity (4) reproduces Sam\u0027s 0.241",
-                      "engine_check":  "0.241/oz [size 16.017 oz]"
+                      "qty_basis":  "package; qty derived lp/up; no name quantity (4) reproduces Walmart\u0027s 0.241",
+                      "engine_check":  "0.241/oz [size 16.017 oz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -31947,8 +31950,9 @@
                       "current_price":  "$3.86",
                       "wm_unit_price":  "24.1 ¢/oz",
                       "item_id":  "10295181",
-                      "qty_basis":  "package; qty derived lp/up; no name quantity (4) reproduces Sam\u0027s 0.241",
-                      "engine_check":  "0.241/oz [size 16.017 oz]"
+                      "qty_basis":  "package; qty derived lp/up; no name quantity (4) reproduces Walmart\u0027s 0.241",
+                      "engine_check":  "0.241/oz [size 16.017 oz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -31961,8 +31965,9 @@
                       "current_price":  "$10.94",
                       "wm_unit_price":  "22.8 ¢/oz",
                       "item_id":  "27440225",
-                      "qty_basis":  "package; qty derived lp/up; no name quantity (4) reproduces Sam\u0027s 0.228",
-                      "engine_check":  "0.228/oz [size 47.982 oz]"
+                      "qty_basis":  "package; qty derived lp/up; no name quantity (4) reproduces Walmart\u0027s 0.228",
+                      "engine_check":  "0.228/oz [size 47.982 oz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -32815,8 +32820,9 @@
                       "current_price":  "$3.36",
                       "wm_unit_price":  "21.0 ¢/oz",
                       "item_id":  "10295169",
-                      "qty_basis":  "package; qty derived lp/up; no name quantity (4) reproduces Sam\u0027s 0.21",
-                      "engine_check":  "0.21/oz [size 16 oz]"
+                      "qty_basis":  "package; qty derived lp/up; no name quantity (4) reproduces Walmart\u0027s 0.21",
+                      "engine_check":  "0.21/oz [size 16 oz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -32857,8 +32863,9 @@
                       "current_price":  "$3.48",
                       "wm_unit_price":  "23.2 ¢/oz",
                       "item_id":  "10295294",
-                      "qty_basis":  "package; qty derived lp/up; no name quantity (3.75) reproduces Sam\u0027s 0.232",
-                      "engine_check":  "0.232/oz [size 15 oz]"
+                      "qty_basis":  "package; qty derived lp/up; no name quantity (3.75) reproduces Walmart\u0027s 0.232",
+                      "engine_check":  "0.232/oz [size 15 oz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -32885,8 +32892,9 @@
                       "current_price":  "$9.14",
                       "wm_unit_price":  "19.0 ¢/oz",
                       "item_id":  "21849152",
-                      "qty_basis":  "package; qty derived lp/up; no name quantity (4) reproduces Sam\u0027s 0.19",
-                      "engine_check":  "0.19/oz [size 48.105 oz]"
+                      "qty_basis":  "package; qty derived lp/up; no name quantity (4) reproduces Walmart\u0027s 0.19",
+                      "engine_check":  "0.19/oz [size 48.105 oz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -34588,8 +34596,9 @@
                       "current_price":  "$2.24",
                       "wm_unit_price":  "18.7 ¢/oz",
                       "item_id":  "193731341",
-                      "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.1867/oz [size 12 oz]"
+                      "qty_basis":  "package; qty name (reproduces Walmart\u0027s unit price)",
+                      "engine_check":  "0.1867/oz [size 12 oz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -34728,8 +34737,9 @@
                       "current_price":  "$3.87",
                       "wm_unit_price":  "10.8 ¢/oz",
                       "item_id":  "10450904",
-                      "qty_basis":  "package; qty derived lp/up; no name quantity (3) reproduces Sam\u0027s 0.108",
-                      "engine_check":  "0.108/oz [size 35.833 oz]"
+                      "qty_basis":  "package; qty derived lp/up; no name quantity (3) reproduces Walmart\u0027s 0.108",
+                      "engine_check":  "0.108/oz [size 35.833 oz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -34801,8 +34811,9 @@
                       "current_price":  "$8.77",
                       "wm_unit_price":  "47.9 ¢/oz",
                       "item_id":  "36095917",
-                      "qty_basis":  "package; qty derived lp/up; no name quantity (4.58) reproduces Sam\u0027s 0.479",
-                      "engine_check":  "0.479/oz [size 18.309 oz]"
+                      "qty_basis":  "package; qty derived lp/up; no name quantity (4.58) reproduces Walmart\u0027s 0.479",
+                      "engine_check":  "0.479/oz [size 18.309 oz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -34829,8 +34840,9 @@
                       "current_price":  "$3.87",
                       "wm_unit_price":  "10.8 ¢/oz",
                       "item_id":  "15570903",
-                      "qty_basis":  "package; qty derived lp/up; no name quantity (3) reproduces Sam\u0027s 0.108",
-                      "engine_check":  "0.108/oz [size 35.833 oz]"
+                      "qty_basis":  "package; qty derived lp/up; no name quantity (3) reproduces Walmart\u0027s 0.108",
+                      "engine_check":  "0.108/oz [size 35.833 oz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -34843,8 +34855,9 @@
                       "current_price":  "$3.87",
                       "wm_unit_price":  "10.8 ¢/oz",
                       "item_id":  "49543487",
-                      "qty_basis":  "package; qty derived lp/up; no name quantity (3) reproduces Sam\u0027s 0.108",
-                      "engine_check":  "0.108/oz [size 35.833 oz]"
+                      "qty_basis":  "package; qty derived lp/up; no name quantity (3) reproduces Walmart\u0027s 0.108",
+                      "engine_check":  "0.108/oz [size 35.833 oz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -35039,8 +35052,9 @@
                       "current_price":  "$4.97",
                       "wm_unit_price":  "41.4 Â¢/oz",
                       "item_id":  "1067046242",
-                      "qty_basis":  "package; qty name (reproduces Sam\u0027s unit price)",
-                      "engine_check":  "0.4142/oz [size 12 oz]"
+                      "qty_basis":  "package; qty name (reproduces Walmart\u0027s unit price)",
+                      "engine_check":  "0.4142/oz [size 12 oz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -38576,8 +38590,9 @@
                       "current_price":  "$7.27",
                       "wm_unit_price":  "11.4 Â¢/fl oz",
                       "item_id":  "483952655",
-                      "qty_basis":  "package; qty derived lp/up; no name quantity (32) reproduces Sam\u0027s 0.114",
-                      "engine_check":  "0.114/floz [size 63.772 floz]"
+                      "qty_basis":  "package; qty derived lp/up; no name quantity (32) reproduces Walmart\u0027s 0.114",
+                      "engine_check":  "0.114/floz [size 63.772 floz]",
+                      "written_by":  "import-walmart-batch.ps1"
                   },
                   {
                       "store":  "Walmart",
@@ -64028,15 +64043,15 @@
                       "store":  "Walmart",
                       "item":  "Chef Merito Achiote Condimentado Spiced Annatto Seed Paste, 3.5 oz, (Pack of 12)",
                       "ad_price":  "$16.24",
-                      "size":  "42 ct",
+                      "size":  "42 oz",
                       "regular":  null,
                       "source_ad":  "Walmart Bellevue 68123 shelf price (batch capture)",
                       "price_type":  "everyday",
                       "current_price":  "$16.24",
                       "wm_unit_price":  "38.7 ¢/ea",
                       "item_id":  "44014301",
-                      "qty_basis":  "package; qty derived lp/up",
-                      "engine_check":  "0.3867/each [per-42-pack]",
+                      "qty_basis":  "package; qty derived lp/up; denominator proven by name arithmetic (12 x 3.5 oz = 42) - Walmart labelled this per-oz price \"/ea\"",
+                      "engine_check":  "0.3867/oz [size 42 oz]",
                       "written_by":  "import-walmart-batch.ps1",
                       "as_of":  "2026-07-31",
                       "seller_check":  "capture"
@@ -74565,7 +74580,7 @@
                       "seller_check":  "capture"
                   }
               ],
-    "deal_count":  4864,
+    "deal_count":  4863,
     "batch_imports":  [
                           {
                               "date":  "2026-07-30",
@@ -74647,6 +74662,15 @@
                               "quarantined":  0,
                               "rejected":  62,
                               "by":  "import-walmart-batch.ps1"
+                          },
+                          {
+                              "date":  "2026-07-31",
+                              "raw":  "reheal:(?i)\\bpacks?\\s+of\\s+\\d+",
+                              "added":  0,
+                              "replaced":  2,
+                              "quarantined":  0,
+                              "rejected":  1,
+                              "by":  "import-walmart-batch.ps1 -Reheal"
                           }
                       ]
 }

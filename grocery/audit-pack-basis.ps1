@@ -22,7 +22,12 @@
 
   Usage: audit-pack-basis.ps1 [-CompareFile <path>] [-Strict]
 #>
-param([string]$CompareFile = "", [switch]$Strict)
+# -ReportDir: where pack-basis-audit.json is written. Defaults to out\, which is the live daily behaviour and
+# is unchanged. It exists so a FIXTURE run can park its report beside its fixture instead of overwriting the
+# live one: test-auditors passes fixture boards via -CompareFile but the report path was hardcoded, so every
+# harness run left out\pack-basis-audit.json describing 'packbasis-legit-bulk-board.json' with 0 findings -
+# a fixture's clean result sitting exactly where a human (or the next audit) looks for the real board's.
+param([string]$CompareFile = "", [switch]$Strict, [string]$ReportDir = "")
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $OutDir = Join-Path $root 'out'
@@ -103,7 +108,7 @@ foreach ($r in $doc.comparison) {
   }
 }
 
-$rep = Join-Path $OutDir 'pack-basis-audit.json'
+$rep = Join-Path $(if ($ReportDir) { $ReportDir } else { $OutDir }) 'pack-basis-audit.json'
 ([pscustomobject]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); compare_file = (Split-Path $CompareFile -Leaf); finding_count = $findings.Count; findings = $findings } |
   ConvertTo-Json -Depth 5) | Set-Content $rep -Encoding UTF8
 

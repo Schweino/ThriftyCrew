@@ -1,261 +1,331 @@
 {
-  "readme": "THE KNOWN-WRONG BLOCKLIST. One row per (commodity, store, product) that a reasoner has ADJUDICATED wrong - the product is not the commodity, so no price for it may ever appear in that commodity's row again. audit-known-wrong.ps1 exits 2 if any listed product is priced on the board, and guards.ps1 delegates to it, so a defect that was already found and fixed cannot come back silently. This file exists because audit findings used to live as PROSE in .md files: honeydew was written up on 2026-07-29 with the store's own arithmetic and was still the published crown the next morning. Add a finding with add-known-wrong.ps1 (one command). NEVER hand-edit a name to make the gate go green - if a ruling was wrong, reverse it with add-known-wrong.ps1 -Reverse, which records who reversed it and why.",
-  "schema": 1,
-  "matching_key": "Normalized product name, scoped to (commodity, store). The name is lower-cased, apostrophes are deleted, every other non-alphanumeric byte becomes a space, and a stranded possessive 's' is re-joined. That folds the pipeline's own corruptions together (measured over 35,362 board cells: 69 groups where several raw spellings collapse to one normal form, and all 69 were the SAME product re-encoded - Jiffy(R) three ways, 'Hy Vee' vs 'Hy-Vee', 'Clancy S' vs \"Clancy's\", smart quote vs mojibake pair; zero merged two different products). product_id is a SECOND, optional key used only to re-derive today's spelling of a listed product from its own store feed - it is absent at Aldi, Sam's Club and Fareway, so it can never be the primary key. Scoping to (commodity, store) is required, not cosmetic: 'Lysol Toilet Bowl Cleaner Clinging Gel' is BLOCKED as stain-remover and CORRECT as toilet-bowl-cleaner, where it is priced today; a product-global blocklist would delete a right answer.",
-  "retire_when_vocabulary": {
-    "ruling-reversed": "Fires when the entry carries a non-empty reversed_on AND reversed_by. This is the normal trigger for a wrong-product ruling: the product does not stop being the wrong product on its own, so the only honest way out is a named human or agent reversing the ruling on the record. add-known-wrong.ps1 -Reverse sets both fields in one command, and audit-known-wrong.ps1 stops enforcing the entry the moment they are set.",
-    "commodity-retired": "Fires when the entry's commodity id is no longer in commodities.json. Evaluated every run.",
-    "store-retired": "Fires when the entry's store name is no longer in stores.json. Evaluated every run.",
-    "note": "audit-known-wrong.ps1 evaluates ALL THREE predicates for EVERY entry each run and prints the ones that have fired, and it exits 2 if an entry declares a retire_when outside this list. That is deliberate: the allowlist bug found 2026-07-30 shipped two entries justified by 'the store does not carry the item' while the store carried it - a justification no machine could check, so it could never be retired and never be shown wrong."
-  },
-  "entries": [
-    {
-      "key": "coconut-oil|Bakers|dr-teals-foaming-bath",
-      "commodity": "coconut-oil",
-      "store": "Baker's",
-      "names": ["Dr Teal's Foaming Bath with Pure Epsom Salt, Nourish & Protect with Coconut Oil"],
-      "product_id": "0081106801501",
-      "verdict": "wrong-product",
-      "evidence": "Epsom-salt bath soap, not an edible oil. Held the coconut-oil CROWN on comparison-2026-07-28 at $5.99 / 34 fl oz = $0.1762/oz, 46% under the real cheapest. Top-of-ladder verified the whole way: real Kroger product_id, real price, working link - identity proved the price belonged to the product and said nothing about whether the product belonged to the commodity. The include rule matched on the generic word 'pure', shared with LouAna 100% Pure Coconut Oil.",
-      "seen_on_board": "2026-07-28",
-      "ruled_on": "2026-07-30",
-      "ruled_by": "accuracy-audit-2026-07-30",
-      "retire_when": "ruling-reversed"
-    },
-    {
-      "key": "coffee|Walmart|onyx-coffee-lab-salted-mocha-latte",
-      "commodity": "coffee",
-      "store": "Walmart",
-      "names": ["Onyx Coffee Lab Salted Mocha Oat Milk Latte , 11 fl oz Can", "Onyx Coffee Lab Salted Mocha Oat Milk Latte, 11 fl oz Can"],
-      "product_id": "19034168881",
-      "verdict": "wrong-product",
-      "evidence": "A single-serve ready-to-drink oat milk latte in a can, not ground or whole-bean coffee. Live in walmart-regular-2026-07-30 at $4.97 / 11 fl oz; a per-serving RTD beverage priced per ounce against a commodity whose real unit is dry coffee makes the coffee row unreadable. Caught before it reached a board.",
-      "seen_on_board": "never (blocked in the feed, walmart-regular-2026-07-30)",
-      "ruled_on": "2026-07-30",
-      "ruled_by": "accuracy-audit-2026-07-30",
-      "retire_when": "ruling-reversed"
-    },
-    {
-      "key": "coffee|Walmart|onyx-coffee-lab-matcha-latte-2pk",
-      "commodity": "coffee",
-      "store": "Walmart",
-      "names": ["(2 pack) Onyx Coffee Lab Matcha Oat Milk Latte, 11 fl oz Can"],
-      "product_id": "20454610214",
-      "verdict": "wrong-product",
-      "evidence": "Matcha - green tea - in a 2-pack of RTD cans. Not coffee at all, in the coffee commodity. Live in walmart-regular-2026-07-30 at $9.94 / 22 fl oz.",
-      "seen_on_board": "never (blocked in the feed, walmart-regular-2026-07-30)",
-      "ruled_on": "2026-07-30",
-      "ruled_by": "accuracy-audit-2026-07-30",
-      "retire_when": "ruling-reversed"
-    },
-    {
-      "key": "frosting|Walmart|freshness-guaranteed-choc-chip-sandwich-cookies",
-      "commodity": "frosting",
-      "store": "Walmart",
-      "names": ["Freshness Guaranteed Shelf Stable Chocolate Chip Sandwich Cookies with Butter Cream Icing, 12 Count"],
-      "product_id": "17762904277",
-      "verdict": "wrong-product",
-      "evidence": "A packet of sandwich cookies, matched into frosting on the words 'Butter Cream Icing'. Priced on comparison-2026-07-29 at $5.76 / 15 oz = $0.384/oz in the frosting row. The whole product is not frosting; the frosting is a filling inside it.",
-      "seen_on_board": "2026-07-29",
-      "ruled_on": "2026-07-30",
-      "ruled_by": "accuracy-audit-2026-07-30",
-      "retire_when": "ruling-reversed"
-    },
-    {
-      "key": "parmesan|Aldi|clancys-parmesan-garlic-pita-chips",
-      "commodity": "parmesan",
-      "store": "Aldi",
-      "names": ["Clancy S Parmesan Garlic Pita Chips 7.33 OZ", "Clancy's Parmesan Garlic Pita Chips"],
-      "product_id": "",
-      "verdict": "wrong-product",
-      "evidence": "Pita chips with a parmesan-garlic seasoning, not parmesan cheese. Live in aldi-regular-2026-07-29 at $2.29 / 7.33 oz - about a quarter of real grated parmesan per ounce, so it wins the cheapest slot whenever it is admitted. Aldi publishes no product id, and its feed also strips the apostrophe (\"Clancy S\"), which is why the blocklist carries BOTH observed spellings and the normalizer re-joins the stranded possessive.",
-      "seen_on_board": "never (blocked in the feed, aldi-regular-2026-07-29)",
-      "ruled_on": "2026-07-30",
-      "ruled_by": "accuracy-audit-2026-07-30",
-      "retire_when": "ruling-reversed"
-    },
-    {
-      "key": "parmesan|Bakers|idahoan-baby-reds-garlic-parmesan",
-      "commodity": "parmesan",
-      "store": "Baker's",
-      "names": ["Idahoan Baby Reds with Roasted Garlic & Parmesan Mashed Potatoes"],
-      "product_id": "0002970000139",
-      "verdict": "wrong-product",
-      "evidence": "Instant mashed potatoes with a garlic-parmesan flavour, not parmesan cheese. Held the parmesan CROWN on SIX consecutive boards, comparison-2026-07-23 through 2026-07-28, at $1.25 / 4.1 oz = $0.3049/oz. Six days of a wrong crown that nothing in the publish path could see, while Idahoan sits correctly in instant-mashed-potatoes on the same boards.",
-      "seen_on_board": "2026-07-23 .. 2026-07-28 (crown all six days)",
-      "ruled_on": "2026-07-30",
-      "ruled_by": "accuracy-audit-2026-07-30",
-      "retire_when": "ruling-reversed"
-    },
-    {
-      "key": "salmon|Walmart|blue-buffalo-wilderness-cat-food-salmon",
-      "commodity": "salmon",
-      "store": "Walmart",
-      "names": ["Blue Buffalo Wilderness Natural High Protein Dry Food for Adult Cats, Salmon, 9.5-lb Bag"],
-      "product_id": "634625434",
-      "verdict": "wrong-product",
-      "evidence": "Dry cat food. Held the salmon CROWN on comparison-2026-07-29 at $38.98 / 9.5 lb = $4.10/lb, 20.8% under the runner-up - a near-miss with no magnitude signal, so no price band could ever have caught it. The salmon commodity already carried TEN pet-food exclude patterns and the phrase 'Dry Food for Adult Cats' walked through all ten. This entry is the reason the blocklist exists: the rule library is 43,416 excludes against 1,079 includes and still loses.",
-      "seen_on_board": "2026-07-29 (crown)",
-      "ruled_on": "2026-07-30",
-      "ruled_by": "accuracy-audit-2026-07-30",
-      "retire_when": "ruling-reversed"
-    },
-    {
-      "key": "ground-cinnamon|Walmart|teddy-grahams-cinnamon",
-      "commodity": "ground-cinnamon",
-      "store": "Walmart",
-      "names": ["TEDDY GRAHAMS Cinnamon Graham Snacks, Kids Snacks, 10 oz"],
-      "product_id": "10292091",
-      "verdict": "wrong-product",
-      "evidence": "A box of cinnamon-flavoured kids' cookies, not ground cinnamon. Live in walmart-regular-2026-07-30 at $3.98 / 10 oz. Adjudicated at 4.7% under the runner-up, so the miss is invisible to any per-unit sanity band - the near-miss class that makes magnitude detectors useless here.",
-      "seen_on_board": "never (blocked in the feed, walmart-regular-2026-07-30)",
-      "ruled_on": "2026-07-30",
-      "ruled_by": "accuracy-audit-2026-07-30",
-      "retire_when": "ruling-reversed"
-    },
-    {
-      "key": "stain-remover|Walmart|lysol-toilet-bowl-cleaner-clinging-gel-2pk",
-      "commodity": "stain-remover",
-      "store": "Walmart",
-      "names": ["Lysol Toilet Bowl Cleaner Clinging Gel, Power, Disinfecting Bathroom Cleaner and Toilet Bowl Stain Remover, 24 oz (2 Pack)"],
-      "product_id": "14711873",
-      "verdict": "wrong-product",
-      "evidence": "A toilet bowl cleaner, matched into stain-remover (laundry) on the words 'Stain Remover' in its own marketing copy. Adjudicated at 2.8% under the runner-up. NOTE THE SCOPE: this exact product is priced CORRECTLY on comparison-2026-07-30 in the toilet-bowl-cleaner row at $4.97 / 48 fl oz - the ruling is about (product, commodity), never about the product alone, and a product-global blocklist would have deleted a right answer.",
-      "seen_on_board": "never in stain-remover (correct today in toilet-bowl-cleaner)",
-      "ruled_on": "2026-07-30",
-      "ruled_by": "accuracy-audit-2026-07-30",
-      "retire_when": "ruling-reversed"
-    },
-    {
-      "key": "butter|Walmart|natures-own-butter-buns-hot-dog",
-      "commodity": "butter",
-      "store": "Walmart",
-      "names": ["Nature's Own Butter Buns Hot Dog Buns, Non-GMO Hot Dog Buns, 8 Count"],
-      "product_id": "21094641",
-      "verdict": "wrong-product",
-      "evidence": "Hot dog buns whose brand line is literally 'Butter Buns'. Priced on comparison-2026-07-29 in the butter row at $2.78 / 15.027 oz. Bakery carriers named after the dairy commodity are a standing class here (butter buns, cream cheese frosting, garlic bread).",
-      "seen_on_board": "2026-07-29",
-      "ruled_on": "2026-07-30",
-      "ruled_by": "accuracy-audit-2026-07-30",
-      "retire_when": "ruling-reversed"
-    },
-    {
-      "key": "tomatoes|FamilyFare|contadina-roma-tomatoes-puree",
-      "commodity": "tomatoes",
-      "store": "Family Fare",
-      "names": ["Contadina Roma Tomatoes Puree 29 Oz", "Contadina Roma Tomatoes Puree"],
-      "product_id": "6931",
-      "verdict": "wrong-product",
-      "evidence": "Canned tomato PUREE in the FRESH tomatoes commodity - a form flip, not a brand difference. Live in family-fare-regular-2026-07-30 at $2.99 / 29 oz, which is far under fresh Roma at $1.29-$1.49/lb and therefore wins the cheapest slot whenever admitted. Contadina Crushed Tomatoes from the same feed sits correctly in crushed-tomatoes on comparison-2026-07-30, so the brand cannot be excluded wholesale.",
-      "seen_on_board": "never in tomatoes (Contadina is correct today in crushed-tomatoes)",
-      "ruled_on": "2026-07-30",
-      "ruled_by": "accuracy-audit-2026-07-30",
-      "retire_when": "ruling-reversed"
-    },
-    {
-      "key": "raspberries|FamilyFare|kens-raspberry-walnut-vinaigrette",
-      "commodity": "raspberries",
-      "store": "Family Fare",
-      "names": ["Ken's Steak House Salad Dressing & Marinade, Raspberry Walnut Vinaigrette, Lite 16 Fl Oz"],
-      "product_id": "",
-      "verdict": "wrong-product",
-      "evidence": "Salad dressing in the fresh raspberries commodity. Held the raspberries CROWN on comparison-2026-07-14 at $3.69 / 16 fl oz = $0.2306/oz. Ken's dressings are correctly matched elsewhere on today's board (italian-dressing, caesar-dressing, honey-mustard), so the brand is legitimate and only this flavour-name collision is not.",
-      "seen_on_board": "2026-07-14 (crown)",
-      "ruled_on": "2026-07-30",
-      "ruled_by": "accuracy-audit-2026-07-30",
-      "retire_when": "ruling-reversed"
-    },
-    {
-      "key": "raspberries|Bakers|pure-silk-raspberry-mist-shave-cream",
-      "commodity": "raspberries",
-      "store": "Baker's",
-      "names": ["Pure Silk Raspberry Mist Moisturizing Shave Cream"],
-      "product_id": "0005100930991",
-      "verdict": "wrong-product",
-      "evidence": "Shave cream in the fresh raspberries commodity, matched on a SCENT name. Held the raspberries CROWN on comparison-2026-07-23 and 2026-07-25 through 2026-07-28 at $2.29 / 7.25 oz = $0.3159/oz. Pure Silk Spa Therapy from the same feed is priced correctly in shaving-cream on today's board, which is why the ruling is scoped to (raspberries, Baker's) and not to the brand.",
-      "seen_on_board": "2026-07-23, 2026-07-25 .. 2026-07-28 (crown)",
-      "ruled_on": "2026-07-30",
-      "ruled_by": "accuracy-audit-2026-07-30",
-      "retire_when": "ruling-reversed"
-    },
-    {
-      "key": "strawberries|SamsClub|monster-energy-strawberry-shot-24pk",
-      "commodity": "strawberries",
-      "store": "Sam's Club",
-      "names": ["Monster Energy Zero Sugar, Strawberry Shot, 16 fl. oz., 24 pk."],
-      "product_id": "",
-      "verdict": "wrong-product",
-      "evidence": "A 24-pack of energy drinks in the fresh strawberries commodity. Held the strawberries CROWN on comparison-2026-07-17, 2026-07-18 and 2026-07-22 at $42.48 / 384 fl oz = $0.1106/oz, then stayed priced in the row through 2026-07-28. Sam's Club publishes no product id in its captures, so the name is the only available key.",
-      "seen_on_board": "2026-07-17 .. 2026-07-28 (crown on 07-17, 07-18, 07-22)",
-      "ruled_on": "2026-07-30",
-      "ruled_by": "accuracy-audit-2026-07-30",
-      "retire_when": "ruling-reversed"
-    },
-    {
-      "key": "strawberries|FamilyFare|jumex-strawberry-banana-nectar",
-      "commodity": "strawberries",
-      "store": "Family Fare",
-      "names": ["Jumex Strawberry Banana Nectar From Concentrate 11.3 Fl Oz"],
-      "product_id": "",
-      "verdict": "wrong-product",
-      "evidence": "Fruit nectar from concentrate in the fresh strawberries commodity. Held the strawberries CROWN on comparison-2026-07-12 at $1.19 / 11.3 fl oz = $0.1053/oz.",
-      "seen_on_board": "2026-07-12 (crown)",
-      "ruled_on": "2026-07-30",
-      "ruled_by": "accuracy-audit-2026-07-30",
-      "retire_when": "ruling-reversed"
-    },
-    {
-      "key": "strawberries|Bakers|kroger-strawberry-applesauce",
-      "commodity": "strawberries",
-      "store": "Baker's",
-      "names": ["Kroger Strawberry Applesauce"],
-      "product_id": "0001111015511",
-      "verdict": "wrong-product",
-      "evidence": "Applesauce cups in the fresh strawberries commodity. Held the strawberries CROWN on SIX consecutive boards, comparison-2026-07-23 through 2026-07-28, at $2.00 / 6 pk 4 oz = $0.0833/oz - roughly a tenth of real fresh strawberries per ounce, and still nothing in the publish path could see it.",
-      "seen_on_board": "2026-07-23 .. 2026-07-28 (crown all six days)",
-      "ruled_on": "2026-07-30",
-      "ruled_by": "accuracy-audit-2026-07-30",
-      "retire_when": "ruling-reversed"
-    },
-    {
-      "key": "tortillas|SamsClub|quest-tortilla-style-protein-chips",
-      "commodity": "tortillas",
-      "store": "Sam's Club",
-      "names": ["Quest Tortilla Style 10-20g Protein Chip Variety Pack, Salsa Verde and Chili Lime, 14 ct."],
-      "product_id": "",
-      "verdict": "wrong-product",
-      "evidence": "Protein CHIPS described as 'Tortilla Style' in the tortillas commodity. Held the tortillas CROWN on comparison-2026-07-14 at $1.56, priced against a bare 'oz' basis. A chip is not a tortilla and the pack basis is not comparable either.",
-      "seen_on_board": "2026-07-14 (crown)",
-      "ruled_on": "2026-07-30",
-      "ruled_by": "accuracy-audit-2026-07-30",
-      "retire_when": "ruling-reversed"
-    },
-    {
-      "key": "cucumbers|SamsClub|members-mark-fujisan-cucumber-avocado-roll",
-      "commodity": "cucumbers",
-      "store": "Sam's Club",
-      "names": ["Member's Mark by FujiSan Cucumber Avocado Roll, 15 pcs."],
-      "product_id": "",
-      "verdict": "wrong-product",
-      "evidence": "A prepared sushi roll in the fresh cucumbers commodity. Held the cucumbers CROWN on FIVE consecutive boards, comparison-2026-07-17 through 2026-07-24, at $5.74 / 15 ct = $0.3827 per piece - a per-PIECE basis silently compared against per-cucumber.",
-      "seen_on_board": "2026-07-17 .. 2026-07-24 (crown all five days)",
-      "ruled_on": "2026-07-30",
-      "ruled_by": "accuracy-audit-2026-07-30",
-      "retire_when": "ruling-reversed"
-    },
-    {
-      "key": "black-pepper|Bakers|simple-truth-black-pepper-lentil-rice-blend",
-      "commodity": "black-pepper",
-      "store": "Baker's",
-      "names": ["Simple Truth Protein Black Pepper Lentils Brown Rice and Ancient Grains Whole Grain Blend"],
-      "product_id": "0001111002281",
-      "verdict": "wrong-product",
-      "evidence": "A lentil / brown rice / ancient grain side dish flavoured with black pepper, in the black-pepper SPICE commodity. Held the black-pepper CROWN on SIX consecutive boards, comparison-2026-07-23 through 2026-07-28, at $2.99 / 8.8 oz = $0.3398/oz. Ground black pepper runs many times that per ounce, so the wrong product owned the row's headline number for six days.",
-      "seen_on_board": "2026-07-23 .. 2026-07-28 (crown all six days)",
-      "ruled_on": "2026-07-30",
-      "ruled_by": "accuracy-audit-2026-07-30",
-      "retire_when": "ruling-reversed"
-    }
-  ]
+    "readme":  "THE KNOWN-WRONG BLOCKLIST. One row per (commodity, store, product) that a reasoner has ADJUDICATED wrong - the product is not the commodity, so no price for it may ever appear in that commodity\u0027s row again. audit-known-wrong.ps1 exits 2 if any listed product is priced on the board, and guards.ps1 delegates to it, so a defect that was already found and fixed cannot come back silently. This file exists because audit findings used to live as PROSE in .md files: honeydew was written up on 2026-07-29 with the store\u0027s own arithmetic and was still the published crown the next morning. Add a finding with add-known-wrong.ps1 (one command). NEVER hand-edit a name to make the gate go green - if a ruling was wrong, reverse it with add-known-wrong.ps1 -Reverse, which records who reversed it and why.",
+    "schema":  1,
+    "matching_key":  "Normalized product name, scoped to (commodity, store). The name is lower-cased, apostrophes are deleted, every other non-alphanumeric byte becomes a space, and a stranded possessive \u0027s\u0027 is re-joined. That folds the pipeline\u0027s own corruptions together (measured over 35,362 board cells: 69 groups where several raw spellings collapse to one normal form, and all 69 were the SAME product re-encoded - Jiffy(R) three ways, \u0027Hy Vee\u0027 vs \u0027Hy-Vee\u0027, \u0027Clancy S\u0027 vs \"Clancy\u0027s\", smart quote vs mojibake pair; zero merged two different products). product_id is a SECOND, optional key used only to re-derive today\u0027s spelling of a listed product from its own store feed - it is absent at Aldi, Sam\u0027s Club and Fareway, so it can never be the primary key. Scoping to (commodity, store) is required, not cosmetic: \u0027Lysol Toilet Bowl Cleaner Clinging Gel\u0027 is BLOCKED as stain-remover and CORRECT as toilet-bowl-cleaner, where it is priced today; a product-global blocklist would delete a right answer.",
+    "retire_when_vocabulary":  {
+                                   "ruling-reversed":  "Fires when the entry carries a non-empty reversed_on AND reversed_by. This is the normal trigger for a wrong-product ruling: the product does not stop being the wrong product on its own, so the only honest way out is a named human or agent reversing the ruling on the record. add-known-wrong.ps1 -Reverse sets both fields in one command, and audit-known-wrong.ps1 stops enforcing the entry the moment they are set.",
+                                   "commodity-retired":  "Fires when the entry\u0027s commodity id is no longer in commodities.json. Evaluated every run.",
+                                   "store-retired":  "Fires when the entry\u0027s store name is no longer in stores.json. Evaluated every run.",
+                                   "note":  "audit-known-wrong.ps1 evaluates ALL THREE predicates for EVERY entry each run and prints the ones that have fired, and it exits 2 if an entry declares a retire_when outside this list. That is deliberate: the allowlist bug found 2026-07-30 shipped two entries justified by \u0027the store does not carry the item\u0027 while the store carried it - a justification no machine could check, so it could never be retired and never be shown wrong."
+                               },
+    "entries":  [
+                    {
+                        "key":  "coconut-oil|Bakers|dr-teals-foaming-bath",
+                        "commodity":  "coconut-oil",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Dr Teal\u0027s Foaming Bath with Pure Epsom Salt, Nourish \u0026 Protect with Coconut Oil"
+                                  ],
+                        "product_id":  "0081106801501",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Epsom-salt bath soap, not an edible oil. Held the coconut-oil CROWN on comparison-2026-07-28 at $5.99 / 34 fl oz = $0.1762/oz, 46% under the real cheapest. Top-of-ladder verified the whole way: real Kroger product_id, real price, working link - identity proved the price belonged to the product and said nothing about whether the product belonged to the commodity. The include rule matched on the generic word \u0027pure\u0027, shared with LouAna 100% Pure Coconut Oil.",
+                        "seen_on_board":  "2026-07-28",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "coffee|Walmart|onyx-coffee-lab-salted-mocha-latte",
+                        "commodity":  "coffee",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Onyx Coffee Lab Salted Mocha Oat Milk Latte , 11 fl oz Can",
+                                      "Onyx Coffee Lab Salted Mocha Oat Milk Latte, 11 fl oz Can"
+                                  ],
+                        "product_id":  "19034168881",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A single-serve ready-to-drink oat milk latte in a can, not ground or whole-bean coffee. Live in walmart-regular-2026-07-30 at $4.97 / 11 fl oz; a per-serving RTD beverage priced per ounce against a commodity whose real unit is dry coffee makes the coffee row unreadable. Caught before it reached a board.",
+                        "seen_on_board":  "never (blocked in the feed, walmart-regular-2026-07-30)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "coffee|Walmart|onyx-coffee-lab-matcha-latte-2pk",
+                        "commodity":  "coffee",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "(2 pack) Onyx Coffee Lab Matcha Oat Milk Latte, 11 fl oz Can"
+                                  ],
+                        "product_id":  "20454610214",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Matcha - green tea - in a 2-pack of RTD cans. Not coffee at all, in the coffee commodity. Live in walmart-regular-2026-07-30 at $9.94 / 22 fl oz.",
+                        "seen_on_board":  "never (blocked in the feed, walmart-regular-2026-07-30)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "frosting|Walmart|freshness-guaranteed-choc-chip-sandwich-cookies",
+                        "commodity":  "frosting",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Freshness Guaranteed Shelf Stable Chocolate Chip Sandwich Cookies with Butter Cream Icing, 12 Count"
+                                  ],
+                        "product_id":  "17762904277",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A packet of sandwich cookies, matched into frosting on the words \u0027Butter Cream Icing\u0027. Priced on comparison-2026-07-29 at $5.76 / 15 oz = $0.384/oz in the frosting row. The whole product is not frosting; the frosting is a filling inside it.",
+                        "seen_on_board":  "2026-07-29",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "parmesan|Aldi|clancys-parmesan-garlic-pita-chips",
+                        "commodity":  "parmesan",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Clancy S Parmesan Garlic Pita Chips 7.33 OZ",
+                                      "Clancy\u0027s Parmesan Garlic Pita Chips"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Pita chips with a parmesan-garlic seasoning, not parmesan cheese. Live in aldi-regular-2026-07-29 at $2.29 / 7.33 oz - about a quarter of real grated parmesan per ounce, so it wins the cheapest slot whenever it is admitted. Aldi publishes no product id, and its feed also strips the apostrophe (\"Clancy S\"), which is why the blocklist carries BOTH observed spellings and the normalizer re-joins the stranded possessive.",
+                        "seen_on_board":  "never (blocked in the feed, aldi-regular-2026-07-29)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "parmesan|Bakers|idahoan-baby-reds-garlic-parmesan",
+                        "commodity":  "parmesan",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Idahoan Baby Reds with Roasted Garlic \u0026 Parmesan Mashed Potatoes"
+                                  ],
+                        "product_id":  "0002970000139",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Instant mashed potatoes with a garlic-parmesan flavour, not parmesan cheese. Held the parmesan CROWN on SIX consecutive boards, comparison-2026-07-23 through 2026-07-28, at $1.25 / 4.1 oz = $0.3049/oz. Six days of a wrong crown that nothing in the publish path could see, while Idahoan sits correctly in instant-mashed-potatoes on the same boards.",
+                        "seen_on_board":  "2026-07-23 .. 2026-07-28 (crown all six days)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "salmon|Walmart|blue-buffalo-wilderness-cat-food-salmon",
+                        "commodity":  "salmon",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Blue Buffalo Wilderness Natural High Protein Dry Food for Adult Cats, Salmon, 9.5-lb Bag"
+                                  ],
+                        "product_id":  "634625434",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Dry cat food. Held the salmon CROWN on comparison-2026-07-29 at $38.98 / 9.5 lb = $4.10/lb, 20.8% under the runner-up - a near-miss with no magnitude signal, so no price band could ever have caught it. The salmon commodity already carried TEN pet-food exclude patterns and the phrase \u0027Dry Food for Adult Cats\u0027 walked through all ten. This entry is the reason the blocklist exists: the rule library is 43,416 excludes against 1,079 includes and still loses.",
+                        "seen_on_board":  "2026-07-29 (crown)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-cinnamon|Walmart|teddy-grahams-cinnamon",
+                        "commodity":  "ground-cinnamon",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "TEDDY GRAHAMS Cinnamon Graham Snacks, Kids Snacks, 10 oz"
+                                  ],
+                        "product_id":  "10292091",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A box of cinnamon-flavoured kids\u0027 cookies, not ground cinnamon. Live in walmart-regular-2026-07-30 at $3.98 / 10 oz. Adjudicated at 4.7% under the runner-up, so the miss is invisible to any per-unit sanity band - the near-miss class that makes magnitude detectors useless here.",
+                        "seen_on_board":  "never (blocked in the feed, walmart-regular-2026-07-30)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "stain-remover|Walmart|lysol-toilet-bowl-cleaner-clinging-gel-2pk",
+                        "commodity":  "stain-remover",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Lysol Toilet Bowl Cleaner Clinging Gel, Power, Disinfecting Bathroom Cleaner and Toilet Bowl Stain Remover, 24 oz (2 Pack)"
+                                  ],
+                        "product_id":  "14711873",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A toilet bowl cleaner, matched into stain-remover (laundry) on the words \u0027Stain Remover\u0027 in its own marketing copy. Adjudicated at 2.8% under the runner-up. NOTE THE SCOPE: this exact product is priced CORRECTLY on comparison-2026-07-30 in the toilet-bowl-cleaner row at $4.97 / 48 fl oz - the ruling is about (product, commodity), never about the product alone, and a product-global blocklist would have deleted a right answer.",
+                        "seen_on_board":  "never in stain-remover (correct today in toilet-bowl-cleaner)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "butter|Walmart|natures-own-butter-buns-hot-dog",
+                        "commodity":  "butter",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Nature\u0027s Own Butter Buns Hot Dog Buns, Non-GMO Hot Dog Buns, 8 Count"
+                                  ],
+                        "product_id":  "21094641",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Hot dog buns whose brand line is literally \u0027Butter Buns\u0027. Priced on comparison-2026-07-29 in the butter row at $2.78 / 15.027 oz. Bakery carriers named after the dairy commodity are a standing class here (butter buns, cream cheese frosting, garlic bread).",
+                        "seen_on_board":  "2026-07-29",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "tomatoes|FamilyFare|contadina-roma-tomatoes-puree",
+                        "commodity":  "tomatoes",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Contadina Roma Tomatoes Puree 29 Oz",
+                                      "Contadina Roma Tomatoes Puree"
+                                  ],
+                        "product_id":  "6931",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Canned tomato PUREE in the FRESH tomatoes commodity - a form flip, not a brand difference. Live in family-fare-regular-2026-07-30 at $2.99 / 29 oz, which is far under fresh Roma at $1.29-$1.49/lb and therefore wins the cheapest slot whenever admitted. Contadina Crushed Tomatoes from the same feed sits correctly in crushed-tomatoes on comparison-2026-07-30, so the brand cannot be excluded wholesale.",
+                        "seen_on_board":  "never in tomatoes (Contadina is correct today in crushed-tomatoes)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "raspberries|FamilyFare|kens-raspberry-walnut-vinaigrette",
+                        "commodity":  "raspberries",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Ken\u0027s Steak House Salad Dressing \u0026 Marinade, Raspberry Walnut Vinaigrette, Lite 16 Fl Oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Salad dressing in the fresh raspberries commodity. Held the raspberries CROWN on comparison-2026-07-14 at $3.69 / 16 fl oz = $0.2306/oz. Ken\u0027s dressings are correctly matched elsewhere on today\u0027s board (italian-dressing, caesar-dressing, honey-mustard), so the brand is legitimate and only this flavour-name collision is not.",
+                        "seen_on_board":  "2026-07-14 (crown)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "raspberries|Bakers|pure-silk-raspberry-mist-shave-cream",
+                        "commodity":  "raspberries",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Pure Silk Raspberry Mist Moisturizing Shave Cream"
+                                  ],
+                        "product_id":  "0005100930991",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Shave cream in the fresh raspberries commodity, matched on a SCENT name. Held the raspberries CROWN on comparison-2026-07-23 and 2026-07-25 through 2026-07-28 at $2.29 / 7.25 oz = $0.3159/oz. Pure Silk Spa Therapy from the same feed is priced correctly in shaving-cream on today\u0027s board, which is why the ruling is scoped to (raspberries, Baker\u0027s) and not to the brand.",
+                        "seen_on_board":  "2026-07-23, 2026-07-25 .. 2026-07-28 (crown)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "strawberries|SamsClub|monster-energy-strawberry-shot-24pk",
+                        "commodity":  "strawberries",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Monster Energy Zero Sugar, Strawberry Shot, 16 fl. oz., 24 pk."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A 24-pack of energy drinks in the fresh strawberries commodity. Held the strawberries CROWN on comparison-2026-07-17, 2026-07-18 and 2026-07-22 at $42.48 / 384 fl oz = $0.1106/oz, then stayed priced in the row through 2026-07-28. Sam\u0027s Club publishes no product id in its captures, so the name is the only available key.",
+                        "seen_on_board":  "2026-07-17 .. 2026-07-28 (crown on 07-17, 07-18, 07-22)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "strawberries|FamilyFare|jumex-strawberry-banana-nectar",
+                        "commodity":  "strawberries",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Jumex Strawberry Banana Nectar From Concentrate 11.3 Fl Oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Fruit nectar from concentrate in the fresh strawberries commodity. Held the strawberries CROWN on comparison-2026-07-12 at $1.19 / 11.3 fl oz = $0.1053/oz.",
+                        "seen_on_board":  "2026-07-12 (crown)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "strawberries|Bakers|kroger-strawberry-applesauce",
+                        "commodity":  "strawberries",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Kroger Strawberry Applesauce"
+                                  ],
+                        "product_id":  "0001111015511",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Applesauce cups in the fresh strawberries commodity. Held the strawberries CROWN on SIX consecutive boards, comparison-2026-07-23 through 2026-07-28, at $2.00 / 6 pk 4 oz = $0.0833/oz - roughly a tenth of real fresh strawberries per ounce, and still nothing in the publish path could see it.",
+                        "seen_on_board":  "2026-07-23 .. 2026-07-28 (crown all six days)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "tortillas|SamsClub|quest-tortilla-style-protein-chips",
+                        "commodity":  "tortillas",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Quest Tortilla Style 10-20g Protein Chip Variety Pack, Salsa Verde and Chili Lime, 14 ct."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Protein CHIPS described as \u0027Tortilla Style\u0027 in the tortillas commodity. Held the tortillas CROWN on comparison-2026-07-14 at $1.56, priced against a bare \u0027oz\u0027 basis. A chip is not a tortilla and the pack basis is not comparable either.",
+                        "seen_on_board":  "2026-07-14 (crown)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cucumbers|SamsClub|members-mark-fujisan-cucumber-avocado-roll",
+                        "commodity":  "cucumbers",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Member\u0027s Mark by FujiSan Cucumber Avocado Roll, 15 pcs."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A prepared sushi roll in the fresh cucumbers commodity. Held the cucumbers CROWN on FIVE consecutive boards, comparison-2026-07-17 through 2026-07-24, at $5.74 / 15 ct = $0.3827 per piece - a per-PIECE basis silently compared against per-cucumber.",
+                        "seen_on_board":  "2026-07-17 .. 2026-07-24 (crown all five days)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "black-pepper|Bakers|simple-truth-black-pepper-lentil-rice-blend",
+                        "commodity":  "black-pepper",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Simple Truth Protein Black Pepper Lentils Brown Rice and Ancient Grains Whole Grain Blend"
+                                  ],
+                        "product_id":  "0001111002281",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A lentil / brown rice / ancient grain side dish flavoured with black pepper, in the black-pepper SPICE commodity. Held the black-pepper CROWN on SIX consecutive boards, comparison-2026-07-23 through 2026-07-28, at $2.99 / 8.8 oz = $0.3398/oz. Ground black pepper runs many times that per ounce, so the wrong product owned the row\u0027s headline number for six days.",
+                        "seen_on_board":  "2026-07-23 .. 2026-07-28 (crown all six days)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "spinach|Walmart|pictsweet-family-size-chopped-spinach",
+                        "commodity":  "spinach",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Pictsweet Family Size Chopped Spinach"
+                                  ],
+                        "product_id":  "10805106",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Wrong FORM. Pictsweet is a frozen-vegetable brand and this 32 oz chopped spinach is frozen, but the name carries no \u0027frozen\u0027 token so neither the global frozen exclude nor spinach\u0027s own \u0027birds eye\u0027 brand exclude could see it. It held the CROWN on fresh spinach at 0.115/oz, roughly half the real fresh crown (Aldi Little Salad Bar 8 oz 1.89 = 0.2362/oz), so the board advertised a frozen block as the cheapest fresh spinach. Brand excluded on spinach and sweet-potatoes; Pictsweet keeps its access to the frozen commodities.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-07-31",
+                        "ruled_by":  "triage-developer 2026-07-31 (plan-2026-07-31 fa3102)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "jalapenos|FamilyFare|san-marcos-traditional-recipe-crunchy-whole-jala",
+                        "commodity":  "jalapenos",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "San Marcos Traditional Recipe Crunchy Whole Jalapenos Peppers 26 Oz"
+                                  ],
+                        "product_id":  "2392976",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Wrong FORM. San Marcos is a canned escabeche brand and this 26 oz jar is canned whole jalapenos in brine, but the name carries no \u0027canned\u0027 or \u0027pickled\u0027 token so jalapenos\u0027 own form excludes could not see it. It held the CROWN on fresh jalapenos at 1.3477/lb, beating six rows of actual fresh peppers (Aldi 1.70, Walmart 1.76, Baker\u0027s 1.99, Hy-Vee and Fareway 2.99). Brand excluded on the fresh jalapenos commodity only; San Marcos keeps its access to the chipotle and pickled commodities.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-07-31",
+                        "ruled_by":  "triage-developer 2026-07-31 (plan-2026-07-31 fa3102)",
+                        "retire_when":  "ruling-reversed"
+                    }
+                ]
 }
-
