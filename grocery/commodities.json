@@ -3610,7 +3610,9 @@
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
                         "\\bheart\\s+health\\b",
-                        "\\blatte\\b"
+                        "\\blatte\\b",
+                        "\\bfrosting\\b",
+                        "\\bicing\\b"
                     ]
     },
     {
@@ -12372,7 +12374,9 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\bsyrup\\b",
+                        "\\bsegments?\\b"
                     ]
     },
     {

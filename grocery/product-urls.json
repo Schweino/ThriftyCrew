@@ -1225,11 +1225,11 @@
                                                              "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
                                                          },
                                      "Walmart":  {
-                                                     "url":  "https://www.walmart.com/ip/Ricitos-de-Oro-Baby-Wipes-Chamomile-Aloe-Vera-Refillable-Baby-Wipes-Moisturize-Clean-Baby-Lightly-Scented-Hypoallergenic-Alcoh",
-                                                     "price":  3.34,
-                                                     "size":  "240 ct",
-                                                     "name":  "Ricitos de Oro Gentle Baby Wipes 3 Pack",
-                                                     "board_pu":  0.0139
+                                                     "url":  "https://www.walmart.com/ip/15512153662",
+                                                     "price":  "18",
+                                                     "size":  "900 ct",
+                                                     "name":  "Parent\u0027s Choice Limited Edition Sunshine \u0026 Daydreams Baby Wipes, 900 Count",
+                                                     "verified":  "2026-07-31 price-pull self-capture"
                                                  }
                                  },
                   "bacon":  {
@@ -3470,13 +3470,6 @@
                                                                   "size":  "4 pk 15.25 oz",
                                                                   "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
                                                               },
-                                             "Family Fare":  {
-                                                                 "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/bush_s_best_black_beans_16_oz/p/26837",
-                                                                 "price":  1.79,
-                                                                 "size":  "15 oz",
-                                                                 "name":  "Bush\u0027s Best Black Beans 16 Oz",
-                                                                 "board_pu":  0.1193
-                                                             },
                                              "Fareway":  {
                                                              "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25806571-fareway-black-beans-1525-oz",
                                                              "price":  0.99,
@@ -6266,10 +6259,10 @@
                                                      },
                                  "Walmart":  {
                                                  "url":  "https://www.walmart.com/ip/311974881",
-                                                 "name":  "Great Value Donut Shop, 100% Arabica, Medium Roast, Ground Coffee, 12 oz",
-                                                 "price":  "$6.44",
+                                                 "price":  "6.44",
                                                  "size":  "12 oz",
-                                                 "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
+                                                 "name":  "Great Value Donut Shop, 100% Arabica, Medium Roast, Ground Coffee, 12 oz",
+                                                 "verified":  "2026-07-31 price-pull self-capture"
                                              }
                              },
                   "coffee-creamer":  {
@@ -8015,14 +8008,7 @@
                                                                      "price":  "$10.98",
                                                                      "size":  "312 ct",
                                                                      "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                                 },
-                                             "Walmart":  {
-                                                             "url":  "https://www.walmart.com/ip/Great-Value-Disinfecting-Wipes-Fresh-Scent-75-Count/20670295",
-                                                             "price":  2.98,
-                                                             "size":  "75 ct",
-                                                             "name":  "Great Value Disinfecting Wipes Fresh Scent",
-                                                             "board_pu":  0.0397
-                                                         }
+                                                                 }
                                          },
                   "dog-food":  {
                                    "commodity":  "dog-food",
@@ -9322,11 +9308,11 @@
                                                                 "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
                                                             },
                                         "Walmart":  {
-                                                        "url":  "https://www.walmart.com/ip/Murphy-Oil-Wood-Surface-Household-Cleaner-Spray-Orange-22-Fluid-Ounce/19399994",
-                                                        "name":  "Murphy Oil Soap Cleaning Spray, No-Rinse Floor Cleaner, Orange Scent, 22 fl oz Bottle",
-                                                        "price":  2.97,
-                                                        "size":  "22 fl oz",
-                                                        "board_pu":  0.135
+                                                        "url":  "https://www.walmart.com/ip/314273595",
+                                                        "price":  "6.45",
+                                                        "size":  "25 oz",
+                                                        "name":  "Method Squirt + Mop Hard Floor Cleaner, Spearmint Sage, 25  fl oz",
+                                                        "verified":  "2026-07-31 price-pull self-capture"
                                                     }
                                     },
                   "flour":  {
@@ -9792,7 +9778,14 @@
                                                            "price":  "$50.66",
                                                            "size":  "32 lb",
                                                            "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                       }
+                                                       },
+                                   "Walmart":  {
+                                                   "url":  "https://www.walmart.com/ip/18818567381",
+                                                   "price":  "14.08",
+                                                   "size":  "128 oz",
+                                                   "name":  "(8 pack) Pillsbury Creamy Supreme Vanilla Frosting, 16 oz Tub",
+                                                   "verified":  "2026-07-31 price-pull self-capture"
+                                               }
                                },
                   "frozen-broccoli":  {
                                           "commodity":  "frozen-broccoli",
@@ -13810,12 +13803,6 @@
                                                        "board_pu":  0.0545,
                                                        "recipe_pu":  0.052
                                                    },
-                                  "Family Fare":  {
-                                                      "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/ketchup/our_family_squeeze_bottle_ketchup/p/1564405684715520105",
-                                                      "price":  1.99,
-                                                      "size":  "20 oz",
-                                                      "name":  "Our Family Squeeze Bottle Ketchup"
-                                                  },
                                   "Fareway":  {
                                                   "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20548311-fareway-tomato-ketchup-32-oz",
                                                   "price":  1.97,
@@ -14604,14 +14591,7 @@
                                                                  "size":  "12 ct 2.05 oz",
                                                                  "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)",
                                                                  "board_pu":  0.7067
-                                                             },
-                                         "Walmart":  {
-                                                         "url":  "https://www.walmart.com/ip/Kraft-Original-Mac-N-Cheese-Macaroni-and-Cheese-Dinner-5-ct-Pack-7-25-oz-Boxes/14869676",
-                                                         "price":  4.88,
-                                                         "size":  "5 ct",
-                                                         "name":  "Kraft Mac and Cheese Original 5 Boxes",
-                                                         "board_pu":  0.976
-                                                     }
+                                                             }
                                      },
                   "mandarin-oranges":  {
                                            "commodity":  "Canned Mandarin Oranges",
@@ -20736,7 +20716,14 @@
                                                            "size":  "15 oz",
                                                            "name":  "A.1. Original Steak Sauce",
                                                            "verified":  "2026-07-30 price-pull self-capture"
-                                                       }
+                                                       },
+                                      "Walmart":  {
+                                                      "url":  "https://www.walmart.com/ip/10309001",
+                                                      "price":  "6.48",
+                                                      "size":  "15 oz",
+                                                      "name":  "A.1. Original Sauce, 15 oz. Bottle",
+                                                      "verified":  "2026-07-31 price-pull self-capture"
+                                                  }
                                   },
                   "storage-bags":  {
                                        "commodity":  "storage-bags",
@@ -22781,7 +22768,14 @@
                                                               "size":  "18.8 oz",
                                                               "name":  "Campbell\u0027s Chunky Soup Savory Vegetable Soup 18.8 Oz Can",
                                                               "verified":  "2026-07-30 price-pull self-capture"
-                                                          }
+                                                          },
+                                         "Walmart":  {
+                                                         "url":  "https://www.walmart.com/ip/10320655",
+                                                         "price":  "2.48",
+                                                         "size":  "19 oz",
+                                                         "name":  "Progresso Vegetable Soup, Vegetable Classics Canned Soup, 19 oz",
+                                                         "verified":  "2026-07-31 price-pull self-capture"
+                                                     }
                                      },
                   "walnuts":  {
                                   "commodity":  "Walnuts",
