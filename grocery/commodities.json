@@ -30786,7 +30786,12 @@
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
                         "\\bheart\\s+health\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             null,
+                             "\\bsoup\\b",
+                             "\\bcanned\\b"
+                         ]
     },
     {
         "id":  "clam-chowder",
@@ -33889,7 +33894,11 @@
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
                         "\\bheart\\s+health\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             null,
+                             "\\bsauce\\b"
+                         ]
     },
     {
         "id":  "cocktail-sauce",

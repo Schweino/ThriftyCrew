@@ -20730,14 +20730,13 @@
                                                       "size":  "10 oz",
                                                       "name":  "Fareway Classic Steak Sauce"
                                                   },
-                                      "Hy-Vee":  {
-                                                     "url":  "https://www.hy-vee.com/aisles-online/p/2870/heinz-original-steak-sauces-meat-condiments-20-oz",
-                                                     "name":  "Heinz Original Steak Sauces \u0026 Meat Condiments 20 oz",
-                                                     "price":  7.99,
-                                                     "size":  "20 oz",
-                                                     "verified":  "2026-07-16 DERIVED from the price row (same record the board priced)",
-                                                     "board_pu":  0.3995
-                                                 }
+                                      "Baker\u0027s":  {
+                                                           "url":  "https://www.bakersplus.com/p/a-1-original-steak-sauce/0005440000004",
+                                                           "price":  "7.49",
+                                                           "size":  "15 oz",
+                                                           "name":  "A.1. Original Steak Sauce",
+                                                           "verified":  "2026-07-30 price-pull self-capture"
+                                                       }
                                   },
                   "storage-bags":  {
                                        "commodity":  "storage-bags",
@@ -22776,14 +22775,13 @@
                                                          "size":  "18.8 oz",
                                                          "name":  "Campbell\u0027s Old Fashioned Vegetable Beef Soup"
                                                      },
-                                         "Hy-Vee":  {
-                                                        "url":  "https://www.hy-vee.com/aisles-online/p/14785/amy-s-organic-low-fat-chunky-vegetable-soups-14-3-oz",
-                                                        "name":  "Amy\u0027s Organic Low Fat Chunky Vegetable Soups 14.3 oz",
-                                                        "price":  4.49,
-                                                        "size":  "14.3 oz",
-                                                        "verified":  "2026-07-16 DERIVED from the price row (same record the board priced)",
-                                                        "board_pu":  0.314
-                                                    }
+                                         "Baker\u0027s":  {
+                                                              "url":  "https://www.bakersplus.com/p/campbell-s-chunky-soup-savory-vegetable-soup-18-8-oz-can/0005100000551",
+                                                              "price":  "2.99",
+                                                              "size":  "18.8 oz",
+                                                              "name":  "Campbell\u0027s Chunky Soup Savory Vegetable Soup 18.8 Oz Can",
+                                                              "verified":  "2026-07-30 price-pull self-capture"
+                                                          }
                                      },
                   "walnuts":  {
                                   "commodity":  "Walnuts",
