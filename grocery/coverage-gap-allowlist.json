@@ -1,4 +1,4 @@
-﻿{
+{
     "readme":  "Reviewed, legitimate coverage gaps: the store carries the item but it genuinely cannot be priced like-for-like, so audit-coverage-gaps must not keep crying about it. Every entry states WHY, quoting the price_text/size_text the ENGINE actually saw. Do not add an entry to silence a gap you have not diagnosed - the detector exists to catch a store silently vanishing from an item it sells.",
     "allow":  [
                   {
@@ -788,9 +788,9 @@
                   {
                       "commodity":  "doubanjiang",
                       "store":  "Hy-Vee",
-                      "why":  "FALSE FUZZY-MATCH (reviewed 2026-07-27, triage): the coverage-gap audit loosens the include \"chili\\s+bean\\s+sauce\" (correct for real doubanjiang / Lee Kum Kee chili bean sauce) into \"chili.Mrs. Grimes Original Chili Beans in Chili Sauce 15 ozbean.Mrs. Grimes Original Chili Beans in Chili Sauce 15 ozsauce\", which spuriously matches American canned CHILI BEANS (\"Mrs. Grimes Original Chili Beans in Chili Sauce 15 oz\"). This mainstream Omaha store does not carry real doubanjiang (fermented broad-bean chili paste), so its only match is chili beans. Board is unaffected (doubanjiang has no cell). Delete if the store starts stocking real doubanjiang.",
-                      "reviewed":  "2026-07-27",
-                      "reviewed_source":  "prose (transcribed 2026-07-28, never independently re-verified)"
+                      "why":  "FALSE FUZZY-MATCH (re-derived 2026-07-31). The audit loosens the include \"chili\\s+bean\\s+sauce\" into \"chili.{0,25}bean.{0,25}sauce\", which matches American canned CHILI BEANS. Two corrections to the 2026-07-27 text. First, it said \"its only match is chili beans\" and named one product; there are EIGHT in hyvee-regular-2026-07-30.json - Mrs. Grimes Original 15 oz $1.48, Spicy Hot 15 oz $1.48, Black 15.5 oz $1.48, White 15.5 oz $1.48, No Salt Added 15 oz $1.48, and Bush's Red 16 oz $1.99, Kidney 16 oz $1.99, Medium 16 oz $1.99 - all the same false shape. Second, the regex it quoted was gibberish because the audit's own substituted product name had been pasted into the middle of the pattern before transcription; the pattern above is the real one. The verdict is unchanged: no real fermented broad-bean chili paste at this store, and doubanjiang has no cell at any store, so the board is unaffected. DELETE-TRIGGER: delete when a Hy-Vee storeId-1465 search for \"doubanjiang\" or \"chili bean sauce\" returns a real fermented broad-bean paste (Lee Kum Kee, Pixian).",
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "RE-DERIVED 2026-07-31 against hyvee-regular-2026-07-30.json"
                   },
                   {
                       "commodity":  "doubanjiang",
@@ -820,12 +820,6 @@
                       "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Famous Dave\u0027s Medium Jalapeno Corn Bread Mix 15 Oz\" - a corn bread MIX, not fresh jalapenos. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
                   },
                   {
-                      "commodity":  "egg-whites",
-                      "store":  "Family Fare",
-                      "reviewed":  "2026-07-27",
-                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Jimmy Dean Delights Croissant Breakfast Sandwiches With Turkey Sausage, Egg White, And Cheese, Frozen 4 Ct\" - a frozen breakfast sandwich that contains egg white, not a carton of egg whites. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
-                  },
-                  {
                       "commodity":  "chocolate-milk",
                       "store":  "Family Fare",
                       "reviewed":  "2026-07-27",
@@ -840,26 +834,22 @@
                   {
                       "commodity":  "sponges",
                       "store":  "Baker\u0027s",
-                      "reviewed":  "2026-07-27",
-                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Popsicle SpongeBob SquarePants Frozen Confection Bars, 6 Ct\" - frozen popsicles - matched on \"SpongeBob\", not cleaning sponges. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "RE-DERIVED 2026-07-31 against bakers-regular-2026-07-30.json + the sanctioned Kroger API (locationId 61500319)",
+                      "why":  "NOT IN OUR PULL (re-derived 2026-07-31, first-party). The 2026-07-27 claim is FALSE twice over: \"Popsicle SpongeBob SquarePants Frozen Confection Bars\" is not in bakers-regular-2026-07-30.json at all, and the two rows that actually reach the commodity are Scrub Daddy dishwand hardware - \"Scrub Daddy Dish Daddy Silver Dishwand\" 1 ct $8.99 and \"Scrub Daddy Dish Daddy Scratch-Free Dishwand Replacement Heads\" 2 ct $4.79 ($2.395/each) - both far outside the $0.53 to $1.00 per each the board pays. Baker's does sell plain cleaning sponges: the Kroger API at locationId 61500319, term \"sponge\", returns \"Kroger Heavy Duty Scrub Sponge\" 3 ct $1.99 ($0.6633/each, which would rank 4th of 6) and \"Kroger Non-Scratch Scrubber Sponges\" 3 ct $1.99, neither of which is in our Baker's feed. This is a PULL-TERM gap, not a matching bug. DELETE-TRIGGER: delete the moment bakers-regular-*.json contains a row matching \"scrub(ber)?\\s+sponge\"."
                   },
                   {
                       "commodity":  "cake-mix",
                       "store":  "Baker\u0027s",
-                      "reviewed":  "2026-07-27",
-                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Kodiak Chip Power Cakes Flapjack and Waffle Mix Chocolate Chip\" - pancake/waffle mix, not cake mix. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "RE-DERIVED 2026-07-31 against bakers-regular-2026-07-30.json + the sanctioned Kroger API (locationId 61500319)",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, re-derived 2026-07-31). The 2026-07-27 claim that the only include match is \"Kodiak Chip Power Cakes Flapjack and Waffle Mix Chocolate Chip\" is FALSE - that row is killed by the commodity's own \"pancake\" token, and bakers-regular-2026-07-30.json carries EIGHT real yellow cake mixes that pass every filter: Pillsbury Moist Supreme Yellow 15.25 oz $1.69, Duncan Hines Perfectly Moist Classic Yellow 15.250 oz $2.29, Betty Crocker Super Moist Yellow 13.25 oz $2.49, Betty Crocker Butter Recipe Yellow 13.25 oz $2.49, Duncan Hines Dolly Parton Favorite Yellow 15.250 oz $3.29, Pillsbury Zero Sugar Yellow 16 oz $3.49, Bob's Red Mill Classic Yellow 15.5 oz $3.99, Miss Jones Gluten-Free Yellow 19 oz $5.49. The REAL reason there is no cell: cake-mix is priced per EACH and every one of those Kroger rows publishes a WEIGHT size (\"15.25 oz\", size_basis label, sold_by UNIT) with no count, so the engine cannot call one box one each without inventing the count - the same shape as papaya at this store. Fareway is the lone cell only because its own size string is literally \"each\". DELETE-TRIGGER: delete when Baker's publishes a count-bearing size (\"1 ct\") on a cake mix, or when the commodity is re-based to oz."
                   },
                   {
                       "commodity":  "poblano-peppers",
                       "store":  "Family Fare",
                       "reviewed":  "2026-07-27",
                       "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Del Monte Whole Kernel Southwest Style Corn With Poblano \u0026 Red Peppers 15.25 Oz\" - canned corn seasoned with poblano, not fresh poblano peppers. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
-                  },
-                  {
-                      "commodity":  "nectarines",
-                      "store":  "Aldi",
-                      "reviewed":  "2026-07-27",
-                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Plums or Nectarines\" - an either/or ad - the price cannot be attributed to nectarines specifically without guessing. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
                   },
                   {
                       "commodity":  "pomegranates",
@@ -870,8 +860,9 @@
                   {
                       "commodity":  "pomegranates",
                       "store":  "Family Fare",
-                      "reviewed":  "2026-07-27",
-                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Brookside Pomegranate Flavor Dark Chocolate 7 Oz\" - chocolate candy, not fresh pomegranates. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "RE-DERIVED 2026-07-31 against family-fare-regular-2026-07-31.json + a first-party Freshop query (app_key=family_fare, store_id=6401)",
+                      "why":  "NOT CARRIED / OUT OF SEASON (re-derived 2026-07-31, first-party). The count was wrong: THREE rows match the include in family-fare-regular-2026-07-31.json - a Softsoap body wash and a Vitaminwater, both killed by the commodity's own excludes, leaving \"Brookside Pomegranate Flavor Dark Chocolate\" as the only survivor. The verdict holds on store evidence: a live Freshop query (store_id=6401, q=pomegranate) returns 23 products, all juice, sports drinks, soap, tea and candy, and no whole fresh pomegranate. DELETE-TRIGGER: delete when a Freshop q=pomegranate query at store_id=6401 returns a whole fresh pomegranate sold by the each."
                   },
                   {
                       "commodity":  "papaya",
@@ -906,20 +897,15 @@
                   {
                       "commodity":  "coconut",
                       "store":  "Aldi",
-                      "reviewed":  "2026-07-27",
-                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Barissimo Coconut Creme or Cinnamon Roll Creamer\" - a coffee creamer, not coconut. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "RE-DERIVED 2026-07-31 against aldi-regular-2026-07-29.json only - Aldi has no sanctioned first-party API in this estate",
+                      "why":  "NOT CARRIED (re-derived 2026-07-31). Doubly stale: the named \"Barissimo Coconut Creme or Cinnamon Roll Creamer\" is no longer a candidate at all - the engine GLOBAL_EXCLUDE token \"creamer\" now kills it - and 16 rows match the include in aldi-regular-2026-07-29.json, of which exactly ONE survives: \"Simply Nature Organic Coconut Chia 12.3 OZ\" $2.95, a chia pudding. No whole or young coconut appears anywhere in the Aldi feed. HONEST LIMIT: this was re-derived from our own newest feed only, because Aldi is an Instacart storefront with no sanctioned first-party API here, so \"not carried\" is weaker evidence than the Baker's and Hy-Vee entries. DELETE-TRIGGER: delete when any aldi-regular-*.json row matching \"coconuts?\\b\" is a whole or young coconut priced per each."
                   },
                   {
                       "commodity":  "coconut",
                       "store":  "Baker\u0027s",
                       "reviewed":  "2026-07-27",
                       "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"nutpods Non Dairy Half \u0026 Half Alternative made with Almonds and Coconuts\" - a dairy-free coffee creamer, not coconut. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
-                  },
-                  {
-                      "commodity":  "habanero-peppers",
-                      "store":  "Hy-Vee",
-                      "reviewed":  "2026-07-27",
-                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"ROTEL Hot Diced Tomatoes With Habaneros, 10 oz.\" - canned diced tomatoes, not fresh habanero peppers. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
                   },
                   {
                       "commodity":  "habanero-peppers",
@@ -934,22 +920,18 @@
                       "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Birds Eye Broccoli, Carrots, Sugar Snap Peas \u0026 Water Chestnuts 10.8 Oz\" - a frozen mixed-vegetable blend, not a bag of sugar snap peas. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
                   },
                   {
-                      "commodity":  "spring-mix",
-                      "store":  "Walmart",
-                      "reviewed":  "2026-07-27",
-                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Great Value 50/50 Tomato Ketchup, 19.5 oz\" - ketchup - matched on \"50/50\", not a spring salad mix. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
-                  },
-                  {
                       "commodity":  "artichokes",
                       "store":  "Hy-Vee",
-                      "reviewed":  "2026-07-27",
-                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Gustare Vita Grilled Artichokes\" - jarred marinated artichokes, not fresh artichokes priced per each. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "RE-DERIVED 2026-07-31 against hyvee-regular-2026-07-30.json + a first-party Hy-Vee storeId-1465 product search",
+                      "why":  "NOT IN OUR PULL - COSTS A CROWN (re-derived 2026-07-31, first-party). The 2026-07-27 claim that \"the only thing at this store matching the include regex is Gustare Vita Grilled Artichokes\" is FALSE: TEN rows in hyvee-regular-2026-07-30.json match the include, nine of them jarred \"hearts\" killed by the commodity's own token, leaving the Gustare Vita jar as the sole survivor. Worse, the store DOES sell the real item: a Hy-Vee storeId-1465 product search for \"artichoke\" returns \"Artichoke\", unitOfMeasure \"1 ct\", tagPrice $2.99, productId 8655. That is 14.3% UNDER the current cheapest cell (Baker's $3.49/each) and would take the artichokes crown. The row is simply absent from our 1,538-row Hy-Vee everyday file, so this is a PULL-DEPTH gap, not a matching bug - and a false review note has been hiding it since 2026-07-27. DELETE-TRIGGER: delete the moment hyvee-regular-*.json contains a row whose item is exactly \"Artichoke\"; until then treat this entry as an OPEN TODO on the Hy-Vee pull worklist, not a closed verdict."
                   },
                   {
                       "commodity":  "fresh-dill",
                       "store":  "Baker\u0027s",
-                      "reviewed":  "2026-07-27",
-                      "why":  "WRONG-PRODUCT (reviewed 2026-07-27): the only thing at this store matching the include regex is \"Fresh Gourmet Crispy Dillies\" - a crunchy salad topper, not fresh dill herb. The board is correct to omit this store; the gap detector is matching on a substring. Delete this entry if the store starts carrying the real item."
+                      "reviewed":  "2026-07-31",
+                      "reviewed_source":  "RE-DERIVED 2026-07-31 against bakers-regular-2026-07-30.json + the sanctioned Kroger API (locationId 61500319)",
+                      "why":  "INCLUDE TOO STRICT (re-derived 2026-07-31, first-party). The 2026-07-27 claim is FALSE: three rows reach the audit, not one, and the named \"Fresh Gourmet Crispy Dillies\" only ever matched the AUDIT's loosened probe, never the real include. The finding that matters: bakers-regular-2026-07-30.json ALREADY HOLDS \"Simple Truth Organic Baby Dill\", 0.5 oz, $2.49, product_id 0001111001816, sold_by UNIT - genuine fresh dill herb, confirmed live by the Kroger API at locationId 61500319 - and the include \"fresh\\s+dill|dill\\s+(?:bunch|clamshell|sprigs?)\" cannot reach it because the name says \"Baby Dill\". At $4.98/oz it would be the second cell on a commodity that has exactly one (Hy-Vee $3.9867/oz), so no crown moves. This is a commodities.json include fix, NOT an unpriceable store. DELETE-TRIGGER: delete the moment the fresh-dill include reaches \"Simple Truth Organic Baby Dill\"."
                   },
                   {
                       "commodity":  "cantaloupe",

@@ -56,9 +56,86 @@ function Match-Local($c, $name) {
   return $true
 }
 $ak = 'family_fare'; $sid = '6401'; $b = 'https://api.freshop.ncrcloud.com/1'; $UA = @{ 'User-Agent' = 'Mozilla/5.0' }
+# WHAT empty_terms MEANS CHANGED UNDER THIS CHECK ON 2026-07-30, AND IT INVERTED THE ANSWER.
+# The pull now walks the 526-term list from a ROTATING CURSOR and buys only the ~60-70 terms Freshop's
+# per-window budget allows (see the term-budget cursor comment in pull-regular-familyfare.ps1). So
+# empty_terms is no longer 'terms Freshop refused' - it is overwhelmingly 'terms this run never asked for'.
+# Re-probing one of those and finding a real product therefore proves NOTHING about a drop. Measured
+# 2026-07-31: of the 24 terms this check reported as pull-drop victims, 15 had their commodity ALREADY
+# PRICED in the very file whose empty_terms list flagged them - arriving under a different search term or
+# as a carry-forward row. Examples: 'chili beans' was empty while the same file priced 12 chili-bean rows
+# including Our Family 15.5 oz at $0.99; 'shallots', 'pork tenderloin whole boneless' and
+# '93 lean ground beef' each named the product ALREADY ON THE BOARD as their own victim.
+# A victim must be a term whose COMMODITY has no priced row in this pull at all. That one condition took
+# the 24 candidates down to the 9 that are genuinely uncovered, and lost none of them.
+$ffDeals = @(); if ($doc) { $ffDeals = @($doc.deals) }
+$script:covCache = @{}
+function Has-FeedCoverage($c, $deals) {
+  if (-not $c) { return $false }
+  $k = [string]$c.id
+  if ($script:covCache.ContainsKey($k)) { return $script:covCache[$k] }
+  $found = $false
+  foreach ($d in $deals) {
+    if ($found) { break }
+    if (-not $d.item) { continue }
+    if (-not (Match-Local $c ([string]$d.item))) { continue }
+    $pr = 0.0
+    [void][double]::TryParse([string]$d.current_price, [ref]$pr)
+    if ($pr -le 0) { [void][double]::TryParse([string]$d.regular, [ref]$pr) }
+    if ($pr -gt 0) { $found = $true }
+  }
+  $script:covCache[$k] = $found
+  return $found
+}
+# PICK THE CHEAPEST MATCH, NOT THE FIRST ONE FRESHOP SORTED TO THE TOP - see the note at the victim line.
+# The multi-buy guard here is the same one pull-regular-familyfare needs: Freshop returns '4 for $5.00' as
+# the price text, and stripping non-digits from that yields 45.
+function Pick-Cheapest($items) {
+  $best = $null; $bestP = [double]::MaxValue
+  foreach ($it in $items) {
+    $txt = [string]$it.price
+    $p = 0.0
+    if ($txt -and -not $txt.Contains(' for ')) { [void][double]::TryParse(($txt -replace '[^0-9.]', ''), [ref]$p) }
+    if ($p -le 0) { [void][double]::TryParse((([string]$it.base_price) -replace '[^0-9.]', ''), [ref]$p) }
+    if ($p -gt 0 -and $p -lt $bestP) { $bestP = $p; $best = $it }
+  }
+  return $best
+}
+if ($SelfTest) {
+  # FROZEN FIXTURES - never regenerate these from the live pull. Each pair is one MUST-FIRE (the real bug)
+  # and one CLEAN-TWIN (the case that must stay silent), taken from the 2026-07-31 adjudication.
+  $fails = New-Object System.Collections.Generic.List[string]
+  $fx = @(
+    [pscustomobject]@{ item = 'Our Family Chili Beans, In Mild Chili Sauce 15.5 Oz'; current_price = 0.99; regular = 0.99 },
+    [pscustomobject]@{ item = 'Yellow Nectarines'; current_price = 4.29; regular = 4.29 }
+  )
+  if (-not $byId['chili-beans']) { $fails.Add('MUST-FIRE fixture cannot run: commodity chili-beans is gone from commodities.json') }
+  elseif (-not (Has-FeedCoverage $byId['chili-beans'] $fx)) { $fails.Add('MUST-FIRE: chili-beans is priced in the fixture feed but Has-FeedCoverage says it is not - the 2026-07-31 15-of-24 false-positive class is back') }
+  $script:covCache = @{}
+  if (-not $byId['soy-sauce']) { $fails.Add('CLEAN-TWIN fixture cannot run: commodity soy-sauce is gone from commodities.json') }
+  elseif (Has-FeedCoverage $byId['soy-sauce'] $fx) { $fails.Add('CLEAN-TWIN: soy-sauce has no row in the fixture feed but Has-FeedCoverage claims coverage - real pull-drops would be suppressed') }
+  $script:covCache = @{}
+  $sk = @(
+    [pscustomobject]@{ name = 'Claussen Sauerkraut, Premium Crisp 32 Fl Oz'; price = '$6.49'; base_price = 6.49 },
+    [pscustomobject]@{ name = 'Our Family Old Fashioned Shredded Sauerkraut 14.4 Oz'; price = '$1.69'; base_price = 1.69 }
+  )
+  $pk = Pick-Cheapest $sk
+  if (-not $pk -or ([string]$pk.name) -ne 'Our Family Old Fashioned Shredded Sauerkraut 14.4 Oz') { $fails.Add('MUST-FIRE: Pick-Cheapest named the first result, not the cheapest - the report is back to headlining a $6.49 jar over a $1.69 one') }
+  $mb = @(
+    [pscustomobject]@{ name = 'Spice Supreme Spice Ground Cloves'; price = '4 for $5.00'; base_price = 5.0 },
+    [pscustomobject]@{ name = 'Claussen Sauerkraut, Premium Crisp 32 Fl Oz'; price = '$6.49'; base_price = 6.49 }
+  )
+  $pk2 = Pick-Cheapest $mb
+  if (-not $pk2 -or ([string]$pk2.name) -ne 'Spice Supreme Spice Ground Cloves') { $fails.Add('CLEAN-TWIN: the multi-buy row was read by stripping digits - "4 for $5.00" became 45 and the $6.49 row looked cheaper') }
+  if ($fails.Count) { foreach ($f in $fails) { Write-Output ('  SELF-TEST FAIL  ' + $f) }; Write-Output 'ff-carry SELF-TEST FAILED'; exit 2 }
+  Write-Output 'ff-carry: own-feed-coverage and cheapest-pick fixtures both hold - SELF-TEST PASS'
+  exit 0
+}
 $victims = New-Object System.Collections.Generic.List[object]
+$suppressed = 0
 foreach ($term in $emptyTerms) {
   $c = $byId[$termToId[[string]$term]]
+  if ($c -and (Has-FeedCoverage $c $ffDeals)) { $suppressed++; continue }
   $items = @()
     # $probed is incremented INSIDE the try, after the call returns - so it counts probes that got a RESPONSE,
   # not times round the loop. That is the whole distinction the coverage ledger exists for: a run where
@@ -90,9 +167,13 @@ $null = Emit-Coverage $emptyTerms.Count $probed ('empty FF search terms re-probe
 $report = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); empty_terms = $emptyTerms.Count; confirmed_victims = $victims.ToArray() }
 Set-Content (Join-Path $OutDir 'ff-carry-report.json') -Value ($report | ConvertTo-Json -Depth 4) -Encoding UTF8
 
-if ($victims.Count -eq 0) { Write-Output ("ff-carry: OK  " + $emptyTerms.Count + " empty term(s) re-probed, none are actually carried by FF (genuinely not stocked)"); exit 0 }
-Write-Output ("ff-carry: FOUND " + $victims.Count + " pull-drop victim(s) - FF carries these but the pull missed them:")
-foreach ($v in $victims) { Write-Output ("  " + $v.commodity.PadRight(20) + " <- '" + $v.product + "'") }
+# SAY WHAT WAS SUPPRESSED. A filter that removes 15 of 24 findings and reports only the survivors is one
+# bad predicate away from reporting nothing at all, and 'OK, 0 victims' reads identically whether the pull
+# is healthy or the filter has eaten every real case. The counts make that distinguishable from the log.
+$probeStat = ' (' + $probed + ' of ' + $emptyTerms.Count + ' empty term(s) re-probed; ' + $suppressed + ' skipped because this pull already prices that commodity)'
+if ($victims.Count -eq 0) { Write-Output ("ff-carry: OK  no term is missing from the feed AND carried by FF" + $probeStat); exit 0 }
+Write-Output ("ff-carry: FOUND " + $victims.Count + " uncovered term(s) - FF carries these and this pull has no priced row for them" + $probeStat + ":")
+foreach ($v in $victims) { Write-Output ("  " + $v.commodity.PadRight(20) + " <- '" + $v.product + "' " + $v.size + " " + $v.price) }
 if ($Alert) {
   $sig = (@($victims | ForEach-Object { $_.commodity } | Sort-Object) -join ';')
   $sigHash = [BitConverter]::ToString((New-Object Security.Cryptography.SHA256Managed).ComputeHash([Text.Encoding]::UTF8.GetBytes($sig))).Replace('-', '').Substring(0, 16)

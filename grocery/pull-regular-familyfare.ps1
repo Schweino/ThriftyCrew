@@ -122,8 +122,24 @@ function Ingest-Items($items) {
     # 375 Family Fare products sampled on 2026-07-14, so it was harmless - but it was a loaded gun. The day
     # Freshop starts populating a markdown into `price`, the old order would have quietly published the
     # regular price instead, and nothing downstream would have caught it.
-    # `price` comes back as a string with a $ ("$3.59"); base_price as a number (3.59).
-    $cur  = 0.0; [void][double]::TryParse((([string]$it.price)      -replace '[^0-9.]',''), [ref]$cur)
+        # `price` comes back as a string with a $ ("$3.59"); base_price as a number (3.59).
+    # ...AND SOMETIMES IT IS NOT A PRICE AT ALL. Freshop returns multi-buy offers as text: "4 for $5.00".
+    # Stripping non-digits from that yields "45.00", so the row gets published at $45. Measured 2026-07-31:
+    # 28 of 3,856 Family Fare rows carried a price built exactly that way (all "4 for $5.00" -> 45,
+    # "3 for $5.00" -> 35, "2 for $3.00" -> 23), and one of them was LIVE ON THE PUBLISHED BOARD:
+    # ground-cloves @ Family Fare read "Spice Supreme Spice Ground Cloves", size 1.25 oz, ad $45, which the
+    # engine correctly divided into $36.00/oz against a real cheapest of $1.09/oz at Walmart. No price band,
+    # no guard and no audit blinked, because $45 for a spice jar is absurd but not arithmetically impossible.
+    # DROP, DO NOT FLIP. Freshop's own row says base_price=5.0 and unit_price=1.25 for that product, so the
+    # OFFER costs $5.00 and a jar inside the offer works out at $1.25. Neither number says what ONE jar costs
+    # a shopper who does not buy four, and "4 for $5.00" is very often must-buy-four. Two readings, no way to
+    # choose between them: the honest output is no row. Skipping costs one board cell today (ground-cloves
+    # keeps Walmart, Hy-Vee, Baker's and Fareway, and Walmart stays cheapest) and removes a 36x error.
+    # If a later pass proves Family Fare honours the single price, read unit_price here and require
+    # n * unit_price to reconcile with base_price before trusting it - do not simply divide.
+    $priceText = [string]$it.price
+    if ($priceText -and $priceText.Contains(' for ')) { continue }
+    $cur  = 0.0; [void][double]::TryParse(($priceText -replace '[^0-9.]',''), [ref]$cur)
     $base = 0.0; [void][double]::TryParse((([string]$it.base_price) -replace '[^0-9.]',''), [ref]$base)
     $val = $cur
     if ($val -le 0) { $val = $base }

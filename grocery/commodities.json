@@ -1,4 +1,4 @@
-﻿[
+[
     {
         "id":  "chicken-breast",
         "label":  "Boneless Skinless Chicken Breast",
@@ -30244,7 +30244,8 @@
         "band_max":  0.30,
         "include":  [
                         "distilled\\s+(?:white\\s+)?vinegar",
-                        "white\\s+vinegar"
+                        "white\\s+vinegar",
+                        "vinegar,?\\s+(?:distilled\\s+white|white\\s+distilled)"
                     ],
         "exclude":  [
                         "\\bwine\\b",
@@ -33622,7 +33623,8 @@
         "label":  "Red Wine Vinegar",
         "unit":  "floz",
         "include":  [
-                        "red\\s+wine\\s+vinegar"
+                        "red\\s+wine\\s+vinegar",
+                        "vinegar,?\\s+red\\s+wine"
                     ],
         "exclude":  [
                         "vinaigrette",
@@ -43306,6 +43308,7 @@
                         "papayas?\\b"
                     ],
         "exclude":  [
+                        "\\bjce\\b",
                         "\\bdried\\b",
                         "spears?",
                         "nectar",
@@ -44098,7 +44101,8 @@
         "unit":  "oz",
         "include":  [
                         "dried\\s+cranberr(?:y|ies)",
-                        "craisins?\\b"
+                        "craisins?\\b",
+                        "cranberr(?:y|ies),?\\s+dried\\b"
                     ],
         "exclude":  [
                         "\\bfresh\\b",

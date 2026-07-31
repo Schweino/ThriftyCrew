@@ -84,7 +84,78 @@ foreach ($it in ($staple + $recipe)) {
     $lpu = LinkPU ([string]$e.size) $unit $price ([string]$e.name)
     if ($null -eq $lpu -or $lpu -le 0) { $skip.badprice++; continue }
     $off = [math]::Abs($lpu - $board) / $board
-    if ($off -le $Tol) { $skip.agree++; continue }
+        if ($off -le $Tol) { $skip.agree++; continue }
+    # ---- BOARD-CONFIRMED-FRESH GATE (2026-07-31) ------------------------------------------------------
+    # THE PIN'S FOUNDING PREMISE IS "the board number is the stale/mis-parsed one". Prove it before acting
+    # on it. If the store's OWN newest first-party pull still carries this cell's exact item at this cell's
+    # exact price, the board is not stale - it is confirmed by the source we trust most - and the
+    # disagreement is about the LINK, which is prune-bad-links' and audit-links' problem, never a reason to
+    # move a published number.
+    # MEASURED 2026-07-31 on the live board: three pins existed whose board item sat in that same morning's
+    # own pull at the board price, and all three published a number ~30% too high for the product the card
+    # names - rice-vinegar/Walmart (Kikkoman 10 fl oz, $1.87 in walmart-regular-2026-07-30, published as the
+    # row's CHEAPEST at 24c/fl oz against a true 18.7c), frozen-lasagna/Walmart (Stouffer's 96 oz, $16.48,
+    # published 23c/oz vs 17.2c) and bbq-sauce/Family Fare (Our Family 18 oz, $1.99 in
+    # family-fare-regular-2026-07-31, published 14c/oz vs 11.1c). Five more were queued behind them the same
+    # morning (baby-wipes, disinfecting-wipes, floor-cleaner, ketchup, canned-black-beans), three of which
+    # would have pinned a number LOWER than the truth - the shape that mints a wrong cheapest-store crown.
+    # WHY A NAME TEST WAS NOT ENOUGH: the only identity gate this script had is audit-name-drift, and it
+    # flagged 3 cells out of 2,723 examined and none of those three. A bidirectional word-overlap test still
+    # waved rice-vinegar through (Kikkoman vs Mizkan share "rice" and "vinegar"). This gate asks the STORE,
+    # not the resolver, so no name heuristic is involved.
+    # It can only ever REFUSE to move a number, never move one, so nothing it does can invent a price.
+    if (-not $script:PINFEED) {
+      $script:PINFEED = @{}
+      $script:PINFEEDDATE = @{}
+      $pinFilePat = @{ 'Walmart' = 'walmart-regular-*.json'; 'Family Fare' = 'family-fare-regular-*.json'; 'Hy-Vee' = 'hyvee-regular-*.json'; "Sam's Club" = 'sams-regular-*.json'; 'Aldi' = 'aldi-regular-*.json'; "Baker's" = 'bakers-regular-*.json'; 'Fareway' = 'fareway-regular-*.json' }
+      foreach ($psKey in $pinFilePat.Keys) {
+        $script:PINFEED[$psKey] = @()
+        $script:PINFEEDDATE[$psKey] = ''
+        try {
+          $pf = Get-ChildItem (Join-Path $OutDir 'regular') -Filter $pinFilePat[$psKey] -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
+          if (-not $pf -or $pf.Length -lt 3) { continue }
+          $pdoc = Get-Content $pf.FullName -Raw | ConvertFrom-Json
+          $script:PINFEED[$psKey] = @($pdoc.deals)
+          $pfd = ''
+          foreach ($pfp in @('captured','week_of')) { if (($pdoc.PSObject.Properties.Name -contains $pfp) -and $pdoc.$pfp) { $pfd = [string]$pdoc.$pfp; break } }
+          if (-not $pfd) { $pfm = [regex]::Match($pf.Name, '(\d{4}-\d{2}-\d{2})'); if ($pfm.Success) { $pfd = $pfm.Groups[1].Value } }
+          $script:PINFEEDDATE[$psKey] = ($pfd -replace 'T.*$','')
+        } catch { }
+      }
+      $pinFeedRows = 0
+      foreach ($psKey in @($script:PINFEED.Keys)) { $pinFeedRows += @($script:PINFEED[$psKey]).Count }
+      # ZERO-ROWS RULE: a gate that loaded nothing has refused nothing, and must say so rather than let every
+      # pin below read as "checked against the store".
+      if ($pinFeedRows -eq 0) { Write-Warning 'generate-board-overrides: the board-confirmed-fresh gate loaded ZERO first-party rows from out\regular - it cannot refuse a single pin this run, so every pin written below is UNCHECKED against its own store feed.' }
+      Write-Output ("  board-confirmed-fresh gate: " + $pinFeedRows + " first-party rows loaded from out\regular")
+    }
+    $bcfHit = $false
+    $bcfItem = [string]$s.item
+    $bcfAd = 0.0; [void][double]::TryParse((([string]$s.ad) -replace '[^0-9.]',''), [ref]$bcfAd)
+    if ($bcfItem -and $bcfAd -gt 0 -and @($script:PINFEED[$st]).Count -gt 0) {
+      $bcfNorm = ((($bcfItem.ToLower()) -replace '[^a-z0-9]',' ') -replace '\s+',' ').Trim()
+      $bcfFd = [string]$script:PINFEEDDATE[$st]
+      $bcfCut = $null
+      if ($bcfFd -match '^\d{4}-\d{2}-\d{2}$') { try { $bcfCut = ([datetime]$bcfFd).AddDays(-2) } catch { $bcfCut = $null } }
+      foreach ($fr in @($script:PINFEED[$st])) {
+        if (((([string]$fr.item).ToLower() -replace '[^a-z0-9]',' ') -replace '\s+',' ').Trim() -ne $bcfNorm) { continue }
+        $frP = 0.0; [void][double]::TryParse((([string]$fr.ad_price) -replace '[^0-9.]',''), [ref]$frP)
+        if ($frP -le 0) { [void][double]::TryParse((([string]$fr.current_price) -replace '[^0-9.]',''), [ref]$frP) }
+        if ([math]::Abs($frP - $bcfAd) -gt 0.005) { continue }
+        $frAo = ''
+        if (($fr.PSObject.Properties.Name -contains 'as_of') -and $fr.as_of) { $frAo = [string]$fr.as_of }
+        if (-not $frAo) { $frAo = $bcfFd }
+        if ($bcfCut -and ($frAo -match '^\d{4}-\d{2}-\d{2}$')) { try { if (([datetime]$frAo) -lt $bcfCut) { continue } } catch { } }
+        if (($fr.PSObject.Properties.Name -contains 'not_reverified') -and $fr.not_reverified) { continue }
+        $bcfHit = $true
+        break
+      }
+    }
+    if ($bcfHit) {
+      $skip.boardfresh = 1 + [int]$skip.boardfresh
+      Write-Output ("  board-CONFIRMED-FRESH, pin REFUSED: {0} / {1}  board={2} ({3}) is in this store's own current pull - the link '{4}' ({5}) is the side that disagrees" -f $id, $st, $board, ([string]$s.ad), ([string]$e.name), [math]::Round($lpu,4))
+      continue
+    }
     # RATIO CAP (2026-07-23): a genuinely stale board price drifts by percents; a 2x+ gap means the LINK
     # side is the broken one (pack price parsed as per-item: bottled water 24x, dryer sheets 120x, facial
     # tissues 107x all minted as "corrections" tonight). Never pin across a basis-sized gap - leave the
@@ -103,6 +174,6 @@ $obj = [ordered]@{
   cells = $cells
 }
 $obj | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $root 'board-price-overrides.json') -Encoding UTF8
-Write-Output ("board-overrides: wrote $($cells.Count) corrections  (skipped: sale=$($skip.sale) collision=$($skip.collision) name-drift=$($skip.namedrift) no-link=$($skip.nolink) bad-price=$($skip.badprice) already-agree=$($skip.agree) basis-gap=$($skip.basisgap))")
+Write-Output ("board-overrides: wrote $($cells.Count) corrections  (skipped: sale=$($skip.sale) collision=$($skip.collision) name-drift=$($skip.namedrift) no-link=$($skip.nolink) bad-price=$($skip.badprice) already-agree=$($skip.agree) basis-gap=$($skip.basisgap) board-confirmed-fresh=$([int]$skip.boardfresh))")
 
 
