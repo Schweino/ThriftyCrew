@@ -482,6 +482,9 @@
     "open_questions_for_brad":  [
 
                                 ],
+    "superseded_notes":  [
+                             "TACO-SAUCE, superseded 2026-07-31 after this plan shipped: Brad answered the round-1 open question the same day and it has been implemented and published. This plan's do_not_touch line 'the taco-sauce allowlist entry (parked for Brad in round 1)' and its developer_record note 'The taco-sauce question stays parked for Brad' were true when written and no longer apply. The allowlist entry is deleted, taco-sauce.include gained the Taco Bell bottle token, hot-sauce.exclude gained 'taco backslash-s-plus bell' to release the Hot bottle from first-match-wins, and Sam's Club now holds a real taco-sauce cell at 0.1992/oz. Full record in plan-2026-07-31.json under brad_decision_shipped. Nothing else in this plan is affected."
+                         ],
     "developer_record":  {
                              "ran":  "2026-07-31 09:38",
                              "board_republished":  true,

@@ -21705,6 +21705,7 @@
                         "red\\s*hot\\b"
                     ],
         "exclude":  [
+                        "taco\\s+bell",
                         "wing",
                         "chicken",
                         "chips",
@@ -36428,7 +36429,8 @@
         "label":  "Taco Sauce",
         "unit":  "oz",
         "include":  [
-                        "taco\\s+sauce"
+                        "taco\\s+sauce",
+                        "taco\\s+bell\\s+(mild|hot|fire|diablo|verde|salsa\\s+verde)?\\s*sauce"
                     ],
         "exclude":  [
                         "\\bsalsa\\b",

@@ -1274,13 +1274,6 @@
                       "reviewed_source":  "REVIEWED 2026-07-31 against out\\coverage-gaps.json (06:10) + the store captures named in each entry (plan-2026-07-31.json item f3fd16)"
                   },
                   {
-                      "commodity":  "taco-sauce",
-                      "store":  "Sam\u0027s Club",
-                      "why":  "PARKED FOR BRAD - a what-should-this-commodity-MEAN question, not a bug. The candidate \"Taco Bell Mild Sauce, 25 oz.\" $4.98 genuinely IS taco sauce, but no workable include token admits it without also dragging in the Fire/Diablo/Hot Sauce bottles: the estate carries ~21 distinct Taco Bell products (seasonings, Verde Salsa, Salsa Con Queso, and the heat-level sauce bottles) across 4+ stores. Widening the include is a decision about what the commodity is FOR, so it is Brad\u0027s call, not the developer\u0027s. Allowlisted as a REVIEWED GAP meanwhile - the cell stays empty rather than filled with a guess. Open question recorded in plan-2026-07-31.json open_questions_for_brad.",
-                      "reviewed":  "2026-07-31",
-                      "reviewed_source":  "REVIEWED 2026-07-31 against out\\coverage-gaps.json (06:10) + the store captures named in each entry (plan-2026-07-31.json item f3fd16)"
-                  },
-                  {
                       "commodity":  "teriyaki-sauce",
                       "store":  "Fareway",
                       "why":  "WRONG FORM, by the product\u0027s own name: the only candidate is \"Kikkoman Teriyaki Original BBQ Sauce\" - Kikkoman names this a BBQ sauce, and it is formulated and priced as one. Allowlisted rather than widening the teriyaki include, which would let every teriyaki-flavoured BBQ and marinade bottle into the cell and make the crown meaningless.",
