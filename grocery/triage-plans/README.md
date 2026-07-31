@@ -27,6 +27,13 @@ with the change and a future reader can see why a rule exists.
   "round": 1,                              // 2 = a bounce-back round (max 2, see below)
   "board_week": "2026-07-30",              // week_of of the newest comparison the reviewer read
   "queue_ids_seen": ["2026-07-30-abc123"], // EVERY open id from triage-queue.json, no exceptions
+
+  // THE MEASUREMENT ITSELF, not just its summary. Sidecar file the reviewer writes next to the plan:
+  // plan-<date>.routing.json = the frozen before/after routing of every affected name. The developer
+  // DIFFS against this instead of re-deriving the corpus (on 2026-07-31 the reviewer routed 26,003 names
+  // and the developer then rebuilt 25,939 of them to check the same contract). "Outside the contract"
+  // becomes a set difference anyone can re-run instead of a claim to be reconstructed.
+  "routing_artifact": "plan-2026-07-31.routing.json",
   "items": [
     {
       "queue_id": "2026-07-30-abc123",
@@ -40,6 +47,11 @@ with the change and a future reader can see why a rule exists.
       //   infra            - a job, log, schedule, credential or wall (CAPTCHA) problem.
       //   no-code-change   - handled by another owner (Wednesday browser agent, daily self-heal).
       //   needs-brad       - a purchase, a wall, or a judgment call about what a commodity SHOULD mean.
+      //   superseded       - the same unresolved condition as another item in this plan; name which one.
+      //                      (Five of 2026-07-31's fourteen alerts were this. They are not work.)
+      //   needs-more-time  - hit the per-item effort ceiling; carries what was learned so far.
+      // The last four are ONE-LINE items: classification, one evidence line, root_cause, resolution_note.
+      // Do not spend blast radius, proof or rollback on "the Wednesday agent owns this".
       "classification": "wrong-product",
 
       // WHAT WAS ACTUALLY READ. Rows, not adjectives. Store, product name, size, ad price, per-unit.
@@ -69,11 +81,31 @@ with the change and a future reader can see why a rule exists.
       // run the proposed regex over every product name in the newest comparison AND out\regular\*.json
       // AND out\sams|bakers|fareway captures, and report what gains or loses a match.
       "blast_radius": {
-        "measured_by": "regex scan of 18,123 product names across comparison-2026-07-30 + out\\regular + out\\sams",
+        // MUST be "routing". A rule's impact is where products END UP after first-match-wins, never how
+        // many names a regex hits. This estate made the proxy mistake TWICE on 2026-07-31: round 1 checked
+        // each commodity's crown instead of each product's routing, and the taco-sauce measurement counted
+        // 6 token matches when only 5 could route (hot-sauce claimed the sixth at a lower array index).
+        // A match count both over-predicts (matches that change nothing) and under-predicts (second-order
+        // re-landings). validate-triage-plan.ps1 rejects any other value.
+        "measured_as": "routing",
+        "measured_by": "before/after routing of 25,939 names across comparison-2026-07-30 + out\\regular + out\\sams + out\\bakers + out\\fareway",
         "affected_now": 2,
         "names": ["Starry Mini Cans Lemon Lime, 7.5 fl. oz., 30 pk.", "Lulu Platanitios Lemon Plantain Chips, 2.5 oz., 30 pk."],
         "risk": "both are the wrong-product rows themselves; no legitimate produce name matches. Fresh Lemon / Fresh Lime verified NOT matched."
       },
+
+      // REQUIRED WHENEVER AN INCLUDE IS WIDENED. For each name the new token should admit, who claims it
+      // today and at what array index. First-match-wins does not only hijack cells, it also silently
+      // BLOCKS an intended admit: on 2026-07-31 taco-sauce (index 369) could never reach "Taco Bell Hot
+      // Sauce" because hot-sauce (index 181) already matched it, so the widening needed a release exclude
+      // on hot-sauce to work at all. Name the release excludes here or the developer discovers it mid-build.
+      "claimed_by_earlier": [
+        { "name": "Taco Bell Hot Sauce, 7.5 oz Bottle", "claimed_by": "hot-sauce", "index": 181, "release_needed": "hot-sauce.exclude += taco\\s+bell" }
+      ],
+
+      // WHAT THIS MEASUREMENT WAS TAKEN AGAINST, so a board that moved underneath is a checked branch and
+      // not a judgment call. Four of fourteen items deviated on 2026-07-31 largely for this reason.
+      "freshness": "measured against comparison-2026-07-30 (built 06:10) and the FF capture of 04:00; if the board has rebuilt since, re-run the routing diff before accepting - the FF sweep adds names every 3 hours",
 
       // HOW WE WILL KNOW IT WORKED, AND KEEPS WORKING. A fix with no reachable test does not ship
       // (see the 2026-07-29 lesson: two same-day fixes regressed because their self-test could not
@@ -93,7 +125,21 @@ with the change and a future reader can see why a rule exists.
       // What goes in triage-queue.json when this is done (1-2 lines, specific).
       "resolution_note": "Wrong product: Sam's Starry soda and Lulu plantain chips were pricing lemons/limes. Excluded at the commodity AND added to the food-class library so the guard catches the class. Board republished.",
 
-      "status": "planned"   // developer updates: done | deviated | blocked | bounced
+      // Which publish this item rides. The board was rebuilt and republished THREE times on 2026-07-31
+      // (round 1, round 2, a follow-up decision) at roughly eight minutes plus cache churn each. Items in
+      // the same batch ship together on one publish; "next-round" means it can wait.
+      "publish_batch": 1,
+
+      "status": "planned",  // developer updates: done | deviated | blocked | bounced | superseded | needs-more-time
+
+      // --- fields the DEVELOPER fills in, not the reviewer ---
+      // A plan premise is a claim, not a fact. Two premises were false on 2026-07-31 (the Family Fare
+      // cursor "skipping the wall", and a bounce claiming strawberries/milk had no sanity band - both do).
+      // Re-check the premise against live data BEFORE acting and record the answer here, so a falsified
+      // premise is visible in the artifact instead of buried in a report.
+      "premise_verified": null,   // true | false + what you checked
+      "deviation": null,          // what ground truth said, and what you did instead
+      "shipped_commit": null
     }
   ],
 
@@ -128,3 +174,23 @@ with the change and a future reader can see why a rule exists.
    reviewer round (round 2). Two rounds maximum, then whatever is left becomes `needs-brad`. This exists
    because discovery during implementation is normal here, not exceptional.
 4. **Every item ends resolved, needs-brad, or blocked with a reason.** Silence is not a resolution.
+5. **A bounce carries a measurement, not an observation.** Round 1's bounce on 2026-07-31 was directionally
+   right and factually wrong (it claimed two commodities had no sanity band; both do, and the engine had
+   already stamped OUT-OF-BAND on the exact rows). If the bounce had been required to show the measurement,
+   it would have died inside the developer instead of costing a whole review round.
+6. **Effort ceiling per item.** If one item exceeds the ceiling the dispatch names, park it as
+   `needs-more-time` with what was learned and move on. One item must not eat the budget for thirteen others.
+
+## The gate
+
+`grocery/validate-triage-plan.ps1 -Plan <path> -OpenIds <ids>` is the handoff gate and it is deterministic:
+exit 0 hand it over, 2 incomplete (it prints exactly what is missing), 3 BLIND (no plan, unparseable, or
+zero items). It has its own `-SelfTest` with frozen good and bad fixtures, including must-fire cases for
+the two mistakes this estate actually made: a blast radius `measured_as` anything other than `routing`, and
+a widened include with no `claimed_by_earlier`. The orchestrator runs it instead of eyeballing the plan,
+because an unversioned check nobody can re-run is a habit, not a gate.
+
+## Housekeeping
+
+Plans accumulate one per day and are rotated monthly by `run-daily-local.ps1` into `grocery/logs-archive/`
+alongside the pipeline logs. Git history keeps the content either way.

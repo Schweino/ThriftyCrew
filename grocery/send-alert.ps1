@@ -15,7 +15,9 @@ param(
   # bypass the once-per-type-per-day gate for a genuinely new incident that must page through today. Callers
   # that already do their own signature de-dup (the consistency-drift alert) pass this so their finer-grained
   # logic wins; everything else takes the daily gate.
-  [switch]$Force
+  [switch]$Force,
+  # exercises the queue-routing decision against temp fixtures and exits. Sends nothing, touches no live file.
+  [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -41,6 +43,78 @@ $typeKey = ($Subject.ToLower() `
     -replace 'rc\s*=\s*\d+', '' `
     -replace '\d+(\.\d+)?', '' `
     -replace '[^a-z]+', ' ').Trim()
+
+# ---- WHERE DOES THIS ALERT GO IN THE QUEUE? (2026-07-31) ------------------------------------------------
+# One function, so the rule is testable (-SelfTest below) instead of buried in the write block.
+#
+# THE BUG IT FIXES: the queue keyed on type + DATE, so a condition that stays broken across midnight minted a
+# second id every day. On 2026-07-31 the triage run opened with 14 alerts of which FIVE were the previous
+# day's unresolved condition wearing a new id (cell drops, matching soundness, registry drift, link drift,
+# price flags). Triage then paid to re-investigate and re-close each pair. A still-open item IS the same
+# incident: absorb the recurrence, keep ONE id, and let the count and the recurrence list carry the news.
+# Once an item is RESOLVED, the same condition firing again mints a fresh id on purpose - a fix that did not
+# hold is a different fact from a fix nobody has attempted yet, and triage must see the difference.
+# The 14-day bound stops a long-parked needs-brad item from silently swallowing months of occurrences.
+function Get-QueueAction {
+  param($Items, [string]$TypeKey, [string]$Today, [int]$MaxAbsorbDays = 14)
+  $todayD = [datetime]$Today
+  foreach ($i in @($Items)) {
+    if ([string]$i.type -ne $TypeKey) { continue }
+    if ([string]$i.status -ne 'open') { continue }          # resolved / needs-brad never absorb
+    $age = 999
+    try { $age = [int]($todayD - [datetime]([string]$i.date)).TotalDays } catch {}
+    if ($age -lt 0 -or $age -gt $MaxAbsorbDays) { continue }
+    if ($age -eq 0) { return @{ action = 'same-day'; target = $i } }
+    return @{ action = 'absorb'; target = $i; days = $age }
+  }
+  return @{ action = 'new'; target = $null }
+}
+
+# ---- CAN A HUMAN (OR AN AGENT) JUDGE THIS ALERT FROM ITS OWN BODY? (2026-07-31) -------------------------
+# An alert whose body carries no store, no commodity and no number cannot be classified without going and
+# finding the data by hand - which is the same as not alerting. Two live examples: the multibuy flags whose
+# queue record had EMPTY item/ad/size fields, and the Family Fare throttle alert that compared one 3-hourly
+# slice against the whole catalogue and therefore paged forever. This does not block anything; it stamps
+# body_thin on the entry so triage treats the ALERT as the bug, not just the condition it describes.
+function Test-BodyThin([string]$Body) {
+  $b = [string]$Body
+  if ($b.Trim().Length -lt 120) { return $true }
+  $hasStore = $b -imatch "hy-vee|baker|family fare|fareway|aldi|walmart|sam's|sams"
+  $hasId    = $b -match '[a-z]{3,}(-[a-z0-9]{2,}){1,}'      # commodity-id shape, e.g. canned-mushrooms
+  $hasNum   = $b -match '\d'
+  if ($hasStore -or $hasId) { return $false }
+  return (-not $hasNum)
+}
+
+if ($SelfTest) {
+  $fail = 0
+  function _T($label, $got, $want) {
+    if ("$got" -eq "$want") { Write-Output "ok    $label" } else { Write-Output "FAIL  $label  got '$got' want '$want'"; $script:fail++ }
+  }
+  # MUST-FIRE: yesterday's still-open item absorbs today's recurrence instead of minting a second id.
+  $items = @([pscustomobject]@{ type='grocery store s dropped from a commodity they carry'; date='2026-07-30'; status='open'; count=1 })
+  _T 'open item from yesterday absorbs today' (Get-QueueAction $items 'grocery store s dropped from a commodity they carry' '2026-07-31').action 'absorb'
+  # CLEAN TWIN: once it is resolved, the same condition tomorrow is NEWS and gets its own id.
+  $items2 = @([pscustomobject]@{ type='grocery store s dropped from a commodity they carry'; date='2026-07-30'; status='resolved'; count=1 })
+  _T 'resolved item does NOT absorb (a fix that did not hold is news)' (Get-QueueAction $items2 'grocery store s dropped from a commodity they carry' '2026-07-31').action 'new'
+  # same day stays same-day (the original behaviour, unchanged)
+  $items3 = @([pscustomobject]@{ type='t'; date='2026-07-31'; status='open'; count=1 })
+  _T 'same-day duplicate still increments in place' (Get-QueueAction $items3 't' '2026-07-31').action 'same-day'
+  # a parked needs-brad item must not swallow the recurrence
+  $items4 = @([pscustomobject]@{ type='t'; date='2026-07-30'; status='needs-brad'; count=1 })
+  _T 'needs-brad item does NOT absorb' (Get-QueueAction $items4 't' '2026-07-31').action 'new'
+  # and neither does something ancient
+  $items5 = @([pscustomobject]@{ type='t'; date='2026-06-01'; status='open'; count=1 })
+  _T 'open item older than the absorb window does NOT absorb' (Get-QueueAction $items5 't' '2026-07-31').action 'new'
+  # body-thin detection: the real multibuy record vs a real, judgeable body
+  _T 'thin body flagged'  (Test-BodyThin 'MULTIBUY|Hy-Vee|Soda (12-pack)') 'True'
+  _T 'rich body not flagged' (Test-BodyThin 'These commodity+store cells are on SALE with no everyday item to revert to: bell-peppers @ Family Fare; plums @ Family Fare; sandwich-cookies @ Family Fare. Browser stores are queued in grocery/out/research-worklist.json.') 'False'
+  Write-Output ""
+  if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
+  Write-Output 'SELF-TEST PASS (queue routing + body-thin)'
+  exit 0
+}
+
 $sentFile = Join-Path $root ("alert-sent-$today.txt")
 # purge prior days' sent-files: yesterday's suppressions are irrelevant, and the cloud job's `git add -A`
 # would otherwise commit one new file to the repo every day forever
@@ -74,16 +148,41 @@ try {
     $q = [pscustomobject]@{ readme = 'Durable ops-alert queue. Written by send-alert.ps1 on EVERY alert (even inbox-suppressed dupes). Drained by the grocery-alert-triage scheduled agent: investigate -> fix -> fix the ROOT cause -> status=resolved + notes. Do not hand-edit except to force a re-triage (set status back to open).'; items = @() }
   }
   $items = @($q.items)
-  $dupe = $items | Where-Object { $_.type -eq $typeKey -and $_.date -eq $today }
-  if ($dupe) {
-    foreach ($d in $dupe) { $d.count = [int]$d.count + 1 }
-  } else {
-    $items += [pscustomobject]@{
-      id = ($today + '-' + [guid]::NewGuid().ToString('N').Substring(0,6))
-      date = $today; ts = (Get-Date).ToString('s')
-      type = $typeKey; subject = $Subject
-      body = $(if ($Body.Length -gt 1500) { $Body.Substring(0,1500) + ' ...[truncated - full context in ad-cycle-log.txt / the source audit json]' } else { $Body })
-      status = 'open'; count = 1; resolved_ts = $null; notes = $null
+  $bodyStored = $(if ($Body.Length -gt 1500) { $Body.Substring(0,1500) + ' ...[truncated - full context in ad-cycle-log.txt / the source audit json]' } else { $Body })
+  $thin = Test-BodyThin $Body
+  $route = Get-QueueAction $items $typeKey $today
+  switch ($route.action) {
+    'same-day' {
+      foreach ($d in @($items | Where-Object { $_.type -eq $typeKey -and $_.date -eq $today })) { $d.count = [int]$d.count + 1 }
+    }
+    'absorb' {
+      # STILL-OPEN CONDITION FROM AN EARLIER DAY: one incident, one id. Keep the ORIGINAL body (it is what
+      # triage was working from) and carry today's wording as a dated recurrence so a changed count or a
+      # changed item list is still visible.
+      $t = $route.target
+      $t.count = [int]$t.count + 1
+      if ($t.PSObject.Properties['last_seen']) { $t.last_seen = (Get-Date).ToString('s') } else { $t | Add-Member -NotePropertyName last_seen -NotePropertyValue (Get-Date).ToString('s') }
+      $rec = @()
+      if ($t.PSObject.Properties['recurrences']) { $rec = @($t.recurrences) }
+      $rec += [pscustomobject]@{ date = $today; subject = $Subject; body = $(if ($bodyStored.Length -gt 400) { $bodyStored.Substring(0,400) + ' ...' } else { $bodyStored }) }
+      if ($rec.Count -gt 5) { $rec = @($rec[($rec.Count-5)..($rec.Count-1)]) }   # keep the last 5, bounded
+      if ($t.PSObject.Properties['recurrences']) { $t.recurrences = $rec } else { $t | Add-Member -NotePropertyName recurrences -NotePropertyValue $rec }
+      Log ("QUEUE ABSORBED into open item " + $t.id + " (day " + $route.days + " of this condition, count now " + $t.count + ") - no new id minted")
+    }
+    default {
+      $newItem = [pscustomobject]@{
+        id = ($today + '-' + [guid]::NewGuid().ToString('N').Substring(0,6))
+        date = $today; ts = (Get-Date).ToString('s')
+        type = $typeKey; subject = $Subject
+        body = $bodyStored
+        status = 'open'; count = 1; resolved_ts = $null; notes = $null
+      }
+      # an alert nobody can classify from its own body is a bug in the ALERT - say so on the record
+      if ($thin) {
+        $newItem | Add-Member -NotePropertyName body_thin -NotePropertyValue $true
+        Log ("BODY THIN on '" + $Subject + "' - the queue entry carries no store, commodity or number, so it cannot be classified without hunting the data. Fix the caller to include the identifying rows.")
+      }
+      $items += $newItem
     }
   }
   # keep resolved history 30 days so triage can see recurrences; open items never age out

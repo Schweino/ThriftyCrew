@@ -53,6 +53,21 @@ if ((Get-Date).Day -eq 1) {
   $arch = Join-Path $root 'logs-archive'
   if (-not (Test-Path $arch)) { New-Item -ItemType Directory -Path $arch -Force | Out-Null }
   $stamp = (Get-Date).AddMonths(-1).ToString('yyyy-MM')
+  # triage plans accumulate one (or three) per day and are pure history once shipped - the fixes they
+  # describe are in the commits. Archive last month's alongside the logs; git keeps the content either way.
+  try {
+    $tp = Join-Path $root 'triage-plans'
+    if (Test-Path $tp) {
+      $tpArch = Join-Path $arch 'triage-plans'
+      if (-not (Test-Path $tpArch)) { New-Item -ItemType Directory -Path $tpArch -Force | Out-Null }
+      $cutM = (Get-Date).AddMonths(-1).ToString('yyyy-MM')
+      $moved = 0
+      foreach ($pf in @(Get-ChildItem (Join-Path $tp 'plan-*.json') -ErrorAction SilentlyContinue)) {
+        if ($pf.BaseName -match '^plan-(\d{4}-\d{2})' -and $Matches[1] -le $cutM) { Move-Item $pf.FullName $tpArch -Force -ErrorAction SilentlyContinue; $moved++ }
+      }
+      if ($moved) { Log ("triage-plan rotation: archived $moved plan file(s) to logs-archive\triage-plans") }
+    }
+  } catch { Log ('triage-plan rotation threw: ' + $_.Exception.Message) }
   foreach ($lf in @('ad-cycle-log.txt', 'alert-log.txt', 'local-daily-log.txt', 'ff-sweep-log.txt')) {
     $src = Join-Path $root $lf
     $dst = Join-Path $arch ($lf -replace '\.txt$', "-$stamp.txt")

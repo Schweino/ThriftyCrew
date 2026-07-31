@@ -2196,5 +2196,22 @@ if ($r.rc -eq 0) { Ok 'food-category clean twin: the real honey / strawberries /
 else { Bad ('food-category flagged REAL cells (rc=' + $r.rc + ') - a round-2 token is too broad: ' + ($r.text -replace "`n", ' ')) }
 Remove-Item $fxR2 -Recurse -Force -ErrorAction SilentlyContinue
 
+# ---- (f) THE TRIAGE PIPELINE'S OWN WATCHERS (2026-07-31) -----------------------------------------------
+# Two pieces of the alert-to-fix loop carry their own frozen self-tests. They are only worth having if
+# something RUNS them, so they run here, daily, with the rest of the watchers.
+#   * send-alert's queue routing: a still-open condition that re-fires on a later day must absorb into the
+#     SAME id (five of 2026-07-31's fourteen alerts were one condition wearing two ids), while a RESOLVED
+#     one must mint a new id, because a fix that did not hold is different news from a fix nobody tried.
+#   * validate-triage-plan: the handoff gate between the reviewer and the developer. Its must-fire cases
+#     are the two mistakes this estate actually made - a blast radius measured as token matches instead of
+#     routing outcomes, and a widened include with no claimed_by_earlier.
+$r = RunPS 'send-alert.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'send-alert: queue routing (cross-day absorb, resolved-mints-new) + body-thin detection' }
+else { Bad ('send-alert -SelfTest failed (rc=' + $r.rc + ') - the triage queue may be minting a new id per day for one condition, or absorbing one it should not: ' + ($r.text -replace "`n", ' ')) }
+
+$r = RunPS 'validate-triage-plan.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'validate-triage-plan: the reviewer-to-developer handoff gate still rejects a token-match blast radius and an unclaimed include' }
+else { Bad ('validate-triage-plan -SelfTest failed (rc=' + $r.rc + ') - the plan gate is not enforcing what it claims: ' + ($r.text -replace "`n", ' ')) }
+
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2
