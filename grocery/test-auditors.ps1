@@ -1489,6 +1489,22 @@ if ($ffcS -match 'Our Family Chili Beans') { Ok 'the chili-beans own-feed-covera
 else { Bad 'ff-carry lost its chili-beans fixture - the "already priced in this very pull" false-positive class is no longer proven catchable' }
 if ($ffcS -match '4 for \$5\.00') { Ok 'the multi-buy cheapest-pick fixture is still armed ("4 for $5.00" must not read as 45)' }
 else { Bad 'ff-carry lost the multi-buy fixture - the digit-stripping bug that made $5.00 look like $45 is unguarded' }
+
+# THE ZERO-PROBE FALSE OK (2026-07-31, caught live). Every Freshop call sits in an empty catch, so a
+# throttled window returns nothing for all of them, $victims stays empty, and ff-carry printed the same
+# confident "OK no term is missing from the feed" as a run that really checked 123 terms. Observed:
+# "ff-carry: OK ... (0 of 466 empty term(s) re-probed)" exit 0, with the coverage ledger beside it saying
+# BLIND. It now exits 3 instead. Two things can rot: the gate keying off the WRONG count, and the caller
+# re-flattening exit 3 into a crash report. Both are source checks - the behaviour needs a throttled
+# Freshop, which cannot be summoned on demand and must never be faked by hitting the live API harder.
+$ffcOkIdx = $ffcS.IndexOf('ff-carry: OK  no term is missing')
+$ffcBlindIdx = $ffcS.IndexOf('$attempted -gt 0 -and $probed -eq 0')
+if ($ffcBlindIdx -ge 0 -and $ffcOkIdx -ge 0 -and $ffcBlindIdx -lt $ffcOkIdx) { Ok 'ff-carry refuses to print OK when Freshop answered none of the terms it needed to probe (exit 3, blind)' }
+else { Bad 'ff-carry no longer gates its OK line on having actually probed something - a fully throttled run reads as a clean bill of health again (the 2026-07-31 zero-probe false OK)' }
+if ($ffcS -match '\$attempted\s*=\s*\$emptyTerms\.Count\s*-\s*\$suppressed') { Ok 'ff-carry measures blindness against terms it actually had to probe, not the raw empty-term count' }
+else { Bad 'ff-carry blindness is no longer keyed on $emptyTerms.Count - $suppressed - a pull that legitimately suppressed every term will now be reported blind (cry-wolf) or a real blind run missed' }
+if ($cacSrc -match '\$fcRc -eq 3') { Ok 'check-ad-cycles reports an ff-carry could-not-evaluate separately from a crash' }
+else { Bad 'check-ad-cycles has no $fcRc -eq 3 branch - a blind-but-healthy ff-carry is logged as "DID NOT RUN ... see stderr" and points the reader at an empty stderr' }
 if ($stSrc -match 'protein-bars') { Ok 'the protein-bars clean twin is still present (the one measured legitimate non-food crossing)' }
 else { Bad 'store-taxonomy lost the protein-bars clean twin - the allowlist valve is untested and the audit drops to 50% precision' }
 # BLIND twin: an empty out\ must say could-not-evaluate, never report a clean zero.

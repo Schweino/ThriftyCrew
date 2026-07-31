@@ -151,7 +151,14 @@ if ($serverDue) {
       $fcOut = & powershell @fcArgs
       $fcRc  = $LASTEXITCODE
       foreach ($l in @($fcOut)) { Log ('ff-carry: ' + $l) }
-      if ($fcRc -ne 0 -or @($fcOut).Count -eq 0) {
+      # Exit 3 is the estate's could-not-evaluate code and must NOT be reported as a crash. ff-carry returns
+      # it when Freshop answered none of the terms it needed to probe: the script ran fine and said so, it
+      # just proved nothing. Both cases leave the watch blind for the cycle, but only one of them means
+      # "go read stderr", and sending someone to an empty stderr is how a real crash stops being believed.
+      if ($fcRc -eq 3) {
+        $summary += 'REVIEW    audit-ff-carry could not evaluate (Freshop refused every probe) - FF pull-drop victims went unchecked this cycle'
+      }
+      elseif ($fcRc -ne 0 -or @($fcOut).Count -eq 0) {
         Log ("ff-carry: DID NOT RUN - exit $fcRc with " + @($fcOut).Count + ' output line(s); the FF pull-drop watch is blind this cycle (see stderr)')
         $summary += 'REVIEW    audit-ff-carry did not complete - FF pull-drop victims went unchecked this cycle'
       }

@@ -180,6 +180,20 @@ Set-Content (Join-Path $OutDir 'ff-carry-report.json') -Value ($report | Convert
 # bad predicate away from reporting nothing at all, and 'OK, 0 victims' reads identically whether the pull
 # is healthy or the filter has eaten every real case. The counts make that distinguishable from the log.
 $probeStat = ' (' + $probed + ' of ' + $emptyTerms.Count + ' empty term(s) re-probed; ' + $suppressed + ' skipped because this pull already prices that commodity)'
+# ZERO PROBES IS NOT A CLEAN BILL OF HEALTH. Every Freshop call is wrapped in an empty catch, so a throttled
+# window returns 0 items for all of them, $victims stays empty, and this used to print the same confident
+# "OK no term is missing" as a run that actually checked 123 terms. Observed live 2026-07-31 (throttled by
+# repeated runs): "ff-carry: OK ... (0 of 466 empty term(s) re-probed)" with exit 0, while the coverage
+# ledger next to it correctly said BLIND. The ledger catching it does not excuse this line lying.
+# $attempted, NOT $emptyTerms.Count: if every empty term was suppressed because this pull already prices
+# that commodity, then probing nothing is the CORRECT answer and must stay a clean exit 0. Only a run that
+# had real work to do and completed none of it is blind - a hard zero, so there is no threshold to tune and
+# no cry-wolf risk. Exit 3 is the estate's could-not-evaluate code; check-ad-cycles words it separately.
+$attempted = $emptyTerms.Count - $suppressed
+if ($attempted -gt 0 -and $probed -eq 0) {
+  Write-Output ("ff-carry: BLIND  Freshop answered NONE of the " + $attempted + " term(s) this run needed to probe, so nothing was checked - this is not an OK" + $probeStat)
+  exit 3
+}
 if ($victims.Count -eq 0) { Write-Output ("ff-carry: OK  no term is missing from the feed AND carried by FF" + $probeStat); exit 0 }
 Write-Output ("ff-carry: FOUND " + $victims.Count + " uncovered term(s) - FF carries these and this pull has no priced row for them" + $probeStat + ":")
 foreach ($v in $victims) { Write-Output ("  " + $v.commodity.PadRight(20) + " <- '" + $v.product + "' " + $v.size + " " + $v.price) }
