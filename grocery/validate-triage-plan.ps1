@@ -49,6 +49,21 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 # classifications that legitimately carry no code change, so no blast radius / proof / rollback is demanded
 $NO_CODE = @('no-code-change','needs-brad','superseded','needs-more-time')
 
+# Does this item change how PRODUCTS ROUTE to commodities? That is the family whose impact can only be
+# stated as routing outcomes: the rule files themselves, plus any wrong-product fix (which is a rule change
+# by definition). An importer fix, a scheduled task, a logging path and a registry entry are not.
+function Test-TouchesMatchingRule($Item) {
+  if ([string]$Item.classification -eq 'wrong-product') { return $true }
+  $files = @()
+  foreach ($f in @($Item.surface_fix, $Item.root_fix)) {
+    if (-not $f) { continue }
+    $files += @($f.files)
+    $files += [string]$f.exact_change
+    $files += [string]$f.what
+  }
+  return (($files -join ' ') -match 'commodities\.json|category-excludes|price-bands|commodity-search')
+}
+
 function Test-Plan {
   param($Doc, [string[]]$Expect, [string]$PlanDir)
   $problems = New-Object System.Collections.Generic.List[string]
@@ -77,15 +92,26 @@ function Test-Plan {
     if ($NO_CODE -contains $cls) { continue }
 
     # --- code-changing items carry the anti-regression apparatus ---
+    # WHICH KIND OF MEASUREMENT, THOUGH. "measured_as: routing" is the right demand for a change to a
+    # MATCHING RULE, where the only honest impact statement is where products end up after
+    # first-match-wins. It is meaningless for the other half of a real plan: measured on the actual
+    # 2026-07-31 plan, 5 of 7 code items were infra (a logging path, a scheduled task's cadence, an
+    # importer, a stores.json entry, a browser pass) where there is no routing to measure. Demanding
+    # 'routing' there would force the reviewer to write a nonsense value or fail the gate - and a
+    # twice-failed gate costs a whole day of triage. So: every code item still needs a MEASURED blast
+    # radius, and the rule-changing ones specifically need it measured as routing.
     $br = $i.blast_radius
     if (-not $br) { $problems.Add("$id changes code but has no blast_radius") }
     else {
       if ($null -eq $br.affected_now) { $problems.Add("$id blast_radius has no affected_now count") }
+      if (-not [string]$br.measured_by) { $problems.Add("$id blast_radius has no measured_by (what corpus or call sites were scanned)") }
       $ma = [string]$br.measured_as
-      if ($ma -ne 'routing') {
-        $problems.Add("$id blast_radius.measured_as is '$ma' - it MUST be 'routing' (post-rule routing outcomes, not name/token matches; see the 2026-07-31 lesson)")
+      if (-not $ma) {
+        $problems.Add("$id blast_radius has no measured_as - say what was counted (routing for a matching rule; callers / rows / cells / schedule for the rest)")
       }
-      if (-not [string]$br.measured_by) { $problems.Add("$id blast_radius has no measured_by (what corpus was scanned)") }
+      elseif ((Test-TouchesMatchingRule $i) -and $ma -ne 'routing') {
+        $problems.Add("$id changes a MATCHING RULE but measured_as is '$ma' - it must be 'routing' (post-rule routing outcomes, never name/token matches; see the 2026-07-31 lesson that cost two rounds)")
+      }
     }
     if (-not ($i.proof -and [string]$i.proof.guard_or_fixture)) { $problems.Add("$id has no proof.guard_or_fixture") }
     if (-not [string]$i.rollback) { $problems.Add("$id has no rollback") }
@@ -132,9 +158,21 @@ if ($SelfTest) {
     })
   }
   _Case 'complete plan passes' $good 0 $null
-  # MUST-FIRE 1: the recurring 2026-07-31 error - impact counted as name matches
+  # MUST-FIRE 1: the recurring 2026-07-31 error - a MATCHING RULE whose impact is counted as name matches
   $m = $good | ConvertTo-Json -Depth 9 | ConvertFrom-Json; $m.items[0].blast_radius.measured_as = 'token-matches'
-  _Case 'measured_as token-matches is rejected' $m 2 "MUST be 'routing'"
+  _Case 'a matching-rule change measured as token-matches is rejected' $m 2 "must be 'routing'"
+  # CLEAN TWIN: an INFRA item measured honestly by its own units passes. Demanding 'routing' of a logging
+  # fix or a scheduled task would force a nonsense value, and a twice-failed gate costs a day of triage.
+  $infra = [pscustomobject]@{ queue_ids_seen=@('q1'); ship_sequence=@('x'); items=@([pscustomobject]@{
+      queue_id='q1'; classification='infra'; evidence=@('check-ad-cycles logged: cost-flag alert threw'); root_cause='[string]$null is $null so .Trim() throws on a zero-byte file'
+      blast_radius=[pscustomobject]@{ measured_as='callers'; measured_by='grep of all live .ps1 for the idiom'; affected_now=11 }
+      proof=[pscustomobject]@{ guard_or_fixture='test-guards case 0' }; rollback='revert the hunks'
+      freshness='measured against the working tree at 2026-07-31T07:00'; resolution_note='fixed'
+      surface_fix=[pscustomobject]@{ what='use the null-safe idiom'; exact_change='((Get-Content $f -Raw) + $emptyString).Trim()'; files=@('grocery/check-ad-cycles.ps1') } }) }
+  _Case 'an infra item measured as callers passes (routing would be meaningless)' $infra 0 $null
+  # MUST-FIRE 2: but an infra item with NO measure at all is still rejected
+  $noMeasure = $infra | ConvertTo-Json -Depth 9 | ConvertFrom-Json; $noMeasure.items[0].blast_radius.measured_as = ''
+  _Case 'a code item with no measured_as at all is rejected' $noMeasure 2 'no measured_as'
   # MUST-FIRE 2: an include widened with no claimed_by_earlier
   $w = $good | ConvertTo-Json -Depth 9 | ConvertFrom-Json; $w.items[0].surface_fix.exact_change = 'taco-sauce.include += taco bell sauce'
   _Case 'widened include without claimed_by_earlier is rejected' $w 2 'claimed_by_earlier'

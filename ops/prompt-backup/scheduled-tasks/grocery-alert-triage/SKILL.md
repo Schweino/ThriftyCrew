@@ -50,8 +50,17 @@ or superseded, the foreign-dirty file list, the plan path to write
 STEP 2 - GATE THE HANDOFF, DETERMINISTICALLY. Do not eyeball the plan; run:
   powershell -ExecutionPolicy Bypass -File C:\Codex\income\grocery\validate-triage-plan.ps1 -Plan <plan> -OpenIds <every open id>
 Exit 0 = hand it over. Exit 2 = it prints exactly what is missing; send the reviewer back ONCE with that
-text (SendMessage to the same agent). Exit 3 = BLIND (no plan, unparseable, zero items): do not hand a bad
-plan downstream, record it and stop with a report. If a round changed matching rules, also confirm the
+text (SendMessage to the same agent). Exit 3 = BLIND (no plan, unparseable, zero items): treat like a
+second failure.
+
+**A FAILED GATE MUST NEVER COST A DAY OF TRIAGE.** If the plan still does not pass after that one
+send-back, do NOT stop with nothing shipped - a gate is there to stop a BAD PLAN reaching the developer,
+not to stop the alerts being worked. Fall through to the monolith playbook in `SKILL.monolith-fallback.md`
+and run the day yourself, then report BOTH facts: what the gate rejected (verbatim), and what you shipped
+without it. That distinction is the whole point - the gate's complaint is the bug report on the reviewer
+stage, and it is worth more than a clean-looking skipped day. This clause exists because the gate shipped
+2026-07-31 was strict enough to reject a real plan on its first contact with one, and the SKILL as written
+would have answered that by triaging nothing. If a round changed matching rules, also confirm the
 `routing_artifact` file it names is on disk - the gate checks this, and it is what saves the developer from
 re-deriving the whole corpus.
 
