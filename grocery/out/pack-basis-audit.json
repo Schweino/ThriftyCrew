@@ -1,8 +1,20 @@
 ﻿{
-    "generated":  "2026-07-31 06:19",
-    "compare_file":  "packbasis-legit-bulk-board.json",
-    "finding_count":  0,
+    "generated":  "2026-07-31 09:03",
+    "compare_file":  "comparison-2026-07-31.json",
+    "finding_count":  1,
     "findings":  [
-
+                     {
+                         "id":  "hummus",
+                         "commodity":  "Hummus",
+                         "store":  "Sam\u0027s Club",
+                         "unit":  "oz",
+                         "published":  0.1395,
+                         "as_pack_total":  2.232,
+                         "peer_cheapest":  0.259,
+                         "count":  16,
+                         "size":  "16 ct 2.5 oz",
+                         "ad":  "$5.58",
+                         "item":  "Member\u0027s Mark Classic Hummus Singles 2.5 oz., 16 ct."
+                     }
                  ]
 }

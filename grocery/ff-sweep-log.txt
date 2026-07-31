@@ -173,3 +173,25 @@
 [2026-07-31T04:06:28]   alert-spam note in this script).
 [2026-07-31T04:06:28]   Family Fare everyday prices: 3974 catalog items (566 fresh, 3408 carried forward, 0 expired past 14 d; 466 terms still empty) -> C:\Codex\income\grocery\out\regular\family-fare-regular-2026-07-31.json
 [2026-07-31T04:06:28] sweep done rc=0 - cursor #154 -> #244
+[2026-07-31T07:00:01] sweep start (cursor before = #244, MaxMinutes=9)
+[2026-07-31T07:06:16]   Family Fare: term cursor at #244 of 526 - this run's budget starts there and wraps
+[2026-07-31T07:06:16]   Family Fare: throttle streak (15 empties) - cooling down 45s...
+[2026-07-31T07:06:16]   Family Fare: throttle streak (15 empties) - cooling down 45s...
+[2026-07-31T07:06:16]   Family Fare: throttle streak (15 empties) - cooling down 45s...
+[2026-07-31T07:06:16]   Family Fare: throttle streak (15 empties) - cooling down 45s...
+[2026-07-31T07:06:16]   Family Fare: ABORTING - 60 consecutive empty terms after 773 rows. API said: HTTP 400 x176. Continuing would burn time for nothing and push the limit out further. Carrying forward and writing what we have.
+[2026-07-31T07:06:16]   Family Fare: term cursor advanced to #332 (this run bought terms #244..#331)
+[2026-07-31T07:06:16]   WARNING: Family Fare: 466 term(s) STILL empty after recovery (not carried, or persistent throttle): fruit punch,
+[2026-07-31T07:06:16]   gatorade, energy drink, sparkling water, iced tea gallon, black tea bags, hot cocoa mix, coffee k cups, instant coffee,
+[2026-07-31T07:06:16]   frozen waffles, frozen broccoli florets, frozen sweet corn, frozen sweet peas, parchment paper, toilet bowl cleaner,
+[2026-07-31T07:06:16]   glass cleaner, disinfecting wipes, disinfectant spray, air freshener spray, aa batteries, charcoal briquets,
+[2026-07-31T07:06:16]   toothpaste, toothbrush, mouthwash, shampoo, hair conditioner, body wash, bar soap, bathroom cleaner, furniture polish,
+[2026-07-31T07:06:16]   ant roach killer spray, corn starch, bread crumbs, paprika, oregano leaves, parsley flakes, ground cinnamon, ground
+[2026-07-31T07:06:16]   turmeric, crushed red pepper, garbanzo beans
+[2026-07-31T07:06:16]   WARNING: Family Fare: throttled - got only 773 items vs 3972 in the last good file. Diagnostic copy:
+[2026-07-31T07:06:16]   C:\Codex\income\grocery\out\throttled\family-fare-2026-07-31.throttled.json. These rows are REAL and are being MERGED
+[2026-07-31T07:06:16]   (today's prices win, everything else carries forward).
+[2026-07-31T07:06:16]   WARNING: Family Fare: throttle alert already sent today (2026-07-31) - not re-sending (one email per day; see the
+[2026-07-31T07:06:16]   alert-spam note in this script).
+[2026-07-31T07:06:16]   Family Fare everyday prices: 4269 catalog items (771 fresh, 3498 carried forward, 0 expired past 14 d; 466 terms still empty) -> C:\Codex\income\grocery\out\regular\family-fare-regular-2026-07-31.json
+[2026-07-31T07:06:16] sweep done rc=0 - cursor #244 -> #332

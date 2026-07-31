@@ -2888,3 +2888,212 @@
 [2026-07-31T06:17:58] notify-item-added: notify-item-added: new-ids=1 queue=0 sent=0 failed=0 expired=0
 [2026-07-31T06:20:31] WATCHERS FAILED: test-auditors could not prove a guard still sees its own bug
 [2026-07-31T06:20:34] run complete; flips=0
+[2026-07-31T08:31:02] pull attempt 1 ok=True
+[2026-07-31T08:32:30] FF everyday refreshed
+[2026-07-31T08:46:33] Hy-Vee: Hy-Vee: 1538 products (1053 refreshable via GraphQL; 485 have no link so their price cannot be re-verified)
+[2026-07-31T08:46:33] Hy-Vee: WARNING: Hy-Vee: wall-clock cap of 14 min hit after 873 refreshed; every remaining product is kept at its last known 
+[2026-07-31T08:46:33] Hy-Vee: price and marked not_reverified
+[2026-07-31T08:46:33] Hy-Vee: Hy-Vee: 873 refreshed today (166 marked down), 0 newly priced, 665 not re-verified, 7 REFUSED (productId is a different size than our row), 165 never asked (wall-clock cap), 0 failed
+[2026-07-31T08:46:33] Hy-Vee: WARNING:   size conflict, refresh refused: Clorox Disinfecting Bleach Free Crisp Lemon Cleaning Wipes  ours=[35 ct] 
+[2026-07-31T08:46:33] Hy-Vee: hy-vee=[each]  qty 35 vs 1  (productId 50222)
+[2026-07-31T08:46:33] Hy-Vee: WARNING:   size conflict, refresh refused: That's Smart Ground Cinnamon  ours=[2.5 oz] hy-vee=[2.38 oz]  qty 2.5 vs 
+[2026-07-31T08:46:33] Hy-Vee: 2.38  (productId 2950925)
+[2026-07-31T08:46:33] Hy-Vee: WARNING:   size conflict, refresh refused: Lee Kum Kee Premium Dark Soy Sauce  ours=[16.9 fl oz] hy-vee=[16.9 ml]  qty 
+[2026-07-31T08:46:33] Hy-Vee: 16.9 vs 0.57  (productId 731717)
+[2026-07-31T08:46:33] Hy-Vee: WARNING:   size conflict, refresh refused: Dinty Moore Beef Stew  ours=[15 oz] hy-vee=[38 oz]  qty 15 vs 38  (productId
+[2026-07-31T08:46:33] Hy-Vee:  11342)
+[2026-07-31T08:46:33] Hy-Vee: WARNING:   size conflict, refresh refused: Hormel Mary Kitchen Homestyle Corned Beef Hash  ours=[14 oz] hy-vee=[25 oz] 
+[2026-07-31T08:46:33] Hy-Vee:  qty 14 vs 25  (productId 47144)
+[2026-07-31T08:46:33] Hy-Vee: WARNING:   size conflict, refresh refused: Hy-Vee Sloppy Joe Sauce  ours=[24 oz] hy-vee=[15 oz]  qty 24 vs 15  
+[2026-07-31T08:46:33] Hy-Vee: (productId 444508)
+[2026-07-31T08:46:33] Hy-Vee: WARNING:   size conflict, refresh refused: Spice World Minced Garlic  ours=[4.5 oz] hy-vee=[32 oz]  qty 4.5 vs 32  
+[2026-07-31T08:46:33] Hy-Vee: (productId 19478)
+[2026-07-31T08:46:33] Hy-Vee: Hy-Vee everyday prices -> C:\Codex\income\grocery\out\regular\hyvee-regular-2026-07-31.json
+[2026-07-31T08:57:12] Baker's everyday+promo refreshed via Kroger API (Saddlecreek) + link snapshots synced
+[2026-07-31T08:57:13] Hy-Vee link snapshots refreshed
+[2026-07-31T08:58:24] ff-carry: ff-carry: BLIND  Freshop answered NONE of the 117 term(s) this run needed to probe, so nothing was checked - this is not an OK (0 of 526 empty term(s) re-probed; 409 skipped because this pull already prices that commodity)
+[2026-07-31T08:59:11] history banked from the raw board (no verdict file for this week - nothing judged, so raw == verified)
+[2026-07-31T08:59:26] coverage-gaps: 5 store(s) carry an item but are off the board - kale @ Family Fare; feta @ Family Fare; brownie-mix @ Family Fare; canned-green-beans @ Family Fare; frozen-lasagna @ Family Fare
+[2026-07-31T08:59:26] coverage-gap alert sent
+[2026-07-31T09:00:34] match-soundness: match-soundness: MOVED=0  DROPPED=0  new-contested=1  drift-vs-engine=0
+[2026-07-31T09:00:34] match-soundness:   new-contested (order-dependence to review): Hy-Vee quality deli sliced ham or cheese, $5.99 lb.
+[2026-07-31T09:00:34] category-coverage: category-coverage: OK  all 503 commodities are in exactly one of 16 categories
+[2026-07-31T09:00:36] store-registry: store-registry: OK  7 stores; board, files, schedule and live scripts all agree
+[2026-07-31T09:00:39] arrivals:   cells today 2833 | baseline union 4755 | ARRIVALS 2 (crown 0) | scored 2 | blind 0
+[2026-07-31T09:00:39] arrivals:   FLAGGED at div >= 0.75: 0  (this is a REVIEW QUEUE - measured precision is low; nothing here blocks a publish)
+[2026-07-31T09:00:39] arrivals: CROWN ARRIVALS (0) - a wrong product is 4x more likely to hold a crown
+[2026-07-31T09:00:39] arrivals: OTHER ARRIVALS (2)
+[2026-07-31T09:00:42] taxonomy: taxonomy source: Family Fare: canonical_url from 16 file(s) within 30d -> 4229 product(s) with a department (newest family-fare-regular-2026-07-31.json)
+[2026-07-31T09:00:42] taxonomy: taxonomy source: Hy-Vee: row field store_department in hyvee-regular-2026-07-31.json -> 864 product(s) with a department
+[2026-07-31T09:00:42] taxonomy: taxonomy source: Baker's: row field store_category in bakers-regular-2026-07-31.json -> 6366 product(s) with a department
+[2026-07-31T09:00:42] taxonomy: taxonomy: judged 3732 row(s) across board cells + candidates; 1 LIVE CELL disagreement(s), 19 candidate disagreement(s)
+[2026-07-31T09:00:42] taxonomy: taxonomy: 5960 row(s) from Baker's carried a department but that store has no entry in taxonomy-map.json - NOT judged
+[2026-07-31T09:00:42] taxonomy: taxonomy: 1117 row(s) from Hy-Vee carried a department but that store has no entry in taxonomy-map.json - NOT judged
+[2026-07-31T09:00:42] taxonomy:   LIVE CELL  baking-soda @ Family Fare [CROWN] -> pets_wildlife/cat  Arm & Hammer Baking Soda Clumping Litter, Fresh Scent
+[2026-07-31T09:00:42] taxonomy:   candidate  apples @ Family Fare -> health_beauty/baby_child  Once Upon A Farm No Added Sugar Apple, Sweet Potato & Spinach Toddler Tractor Wheels 5 Ea
+[2026-07-31T09:00:42] taxonomy:   candidate  apples @ Family Fare -> health_beauty/baby_child  Pumpkin Tree Fruit & Vegetable Puree, Apple, Sweet Potato & Corn, Organic 4.4 Oz
+[2026-07-31T09:00:42] taxonomy:   candidate  baking-soda @ Family Fare [RANKABLE] -> pets_wildlife/cat  Arm & Hammer Baking Soda Clumping Litter, Fresh Scent
+[2026-07-31T09:00:42] taxonomy:   candidate  baking-soda @ Family Fare [RANKABLE] -> pets_wildlife/cat  Arm & Hammer Clumping Litter, Baking Soda Coated, Ultra Last 20 Lb
+[2026-07-31T09:00:42] taxonomy:   candidate  brown-rice @ Family Fare -> pets_wildlife/dog  Blue Buffalo Natural Puppy Chicken And Brown Rice Recipe Food For Puppies 5 Lb
+[2026-07-31T09:00:42] taxonomy:   candidate  coconut-oil @ Family Fare -> household/facial_tissue  Kleenex 3 In 1 3 Ply Coconut Oil + Aloe Tissues 4 Ea
+[2026-07-31T09:00:42] taxonomy:   candidate  cookies @ Family Fare -> health_beauty/adult_nutrition  Built Puff Cookies 'N Cream Protein Bar 1.41 Oz
+[2026-07-31T09:00:42] taxonomy:   candidate  cookies @ Family Fare -> health_beauty/adult_nutrition  Barebells Cookies & Cream Protein Bar 1.94 Oz
+[2026-07-31T09:00:42] taxonomy:   candidate  cookies @ Family Fare -> health_beauty/adult_nutrition  Atkins Cookie Fusion High Protein Bar 4 Ea
+[2026-07-31T09:00:42] taxonomy:   candidate  cookies @ Family Fare -> health_beauty/adult_nutrition  Built Puff Cookies 'N Cream Protein Bars 4 Ea
+[2026-07-31T09:00:42] taxonomy:   candidate  cookies @ Family Fare -> health_beauty/adult_nutrition  Barebells Cookies & Caramel Protein Bar 1.94 Oz
+[2026-07-31T09:00:42] taxonomy:   candidate  grapefruit @ Family Fare -> health_beauty/skin_care  Top Care Foaming Pink Grapefruit Acne Scrub 4.2 Fl Oz
+[2026-07-31T09:00:42] taxonomy:   candidate  ice-cream @ Family Fare -> health_beauty/adult_nutrition  Optimum Nutrition Vanilla Ice Cream 100% Whey Protein 24.05 Oz
+[2026-07-31T09:00:42] taxonomy:   candidate  lemons @ Family Fare -> health_beauty/pharmacy  Halls Sugar Free Drops Honey Lemon Flavor Cough & Throat Relief 25 Ea
+[2026-07-31T09:00:42] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/grooming_hygiene  Nair Shower Cream Moroccan Argan Oil & Orange Blossom Hair Remover 12 Oz
+[2026-07-31T09:00:42] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/pharmacy  Metamucil 4 In 1 Psyllium Fiber Powder, Sugar Free, Orange, 114 Tsp 23.3 Oz
+[2026-07-31T09:00:42] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/pharmacy  Top Care Fiber Powder, Sugar Free, Orange Flavor 23.3 Oz
+[2026-07-31T09:00:42] taxonomy:   candidate  salt @ Family Fare -> health_beauty/adult_nutrition  Rxbar Chocolate Sea Salt Protein Bar 1.8 Oz
+[2026-07-31T09:00:42] taxonomy:   candidate  watermelon @ Family Fare -> health_beauty/adult_nutrition  5 Hour Energy Watermelon Energy Shot 1.93 Fl Oz
+[2026-07-31T09:00:42] taxonomy: taxonomy: report -> C:\Codex\income\grocery\out\taxonomy-disagreements-2026-07-31.json
+[2026-07-31T09:00:44] sale-fallback: 1 on-sale cell(s) with no everyday fallback - bell-peppers @ Family Fare
+[2026-07-31T09:00:44] sale-fallback gaps unchanged - not re-alerting
+[2026-07-31T09:00:45] sale-windows refreshed
+[2026-07-31T09:00:53] recipe-overlay applied
+[2026-07-31T09:00:55] engine cost-recipes refreshed db\costed
+[2026-07-31T09:00:56] db-agreement guard: clean
+[2026-07-31T09:00:59] v2 per-serving manifest recomputed
+[2026-07-31T09:01:00] ingredient-map regenerated (derived from specs + feed)
+[2026-07-31T09:01:06] top5-weekly refreshed
+[2026-07-31T09:01:06] free-rotation: rotation: board-week=2026-07-31  target free set = 20 recipe(s)
+[2026-07-31T09:01:06] free-rotation:   chicken #1  $1.51/srv  chicken-bulgogi-rice-bowls
+[2026-07-31T09:01:06] free-rotation:   chicken #2  $1.71/srv  claypot-chicken-mushroom-rice
+[2026-07-31T09:01:06] free-rotation:   chicken #3  $1.72/srv  chicken-fried-rice-skillet
+[2026-07-31T09:01:06] free-rotation:   chicken #4  $1.84/srv  poppy-seed-chicken-and-rice-casserole
+[2026-07-31T09:01:06] free-rotation:   chicken #5  $1.92/srv  chicken-pot-pie-biscuit-casserole
+[2026-07-31T09:01:06] free-rotation:   turkey  #1  $1.84/srv  turkey-huevos-rancheros-rice-bowls
+[2026-07-31T09:01:06] free-rotation:   turkey  #2  $1.92/srv  haluski-and-kielbasa-cabbage-noodles
+[2026-07-31T09:01:06] free-rotation:   turkey  #3  $1.93/srv  turkey-biscuit-pot-pie-casserole
+[2026-07-31T09:01:06] free-rotation:   turkey  #4  $2.00/srv  scalloped-potato-turkey-casserole
+[2026-07-31T09:01:06] free-rotation:   turkey  #5  $2.09/srv  red-beans-turkey-sausage-and-rice
+[2026-07-31T09:01:06] free-rotation:   beef    #1  $2.40/srv  lebanese-hashweh
+[2026-07-31T09:01:06] free-rotation:   beef    #2  $2.43/srv  beef-potato-au-gratin-casserole
+[2026-07-31T09:01:06] free-rotation:   beef    #3  $2.45/srv  bistek-tagalog-filipino-beef-onion-rice
+[2026-07-31T09:01:06] free-rotation:   beef    #4  $2.49/srv  mediterranean-beef-hummus-bowls
+[2026-07-31T09:01:06] free-rotation:   beef    #5  $2.55/srv  million-dollar-baked-spaghetti
+[2026-07-31T09:01:06] free-rotation:   pork    #1  $1.31/srv  bratwurst-sauerkraut-potatoes-bake
+[2026-07-31T09:01:06] free-rotation:   pork    #2  $1.49/srv  vietnamese-thit-kho-braised-pork-and-eggs
+[2026-07-31T09:01:06] free-rotation:   pork    #3  $1.51/srv  slow-cooker-country-style-pork-ribs-rice
+[2026-07-31T09:01:06] free-rotation:   pork    #4  $1.59/srv  orecchiette-italian-sausage-broccoli
+[2026-07-31T09:01:06] free-rotation:   pork    #5  $1.63/srv  slow-cooker-kalua-pork-bowls
+[2026-07-31T09:01:07] free-rotation:   REVERT chicken-40-cloves-garlic -> flipped-to-paid
+[2026-07-31T09:01:08] free-rotation:   FREE   chicken-bulgogi-rice-bowls -> already-public
+[2026-07-31T09:01:08] free-rotation:   FREE   claypot-chicken-mushroom-rice -> already-public
+[2026-07-31T09:01:09] free-rotation:   FREE   chicken-fried-rice-skillet -> already-public
+[2026-07-31T09:01:09] free-rotation:   FREE   poppy-seed-chicken-and-rice-casserole -> already-public
+[2026-07-31T09:01:10] free-rotation:   FREE   chicken-pot-pie-biscuit-casserole -> flipped-to-public
+[2026-07-31T09:01:11] free-rotation:   FREE   turkey-huevos-rancheros-rice-bowls -> already-public
+[2026-07-31T09:01:11] free-rotation:   FREE   haluski-and-kielbasa-cabbage-noodles -> already-public
+[2026-07-31T09:01:12] free-rotation:   FREE   turkey-biscuit-pot-pie-casserole -> already-public
+[2026-07-31T09:01:13] free-rotation:   FREE   scalloped-potato-turkey-casserole -> already-public
+[2026-07-31T09:01:13] free-rotation:   FREE   red-beans-turkey-sausage-and-rice -> already-public
+[2026-07-31T09:01:14] free-rotation:   FREE   lebanese-hashweh -> already-public
+[2026-07-31T09:01:14] free-rotation:   FREE   beef-potato-au-gratin-casserole -> already-public
+[2026-07-31T09:01:15] free-rotation:   FREE   bistek-tagalog-filipino-beef-onion-rice -> already-public
+[2026-07-31T09:01:15] free-rotation:   FREE   mediterranean-beef-hummus-bowls -> already-public
+[2026-07-31T09:01:16] free-rotation:   FREE   million-dollar-baked-spaghetti -> already-public
+[2026-07-31T09:01:16] free-rotation:   FREE   bratwurst-sauerkraut-potatoes-bake -> already-public
+[2026-07-31T09:01:17] free-rotation:   FREE   vietnamese-thit-kho-braised-pork-and-eggs -> already-public
+[2026-07-31T09:01:17] free-rotation:   FREE   slow-cooker-country-style-pork-ribs-rice -> already-public
+[2026-07-31T09:01:18] free-rotation:   FREE   orecchiette-italian-sausage-broccoli -> already-public
+[2026-07-31T09:01:18] free-rotation:   FREE   slow-cooker-kalua-pork-bowls -> already-public
+[2026-07-31T09:01:19] free-rotation:   recipes-db: patched 2 visibility field(s) key-scoped (no whole-file round-trip)
+[2026-07-31T09:01:19] free-rotation: rotation: 21 flip(s), 0 error(s); state + recipes-db + public/free-dinners.json written
+[2026-07-31T09:01:20] smp-feed exported
+[2026-07-31T09:02:43] price-alerts: price-alerts done: 0 email(s) sent
+[2026-07-31T09:02:47] derive-links-from-prices: .
+[2026-07-31T09:03:02] family-fare link fill: APPLIED: 2 Family Fare link(s) written from the plan (0 network calls)
+[2026-07-31T09:03:04] prune-bad-links: links DROPPED (wrong product/price)    : 3   (of which 2 were SALE cells the old rule skipped entirely) | links DROPPED (per-unit unverifiable)  : 0   (cannot prove the link shows our price - unknown is not a pass) | links DROPPED (link carries no price)  : 0   (nothing from the store to check against)
+[2026-07-31T09:03:16] basis-reconcile: checked 76 cell(s) against the store's own unit price (18518 indexed, 0 allowlisted)
+[2026-07-31T09:03:17] REVIEW FLAGS: 64 -> SANITY|Achiote Paste|wow|cheapest moved down 92% vs last week ($4.64 -> $0.39) ; SANITY|Allspice (ground)|outlier|Walmart $1.06 is 49% below runner-up Baker's $2.09 - verify the price/size parse ; SANITY|Beets (fresh)|outlier|Baker's $2.49 is 53% below runner-up Family Fare $5.32 - verify the price/size parse ; SANITY|Bok Choy|outlier|Baker's $2.49 is 38% below runner-up Hy-Vee $3.99 - verify the price/size parse
+[2026-07-31T09:03:17] review-flag alert sent (1 new of 64)
+[2026-07-31T09:03:21] pins:   board-confirmed-fresh gate: 20065 first-party rows loaded from out\regular
+[2026-07-31T09:03:21] pins:   basis-gap SKIPPED (not pinned): boneless-skinless-chicken-thigh / Hy-Vee  board=1.99 link=3.996  (2.0x)
+[2026-07-31T09:03:21] pins:   basis-gap SKIPPED (not pinned): apple / Hy-Vee  board=0.79 link=1.98  (2.5x)
+[2026-07-31T09:03:21] pins:   basis-gap SKIPPED (not pinned): fries / Sam's Club  board=0.0334 link=0.067  (2.0x)
+[2026-07-31T09:03:21] pins:   basis-gap SKIPPED (not pinned): zero-sugar-soda / Aldi  board=2.15 link=0.3158  (0.1x)
+[2026-07-31T09:03:21] pins:   basis-gap SKIPPED (not pinned): parmesan-cheese / Hy-Vee  board=0.3744 link=1.9967  (5.3x)
+[2026-07-31T09:03:21] pins:   basis-gap SKIPPED (not pinned): smoked-paprika / Family Fare  board=0.9986 link=2.49  (2.5x)
+[2026-07-31T09:03:21] pins:   basis-gap SKIPPED (not pinned): swiss-cheese / Hy-Vee  board=0.3125 link=0.658  (2.1x)
+[2026-07-31T09:03:21] pins: board-overrides: wrote 16 corrections  (skipped: sale=61 collision=0 name-drift=2 no-link=180 bad-price=86 already-agree=2885 basis-gap=7 board-confirmed-fresh=0)
+[2026-07-31T09:03:21] guards:   ok    pu-lib per-unit engine self-check
+[2026-07-31T09:03:22] guards:   ok    partial-pull union (compare-deals) self-test
+[2026-07-31T09:03:22] guards:   ok    multipack reject + pricing (walmart-deals) self-test
+[2026-07-31T09:03:23] guards:   ok    name-size vs Walmart unit price (walmart-batch) self-test
+[2026-07-31T09:03:25] guards:   ok    fullpull [Walmart]: ok - newest comprehensive capture walmart-regular-2026-07-31.json (217 terms) is 0 day(s) old (warn at 10, cliff at 14) fullpull [Sam's Club]: ok - newest comprehensive capture sams-deals-2026-07-29.json (316 terms) is 2 day(s) old (warn at 10, cliff at 14) fullpull [Walmart] cells: ok - 21 of 436 attributed board cell(s) expire within 5 day(s) (warn at 5%); 0 cell(s) could not be traced to a capture in the window fullpull [Sam's Club] cells: ok - 13 of 335 attributed board cell(s) expire within 5 day(s) (warn at 5%); 11 cell(s) could not be traced to a capture in the window
+[2026-07-31T09:03:25] guards:   ok    matching rules carry no mojibake (accented classes use the \u00XX escape form)
+[2026-07-31T09:03:26] guards:   ok    price-mode (in-store pricing)
+[2026-07-31T09:03:28] guards:   ok    household-in-food
+[2026-07-31T09:03:29] guards:   ok    no food commodity matched a wrong-class product (beverage/baby/pet/household/carrier/candy)
+[2026-07-31T09:03:29] guards:   ok    no store lost coverage vs the previous board
+[2026-07-31T09:03:32] guards:   ok    no product a reasoner already ruled wrong is priced on the board (known-wrong blocklist)
+[2026-07-31T09:03:33] guards:   ok    ZERO shipped links disagree with their tile (hard), and no store regressed on coverage (ratchet)
+[2026-07-31T09:03:33] guards:   ok    every override pin is derivable from its own link (16 checked for derivability; product identity checked on 6 of them)
+[2026-07-31T09:03:34] guards:   ok    no board cell differs from its linked product by a factor (2595 cells compared)
+[2026-07-31T09:03:36] guards:   ok    no multipack row prices a pack as a single unit (588 pack-total size(s) verified by arithmetic out of 594 pack-shaped row(s))
+[2026-07-31T09:03:38] guards:   ok    no store's newest data file collapsed vs its recent history (6 store(s) compared against their own history)
+[2026-07-31T09:03:38] guards:   ok    out\regular holds only canonical <store>-regular-<date>.json data files
+[2026-07-31T09:03:38] guards:   ok    no undated stale discount is being published as a live sale
+[2026-07-31T09:03:40] guards:   ok    no store's price data is older than 14 days (7 store(s) aged)
+[2026-07-31T09:03:41] guards:   ok    every price we publish is the price the store charges (29334 rows verified against their own current_price)
+[2026-07-31T09:03:42] guards:   ok    Baker's prices arrive verbatim from the sanctioned Kroger API (6928 rows, 6928 carrying current_price); independent proof is audit-basis-reconcile's netWeight check
+[2026-07-31T09:03:42] guards:   ok    the board is built from the newest ads file (ads-2026-07-31 -> comparison-2026-07-31)
+[2026-07-31T09:03:42] guards: 
+[2026-07-31T09:03:42] guards:   warn  cell-drops: WARNING - 17 everyday cell(s) priced on comparison-2026-07-26 are missing from today's board. Baker's/Walmart run comprehensive pulls with NO carry-forward by design, so a dead search term is an instant hole - check that store's pull for failed terms first; for the browser stores check as_of expiry + carry-forward: |   bottled-water @ Aldi (was $0.13) |   bread @ Aldi (was $1.65) |   coconut-milk-canned @ Fareway (was $0.10) |   coleslaw-mix @ Fareway (was $0.53) |   eggplant @ Fareway (was $1.99) |   frozen-fries @ Family Fare (was $0.12) |   gelatin @ Aldi (was $0.98) |   gelatin @ Family Fare (was $1.99) |   ground-pork @ Family Fare (was $4.49) |   hamburger-buns @ Aldi (was $0.17) |   honeydew @ Fareway (was $1.49) |   hot-dog-buns @ Aldi (was $0.17) |   microwave-popcorn @ Aldi (was $0.37) |   pomegranates @ Fareway (was $2.99) |   soy-sauce @ Family Fare (was $0.17) |   white-vinegar @ Family Fare (was $0.03) |   wild-rice @ Fareway (was $0.23)
+[2026-07-31T09:03:42] guards:   warn  allowlist hygiene: 0 entr(y/ies) reviewed >120 days ago + 18 with no 'reviewed' date - re-verify against the store and stamp 'reviewed: yyyy-MM-dd' (multipack-allowlist / coverage-gap-allowlist / basis-reconcile-allowlist)
+[2026-07-31T09:03:42] guards:   warn  guard 3 could not product-identity-check 10 of 16 pins - their board cell carries no product name, so nothing can check that the pinned link is the product the board priced: boneless-skinless-chicken-thigh/Family Fare, apple/Baker's, ginger/Hy-Vee, hickory-smoked-bacon/Baker's, honey-dijon-mustard/Hy-Vee, light-sour-cream/Sam's Club, red-bell-pepper/Sam's Club, red-bell-pepper/Family Fare, rotini-pasta/Hy-Vee, white-mushrooms/Hy-Vee. Fix at the source: give these recipe-board cells an .item.
+[2026-07-31T09:03:42] guards:   warn  16 cell(s) drift from their link by <50% (ordinary price movement; the daily consistency repair handles it)
+[2026-07-31T09:03:42] guards:   warn  guard 6 could NOT evaluate these store(s) - fewer than 2 captures in out\regular, so there is no history to compare a thin or throttled file against and a collapse there would look normal: sams
+[2026-07-31T09:03:42] guards:   warn  Aldi          1664 rows |   0% re-verified against the store TODAY (0 of 1664 dated) | file 2d old
+[2026-07-31T09:03:42] guards:   warn  Baker's       6928 rows | 100% re-verified against the store TODAY (6928 of 6928 dated) | file 0d old
+[2026-07-31T09:03:42] guards:   warn  Family Fare   4269 rows |  47% re-verified against the store TODAY (2012 of 4269 dated) | file 0d old
+[2026-07-31T09:03:42] guards:   warn  Fareway        743 rows |   0% re-verified against the store TODAY (0 of 743 dated) | file 4d old  <-- NOT price-verified today: this store CAN discount, so it may be publishing regular prices (the Hy-Vee/Baker's bug)
+[2026-07-31T09:03:42] guards:   warn  Hy-Vee        1538 rows |  57% re-verified against the store TODAY (873 of 1538 dated) | file 0d old | 665 row(s) flagged unverified
+[2026-07-31T09:03:42] guards:   warn  Sam's Club: the freshness line below is measured from sams-deals-2026-07-29.json, but out\regular\sams-regular-2026-07-14.json is STILL IN THE ENGINE'S FILE SET and is 17 days old (60 rows; 22 live board cell(s) trace to it by name+price). Nothing writes that file, so its age can never improve and guard 9's >14-day HARD FAIL can never reach those rows. Fix it by refreshing those items into the store's own feed - do NOT simply delete the capture, because guard 9 reaches this store ONLY through its out\regular file (the loop above is over RegFiles), so deleting it drops the store out of guard 9 altogether while the aged count stays non-zero and the ok line still prints. Until then, do NOT read the file-age number below as covering these rows.
+[2026-07-31T09:03:42] guards:   warn  Sam's Club    2475 rows | NO as_of ON ANY ROW - freshness cannot be measured, only file age | file 2d old  <-- NOT price-verified today: this store CAN discount, so it may be publishing regular prices (the Hy-Vee/Baker's bug)
+[2026-07-31T09:03:42] guards:   warn  Walmart       4863 rows |  15% re-verified against the store TODAY (753 of 2154 dated) | file 0d old
+[2026-07-31T09:03:42] guards:   warn  these stores do NOT record the store's current price on their rows, so guard 10 CANNOT check them: Sam's Club - until their pullers record current_price, guard 9's freshness numbers are the only thing standing between them and the basePrice bug
+[2026-07-31T09:03:42] guards:   warn  coverage ratchet: BLIND           audit-ff-carry - examined 0 of 526 eligible row(s). This is the shape guard 11 held for five days: a confident ok over an empty examination. empty FF search terms re-probed against Freshop from family-fare-regular-2026-07-31.json | coverage-ledger: 1 coverage finding(s) across 12 rostered check(s); 12 row(s) evaluated.
+[2026-07-31T09:03:42] guards: GUARDS OK: every hard invariant holds. Safe to publish.
+[2026-07-31T09:03:42] share: share-image: 5 drops -> C:\Codex\income\public\share\omaha-drops.png
+[2026-07-31T09:11:15] AUTO-PUBLISH: live page updated (price change mid-cycle)
+[2026-07-31T09:11:17] walmart-fullpull: fullpull [Walmart]: ok - newest comprehensive capture walmart-regular-2026-07-31.json (217 terms) is 0 day(s) old (warn at 10, cliff at 14) fullpull [Sam's Club]: ok - newest comprehensive capture sams-deals-2026-07-29.json (316 terms) is 2 day(s) old (warn at 10, cliff at 14) fullpull [Walmart] cells: ok - 21 of 436 attributed board cell(s) expire within 5 day(s) (warn at 5%); 0 cell(s) could not be traced to a capture in the window fullpull [Sam's Club] cells: ok - 13 of 335 attributed board cell(s) expire within 5 day(s) (warn at 5%); 11 cell(s) could not be traced to a capture in the window
+[2026-07-31T09:11:17] digest: digest REFUSED: no Ghost admin key
+[2026-07-31T09:11:18] consistency BREACH - auto-repairing Family Fare + Hy-Vee links + republishing
+[2026-07-31T09:15:23] consistency STILL breached after repair - no-link=21 (browser-store price drift, needs re-pull)
+[2026-07-31T09:15:23] consistency drift alert sent
+[2026-07-31T09:15:24] store-coverage OK - every staple commodity shows all 7 stores
+[2026-07-31T09:15:24] notify-item-added: notify-item-added: no new commodities, empty queue - nothing to do
+[2026-07-31T09:16:40] watchers ok: every guard still fires on its own founding bug
+[2026-07-31T09:16:41] everyday-mismatch: everyday cells with a link, checked : 2594
+[2026-07-31T09:16:41] everyday-mismatch: sale cells skipped (expected diff)  : 42
+[2026-07-31T09:16:41] everyday-mismatch: uncomputable size                   : 0
+[2026-07-31T09:16:41] everyday-mismatch: board published no per-unit         : 0
+[2026-07-31T09:16:41] everyday-mismatch: 
+[2026-07-31T09:16:41] everyday-mismatch: EVERYDAY MISMATCHES (board disagrees with its own linked product): 4
+[2026-07-31T09:16:41] everyday-mismatch:   ground-cinnamon          Hy-Vee       board=0.5       link=0.436     x0.87   $1.09 [2.5 oz]
+[2026-07-31T09:16:41] everyday-mismatch:   frosting                 Walmart      board=0.11      link=0.1212    x1.1    $15.52 [128 oz]
+[2026-07-31T09:16:41] everyday-mismatch:   whole-chicken            Sam's Club   board=2.38      link=2.57      x1.08   $2.57 [lb]
+[2026-07-31T09:16:41] everyday-mismatch:   ricotta                  Hy-Vee       board=0.2341    link=0.2184    x0.93   $6.99 [32 oz]
+[2026-07-31T09:16:41] everyday-mismatch: 
+[2026-07-31T09:16:41] everyday-mismatch: saved -> C:\Codex\income\grocery\out\everyday-mismatches.json
+[2026-07-31T09:16:41] coverage-cycle:   ok    audit-everyday-mismatch        examined 2594 of 2594 eligible (baseline 2582, tol 10%)
+[2026-07-31T09:16:41] coverage-cycle:   ok    audit-food-category            examined 2697 of 3237 eligible (baseline 2663, tol 10%)
+[2026-07-31T09:16:41] coverage-cycle:   ok    guards/10-store-charges        examined 29334 of 29334 eligible (baseline 24018, tol 35%)
+[2026-07-31T09:16:41] coverage-cycle:   ok    guards/11-bakers-provenance    examined 6928 of 6928 eligible (baseline 6936, tol 25%)
+[2026-07-31T09:16:41] coverage-cycle:   ok    guards/3-pin-derivable         examined 16 of 16 eligible (baseline 19, tol 50%)
+[2026-07-31T09:16:41] coverage-cycle:   ok    guards/3-pin-identity          examined 6 of 16 eligible (baseline 9, tol 50%)
+[2026-07-31T09:16:41] coverage-cycle:   ok    guards/4-factor                examined 2594 of 2594 eligible (baseline 2435, tol 10%)
+[2026-07-31T09:16:41] coverage-cycle:   ok    guards/5-multipack             examined 594 of 594 eligible (baseline 380, tol 100%)
+[2026-07-31T09:16:41] coverage-cycle:   ok    guards/6-collapse              examined 6 of 7 eligible (baseline 6, tol 15%)
+[2026-07-31T09:16:41] coverage-cycle:   ok    guards/9-freshness             examined 7 of 7 eligible (baseline 7, tol 15%)
+[2026-07-31T09:16:41] coverage-cycle:   ok    pull-regular-hyvee             examined 873 of 1053 eligible (baseline 1010, tol 15%)
+[2026-07-31T09:16:41] coverage-cycle: 
+[2026-07-31T09:16:41] coverage-cycle:   BLIND           audit-ff-carry - examined 0 of 526 eligible row(s). This is the shape guard 11 held for five days: a confident ok over an empty examination. empty FF search terms re-probed against Freshop from family-fare-regular-2026-07-31.json
+[2026-07-31T09:16:41] coverage-cycle: 
+[2026-07-31T09:16:41] coverage-cycle: coverage-ledger: 1 coverage finding(s) across 12 rostered check(s); 12 row(s) evaluated.
+[2026-07-31T09:16:41] run complete; flips=0

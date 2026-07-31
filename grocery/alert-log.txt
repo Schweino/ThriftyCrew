@@ -101,3 +101,8 @@
 [2026-07-31T06:14:37] SENT 'Grocery: 9 NEW price flag(s) - 2026-07-31' -> schweino68@gmail.com (id 19fb7e21bd2e4f77)
 [2026-07-31T06:17:57] SENT 'Grocery: board-link price drift (20 chips) - 2026-07-31' -> schweino68@gmail.com (id 19fb7e5276fa2e14)
 [2026-07-31T06:20:34] SEND FAILED 'Grocery: a GUARD has gone blind (test-auditors failed)': The remote server returned an error: (400) Bad Request.
+[2026-07-31T08:59:26] SUPPRESSED (already sent this type today) 'Grocery: 5 store(s) dropped from a commodity they carry - 2026-07-31' [type: grocery store s dropped from a commodity they carry]
+[2026-07-31T09:00:34] SUPPRESSED (already sent this type today) 'Grocery matching soundness - review needed' [type: grocery matching soundness review needed]
+[2026-07-31T09:00:59] SENT 'Recipe price inversion: 5 clamped' -> schweino68@gmail.com (id 19fb87a6609d6b7f)
+[2026-07-31T09:03:17] SUPPRESSED (already sent this type today) 'Grocery: 1 NEW price flag(s) - 2026-07-31' [type: grocery new price flag s]
+[2026-07-31T09:15:23] SUPPRESSED (already sent this type today) 'Grocery: board-link price drift (21 chips) - 2026-07-31' [type: grocery board link price drift chips]
