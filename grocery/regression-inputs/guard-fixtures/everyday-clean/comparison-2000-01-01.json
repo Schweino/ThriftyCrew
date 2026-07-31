@@ -1,0 +1,27 @@
+{
+  "_fixture": "FROZEN, SYNTHETIC, NEVER REGENERATED FROM THE LIVE BOARD. CLEAN TWIN of everyday-mustfire\\. Identical shape, but every board number AGREES with its linked product. If audit-everyday-mismatch reports anything here it is firing on correct data, which would make its findings unreadable noise the moment it is wired into the cycle.",
+  "generated": "2000-01-01",
+  "comparison": [
+    {
+      "id": "fixture-eggplant",
+      "unit": "each",
+      "stores": [
+        { "store": "Fixture Mart", "type": "everyday", "per_unit": 1.99, "item": "Fixture Whole Eggplant" }
+      ]
+    },
+    {
+      "id": "fixture-string-price",
+      "unit": "each",
+      "stores": [
+        { "store": "Fixture Mart", "type": "everyday", "per_unit": 3.99, "item": "Fixture Sandwich Bread" }
+      ]
+    },
+    {
+      "id": "fixture-halfcent",
+      "unit": "oz",
+      "stores": [
+        { "store": "Fixture Mart", "type": "everyday", "per_unit": 0.0645, "item": "Fixture Canned Beans" }
+      ]
+    }
+  ]
+}

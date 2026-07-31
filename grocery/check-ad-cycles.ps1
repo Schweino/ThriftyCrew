@@ -118,7 +118,28 @@ if ($serverDue) {
     # $11.99, and how ~110 live markdowns went unseen. Its GraphQL takes storeId as a request VARIABLE (not a
     # cookie), so it runs headless right here, every day, like Family Fare's. Non-fatal: a bad run keeps the
     # last good file (throttle-wipeout guard) and the price guards still gate the publish.
-    try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'pull-regular-hyvee.ps1') | Out-Null; Log 'Hy-Vee everyday refreshed (current shelf price, Omaha #01)' } catch { Log ('Hy-Vee pull threw: ' + $_.Exception.Message) }
+    # CAPTURE, THEN LOG, THEN CHECK THE EXIT CODE - the same shape as the ff-carry caller below, and for the
+    # same reason. This line used to pipe the whole pull to Out-Null and then log 'Hy-Vee everyday refreshed'
+    # UNCONDITIONALLY, so all four of these were indistinguishable in the log: a clean 1,010-product refresh,
+    # a run truncated by the wall-clock cap, a run that refreshed three products, and the THROTTLE-WIPEOUT
+    # guard tripping (the pull collapsing below half its normal size and being quarantined to out\throttled\
+    # instead of written). The puller had no `exit` statement at all, so the wipeout path's bare `return`
+    # exited ZERO; it now exits 2. A native child's crash is not a PowerShell exception, so the catch never
+    # saw that either. No 2>&1: this file runs under EAP=Stop, where redirecting a native child's stderr turns
+    # its first stderr line into a terminating throw that would skip the very check being added here.
+    try {
+      $hvOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'pull-regular-hyvee.ps1')
+      $hvRc  = $LASTEXITCODE
+      foreach ($l in @($hvOut)) { Log ('Hy-Vee: ' + $l) }
+      if ($hvRc -eq 2) {
+        Log 'Hy-Vee: THROTTLE-WIPEOUT - the pull collapsed and was quarantined; the last good file still serves'
+        $summary += 'REVIEW    Hy-Vee pull tripped the throttle-wipeout guard - board is serving the previous capture'
+      }
+      elseif ($hvRc -ne 0 -or @($hvOut).Count -eq 0) {
+        Log ("Hy-Vee: DID NOT RUN - exit $hvRc with " + @($hvOut).Count + ' output line(s); today''s Hy-Vee prices are whatever the last capture held')
+        $summary += 'REVIEW    Hy-Vee pull did not complete - its prices were not refreshed this cycle'
+      }
+    } catch { Log ('Hy-Vee pull threw: ' + $_.Exception.Message) }
     # Baker's via Kroger's sanctioned public API (2026-07-24): daily headless current+promo prices for the
     # Saddlecreek store, replacing the browser scan that needed the Claude app awake. Credentials are the
     # gitignored grocery\.krogerkey locally (env vars in CI); WHERE THE KEY IS ABSENT (the cloud backup
@@ -1070,6 +1091,66 @@ try {
     }
   }
 } catch { Log ('test-guards weekly threw: ' + $_.Exception.Message) }
+
+# ---- THE BOARD vs ITS OWN LINKS (everyday cells only) ----
+# WAS AN ORPHAN. audit-everyday-mismatch.ps1 is the only check that asks "does the number we published agree
+# with the product page we linked to?", it works, and until now NOTHING invoked it - not guards.ps1, not this
+# file. It could find real defects every day and no one would ever read them. (Found 5 on 2026-07-31.)
+# STRICTLY ADVISORY, and that is measured, not assumed: on a 43-finding day only 3 were wrong NUMBERS, and in
+# the other 40 the BOARD was right and the LINK was stale. Gating a publish on this would hold correct boards
+# hostage to stale links. Exit 1 means "found disagreements", not "failed"; only exit 3 (could-not-evaluate)
+# and an unexpected code are worth a REVIEW line of their own.
+# Placed here, at the end of the cycle: it reads the newest comparison-*.json and product-urls.json, so it
+# must run after compare-deals AND after the link repairs above, and before the coverage ratchet below so its
+# row is on the ledger when the ratchet reads it. No 2>&1 (EAP=Stop turns a child's stderr into a throw).
+try {
+  $emPath = Join-Path $root 'audit-everyday-mismatch.ps1'
+  if (Test-Path $emPath) {
+    $emOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $emPath -OutDir $OutDir
+    $emRc  = $LASTEXITCODE
+    foreach ($l in @($emOut)) { Log ('everyday-mismatch: ' + $l) }
+    if ($emRc -eq 1) {
+      # [regex]::Match, NOT -match + $Matches. $Matches is GLOBAL in PowerShell, so reading it downstream of a
+      # -match inside a pipeline both depends on and clobbers state this file uses elsewhere - a trap this
+      # repo has already been bitten by. A local Match object carries its own groups and touches nothing.
+      $emM = [regex]::Match((@($emOut) -join "`n"), 'EVERYDAY MISMATCHES[^:]*:\s*(\d+)')
+      $emN = if ($emM.Success) { $emM.Groups[1].Value } else { 'some' }
+      $summary += ('REVIEW    everyday-mismatch: ' + $emN + ' board cell(s) disagree with their own linked product - usually a stale LINK, not a wrong price; see out\everyday-mismatches.json')
+    }
+    elseif ($emRc -eq 3) {
+      $summary += 'REVIEW    everyday-mismatch could not evaluate - the board/link agreement check proved nothing this cycle'
+    }
+    elseif ($emRc -ne 0) {
+      Log ("everyday-mismatch: DID NOT RUN - exit $emRc with " + @($emOut).Count + ' output line(s)')
+      $summary += 'REVIEW    everyday-mismatch did not complete - board/link agreement went unchecked this cycle'
+    }
+  }
+} catch { Log ('everyday-mismatch threw: ' + $_.Exception.Message) }
+
+# ---- COVERAGE RATCHET FOR THE CYCLE PHASE ----
+# THE HOOK THAT WAS NEVER BUILT. coverage-baseline.json's own audit-ff-carry entry has carried the note
+# "nothing yet runs the ratchet with -Phase cycle, so those two verdicts fire only on a manual run until
+# check-ad-cycles.ps1 gets its own hook" since the ledger shipped. guards.ps1 runs the ratchet with
+# -Phase publish, so every cycle-phase row was being WRITTEN faithfully and never COMPARED to anything -
+# a gate that cannot arm, which is the exact class the ledger itself exists to catch. This is that hook.
+# It sits at the very end, after every cycle-phase producer has recorded (the Hy-Vee pull near the top,
+# ff-carry, everyday-mismatch), and it is ADVISORY: a coverage regression means a check got quieter, which
+# is worth an eye, not a reason to hold a board whose own guards passed.
+# No 2>&1 (EAP=Stop turns a native child's first stderr line into a terminating throw), capture then read
+# $LASTEXITCODE, and treat exit 3 as could-not-evaluate rather than as a pass.
+try {
+  $clPath = Join-Path $root 'audit-coverage-ledger.ps1'
+  if (Test-Path $clPath) {
+    $clOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $clPath -Phase cycle
+    $clRc  = $LASTEXITCODE
+    foreach ($l in @($clOut)) { Log ('coverage-cycle: ' + $l) }
+    if ($clRc -eq 1) {
+      $summary += 'REVIEW    a cycle-phase check examined materially fewer rows than its baseline - see coverage-cycle lines in the log'
+    } elseif ($clRc -eq 3) {
+      $summary += 'REVIEW    cycle-phase coverage could not be evaluated - no rostered cycle check recorded a row this run'
+    }
+  }
+} catch { Log ('coverage-cycle ratchet threw: ' + $_.Exception.Message) }
 
 # ---- report ----
 $pullNote = if ($serverDue) { '   (server pull ran)' } else { '   (nothing due)' }

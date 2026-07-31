@@ -1,0 +1,14 @@
+{
+  "_fixture": "FROZEN, SYNTHETIC. Companion to the BLIND comparison in this directory. The links are real and priced - the point is that the BOARD side is unusable, so there is genuine work to do and none of it can be done. That is what separates 'could not evaluate' (exit 3) from an honest zero.",
+  "items": {
+    "fixture-eggplant": {
+      "Fixture Mart": { "name": "Fixture Whole Eggplant", "price": 1.99, "size": "1 ct", "url": "https://example.invalid/eggplant" }
+    },
+    "fixture-string-price": {
+      "Fixture Mart": { "name": "Fixture Sandwich Bread", "price": "$3.99", "size": "1 ct", "url": "https://example.invalid/bread" }
+    },
+    "fixture-halfcent": {
+      "Fixture Mart": { "name": "Fixture Canned Beans", "price": 0.93, "size": "15.5 oz", "url": "https://example.invalid/beans" }
+    }
+  }
+}

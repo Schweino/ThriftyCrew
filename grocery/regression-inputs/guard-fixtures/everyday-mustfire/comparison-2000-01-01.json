@@ -1,0 +1,34 @@
+{
+  "_fixture": "FROZEN, SYNTHETIC, NEVER REGENERATED FROM THE LIVE BOARD. Founding bugs for audit-everyday-mismatch.ps1: (1) it was an ORPHAN that nothing invoked, so real findings were never read; (2) it printed a confident 'EVERYDAY MISMATCHES: 0' when it had checked ZERO cells; (3) it cast [double] on a stored link price like \"$1.88\" and died inside the record for its own FIRST finding. Every product name and price below is invented. The three rows are: a real everyday disagreement (must fire), a string-priced link that must be parsed not thrown on, and a half-cent rounding case that must stay silent.",
+  "generated": "2000-01-01",
+  "comparison": [
+    {
+      "id": "fixture-eggplant",
+      "unit": "each",
+      "stores": [
+        { "store": "Fixture Mart", "type": "everyday", "per_unit": 2.49, "item": "Fixture Whole Eggplant" }
+      ]
+    },
+    {
+      "id": "fixture-string-price",
+      "unit": "each",
+      "stores": [
+        { "store": "Fixture Mart", "type": "everyday", "per_unit": 3.99, "item": "Fixture Sandwich Bread" }
+      ]
+    },
+    {
+      "id": "fixture-halfcent",
+      "unit": "oz",
+      "stores": [
+        { "store": "Fixture Mart", "type": "everyday", "per_unit": 0.0645, "item": "Fixture Canned Beans" }
+      ]
+    },
+    {
+      "id": "fixture-sale-cell",
+      "unit": "each",
+      "stores": [
+        { "store": "Fixture Mart", "type": "sale", "per_unit": 0.99, "item": "Fixture Sale Item" }
+      ]
+    }
+  ]
+}

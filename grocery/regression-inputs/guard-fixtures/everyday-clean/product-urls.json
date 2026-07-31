@@ -1,0 +1,14 @@
+{
+  "_fixture": "FROZEN, SYNTHETIC. Companion to the CLEAN TWIN comparison in this directory. Same three products as everyday-mustfire, same string-priced link, same half-cent rounding - but the eggplant link now matches the board at 1.99, so the audit must report ZERO findings and exit 0.",
+  "items": {
+    "fixture-eggplant": {
+      "Fixture Mart": { "name": "Fixture Whole Eggplant", "price": 1.99, "size": "1 ct", "url": "https://example.invalid/eggplant" }
+    },
+    "fixture-string-price": {
+      "Fixture Mart": { "name": "Fixture Sandwich Bread", "price": "$3.99", "size": "1 ct", "url": "https://example.invalid/bread" }
+    },
+    "fixture-halfcent": {
+      "Fixture Mart": { "name": "Fixture Canned Beans", "price": 0.93, "size": "15.5 oz", "url": "https://example.invalid/beans" }
+    }
+  }
+}

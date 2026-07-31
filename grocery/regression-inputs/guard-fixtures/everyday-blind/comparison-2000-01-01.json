@@ -1,0 +1,27 @@
+{
+  "_fixture": "FROZEN, SYNTHETIC, NEVER REGENERATED FROM THE LIVE BOARD. The BLIND fixture. Three everyday cells, all with links, and every one publishes per_unit 0 - so every cell drains out of the comparison and NOT ONE is examined. Before 2026-07-31 this printed 'everyday cells with a link, checked : 0' followed by a confident 'EVERYDAY MISMATCHES: 0' and exited clean, which is the estate's oldest failure shape: an all-clear over an empty examination. It must exit 3.",
+  "generated": "2000-01-01",
+  "comparison": [
+    {
+      "id": "fixture-eggplant",
+      "unit": "each",
+      "stores": [
+        { "store": "Fixture Mart", "type": "everyday", "per_unit": 0, "item": "Fixture Whole Eggplant" }
+      ]
+    },
+    {
+      "id": "fixture-string-price",
+      "unit": "each",
+      "stores": [
+        { "store": "Fixture Mart", "type": "everyday", "per_unit": 0, "item": "Fixture Sandwich Bread" }
+      ]
+    },
+    {
+      "id": "fixture-halfcent",
+      "unit": "oz",
+      "stores": [
+        { "store": "Fixture Mart", "type": "everyday", "per_unit": 0, "item": "Fixture Canned Beans" }
+      ]
+    }
+  ]
+}

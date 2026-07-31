@@ -192,14 +192,32 @@ $startT = Get-Date
 $MAXMIN = 14
 $deals = New-Object System.Collections.ArrayList
 $fresh = 0; $fail = 0; $markdown = 0; $stale = 0; $newProd = 0; $mismatch = 0
+# CAP-SKIPPED IS ITS OWN NUMBER. $stale counts a carry-forward row for THREE unrelated reasons - the
+# wall-clock cap stopped us asking, the size-mismatch check refused the answer, or the product has no
+# productId to ask with - so a run truncated at $MAXMIN minutes and a healthy run produce the same $stale
+# and are indistinguishable from the outside. Counting the cap separately is what makes truncation visible.
+# DO NOT "fix" the cap by breaking the loop: every remaining product still needs its pass through the
+# carry-forward branch below, and a break would delete those rows from the file outright - real cell drops
+# on the board instead of honest not_reverified rows. The cap is meant to stop us ASKING, not stop us WRITING.
+$capSkipped = 0
+$capWarned = $false
 $sizeConflicts = New-Object System.Collections.Generic.List[string]
 foreach ($w in $work) {
-  if (((Get-Date) - $startT).TotalMinutes -gt $MAXMIN) { Write-Warning 'Hy-Vee: wall-clock cap hit; remaining products kept at their last price'; }
+  $overCap = (((Get-Date) - $startT).TotalMinutes -gt $MAXMIN)
+  # Warn ONCE. This used to sit bare inside the loop, so it re-fired for every remaining product - hundreds
+  # of identical lines that say nothing about scale, which is its own kind of silence.
+  if ($overCap -and -not $capWarned) {
+    $capWarned = $true
+    Write-Warning ('Hy-Vee: wall-clock cap of ' + $MAXMIN + ' min hit after ' + $fresh + ' refreshed; every remaining product is kept at its last known price and marked not_reverified')
+  }
 
   $got = $null
-  if ($w.pid -gt 0 -and (((Get-Date) - $startT).TotalMinutes -le $MAXMIN)) {
-    $got = Get-HyVeeStoreProduct ([int]$w.pid)
-    Start-Sleep -Milliseconds 120
+  if ($w.pid -gt 0) {
+    if ($overCap) { $capSkipped++ }
+    else {
+      $got = Get-HyVeeStoreProduct ([int]$w.pid)
+      Start-Sleep -Milliseconds 120
+    }
   }
 
   if ($got) {
@@ -319,7 +337,29 @@ foreach ($w in $work) {
   } else { $fail++ }
 }
 
-Write-Output ("Hy-Vee: " + $fresh + " refreshed today (" + $markdown + " marked down), " + $newProd + " newly priced, " + $stale + " not re-verified, " + $mismatch + " REFUSED (productId is a different size than our row), " + $fail + " failed")
+Write-Output ("Hy-Vee: " + $fresh + " refreshed today (" + $markdown + " marked down), " + $newProd + " newly priced, " + $stale + " not re-verified, " + $mismatch + " REFUSED (productId is a different size than our row), " + $capSkipped + " never asked (wall-clock cap), " + $fail + " failed")
+
+# COVERAGE, SO THE EXISTING RATCHET CATCHES TRUNCATION - no new threshold invented here. $refreshable is
+# every product we hold a productId for, $fresh is how many of them Hy-Vee actually answered for. If the cap
+# starts biting, or the GraphQL endpoint starts refusing, examined falls against the baseline and
+# audit-coverage-ledger reports it. Measured across the retained history for the baseline entry: refreshed
+# sits at 1,006-1,065 since 2026-07-19, worst day-over-day drop -8.1% (07-24), so a 0.15 band gives zero
+# findings on real history. Wrapped in its own try/catch inside coverage-lib, which is function-scoped, so a
+# missing or broken ledger can never take the price pull down with it.
+# -Quick MUST NOT RECORD. It caps the work list at 10 products and writes to hyvee-quick-test.json instead of
+# the real capture, but the coverage ledger is a single shared file: a -Quick run would stamp examined=10
+# against a baseline of ~1,010 and the ratchet would report a 99% collapse on a deliberate smoke test.
+try {
+  $covLib = Join-Path $root 'coverage-lib.ps1'
+  if ((-not $Quick) -and (Test-Path $covLib)) {
+    . $covLib
+    if ($fresh -le 0 -and $refreshable -gt 0) {
+      Write-CoverageRecord -Check 'pull-regular-hyvee' -OutDir $OutDir -Eligible $refreshable -Examined $fresh -Detail 'Hy-Vee products re-verified against Aisles Online GraphQL' -Blind
+    } else {
+      Write-CoverageRecord -Check 'pull-regular-hyvee' -OutDir $OutDir -Eligible $refreshable -Examined $fresh -Detail 'Hy-Vee products re-verified against Aisles Online GraphQL'
+    }
+  }
+} catch { }
 foreach ($sc in $sizeConflicts) { Write-Warning ("  size conflict, refresh refused: " + $sc) }
 
 # THROTTLE-WIPEOUT GUARD: never let a broken run clobber good data.
@@ -334,7 +374,12 @@ if ((-not $Quick) -and $prevMax -gt 100 -and $deals.Count -lt ($prevMax * 0.5)) 
   $pfile = Join-Path $qDir ("hyvee-$todayS.throttled.json")   # NOT out\regular - see guards invariant 7
   ([ordered]@{ store='Hy-Vee'; week_of=$todayS; price_type='everyday'; throttled=$true; deal_count=$deals.Count; deals=$deals.ToArray() } | ConvertTo-Json -Depth 6) | Set-Content $pfile -Encoding UTF8
   Write-Warning ("Hy-Vee: THROTTLE-WIPEOUT guard tripped - only " + $deals.Count + " rows vs " + $prevMax + " last time. NOT overwriting.")
-  return
+  # EXIT 2, NOT a bare return. A bare `return` at script scope exits with code ZERO, so this - the single
+  # worst outcome this puller has, the run collapsing below half its normal size and being quarantined to
+  # out\throttled\ instead of written - reported SUCCESS to its caller. check-ad-cycles piped the whole thing
+  # to Out-Null and logged 'Hy-Vee everyday refreshed (current shelf price, Omaha #01)' either way. This
+  # script had no `exit` statement anywhere, so there was no exit code to read even if the caller had looked.
+  exit 2
 }
 
 $file = if ($Quick) { Join-Path $OutDir 'hyvee-quick-test.json' } else { Join-Path $regDir ("hyvee-regular-$todayS.json") }
@@ -342,7 +387,12 @@ $out = [ordered]@{
   store='Hy-Vee'; week_of=$todayS; price_type='everyday'; price_mode='in-store'
   source='Hy-Vee Aisles Online GraphQL storeProducts.price - the CURRENT shelf price at storeId 1465 (Omaha #01). NOT basePrice (the regular price) and NOT ssrPricing (a different store).'
   size_policy='sizes are OUR verified ones, not Hy-Vee''s - their size field mixes totals, single units of a multipack, and mislabelled units'
-  deal_count=$deals.Count; refreshed_today=$fresh; marked_down=$markdown; newly_priced=$newProd; not_reverified=$stale; failed=$fail
+  # cap_skipped is ADDITIVE and sits beside the counts that were already here. Every consumer of this file
+  # reads .deals or a named top-level field (guards 9/10, generate-board-overrides, refresh-hyvee-links,
+  # resolve-hyvee-links - checked, none enumerate the key set), so a new sibling key is safe. It is recorded
+  # in the FILE and not just on the console because the console is exactly where this information kept going
+  # to die.
+  deal_count=$deals.Count; refreshed_today=$fresh; marked_down=$markdown; newly_priced=$newProd; not_reverified=$stale; cap_skipped=$capSkipped; failed=$fail
   deals=$deals.ToArray()
 }
 ($out | ConvertTo-Json -Depth 6) | Set-Content $file -Encoding UTF8

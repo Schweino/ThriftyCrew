@@ -66,6 +66,20 @@
       "phase": "publish",
       "why": "Baker's rows whose provenance was checked. THE FOUNDING BUG OF THIS WHOLE COMPONENT: the old guard 11 filtered on .upc and source_ad='bakersplus', Baker's moved to the Kroger API, and it printed ok over 0 of 6,960 rows for FIVE DAYS on the board's largest store. Band set to 0.25 because the row count is whatever the day's API pull returned; a total collapse is caught by BLIND at any tolerance."
     },
+    "audit-everyday-mismatch": {
+      "examined": 2582,
+      "tolerance": 0.1,
+      "max_age_days": 3,
+      "phase": "cycle",
+      "why": "everyday board cells compared against their own linked product's per-unit - the only check that asks whether the number we PUBLISHED agrees with the page we LINKED to. Measured 2026-07-31: 2,582 checked, 0 uncomputable, 0 without a board per-unit, 5 findings. Board-derived like guards/4-factor (2,582 on the same board), so the same measured 0.10 band applies. THIS CHECK WAS AN ORPHAN until 2026-07-31 - it ran nowhere, so its own history starts here. Eligible counts only everyday cells we hold a link for, so the number does not swing when the board gains sale cells or linkless ones."
+    },
+    "pull-regular-hyvee": {
+      "examined": 1010,
+      "tolerance": 0.15,
+      "max_age_days": 3,
+      "phase": "cycle",
+      "why": "Hy-Vee products we hold a productId for that Aisles Online actually answered for. This is the first PULLER on the ledger rather than a check, and it is here because the pull's own numbers were being thrown away: check-ad-cycles piped it to Out-Null and logged an unconditional success line, so a truncated pull, a collapsed pull and a clean 1,010-product pull were identical in the log. Band measured off the retained history rather than guessed: refreshed_today sits at 1,006-1,065 on every file since 2026-07-19, and the worst day-over-day drop in that stable era is -8.1% (07-24, 1008 -> 926), so 0.15 gives ZERO findings on real history while still catching the wall-clock cap starting to bite. The -30.4% on 07-15 predates the stable era (the file went 448 -> 1,127 rows that week) and is not representative. Eligible is $refreshable, so the 485 products with no link at all - the no-discovery-path problem - correctly stay OUT of the denominator instead of making the pull look permanently broken. max_age_days 3 because it runs on the ad cycle, not on every publish."
+    },
     "audit-ff-carry": {
       "examined": 464,
       "tolerance": 1.0,

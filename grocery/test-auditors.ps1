@@ -1505,6 +1505,93 @@ if ($ffcS -match '\$attempted\s*=\s*\$emptyTerms\.Count\s*-\s*\$suppressed') { O
 else { Bad 'ff-carry blindness is no longer keyed on $emptyTerms.Count - $suppressed - a pull that legitimately suppressed every term will now be reported blind (cry-wolf) or a real blind run missed' }
 if ($cacSrc -match '\$fcRc -eq 3') { Ok 'check-ad-cycles reports an ff-carry could-not-evaluate separately from a crash' }
 else { Bad 'check-ad-cycles has no $fcRc -eq 3 branch - a blind-but-healthy ff-carry is logged as "DID NOT RUN ... see stderr" and points the reader at an empty stderr' }
+
+# ---------------------------------------------------------------- (v) everyday-mismatch: the orphan, now wired
+# 2026-07-31. audit-everyday-mismatch.ps1 is the only check that asks whether the number we PUBLISHED agrees
+# with the product page we LINKED to. It worked, it found real defects, and NOTHING invoked it - not
+# guards.ps1, not check-ad-cycles.ps1. It also printed a confident "EVERYDAY MISMATCHES: 0" after checking
+# ZERO cells, and it had no param() block at all, which is why it had never had a fixture: there was no way
+# to feed it anything but the live board.
+# The three fixtures below are FROZEN and SYNTHETIC (invented product names and prices, never regenerated
+# from a board) and they run from a COPY in TEMP, because the audit writes everyday-mismatches.json and a
+# coverage row into its -OutDir and a fixture that mutates itself is not frozen.
+$emFxSrc = Join-Path $root 'regression-inputs\guard-fixtures'
+$emTmp = Join-Path $env:TEMP ('emfx-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+$null = New-Item -ItemType Directory -Path $emTmp -Force
+function EmFixture([string]$name) {
+  $d = Join-Path $emTmp $name
+  Copy-Item (Join-Path $emFxSrc $name) $d -Recurse -Force
+  $r = RunPS 'audit-everyday-mismatch.ps1' @('-OutDir', $d)
+  $m = [regex]::Match($r.text, 'EVERYDAY MISMATCHES[^:]*:\s*(\d+)')
+  return @{ rc = $r.rc; n = $(if ($m.Success) { [int]$m.Groups[1].Value } else { -1 }); text = $r.text }
+}
+# MUST FIRE: the board says 2.49, its own link says 1.99. Exactly one finding - the other two everyday rows
+# in the same fixture are a string-priced link and a half-cent rounding case that must BOTH stay silent, so
+# this single assertion also proves the audit is not simply reporting everything it looks at.
+$emA = EmFixture 'everyday-mustfire'
+if ($emA.rc -eq 1 -and $emA.n -eq 1) { Ok 'everyday-mismatch FIRES on a board cell that disagrees with its own linked product (exit 1, advisory)' }
+else { Bad ('everyday-mismatch missed its founding disagreement: rc=' + $emA.rc + ' findings=' + $emA.n + ' (expected rc 1, exactly 1)') }
+# CLEAN TWIN: same three products, board now agrees with every link. Must be silent AND exit 0.
+$emB = EmFixture 'everyday-clean'
+if ($emB.rc -eq 0 -and $emB.n -eq 0) { Ok 'everyday-mismatch stays silent when the board agrees with its links (clean twin)' }
+else { Bad ('everyday-mismatch false-positives on a board that agrees with its own links: rc=' + $emB.rc + ' findings=' + $emB.n) }
+# THE STRING-PRICE FOUNDING BUG, proven by the clean twin above: fixture-string-price stores "$3.99", and
+# [double] on that throws under EAP=Stop. If that regressed, the fixture run dies and rc is neither 0 nor 1.
+if ($emA.rc -in @(0, 1) -and $emB.rc -in @(0, 1)) { Ok 'everyday-mismatch survives a link price stored as a STRING ("$3.99") - the cast that killed it on its own first finding' }
+else { Bad 'everyday-mismatch died on a string-shaped link price again - 579 of 2,987 stored prices are strings like "$1.88", so this kills the whole audit at its first finding' }
+# BLIND: three everyday cells, all linked, all publishing per_unit 0 - real work, none of it doable. The
+# house rule is that this can never read as a clean board.
+$emC = EmFixture 'everyday-blind'
+if ($emC.rc -eq 3 -and $emC.text -match 'COULD NOT EVALUATE') { Ok 'everyday-mismatch exits 3 when it had cells to check and could check none (no all-clear over an empty examination)' }
+else { Bad ('everyday-mismatch reported a clean board having examined nothing: rc=' + $emC.rc + ' (expected 3 COULD NOT EVALUATE)') }
+try { Remove-Item -LiteralPath $emTmp -Recurse -Force -ErrorAction SilentlyContinue } catch {}
+# SOURCE-ONLY, and it has to be: "is this script still CALLED" is the one property no run of the script can
+# demonstrate about itself. Being uncalled is its founding bug, so this is the check that matters most.
+if ($cacSrc -match 'audit-everyday-mismatch\.ps1') { Ok 'check-ad-cycles still invokes audit-everyday-mismatch (it spent its whole life as an orphan)' }
+else { Bad 'audit-everyday-mismatch is an ORPHAN again - nothing invokes it, so it can find real board/link disagreements every day and no one will ever read them' }
+if ($cacSrc -match '\$emRc\s*-eq\s*1') { Ok 'check-ad-cycles treats an everyday-mismatch finding as a REVIEW line, not a failure' }
+else { Bad 'check-ad-cycles no longer has an $emRc -eq 1 branch - findings are being read as a crash, and this audit must stay advisory (on a 43-finding day only 3 were wrong NUMBERS; the other 40 were stale LINKS over a correct board)' }
+if ($cacSrc -match 'audit-coverage-ledger\.ps1[\s\S]{0,400}?-Phase cycle') { Ok 'check-ad-cycles runs the coverage ratchet for the CYCLE phase' }
+else { Bad 'nothing runs audit-coverage-ledger with -Phase cycle - every cycle-phase coverage row is written and never compared, which is a gate that cannot arm (coverage-baseline.json carried this as a known TODO for exactly that reason)' }
+
+# ---------------------------------------------------------------- (v2) the Hy-Vee pull's own numbers
+# 2026-07-31. The wall-clock cap ($MAXMIN) warned once PER REMAINING PRODUCT and counted nothing, and $stale
+# lumps together three unrelated reasons for a carry-forward row (cap hit, size-check refused, no productId),
+# so a truncated run and a healthy one were identical from outside. Worse, the puller had NO exit statement
+# anywhere: the throttle-wipeout guard - the pull collapsing below half its normal size and being quarantined
+# instead of written - ended in a bare `return`, which exits ZERO, and check-ad-cycles piped the whole thing
+# to Out-Null and logged 'Hy-Vee everyday refreshed' regardless.
+# These are SOURCE checks. The behavioural cases need either a 14-minute run against the live GraphQL or a
+# collapsed pull, neither of which can be summoned in a fixture suite, and -Quick deliberately bypasses the
+# wipeout guard. Each names the exact mutation that makes it fire.
+$hvSrc = Get-Content (Join-Path $root 'pull-regular-hyvee.ps1') -Raw
+if ($hvSrc -match '\$capSkipped\+\+') { Ok 'pull-regular-hyvee counts cap-skipped products separately from $stale' }
+else { Bad 'pull-regular-hyvee no longer counts cap-skipped products - a run truncated by the wall-clock cap is indistinguishable from a healthy one again' }
+# BOTH HALVES, because the NAME surviving proves nothing. Mutating the assignment away left '$capWarned'
+# still present in the initialiser and the test, so the loose form stayed green while the flag was never set
+# and the warning re-fired every iteration - the exact behaviour being guarded. Same substring trap as $hvRc.
+if (($hvSrc -match '-not \$capWarned') -and ($hvSrc -match '\$capWarned\s*=\s*\$true')) { Ok 'the Hy-Vee wall-clock warning fires ONCE, not once per remaining product' }
+else { Bad 'the Hy-Vee cap warning lost its once-only flag (it must be both TESTED and SET) - it re-fires for every remaining product, hundreds of identical lines that say nothing about scale' }
+if ($hvSrc -match 'cap_skipped=\$capSkipped') { Ok 'the Hy-Vee capture file records cap_skipped, not just the console' }
+else { Bad 'pull-regular-hyvee stopped recording cap_skipped in its output file - the console is exactly where this information kept going to die' }
+# -cmatch AND A LINE ANCHOR, not -match 'exit 2'. PowerShell's -match is case-INSENSITIVE, and the fix's own
+# comment three lines above the statement begins "# EXIT 2, NOT a bare return" - so the loose form stayed
+# green after the real `exit 2` was mutated away, satisfied entirely by the comment describing it. That is
+# the second time in one day a source check was answered by the prose documenting the bug rather than by the
+# code fixing it (test-guards.ps1's empty-stamp scan did the same). Match a STATEMENT: start of line,
+# lowercase, nothing after it.
+$hvWipe = [regex]::Match($hvSrc, 'THROTTLE-WIPEOUT guard tripped[\s\S]{0,900}')
+if ($hvWipe.Success -and $hvWipe.Value -cmatch '(?m)^\s*exit 2\s*$') { Ok 'the Hy-Vee throttle-wipeout path exits 2 (a bare return at script scope exits ZERO)' }
+else { Bad 'the Hy-Vee throttle-wipeout path no longer exits non-zero - the pull collapsing and being quarantined reports SUCCESS to its caller, which is how it went unnoticed' }
+$hvCall = [regex]::Match($cacSrc, 'pull-regular-hyvee\.ps1[\s\S]{0,700}')
+if ($hvCall.Success -and $hvCall.Value -notmatch 'pull-regular-hyvee\.ps1.{0,40}\|\s*Out-Null') { Ok 'check-ad-cycles no longer pipes the Hy-Vee pull to Out-Null' }
+else { Bad 'the Hy-Vee pull is piped to Out-Null again - every count it prints is discarded and the log says "refreshed" whatever happened' }
+# ASSERT THE ASSIGNMENT, not the name. '\$hvRc' alone is a SUBSTRING of '$hvRcX', so renaming the variable
+# away from $LASTEXITCODE left this check green while the exit code went unread - proven by mutation.
+if ($hvCall.Success -and $hvCall.Value -match '\$hvRc\s*=\s*\$LASTEXITCODE' -and $hvCall.Value -match '\$hvRc\s*-eq\s*2') { Ok 'check-ad-cycles captures the Hy-Vee pull exit code and branches on it (a native child crash is not a PowerShell exception, so the catch never sees it)' }
+else { Bad 'check-ad-cycles no longer captures $LASTEXITCODE from the Hy-Vee pull into a variable it branches on - the throttle-wipeout and a dead pull both log as a clean refresh' }
+if ($hvCall.Success -and $hvCall.Value -notmatch '2>&1') { Ok 'the Hy-Vee pull child is captured without 2>&1 (which under EAP=Stop makes its first stderr line terminating)' }
+else { Bad 'the Hy-Vee pull child is captured with 2>&1 under EAP=Stop - its first stderr line becomes a terminating throw that skips the exit-code check just added' }
 if ($stSrc -match 'protein-bars') { Ok 'the protein-bars clean twin is still present (the one measured legitimate non-food crossing)' }
 else { Bad 'store-taxonomy lost the protein-bars clean twin - the allowlist valve is untested and the audit drops to 50% precision' }
 # BLIND twin: an empty out\ must say could-not-evaluate, never report a clean zero.

@@ -1,0 +1,17 @@
+{
+  "_fixture": "FROZEN, SYNTHETIC. Companion to comparison-2000-01-01.json in this directory. fixture-eggplant DISAGREES with the board (board 2.49, link 1.99 = x0.80) and must be reported. fixture-string-price stores its price as the STRING \"$3.99\" - the shape that killed this audit inside its own first finding record - and AGREES with the board, so it must be parsed successfully and stay silent. fixture-halfcent is the store's own rounded unit price ($0.06/oz vs a true $0.0645/oz): a 7% ratio that is really two decimal places, and the half-cent rule must suppress it.",
+  "items": {
+    "fixture-eggplant": {
+      "Fixture Mart": { "name": "Fixture Whole Eggplant", "price": 1.99, "size": "1 ct", "url": "https://example.invalid/eggplant" }
+    },
+    "fixture-string-price": {
+      "Fixture Mart": { "name": "Fixture Sandwich Bread", "price": "$3.99", "size": "1 ct", "url": "https://example.invalid/bread" }
+    },
+    "fixture-halfcent": {
+      "Fixture Mart": { "name": "Fixture Canned Beans", "price": 0.93, "size": "15.5 oz", "url": "https://example.invalid/beans" }
+    },
+    "fixture-sale-cell": {
+      "Fixture Mart": { "name": "Fixture Sale Item", "price": 4.99, "size": "1 ct", "url": "https://example.invalid/sale" }
+    }
+  }
+}
