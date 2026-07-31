@@ -11,6 +11,14 @@
 param(
   [string]$Subject = "Grocery pipeline alert",
   [string]$Body = "",
+  # PASS A LONG OR QUOTED BODY BY FILE (2026-07-31). Every caller invokes this as
+  # `& powershell -File send-alert.ps1 -Body $body`, and a body containing DOUBLE QUOTES breaks the
+  # argument tokenization: measured today, a 2.3 KB body with quoted sizes ("24 x 16.9 fl oz") arrived as
+  # 307 chars and the mangled remainder made Gmail answer 400 Bad Request. The queue entry still landed -
+  # by design, queue first, mail second - but it landed TRUNCATED, which is the worst of both: an alert
+  # that pages nobody and cannot be classified from its own body either. -BodyFile sidesteps the shell
+  # entirely. Use it whenever the body carries quotes, or runs past a few hundred characters.
+  [string]$BodyFile = "",
   [string]$To = "schweino68@gmail.com",
   # bypass the once-per-type-per-day gate for a genuinely new incident that must page through today. Callers
   # that already do their own signature de-dup (the consistency-drift alert) pass this so their finer-grained
@@ -22,6 +30,10 @@ param(
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $logFile = Join-Path $root 'alert-log.txt'
+if ($BodyFile) {
+  if (-not (Test-Path $BodyFile)) { throw "send-alert: -BodyFile not found: $BodyFile" }
+  $Body = ((Get-Content $BodyFile -Raw) + '')   # ((...) + '') because [string]$null is $null in PS 5.1
+}
 # a locked log file must never kill the alerter - see the note in check-ad-cycles.ps1 (2026-07-28). This one
 # matters twice over: Log() runs inside the catch that handles a failed queue write, so a locked log here
 # would swallow the alert entirely.
@@ -107,6 +119,11 @@ if ($SelfTest) {
   $items5 = @([pscustomobject]@{ type='t'; date='2026-06-01'; status='open'; count=1 })
   _T 'open item older than the absorb window does NOT absorb' (Get-QueueAction $items5 't' '2026-07-31').action 'new'
   # body-thin detection: the real multibuy record vs a real, judgeable body
+  # a truncated first occurrence must be UPGRADED by a fuller later one, not preserved out of politeness
+  $short = 'Verified in-browser: pull-aldi-instore reads the product page and takes its size field.'
+  $full  = $short + (' ' * 400) + 'plus the three confirmed instances, the why-this-is-not-live-yet paragraph, and the root-cause list.'
+  _T 'a materially fuller later body upgrades the stored one' ([bool]($full.Length -gt ($short.Length * 1.5) -and $full.Length -gt ($short.Length + 200))) 'True'
+  _T 'a same-size repeat does NOT churn the stored body'      ([bool]($short.Length -gt ($short.Length * 1.5))) 'False'
   _T 'thin body flagged'  (Test-BodyThin 'MULTIBUY|Hy-Vee|Soda (12-pack)') 'True'
   _T 'rich body not flagged' (Test-BodyThin 'These commodity+store cells are on SALE with no everyday item to revert to: bell-peppers @ Family Fare; plums @ Family Fare; sandwich-cookies @ Family Fare. Browser stores are queued in grocery/out/research-worklist.json.') 'False'
   Write-Output ""
@@ -153,7 +170,18 @@ try {
   $route = Get-QueueAction $items $typeKey $today
   switch ($route.action) {
     'same-day' {
-      foreach ($d in @($items | Where-Object { $_.type -eq $typeKey -and $_.date -eq $today })) { $d.count = [int]$d.count + 1 }
+      foreach ($d in @($items | Where-Object { $_.type -eq $typeKey -and $_.date -eq $today })) {
+        $d.count = [int]$d.count + 1
+        # same upgrade rule as the cross-day branch below: a truncated or thin first occurrence must not
+        # outrank a later one that actually carries the evidence.
+        $oldLen = ([string]$d.body).Length
+        if ($bodyStored.Length -gt ($oldLen * 1.5) -and $bodyStored.Length -gt ($oldLen + 200)) {
+          $d.body = $bodyStored
+          if ($d.PSObject.Properties['body_upgraded']) { $d.body_upgraded = $today } else { $d | Add-Member -NotePropertyName body_upgraded -NotePropertyValue $today }
+          if ($d.PSObject.Properties['body_thin'] -and (-not $thin)) { $d.body_thin = $false }
+          Log ("QUEUE BODY UPGRADED on " + $d.id + " (" + $oldLen + " -> " + $bodyStored.Length + " chars, same day)")
+        }
+      }
     }
     'absorb' {
       # STILL-OPEN CONDITION FROM AN EARLIER DAY: one incident, one id. Keep the ORIGINAL body (it is what
@@ -161,6 +189,19 @@ try {
       # changed item list is still visible.
       $t = $route.target
       $t.count = [int]$t.count + 1
+      # A LATER OCCURRENCE MAY CARRY BETTER EVIDENCE THAN THE FIRST. Keeping the original body is right
+      # when the recurrences are the same alert repeating, and WRONG when the first one was truncated or
+      # thin: the whole value of a queue entry is that triage can classify it without hunting the data.
+      # Measured 2026-07-31: an alert whose body contained double quotes arrived through the shell at 307
+      # of 2299 chars, and the re-send with the full evidence would have been filed as a 400-char
+      # recurrence under the mangled original. Upgrade when the new body is materially fuller.
+      $oldLen = ([string]$t.body).Length
+      if ($bodyStored.Length -gt ($oldLen * 1.5) -and $bodyStored.Length -gt ($oldLen + 200)) {
+        $t.body = $bodyStored
+        if ($t.PSObject.Properties['body_upgraded']) { $t.body_upgraded = $today } else { $t | Add-Member -NotePropertyName body_upgraded -NotePropertyValue $today }
+        if ($t.PSObject.Properties['body_thin'] -and (-not $thin)) { $t.body_thin = $false }
+        Log ("QUEUE BODY UPGRADED on " + $t.id + " (" + $oldLen + " -> " + $bodyStored.Length + " chars) - a later occurrence carried fuller evidence")
+      }
       if ($t.PSObject.Properties['last_seen']) { $t.last_seen = (Get-Date).ToString('s') } else { $t | Add-Member -NotePropertyName last_seen -NotePropertyValue (Get-Date).ToString('s') }
       $rec = @()
       if ($t.PSObject.Properties['recurrences']) { $rec = @($t.recurrences) }
