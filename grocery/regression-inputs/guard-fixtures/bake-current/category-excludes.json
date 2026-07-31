@@ -1,0 +1,23 @@
+{
+    "note":  "FROZEN FIXTURE - the CLEAN TWIN of bake-drifted: the same library, against a commodities.json that has actually been baked. A bake-currency check that cannot tell this tree from bake-drifted is measuring nothing. NEVER regenerate from the live tree.",
+    "classes":  {
+                    "snack_carrier":  [
+                                          "\\bjerky\\b",
+                                          "\\bcrisps?\\b"
+                                      ]
+                },
+    "apply":  [
+                  {
+                      "categories":  "^(Fruit|Vegetables)$",
+                      "classes":  [
+                                      "snack_carrier"
+                                  ]
+                  }
+              ],
+    "exempt":  {
+                   "snack_carrier":  "^apples$"
+               },
+    "universal_for_unknown":  [
+                                  "snack_carrier"
+                              ]
+}

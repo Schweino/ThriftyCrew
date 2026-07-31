@@ -1,0 +1,23 @@
+{
+    "note":  "FROZEN FIXTURE - the 2026-07-31 bake-drift founding bug, in miniature. The library KNOWS \\bjerky\\b is wrong on every Fruit/Vegetables commodity, but the garlic commodity below was baked before snack_carrier existed, so its own exclude list has never carried the token - which is exactly how 'Krave Garlic Truffle Wagyu Beef Jerky' reached the GARLIC commodity while the library that forbids it sat right there. apples carries the load-bearing snack_carrier exempt (Cosmic Crisp / Honeycrisp are real apples), so a correct bake must ADD to garlic and NOTHING to apples. NEVER regenerate this from the live tree: the moment it is re-baked the drift disappears and the watcher passes by finding nothing.",
+    "classes":  {
+                    "snack_carrier":  [
+                                          "\\bjerky\\b",
+                                          "\\bcrisps?\\b"
+                                      ]
+                },
+    "apply":  [
+                  {
+                      "categories":  "^(Fruit|Vegetables)$",
+                      "classes":  [
+                                      "snack_carrier"
+                                  ]
+                  }
+              ],
+    "exempt":  {
+                   "snack_carrier":  "^apples$"
+               },
+    "universal_for_unknown":  [
+                                  "snack_carrier"
+                              ]
+}

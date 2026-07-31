@@ -12,9 +12,13 @@
   exclude that drops a store's only match turns a priced cell into "no price", and that must be a reviewed
   correction, not a surprise.
 #>
-param([switch]$WhatIf)
+param([switch]$WhatIf, [string]$Root = '')
 $ErrorActionPreference = 'Stop'
-$root = $PSScriptRoot
+# -Root exists ONLY so test-auditors can point this script at a frozen fixture tree and prove the drift
+# detector still detects drift. Live behaviour is byte-identical: with no -Root it is $PSScriptRoot, as before.
+# PowerShell variable names are CASE-INSENSITIVE, so $Root and $root are the SAME variable - this one line
+# both honours an explicit -Root and defaults it. Do not "tidy" it into two names; they cannot be two names.
+if (-not $root) { $root = $PSScriptRoot }
 $lib = Get-Content (Join-Path $root 'category-excludes.json') -Raw | ConvertFrom-Json
 $cat = @{}
 foreach ($c in (Get-Content (Join-Path $root 'categories.json') -Raw | ConvertFrom-Json).categories) {

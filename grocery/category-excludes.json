@@ -23,7 +23,10 @@
                                      "\\bstarry\\b",
                                      "monster\\s+energy",
                                      "\\bcola\\b",
-                                     "\\bseltzer\\b"
+                                     "\\bseltzer\\b",
+                                     "\\btea\\b",
+                                     "\\bcoffee\\b",
+                                     "\\bv8\\b"
                                  ],
                     "snack_carrier":  [
                                           "\\bchips?\\b",
@@ -33,7 +36,8 @@
                                           "\\bjerky\\b",
                                           "\\bpuffs?\\b",
                                           "fruit\\s+snacks?",
-                                          "trail\\s+mix"
+                                          "trail\\s+mix",
+                                          "rice\\s+cakes?"
                                       ],
                     "babyfood":  [
                                      "beech\\s*nut",
@@ -108,7 +112,9 @@
                                       "toothbrush",
                                       "\\bdenture",
                                       "\\bdental\\b",
-                                      "epsom"
+                                      "epsom",
+                                      "tampons?",
+                                      "lip\\s+balm"
                                   ],
                     "bakery_carrier":  [
                                            "\\bbagels?\\b",
@@ -153,7 +159,8 @@
                                   "fruit\\s+pops?",
                                   "ice\\s+bars?",
                                   "\\bhelados\\b",
-                                  "\\boutshine\\b"
+                                  "\\boutshine\\b",
+                                  "marshmallows?"
                               ],
                     "supplement":  [
                                        "\\bsupplements?\\b",
@@ -208,7 +215,7 @@
                    "bakery_carrier":  "pumpkin",
                    "dairy_carrier":  "milk|yogurt|cheese|cream|butter",
                    "candy":  "",
-                   "snack_carrier":  "",
+                   "snack_carrier":  "^apples$",
                    "supplement":  ""
                },
     "universal_for_unknown":  [

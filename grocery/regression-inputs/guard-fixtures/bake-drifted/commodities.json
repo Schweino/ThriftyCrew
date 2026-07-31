@@ -1,0 +1,24 @@
+[
+    {
+        "id":  "garlic",
+        "label":  "Garlic",
+        "unit":  "each",
+        "include":  [
+                        "\\bgarlic\\b"
+                    ],
+        "exclude":  [
+                        "powder"
+                    ]
+    },
+    {
+        "id":  "apples",
+        "label":  "Apples",
+        "unit":  "lb",
+        "include":  [
+                        "\\bapple(s)?\\b"
+                    ],
+        "exclude":  [
+                        "\\bsauce\\b"
+                    ]
+    }
+]

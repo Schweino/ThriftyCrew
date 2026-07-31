@@ -2131,5 +2131,70 @@ if (-not (Test-Path $bvsPath) -or -not (Test-Path $rsvPath)) {
   Remove-Item $fxVs, $fxVsE -Recurse -Force -ErrorAction SilentlyContinue
 }
 
+# ---------------------------------------------------------------- BAKE CURRENCY (2026-07-31, triage round 2)
+# FOUNDING BUG: category-excludes.json is the LIBRARY; apply-category-excludes.ps1 BAKES it into every
+# commodity's own exclude list. Nothing enforced the bake. Measured 2026-07-31: the bake sat 2,165 patterns
+# behind the library across 443 commodities, which is exactly why "Krave Garlic Truffle Wagyu Beef Jerky"
+# could reach the GARLIC commodity while the library that forbids \bjerky\b on every Fruit/Vegetables
+# commodity sat right there, already correct, for a day. A library nobody bakes protects nothing, and the
+# blocking guard (audit-food-category) reads the same library, so the drift is invisible from both ends.
+# Two things have to stay true, and they are different claims:
+#   (1) the LIVE tree is current - a -WhatIf that wants to add nothing;
+#   (2) the detector can still SEE drift - the frozen fixture pair, so (1) passing means something.
+$r = RunPS 'apply-category-excludes.ps1' @('-WhatIf')
+if ($r.rc -eq 0 -and $r.text -match '\+0 patterns across 0 commodities') { Ok 'bake-currency: the live commodities.json is CURRENT with category-excludes.json (nothing left to bake)' }
+else { Bad ('bake-currency: the LIVE bake has DRIFTED behind the library - run apply-category-excludes.ps1, then re-run compare-deals and diff the board. It reports: ' + (($r.text -split "`n") | Select-Object -First 1)) }
+# MUST-FIRE: a frozen miniature of the founding shape - garlic (a Vegetable) whose exclude list predates
+# snack_carrier, against a library that already carries \bjerky\b and \bcrisps?\b. A correct bake wants to
+# add BOTH to garlic and NOTHING to apples, which pins the load-bearing ^apples$ exempt in the same
+# assertion (drop the exempt and this reads "+4 patterns across 2 commodities" and goes red).
+$fxBakeD = Join-Path $fix 'bake-drifted'
+$r = RunPS 'apply-category-excludes.ps1' @('-Root', $fxBakeD, '-WhatIf')
+if ($r.rc -eq 0 -and $r.text -match '\+2 patterns across 1 commodities') { Ok 'bake-currency MUST-FIRE: a commodity whose exclude list predates a library class is reported as drift, and the apples exempt still exempts' }
+else { Bad ('bake-currency did NOT see the drifted fixture (rc=' + $r.rc + '): ' + (($r.text -split "`n") | Select-Object -First 1) + ' - either the drift counter or the ^apples$ snack_carrier exempt has changed') }
+# CLEAN TWIN: the same library against a tree that HAS been baked. A checker that cannot tell these two
+# apart is measuring nothing, and the live +0 above would be worthless.
+$r = RunPS 'apply-category-excludes.ps1' @('-Root', (Join-Path $fix 'bake-current'), '-WhatIf')
+if ($r.rc -eq 0 -and $r.text -match '\+0 patterns across 0 commodities') { Ok 'bake-currency clean twin: an already-baked tree reports no drift' }
+else { Bad ('bake-currency false-positived on an already-baked fixture (rc=' + $r.rc + '): ' + (($r.text -split "`n") | Select-Object -First 1)) }
+# ...and the fixture must still be FROZEN afterwards. -WhatIf returns before the write, but a future edit
+# that forgets -WhatIf would silently bake the fixture and the must-fire above would pass forever after by
+# finding nothing - the [[guard-fixture-rule]] failure mode, one careless argument away.
+if ((Get-Content (Join-Path $fxBakeD 'commodities.json') -Raw) -notmatch 'jerky') { Ok 'bake-currency fixture is still frozen (the drifted tree was not written to)' }
+else { Bad 'the bake-drifted FIXTURE has been baked - it no longer encodes the drift, so its must-fire proves nothing. Restore it from git.' }
+
+# ---------------------------------------------------------------- (d3) food-category: the round-2 classes
+# MUST-FIRE for the 2026-07-31 library additions (household tampons/lip-balm, candy marshmallows, beverage
+# tea/coffee/v8). All three rows below are REAL Baker's rows read during that review, frozen verbatim, and
+# all three were live CANDIDATES on commodities they have no business being in: the tampons priced against
+# HONEY, the marshmallow bag against fresh STRAWBERRIES (at $0.22/oz it already beat two real strawberry
+# rows), and the tea bags against fresh LEMONS. None held a cell - what stopped them was a unit refusal or
+# a sanity band, not the class library, which could not express any of these classes at all.
+# FROZEN LITERALS. Never regenerate from the board: the products rotate out of Baker's catalog weekly, and
+# a fixture rebuilt from live data would encode nothing.
+$fxR2 = NewFxDir 'afc-round2'
+$r2Bug = '{"week_of":"2026-07-31","comparison":[' +
+  '{"commodity":"Honey","id":"honey","unit":"oz","stores":[{"store":"Baker''s","per_unit":0.4994,"item":"Honey Pot 100% Organic Cotton Core Duo Pack Tampons, 18 Count"}]},' +
+  '{"commodity":"Strawberries","id":"strawberries","unit":"oz","stores":[{"store":"Baker''s","per_unit":0.22,"item":"De La Rosa Strawberry & Vanilla Marshmallows"}]},' +
+  '{"commodity":"Lemons","id":"lemons","unit":"each","stores":[{"store":"Baker''s","per_unit":0.1895,"item":"Bigelow Lemon Lift Black Tea Bags"}]}]}'
+Set-Content (Join-Path $fxR2 'comparison-2026-07-31.json') $r2Bug -Encoding UTF8
+$r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxR2)
+if ($r.rc -eq 2 -and $r.text -match 'household' -and $r.text -match 'candy' -and $r.text -match 'beverage' -and $r.text -match 'honey' -and $r.text -match 'strawberries' -and $r.text -match 'lemons') {
+  Ok 'food-category MUST-FIRE: tampons on honey, marshmallows on strawberries and tea bags on lemons all hard-fail (exit 2) and each names its class'
+} else {
+  Bad ('food-category did NOT catch the round-2 rows (rc=' + $r.rc + ') - the household tampons/lip-balm, candy marshmallows or beverage tea/coffee/v8 tokens are gone from category-excludes.json: ' + ($r.text -replace "`n", ' '))
+}
+# CLEAN TWIN: the SAME three commodities priced from the real products that hold those cells today. A token
+# broad enough to flag these would take the board down daily, which is how a guard gets switched off.
+$r2Clean = '{"week_of":"2026-07-31","comparison":[' +
+  '{"commodity":"Honey","id":"honey","unit":"oz","stores":[{"store":"Sam''s Club","per_unit":0.1662,"item":"Member''s Mark Wildflower Pure Premium Honey, 48 oz."}]},' +
+  '{"commodity":"Strawberries","id":"strawberries","unit":"oz","stores":[{"store":"Aldi","per_unit":0.1181,"item":"Strawberries"}]},' +
+  '{"commodity":"Lemons","id":"lemons","unit":"each","stores":[{"store":"Walmart","per_unit":0.5,"item":"Fresh Lemon"}]}]}'
+Set-Content (Join-Path $fxR2 'comparison-2026-07-31.json') $r2Clean -Encoding UTF8
+$r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxR2)
+if ($r.rc -eq 0) { Ok 'food-category clean twin: the real honey / strawberries / lemons cells stay silent under the round-2 classes' }
+else { Bad ('food-category flagged REAL cells (rc=' + $r.rc + ') - a round-2 token is too broad: ' + ($r.text -replace "`n", ' ')) }
+Remove-Item $fxR2 -Recurse -Force -ErrorAction SilentlyContinue
+
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2

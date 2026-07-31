@@ -1,0 +1,17 @@
+{
+    "note":  "FROZEN FIXTURE (bake-currency). Two commodities, two categories: garlic is a Vegetable that must receive the snack_carrier class, apples is a Fruit that must NOT (exempt).",
+    "categories":  [
+                       {
+                           "label":  "Vegetables",
+                           "commodities":  [
+                                               "garlic"
+                                           ]
+                       },
+                       {
+                           "label":  "Fruit",
+                           "commodities":  [
+                                               "apples"
+                                           ]
+                       }
+                   ]
+}
