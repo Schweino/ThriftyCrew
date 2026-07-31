@@ -5126,7 +5126,7 @@
                   },
                   {
                       "store":  "Fareway",
-                      "item":  "Rhubarb",
+                      "item":  "Rhubarb 1 Lb",
                       "ad_price":  "$3.99",
                       "size":  "lb",
                       "regular":  "",
@@ -5222,7 +5222,7 @@
                   },
                   {
                       "store":  "Fareway",
-                      "item":  "Spaghetti Squash",
+                      "item":  "Spaghetti Squash 1 Lb",
                       "ad_price":  "$1.49",
                       "size":  "lb",
                       "regular":  "",
@@ -5301,7 +5301,7 @@
                   },
                   {
                       "store":  "Fareway",
-                      "item":  "Spice World Shallots Fresh",
+                      "item":  "Spice World Shallots Fresh 3 Oz",
                       "ad_price":  "$2.49",
                       "size":  "3 oz",
                       "regular":  "",
@@ -5349,14 +5349,14 @@
                   },
                   {
                       "store":  "Fareway",
-                      "item":  "Coconut",
-                      "ad_price":  "$3.99",
+                      "item":  "FOCO Coconut Juice",
+                      "ad_price":  "$2.19",
                       "size":  "each",
                       "regular":  "",
                       "source_ad":  "shop.fareway.com",
                       "as_of":  "2026-07-31",
-                      "link_url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3402271-coconut-each",
-                      "current_price":  3.99
+                      "link_url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/198041-foco-coconut-juice-17-6-oz",
+                      "current_price":  2.19
                   },
                   {
                       "store":  "Fareway",
@@ -6048,6 +6048,17 @@
                       "as_of":  "2026-07-27",
                       "link_url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387369-fareway-bonein-turkey-breast-1-each",
                       "current_price":  2.99
+                  },
+                  {
+                      "store":  "Fareway",
+                      "item":  "Coconut",
+                      "ad_price":  "$3.99",
+                      "size":  "each",
+                      "regular":  "",
+                      "source_ad":  "shop.fareway.com",
+                      "as_of":  "2026-07-27",
+                      "link_url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3402271-coconut-each",
+                      "current_price":  3.99
                   },
                   {
                       "store":  "Fareway",
@@ -6814,6 +6825,6 @@
                       "marked_down":  true
                   }
               ],
-    "carry_note":  "carry-forward: +104 item(s) from fareway-regular-2026-07-27.json + fareway-regular-2026-07-23.json + fareway-regular-2026-07-18.json (absent from this pull; as_of-stamped, 14-day cap), 196 expired",
+    "carry_note":  "carry-forward: +105 item(s) from fareway-regular-2026-07-27.json + fareway-regular-2026-07-23.json + fareway-regular-2026-07-18.json (absent from this pull; as_of-stamped, 14-day cap), 196 expired",
     "size_heal_note":  "size-heal: 11 row(s) re-sized from prior capture(s) (same item+price, capture had dropped the pack count); 1 skipped on price change"
 }
