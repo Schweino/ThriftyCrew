@@ -1,4 +1,4 @@
-[
+﻿[
     {
         "id":  "chicken-breast",
         "label":  "Boneless Skinless Chicken Breast",
@@ -2572,7 +2572,8 @@
                         "superbeets",
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
-                        "\\bheart\\s+health\\b"
+                        "\\bheart\\s+health\\b",
+                        "\\btea\\b"
                     ]
     },
     {
@@ -17079,7 +17080,8 @@
                         "\\bsoftgels?\\b",
                         "heart\\s+chews?",
                         "\\bheart\\s+health\\b",
-                        "\\bchips?\\b"
+                        "\\bchips?\\b",
+                        "mashed\\s+potatoes"
                     ]
     },
     {

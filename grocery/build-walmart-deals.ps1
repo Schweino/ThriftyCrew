@@ -230,8 +230,24 @@ function Build-Row($raw) {
   }
   $lp = [double]($lpm.Groups[1].Value -replace ',','')
   if ($lp -le 0 -or $up -le 0) { return @{ err='zero price' } }
-  $u = Resolve-Unit $upm.Groups[2].Value
-  if (-not $u) { return @{ err=('unknown unit "' + $upm.Groups[2].Value + '"') } }
+  # A QUANTIFIED DENOMINATOR MEANS "PRICE PER N UNITS" (2026-07-31). Walmart quotes count goods per 100:
+  # the unit price on a pack of plates arrives as "$5.58/100 ct", not "$0.0558/ct". Resolve-Unit anchors on
+  # a BARE unit (^(ea|each|ct|count)$), so "100 ct" fell straight through to the unknown-unit reject and the
+  # whole class was silently unpriceable - measured on the 2026-07-31 at-risk capture, 194 of 205 unit-price
+  # strings carried a count denominator and 152 of 154 rejects were exactly this. That removes every paper
+  # plate, napkin, dryer sheet and tea bag from any batch capture, which is why four commodities could not be
+  # refreshed off the expiring 07-18 pull no matter how deep the search went.
+  # Dividing is right in general, not just for counts: "$2.00/12 fl oz" is $0.1667/fl oz, and a denominator of
+  # "1 lb" divides by 1 and changes nothing. Verified against a known-good board value - Great Value 8.5"
+  # plates quote "$5.58/100 ct" and the board's existing per-each for that cell is 0.0558.
+  $denom = $upm.Groups[2].Value
+  $dm = [regex]::Match(($denom + '').Trim(), '^([\d,]+(?:\.\d+)?)\s+(.+)$')
+  if ($dm.Success) {
+    $dq = [double]($dm.Groups[1].Value -replace ',','')
+    if ($dq -gt 0) { $up = $up / $dq; $denom = $dm.Groups[2].Value }
+  }
+  $u = Resolve-Unit $denom
+  if (-not $u) { return @{ err=('unknown unit "' + $denom + '"') } }
 
   # unitPrice is rounded to the cent, so lp/up is only as good as that rounding: a $0.09/ea item can be off by
   # 0.005/0.09 = 5.6% before anything is wrong, and at $0.01/ea it is off by up to 50%.
