@@ -698,7 +698,7 @@
                                   "concurrency_note":  "The Family Fare 3-hourly sweep ran at 10:06:37, four minutes AFTER this compare at 10:02:26, and bought terms #332 to #422 (the vinegar and soy-sauce block). audit-coverage-gaps therefore reports 10 gaps instead of 5, all Family Fare, all from capture rows the board had not yet seen. Not this change: the cell diff proves ZERO cells lost, and all five of the new names were already absent from the pre-change board. They heal on the next daily compare, which is the designed behaviour.",
                                   "supersedes":  "plan-2026-07-31-2.json do_not_touch ('the taco-sauce allowlist entry (parked for Brad in round 1)') and its developer_record note ('The taco-sauce question stays parked for Brad'). Both were true when written and are now answered.",
                                   "no_queue_item":  "This was an open question, not an alert, so there is no triage-queue.json item to close and no alert to send.",
-                                  "shipped_commit":  "PENDING"
+                                  "shipped_commit":  "2403beae"
                               },
     "developer_record":  {
                              "ran":  "2026-07-31 08:06",
