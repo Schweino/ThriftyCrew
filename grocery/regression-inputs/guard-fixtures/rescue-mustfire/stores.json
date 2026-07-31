@@ -1,0 +1,16 @@
+{
+  "readme": "FROZEN, SYNTHETIC, NEVER REGENERATED FROM THE LIVE REGISTRY. One invented walled store so build-rescue-worklist.ps1 can be exercised without the live board. If the 'walled' key is ever renamed, this fixture stops selecting a store and the tool exits 3 - which is the point.",
+  "stores": [
+    {
+      "name": "Fixture Mart",
+      "order": 1,
+      "regular_prefix": "fixturemart",
+      "urlkey": "fixturemart",
+      "ad_cycle": "none (fixture)",
+      "capture": "browser (fixture)",
+      "walled": true,
+      "price_mode": "in-store"
+    }
+  ],
+  "allowed_subsets": []
+}

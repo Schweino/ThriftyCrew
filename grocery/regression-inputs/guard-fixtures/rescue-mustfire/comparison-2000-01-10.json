@@ -1,0 +1,23 @@
+{
+  "_fixture": "FROZEN, SYNTHETIC, NEVER REGENERATED FROM THE LIVE BOARD. Founding bugs for build-rescue-worklist.ps1, all three observed on 2026-07-31: (1) 21 Walmart cells traced to a capture that left the 14-day union window the next day and nothing ever emitted 'capture exactly these terms'; (2) Aldi's biggest-ever pass still cost 7 staple cells because the new pass never searched those terms, and the audit that noticed reported it AFTER the loss; (3) ~20 Sam's cells serve from captures already past the window. Every product name, price and date below is invented. fx-milk traces to a 9-day-old capture (EXPIRING, 5 days left), fx-toast traces to nothing on disk (UNTRACEABLE), and fx-eggs is priced on the older board and absent here (DROPPED).",
+  "built_at": "2000-01-10",
+  "week_of": "2000-01-10",
+  "comparison": [
+    {
+      "commodity": "Fixture Whole Milk",
+      "id": "fx-milk",
+      "unit": "gal",
+      "stores": [
+        { "store": "Fixture Mart", "per_unit": 3.19, "unit": "gal", "type": "everyday", "item": "Fixture Whole Milk Gallon", "ad": "$3.19", "size": "1 gal" }
+      ]
+    },
+    {
+      "commodity": "Fixture Sandwich Toast",
+      "id": "fx-toast",
+      "unit": "each",
+      "stores": [
+        { "store": "Fixture Mart", "per_unit": 2.49, "unit": "each", "type": "everyday", "item": "Fixture Sandwich Toast Loaf", "ad": "$2.49", "size": "each" }
+      ]
+    }
+  ]
+}

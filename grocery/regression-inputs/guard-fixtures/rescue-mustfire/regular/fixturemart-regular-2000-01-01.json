@@ -1,0 +1,10 @@
+{
+  "_fixture": "FROZEN, SYNTHETIC. The only capture on disk for this fixture store, dated 9 days before the fixture's -AsOf 2000-01-10, so fx-milk has 5 of its 14 window days left (EXPIRING). It deliberately does NOT carry a fx-toast row: a board cell no capture on disk still holds is UNTRACEABLE, which is the conservative 'capture it, we cannot promise it survives the next union' verdict.",
+  "store": "Fixture Mart",
+  "price_type": "everyday",
+  "captured": "2000-01-01",
+  "pull_terms": 3,
+  "deals": [
+    { "store": "Fixture Mart", "item": "Fixture Whole Milk Gallon", "ad_price": "$3.19", "size": "1 gal", "price_type": "everyday", "source_ad": "everyday shelf price (fixture)" }
+  ]
+}

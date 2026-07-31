@@ -1,5 +1,5 @@
 {
-  "readme": "CANONICAL store registry (2026-07-26, estate-audit item #5). One row per store the board tracks. Scripts that need the full store list read THIS file (sorted by 'order'); audit-store-registry.ps1 scans live scripts daily and flags any hardcoded list that names >=3 stores but not all of them (the publish-store-guide/publish-deals-page Fareway-drift class). Add a new store HERE FIRST, then run audit-store-registry.ps1 to find every site the change must reach. 'allowed_subsets' documents lines that legitimately name only some stores.",
+  "readme": "CANONICAL store registry (2026-07-26, estate-audit item #5). One row per store the board tracks. Scripts that need the full store list read THIS file (sorted by 'order'); audit-store-registry.ps1 scans live scripts daily and flags any hardcoded list that names >=3 stores but not all of them (the publish-store-guide/publish-deals-page Fareway-drift class). Add a new store HERE FIRST, then run audit-store-registry.ps1 to find every site the change must reach. 'allowed_subsets' documents lines that legitimately name only some stores. 'walled': true marks the four stores whose prices can only be captured through a human browser session behind a bot wall (Walmart, Sam's Club, Aldi, Fareway) - build-rescue-worklist.ps1 reads THIS FLAG to decide which stores get a rescue term list. It is an explicit flag and not a match on 'capture' on purpose: Aldi's capture string starts with 'server (Flipp flyerkit JSON)' because its AD is a server pull, while its shelf prices come off the Instacart storefront by hand, so any substring test for 'browser' silently drops it.",
   "stores": [
     {
       "name": "Hy-Vee",
@@ -18,6 +18,7 @@
       "urlkey": "aldi",
       "ad_cycle": "weekly",
       "capture": "server (Flipp flyerkit JSON) + Instacart storefront for shelf prices",
+      "walled": true,
       "price_mode": "in-store (Instacart serves marked-up DELIVERY prices by default - mode_verified required, audit-price-mode.ps1 guards)",
       "notes": "server pull via pull-grocery-ads.ps1"
     },
@@ -40,6 +41,7 @@
       "deals_glob": "out/fareway/fareway-deals-*.json",
       "ad_cycle": "weekly",
       "capture": "browser (Instacart storefront)",
+      "walled": true,
       "price_mode": "in-store (Instacart delivery-price trap - mode_verified required)",
       "notes": "was silently missing from the store-guide (07-12..07-26) and both publish gates - the drift that motivated this registry"
     },
@@ -62,6 +64,7 @@
       "deals_glob": "out/sams/sams-deals-*.json",
       "ad_cycle": "none (national/club everyday pricing)",
       "capture": "browser, CAPTCHA-walled -> PARTIAL SLICES; compare-deals unions every capture in its 14-day window, freshest-per-commodity wins",
+      "walled": true,
       "price_mode": "in-store (club 68137 preferred over national)",
       "membership": true,
       "notes": "unit-price feed - ingest ONLY via build-sams-deals.ps1 (linePrice AND unitPrice) or recover-sams-quarantine.ps1; never write bare per-unit rows"
@@ -73,6 +76,7 @@
       "urlkey": "walmart",
       "ad_cycle": "none (everyday pricing)",
       "capture": "browser (priceInfo.priceDetails.priceLines)",
+      "walled": true,
       "price_mode": "in-store",
       "everyday_only": true,
       "notes": "no ad cycle -> partial daily refreshes UNION with recent captures (EVERYDAY_ONLY_STORES in compare-deals) or the board collapses"

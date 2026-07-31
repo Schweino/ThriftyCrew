@@ -173,7 +173,12 @@ try {
 # Sam's 14-day slices). With carry-forward now walking the whole window this should read zero; anything it
 # names is a real, new leak.
 try {
-  $cdOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-cell-drops.ps1') 2>$null
+  # NO 2>$null (removed 2026-07-31). Under this file's EAP=Stop, redirecting a NATIVE child's stderr turns
+  # its first stderr line into a TERMINATING throw in the parent - the same idiom already pulled out of the
+  # delegated-audit loop. It sits inside its own try/catch here, so the blast radius was not a dead guard
+  # but a wrong signal: any run where cell-drops wrote a single stderr line was reported as "could not run"
+  # instead of its real finding, and a real leak would read as plumbing noise.
+  $cdOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-cell-drops.ps1')
   if ($LASTEXITCODE -eq 0) { Say ("  ok    " + (@($cdOut) | Select-Object -First 1)) }
   elseif ($LASTEXITCODE -eq 3) { [void]$warn.Add('cell-drops could NOT be evaluated, so it proves nothing this run: ' + ((@($cdOut) | Where-Object { $_ }) -join ' ')) }
   else { [void]$warn.Add((@($cdOut) -join ' | ')) }

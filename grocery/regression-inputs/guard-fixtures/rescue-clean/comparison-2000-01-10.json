@@ -1,0 +1,23 @@
+{
+  "_fixture": "FROZEN, SYNTHETIC CLEAN TWIN. Both cells trace to a capture dated 2000-01-09 - one day old at -AsOf 2000-01-10, so 13 of 14 window days remain - and the older board carries exactly the same two cells, so nothing dropped. Every section must be empty and the tool must exit 0.",
+  "built_at": "2000-01-10",
+  "week_of": "2000-01-10",
+  "comparison": [
+    {
+      "commodity": "Fixture Whole Milk",
+      "id": "fx-milk",
+      "unit": "gal",
+      "stores": [
+        { "store": "Fixture Mart", "per_unit": 3.19, "unit": "gal", "type": "everyday", "item": "Fixture Whole Milk Gallon", "ad": "$3.19", "size": "1 gal" }
+      ]
+    },
+    {
+      "commodity": "Fixture Sandwich Toast",
+      "id": "fx-toast",
+      "unit": "each",
+      "stores": [
+        { "store": "Fixture Mart", "per_unit": 2.49, "unit": "each", "type": "everyday", "item": "Fixture Sandwich Toast Loaf", "ad": "$2.49", "size": "each" }
+      ]
+    }
+  ]
+}

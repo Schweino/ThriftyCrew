@@ -38,6 +38,11 @@
 # the same regenerable-output rule that already covers name-drift.json and link-audit.json directly above.
 /grocery/out/arrivals-docket.json
 /grocery/out/url-worklist.json
+# the walled-store rescue worklists: build-rescue-worklist.ps1 rewrites all four from scratch on every ad
+# cycle out of the comparison boards (ignored above) plus the capture files, and their whole job is to be
+# TODAY's list - a tracked copy would churn daily through push-data's `git add -A` and, worse, invite
+# someone to read a committed one as current. Same regenerable-output rule as url-worklist.json above.
+/grocery/out/rescue-terms-*.txt
 # input-fingerprint stamp for audit-match-soundness: a pure function of files already in the repo, rewritten
 # whenever any of them changes, and 1.24 MB a time - regenerable output, never a source of truth
 /grocery/out/audit/match-sweep-cache.json

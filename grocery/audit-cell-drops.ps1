@@ -31,6 +31,12 @@ $drops = @(); $cells = 0
 foreach ($r in $old) {
   foreach ($s in @($r.stores)) {
     $st = [string]$s.store
+    # SAM'S IS EXCLUDED HERE AND INCLUDED IN build-rescue-worklist.ps1, ON PURPOSE (noted 2026-07-31).
+    # This audit answers "did something break?", and a Sam's slice aging out of the 14-day window is policy,
+    # not breakage, so listing it here would be a permanent false alarm. The rescue worklist answers a
+    # different question - "what should the next browser session search?" - and by that measure the shopper
+    # lost the price either way and a capture is what fixes it. Two questions, two answers, one comment in
+    # each file so neither reads as a bug in the other.
     if ($st -eq "Sam's Club") { continue }              # 14-day slice policy; fullpull watch owns it
     if ([string]$s.type -eq 'sale') { continue }        # ended sales roll off correctly
     $cells++

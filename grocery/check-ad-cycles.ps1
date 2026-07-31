@@ -1137,6 +1137,44 @@ try {
   }
 } catch { Log ('everyday-mismatch threw: ' + $_.Exception.Message) }
 
+# ---- RESCUE WORKLIST FOR THE WALLED STORES (Walmart, Sam's, Aldi, Fareway) ----
+# The four walled stores are captured by hand through a browser, and compare-deals hands each commodity to
+# the FRESHEST capture in a 14-day window OUTRIGHT. Two things fall out of that and nothing used to turn
+# either into a to-do list: cells silently counting down to the day their only source leaves the window
+# (21 Walmart produce cells on 2026-07-31, all of them renamed products newer captures missed by name),
+# and a re-capture that is BIGGER overall but narrower on some terms (Aldi's 1,664-row 07-29 pass still
+# cost 7 staple cells). audit-walmart-fullpull COUNTS the first; audit-cell-drops reports the second AFTER
+# the loss. This turns both, plus the already-past-the-window pocket at Sam's, into per-store search lists.
+# ADVISORY AND NOTHING ELSE: exit 1 means "capture work exists", never "hold the board". The output is a
+# to-do list for the next browser session.
+# Placed after the everyday-mismatch block so the comparison is final, and before the coverage ratchet so
+# this tool's coverage row is on the ledger when the ratchet reads it. No 2>&1 / 2>$null on the child (under
+# EAP=Stop a native child's first stderr line becomes a terminating throw), capture then read $LASTEXITCODE.
+try {
+  $rwPath = Join-Path $root 'build-rescue-worklist.ps1'
+  if (Test-Path $rwPath) {
+    $rwOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $rwPath -OutDir $OutDir
+    $rwRc  = $LASTEXITCODE
+    foreach ($l in @($rwOut)) { Log ('rescue-worklist: ' + $l) }
+    if ($rwRc -eq 1) {
+      # [regex]::Match, NOT -match + $Matches: $Matches is GLOBAL and this file reads it elsewhere.
+      $rwWork = 0
+      foreach ($rwM in [regex]::Matches((@($rwOut) -join "`n"), 'DROPPED (\d+)\s+UNTRACEABLE (\d+)\s+EXPIRING (\d+)\s+STALE (\d+)')) {
+        for ($rwG = 1; $rwG -le 4; $rwG++) { $rwWork += [int]$rwM.Groups[$rwG].Value }
+      }
+      $rwN = if ($rwWork -gt 0) { [string]$rwWork } else { 'some' }
+      $summary += ('REVIEW    rescue-worklist: capture work exists for the walled stores (' + $rwN + ' cell(s)) - see out\rescue-terms-*.txt (DROPPED/EXPIRING cells will leave the board if not captured)')
+    }
+    elseif ($rwRc -eq 3) {
+      $summary += 'REVIEW    rescue-worklist could not evaluate - the walled-store freshness check proved nothing this cycle, so no browser worklist can be trusted'
+    }
+    elseif ($rwRc -ne 0) {
+      Log ("rescue-worklist: DID NOT RUN - exit $rwRc with " + @($rwOut).Count + ' output line(s)')
+      $summary += 'REVIEW    rescue-worklist did not complete - walled-store capture priorities went uncomputed this cycle'
+    }
+  }
+} catch { Log ('rescue-worklist threw: ' + $_.Exception.Message) }
+
 # ---- COVERAGE RATCHET FOR THE CYCLE PHASE ----
 # THE HOOK THAT WAS NEVER BUILT. coverage-baseline.json's own audit-ff-carry entry has carried the note
 # "nothing yet runs the ratchet with -Phase cycle, so those two verdicts fire only on a manual run until

@@ -1,0 +1,11 @@
+{
+  "_fixture": "FROZEN, SYNTHETIC CLEAN TWIN. One day old at -AsOf 2000-01-10 and it carries BOTH board rows, so both cells trace and both have 13 window days left. This is what a healthy walled store looks like: nothing dropped, nothing expiring, nothing stale, nothing untraceable.",
+  "store": "Fixture Mart",
+  "price_type": "everyday",
+  "captured": "2000-01-09",
+  "pull_terms": 3,
+  "deals": [
+    { "store": "Fixture Mart", "item": "Fixture Whole Milk Gallon", "ad_price": "$3.19", "size": "1 gal", "price_type": "everyday", "source_ad": "everyday shelf price (fixture)" },
+    { "store": "Fixture Mart", "item": "Fixture Sandwich Toast Loaf", "ad_price": "$2.49", "size": "each", "price_type": "everyday", "source_ad": "everyday shelf price (fixture)" }
+  ]
+}

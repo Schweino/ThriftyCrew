@@ -1,0 +1,16 @@
+{
+  "readme": "FROZEN, SYNTHETIC BLIND FIXTURE. Registry and terms are present and perfectly valid; there is NO comparison-*.json at all. That is the fresh-clone / cloud-runner state (comparison-*.json is gitignored), and the house rule is that a check which examined nothing must say so - exit 3, never a clean exit 0 over an empty examination.",
+  "stores": [
+    {
+      "name": "Fixture Mart",
+      "order": 1,
+      "regular_prefix": "fixturemart",
+      "urlkey": "fixturemart",
+      "ad_cycle": "none (fixture)",
+      "capture": "browser (fixture)",
+      "walled": true,
+      "price_mode": "in-store"
+    }
+  ],
+  "allowed_subsets": []
+}

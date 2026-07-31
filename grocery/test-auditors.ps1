@@ -1619,6 +1619,76 @@ $cacTx = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
 if ($cacTx -match 'audit-store-taxonomy\.ps1') { Ok 'the daily job still runs the store-taxonomy second opinion' }
 else { Bad 'check-ad-cycles no longer calls audit-store-taxonomy - the only check that does not inherit the include regex is dark, and the script census will call it an orphan' }
 
+# ---------------------------------------------------------------- (v3) the walled-store rescue worklist
+# 2026-07-31. The four walled stores are captured by hand through a browser, and compare-deals hands each
+# commodity to the FRESHEST capture in its 14-day window OUTRIGHT. Three failure classes were all visible in
+# the data and none of them produced a to-do list: 21 Walmart cells traced to a capture leaving the window
+# the next day (produce, whose names Walmart rewrites - "Fresh Pineapple" -> "Fresh Pineapple, Each" - so
+# newer captures missed them); Aldi's biggest-ever pass still cost 7 staple cells because it never searched
+# those terms, reported only AFTER the loss; and ~20 Sam's cells serving from captures already past the
+# window. build-rescue-worklist.ps1 turns all three into out\rescue-terms-<urlkey>.txt.
+# The three fixtures are FROZEN and SYNTHETIC (an invented "Fixture Mart", invented products, dates in
+# January 2000) and run from a COPY in TEMP, because the tool writes its lists and a coverage row into
+# -OutDir and a fixture that mutates itself is not frozen. -AsOf is what makes them freezable at all: the
+# tool calls Get-Date nowhere except to default that one parameter.
+$rwFxSrc = Join-Path $root 'regression-inputs\guard-fixtures'
+$rwTmp = Join-Path $env:TEMP ('rwfx-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+$null = New-Item -ItemType Directory -Path $rwTmp -Force
+function RwFixture([string]$name) {
+  $d = Join-Path $rwTmp $name
+  Copy-Item (Join-Path $rwFxSrc $name) $d -Recurse -Force
+  $r = RunPS 'build-rescue-worklist.ps1' @('-AsOf', '2000-01-10', '-OutDir', $d)
+  $listF = Join-Path $d 'rescue-terms-fixturemart.txt'
+  $list = if (Test-Path $listF) { [IO.File]::ReadAllText($listF, [Text.Encoding]::UTF8) } else { '' }
+  return @{ rc = $r.rc; text = $r.text; list = $list; hasList = (Test-Path $listF) }
+}
+# MUST FIRE, one cell per section so a single assertion cannot pass by accident: fx-eggs is priced on the
+# older board and gone today (the Aldi class), fx-toast is on the board with no capture on disk carrying it
+# (unknown provenance = capture it), fx-milk traces to a 9-day-old capture with 5 of 14 window days left
+# (the Walmart silent countdown).
+$rwA = RwFixture 'rescue-mustfire'
+if ($rwA.rc -eq 1 -and $rwA.list -match '(?m)^fixture eggs\t+fx-eggs\tDROPPED') { Ok 'rescue-worklist FIRES on a cell that was priced a week ago and is gone today (the Aldi 7-staple drop class)' }
+else { Bad ('rescue-worklist missed its DROPPED founding case: rc=' + $rwA.rc + ' - a board cell lost to a narrower re-capture produces no re-search term again') }
+if ($rwA.list -match '(?m)^fixture toast\t+fx-toast\tUNTRACEABLE') { Ok 'rescue-worklist flags a cell no capture on disk still carries (unknown provenance = capture it)' }
+else { Bad 'rescue-worklist no longer flags an UNTRACEABLE cell - a price we cannot attribute to any file is being reported as healthy' }
+if ($rwA.list -match '(?m)^fixture milk\t+fx-milk\tEXPIRING\t5d left') { Ok 'rescue-worklist counts an expiring cell down to the exact day its only source leaves the union window' }
+else { Bad 'rescue-worklist lost the EXPIRING section or its days-left arithmetic - the 21-cell Walmart silent countdown is invisible again' }
+if ($rwA.hasList -and $rwA.list -match 'DEEP CAPTURE REQUIRED') { Ok 'the emitted worklist carries the DEEP CAPTURE warning (a narrow re-capture WINS the commodity with thinner data)' }
+else { Bad 'the emitted worklist lost the DEEP CAPTURE header - a shallow rescue pass makes the board WORSE, and nothing on the list now says so' }
+# CLEAN TWIN: same store, capture one day old and carrying both rows, older board identical. Every section
+# empty, exit 0, and the file still written so a stale list can never be mistaken for today's.
+$rwB = RwFixture 'rescue-clean'
+if ($rwB.rc -eq 0 -and $rwB.list -match 'nothing at risk' -and $rwB.list -notmatch '(?m)^fixture ') { Ok 'rescue-worklist stays silent on a healthy walled store (clean twin: exit 0, every section empty, list still emitted)' }
+else { Bad ('rescue-worklist cries wolf on a healthy store: rc=' + $rwB.rc + ' - a browser session would re-pull terms that did not need it') }
+# BLIND: registry and terms present, no board at all. That is the fresh-clone / cloud-runner state.
+$rwC = RwFixture 'rescue-blind'
+if ($rwC.rc -eq 3 -and $rwC.text -match 'COULD NOT EVALUATE') { Ok 'rescue-worklist exits 3 with no board to read, instead of reporting every walled store healthy' }
+else { Bad ('rescue-worklist reported a result with no comparison-*.json to read: rc=' + $rwC.rc + ' (expected 3 COULD NOT EVALUATE)') }
+try { Remove-Item -LiteralPath $rwTmp -Recurse -Force -ErrorAction SilentlyContinue } catch {}
+# SOURCE-ONLY, and it is the check that matters most: being uncalled is this class's founding bug. The
+# closest relative of this tool, audit-everyday-mismatch, spent its ENTIRE life as an orphan finding real
+# defects nobody read. No run of a script can demonstrate that something still calls it.
+if ($cacSrc -match 'build-rescue-worklist\.ps1') { Ok 'check-ad-cycles still invokes build-rescue-worklist (an uncalled worklist builder is a worklist nobody gets)' }
+else { Bad 'build-rescue-worklist is an ORPHAN - nothing invokes it, so the walled stores go back to being re-pulled blind and the expiring cells die on schedule' }
+# ASSERT THE ASSIGNMENT AND A BRANCH, never the bare name: '\$rwRc' alone is a substring of '$rwRcX', which
+# is exactly how the $hvRc check stayed green while the exit code went unread.
+if ($cacSrc -match '\$rwRc\s*=\s*\$LASTEXITCODE' -and $cacSrc -match '\$rwRc\s*-eq\s*1') { Ok 'check-ad-cycles captures the rescue-worklist exit code and branches on it (a native child exit is not a PowerShell exception)' }
+else { Bad 'check-ad-cycles no longer reads $LASTEXITCODE from build-rescue-worklist into a variable it branches on - work-exists and nothing-to-do are the same log line again' }
+$rwCall = [regex]::Match($cacSrc, 'build-rescue-worklist\.ps1[\s\S]{0,600}')
+if ($rwCall.Success -and $rwCall.Value -notmatch '2>&1' -and $rwCall.Value -notmatch '2>\$null') { Ok 'the rescue-worklist child is captured without a stderr redirect (under EAP=Stop one stderr line would become a terminating throw)' }
+else { Bad 'the rescue-worklist child is captured with 2>&1 or 2>$null under EAP=Stop - its first stderr line becomes a throw that skips the exit-code read entirely' }
+# THE REGISTRY FLAG THE WHOLE TOOL SELECTS ON. Counted from the PARSED JSON, not a regex over the text: a
+# regex would count the word inside this file's own prose, or inside a readme sentence in stores.json.
+$rwReg = Get-Content (Join-Path $root 'stores.json') -Raw | ConvertFrom-Json
+$rwWalled = @(@($rwReg.stores) | Where-Object { $_.PSObject.Properties['walled'] -and $_.walled })
+if ($rwWalled.Count -eq 4) { Ok 'stores.json still marks exactly 4 walled stores - the set build-rescue-worklist builds lists for' }
+else { Bad ('stores.json marks ' + $rwWalled.Count + ' walled store(s), not 4 - a dropped flag silently removes that store from every rescue list, and the tool exits 3 only when ALL of them are gone') }
+# guards.ps1 delegates cell-drops as a NATIVE child under EAP=Stop, where a redirected stderr line throws.
+# It had 2>$null until 2026-07-31: inside its own try/catch, so not a dead guard, but any run where the
+# child wrote to stderr was reported as "could not run" instead of its real finding.
+if ($gSrc -match "audit-cell-drops\.ps1'\)\s*2>") { Bad 'guards.ps1 redirects the cell-drops child stderr again - under EAP=Stop the first stderr line throws, and a real cell leak is reported as plumbing failure' }
+else { Ok 'guards.ps1 delegates cell-drops without a stderr redirect (a real finding reaches the warn line, not the catch)' }
+
 # ---------------------------------------------------------------- 24. known-wrong blocklist (Component 2)
 # MUST FIRE: an adjudicated-wrong product is priced on the board again. FOUNDING BUG - audit findings lived
 # as PROSE in .md files, so honeydew was written up on 2026-07-29 with the store's own arithmetic and was

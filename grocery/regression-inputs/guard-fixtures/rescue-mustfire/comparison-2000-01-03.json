@@ -1,0 +1,31 @@
+{
+  "_fixture": "FROZEN, SYNTHETIC. The DROPPED baseline: exactly 7 days older than comparison-2000-01-10.json, which is the tool's default -DropLookbackDays. fx-eggs is priced here as an everyday cell and has NO cell of any type on the newer board, which is the Aldi 2026-07-29 class - a re-capture that never searched the term, so the price silently left the board.",
+  "built_at": "2000-01-03",
+  "week_of": "2000-01-03",
+  "comparison": [
+    {
+      "commodity": "Fixture Whole Milk",
+      "id": "fx-milk",
+      "unit": "gal",
+      "stores": [
+        { "store": "Fixture Mart", "per_unit": 3.19, "unit": "gal", "type": "everyday", "item": "Fixture Whole Milk Gallon", "ad": "$3.19", "size": "1 gal" }
+      ]
+    },
+    {
+      "commodity": "Fixture Sandwich Toast",
+      "id": "fx-toast",
+      "unit": "each",
+      "stores": [
+        { "store": "Fixture Mart", "per_unit": 2.49, "unit": "each", "type": "everyday", "item": "Fixture Sandwich Toast Loaf", "ad": "$2.49", "size": "each" }
+      ]
+    },
+    {
+      "commodity": "Fixture Large Eggs",
+      "id": "fx-eggs",
+      "unit": "dozen",
+      "stores": [
+        { "store": "Fixture Mart", "per_unit": 1.89, "unit": "dozen", "type": "everyday", "item": "Fixture Large Eggs Dozen", "ad": "$1.89", "size": "dozen" }
+      ]
+    }
+  ]
+}

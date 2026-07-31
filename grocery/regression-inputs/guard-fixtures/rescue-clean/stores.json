@@ -1,0 +1,16 @@
+{
+  "readme": "FROZEN, SYNTHETIC CLEAN TWIN of rescue-mustfire. Same invented store; the only differences live in the capture date and the older board. A tool that reports work on THIS fixture is crying wolf, which on a healthy day would mean a browser session re-pulling terms that did not need it.",
+  "stores": [
+    {
+      "name": "Fixture Mart",
+      "order": 1,
+      "regular_prefix": "fixturemart",
+      "urlkey": "fixturemart",
+      "ad_cycle": "none (fixture)",
+      "capture": "browser (fixture)",
+      "walled": true,
+      "price_mode": "in-store"
+    }
+  ],
+  "allowed_subsets": []
+}

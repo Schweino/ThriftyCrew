@@ -73,6 +73,13 @@
       "phase": "cycle",
       "why": "everyday board cells compared against their own linked product's per-unit - the only check that asks whether the number we PUBLISHED agrees with the page we LINKED to. Measured 2026-07-31: 2,582 checked, 0 uncomputable, 0 without a board per-unit, 5 findings. Board-derived like guards/4-factor (2,582 on the same board), so the same measured 0.10 band applies. THIS CHECK WAS AN ORPHAN until 2026-07-31 - it ran nowhere, so its own history starts here. Eligible counts only everyday cells we hold a link for, so the number does not swing when the board gains sale cells or linkless ones."
     },
+    "build-rescue-worklist": {
+      "examined": 1517,
+      "tolerance": 0.1,
+      "max_age_days": 3,
+      "phase": "cycle",
+      "why": "everyday walled-store board cells traced to a dated capture file. Measured on the first real run, 2026-07-31: 1,517 everyday cells across the four walled stores (Walmart 436, Sam's Club 347, Aldi 332, Fareway 402) and all 1,517 traced. Board-derived like guards/4-factor and audit-everyday-mismatch, so the same measured 0.10 band applies. Eligible is everyday cells of the four `walled: true` stores only - sale cells and the three headless stores stay out of the denominator, so the number does not swing on an ad cycle. Examined falls to 0 (BLIND, exit 3) if the capture files vanish from out\\, which is the fresh-clone / cloud-runner state: every cell would read UNTRACEABLE and the emitted lists would be a full re-pull rather than a rescue. max_age_days 3 because it runs on the ad cycle, not on every publish."
+    },
     "pull-regular-hyvee": {
       "examined": 1010,
       "tolerance": 0.15,

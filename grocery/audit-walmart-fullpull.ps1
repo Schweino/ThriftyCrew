@@ -19,6 +19,13 @@
   partials; 3 = BLIND, at least one store had ZERO captures in its window - the watch examined nothing and can prove nothing (blind outranks advisory). NEVER 2 - this must never block a publish; the coverage guard already fails closed at the
   cliff. ONE copy of this logic on purpose: guards.ps1 (warn) and check-ad-cycles.ps1 (deduped email)
   both call this script instead of re-implementing it.
+
+  CROSS-REFERENCE (2026-07-31): build-rescue-worklist.ps1 carries its OWN copy of the item|price capture
+  tracer in watch 2 below, and that duplication is deliberate. This file WATCHES (is a comprehensive
+  capture aging?); that one BUILDS A WORKLIST (which terms should the next browser session search?).
+  Sharing a tracer lib would mean one edit could blind both at once, and the two separate fixture sets
+  exist precisely so that cannot happen. Duplicated tracing is an accepted drift risk here; a broken
+  freshness watcher is not.
 #>
 param([int]$WindowDays = 14, [int]$WarnAgeDays = 10, [string]$GroceryRoot = "", [int]$CellWarnDays = 5, [int]$CellWarnPct = 5)
 $ErrorActionPreference = 'Stop'
