@@ -2213,5 +2213,20 @@ $r = RunPS 'validate-triage-plan.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'validate-triage-plan: the reviewer-to-developer handoff gate still rejects a token-match blast radius and an unclaimed include' }
 else { Bad ('validate-triage-plan -SelfTest failed (rc=' + $r.rc + ') - the plan gate is not enforcing what it claims: ' + ($r.text -replace "`n", ' ')) }
 
+# ---- (g) THE PROMPTS THEMSELVES ARE CODE (2026-07-31) --------------------------------------------------
+# The agents and scheduled-task SKILLs that drive all of this were the only unversioned thing left, and on
+# the day this check was written SIX of eight agent prompts had already drifted between project scope and
+# user scope - same name, two files, quietly disagreeing, and which one runs depends on the session's
+# working directory. Same two-copies-of-one-truth trap as pu-lib and the category-exclude bake.
+# The audit lives outside grocery\ (it is estate-wide), so call it by path.
+$pb = Join-Path (Split-Path $root -Parent) 'ops\audit-prompt-backup.ps1'
+if (Test-Path $pb) {
+  $out = & powershell -NoProfile -ExecutionPolicy Bypass -File $pb 2>&1 | ForEach-Object { [string]$_ }
+  $rc = $LASTEXITCODE; $txt = ($out -join "`n")
+  if ($rc -eq 0) { Ok 'prompt-backup: every agent prompt and scheduled-task SKILL is backed up in ops\prompt-backup and identical across scopes' }
+  elseif ($rc -eq 3) { Bad ('prompt-backup went BLIND (found zero live prompts) - the .claude paths moved: ' + ($txt -replace "`n", ' ')) }
+  else { Bad ('prompt-backup drift (rc=' + $rc + ') - run ops\audit-prompt-backup.ps1 -Sync and commit: ' + ($txt -replace "`n", ' ')) }
+} else { Bad 'prompt-backup audit is MISSING from ops\ - the agent prompts have no backup check' }
+
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2

@@ -5,6 +5,10 @@
 !/README.md
 !/grocery/
 !/meal-prep/
+# the agent prompts + scheduled-task SKILLs that DRIVE the estate, plus the audit that proves the backup is
+# current. They live under C:\Codex\.claude and C:\Users\Owner\.claude, neither of which is a repository, so
+# without this they were the only unversioned code in the system (2026-07-31).
+!/ops/
 !/.github/
 !/public/
 !/worker/
