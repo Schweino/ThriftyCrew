@@ -49,8 +49,24 @@ $rows = @((Get-Content $regF.FullName -Raw | ConvertFrom-Json).deals)
 $unver = @{}; $rowByName = @{}
 foreach ($r in $rows) { $rowByName[([string]$r.item).Trim()] = $r; if ($r.not_reverified) { $unver[([string]$r.item).Trim()] = $r } }
 
+# BOTH BOARDS (2026-08-01). This read only the main comparison, so a Hy-Vee cell that exists ONLY on the
+# recipe board could never be reached by the headless resolver - it was structurally unhealable. That is
+# the root cause of the consistency mismatch backlog (F5), not bad luck: four of its seven rows were
+# recipe-board Hy-Vee cells (apple, parmesan-cheese, swiss-cheese, boneless-skinless-chicken-thigh), and
+# withdrawing their drifted links did NOT bring them back, because withdrawal only re-enters a cell into a
+# worklist this resolver never consulted. resolve-worklist.ps1 already reads recipe-board.json; this did
+# not, so the two halves of the same heal loop disagreed about which cells exist.
 $cmpF = (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName
 $board = @((Get-Content $cmpF -Raw | ConvertFrom-Json).comparison)
+$rbF = Join-Path $root 'out\recipe-board.json'
+if (Test-Path $rbF) {
+  $seenRow = @{}
+  foreach ($b in $board) { $seenRow[[string]$b.id] = $true }
+  foreach ($b in @((Get-Content $rbF -Raw | ConvertFrom-Json).comparison)) {
+    if (-not $seenRow.ContainsKey([string]$b.id)) { $board += $b }
+  }
+  Write-Output ("board rows to resolve against: {0} (main + recipe-board)" -f $board.Count)
+}
 
 $puF = Join-Path $root 'product-urls.json'
 $doc = Get-Content $puF -Raw | ConvertFrom-Json

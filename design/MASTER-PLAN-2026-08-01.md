@@ -138,8 +138,24 @@ recipe-board rows are off the main board, all 80 carry a link, and they price re
   product name that does not contain our search term at all - but it is a design change, not a one-liner.
 **F4. Baseline tolerance narrowing** from the week's accumulated ledger data (the freeze week's whole
 point was to let that ledger accumulate).
-**F5. The 9-row consistency mismatch backlog** (stored links whose price drifted >30%): re-point or
-refresh through resolve-links-from-board.
+**F5. ROOT CAUSE FOUND, fix HALF landed. Backlog is 7 rows, not 9.** And `resolve-links-from-board.ps1`
+does not exist - like `discover-hyvee.ps1`, the plan named a tool that was never built.
+
+**Why the backlog never drains:** all 7 rows are RECIPE-BOARD cells, and the headless heal loop cannot
+reach them. `resolve-worklist.ps1` reads `recipe-board.json`; `resolve-hyvee-links.ps1` read only
+`comparison-*.json`. The two halves of the same loop disagreed about which cells exist, so a
+recipe-board Hy-Vee cell was structurally unhealable. Proven, not theorised: withdrawing all 7 drifted
+links (the documented withdraw-then-resolve loop, which works on main-board cells) brought back ZERO of
+the four Hy-Vee ones.
+
+**LANDED:** `resolve-hyvee-links` now resolves against both boards (572 rows, was 492).
+**STILL OPEN, and it is the part that actually drains the backlog:** the resolver's CANDIDATE list is
+still main-board-only. It is built from `not_reverified` rows plus the consistency report's `no_link`
+list, and both are derived from the main board - so widening the board it matches against does not put a
+recipe-board cell into the queue in the first place. That is the remaining fix.
+
+The withdrawals were REVERTED and `product-urls.json` restored to its committed state: 7 cells with a
+tracked drifted link beat 7 cells with no exact link plus a red coverage ratchet. Board verified green.
 
 ## Section 3: BLOCKED ON BRAD (decisions, not work)
 
