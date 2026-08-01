@@ -31,6 +31,11 @@
   So this script stops one step short: it finds the net-new candidates and writes them to a docket for
   adjudication. Nothing it produces reaches a board on its own.
 
+  WHERE THE DOCKET GOES (2026-08-01). build-arrivals-docket.ps1 lists it as a PROSPECTS section - the same
+  desk, the same reader, the same cohort-divergence score as a product that already arrived - and
+  adjudicate-discovery.ps1 records the ruling. A settled candidate is dropped here rather than surfaced
+  again: a review queue that re-asks a question a human already answered teaches its reader to skim it.
+
   WHAT IT KEEPS
   -------------
   A candidate must (1) match the searched commodity's own include and survive its excludes - the same
@@ -111,6 +116,8 @@ if ($SelfTest) {
 
 # ---- live -------------------------------------------------------------------------------------------
 . (Join-Path $root 'pu-lib.ps1')
+. (Join-Path $root 'discovery-lib.ps1')
+$verdicts = Get-DiscoveryVerdicts (Join-Path $root 'discovery-verdicts.json')
 $coms = ConvertFrom-Json (Get-Content (Join-Path $root 'commodities.json') -Raw)
 $terms = (ConvertFrom-Json (Get-Content (Join-Path $root 'commodity-search.json') -Raw)).terms
 $comById = @{}; foreach ($c in $coms) { $comById[[string]$c.id] = $c }
@@ -163,7 +170,7 @@ function HV-Search([string]$term, [int]$size) {
 }
 
 $docket = New-Object System.Collections.Generic.List[object]
-$searched = 0; $failed = 0; $scanned = 0
+$searched = 0; $failed = 0; $scanned = 0; $settled = 0
 # COUNT EVERY SKIP. The first live run of this script asked for six commodities, matched none of them by
 # id, and printed "searched 0 term(s)" with no reason - which reads exactly like a store that returned
 # nothing. Every path out of a requested id is now counted and named.
@@ -191,6 +198,10 @@ foreach ($id in $work) {
     if ($null -eq $pu) { continue }
     $v = Test-Candidate -Name $nm -PerUnit ([double]$pu) -HeldPerUnit $heldPu -HaveNames $haveNames -Rx $rx -Ex $ex -MinBeatPct $MinBeatPct
     if (-not $v.keep) { continue }
+    # ALREADY RULED ON? Keyed by the store's own productId, so a re-titled product cannot walk back onto the
+    # docket as if it had never been judged. Counted, never silently dropped - a docket that shrinks without
+    # saying why is indistinguishable from a search that stopped working.
+    if ($verdicts.ContainsKey((Get-DiscoveryKey -Store 'Hy-Vee' -Commodity ([string]$id) -ProductId ([string]$x.id) -Product $nm))) { $settled++; continue }
     $docket.Add([pscustomobject]@{
         id = [string]$id; store = 'Hy-Vee'; product = $nm; size = $size; price = $price
         per_unit = [math]::Round([double]$pu, 4); unit = [string]$c.unit
@@ -210,8 +221,10 @@ Write-Output ("searched {0} term(s), {1} failed, {2} product(s) scanned" -f $sea
 if ($noCommodity.Count) { Write-Output ("  {0} requested id(s) are in NO commodity: {1}" -f $noCommodity.Count, (($noCommodity | Select-Object -First 12) -join ', ')) }
 if ($noTerm.Count) { Write-Output ("  {0} commodit(y/ies) have no search term: {1}" -f $noTerm.Count, (($noTerm | Select-Object -First 12) -join ', ')) }
 Write-Output ("DOCKET: {0} candidate(s) that beat what we hold -> {1}" -f $docket.Count, $outF)
+if ($settled -gt 0) { Write-Output ("  ({0} further candidate(s) suppressed - already ruled in discovery-verdicts.json)" -f $settled) }
 Write-Output 'ADVISORY ONLY: nothing here reaches a board. Adjudicate before any of it is priced -'
 Write-Output 'Hy-Vee publishes no per-product department, so aisle-test CANNOT vet these (see the header).'
+Write-Output 'Read them ranked in the arrivals desk PROSPECTS section; rule them with adjudicate-discovery.ps1.'
 if ($failed -gt 0 -and $searched -eq 0) { Write-Output 'BLIND: every search failed'; exit 3 }
 exit 0
 

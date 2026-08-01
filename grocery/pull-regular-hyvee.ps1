@@ -183,6 +183,52 @@ foreach ($k in $idByName.Keys) {
   $e = $pd.($idByName[$k].cid).'Hy-Vee'
   [void]$work.Add([pscustomobject]@{ name=[string]$e.name; size=''; prow=$null; pid=$idByName[$k].pid; cid=$idByName[$k].cid })
 }
+
+# ---- THIRD SOURCE: ADJUDICATED CATALOGUE ADDITIONS -------------------------------------------------
+# The two sources above are CLOSED SETS - yesterday's own file, and the Hy-Vee links in product-urls.json.
+# A product in neither can never enter, which is why 1,538 rows is a fixed point rather than a bound and why
+# 89.3% of the catalogue is absent. This is the only door in, and it opens exactly one way: a human ruled a
+# discovery candidate to be the commodity (adjudicate-discovery.ps1 -Accept, which demands a named reviewer
+# and written evidence), and that wrote hyvee-catalog-adds.json. Discovery on its own writes NOTHING here -
+# ~14% of its candidates are wrong products and Hy-Vee publishes no department to test them against.
+# An entry supplies an id and a name only. The PRICE comes from the store's API like every other row, and the
+# SIZE is derived on the never-priced-before path below, because this file's own header is a list of the ways
+# Hy-Vee's size field lies. A ruling gets a product asked about; it does not get to answer for the store.
+$addF = Join-Path $root 'hyvee-catalog-adds.json'
+$addWork = 0; $addDup = 0
+if (Test-Path $addF) {
+  $adoc = $null
+  try {
+    $araw = ((Get-Content $addF -Raw -Encoding UTF8) + '').Trim()
+    if ($araw -ne '') { $adoc = $araw | ConvertFrom-Json }
+  } catch { $adoc = $null }
+  if ($null -eq $adoc) {
+    # LOUD. An unreadable work list must not read like an empty one - that is the throttled-file-outsorts-
+    # real-data failure, and here it would silently un-add every product a human already ruled on.
+    Write-Warning ('Hy-Vee: hyvee-catalog-adds.json is present but UNREADABLE - every adjudicated catalogue addition is being skipped this run')
+  } else {
+    $seenPid = @{}
+    foreach ($w in $work) { if ([int]$w.pid -gt 0) { $seenPid[[string][int]$w.pid] = $true } }
+    foreach ($a in @($adoc.items)) {
+      if (-not $a) { continue }
+      $apid = 0
+      if (-not [int]::TryParse((([string]$a.product_id).Trim()), [ref]$apid) -or $apid -le 0) {
+        Write-Warning ('Hy-Vee: catalogue addition "' + [string]$a.name + '" has no usable productId - skipped (it can never be priced)')
+        continue
+      }
+      $anm = ([string]$a.name).Trim()
+      # Already in the work list under this id or this name: it is being refreshed, not missing.
+      if ($seenPid.ContainsKey([string]$apid) -or ($anm -ne '' -and $seenName.ContainsKey($anm.ToLower()))) { $addDup++; continue }
+      $seenPid[[string]$apid] = $true
+      if ($anm -ne '') { $seenName[$anm.ToLower()] = $true }
+      [void]$work.Add([pscustomobject]@{ name=$anm; size=''; prow=$null; pid=$apid; cid=[string]$a.commodity })
+      $addWork++
+    }
+  }
+}
+if ($addWork -gt 0 -or $addDup -gt 0) {
+  Write-Output ("Hy-Vee: {0} adjudicated catalogue addition(s) joined the work list ({1} already covered by the refresh)" -f $addWork, $addDup)
+}
 if ($Quick) { $work = @($work | Where-Object { $_.pid -gt 0 } | Select-Object -First 10) }
 
 $refreshable = @($work | Where-Object { $_.pid -gt 0 }).Count

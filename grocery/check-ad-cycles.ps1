@@ -499,6 +499,17 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
             elseif ([int]$adJ.flagged_count -gt 0 -or [int]$adJ.blind_count -gt 0) {
               $summary += ('REVIEW    arrivals-docket: ' + [int]$adJ.flagged_count + ' of ' + [int]$adJ.arrivals + ' new product(s) diverge from their own cohort, ' + [int]$adJ.blind_count + ' unscorable - read out\arrivals-docket.json, CROWN rows first (review queue, ~1 in 7 is real)')
             }
+            # PROSPECTS get their OWN summary line, always, and separately from the arrivals count. They are
+            # the opposite question - products NOT on the board that would beat what we hold - and discovery
+            # pays nothing at all until a human rules on them, so a silent zero here is the whole failure.
+            if ($null -ne $adJ) {
+              if ([string]$adJ.prospects_state -ne 'ok' -and [string]$adJ.prospects_state -ne '') {
+                $summary += ('REVIEW    arrivals-docket PROSPECTS section is BLIND: ' + [string]$adJ.prospects_state)
+              } elseif ([int]$adJ.prospects_open -gt 0) {
+                $summary += ('REVIEW    ' + [int]$adJ.prospects_open + ' Hy-Vee discovery prospect(s) await a ruling (' +
+                  [int]$adJ.prospects_crown_takers + ' would take a crown) - read the PROSPECTS section of out\arrivals-docket.json and rule each with adjudicate-discovery.ps1. ~1 in 7 is a WRONG PRODUCT and nothing machine-vetted them.')
+              }
+            }
           }
         }
       } catch { Log ('arrivals-docket threw: ' + $_.Exception.Message) }
