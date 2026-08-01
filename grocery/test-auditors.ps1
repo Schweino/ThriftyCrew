@@ -1721,6 +1721,23 @@ $acbSrcHv = [regex]::Match($acbSrc, "resolve-hyvee-links\.ps1'\)\s*@hvArgs")
 if ($acbSrcHv.Success -and $acbSrc -match '\$hvArgs = @\{ Ids = @\(\$TouchedIds\) \}') { Ok 'rule-batch link repair calls resolve-hyvee-links SCOPED to the batch, not in bulk' }
 else { Bad 'apply-coverage-batch runs a BULK resolve-hyvee-links in its repair chain again - a one-commodity edit will rewrite every Hy-Vee link' }
 
+# ---------------------------------------------------------------- N9. public feeds are BOM-less (L7)
+# Set-Content -Encoding UTF8 emits a UTF-8 BOM in PS 5.1. Browsers strip it per spec, so the live page was
+# never broken - but PS 5.1's OWN ConvertFrom-Json chokes on it, which is how a verification pass reported
+# the public feed "malformed" when it was fine and spent the morning on a non-bug. Our own tooling must be
+# able to read what we publish. Source-scanned because the live files only lose their BOM on the next
+# publish, so a file check would fail for a day and then pass for the wrong reason.
+foreach ($bw in @(
+    @{ f = 'grocery\build-deals-page.ps1'; n = 'price-history.json'; pat = '\[IO\.File\]::WriteAllText\(\$histOut' }
+    @{ f = 'grocery\build-deals-page.ps1'; n = 'board.json'; pat = '\[IO\.File\]::WriteAllText\(\$boardOut' }
+    @{ f = 'grocery\export-feed.ps1'; n = 'smp-feed.json'; pat = "\[IO\.File\]::WriteAllText\(\(Join-Path \`$pub 'smp-feed\.json'\)" }
+    @{ f = 'meal-prep\rotate-free-dinners.ps1'; n = 'free-dinners.json'; pat = "\[IO\.File\]::WriteAllText\(\(Join-Path \`$pubDir 'free-dinners\.json'\)" }
+  )) {
+  $bwTxt = Get-Content (Join-Path (Split-Path $root -Parent) $bw.f) -Raw
+  if ($bwTxt -match $bw.pat) { Ok ('public feed ' + $bw.n + ' is written BOM-less (PS 5.1 cannot parse its own BOM)') }
+  else { Bad ('public feed ' + $bw.n + ' is back on Set-Content -Encoding UTF8, which writes a BOM our own ConvertFrom-Json cannot read') }
+}
+
 # ---------------------------------------------------------------- N8. multi-term search (F3)
 # 210 of 429 commodities have a Family Fare product name that does not contain our single search term, so
 # one term per commodity is structurally unable to reach them. commodity-search.json now allows an ARRAY.

@@ -1,4 +1,4 @@
-<#
+﻿<#
   rotate-free-dinners.ps1 - Brad's free-dinner rotation (2026-07-25): the TOP 5 CHEAPEST dinners in each
   protein class (chicken / turkey / beef / pork - the catalog has no seafood dinners) are temporarily FREE;
   when a new board week re-ranks them, yesterday's free set reverts to members-only and the new set opens.
@@ -152,7 +152,7 @@ if ($visChanges.Count) { $nvis = Set-RecipeVisibility -DbPath (Join-Path $root '
   # refresh is remove-only and trusts this feed, so publishing $target could keep a gold FREE badge on a
   # recipe whose flip FAILED and is still paid - the exact ribbon-over-a-paywall sin. Ghost-confirmed only.
   free = $stateFree
-} | ConvertTo-Json -Depth 4 | Set-Content (Join-Path $pubDir 'free-dinners.json') -Encoding UTF8
+} | ConvertTo-Json -Depth 4 | ForEach-Object { [IO.File]::WriteAllText((Join-Path $pubDir 'free-dinners.json'), $_, (New-Object Text.UTF8Encoding($false))) }   # BOM-less: PS 5.1 ConvertFrom-Json chokes on our own BOM (L7)
 Write-Output ("rotation: $flips flip(s), $errors error(s); state + recipes-db + public/free-dinners.json written")
 
 # REPUBLISH THE HUB WHEN THE SET CHANGED (2026-08-01). The hub bakes FREE badges into static HTML at

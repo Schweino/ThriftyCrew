@@ -1,4 +1,4 @@
-<#
+﻿<#
   build-deals-page.ps1 - Renders the weekly Omaha cross-store price board into a self-contained,
   filterable HTML page (embeddable in a Ghost page). Data-driven: re-run it whenever the board
   refreshes. Groups commodities by food category (categories.json), one ROW per commodity, and
@@ -277,8 +277,8 @@ function SeeLink([string]$id, [string]$store, [string]$boardItem, [double]$board
           # flyer-fluff rescue: word-overlap failed, but the link IS the same commodity (its own include/exclude)
           # AND its per-unit is computable and inside the sale band AND the link name is a GENERIC SUBSET of the
           # board's (every distinctive link word appears in the board item). The subset test is what stops a
-          # brand swap: "Fresh Peaches" âŠ‚ "Tree Ripened Yellow Flesh Peaches, Small" -> show (same commodity,
-          # less flowery), but "Kroger Thick Cut Bacon" âŠ„ "Oscar Mayer Bacon" -> still hidden (different brand,
+          # brand swap: "Fresh Peaches" Ã¢Å â€š "Tree Ripened Yellow Flesh Peaches, Small" -> show (same commodity,
+          # less flowery), but "Kroger Thick Cut Bacon" Ã¢Å â€ž "Oscar Mayer Bacon" -> still hidden (different brand,
           # even at a plausible price). Band is REQUIRED here.
           if (-not $ident -and ($null -ne $lpu) -and ($lpu -ge $boardPU * 0.85) -and ($lpu -le $boardPU * 3.0) -and (CommodityIdent $id ([string]$lnk.name)) -and (NameMatch ([string]$lnk.name) $boardItem)) { $ident = $true }
           if (-not $ident) { $ok = $false }
@@ -1709,7 +1709,7 @@ $js = @'
       var wrap=document.createElement('span');
       wrap.className='pg-spark';
       wrap.innerHTML='<svg width="'+W+'" height="'+Hh+'" viewBox="0 0 '+W+' '+Hh+'" aria-hidden="true"><polyline points="'+pathPts.join(' ')+'" fill="none" stroke="#1E3A5F" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="'+lx+'" cy="'+ly+'" r="2.6" fill="#E2A43C"/></svg>'
-        +'<span class="pg-spark-l">Record: '+(mn<1?(Math.round(mn*1000)/10+'¢'):('$'+mn.toFixed(2)))+(labs[lowI]?(', '+labs[lowI]):'')+'</span>'
+        +'<span class="pg-spark-l">Record: '+(mn<1?(Math.round(mn*1000)/10+'Â¢'):('$'+mn.toFixed(2)))+(labs[lowI]?(', '+labs[lowI]):'')+'</span>'
         +'<span class="pg-spark-c">best price in Omaha, weekly</span>';
       slot.appendChild(wrap);
     });
@@ -2044,7 +2044,11 @@ if ($histDoc) {
     $histOut = Join-Path (Split-Path $root -Parent) 'public\price-history.json'   # C:\Codex\income\public\
     $histDir = Split-Path $histOut -Parent
     if (-not (Test-Path $histDir)) { New-Item -ItemType Directory -Force -Path $histDir | Out-Null }
-    $histJson | Set-Content $histOut -Encoding UTF8
+    # BOM-LESS (L7, 2026-08-01). Set-Content -Encoding UTF8 emits a UTF-8 BOM in PS 5.1. Browsers strip it
+# per spec so the live page was never broken - but PS 5.1's OWN ConvertFrom-Json chokes on it, which is
+# how a verification pass reported this feed "malformed" when it was fine. Our own tooling has to be able
+# to read what we publish.
+[IO.File]::WriteAllText($histOut, $histJson, (New-Object Text.UTF8Encoding($false)))
     $idIndex = '{' + ((@($entries | ForEach-Object { ($_ -split ':\{')[0] + ':1' })) -join ',') + '}'
     Write-Output ("history: {0} items -> public\price-history.json ({1} KB, lazily fetched); inline index {2} KB" -f $entries.Count, [math]::Round($histJson.Length/1KB,0), [math]::Round($idIndex.Length/1KB,1))
     # content-hash cache-bust (same reason as board.json: the feed is cached 30 min, the post can be newer)
@@ -2065,7 +2069,8 @@ if (-not (Test-Path $boardDir)) { New-Item -ItemType Directory -Force -Path $boa
 # ConvertTo-Json (not hand-rolled escaping): the chip html is full of quotes/apostrophes/entities and one
 # mis-escaped row would break the whole feed parse and silently empty every store breakdown.
 $boardJson = ($boardChips | ConvertTo-Json -Depth 3 -Compress)
-$boardJson | Set-Content $boardOut -Encoding UTF8
+  # BOM-LESS - see the note on price-history.json above.
+  [IO.File]::WriteAllText($boardOut, $boardJson, (New-Object Text.UTF8Encoding($false)))
 # CACHE-BUST WITH A CONTENT HASH. The feed is served with max-age=1800, so a freshly published post can fetch a
 # 30-minute-old board.json - rows added since would find no key and never fill (seen live: 15 empty rows, and a
 # store still showing its pre-fix chip count). The post and the feed MUST move together, so the URL changes

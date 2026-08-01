@@ -1,4 +1,4 @@
-<#
+﻿<#
   export-feed.ps1 - Builds smp-feed.json, the single public price feed the website fetches at view time.
 
   This is the "database" the pages read from: instead of baking prices into 113 published posts, every
@@ -129,5 +129,9 @@ $json = $feed | ConvertTo-Json -Depth 8 -Compress
 $json | Set-Content (Join-Path $out 'smp-feed.json') -Encoding UTF8
 $pub = Join-Path (Split-Path $root -Parent) 'public'
 if (-not (Test-Path $pub)) { New-Item -ItemType Directory -Force -Path $pub | Out-Null }
-$json | Set-Content (Join-Path $pub 'smp-feed.json') -Encoding UTF8
+# BOM-LESS (L7, 2026-08-01). Set-Content -Encoding UTF8 emits a UTF-8 BOM in PS 5.1. Browsers strip it
+# per spec so the live page was never broken - but PS 5.1's OWN ConvertFrom-Json chokes on it, which is
+# how a verification pass reported this feed "malformed" when it was fine. Our own tooling has to be able
+# to read what we publish.
+[IO.File]::WriteAllText((Join-Path $pub 'smp-feed.json'), $json, (New-Object Text.UTF8Encoding($false)))
 Write-Output ("smp-feed.json: " + $ing.Count + " ingredients, " + $rec.Count + " recipes, week " + $weekOf + " -> out\ + public\")
