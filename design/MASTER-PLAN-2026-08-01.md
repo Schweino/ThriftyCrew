@@ -94,7 +94,7 @@ exist, not asserted from the code), signature-deduped so a standing backlog is r
 NEW products speak again. It is not redundant with audit-coverage-gaps, which is regex reasoning
 about regex and structurally cannot see a product whose name shares no vocabulary with the rule.
 
-## Section 2: FREEZE-GATED (grocery code, ~08-07 or Brad's word)
+## Section 2: UNBLOCKED 2026-08-01 (was freeze-gated; the freeze was lifted at Brad's word)
 
 **F1. Discovery depth**: `discover-hyvee.ps1` + prime-batch-headless pageSize 40->90 + cycle wiring.
 Built and verified per the resume list; the dominant defect class is ABSENT catalogue (Hy-Vee misses
@@ -108,7 +108,7 @@ refresh through resolve-links-from-board.
 
 ## Section 3: BLOCKED ON BRAD (decisions, not work)
 
-**D1. The freeze itself** (see Section 0).
+**D1. DONE 2026-08-01 - the freeze was formally LIFTED** at Brad's direction. Section 2 is open work.
 **D2. ~200 captured-but-unused verified Sam's prices** sitting idle (board-data-integrity memo).
 **D3. Elite-layer decisions never answered**: sparkline tease depth, de-Ghost nav (wants a screenshot),
 Portal accent pass, photo program cap. Defaults were stated in the design doc; silence = defaults, but
@@ -117,7 +117,7 @@ the de-Ghost frame and Portal pass genuinely need your eyes before build.
 Fifteen minutes in the Ads UI, real Quality-Score money.
 **D5. Half-cent rounding** (banker's vs half-up) - frozen in a fixture, documented, awaiting a call.
 
-## Section 4: BLOCKED ON CAPTURE SESSIONS (browser work, not code)
+## Section 4: CAPTURE SESSIONS (browser work, not code - NOT blocked on Brad; Claude drives his Chrome)
 
 **C1. Rescue worklists** from `out\rescue-terms-*.txt`: Walmart 21, Sam's 25, Fareway 28, Aldi 6 terms
 (DEEP per term, per the file header). The Sam's list is what retires the 18-day orphan capture that
