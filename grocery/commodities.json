@@ -12588,7 +12588,10 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\bbrats?\\b",
+                        "teriyaki",
+                        "\\bsausage\\b"
                     ]
     },
     {
@@ -19855,7 +19858,8 @@
                         "\\bheart\\s+health\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bpizzas?\\b"
                     ]
     },
     {
@@ -20338,7 +20342,9 @@
                         "\\bheart\\s+health\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\blitter\\b",
+                        "clumping"
                     ]
     },
     {
@@ -41260,7 +41266,9 @@
                         "\\bheart\\s+health\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bsausage\\b",
+                        "\\bbrats?\\b"
                     ]
     },
     {
@@ -42198,7 +42206,8 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "smart\\s+ones"
                     ],
         "relax_global":  [
                              "\\bfrozen\\b"

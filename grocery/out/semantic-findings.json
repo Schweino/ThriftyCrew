@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-01 11:26",
+    "generated":  "2026-08-01 15:15",
     "board":  "comparison-2026-08-01.json",
-    "sidecar_generated":  "2026-08-01 11:26:21",
+    "sidecar_generated":  "2026-08-01 15:15:49",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,12 +9,12 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2825,
-                     "corpus":  22921,
-                     "rule_invisible":  3301
+                     "board_pairs":  2822,
+                     "corpus":  22925,
+                     "rule_invisible":  3304
                  },
     "identity_count":  0,
-    "coverage_count":  27,
+    "coverage_count":  28,
     "identity":  [
 
                  ],
@@ -197,6 +197,16 @@
                          "product":  "Kroger 80/20 Ground Beef Patties",
                          "cos":  0.6717,
                          "score":  0.92749,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "breakfast-sandwiches",
+                         "commodity":  "Frozen Breakfast Sandwiches",
+                         "store":  "Family Fare",
+                         "product":  "Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct",
+                         "cos":  0.7327,
+                         "score":  0.926773,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {

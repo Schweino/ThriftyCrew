@@ -444,13 +444,6 @@
                                                        "size":  "6oz",
                                                        "verified":  "2026-08-01"
                                                    },
-                                  "Family Fare":  {
-                                                      "url":  "https://www.shopfamilyfare.com/shop/pantry/snacks/nuts/our_family_almonds_roasted_lightly_salted_whole_12_oz/p/1564405684714124019",
-                                                      "name":  "Our Family Almonds, Roasted \u0026 Lightly Salted, Whole 12 Oz",
-                                                      "price":  "$6.49",
-                                                      "size":  "12 oz",
-                                                      "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                                  },
                                   "Fareway":  {
                                                   "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/21344009-fareway-whole-almonds-low-sodium-roasted-and-salted-16-oz",
                                                   "name":  "Fareway Whole Almonds, Low Sodium, Roasted and Salted",
@@ -479,7 +472,14 @@
                                                   "price":  "$10.48",
                                                   "size":  "25 oz",
                                                   "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                              }
+                                              },
+                                  "Family Fare":  {
+                                                      "url":  "https://www.shopfamilyfare.com/shop/pantry/snacks/nuts/our_family_almonds_roasted_salted_whole_12_oz/p/1564405684714124020",
+                                                      "name":  "Our Family Almonds, Roasted \u0026 Salted, Whole 12 Oz",
+                                                      "price":  "$6.49",
+                                                      "size":  "12 oz",
+                                                      "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                  }
                               },
                   "aluminum-foil":  {
                                         "commodity":  "aluminum-foil",
@@ -1180,13 +1180,6 @@
                                                          "verified":  "2026-08-01",
                                                          "board_pu":  0.1873
                                                      },
-                                    "Family Fare":  {
-                                                        "url":  "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/infant_meals/gerber_sitter_2nd_foods_6_months_veggie_blends_carrot_sweet_potato_pea_2_ea/p/2050464",
-                                                        "name":  "Gerber Sitter 2nd Foods (6+ Months) Veggie Blends Carrot Sweet Potato Pea 2 Ea",
-                                                        "price":  "$2.19",
-                                                        "size":  "2pk 4oz",
-                                                        "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
-                                                    },
                                     "Fareway":  {
                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25707-plum-organics-banana-pumpkin-baby-food-4-oz",
                                                     "name":  "Plum Organics Banana \u0026 Pumpkin Baby Food",
@@ -1215,7 +1208,14 @@
                                                     "price":  "$9.67",
                                                     "size":  "48 oz",
                                                     "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                                }
+                                                },
+                                    "Family Fare":  {
+                                                        "url":  "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/infant_meals/gerber_sitter_2nd_foods_nourishing_blends_sweet_potato_turkey_with_oats_2_ea/p/15911",
+                                                        "name":  "Gerber Sitter 2nd Foods Nourishing Blends Sweet Potato Turkey With Oats 2 Ea",
+                                                        "price":  "$2.19",
+                                                        "size":  "2pk 4oz",
+                                                        "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                    }
                                 },
                   "baby-formula":  {
                                        "commodity":  "baby-formula",
@@ -1419,13 +1419,6 @@
                                                            "size":  "28 oz",
                                                            "verified":  "2026-08-01"
                                                        },
-                                      "Family Fare":  {
-                                                          "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/heat_serve_meals/van_camp_s_pork_and_beans_in_tomato_sauce_28_oz/p/559144",
-                                                          "name":  "Van Camp\u0027s Pork And Beans, In Tomato Sauce 28 Oz",
-                                                          "price":  "$2.59",
-                                                          "size":  "28 oz",
-                                                          "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                                      },
                                       "Fareway":  {
                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/29529506-saucy-spoon-baked-beans-applewood-smoked-bacon-28-oz",
                                                       "price":  1.99,
@@ -1454,7 +1447,14 @@
                                                       "price":  "$2.22",
                                                       "size":  "28 oz",
                                                       "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                  },
+                                      "Family Fare":  {
+                                                          "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/heat_serve_meals/our_family_original_baked_beans_28_oz/p/6786962",
+                                                          "name":  "Our Family Original Baked Beans 28 Oz",
+                                                          "price":  "$2.59",
+                                                          "size":  "28 oz",
+                                                          "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                      }
                                   },
                   "baking-powder":  {
                                         "commodity":  "baking-powder",
@@ -1525,13 +1525,6 @@
                                                            "verified":  "2026-08-01",
                                                            "board_pu":  0.0619
                                                        },
-                                      "Family Fare":  {
-                                                          "url":  "https://www.shopfamilyfare.com/shop/pets_wildlife/cat/litter_boxes/arm_hammer_baking_soda_clumping_litter_fresh_scent/p/2340662",
-                                                          "name":  "Arm \u0026 Hammer Baking Soda Clumping Litter, Fresh Scent",
-                                                          "price":  "$8.39",
-                                                          "size":  "14 lbs",
-                                                          "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                                      },
                                       "Fareway":  {
                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24227952-fareway-baking-soda-16-oz",
                                                       "price":  0.99,
@@ -1560,7 +1553,14 @@
                                                       "price":  "$3.24",
                                                       "size":  "64 oz",
                                                       "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                  },
+                                      "Family Fare":  {
+                                                          "url":  "https://www.shopfamilyfare.com/shop/pantry/baking/other_baking_necessities/arm_hammer_white_pure_baking_soda_4_lb/p/5379",
+                                                          "name":  "Arm \u0026 Hammer White Pure Baking Soda 4 Lb",
+                                                          "price":  "$4.99",
+                                                          "size":  "4 lb",
+                                                          "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                      }
                                   },
                   "balsamic-vinegar":  {
                                            "commodity":  "Balsamic Vinegar",
@@ -2859,13 +2859,6 @@
                                                                     "size":  "8 ct",
                                                                     "verified":  "2026-08-01"
                                                                 },
-                                               "Family Fare":  {
-                                                                   "url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_meals_more/breakfast/jimmy_dean_croissant_breakfast_sandwiches_with_sausage_egg_and_cheese_frozen_8_ct/p/45711",
-                                                                   "name":  "Jimmy Dean Croissant Breakfast Sandwiches With Sausage, Egg, And Cheese, Frozen 8 Ct",
-                                                                   "price":  "$13.99",
-                                                                   "size":  "8 ct",
-                                                                   "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                                               },
                                                "Fareway":  {
                                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/42274-jimmy-dean-sausage-egg-cheese-croissant-breakfast-sandwiches-4-5-oz",
                                                                "price":  7.29,
@@ -2887,7 +2880,14 @@
                                                                        "size":  "12 ct",
                                                                        "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
                                                                        "board_pu":  1.165
-                                                                   }
+                                                                   },
+                                               "Family Fare":  {
+                                                                   "url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_meals_more/breakfast/jimmy_dean_biscuit_breakfast_sandwiches_with_sausage_egg_and_cheese_frozen_8_ct/p/45712",
+                                                                   "name":  "Jimmy Dean Biscuit Breakfast Sandwiches With Sausage, Egg, And Cheese, Frozen, 8 Ct",
+                                                                   "price":  "$13.99",
+                                                                   "size":  "8 ct",
+                                                                   "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                               }
                                            },
                   "breakfast-sausage":  {
                                             "commodity":  "breakfast-sausage",
@@ -3025,6 +3025,13 @@
                                                                "verified":  "2026-08-01",
                                                                "board_pu":  0.5431
                                                            },
+                                          "Family Fare":  {
+                                                              "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/gravy/our_family_gravy_mix_reduced_sodium_brown_0_87_oz/p/7083802",
+                                                              "name":  "Our Family Gravy Mix, Reduced Sodium, Brown 0.87 Oz",
+                                                              "price":  "$0.59",
+                                                              "size":  "0.87 oz",
+                                                              "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                          },
                                           "Fareway":  {
                                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20671242-fareway-gravy-mix-brown-087-oz",
                                                           "price":  0.98,
@@ -3044,14 +3051,7 @@
                                                           "price":  "$0.48",
                                                           "size":  "0.87 oz",
                                                           "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                                      },
-                                          "Family Fare":  {
-                                                              "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/gravy/our_family_gravy_mix_reduced_sodium_brown_0_87_oz/p/7083802",
-                                                              "name":  "Our Family Gravy Mix, Reduced Sodium, Brown 0.87 Oz",
-                                                              "price":  "$0.59",
-                                                              "size":  "0.87 oz",
-                                                              "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
-                                                          }
+                                                      }
                                       },
                   "brownie-mix":  {
                                       "commodity":  "brownie-mix",
@@ -3310,13 +3310,6 @@
                                                       "size":  "16 oz",
                                                       "verified":  "2026-08-01"
                                                   },
-                                 "Family Fare":  {
-                                                     "url":  "https://www.shopfamilyfare.com/shop/dairy/butter_margarine/butter/land_o_lakes_butter_unsalted_4_ea/p/8136",
-                                                     "name":  "Land O Lakes Butter, Unsalted 4 Ea",
-                                                     "price":  "$5.39",
-                                                     "size":  "1 lb",
-                                                     "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
-                                                 },
                                  "Fareway":  {
                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24451441-fareway-butter-salted-16-oz",
                                                  "price":  3.48,
@@ -3345,7 +3338,14 @@
                                                  "size":  "32.043 oz",
                                                  "name":  "Great Value Sweet Cream Salted Butter Twin Pack, 16 oz Box, 8 Sticks, Slow Churned, Refrigerated",
                                                  "verified":  "2026-07-30 price-pull self-capture"
-                                             }
+                                             },
+                                 "Family Fare":  {
+                                                     "url":  "https://www.shopfamilyfare.com/shop/dairy/butter_margarine/butter/land_o_lakes_butter_unsalted_half_sticks_8_ea/p/24206",
+                                                     "name":  "Land O Lakes Butter, Unsalted, Half Sticks 8 Ea",
+                                                     "price":  "$5.39",
+                                                     "size":  "1 lb",
+                                                     "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                 }
                              },
                   "buttermilk":  {
                                      "commodity":  "buttermilk",
@@ -4876,13 +4876,6 @@
                                                           "size":  "20 lb",
                                                           "verified":  "2026-08-01"
                                                       },
-                                     "Family Fare":  {
-                                                         "url":  "https://www.shopfamilyfare.com/shop/pets_wildlife/cat/litter_boxes/tidy_cats_instant_action_non_clumping_litter_20_lb/p/36726",
-                                                         "name":  "Tidy Cats Instant Action Non Clumping Litter 20 Lb",
-                                                         "price":  "$8.69",
-                                                         "size":  "20 lb",
-                                                         "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                                     },
                                      "Fareway":  {
                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/77387-purina-tidy-cats-non-clumping-cat-litter-instant-action-low-tracking-cat-litter-10-lb",
                                                      "price":  3.98,
@@ -4910,7 +4903,14 @@
                                                      "price":  "$8.12",
                                                      "size":  "20 lb",
                                                      "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                                 }
+                                                 },
+                                     "Family Fare":  {
+                                                         "url":  "https://www.shopfamilyfare.com/shop/pets_wildlife/cat/litter_boxes/tidy_cats_non_clumping_litter_20_lb/p/36724",
+                                                         "name":  "Tidy Cats Non Clumping Litter 20 Lb",
+                                                         "price":  "$8.69",
+                                                         "size":  "20 lb",
+                                                         "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                     }
                                  },
                   "cauliflower":  {
                                       "commodity":  "cauliflower",
@@ -7391,13 +7391,6 @@
                                                               "size":  "24 oz",
                                                               "verified":  "2026-08-01"
                                                           },
-                                         "Family Fare":  {
-                                                             "url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/our_family_cottage_cheese_small_curd_4_milkfat_minimum_24_oz/p/7081910",
-                                                             "name":  "Our Family Cottage Cheese, Small Curd, 4% Milkfat Minimum 24 Oz",
-                                                             "price":  "$3.69",
-                                                             "size":  "24 oz",
-                                                             "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                                         },
                                          "Fareway":  {
                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/26544540-fareway-small-curd-4-milkfat-min-cottage-cheese-48-oz",
                                                          "price":  7.88,
@@ -7426,7 +7419,14 @@
                                                          "size":  "48 oz",
                                                          "verified":  "2026-07-23 DERIVED from the price row (same record the board priced)",
                                                          "board_pu":  0.1138
-                                                     }
+                                                     },
+                                         "Family Fare":  {
+                                                             "url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/our_family_cottage_cheese_large_curd_4_milkfat_minimum_24_oz/p/1564405684702751833",
+                                                             "name":  "Our Family Cottage Cheese, Large Curd, 4% Milkfat Minimum 24 Oz",
+                                                             "price":  "$3.69",
+                                                             "size":  "24 oz",
+                                                             "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                         }
                                      },
                   "cotton-swabs":  {
                                        "commodity":  "cotton-swabs",
@@ -14176,6 +14176,13 @@
                                      },
                   "instant-mashed-potatoes":  {
                                                   "commodity":  "instant-mashed-potatoes",
+                                                  "Aldi":  {
+                                                               "url":  "https://www.aldi.us/store/aldi/products/20752483-chef-s-cupboard-homestyle-four-cheese-mashed-potatoes-4-oz",
+                                                               "name":  "Chef S Cupboard Homestyle Four Cheese Mashed Potatoes 4 OZ",
+                                                               "price":  "$0.99",
+                                                               "size":  "4 oz",
+                                                               "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                           },
                                                   "Baker\u0027s":  {
                                                                        "url":  "https://www.bakersplus.com/p/betty-crocker-instant-mashed-potatoes/0001600041660",
                                                                        "name":  "Betty Crocker Instant Mashed Potatoes",
@@ -14219,14 +14226,7 @@
                                                                   "size":  "13.75 oz",
                                                                   "name":  "Idahoan Original Mashed Potatoes, 13.75 oz Box",
                                                                   "verified":  "2026-07-30 price-pull self-capture"
-                                                              },
-                                                  "Aldi":  {
-                                                               "url":  "https://www.aldi.us/store/aldi/products/20752483-chef-s-cupboard-homestyle-four-cheese-mashed-potatoes-4-oz",
-                                                               "name":  "Chef S Cupboard Homestyle Four Cheese Mashed Potatoes 4 OZ",
-                                                               "price":  "$0.99",
-                                                               "size":  "4 oz",
-                                                               "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
-                                                           }
+                                                              }
                                               },
                   "italian-dressing":  {
                                            "commodity":  "italian-dressing",
@@ -15060,13 +15060,6 @@
                                                         "verified":  "2026-08-01",
                                                         "board_pu":  0.0294
                                                     },
-                                   "Family Fare":  {
-                                                       "url":  "https://www.shopfamilyfare.com/shop/beverages/fruit_vegetable_beverages/other_juice/minute_maid_strawberry_lemonade_carton_59_fl_oz/p/3090851",
-                                                       "name":  "Minute Maid Strawberry Lemonade Carton 59 Fl Oz",
-                                                       "price":  "$2.49",
-                                                       "size":  "59 fl oz",
-                                                       "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                                   },
                                    "Fareway":  {
                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16469141-milo-100-natural-lemonade-128-0-fl-oz",
                                                    "price":  3.98,
@@ -15094,7 +15087,14 @@
                                                    "size":  "144 fl oz",
                                                    "name":  "Minute Maid Lemonade Fridge Pack Cans, 12 fl oz, 12 Pack",
                                                    "verified":  "2026-07-30 price-pull self-capture"
-                                               }
+                                               },
+                                   "Family Fare":  {
+                                                       "url":  "https://www.shopfamilyfare.com/shop/beverages/fruit_vegetable_beverages/lemon_lime/minute_maid_lemonade_59_oz/p/8893",
+                                                       "name":  "Minute Maid Lemonade 59 Oz",
+                                                       "price":  "$2.49",
+                                                       "size":  "59 oz",
+                                                       "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                   }
                                },
                   "lemongrass-paste":  {
                                            "commodity":  "Lemongrass Paste",
@@ -15928,13 +15928,6 @@
                                                     "board_pu":  3.18,
                                                     "recipe_pu":  3.19
                                                 },
-                               "Family Fare":  {
-                                                   "url":  "https://www.shopfamilyfare.com/shop/dairy/milk/dairy_gallon/our_family_lowfat_milk_1_gal/p/7081908",
-                                                   "name":  "Our Family Lowfat Milk 1 Gal",
-                                                   "price":  "$3.59",
-                                                   "size":  "1 gal",
-                                                   "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                               },
                                "Fareway":  {
                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25586562-fareway-2-reduced-fat-milk-05-gal",
                                                "price":  3.15,
@@ -15957,7 +15950,14 @@
                                                "verified":  "2026-07-23 DERIVED from the price row (same record the board priced)",
                                                "board_pu":  3.02,
                                                "recipe_pu":  3
-                                           }
+                                           },
+                               "Family Fare":  {
+                                                   "url":  "https://www.shopfamilyfare.com/shop/dairy/milk/dairy_gallon/our_family_skim_milk_1_gal/p/7081907",
+                                                   "name":  "Our Family Skim Milk 1 Gal",
+                                                   "price":  "$3.59",
+                                                   "size":  "1 gal",
+                                                   "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                               }
                            },
                   "minced-garlic":  {
                                         "commodity":  "Minced Garlic (jarred)",
@@ -18710,13 +18710,6 @@
                                                             "size":  "13 oz",
                                                             "verified":  "2026-08-01"
                                                         },
-                                       "Family Fare":  {
-                                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/potato_chips/our_family_sweet_heat_barbecue_potato_chips_7_75_oz/p/1564405684716827871",
-                                                           "name":  "Our Family Sweet Heat Barbecue Potato Chips 7.75 Oz",
-                                                           "price":  "$1.99",
-                                                           "size":  "7.75 oz",
-                                                           "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                                       },
                                        "Fareway":  {
                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16758378-lay-s-classic-potato-chips-8-oz",
                                                        "price":  1.88,
@@ -18744,7 +18737,14 @@
                                                        "price":  "$2.50",
                                                        "size":  "7.75 oz",
                                                        "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                                   }
+                                                   },
+                                       "Family Fare":  {
+                                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/potato_chips/our_family_potato_chips_sour_cream_onion_flavored_7_75_oz/p/1564405684709885304",
+                                                           "name":  "Our Family Potato Chips, Sour Cream \u0026 Onion Flavored 7.75 Oz",
+                                                           "price":  "$1.99",
+                                                           "size":  "7.75 oz",
+                                                           "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                       }
                                    },
                   "potato-gnocchi":  {
                                          "commodity":  "Potato Gnocchi",
@@ -18934,6 +18934,13 @@
                                                     "name":  "Millville Peanut Butter Dark Chocolate Protein Chewy Bars",
                                                     "board_pu":  0.578
                                                 },
+                                       "Baker\u0027s":  {
+                                                            "url":  "https://www.bakersplus.com/p/nature-valley-protein-peanut-butter-dark-chocolate-chewy-snack-bars/0001600045723",
+                                                            "name":  "Nature Valley Protein Peanut Butter Dark Chocolate Chewy Snack Bars",
+                                                            "price":  "$3.99",
+                                                            "size":  "5 pk 1.42 oz",
+                                                            "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                        },
                                        "Family Fare":  {
                                                            "url":  "https://www.shopfamilyfare.com/shop/health_beauty/adult_nutrition/protein_energy_meal_bars/builders_chocolatey_peanut_butter_protein_bars_6_ea/p/525550",
                                                            "name":  "Builders Chocolatey Peanut Butter Protein Bars 6 Ea",
@@ -18961,14 +18968,7 @@
                                                                "price":  "$11.98",
                                                                "size":  "30 ct",
                                                                "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                           },
-                                       "Baker\u0027s":  {
-                                                            "url":  "https://www.bakersplus.com/p/nature-valley-protein-peanut-butter-dark-chocolate-chewy-snack-bars/0001600045723",
-                                                            "name":  "Nature Valley Protein Peanut Butter Dark Chocolate Chewy Snack Bars",
-                                                            "price":  "$3.99",
-                                                            "size":  "5 pk 1.42 oz",
-                                                            "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
-                                                        }
+                                                           }
                                    },
                   "provolone-cheese":  {
                                            "commodity":  "Provolone Cheese",
@@ -20444,6 +20444,13 @@
                                                          "verified":  "2026-08-01",
                                                          "board_pu":  0.1454
                                                      },
+                                    "Family Fare":  {
+                                                        "url":  "https://www.shopfamilyfare.com/shop/bakery/packaged_bread/rye_bread/beefsteak_bread_soft_rye_no_seeds_18_oz/p/41613",
+                                                        "name":  "Beefsteak Bread, Soft Rye, No Seeds 18 Oz",
+                                                        "price":  "$4.99",
+                                                        "size":  "18 oz",
+                                                        "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                    },
                                     "Fareway":  {
                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/152352-beefsteak-soft-rye-bread-18-oz",
                                                     "price":  4.99,
@@ -20463,14 +20470,7 @@
                                                     "price":  "$2.48",
                                                     "size":  "24 oz",
                                                     "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                                },
-                                    "Family Fare":  {
-                                                        "url":  "https://www.shopfamilyfare.com/shop/bakery/packaged_bread/rye_bread/beefsteak_bread_soft_rye_no_seeds_18_oz/p/41613",
-                                                        "name":  "Beefsteak Bread, Soft Rye, No Seeds 18 Oz",
-                                                        "price":  "$4.99",
-                                                        "size":  "18 oz",
-                                                        "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
-                                                    }
+                                                }
                                 },
                   "salmon":  {
                                  "commodity":  "salmon",
@@ -21013,13 +21013,6 @@
                                                        "verified":  "2026-08-01",
                                                        "board_pu":  0.0927
                                                    },
-                                  "Family Fare":  {
-                                                      "url":  "https://www.shopfamilyfare.com/shop/health_beauty/grooming_hygiene/shampoo_conditioner/alberto_vo5_extra_body_with_collagen_volumizing_shampoo_for_body_bounce_bonus_size_15_fl_oz/p/2458463",
-                                                      "name":  "Alberto Vo5 Extra Body With Collagen Volumizing Shampoo For Body \u0026 Bounce Bonus Size 15 Fl Oz",
-                                                      "price":  "$1.29",
-                                                      "size":  "15 fl oz",
-                                                      "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
-                                                  },
                                   "Fareway":  {
                                                   "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/82401404-ocean-breeze-shampoo",
                                                   "price":  1.97,
@@ -21046,7 +21039,14 @@
                                                   "price":  "$1.26",
                                                   "size":  "16.8 fl oz",
                                                   "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                              }
+                                              },
+                                  "Family Fare":  {
+                                                      "url":  "https://www.shopfamilyfare.com/shop/health_beauty/grooming_hygiene/shampoo_conditioner/alberto_vo5_shampoo_daily_revitalizing_bonus_size_15_fl_oz/p/1564405684713575371",
+                                                      "name":  "Alberto Vo5 Shampoo, Daily Revitalizing, Bonus Size 15 Fl Oz",
+                                                      "price":  "$1.29",
+                                                      "size":  "15 fl oz",
+                                                      "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                  }
                               },
                   "shaving-cream":  {
                                         "commodity":  "shaving-cream",
@@ -21730,13 +21730,6 @@
                                                                "size":  "33.8 fl oz",
                                                                "verified":  "2026-08-01"
                                                            },
-                                          "Family Fare":  {
-                                                              "url":  "https://www.shopfamilyfare.com/shop/beverages/soda_other_carbonated_beverages/water/sparkling_ice_zero_sugar_strawberry_watermelon_sparkling_water_17_fl_oz/p/9276",
-                                                              "name":  "Sparkling Ice Zero Sugar Strawberry Watermelon Sparkling Water 17 Fl Oz",
-                                                              "price":  "$1.39",
-                                                              "size":  "17 fl oz",
-                                                              "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
-                                                          },
                                           "Fareway":  {
                                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17358183-clear-frost-sparkling-water-black-cherry-33-8-fl-oz",
                                                           "price":  0.99,
@@ -21764,7 +21757,14 @@
                                                           "price":  "$0.84",
                                                           "size":  "33.8 fl oz",
                                                           "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                                      }
+                                                      },
+                                          "Family Fare":  {
+                                                              "url":  "https://www.shopfamilyfare.com/shop/beverages/soda_other_carbonated_beverages/water/sparkling_ice_zero_sugar_fruit_punch_sparkling_water_17_fl_oz/p/1564405684704625421",
+                                                              "name":  "Sparkling Ice Zero Sugar Fruit Punch Sparkling Water 17 Fl Oz",
+                                                              "price":  "$1.39",
+                                                              "size":  "17 fl oz",
+                                                              "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                          }
                                       },
                   "spinach":  {
                                   "commodity":  "spinach",
@@ -22450,15 +22450,6 @@
                                                                   "size":  "9 oz",
                                                                   "verified":  "2026-08-01"
                                                               },
-                                             "Family Fare":  {
-                                                                 "url":  "https://www.shopfamilyfare.com/shop/meat/sausage/smoked/gilbert_s_sausage_chicken_caprese_with_basil_mozzarella_sun_dried_tomatoes_10_oz/p/5588160",
-                                                                 "name":  "Gilbert\u0027s Sausage, Chicken, Caprese, With Basil, Mozzarella \u0026 Sun Dried Tomatoes 10 Oz",
-                                                                 "price":  6.99,
-                                                                 "size":  "10 oz",
-                                                                 "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)",
-                                                                 "board_pu":  0.699,
-                                                                 "recipe_pu":  0.7488
-                                                             },
                                              "Fareway":  {
                                                              "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24845-mezzetta-tomatoes-8-oz",
                                                              "price":  4.97,
@@ -22487,7 +22478,14 @@
                                                              "size":  "8.5 oz",
                                                              "name":  "Bella Sun Luci Sun Dried Tomatoes in Olive Oil with Italian Herbs, Julienne Cut, 8.5 oz Jar",
                                                              "verified":  "2026-07-30 price-pull self-capture"
-                                                         }
+                                                         },
+                                             "Family Fare":  {
+                                                                 "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/tomatoes/california_sun_dry_sun_dried_tomatoes_julienne_ct/p/1764405684715566620",
+                                                                 "name":  "California Sun Dry Sun Dried Tomatoes Julienne Ct",
+                                                                 "price":  "$5.99",
+                                                                 "size":  "8 oz",
+                                                                 "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                             }
                                          },
                   "sweet-chili-sauce":  {
                                             "commodity":  "Sweet Chili Sauce",
@@ -23177,13 +23175,6 @@
                                                                 "verified":  "2026-08-01",
                                                                 "board_pu":  0.3122
                                                             },
-                                           "Family Fare":  {
-                                                               "url":  "https://www.shopfamilyfare.com/shop/pantry/breakfast/cereal_bars_pastries/our_family_toaster_pastries_strawberry_frosted_12_ea/p/1564405684715608047",
-                                                               "name":  "Our Family Toaster Pastries, Strawberry, Frosted 12 Ea",
-                                                               "price":  "$2.79",
-                                                               "size":  "12 ea",
-                                                               "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                                           },
                                            "Fareway":  {
                                                            "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2626014-toast-em-pop-ups-real-fruit-pastries-frosted-cherry-11-oz",
                                                            "price":  1.5,
@@ -23211,7 +23202,14 @@
                                                            "size":  "12 ct",
                                                            "name":  "Great Value Frosted Cherry Toaster Pastries",
                                                            "board_pu":  0.1883
-                                                       }
+                                                       },
+                                           "Family Fare":  {
+                                                               "url":  "https://www.shopfamilyfare.com/shop/pantry/breakfast/cereal_bars_pastries/our_family_toaster_pastries_brown_sugar_cinnamon_frosted_12_ea/p/1564405684715497305",
+                                                               "name":  "Our Family Toaster Pastries, Brown Sugar Cinnamon, Frosted 12 Ea",
+                                                               "price":  "$2.79",
+                                                               "size":  "12 ea",
+                                                               "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                           }
                                        },
                   "toilet-bowl-cleaner":  {
                                               "commodity":  "toilet-bowl-cleaner",
@@ -24263,6 +24261,13 @@
                                     },
                   "vegetable-soup":  {
                                          "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
+                                         "Baker\u0027s":  {
+                                                              "url":  "https://www.bakersplus.com/p/progresso-vegetable-classics-vegetable-canned-soup/0004119691113",
+                                                              "name":  "Progresso Vegetable Classics Vegetable Canned Soup",
+                                                              "price":  "$2.99",
+                                                              "size":  "19 oz",
+                                                              "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                          },
                                          "Fareway":  {
                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/37442-campbell-s-chunky-old-fashioned-vegetable-beef-soup-18-8-oz",
                                                          "price":  2.48,
@@ -24282,14 +24287,7 @@
                                                          "size":  "19 oz",
                                                          "name":  "Progresso Vegetable Soup, Vegetable Classics Canned Soup, 19 oz",
                                                          "verified":  "2026-07-31 price-pull self-capture"
-                                                     },
-                                         "Baker\u0027s":  {
-                                                              "url":  "https://www.bakersplus.com/p/progresso-vegetable-classics-vegetable-canned-soup/0004119691113",
-                                                              "name":  "Progresso Vegetable Classics Vegetable Canned Soup",
-                                                              "price":  "$2.99",
-                                                              "size":  "19 oz",
-                                                              "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
-                                                          }
+                                                     }
                                      },
                   "walnuts":  {
                                   "commodity":  "Walnuts",
@@ -24801,13 +24799,6 @@
                                                       "size":  "8 pk 6 oz",
                                                       "verified":  "2026-08-01"
                                                   },
-                                 "Family Fare":  {
-                                                     "url":  "https://www.shopfamilyfare.com/shop/dairy/yogurt/individual_size/yoplait_low_fat_cherry_orchard_yogurt_6_oz/p/37027",
-                                                     "name":  "Yoplait Low Fat Cherry Orchard Yogurt 6 Oz",
-                                                     "price":  "$0.89",
-                                                     "size":  "6 oz",
-                                                     "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                                 },
                                  "Fareway":  {
                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/75563-yoplait-original-yogurt-vanilla-low-fat-yogurt-32-000-oz",
                                                  "price":  3.49,
@@ -24828,7 +24819,14 @@
                                                  "price":  "$2.64",
                                                  "size":  "32 oz",
                                                  "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                             }
+                                             },
+                                 "Family Fare":  {
+                                                     "url":  "https://www.shopfamilyfare.com/shop/dairy/yogurt/individual_size/yoplait_low_fat_harvest_peach_yogurt_6_oz/p/37028",
+                                                     "name":  "Yoplait Low Fat Harvest Peach Yogurt 6 Oz",
+                                                     "price":  "$0.89",
+                                                     "size":  "6 oz",
+                                                     "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                 }
                              },
                   "yukon-gold-potatoes":  {
                                               "commodity":  "Yellow / Yukon Gold Potatoes",

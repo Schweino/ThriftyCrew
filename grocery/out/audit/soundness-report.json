@@ -1,11 +1,37 @@
 ﻿{
-    "generated":  "2026-08-01 11:29",
+    "generated":  "2026-08-01 15:18",
     "drift_vs_engine":  0,
     "moved":  [
-
+                  {
+                      "name":  "Pineapple Teriyaki Brats 4 Ct.",
+                      "from":  "pineapple",
+                      "to":  "bratwurst"
+                  },
+                  {
+                      "name":  "Kroger Teriyaki Pineapple Marinade",
+                      "from":  "pineapple",
+                      "to":  "teriyaki-sauce"
+                  },
+                  {
+                      "name":  "Arm \u0026 Hammer Baking Soda Clumping Litter, Fresh Scent",
+                      "from":  "baking-soda",
+                      "to":  "cat-litter"
+                  },
+                  {
+                      "name":  "Arm \u0026 Hammer Clumping Litter, Baking Soda Coated, Ultra Last 20 Lb",
+                      "from":  "baking-soda",
+                      "to":  "cat-litter"
+                  }
               ],
     "dropped":  [
-
+                    {
+                        "name":  "Stouffer\u0027s Three Meat French Bread Pizzas 2 Ea",
+                        "from":  "french-bread"
+                    },
+                    {
+                        "name":  "Gilbert\u0027s Sausage, Chicken, Caprese, With Basil, Mozzarella \u0026 Sun Dried Tomatoes 10 Oz",
+                        "from":  "sun-dried-tomatoes"
+                    }
                 ],
     "new_contested":  [
                           "Cocina Fresca Cantina Style Mild Jalapeno Salsa",
@@ -16,6 +42,7 @@
                           "Ken\u0027s Steak House Tuscan Italian With Lemon, Garlic \u0026 Herbs Dressing \u0026 Marinade 16 Fl Oz",
                           "Kettle \u0026 Fire Mushroom Chicken Bone Broth",
                           "Kraft Parmesan Pesto Mac \u0026 Cheese Macaroni and Cheese Dinner, Box",
+                          "Lance® Cream Cheese And Chives Sandwich Crackers 13.700 Oz",
                           "Lean Cuisine Roasted Roasted Turkey Breast With Herb Dressing And Cinnamon Apples 9.75 Oz",
                           "Our Family Cranberries, Reduced Sugar 5 Oz",
                           "Pacific Foods Organic Chicken Bone Broth With Sea Salt",

@@ -7218,15 +7218,15 @@
                                             },
                                             {
                                                 "week_of":  "2026-08-01",
-                                                "cheapest_price":  0.0375,
-                                                "cheapest_store":  "Family Fare",
+                                                "cheapest_price":  0.0411,
+                                                "cheapest_store":  "Sam\u0027s Club",
                                                 "per_store":  {
-                                                                  "Family Fare":  0.0375,
                                                                   "Sam\u0027s Club":  0.0411,
                                                                   "Walmart":  0.0506,
                                                                   "Aldi":  0.0556,
-                                                                  "Baker\u0027s":  0.0619,
                                                                   "Fareway":  0.0619,
+                                                                  "Baker\u0027s":  0.0619,
+                                                                  "Family Fare":  0.078,
                                                                   "Hy-Vee":  0.0806
                                                               }
                                             }
@@ -45244,7 +45244,6 @@
                                                                   "Walmart":  1.25,
                                                                   "Baker\u0027s":  1.99,
                                                                   "Sam\u0027s Club":  2.23,
-                                                                  "Family Fare":  2.245,
                                                                   "Fareway":  2.49
                                                               }
                                             }
@@ -80114,10 +80113,9 @@
                                             },
                                             {
                                                 "week_of":  "2026-08-01",
-                                                "cheapest_price":  1.3725,
-                                                "cheapest_store":  "Family Fare",
+                                                "cheapest_price":  1.68,
+                                                "cheapest_store":  "Fareway",
                                                 "per_store":  {
-                                                                  "Family Fare":  1.3725,
                                                                   "Fareway":  1.68,
                                                                   "Aldi":  1.89,
                                                                   "Walmart":  1.98,
@@ -97175,7 +97173,7 @@
                                                                   "Walmart":  0.6094,
                                                                   "Baker\u0027s":  0.61,
                                                                   "Fareway":  0.6212,
-                                                                  "Family Fare":  0.699
+                                                                  "Family Fare":  0.7488
                                                               }
                                             }
                                         ]
@@ -105167,7 +105165,6 @@
                                                                   "Fareway":  2.99,
                                                                   "Walmart":  4.8133,
                                                                   "Baker\u0027s":  4.9967,
-                                                                  "Family Fare":  5.3156,
                                                                   "Aldi":  6.0267,
                                                                   "Hy-Vee":  6.66
                                                               }

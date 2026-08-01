@@ -545,6 +545,51 @@
                         "ruled_on":  "2026-08-01",
                         "ruled_by":  "coverage-backlog-2026-08-01",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "baking-soda|FamilyFare|arm-hammer-baking-soda-clumping-litter-fresh-sce",
+                        "commodity":  "baking-soda",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Arm \u0026 Hammer Baking Soda Clumping Litter, Fresh Scent"
+                                  ],
+                        "product_id":  "2340662",
+                        "verdict":  "wrong-product",
+                        "evidence":  "CAT LITTER, not baking soda. Held the baking-soda CROWN at $0.0375/oz on the live 2026-08-01 board - the cheapest-price verdict shoppers see. Found by aisle-test: the store files it under pets_wildlife while every real baking-soda product is pantry.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "aisle-test-live-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pineapple|FamilyFare|pineapple-teriyaki-brats-4-ct",
+                        "commodity":  "pineapple",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Pineapple Teriyaki Brats 4 Ct."
+                                  ],
+                        "product_id":  "1564405684716779911",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Bratwurst sausages, not pineapple. Held the pineapple CROWN at $1.3725/each on the live board. Found by aisle-test: shelved under meat, while pineapple is produce.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "aisle-test-live-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "sun-dried-tomatoes|FamilyFare|gilberts-sausage-chicken-caprese-with-basil-mozz",
+                        "commodity":  "sun-dried-tomatoes",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Gilbert\u0027s Sausage, Chicken, Caprese, With Basil, Mozzarella \u0026 Sun Dried Tomatoes 10 Oz"
+                                  ],
+                        "product_id":  "5588160",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Chicken sausage, not sun-dried tomatoes. Reached the FF cell through the sun.?dried.{0,40}tomato include I added the same morning in coverage batch 3 - the widening was correct for its target and also matched a sausage that merely lists them as an ingredient. Found by aisle-test: shelved under meat.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "aisle-test-live-2026-08-01",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
