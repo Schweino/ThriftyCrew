@@ -140,8 +140,27 @@ butter 40 oz **-33.4%**, ketchup **-29%**, Hy-Vee EVOO 68 fl oz **-14.2%**, Hy-V
 DRESSING and Pasta Roni Garlic & Olive Oil VERMICELLI, both matching the include and both beating the held
 price. ~14% wrong, matching the FF browse-test rate.
 
-**STILL OPEN on F1:** (a) an ADJUDICATION PATH for the docket - the arrivals desk is the obvious home, and
-until it exists discovery pays nothing; (b) cycle wiring, which must wait on (a); (c) the
+**F1(a) DONE 2026-08-01 - the ADJUDICATION PATH ships, and the arrivals desk is where it lives.** A prospect
+is an arrival that has not happened yet, so `build-arrivals-docket.ps1` grew a PROSPECTS section scored by
+the same cohort divergence, and `adjudicate-discovery.ps1` records the verdict. Built for a docket that is
+1 in 7 wrong: nothing is bulk (one key, one named reviewer, one written reason); ACCEPT sets no price, it
+appends to `hyvee-catalog-adds.json`, a third work-list source for `pull-regular-hyvee` - the store supplies
+the price, the never-priced-before path derives the size, compare-deals decides whether it wins, and if it
+takes a cell it returns to this same desk as a scored ARRIVAL; REJECT delegates to `add-known-wrong.ps1`, so
+compare-deals refuses to price the row at all. A ruled candidate never comes back (keyed on the store's own
+product id, so a re-titled product cannot walk back on).
+
+**WHAT THE SCORE IS WORTH, MEASURED ON THE 11 LIVE CANDIDATES:** the two known-wrong products rank FIRST and
+SECOND (div 0.50) above all nine real ones (0.33 and 0.00) - so the ORDER is informative - but **the 0.75
+floor fired on NEITHER**. Recorded rather than retuned; fitting a threshold to 11 rows is the overfit the
+aisle test walked into by writing its own positive examples. A second, independent detector does fire: the
+Pasta Roni vermicelli "beats" olive oil by 21.8% only because 4.6 WEIGHT ounces were divided as fluid
+ounces, and an ACCEPT on a basis-suspect candidate is refused unless overridden on the record.
+Also worth knowing before anyone rules: **none of the 11 would take a crown** - every one loses to another
+store's floor - so they move the Hy-Vee column, not the cheapest verdict.
+
+**STILL OPEN on F1:** (b) cycle wiring - now unblocked, but it is a network-rotating search at ~598 ms/product
+and that is a scheduling decision, deliberately not taken as a side effect of (a); (c) the
 prime-batch-headless pageSize 40->90 bump, which is cheap but only helps terms with >40 results (measured:
 "baking soda" returns 10 in total, so it is not the lever the plan assumed).
 **F2. DONE 2026-08-01 - everyday-mismatch audits both boards.** 2,656 -> 2,971 cells checked; 95
@@ -184,8 +203,34 @@ queue: `recipe-board.json` store rows carry only `{store, per_unit, type, bulk}`
 - so the resolver logs `no size match (ours: / )` and correctly REFUSES rather than guess (that refusal is
 the founding minced-garlic fix: board published 32 oz while the link opened 4.5 oz).
 
-**NOW THE REAL REMAINING FIX:** give recipe-board rows product identity (`item` + `size`), in whatever
-builds that board. Until then those cells are structurally unlinkable no matter how good the queue is.
+**IDENTITY DONE 2026-08-01, AND IT TURNS OUT NOT TO BE THE BINDING CONSTRAINT.** `derive-recipe-floors.ps1`
+chose a product to price each cell from and threw its identity away; it now stamps `item` + `size` from the
+same candidate it takes the price from, inside the same branch, so the name always describes the number
+published beside it. A cell with no candidate keeps its prior identity exactly as it keeps its prior price -
+filling in a name from another observation would be the wrong-basis class in a new costume. Measured on the
+80 rows that reach the board: item 243 -> 318 of 404 (Hy-Vee 51 -> 64 of 78), size 225 -> 308, and 4 of
+guard 3's 10 uncheckable pins gain a name.
+
+**BUT THE THREE UNHEALED Hy-Vee CELLS ARE NOT IDENTITY BUGS, and this was checked cell by cell:**
+- `boneless-skinless-chicken-thigh` - **the link is CORRECT** (Tyson 2.5 lb, $9.99 = $3.996/lb). The board's
+  $1.99/lb is a frozen 2026-07-12 hand-browsed floor, it **holds the crown**, and it is publishing chicken
+  thighs at HALF what Hy-Vee charges. Identity changes nothing here; the row needs a price refresh path.
+- `apple` - the row is priced per EACH and the link opens Gala apples per LB. The two bases are not
+  comparable, so the "151% off" is an artefact of measuring $/each against $/lb.
+- `swiss-cheese` - it HAS a size, and the size is `8 oz (2/$5.00)`: a **promo baked into the size string**,
+  which parses to 8 oz against a link that opens 5 oz. A polluted size, not a missing one.
+
+**THE REAL REMAINING FIX, restated: identity is downstream of a REFRESH PATH.** 47 recipe-only ids have no
+staples-board twin and no id-map entry, so nothing re-prices them and nothing can honestly name them. The
+other candidate pool that covers those ids - the recipe rule set's own
+`recipe-sales-candidates-<date>.json` - **is polluted on exactly them and must not be wired in**: measured
+2026-08-01, its cheapest everyday `zero-sugar-soda` is **Oreo Zero Sugar COOKIES** at $0.579 and its
+`apple` pool is mostly apple JUICE and baby food. Two more live wrong prices found while checking:
+`fries` @ Sam's holds the crown at $0.0334/oz against the store's $0.067 (exactly 2x - the monthly -Apply
+corrects this one), and `parmesan-cheese` @ Hy-Vee is $0.3744 against a link at $0.7633.
+No id-map entries were added: `boneless-skinless-chicken-thigh` -> `chicken-thighs` ("Chicken Thighs /
+Drumsticks") is a DIFFERENT FORM, and `zero-sugar-soda` (each) -> `soda` (floz) is a different product and
+an unreconcilable unit. Never guess a mapping.
 
 **SEPARATE ISSUE SPOTTED TWICE TODAY:** a full `resolve-hyvee-links` run re-introduces the
 poultry-seasoning/Hy-Vee divergence (board 2.7667 vs link 4.7571) and grows the backlog. Its output was
