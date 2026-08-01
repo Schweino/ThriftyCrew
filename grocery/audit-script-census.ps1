@@ -1,4 +1,4 @@
-<#
+﻿<#
   audit-script-census.ps1 - every .ps1 in this tree is either called by code, or NAMED here as a deliberate
   human entry point. Nothing is allowed to be merely unreachable.
 
@@ -71,7 +71,8 @@ $KNOWN = [ordered]@{
   'explain-coverage-gap.ps1'         = 'diagnoses WHY a swept product is invisible (NO-INCLUDE / EXCLUDED / CLAIMED / MATCHES) before any rule is touched'
   'apply-coverage-batch.ps1'         = 'applies + GATES one batch of commodity include widenings; reverts itself on a batch-attributable tile fault'
   'withdraw-stale-link.ps1'          = 'removes a stored product URL that no longer describes its cell, at a store with no headless resolver'
-  'aisle-test.ps1'                   = 'gates a candidate crown flip on the store''s own shelf department; the prerequisite for any FF/Hy-Vee catalogue-depth work'
+  'aisle-test.ps1'                   = 'gates a crown flip on the store''s own shelf department; also -LiveBoard, wired daily in check-ad-cycles'
+  'discover-hyvee.ps1'               = 'F1 Hy-Vee discovery: bounded rotating search pass writing a REVIEW DOCKET of net-new candidates that beat what we hold; never writes the feed'
   # -- staples-500 per-batch pipeline (batch 1 of 10 done; run once per batch, by hand)
   'prime-batch-headless.ps1'         = 'staples-500 per-batch primer'
   'merge-candidates.ps1'             = 'staples-500 per-batch candidate merge'
@@ -152,3 +153,4 @@ if ($fail.Count -eq 0) { Write-Output ("  ok      no unrecorded orphan; out\ hol
 foreach ($m in $fail) { Write-Output ("  FAIL    " + $m) }
 Write-Output ("script-census FAIL: " + $fail.Count + " finding(s). Wire it in, move it to archive\one-off\, or record it in KNOWN with the reason it stays uncalled.")
 exit 2
+

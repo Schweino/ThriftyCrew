@@ -1,4 +1,4 @@
-<#
+﻿<#
   test-auditors.ps1 - proves the WATCHERS still work. Complements test-guards.ps1, which breaks a live
   invariant and asserts guards.ps1 exits 2; this one tests the auditors and alert plumbing that guards.ps1
   does not own, using FROZEN FIXTURES instead of mutating live data.
@@ -1049,6 +1049,22 @@ else { Bad 'merge-product-urls no longer archives consumed inputs - every past c
 if ($mpuSrc -match "size field corrupted") { Ok 'the size-field clean twin is armed (a URL-only diff cannot see a basis overwrite)' }
 else { Bad 'merge-product-urls lost the size-verbatim fixture - a replay could flip "100 ct" to "each" with the URL unchanged and every URL diff would call it clean' }
 
+# --- discover-hyvee (added 2026-08-01, F1) -----------------------------------------------------------
+# Hy-Vee's puller is a REFRESH with no discovery path: 89.3% of the catalogue is absent and a product not
+# already in the file can never enter. This gives it one. Its founding risk is what it CHOOSES to surface,
+# because the whole point is products that BEAT what we hold - exactly the ones that can take a crown.
+# Hy-Vee's own "baking soda" search returns cat litter, and cat litter WAS holding a live baking-soda
+# crown on 2026-08-01, so the must-fire fixture is that class.
+$dhR = RunPS 'discover-hyvee.ps1' @('-SelfTest')
+if ($dhR.rc -eq 0 -and $dhR.text -match 'SELFTEST: 7/7 pass') { Ok 'discover-hyvee -SelfTest passes (cat litter and toothpaste refused, real cheaper kept, marginal suppressed)' }
+else { Bad ('discover-hyvee -SelfTest failed or lost its founding-bug fixtures: ' + ((($dhR.text -split "`n") | Select-Object -Last 3) -join ' | ')) }
+$dhSrc = Get-Content (Join-Path $root 'discover-hyvee.ps1') -Raw
+if ($dhSrc -match 'Cat Litter with Baking Soda') { Ok 'the cat-litter-as-baking-soda must-fire fixture is still armed' }
+else { Bad 'discover-hyvee lost the cat-litter fixture - that is the exact product class this gate exists to keep off a docket' }
+if ($dhSrc -match 'SILENTLY IGNORED') { Ok 'discover-hyvee still records that the Hy-Vee CATEGORY facet cannot filter (measured, not assumed)' }
+else { Bad 'discover-hyvee lost the note that the CATEGORY searchFilter is silently ignored - someone will build a safety gate on a filter that does nothing' }
+if ($dhSrc -match 'writes a DOCKET' -or $dhSrc -match 'ADVISORY ONLY') { Ok 'discover-hyvee still writes a docket rather than the feed' }
+else { Bad 'discover-hyvee may now write into the store feed - unreviewed discovery installs wrong crowns, which is the browse-test failure mode' }
 # --- aisle-test (added 2026-08-01) -------------------------------------------------------------------
 # The gate that has to exist before a catalogue browse is allowed to flip crowns: the FF browse test
 # flipped 26 verdicts, ~2/3 to the wrong product (watermelon -> Hefty Fabuloso Watermelon TRASH BAGS).
@@ -2378,3 +2394,4 @@ if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'semantic-identity: t
 else { Bad ('audit-semantic-identity -SelfTest failed (rc=' + $r.rc + ') - the semantic advisory feed may be re-reporting adjudicated cells or dropping real ones: ' + ($r.text -replace "`n", ' ')) }
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2
+
