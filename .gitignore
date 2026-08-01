@@ -18,6 +18,15 @@
 # minified blob inside Ghost settings. Same class as lib\ above.
 
 !/join-interstitial.html
+# The GPU semantic sidecar: SOURCE is tracked, the environment is not. .venv is several GB of wheels and
+# the model weights are another ~4.5 GB pulled from HuggingFace on first run; both are reproducible from
+# requirements.txt and the pinned model ids in lib_match.py. data\ and out\ are derived from the feeds.
+!/sidecar/
+/sidecar/.venv/
+/sidecar/data/
+/sidecar/out/*
+!/sidecar/out/backtest-report.md
+/sidecar/**/__pycache__/
 # The member-tool SOURCES and the build scripts that publish them. Same hole as lib\ and the interstitial:
 # these run on the live site, several are the only copy in existence, and none of them were versioned
 # while unrelated tool HTML at the same path was. Swept in 2026-08-01.

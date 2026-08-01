@@ -1,0 +1,10 @@
+﻿# Reproduce with: uv venv --python 3.12 && uv pip install -r requirements.txt
+# torch MUST come from the cu128 index: this card is Blackwell sm_120 and older wheels will not run.
+#   uv pip install torch --index-url https://download.pytorch.org/whl/cu128
+torch==2.11.0+cu128
+numpy
+sentence-transformers==5.1.2
+transformers==5.14.1
+duckdb
+fastapi==0.121.2
+uvicorn==0.52.0
