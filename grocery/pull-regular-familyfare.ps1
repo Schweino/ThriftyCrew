@@ -253,8 +253,22 @@ function Ingest-Items($items) {
     $script:deals += ,$row
   }
 }
-# flatten terms to an ordered array so a wall-clock break can queue the REMAINING terms for recovery
-$termList = @($terms.PSObject.Properties | ForEach-Object { [string]$_.Value })
+# flatten terms to an ordered array so a wall-clock break can queue the REMAINING terms for recovery.
+# THROUGH THE LIB, NOT `[string]$_.Value` (F3, 2026-08-01). commodity-search.json now allows an ARRAY of
+# terms per commodity, because 210 of 429 commodities have an FF product name that does not contain our
+# single term at all - `popsicles` reaches "Popsicle Ice Pops" and never "Our Family Jr. Pops". The old
+# cast did not FAIL on an array, it JOINED it: ["popsicles","ice pops"] became the one search
+# "popsicles ice pops", which matches nothing while looking like an ordinary term that found nothing.
+# Get-SearchTermPairs expands arrays into real separate searches; a plain string behaves exactly as before.
+. (Join-Path $root 'search-terms-lib.ps1')
+$termPairs = @(Get-SearchTermPairs $terms)
+$termList = @($termPairs | ForEach-Object { $_.term })
+$extraTerms = @($termPairs | Where-Object { -not $_.primary }).Count
+if ($extraTerms -gt 0) {
+  # The budget is the binding constraint (~85 of 526 terms bought per rotation), so say what the extra
+  # terms cost rather than letting a longer rotation be discovered later as an unexplained slowdown.
+  Write-Output ("Family Fare: {0} search term(s) across {1} commodit(y/ies) - {2} are ADDITIONAL terms on multi-term commodities and each one spends a budget slot every rotation" -f $termList.Count, @($terms.PSObject.Properties).Count, $extraTerms)
+}
 
 # ROTATE THE START (2026-07-30) - the term-budget cursor.
 # The 3b-ii retest settled what Freshop's limit actually is: a per-window REQUEST BUDGET of roughly 60-70

@@ -1,4 +1,4 @@
-<#
+﻿<#
   prime-batch-headless.ps1 - price a specific BATCH of newly-registered commodities at the two HEADLESS stores
   (Family Fare via Freshop, Hy-Vee via its search API) by querying ONLY that batch's search terms, then
   ADD-MERGING the returned priced products into today's regular files. compare-deals then matches them to
@@ -30,6 +30,7 @@ if (-not (Test-Path $regDir)) { New-Item -ItemType Directory -Path $regDir -Forc
 $todayS = (Get-Date).ToString('yyyy-MM-dd')
 $UA = @{ 'User-Agent' = 'Mozilla/5.0' }
 
+. (Join-Path $root 'search-terms-lib.ps1')
 $terms = (Get-Content (Join-Path $root 'commodity-search.json') -Raw | ConvertFrom-Json).terms
 $Ids = @($Ids | ForEach-Object { ([string]$_).Trim() } | Where-Object { $_ })
 if ($Ids.Count -eq 0) { throw 'no -Ids supplied' }
@@ -117,7 +118,7 @@ if ($Store -eq 'ff' -or $Store -eq 'both') {
   }
   $empty = New-Object System.Collections.Generic.List[string]; $streak = 0
   foreach ($id in $Ids) {
-    $term = [string]$terms.$id
+    $term = (Get-PrimarySearchTerm $terms $id)
     if (-not $term) { Write-Warning "FF: no search term for $id"; continue }
     $items = FF-Query $term; Start-Sleep -Milliseconds 500
     if (@($items).Count -eq 0) { $empty.Add($id); $streak++; if ($streak -ge 6) { Write-Output 'FF: throttle streak - cooling 60s'; Start-Sleep -Seconds 60; $streak = 0 } }
@@ -125,7 +126,7 @@ if ($Store -eq 'ff' -or $Store -eq 'both') {
   }
   if ($empty.Count) {
     Write-Output ("FF: recovery pass for " + $empty.Count + " empty term(s)..."); Start-Sleep -Seconds 20
-    foreach ($id in $empty) { $term = [string]$terms.$id; $items = FF-Query $term; Start-Sleep -Milliseconds 600; if (@($items).Count) { FF-Ingest $items $ffRows $id; Write-Output ("  ff  {0,-26} {1} products (recovered)" -f $id, @($items).Count) } }
+    foreach ($id in $empty) { $term = (Get-PrimarySearchTerm $terms $id); $items = FF-Query $term; Start-Sleep -Milliseconds 600; if (@($items).Count) { FF-Ingest $items $ffRows $id; Write-Output ("  ff  {0,-26} {1} products (recovered)" -f $id, @($items).Count) } }
   }
   $ffAdded = Merge-Rows 'family-fare-regular' $ffRows 'Family Fare'
   Write-Output ("Family Fare: " + $ffRows.Count + " product rows fetched, " + $ffAdded + " new after add-merge")
@@ -148,7 +149,7 @@ if ($Store -eq 'hyvee' -or $Store -eq 'both') {
   }
   $hvRows = New-Object System.Collections.ArrayList
   foreach ($id in $Ids) {
-    $term = [string]$terms.$id
+    $term = (Get-PrimarySearchTerm $terms $id)
     if (-not $term) { Write-Warning "Hy-Vee: no search term for $id"; continue }
     $res = HV-Search $term; Start-Sleep -Milliseconds 400
     $n = 0

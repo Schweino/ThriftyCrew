@@ -117,6 +117,7 @@ if ($SelfTest) {
 # ---- live -------------------------------------------------------------------------------------------
 . (Join-Path $root 'pu-lib.ps1')
 . (Join-Path $root 'discovery-lib.ps1')
+. (Join-Path $root 'search-terms-lib.ps1')
 $verdicts = Get-DiscoveryVerdicts (Join-Path $root 'discovery-verdicts.json')
 $coms = ConvertFrom-Json (Get-Content (Join-Path $root 'commodities.json') -Raw)
 $terms = (ConvertFrom-Json (Get-Content (Join-Path $root 'commodity-search.json') -Raw)).terms
@@ -178,7 +179,7 @@ $noCommodity = @(); $noTerm = @()
 foreach ($id in $work) {
   $c = $comById[[string]$id]
   if (-not $c) { $noCommodity += [string]$id; continue }
-  $term = [string]$terms.$id
+  $term = (Get-PrimarySearchTerm $terms $id)
   if (-not $term) { $noTerm += [string]$id; continue }
   $rx = @(); foreach ($p in @($c.include)) { if ($p) { $rx += [regex]::new([string]$p, 'IgnoreCase,Compiled') } }
   $ex = @(); foreach ($p in @($c.exclude)) { if ($p) { $ex += [regex]::new([string]$p, 'IgnoreCase,Compiled') } }

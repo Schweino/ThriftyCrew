@@ -1,4 +1,4 @@
-<#
+﻿<#
   build-pull-order.ps1 - emit this store's search terms in SHOPPER-VALUE order, so a bot wall truncates the
   long tail instead of the staples.
 
@@ -50,7 +50,8 @@ if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 
 $searchDoc = Get-Content (Join-Path $root 'commodity-search.json') -Raw | ConvertFrom-Json
 $terms = @{}
-foreach ($p in $searchDoc.terms.PSObject.Properties) { $terms[$p.Name] = [string]$p.Value }
+# Get-PrimarySearchTerm, not [string]$p.Value: a multi-term commodity would JOIN into one dead string.
+. (Join-Path $root 'search-terms-lib.ps1'); foreach ($p in $searchDoc.terms.PSObject.Properties) { $terms[$p.Name] = (Get-PrimarySearchTerm $searchDoc.terms $p.Name) }
 
 $cmpFile = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1
 if (-not $cmpFile) { throw 'build-pull-order: no comparison-*.json - run compare-deals first' }

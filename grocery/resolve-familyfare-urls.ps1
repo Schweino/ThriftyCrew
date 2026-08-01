@@ -1,4 +1,4 @@
-<#
+﻿<#
   resolve-familyfare-urls.ps1 - Batch-resolve Family Fare product URLs + verified prices via the Freshop API
   (store 6401 Omaha), for every id in the Family Fare section of out\url-worklist.json.
   For each commodity: query the Freshop API with the commodity's canonical search term, keep only products
@@ -14,6 +14,7 @@ if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 
 $wl = Get-Content (Join-Path $OutDir 'url-worklist.json') -Raw | ConvertFrom-Json
 $ff = @($wl.stores.'Family Fare')
+. (Join-Path $root 'search-terms-lib.ps1')
 $terms = (Get-Content (Join-Path $root 'commodity-search.json') -Raw | ConvertFrom-Json).terms
 
 # The staple board's global exclude is hardcoded in compare-deals.ps1 (staples are never a beverage/candy/
@@ -62,7 +63,8 @@ foreach ($cell in $ff) {
   $id = [string]$cell.id
   $unit = if ($rules.ContainsKey($id)) { $rules[$id].unit } else { [string]$cell.unit }
   # clean generic query beats the over-specific stored product name (which returns few/no API hits)
-  $q = if ($terms.PSObject.Properties[$id]) { [string]$terms.$id } else { $id -replace '-',' ' }
+  # Get-PrimarySearchTerm: [string]$terms.$id JOINS a multi-term commodity into one dead search string.
+  $q = if ($terms.PSObject.Properties[$id]) { Get-PrimarySearchTerm $terms $id } else { $id -replace '-',' ' }
   $api = 'https://api.freshop.ncrcloud.com/1/products?app_key=family_fare&store_id=6401&limit=25&q=' + [uri]::EscapeDataString($q)
   $best = $null
   try {

@@ -1721,6 +1721,49 @@ $acbSrcHv = [regex]::Match($acbSrc, "resolve-hyvee-links\.ps1'\)\s*@hvArgs")
 if ($acbSrcHv.Success -and $acbSrc -match '\$hvArgs = @\{ Ids = @\(\$TouchedIds\) \}') { Ok 'rule-batch link repair calls resolve-hyvee-links SCOPED to the batch, not in bulk' }
 else { Bad 'apply-coverage-batch runs a BULK resolve-hyvee-links in its repair chain again - a one-commodity edit will rewrite every Hy-Vee link' }
 
+# ---------------------------------------------------------------- N8. multi-term search (F3)
+# 210 of 429 commodities have a Family Fare product name that does not contain our single search term, so
+# one term per commodity is structurally unable to reach them. commodity-search.json now allows an ARRAY.
+# THE WHOLE DANGER IS THAT AN ARRAY DOES NOT FAIL, IT JOINS: `[string]$_.Value` turns
+# ["popsicles","ice pops"] into the one search "popsicles ice pops", which matches nothing while looking
+# exactly like an ordinary term that found nothing - and 23 scripts read that file.
+. (Join-Path $root 'search-terms-lib.ps1')
+$stFix = [pscustomobject]@{ 'popsicles' = @('popsicles', 'ice pops'); 'apples' = 'apples'; 'empty-one' = ''; 'dead-array' = @('', '  ') }
+$stPairs = @(Get-SearchTermPairs $stFix)
+if (@($stPairs | Where-Object { $_.id -eq 'popsicles' }).Count -eq 2 -and @($stPairs | Where-Object { $_.id -eq 'apples' }).Count -eq 1) {
+  Ok 'search terms: an array expands to real separate searches and a plain string still yields exactly one'
+} else { Bad ('search-term expansion is wrong - a multi-term commodity is not producing separate searches: ' + (($stPairs | ForEach-Object { $_.id + '=' + $_.term }) -join '; ')) }
+if (@($stPairs | Where-Object { $_.id -eq 'empty-one' -or $_.id -eq 'dead-array' }).Count -eq 0) { Ok 'search terms: an empty term produces NO search rather than a blank one that would match the whole catalogue' }
+else { Bad 'an empty search term is being issued as a real search' }
+# MUST FIRE: the primary term is what every single-string consumer gets, and it must be the FIRST one, so
+# a chip q= or a worklist label is identical to what it was before arrays existed.
+if ((Get-PrimarySearchTerm $stFix 'popsicles') -eq 'popsicles' -and (Get-PrimarySearchTerm $stFix 'apples') -eq 'apples' -and (Get-PrimarySearchTerm $stFix 'nope') -eq '') {
+  Ok 'search terms: single-string consumers get the FIRST term, never the joined one, and a missing id yields empty'
+} else { Bad 'Get-PrimarySearchTerm is not returning the stable first term - single-term consumers will search a joined string' }
+# MUST FIRE, and this is the one that matters: NO consumer may still cast the terms object to a string.
+# That cast is silent, so nothing downstream could ever report it.
+# CODE LINES ONLY. The comments that explain this trap quote the offending cast verbatim, so a whole-file
+# regex flags the very files that fixed it - a scan that cannot tell an explanation from an instance.
+$stOffenders = @()
+foreach ($sf in (Get-ChildItem (Join-Path $root '*.ps1') -File)) {
+  if ($sf.Name -eq 'search-terms-lib.ps1' -or $sf.Name -eq 'test-auditors.ps1') { continue }
+  $sTxt = Get-Content $sf.FullName -Raw
+  if ($sTxt -notmatch 'commodity-search\.json') { continue }
+  $bad = @(Get-Content $sf.FullName | Where-Object {
+      $ln = $_.Trim()
+      if ($ln.StartsWith('#')) { return $false }
+      ($ln -match '\[string\]\$p\.Value' -and $ln -match '\$term') -or ($ln -match '\[string\]\$terms\.\$id') -or ($ln -match '\[string\]\$_\.Value' -and $ln -match '\$term')
+    })
+  if ($bad.Count) { $stOffenders += ($sf.Name + ' (' + $bad.Count + ')') }
+}
+if ($stOffenders.Count -eq 0) { Ok 'search terms: no consumer of commodity-search.json casts a term value to a string (an array would JOIN, not fail)' }
+else { Bad ('these readers of commodity-search.json still flatten a term value, so a multi-term commodity becomes one dead search: ' + ($stOffenders -join ', ')) }
+# the live file must stay usable by the lib
+$stLive = (Get-Content (Join-Path $root 'commodity-search.json') -Raw | ConvertFrom-Json).terms
+$stLiveFindings = @(Test-SearchTermShape $stLive)
+if ($stLiveFindings.Count -eq 0) { Ok 'search terms: the live commodity-search.json has no empty terms and no degenerate arrays' }
+else { Bad ('commodity-search.json shape findings: ' + ($stLiveFindings -join ' | ')) }
+
 # ---------------------------------------------------------------- N7. the coverage ratchet's own config
 # F4 asked for tolerances narrowed "from the week's accumulated ledger data" and there WAS none - the ledger
 # is a single overwritten snapshot, so every tolerance had been hand-seeded from one green run with no

@@ -1,4 +1,4 @@
-<#
+﻿<#
   resolve-worklist.ps1 - Core of the "product URL" automation.
   Reads the current weekly comparison + recipe board (every priced item x store chip) and the durable
   product-urls.json, then emits a per-store worklist of chips that need a URL resolved:
@@ -18,6 +18,7 @@ $cmp = (Get-Content $cmpFile -Raw | ConvertFrom-Json).comparison
 $ri  = @()
 $riFile = Join-Path $OutDir 'recipe-board.json'
 if (Test-Path $riFile) { $ri = (Get-Content $riFile -Raw | ConvertFrom-Json).comparison }
+. (Join-Path $root 'search-terms-lib.ps1')
 $terms = (Get-Content (Join-Path $root 'commodity-search.json') -Raw | ConvertFrom-Json).terms
 
 # durable URLs: id -> store -> {url, price, size, name}
@@ -89,7 +90,8 @@ function AddChip($id, $commodity, $unit, $store, $curPU, $boardItem, $srcBoard) 
   # Prefer the board's exact source product name as the search term - that's the item whose price is shown,
   # so searching for it links the RIGHT product (e.g. "That's Smart! Large Eggs" not just "eggs"). Falls back
   # to the generic commodity search term only when the board did not record a source item.
-  $genTerm = if ($terms.PSObject.Properties.Name -contains $id) { [string]$terms.$id } else { $commodity }
+  # Get-PrimarySearchTerm: [string]$terms.$id JOINS a multi-term commodity into one dead search string.
+  $genTerm = if ($terms.PSObject.Properties.Name -contains $id) { Get-PrimarySearchTerm $terms $id } else { $commodity }
   $term = if ($boardItem -and ([string]$boardItem).Trim()) { [string]$boardItem } else { $genTerm }
   $reason = $null
   if (-not ($purls.ContainsKey($id)) -or -not ($purls[$id].ContainsKey($store)) -or -not $purls[$id][$store].url) {

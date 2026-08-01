@@ -1,4 +1,4 @@
-<#
+﻿<#
   audit-ff-carry.ps1 - COMPLETENESS guard for the Family Fare Freshop pull. Catches the class where the pull
   silently drops a term (rate-limit -> HTTP 200 with 0 items) so a product FF actually carries shows "No price
   yet" on the board (the 2026-07-13 ground-pork bug). coverage-gaps CANNOT see this - it only scans the raw pull,
@@ -54,7 +54,11 @@ if (-not $SelfTest) {
 $tmp = ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $root 'commodities.json'))); $commods = @($tmp)
 $terms = (ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $root 'commodity-search.json')))).terms
 # term-string -> commodity (to apply the right include/exclude)
-$termToId = @{}; foreach ($p in $terms.PSObject.Properties) { $termToId[[string]$p.Value] = [string]$p.Name }
+# EVERY term maps back to its commodity, not just the first. [string]$p.Value JOINED a multi-term
+# commodity into one key ("popsicles ice pops") that no real search will ever produce, so that commodity's
+# probes could never be attributed and it would read as permanently uncovered.
+. (Join-Path $root 'search-terms-lib.ps1')
+$termToId = @{}; foreach ($tp in (Get-SearchTermPairs $terms)) { $termToId[$tp.term] = $tp.id }
 $byId = @{}; foreach ($c in $commods) { $byId[[string]$c.id] = $c }
 function Match-Local($c, $name) {
   if (-not $c) { return $false }

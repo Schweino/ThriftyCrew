@@ -1,4 +1,4 @@
-<#
+﻿<#
   build-rescue-worklist.ps1 - turn the board's own expiry math into a per-store SEARCH LIST a browser
   session can execute, instead of a full-list fire drill nobody has time for.
 
@@ -154,7 +154,8 @@ if ($oldBoardRow) {
 $termDoc = Read-JsonFile $TermsFile
 $terms = @{}
 if ($termDoc -and $termDoc.PSObject.Properties['terms'] -and $termDoc.terms) {
-  foreach ($p in $termDoc.terms.PSObject.Properties) { $terms[[string]$p.Name] = [string]$p.Value }
+  # Get-PrimarySearchTerm, not [string]$p.Value: a multi-term commodity would JOIN into one dead string.
+  . (Join-Path $root 'search-terms-lib.ps1'); foreach ($p in $termDoc.terms.PSObject.Properties) { $terms[[string]$p.Name] = (Get-PrimarySearchTerm $termDoc.terms ([string]$p.Name)) }
 }
 
 # ---- today's cells, indexed by store ----

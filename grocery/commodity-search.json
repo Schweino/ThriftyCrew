@@ -1,4 +1,4 @@
-﻿{
+{
     "note":  "Per-commodity search terms used by the everyday/regular-price pulls (Family Fare Freshop, Baker\u0027s/Kroger, Hy-Vee, Sam\u0027s). Keyed by commodity id in commodities.json.",
     "terms":  {
                   "chicken-breast":  "boneless skinless chicken breast",
@@ -288,7 +288,10 @@
                   "fish-sticks":  "fish sticks",
                   "garlic-bread":  "frozen garlic bread",
                   "frozen-fruit":  "frozen mixed berries",
-                  "popsicles":  "popsicles",
+                  "popsicles":  [
+                                    "popsicles",
+                                    "ice pops"
+                                ],
                   "dryer-sheets":  "dryer sheets",
                   "fabric-softener":  "liquid fabric softener",
                   "laundry-pods":  "laundry detergent pods",

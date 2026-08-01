@@ -1,4 +1,4 @@
-<#
+﻿<#
   build-drift-chips.ps1 - assemble the BLR re-resolve worklist for the WRONG-PRODUCT links name-drift found.
 
   Sibling of build-nolink-chips.ps1: that one feeds chips that have NO link, this one feeds chips whose link
@@ -29,7 +29,8 @@ $cmpF = (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object N
 $cmp = (Get-Content $cmpF -Raw | ConvertFrom-Json).comparison
 $terms = @{}
 $tf = Join-Path $root 'commodity-search.json'
-if (Test-Path $tf) { foreach ($p in (Get-Content $tf -Raw | ConvertFrom-Json).terms.PSObject.Properties) { $terms[$p.Name] = [string]$p.Value } }
+# Get-PrimarySearchTerm, not [string]$p.Value: a multi-term commodity would JOIN into one dead string.
+if (Test-Path $tf) { . (Join-Path $root 'search-terms-lib.ps1'); $tdoc = (Get-Content $tf -Raw | ConvertFrom-Json).terms; foreach ($p in $tdoc.PSObject.Properties) { $terms[$p.Name] = (Get-PrimarySearchTerm $tdoc $p.Name) } }
 
 $cell = @{}
 # BOTH BOARDS, AND THE FLAG'S OWN RECORD IS THE SOURCE OF `match`. This map was built from the STAPLE
