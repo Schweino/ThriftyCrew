@@ -106,3 +106,12 @@
 [2026-07-31T09:00:59] SENT 'Recipe price inversion: 5 clamped' -> schweino68@gmail.com (id 19fb87a6609d6b7f)
 [2026-07-31T09:03:17] SUPPRESSED (already sent this type today) 'Grocery: 1 NEW price flag(s) - 2026-07-31' [type: grocery new price flag s]
 [2026-07-31T09:15:23] SUPPRESSED (already sent this type today) 'Grocery: board-link price drift (21 chips) - 2026-07-31' [type: grocery board link price drift chips]
+[2026-07-31T11:23:53] SEND FAILED 'Grocery: Aldi multipack captures store a PACK price against a PER-UNIT size': The remote server returned an error: (400) Bad Request.
+[2026-07-31T11:24:04] BODY THIN on 'Grocery: alert-channel self-check 2026-07-31' - the queue entry carries no store, commodity or number, so it cannot be classified without hunting the data. Fix the caller to include the identifying rows.
+[2026-07-31T11:24:05] SENT 'Grocery: alert-channel self-check 2026-07-31' -> schweino68@gmail.com (id 19fb8fd6c93a06d4)
+[2026-07-31T11:24:31] SENT 'Grocery: alert-channel bisect B' -> schweino68@gmail.com (id 19fb8fdd13e3585f)
+[2026-07-31T11:25:24] SENT 'Grocery: Aldi multipack captures store a PACK price against a PER-UNIT size' -> schweino68@gmail.com (id 19fb8fe9ca245e03)
+[2026-07-31T11:26:10] SUPPRESSED (already sent this type today) 'Grocery: Aldi multipack captures store a PACK price against a PER-UNIT size' [type: grocery aldi multipack captures store a pack price against a per unit size]
+[2026-07-31T11:26:32] QUEUE BODY UPGRADED on 2026-07-31-96ae4a (307 -> 1574 chars, same day)
+[2026-07-31T11:26:32] SUPPRESSED (already sent this type today) 'Grocery: Aldi multipack captures store a PACK price against a PER-UNIT size' [type: grocery aldi multipack captures store a pack price against a per unit size]
+[2026-07-31T11:29:22] SENT 'Grocery: the link-drift alert counts ad-sourced chips that can never have a link' -> schweino68@gmail.com (id 19fb90243613cf21)

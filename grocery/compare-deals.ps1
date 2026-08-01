@@ -959,6 +959,31 @@ foreach ($g in ($matched | Group-Object id)) {
 $candPfx = if ($OutName -eq 'comparison') { 'candidates' } else { "$OutName-candidates" }
 (@{ week_of=$today; commodities=$candList } | ConvertTo-Json -Depth 8) | Set-Content (Join-Path $OutDir ("$candPfx-"+$today+".json")) -Encoding UTF8
 
+# ---------------------------------------------------------------- adjudicated-wrong cells, dropped HERE
+# known-wrong.json used to be read only by audit-known-wrong.ps1 and guards.ps1, and both of those run
+# AFTER the board is built. A ruling could therefore block a publish but never correct a board: the wrong
+# cell stayed, the gate went red, and every publish stopped until a human hand-edited a commodity rule.
+# That made twenty-two accuracy findings into tripwires instead of fixes. Dropping the row here lets the
+# store fall through to its own next-best REAL row, which is what the shopper should have been seeing.
+# The matching lives in known-wrong-lib.ps1 and is shared with the audit, so the two can never disagree
+# about what a ruling covers.
+. (Join-Path $PSScriptRoot 'known-wrong-lib.ps1')
+$KW_BLOCKS = Get-KnownWrongBlocks -Path (Join-Path $PSScriptRoot 'known-wrong.json')
+$kwDropped = 0
+if ($KW_BLOCKS.Count) {
+  $kept = New-Object System.Collections.Generic.List[object]
+  foreach ($m in $matched) {
+    if ($m.unit_price -ne $null -and (Test-KnownWrong -Blocks $KW_BLOCKS -CommodityId ([string]$m.id) -Store ([string]$m.store) -ProductName ([string]$m.name))) {
+      $kwDropped++
+      Write-Output ("  known-wrong: dropped [{0}] {1} '{2}' (unit_price {3}) - already adjudicated wrong; the store falls through to its next-best row" -f $m.store, $m.id, $m.name, $m.unit_price)
+      continue
+    }
+    [void]$kept.Add($m)
+  }
+  $matched = $kept
+}
+Write-Output ("known-wrong: $($KW_BLOCKS.Count) active blocked cell(s) in the ruling file, $kwDropped priced row(s) dropped from this board")
+
 # ---------------------------------------------------------------- rank: cheapest per store, then across stores
 $report = New-Object System.Collections.Generic.List[object]
 foreach ($g in ($matched | Where-Object { $_.unit_price -ne $null } | Group-Object id)) {

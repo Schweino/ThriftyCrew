@@ -3097,3 +3097,61 @@
 [2026-07-31T09:16:41] coverage-cycle: 
 [2026-07-31T09:16:41] coverage-cycle: coverage-ledger: 1 coverage finding(s) across 12 rostered check(s); 12 row(s) evaluated.
 [2026-07-31T09:16:41] run complete; flips=0
+[2026-07-31T15:15:53] watchers ok: every guard still fires on its own founding bug
+[2026-07-31T15:15:54] everyday-mismatch: everyday cells with a link, checked : 2617
+[2026-07-31T15:15:54] everyday-mismatch: sale cells skipped (expected diff)  : 42
+[2026-07-31T15:15:54] everyday-mismatch: uncomputable size                   : 0
+[2026-07-31T15:15:54] everyday-mismatch: board published no per-unit         : 0
+[2026-07-31T15:15:54] everyday-mismatch: 
+[2026-07-31T15:15:54] everyday-mismatch: EVERYDAY MISMATCHES (board disagrees with its own linked product): 12
+[2026-07-31T15:15:54] everyday-mismatch:   pickled-jalapenos        Baker's      board=0.1139    link=0.0833    x0.73   $1.25 [15 oz]
+[2026-07-31T15:15:54] everyday-mismatch:       board item: La Costena Sliced Jalapeno Peppers
+[2026-07-31T15:15:54] everyday-mismatch:       link  item: Ranch Style Beans with Sliced Jalapeno Peppers
+[2026-07-31T15:15:54] everyday-mismatch:   stuffing-mix             Fareway      board=0.4158    link=0.3158    x0.76   $3.79 [12 oz]
+[2026-07-31T15:15:54] everyday-mismatch:       board item: Kraft Stove Top Everyday Stuffing Mix for Chicken
+[2026-07-31T15:15:54] everyday-mismatch:       link  item: Pepperidge Farm Herb Seasoned Classic Stuffing
+[2026-07-31T15:15:54] everyday-mismatch:   chili-crisp              Fareway      board=1.0891    link=1.3482    x1.24   $9.99 [7.41 oz]
+[2026-07-31T15:15:54] everyday-mismatch:       board item: Dynasty Hot Chili Oil, Spicy
+[2026-07-31T15:15:54] everyday-mismatch:       link  item: WUJU Chili Crisp Sweet Heat
+[2026-07-31T15:15:54] everyday-mismatch:   queso                    Fareway      board=0.1952    link=0.2327    x1.19   $3.49 [15 oz]
+[2026-07-31T15:15:54] everyday-mismatch:       board item: Tostitos Medium Con Queso Salsa Dip
+[2026-07-31T15:15:54] everyday-mismatch:       link  item: Tostitos Salsa Con Queso, Medium
+[2026-07-31T15:15:54] everyday-mismatch:   diapers                  Fareway      board=0.3735    link=0.4461    x1.19   $29.44 [66 ct]
+[2026-07-31T15:15:54] everyday-mismatch:       board item: Luvs Platinum Protection Baby Diapers, Size 6
+[2026-07-31T15:15:54] everyday-mismatch:       link  item: Huggies Little Movers Baby Diapers, Size 4 (22-37 lbs)
+[2026-07-31T15:15:54] everyday-mismatch:   rice-cakes               Family Fare  board=0.5662    link=0.6487    x1.15   $4.69 [7.23 oz]
+[2026-07-31T15:15:54] everyday-mismatch:       board item: Quaker Caramel Chocolate Chip Rice Cakes 7.4 Oz
+[2026-07-31T15:15:54] everyday-mismatch:       link  item: Quaker Rice Cakes, Chocolate 7.23 Oz
+[2026-07-31T15:15:54] everyday-mismatch:   ground-cinnamon          Hy-Vee       board=0.5       link=0.436     x0.87   $1.09 [2.5 oz]
+[2026-07-31T15:15:54] everyday-mismatch:   canned-chili             Fareway      board=0.1592    link=0.176     x1.11   $2.64 [15 oz]
+[2026-07-31T15:15:54] everyday-mismatch:       board item: Hormel Chili with Beans, No Artificial Ingredients, 25 oz Can
+[2026-07-31T15:15:54] everyday-mismatch:       link  item: Hormel Chili with Beans, No Artificial Ingredients, 15 Oz
+[2026-07-31T15:15:54] everyday-mismatch:   frosting                 Walmart      board=0.11      link=0.1212    x1.1    $15.52 [128 oz]
+[2026-07-31T15:15:54] everyday-mismatch:   whole-chicken            Sam's Club   board=2.38      link=2.57      x1.08   $2.57 [lb]
+[2026-07-31T15:15:54] everyday-mismatch:   ricotta                  Hy-Vee       board=0.2341    link=0.2184    x0.93   $6.99 [32 oz]
+[2026-07-31T15:15:54] everyday-mismatch:   mixed-nuts               Walmart      board=0.3548    link=0.3675    x1.04   $5.42 [14.75 oz]
+[2026-07-31T15:15:54] everyday-mismatch:       board item: Great Value Mixed Nuts with Peanuts, 27 oz
+[2026-07-31T15:15:54] everyday-mismatch:       link  item: Great Value Roasted & Lightly Salted Mixed Nuts, 14.75 oz
+[2026-07-31T15:15:54] everyday-mismatch: 
+[2026-07-31T15:15:54] everyday-mismatch: saved -> C:\Codex\income\grocery\out\everyday-mismatches.json
+[2026-07-31T15:15:55] rescue-worklist: rescue [Aldi]: DROPPED 6  UNTRACEABLE 0  EXPIRING 0  STALE 0 -> out\rescue-terms-aldi.txt
+[2026-07-31T15:15:55] rescue-worklist: rescue [Fareway]: DROPPED 28  UNTRACEABLE 0  EXPIRING 0  STALE 0 -> out\rescue-terms-fareway.txt
+[2026-07-31T15:15:55] rescue-worklist: rescue [Sam's Club]: DROPPED 1  UNTRACEABLE 0  EXPIRING 13  STALE 11 -> out\rescue-terms-sams.txt
+[2026-07-31T15:15:55] rescue-worklist: rescue [Walmart]: DROPPED 0  UNTRACEABLE 0  EXPIRING 21  STALE 0 -> out\rescue-terms-walmart.txt
+[2026-07-31T15:15:56] coverage-cycle:   ok    audit-everyday-mismatch        examined 2617 of 2617 eligible (baseline 2582, tol 10%)
+[2026-07-31T15:15:56] coverage-cycle:   ok    audit-food-category            examined 2683 of 3219 eligible (baseline 2663, tol 10%)
+[2026-07-31T15:15:56] coverage-cycle:   ok    build-rescue-worklist          examined 1517 of 1517 eligible (baseline 1517, tol 10%)
+[2026-07-31T15:15:56] coverage-cycle:   ok    guards/10-store-charges        examined 29203 of 29203 eligible (baseline 24018, tol 35%)
+[2026-07-31T15:15:56] coverage-cycle:   ok    guards/11-bakers-provenance    examined 6928 of 6928 eligible (baseline 6936, tol 25%)
+[2026-07-31T15:15:56] coverage-cycle:   ok    guards/3-pin-derivable         examined 16 of 16 eligible (baseline 19, tol 50%)
+[2026-07-31T15:15:56] coverage-cycle:   ok    guards/3-pin-identity          examined 6 of 16 eligible (baseline 9, tol 50%)
+[2026-07-31T15:15:56] coverage-cycle:   ok    guards/4-factor                examined 2617 of 2617 eligible (baseline 2435, tol 10%)
+[2026-07-31T15:15:56] coverage-cycle:   ok    guards/5-multipack             examined 594 of 594 eligible (baseline 380, tol 100%)
+[2026-07-31T15:15:56] coverage-cycle:   ok    guards/6-collapse              examined 6 of 7 eligible (baseline 6, tol 15%)
+[2026-07-31T15:15:56] coverage-cycle:   ok    guards/9-freshness             examined 7 of 7 eligible (baseline 7, tol 15%)
+[2026-07-31T15:15:56] coverage-cycle:   ok    pull-regular-hyvee             examined 873 of 1053 eligible (baseline 1010, tol 15%)
+[2026-07-31T15:15:56] coverage-cycle: 
+[2026-07-31T15:15:56] coverage-cycle:   BLIND           audit-ff-carry - examined 0 of 526 eligible row(s). This is the shape guard 11 held for five days: a confident ok over an empty examination. empty FF search terms re-probed against Freshop from family-fare-regular-2026-07-31.json
+[2026-07-31T15:15:56] coverage-cycle: 
+[2026-07-31T15:15:56] coverage-cycle: coverage-ledger: 1 coverage finding(s) across 13 rostered check(s); 13 row(s) evaluated.
+[2026-07-31T15:15:56] run complete; flips=0

@@ -1376,7 +1376,8 @@
                         "cheese\\s+chunk",
                         "block\\s+cheese",
                         "(cheddar|mozzarella|colby|monterey|jack)\\s+cheese",
-                        "cheese[^,]*(cheddar|mozzarella|colby)"
+                        "cheese[^,]*(cheddar|mozzarella|colby)",
+                        "cheese,\\s+shredded"
                     ],
         "exclude":  [
                         "cottage",
@@ -31072,7 +31073,8 @@
         "band_max":  7,
         "include":  [
                         "red\\s+pepper\\s+flakes",
-                        "crushed\\s+red\\s+pepper"
+                        "crushed\\s+red\\s+pepper",
+                        "red\\s+pepper,?\\s+crushed"
                     ],
         "exclude":  [
                         "roasted",
@@ -31174,7 +31176,8 @@
         "band_max":  4.5,
         "include":  [
                         "garlic\\s+powder",
-                        "granulated\\s+garlic"
+                        "granulated\\s+garlic",
+                        "garlic,?\\s+granulated"
                     ],
         "exclude":  [
                         "\\bsalt\\b",
@@ -31275,7 +31278,8 @@
         "band_max":  4.5,
         "include":  [
                         "onion\\s+powder",
-                        "granulated\\s+onion"
+                        "granulated\\s+onion",
+                        "onion,?\\s+granulated"
                     ],
         "exclude":  [
                         "\\bsalt\\b",
@@ -36824,7 +36828,8 @@
         "include":  [
                         "minced\\s+garlic",
                         "chopped\\s+garlic",
-                        "crushed\\s+garlic"
+                        "crushed\\s+garlic",
+                        "garlic,?\\s+minced"
                     ],
         "exclude":  [
                         "\\bpowder\\b",
@@ -39919,7 +39924,9 @@
         "unit":  "oz",
         "include":  [
                         "ground\\s+cloves?",
-                        "whole\\s+cloves?"
+                        "whole\\s+cloves?",
+                        "cloves?,?\\s+ground",
+                        "cloves?,?\\s+whole"
                     ],
         "exclude":  [
                         "garlic",
@@ -40277,7 +40284,8 @@
         "label":  "Ginger (ground)",
         "unit":  "oz",
         "include":  [
-                        "ground\\s+ginger"
+                        "ground\\s+ginger",
+                        "ginger,?\\s+ground"
                     ],
         "exclude":  [
                         "\\bfresh\\b",

@@ -326,6 +326,21 @@
                         "ruled_on":  "2026-07-31",
                         "ruled_by":  "triage-developer 2026-07-31 (plan-2026-07-31 fa3102)",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-cloves|FamilyFare|spice-supreme-spice-ground-cloves",
+                        "commodity":  "ground-cloves",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Spice Supreme Spice Ground Cloves"
+                                  ],
+                        "product_id":  "2400974",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Captured at current_price=45 for a 1.25 oz Spice Supreme jar, i.e. $36.00/oz, 13.6x the row median and 33x Walmart. Spice Supreme is a discount brand; a $45 spice jar is not a shelf price. Surfaced by audit-unit-basis-outlier on its first live run. The row is also STALE (as_of 2026-07-30 while its shelf-mates are 07-31), and Family Fare stocks Our Family Cloves Ground 2 Oz at $2.99 ($1.50/oz) in the same file, so the bad row was additionally hiding the store real best price.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "accuracy pass 2026-08-01",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
