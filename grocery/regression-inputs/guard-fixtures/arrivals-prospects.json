@@ -1,0 +1,44 @@
+[
+  {
+    "id": "coconut-oil",
+    "store": "Hy-Vee",
+    "product": "Dr Teal's Foaming Bath with Pure Epsom Salt, Nourish & Protect with Coconut Oil",
+    "size": "34 fl oz",
+    "price": 5.09,
+    "per_unit": 0.1497,
+    "unit": "oz",
+    "held_per_unit": 0.2312,
+    "beats_by_pct": 35.2,
+    "product_id": "9990001",
+    "why": "beats the held price",
+    "_fixture": "FROZEN FIXTURE - MUST FIRE, TWICE OVER. The 2026-07-28 founding wrong product, re-staged as a DISCOVERY PROSPECT instead of an arrival: a bath soap that carries 'Coconut Oil' only in the tail of its name, offered 23.8% under the held Hy-Vee price. It is the exact shape the first live Hy-Vee discovery run produced (~14% of candidates were wrong products, and Hy-Vee publishes no department that could refuse them). It must FLAG on cohort divergence, because the head cut at ' with ' scores it against a cohort that agrees on 'coconut oil'; and it must ALSO flag on BASIS, because 34 FLUID ounces were divided into a commodity priced per WEIGHT ounce. NEVER regenerate from a live docket."
+  },
+  {
+    "id": "coconut-oil",
+    "store": "Hy-Vee",
+    "product": "Nutiva Organic Virgin Coconut Oil",
+    "size": "15 oz",
+    "price": 2.99,
+    "per_unit": 0.1993,
+    "unit": "oz",
+    "held_per_unit": 0.2312,
+    "beats_by_pct": 13.8,
+    "product_id": "9990002",
+    "why": "beats the held price",
+    "_fixture": "FROZEN FIXTURE - CLEAN TWIN. A real coconut oil, in the right basis, from the same store on the same docket, beating the held Hy-Vee price but NOT the board floor. If this FLAGS, the prospects score is tracking novelty or cheapness rather than divergence and the whole section is noise - the same trap arrivals-clean-board.json guards for arrivals. It also pins the crown arithmetic: 0.1993 loses to the 0.1762 floor, so it must read 'no crown' while the bath soap at 0.1497 reads TAKES CROWN."
+  },
+  {
+    "id": "salmon",
+    "store": "Hy-Vee",
+    "product": "Blue Buffalo Wilderness Natural High Protein Dry Food for Adult Cats, Salmon, 9.5-lb Bag",
+    "size": "9.5 lb",
+    "price": 34.99,
+    "per_unit": 3.6832,
+    "unit": "lb",
+    "held_per_unit": 7.99,
+    "beats_by_pct": 53.9,
+    "product_id": "9990003",
+    "why": "beats the held price",
+    "_fixture": "FROZEN FIXTURE - ALREADY RULED. The 2026-07-29 cat-food-as-salmon case, carrying a verdict in arrivals-prospect-verdicts.json. It must NOT appear in the open queue and must be COUNTED as settled: a review queue that re-asks a question a human already answered teaches its reader to skim, and a settled candidate that silently vanishes without being counted is indistinguishable from a discovery run that stopped working."
+  }
+]

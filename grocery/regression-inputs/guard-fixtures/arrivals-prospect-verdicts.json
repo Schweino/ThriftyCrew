@@ -1,0 +1,16 @@
+{
+  "readme": "FROZEN FIXTURE - the settled half of the prospects test. One ruling, against the cat-food-as-salmon candidate in arrivals-prospects.json, keyed exactly as discovery-lib.ps1 keys it (store|commodity|storeProductId). It exists to prove the arrivals desk drops a candidate a human has already ruled on AND still counts it. NEVER regenerate from the live ledger.",
+  "entries": [
+    {
+      "key": "hyvee|salmon|9990003",
+      "store": "Hy-Vee",
+      "commodity": "salmon",
+      "product": "Blue Buffalo Wilderness Natural High Protein Dry Food for Adult Cats, Salmon, 9.5-lb Bag",
+      "product_id": "9990003",
+      "verdict": "rejected",
+      "evidence": "Dry cat food. Matched the salmon include through the flavour word in the tail of the name.",
+      "ruled_by": "fixture",
+      "ruled_on": "2026-08-01"
+    }
+  ]
+}

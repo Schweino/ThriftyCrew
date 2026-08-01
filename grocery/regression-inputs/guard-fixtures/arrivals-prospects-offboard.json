@@ -1,0 +1,16 @@
+[
+  {
+    "id": "ketchup",
+    "store": "Hy-Vee",
+    "product": "That's Smart! Tomato Ketchup",
+    "size": "23 oz",
+    "price": 1.28,
+    "per_unit": 0.0557,
+    "unit": "oz",
+    "held_per_unit": 0.0784,
+    "beats_by_pct": 29,
+    "product_id": "9990004",
+    "why": "beats the held price",
+    "_fixture": "FROZEN FIXTURE - MUST FIRE, VARIABLE CLOBBER. A real candidate for a commodity this board does NOT price, so the prospects loop takes its 'no-board-row' unscorable branch. Paired with -N 0 (no baseline), it reproduces the 2026-08-01 bug where that per-candidate reason overwrote the docket-level baseline-adequacy reason: the run printed 'DEGRADED: no-board-row for ketchup' instead of 'ZERO baseline boards' and its exit-3 line named the wrong cause of its own blindness. A check that misreports why it is blind sends the reader to the wrong bug. NEVER regenerate from a live docket."
+  }
+]

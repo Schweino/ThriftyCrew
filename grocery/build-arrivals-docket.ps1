@@ -62,8 +62,39 @@
   board growing, not products arriving (2026-07-12: 268 baseline cells against 1,630 today produced 1,473
   "arrivals"). That case exits 3 - could-not-evaluate - with the docket still written and marked degraded.
 
+  PROSPECTS - THE THIRD SECTION, AND WHY IT IS HERE (2026-08-01). Everything above reviews a product that
+  is ALREADY on the board. `discover-hyvee.ps1` produces the opposite: products that are NOT on the board and
+  would beat what we hold, written to out\hyvee-discovery.json. That docket had no reader, so discovery paid
+  nothing - it found That's Smart! peanut butter 33% under the held price and the finding just sat there.
+  It belongs here because it is the same review unit and the same reader: a new product that would take a
+  crown, ranked by how far its name sits from its own cohort.
+
+  IT CANNOT BE MACHINE-VETTED, AND THAT IS MEASURED. Family Fare depth is safe because `canonical_url` is a
+  shelf path (aisle-test.ps1). Hy-Vee publishes NO per-product department, and the CATEGORY facet its search
+  response exposes is SILENTLY IGNORED when passed back as a filter - three request shapes tried, all
+  returned the identical unfiltered results with a cat litter still sitting in "baking soda". A filter that
+  looks applied and is not is worse than none, so nothing here is gated on it and nothing here is auto-
+  accepted. The first live run measured ~14% of candidates as WRONG PRODUCTS (a salad dressing and a pasta
+  both matched "olive oil" and both beat the held price), which is the Family Fare browse-test rate.
+  So this section RANKS and EXPLAINS; adjudicate-discovery.ps1 records the human's verdict.
+
+  Prospects are scored by the SAME cohort divergence as an arrival, plus a BASIS check on the size string -
+  because the Pasta Roni vermicelli "beat" olive oil only by dividing 4.6 WEIGHT ounces as fluid ounces.
+  A settled candidate (discovery-verdicts.json) is never listed again: a queue that re-asks a settled
+  question teaches its reader to skim.
+
+  WHAT THAT SCORING IS ACTUALLY WORTH, MEASURED ON THE FOUNDING DOCKET (11 candidates, 2026-08-01):
+  the two known-wrong products RANK FIRST AND SECOND (Pasta Roni vermicelli and Hendrickson's dressing,
+  both div 0.50) above all nine real ones (div 0.33 and 0.00). So the ORDER is informative.
+  **The 0.75 FLOOR FIRED ON NEITHER OF THEM** - only the basis check flagged the vermicelli, and the
+  dressing carries no machine signal at all. The floor is NOT retuned to fit 11 rows; that is exactly the
+  overfit the aisle test walked into by writing its own positive examples. So: FLAG means "look here
+  first", it does NOT mean the unflagged ones are clear. EVERY open prospect needs a human ruling, and
+  ~1 in 7 of them is a wrong product.
+
   Exit codes: 0 = docket produced. 3 = could not evaluate (no board, no baseline, or a thin baseline).
               It NEVER exits 1 or 2. This is a review queue; nothing here may hold a publish.
+              PROSPECTS never move the exit code either way - they are not a delta of this board.
 
   Usage:
     build-arrivals-docket.ps1
@@ -78,6 +109,8 @@ param(
   [int]$N = 14,
   [string]$OutFile = '',
   [double]$Floor = 0.75,
+  [string]$DiscoveryFile = '',
+  [string]$VerdictsFile = '',
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
@@ -315,6 +348,121 @@ function Select-Section {
 $crownSec = Select-Section @($scored | Where-Object { $_.crown }) $Floor
 $otherSec = Select-Section @($scored | Where-Object { -not $_.crown }) $Floor
 
+# ------------------------------------------------------------------ PROSPECTS (the discovery docket)
+# Scored against the SAME board and the SAME cohort as an arrival, because a prospect that beats the crown
+# is an arrival that has not happened yet. It never touches $adequate or the exit code: the baseline
+# adequacy question is about THIS board's delta, and a prospect is not part of that delta.
+$prospects = New-Object 'System.Collections.Generic.List[object]'
+$prospectBlind = New-Object 'System.Collections.Generic.List[object]'
+$discState = ''
+$discSettled = 0
+$discFile = if ($DiscoveryFile -ne '') { $DiscoveryFile } else { Join-Path $outDir 'hyvee-discovery.json' }
+$verdFile = if ($VerdictsFile -ne '') { $VerdictsFile } else { Join-Path $root 'discovery-verdicts.json' }
+try {
+  . (Join-Path $root 'discovery-lib.ps1')
+  if (-not (Test-Path $discFile)) {
+    $discState = 'no discovery docket on disk (' + $discFile + ') - discovery has not run, which is NOT the same as "no candidates"'
+  } else {
+    $draw = ((Get-Content -LiteralPath $discFile -Raw -Encoding UTF8) + '').Trim()
+    if ($draw -eq '') { $discState = 'discovery docket is EMPTY on disk - unreadable, not "nothing found"' }
+    else {
+      # assign FIRST: @(Get-Content | ConvertFrom-Json) does not unroll a bare top-level JSON array in PS 5.1
+      $dj = $draw | ConvertFrom-Json
+      $cands = @($dj)
+      if ($null -ne $dj -and $dj.PSObject.Properties.Name -contains 'candidates') { $cands = @($dj.candidates) }
+      $verdicts = Get-DiscoveryVerdicts $verdFile
+      # per-commodity floor and unit, straight off the board this docket was built against
+      $bestById = @{}; $unitById = @{}
+      foreach ($c in $today) {
+        $pu = [double]$c.per_unit
+        if ($pu -gt 0 -and ((-not $bestById.ContainsKey($c.id)) -or $pu -lt $bestById[$c.id])) { $bestById[$c.id] = $pu }
+        if (-not $unitById.ContainsKey($c.id)) { $unitById[$c.id] = [string]$c.unit }
+      }
+      foreach ($cd in @($cands | Where-Object { $_ })) {
+        $cid = [string]$cd.id; $cstore = [string]$cd.store; $cname = [string]$cd.product
+        if ($cid -eq '' -or $cname -eq '') { continue }
+        $key = Get-DiscoveryKey -Store $cstore -Commodity $cid -ProductId ([string]$cd.product_id) -Product $cname
+        if ($verdicts.ContainsKey($key)) { $discSettled++; continue }
+        $basis = Test-DiscoveryBasisSuspect -Size ([string]$cd.size) -Unit ([string]$cd.unit)
+        $head = Get-ArrivalHead $cname
+        $tokA = Get-ArrivalTokens $head
+        $cohort = @()
+        if ($byId.ContainsKey($cid)) { $cohort = @($byId[$cid] | Where-Object { $_.store -ne $cstore }) }
+        # WOULD IT TAKE THE CROWN? Only answerable when the board prices this commodity in the SAME unit the
+        # candidate was measured in. A cross-unit comparison here would be the basis bug wearing a verdict.
+        $takes = $null; $floorPu = $null
+        if ($bestById.ContainsKey($cid) -and ([string]$unitById[$cid] -eq [string]$cd.unit)) {
+          $floorPu = [double]$bestById[$cid]
+          $takes = ([double]$cd.per_unit -gt 0 -and [double]$cd.per_unit -lt $floorPu)
+        }
+        # $pWhy, NOT $why. $why is the BASELINE-ADEQUACY reason for the whole docket, and reusing the name
+        # here overwrote it with the last prospect's message - so a run with no baseline printed
+        # "DEGRADED: no-board-row for ketchup" instead of "ZERO baseline boards", and its exit-3 line lied
+        # about why it could not evaluate. Same clobber family as $Matches being global in PS 5.1.
+        $pWhy = ''
+        if (-not $byId.ContainsKey($cid)) { $pWhy = 'no-board-row (this board prices no cell for "' + $cid + '", so there is no cohort to judge the name against)' }
+        elseif ($cohort.Count -lt 2) { $pWhy = 'thin-cohort (' + $cohort.Count + ' other priced cell(s); scoring is impossible, NOT a pass)' }
+        elseif ($tokA.Count -lt 2) { $pWhy = 'short-head ("' + $head + '" carries no identity words after the cut)' }
+        $div = $null; $consTxt = ''
+        if ($pWhy -eq '') {
+          $cnt = @{}
+          foreach ($m in $cohort) { foreach ($t in (Get-ArrivalTokens (Get-ArrivalHead $m.item))) { if ($cnt.ContainsKey($t)) { $cnt[$t]++ } else { $cnt[$t] = 1 } } }
+          $need = [Math]::Ceiling($cohort.Count / 2.0)
+          $cons = New-Object 'System.Collections.Generic.HashSet[string]'
+          foreach ($k in $cnt.Keys) { if ($cnt[$k] -ge $need) { [void]$cons.Add($k) } }
+          foreach ($t in (Get-ArrivalTokens $labels[$cid])) { [void]$cons.Add($t) }
+          if ($cons.Count -eq 0) { $pWhy = 'no-consensus (the cohort shares no word and the commodity label carries none)' }
+          else {
+            $hit = 0; foreach ($t in $cons) { if ($tokA.Contains($t)) { $hit++ } }
+            $div = [Math]::Round(1.0 - ($hit / [double]$cons.Count), 4)
+            $consTxt = (($cons | Sort-Object) -join ' ')
+          }
+        }
+        $rec = [pscustomobject]@{
+          key = $key; id = $cid; store = $cstore; product = $cname; head = $head
+          size = [string]$cd.size; price = $cd.price; per_unit = $cd.per_unit; unit = [string]$cd.unit
+          held_per_unit = $cd.held_per_unit; beats_by_pct = $cd.beats_by_pct
+          board_floor = $floorPu; would_take_crown = $takes
+          product_id = [string]$cd.product_id
+          cohort = $cohort.Count; consensus = $consTxt; div = $div
+          basis_suspect = $basis
+          unscorable = $pWhy
+        }
+        # A prospect we could not SCORE is still a prospect a human must rule on, so it stays in the queue
+        # with its reason attached rather than being filed away in a BLIND list nobody adjudicates from.
+        if ($pWhy -ne '') { $prospectBlind.Add($rec) } else { $prospects.Add($rec) }
+      }
+      $discState = 'ok'
+    }
+  }
+} catch {
+  # LOUD, never silent: a prospects section that threw must not read like a prospects section that found
+  # nothing. Same failure shape as the guards that died on a delegated child's stderr.
+  $discState = 'THREW while reading the discovery docket: ' + $_.Exception.Message
+}
+
+# FLAG a prospect on divergence OR on a suspect basis - they are independent defects and the Pasta Roni
+# vermicelli carried both. Crown-takers first: a prospect that cannot win changes no shopper's price.
+# .ToArray() on BOTH, not @(...). `@($aList) + @($bList)` throws "Argument types do not match" in PS 5.1:
+# the array subexpression does NOT unroll a List[object] (same family as it not unrolling a bare top-level
+# JSON array), so this is List + List, which has no + operator - and it takes the whole docket down before
+# a single line of it prints.
+$prospectAll = @($prospects.ToArray() + $prospectBlind.ToArray())
+$prospectFlagged = @($prospectAll | Where-Object { ($null -ne $_.div -and $_.div -ge $Floor) -or $_.basis_suspect -ne '' -or $_.unscorable -ne '' })
+# ONE STRING SORT KEY, not four typed expressions. A multi-expression Sort-Object in PS 5.1 compares the
+# results pairwise, so a column that is Int32 on one row and Double on another (div is $null for an
+# unscorable prospect) throws "Argument types do not match" and takes the whole docket down with it.
+# Digits, in order: crown-taker, flagged, unscorable, 1-div (so higher divergence sorts first), id.
+$prospectSorted = @($prospectAll | Sort-Object -Property @{ Expression = {
+  $flagged = (($null -ne $_.div -and [double]$_.div -ge $Floor) -or $_.basis_suspect -ne '' -or $_.unscorable -ne '')
+  $d = if ($null -eq $_.div) { 0.0 } else { [double]$_.div }
+  ('{0}{1}{2}{3:00000}{4}' -f `
+    $(if ($_.would_take_crown -eq $true) { 0 } else { 1 }), `
+    $(if ($flagged) { 0 } else { 1 }), `
+    $(if ($_.unscorable -ne '') { 0 } else { 1 }), `
+    [int][Math]::Round((1.0 - $d) * 10000), [string]$_.id)
+} })
+
 # ------------------------------------------------------------------ console docket
 $hdr = 'arrivals-docket: ' + $boardDate + ' vs ' + $baseFiles.Count + ' baseline board(s)'
 if ($baseFiles.Count -gt 0) { $hdr += ' (' + $baseFiles[0] + ' .. ' + $baseFiles[$baseFiles.Count - 1] + ')' }
@@ -323,6 +471,10 @@ Write-Output ('  cells today ' + $today.Count + ' | baseline union ' + $seen.Cou
   ' (crown ' + @($scored | Where-Object { $_.crown }).Count + ') | scored ' + $scored.Count + ' | blind ' + $blind.Count)
 Write-Output ('  FLAGGED at div >= ' + $Floor + ': ' + ($crownSec.flag.Count + $otherSec.flag.Count) +
   '  (this is a REVIEW QUEUE - measured precision is low; nothing here blocks a publish)')
+Write-Output ('  PROSPECTS awaiting a ruling: ' + $prospectAll.Count + ' (' +
+  @($prospectAll | Where-Object { $_.would_take_crown -eq $true }).Count + ' would take a crown, ' +
+  $prospectFlagged.Count + ' flagged, ' + $discSettled + ' already ruled)' +
+  $(if ($discState -ne 'ok') { '  [' + $discState + ']' } else { '' }))
 if (-not $adequate) { Write-Output ('  DEGRADED: ' + $why) }
 
 $fn = 0
@@ -352,6 +504,37 @@ if ($otherSec.total -eq 0) { Write-Output '  none' }
 Show-Rows $otherSec.flag 'FLAG'
 Show-Rows $otherSec.context 'ctx'
 if ($otherSec.dropped -gt 0) { Write-Output ('  ... ' + $otherSec.dropped + ' more arrival(s) NOT listed, all at div <= ' + ('{0:N2}' -f [double]$otherSec.cut)) }
+
+Write-Output ''
+Write-Output ('PROSPECTS - NOT ON THE BOARD, WOULD BEAT WHAT WE HOLD (' + $prospectAll.Count + ' open, ' + $discSettled + ' already adjudicated)')
+if ($discState -ne 'ok') {
+  Write-Output ('  BLIND: ' + $discState)
+} elseif ($prospectAll.Count -eq 0) {
+  Write-Output '  none open'
+} else {
+  Write-Output ('  ~14% of these are WRONG PRODUCTS (measured). Hy-Vee publishes no per-product department, so')
+  Write-Output ('  NOTHING machine-vetted them and NONE of them is passed here. FLAG is reading order, not a')
+  Write-Output ('  verdict - on the founding docket the floor fired on neither wrong product. Rule every one:')
+  Write-Output ('    .\adjudicate-discovery.ps1 -Key <key> -Accept|-Reject -RuledBy <you> -Evidence "..."')
+  $pn = 0
+  foreach ($p in $prospectSorted) {
+    $pn++
+    $tag = if (($null -ne $p.div -and $p.div -ge $Floor) -or $p.basis_suspect -ne '' -or $p.unscorable -ne '') { 'FLAG' } else { 'ctx ' }
+    $divTxt = if ($null -eq $p.div) { ' n/a' } else { ('{0:N2}' -f $p.div) }
+    $crownTxt = if ($p.would_take_crown -eq $true) { 'TAKES CROWN' } elseif ($null -eq $p.would_take_crown) { 'crown UNKNOWN (unit/row mismatch)' } else { 'no crown' }
+    Write-Output ''
+    Write-Output ('  ' + $tag + '#' + $pn + '  div=' + $divTxt + '  ' + $crownTxt + '  ' + $p.id + ' @ ' + (ConvertTo-AsciiLine $p.store) +
+      '   $' + ('{0:N4}' -f [double]$p.per_unit) + '/' + (ConvertTo-AsciiLine $p.unit))
+    Write-Output ('        candidate   : ' + (ConvertTo-AsciiLine $p.product) + '   [' + (ConvertTo-AsciiLine $p.size) + ' @ $' + ('{0:N2}' -f [double]$p.price) + ']')
+    Write-Output ('        vs we hold  : $' + ('{0:N4}' -f [double]$p.held_per_unit) + '/' + (ConvertTo-AsciiLine $p.unit) +
+      $(if ($null -ne $p.beats_by_pct) { '   beats by ' + $p.beats_by_pct + '%' } else { '   (we hold nothing here)' }) +
+      $(if ($null -ne $p.board_floor) { '   board floor $' + ('{0:N4}' -f [double]$p.board_floor) } else { '' }))
+    if ($p.unscorable -ne '') { Write-Output ('        UNSCORABLE  : ' + (ConvertTo-AsciiLine $p.unscorable)) }
+    else { Write-Output ('        cohort says : ' + (ConvertTo-AsciiLine $p.consensus) + '   (' + $p.cohort + ' other cell(s))') }
+    if ($p.basis_suspect -ne '') { Write-Output ('        BASIS       : ' + (ConvertTo-AsciiLine $p.basis_suspect)) }
+    Write-Output ('        key         : ' + $p.key)
+  }
+}
 
 Write-Output ''
 Write-Output ('BLIND - COULD NOT SCORE (' + $blind.Count + '). These were examined and produced NO verdict. Not a pass.')
@@ -387,6 +570,13 @@ $doc = [ordered]@{
   other_flagged = @($otherSec.flag)
   other_context = @($otherSec.context)
   blind = $blind.ToArray()
+  prospects_source = $discFile
+  prospects_state = $discState
+  prospects_open = $prospectAll.Count
+  prospects_settled = $discSettled
+  prospects_flagged = $prospectFlagged.Count
+  prospects_crown_takers = @($prospectAll | Where-Object { $_.would_take_crown -eq $true }).Count
+  prospects = $prospectSorted
 }
 $doc | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $OutFile -Encoding UTF8
 Write-Output ''

@@ -1521,6 +1521,69 @@ $r3 = RunPS 'build-arrivals-docket.ps1' @('-CompareFile', (Join-Path $fix 'arriv
 if ($r3.rc -eq 3 -and $r3.text -match 'ZERO baseline boards') { Ok 'arrivals-docket exits 3 when it has NO baseline to diff against' }
 else { Bad ('arrivals-docket claimed a usable delta with zero baseline (rc=' + $r3.rc + ')') }
 
+# ---------------------------------------------------------------- N2. the PROSPECTS section (F1 adjudication)
+# discover-hyvee.ps1 writes a docket of products that are NOT on the board and would beat what we hold. It had
+# no reader, so discovery paid nothing. These fixtures pin the reader.
+# WHY IT CANNOT BE MACHINE-VETTED: Hy-Vee publishes no per-product department, and the CATEGORY facet its
+# search response exposes is SILENTLY IGNORED when passed back as a filter (three request shapes tried, all
+# returned the identical unfiltered results with a cat litter still in "baking soda"). Measured on the first
+# live run: ~14% of candidates are WRONG PRODUCTS. So the section must rank and explain, never pass.
+$proArgs = @('-CompareFile', (Join-Path $fix 'arrivals-clean-board.json'), '-BaselineDir', (Join-Path $fix 'arrivals-baseline'),
+  '-CommoditiesFile', (Join-Path $fix 'arrivals-commodities.json'), '-DiscoveryFile', (Join-Path $fix 'arrivals-prospects.json'),
+  '-VerdictsFile', (Join-Path $fix 'arrivals-prospect-verdicts.json'),
+  '-OutFile', (Join-Path $env:TEMP ('arrdock-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json')))
+$rp = RunPS 'build-arrivals-docket.ps1' $proArgs
+# MUST FIRE: the 2026-07-28 bath soap, re-staged as a PROSPECT. It has to rank first, carry div 1.00 from the
+# head cut, and be named a crown-taker - a prospect that cannot win changes no shopper's price, so that
+# distinction is the severity signal the reader sorts on.
+if ($rp.text -match 'FLAG#1' -and $rp.text -match "Dr Teal" -and $rp.text -match 'div=1\.00' -and $rp.text -match 'TAKES CROWN') {
+  Ok 'prospects: the bath-soap-as-coconut-oil candidate ranks FIRST, div 1.00, named as a crown-taker'
+} else { Bad ('prospects MISSED the founding wrong product (head cut, ranking or crown arithmetic broken): ' + $rp.text) }
+# MUST FIRE, INDEPENDENTLY: 34 FLUID ounces divided into a commodity priced per WEIGHT ounce. This is the
+# defect that made a Pasta Roni vermicelli "beat" olive oil by 21.8% on the first live docket - a REAL price
+# on a FALSE basis, where every number in the row is individually defensible. Divergence and basis are
+# separate detectors on purpose; the vermicelli scored only 0.50 and the floor would have missed it.
+if ($rp.text -match 'BASIS' -and $rp.text -match 'names a VOLUME') { Ok 'prospects: a size in fluid ounces against a per-weight commodity is flagged as a BASIS defect' }
+else { Bad ('prospects passed a false basis - the saving is arithmetic, not money: ' + $rp.text) }
+# MUST BE SILENT: a real coconut oil, right basis, same store, same docket, also beating the held price.
+if ($rp.text -match 'ctx #2' -and $rp.text -match 'Nutiva' -and $rp.text -match 'no crown') { Ok 'prospects: the real coconut oil is listed as context, unflagged, and correctly reads no crown' }
+else { Bad ('prospects flagged a correct product or got the crown arithmetic wrong - it is scoring novelty, not divergence: ' + $rp.text) }
+# MUST FIRE: a candidate a human already ruled on must LEAVE the queue and still be COUNTED. A settled
+# candidate that silently vanishes is indistinguishable from a discovery run that stopped working.
+if ($rp.text -match 'PROSPECTS awaiting a ruling: 2 \(1 would take a crown, 1 flagged, 1 already ruled\)' -and $rp.text -notmatch 'Blue Buffalo') {
+  Ok 'prospects: the already-ruled cat-food candidate leaves the queue and is counted as settled, not dropped'
+} else { Bad ('prospects re-asked a settled question, or dropped it without counting it: ' + $rp.text) }
+# MUST FIRE: no docket on disk is NOT "no candidates". Discovery not having run and discovery finding nothing
+# are different facts and must never print the same.
+$rp2 = RunPS 'build-arrivals-docket.ps1' @('-CompareFile', (Join-Path $fix 'arrivals-clean-board.json'), '-BaselineDir', (Join-Path $fix 'arrivals-baseline'),
+  '-CommoditiesFile', (Join-Path $fix 'arrivals-commodities.json'), '-DiscoveryFile', (Join-Path $fix 'no-such-discovery-docket.json'),
+  '-VerdictsFile', (Join-Path $fix 'arrivals-prospect-verdicts.json'),
+  '-OutFile', (Join-Path $env:TEMP ('arrdock-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json')))
+if ($rp2.text -match 'BLIND' -and $rp2.text -match 'discovery has not run') { Ok 'prospects: a missing docket reports BLIND rather than a clean zero' }
+else { Bad ('prospects turned a missing discovery docket into "no candidates": ' + $rp2.text) }
+# MUST FIRE: the prospects section must not overwrite the ARRIVALS baseline-adequacy reason. Shipped and
+# caught the same day: the loop reused $why, the docket-level variable, so a run with no baseline printed
+# "DEGRADED: no-board-row for ketchup" and its exit-3 line named the wrong reason entirely - a check that
+# reports the wrong cause of its own blindness sends the reader to the wrong bug. Same clobber family as
+# $Matches being global in PS 5.1. A prospect whose commodity is off this board forces the collision.
+$rp3 = RunPS 'build-arrivals-docket.ps1' @('-CompareFile', (Join-Path $fix 'arrivals-mustfire-board.json'), '-BaselineDir', (Join-Path $fix 'arrivals-baseline'),
+  '-CommoditiesFile', (Join-Path $fix 'arrivals-commodities.json'), '-DiscoveryFile', (Join-Path $fix 'arrivals-prospects-offboard.json'),
+  '-VerdictsFile', (Join-Path $fix 'arrivals-prospect-verdicts.json'), '-N', '0',
+  '-OutFile', (Join-Path $env:TEMP ('arrdock-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json')))
+if ($rp3.text -match 'DEGRADED: ZERO baseline boards' -and $rp3.text -match 'no-board-row') {
+  Ok 'prospects: an off-board prospect is reported as unscorable WITHOUT overwriting the docket-level DEGRADED reason'
+} else { Bad ('the prospects loop clobbered the arrivals baseline-adequacy reason again: ' + $rp3.text) }
+# The fixtures must stay frozen. Both were authored from the founding cases, not from a live docket, and a
+# fixture regenerated from live data proves only that the code agrees with itself.
+$rpF = @((Get-Content (Join-Path $fix 'arrivals-prospects.json') -Raw) + (Get-Content (Join-Path $fix 'arrivals-prospect-verdicts.json') -Raw))
+if ($rpF -match 'NEVER regenerate' -and $rpF -match '9990003') { Ok 'prospects fixtures are still the frozen founding cases' }
+else { Bad 'the prospects fixtures were regenerated - they no longer pin the founding wrong products' }
+
+# the verdict intake itself: 14 hermetic checks, including that ACCEPT writes a work-list row and not a price
+$r = RunPS 'adjudicate-discovery.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELFTEST: all') { Ok ('adjudicate-discovery self-test: ' + (($r.text -split "`n" | Where-Object { $_ -match 'SELFTEST: all' }) -join '')) }
+else { Bad ('adjudicate-discovery self-test FAILED: ' + $r.text) }
+
 # ---------------------------------------------------------------- (u) store-taxonomy: the second opinion
 # The ONLY watcher that does not inherit the include regex's premise. Its founding bug is the class that
 # produced 47 of the 99 wrong numbers in 22 days: Family Fare's own catalogue files "Blue Buffalo Natural
