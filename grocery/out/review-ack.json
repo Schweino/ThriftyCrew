@@ -1,4 +1,4 @@
-{
+﻿{
     "note":  "ACKNOWLEDGED price-review flags. A flag listed here with a FUTURE `expires` date is not paged. Anything else pages: an ack with no `expires`, an unparseable one, or a past one is treated as EXPIRED, because silencing a price flag forever on the strength of a typo is exactly the failure the review-flag system exists to prevent. Read by check-ad-cycles.ps1; mirrors how coverage-ack.json works for coverage regressions. WHY THIS FILE EXISTS: before 2026-07-30 a flag that stayed open simply went quiet after its first page - last_seen was refreshed on every run, so the 7-day novelty test could never elapse. Being ignored long enough was indistinguishable from being reviewed. Now an open flag RE-ARMS after 14 days and an ack is the only way to make one quiet, with a date on which someone has to look again.",
     "how_to_ack":  "Add { \"key\": \"\u003cthe flag key from out\\\\alerted-flags.json\u003e\", \"reason\": \"why this is not a bug - be specific, a future reader needs to re-verify it\", \"expires\": \"yyyy-MM-dd\" }. Keep expiries short (weeks, not months): the expiry is the whole point, it forces the question again. Do NOT ack a flag you have not actually checked against the store.",
     "acks":  [
@@ -405,6 +405,21 @@
                  {
                      "key":  "SANITY|Vegetable / Vegetable Beef Soup (canned)|wow",
                      "reason":  "REAL, and corroborated by two other stores. Walmart Progresso 19 oz \\.48 = \\.1305/oz, with Fareway and Hy-Vee both at \\.1319/oz. Three stores within 1% of each other is not a parse error.",
+                     "expires":  "2026-08-14"
+                 },
+                 {
+                     "key":  "SANITY|Furniture Polish / Dusting Spray|wow",
+                     "reason":  "Catalog rotation, not a parse. Last week the crown was Bakers \"Murphy Oil Soap Wood Cleaner Original\" 32 fl oz at 0.1559/oz (comparison-2026-07-30). Murphy is ABSENT from bakers-regular-2026-08-01.json (0 rows match murphy) because the daily Kroger API pull rotates its catalog, so the crown correctly moved to Fareway \"Behold Furniture Polish, Lemon\" 2.99 / 12.5 oz = 0.2392/oz, which reproduces exactly from its own captured row. Verified 2026-08-01 by triage 2026-08-01-b6c064.",
+                     "expires":  "2026-08-14"
+                 },
+                 {
+                     "key":  "SANITY|Gelatin (Jell-O)|outlier",
+                     "reason":  "Store brand against a name brand on an each-commodity, both parses correct. Winner Hy-Vee \"Hy-Vee Strawberry Gelatin Dessert 3 oz\" 0.99 per 1 ct box (source: verified on store page 2026-07-14, boxed gelatin open-item resolution); runner-up Walmart \"Jell-O Strawberry Gelatin Dessert Mix, 3 oz Box\" 1.62 per 1 ct. Same 3 oz box either way, so the 39 percent gap is the brand, not a size error. Verified 2026-08-01 by triage 2026-08-01-b6c064.",
+                     "expires":  "2026-08-14"
+                 },
+                 {
+                     "key":  "SANITY|Wild Rice|outlier",
+                     "reason":  "Real economics: store brand at double the size against a premium organic half-pound. Winner Hy-Vee \"Hy-Vee Select Wild Rice\" 10.99 / 16 oz = 0.6869/oz (Aisles Online shelf price, storeId 1465, as_of 2026-07-30); runner-up Fareway \"Lundberg Family Farms Organic Wild Rice\" 9.29 / 8 oz = 1.1612/oz. Both reproduce exactly from their captured rows. The 2026-07-28 \"Canoe cooked wild rice\" wrong-form bug is not involved - neither row is a cooked product. Verified 2026-08-01 by triage 2026-08-01-b6c064.",
                      "expires":  "2026-08-14"
                  }
              ]

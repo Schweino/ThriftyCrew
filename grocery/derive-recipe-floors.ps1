@@ -65,19 +65,58 @@ if (-not $hasType) { throw ("candidates file " + $candF.Name + " predates the pr
 # NON-standard mismatches (each vs oz, ct vs lb) are REFUSED, never guessed - the brown-sugar 16x lesson:
 # a unit_price silently reinterpreted in a different unit is a real number attached to a false basis.
 $UNIT_G = @{ lb = 453.592; oz = 28.3495; floz = 29.57; kg = 1000.0; g = 1.0 }
+# ---- THE FALLBACK POOL: the RECIPE rule set's own candidates -----------------------------------------
+# The staples board covers most recipe ingredients, but ~50 recipe-only ids have no twin there and no
+# id-map entry, so nothing re-priced them and they sat frozen at their 2026-07-12 hand-browse. That is not
+# cosmetic: boneless-skinless-chicken-thigh @ Hy-Vee HELD THE RECIPE-BOARD CROWN at $1.99/lb while the
+# store charges $3.996, and every stale cell measured was too LOW - the board has been understating what a
+# recipe costs.
+# recipe-overlay already runs compare-deals against recipe-commodities.json every day, so the candidates
+# exist; they were simply never read here.
+# THEY ARE A SECOND-CLASS SOURCE AND ARE LABELLED AS ONE. Measured 2026-08-01 before use: 7 of 10 diverging
+# cells were WRONG PRODUCTS, not repricings - `olives` matched Mt. OLIVE pickles and banana pepper rings
+# (the brand carries the commodity's word), `zero-sugar-soda` matched Oreo Zero Sugar COOKIES at $0.579,
+# `apple` matched apple JUICE and Gerber baby food. Seven rule fixes later all six remaining divergences
+# are real products at real prices. But that was six ids inspected by hand, not a proof about the pool, so
+# every cell priced from it is reported separately for the monthly reviewer instead of blending into the
+# same count as a staples-derived one. Never promote this to silent.
+$rcCandById = @{}
+$rcF = Get-ChildItem (Join-Path $outDir 'recipe-sales-candidates-*.json') -ErrorAction SilentlyContinue |
+  Where-Object { $_.BaseName -match '^recipe-sales-candidates-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
+if ($rcF) {
+  $rcDoc = ((Get-Content $rcF.FullName -Raw -Encoding UTF8) + '').Trim() | ConvertFrom-Json
+  if ($rcDoc) { foreach ($c in @($rcDoc.commodities)) { if ($c -and $c.id) { $rcCandById[[string]$c.id] = $c } } }
+}
+
 $updated = 0; $kept = 0; $bigDeltas = @(); $noMatch = @(); $noEveryday = @(); $unitMismatch = @()
 $identified = 0; $sized = 0; $noItem = @(); $noSize = @()
+$fallbackCells = @(); $fallbackIds = @()
 foreach ($row in $rows) {
   $lookupId = if ($idMap.ContainsKey($row.id)) { $idMap[$row.id] } else { $row.id }
   $c = $candById[$lookupId]
-  if (-not $c) { $noMatch += $row.id; continue }
+  $srcIsFallback = $false
   # unit reconciliation BEFORE any price moves: candidates' unit_price is per the BOARD unit ($c.unit)
   $factor = $null
-  if ([string]$row.unit -eq [string]$c.unit) { $factor = 1.0 }
-  elseif ($UNIT_G.ContainsKey([string]$row.unit) -and $UNIT_G.ContainsKey([string]$c.unit)) {
-    # board $/boardUnit -> $/rowUnit: multiply by grams-per-rowUnit / grams-per-boardUnit
-    $factor = $UNIT_G[[string]$row.unit] / $UNIT_G[[string]$c.unit]
+  if ($c) {
+    if ([string]$row.unit -eq [string]$c.unit) { $factor = 1.0 }
+    elseif ($UNIT_G.ContainsKey([string]$row.unit) -and $UNIT_G.ContainsKey([string]$c.unit)) {
+      # board $/boardUnit -> $/rowUnit: multiply by grams-per-rowUnit / grams-per-boardUnit
+      $factor = $UNIT_G[[string]$row.unit] / $UNIT_G[[string]$c.unit]
+    }
   }
+  # The staples pool could not price this row - by absence or by an unreconcilable unit. Try the recipe
+  # pool, which is keyed by THIS row's own id under THIS row's own rules, so there is no mapping question
+  # and the unit is the same by construction. Anything else is still refused, never guessed.
+  if ($null -eq $factor -and $rcCandById.ContainsKey([string]$row.id)) {
+    $rcC = $rcCandById[[string]$row.id]
+    if ([string]$rcC.unit -eq [string]$row.unit) {
+      if (-not $c) { $noMatch += ($row.id + ' [priced from the recipe pool instead]') }
+      else { $unitMismatch += ($row.id + " (row '" + $row.unit + "' vs board '" + $c.unit + "') [priced from the recipe pool instead]") }
+      $c = $rcC; $factor = 1.0; $srcIsFallback = $true
+      $fallbackIds += [string]$row.id
+    }
+  }
+  if (-not $c) { $noMatch += $row.id; continue }
   if ($null -eq $factor) { $unitMismatch += ($row.id + " (row '" + $row.unit + "' vs board '" + $c.unit + "')"); continue }
   foreach ($s in @($row.stores)) {
     $best = @($c.candidates) |
@@ -87,7 +126,10 @@ foreach ($row in $rows) {
     $new = [math]::Round(([double]$best.unit_price * $factor), 4)
     $old = [double]$s.per_unit
     if ($old -gt 0 -and [math]::Abs($new - $old) / $old -gt 0.25) {
-      $bigDeltas += [pscustomobject]@{ id = $row.id; store = $s.store; old = $old; new = $new; item = [string]$best.name }
+      $bigDeltas += [pscustomobject]@{ id = $row.id; store = $s.store; old = $old; new = $new; item = [string]$best.name; source = $(if ($srcIsFallback) { 'recipe-pool' } else { 'staples-board' }) }
+    }
+    if ($srcIsFallback) {
+      $fallbackCells += [pscustomobject]@{ id = $row.id; store = $s.store; old = $old; new = $new; item = [string]$best.name; size = [string]$best.size_text }
     }
     if ($new -ne $old) { $s.per_unit = $new; $updated++ } else { $kept++ }
 
@@ -140,6 +182,8 @@ $report = [pscustomobject]@{
   cells_given_size = $sized
   cells_whose_candidate_has_no_name = @($noItem)
   cells_whose_candidate_has_no_size = @($noSize)
+  recipe_pool_ids = @($fallbackIds | Sort-Object -Unique)
+  recipe_pool_cells = @($fallbackCells)
 }
 $report | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $outDir 'recipe-floors-report.json') -Encoding UTF8
 $doc | ConvertTo-Json -Depth 8 | Set-Content (Join-Path $outDir 'recipe-floors-proposed.json') -Encoding UTF8
@@ -151,5 +195,12 @@ Write-Output ("derive-recipe-floors ({0}): {1} cells updated, {2} unchanged | no
   $candF.Name, $updated, $kept, @($noMatch).Count, @($unitMismatch).Count, @($noEveryday).Count, @($bigDeltas).Count)
 Write-Output ("  identity: {0} cell(s) stamped with the product the price came from, {1} with its size ({2} candidate(s) carried no name, {3} no size)" -f `
   $identified, $sized, @($noItem).Count, @($noSize).Count)
+if (@($fallbackCells).Count) {
+  Write-Output ("  RECIPE POOL (second-class source - READ THESE): {0} cell(s) across {1} id(s) priced from recipe-commodities.json because the staples board has no twin. 7 of 10 diverging cells here were WRONG PRODUCTS before the rules were fixed; nothing proves the rest are clean." -f @($fallbackCells).Count, @($fallbackIds | Sort-Object -Unique).Count)
+  foreach ($fc in @($fallbackCells | Sort-Object id, store)) {
+    $mv = if ([double]$fc.old -gt 0) { ' ({0:N2}x)' -f ([math]::Max([double]$fc.new / [double]$fc.old, [double]$fc.old / [double]$fc.new)) } else { '' }
+    Write-Output ("      {0,-30} {1,-12} {2,9} -> {3,-9}{4}  '{5}'" -f $fc.id, $fc.store, $fc.old, $fc.new, $mv, $fc.item)
+  }
+}
 if (@($unitMismatch).Count) { Write-Output ("  REFUSED (unit mismatch - map or convert, never guess): " + (@($unitMismatch) -join '; ')) }
 if (@($noMatch).Count) { Write-Output ("  hand-check ids (add verified mappings to recipe-floor-id-map.json to automate them): " + (@($noMatch) -join ', ')) }

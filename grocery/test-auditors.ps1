@@ -1624,6 +1624,27 @@ if ($nr -and -not ($nr.PSObject.Properties.Name -contains 'item') -and $r.text -
 } else { Bad ('identity was stamped onto a cell whose price came from somewhere else: ' + ($nr | ConvertTo-Json -Compress)) }
 if ((Get-Content (Join-Path $fix 'recipe-floors\recipe-board-everyday.json') -Raw) -match 'NEVER regenerate') { Ok 'recipe-floors fixture is still the frozen identity gap' }
 else { Bad 'the recipe-floors fixture was regenerated - it no longer pins the shape the bug lived in' }
+# MUST FIRE: a recipe-only row the staples board cannot price falls back to the RECIPE pool. Founding case -
+# boneless-skinless-chicken-thigh @ Hy-Vee held the recipe-board CROWN at $1.99/lb while the store charged
+# $3.996, because no staples commodity matches that cut so nothing re-priced it since 2026-07-12.
+$rp = RfCell 'recipe-pool-only' 'Hy-Vee'
+if ($rp -and [double]$rp.per_unit -eq 3.996 -and [string]$rp.item -eq 'Tyson Boneless Skinless Chicken Thighs') {
+  Ok 'recipe floors: a row with no staples twin is priced (and named) from the recipe pool instead of sitting frozen'
+} else { Bad ('the recipe-pool fallback stopped reaching a recipe-only row - it will sit frozen again: ' + ($rp | ConvertTo-Json -Compress)) }
+# MUST FIRE: the pool is a SECOND-CLASS source and every cell from it is reported for review, never blended
+# into the staples count. Measured before use: 7 of 10 diverging cells were WRONG PRODUCTS (Mt. OLIVE pickles
+# as olives, Oreo Zero Sugar COOKIES as zero-sugar-soda, apple JUICE and Gerber baby food as apple).
+$rfRep = $null
+try { $rfRep = ((Get-Content (Join-Path $fxRf 'recipe-floors-report.json') -Raw) + '').Trim() | ConvertFrom-Json } catch {}
+if ($rfRep -and @($rfRep.recipe_pool_cells).Count -ge 1 -and (@($rfRep.recipe_pool_ids) -contains 'recipe-pool-only') -and $r.text -match 'RECIPE POOL') {
+  Ok 'recipe floors: every cell priced from the recipe pool is reported separately for review, not blended in'
+} else { Bad 'the recipe pool is being used without being declared - a second-class source is passing as a staples-derived one' }
+# MUST FIRE: the fallback removes the MAPPING question, not the BASIS one. A pool entry whose unit differs
+# from the row's is still refused - the brown-sugar 16x lesson.
+$wu = RfCell 'wrong-unit-pool' 'Hy-Vee'
+if ($wu -and [double]$wu.per_unit -eq 1.49 -and -not ($wu.PSObject.Properties.Name -contains 'item')) {
+  Ok 'recipe floors: a pool entry in a different unit is REFUSED, price and identity both untouched'
+} else { Bad ('the fallback took a price across an unreconciled unit - a real number on a false basis: ' + ($wu | ConvertTo-Json -Compress)) }
 Remove-Item $fxRf -Recurse -Force -ErrorAction SilentlyContinue
 
 # ---------------------------------------------------------------- N4. multipack SIZE REPAIR
@@ -2568,6 +2589,20 @@ else { Bad ('audit-board-consistency -SelfTest failed (rc=' + $r.rc + ') - the a
 $r = RunPS 'audit-semantic-identity.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'semantic-identity: the actionable filter still admits fresh findings and still suppresses settled rulings' }
 else { Bad ('audit-semantic-identity -SelfTest failed (rc=' + $r.rc + ') - the semantic advisory feed may be re-reporting adjudicated cells or dropping real ones: ' + ($r.text -replace "`n", ' ')) }
+# ---- (k) THE FAREWAY SIZE SURFACE (2026-08-01, triage 2026-08-01-9da3a8) -------------------------------
+# Fareway's storefront DOM often omits the pack size, so the builder now reads it from the catalog slug.
+# That surface is unreliable in four proven ways (dropped decimal, leading zero, per-unit size on a
+# multipack, stale token), and each refusal is a row that would otherwise be published at a wrong per-unit
+# or dropped for "disagreeing" with itself. Both directions are silent on a healthy board - a wrong size
+# just looks like a price, and a quarantined row just looks like a store that does not carry the item -
+# so the fixtures are the only thing that can see them. They are frozen from the real 2026-07-31 rows.
+$r = RunPS 'build-fareway-regular.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'fareway slug sizes: counts still recovered, the four slug defects still refused, and the milk/eggs basis relabel still cannot eat a real size' }
+else { Bad ('build-fareway-regular -SelfTest failed (rc=' + $r.rc + ') - Fareway can publish a pack price as a unit price again, or quarantine correct rows: ' + ($r.text -replace "`n", ' ')) }
+
+$r = RunPS 'heal-degraded-sizes.ps1' @('-Store','fareway','-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'size-heal: still heals across a store RENAME on the catalog product id, and still refuses when the price moved' }
+else { Bad ('heal-degraded-sizes -SelfTest failed (rc=' + $r.rc + ') - a renamed product loses its pack size again and the band drops the store: ' + ($r.text -replace "`n", ' ')) }
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2
 

@@ -1,4 +1,4 @@
-﻿{
+{
     "readme":  "Recipe-ingredient ad-matching rules for compare-deals -CommoditiesFile. Wrapper form: global_exclude relaxes sauce/canned/frozen/juice (recipe items legitimately are those); each rule carries inline band_min/band_max.",
     "global_exclude":  [
                            "drink\\s*mix",
@@ -220,7 +220,21 @@
                                             "fritter",
                                             "turnover",
                                             "donut",
-                                            "strudel"
+                                            "strudel",
+                                            "squeez",
+                                            "\\bpouch(es)?\\b",
+                                            "apple\\s*\u0026\\s*eve",
+                                            "happy\\s*tot",
+                                            "\\bpuree\\b",
+                                            "\\bbaby\\b",
+                                            "\\bgerber\\b",
+                                            "2nd\\s+foods",
+                                            "sitter",
+                                            "\\bsliced\\b",
+                                            "\\bpeeled\\b",
+                                            "toddler",
+                                            "once\\s+upon\\s+a\\s+farm",
+                                            "crunch\\s*pak"
                                         ],
                             "band_min":  0.2,
                             "band_max":  3,
@@ -341,7 +355,12 @@
                                             "cookie",
                                             "yog",
                                             "cereal",
-                                            "granola"
+                                            "granola",
+                                            "variety\\s+pack",
+                                            "\u0026\\s*peanuts",
+                                            "balanced\\s*breaks",
+                                            "sargento",
+                                            "\\bcheese\\b"
                                         ],
                             "band_min":  0.2,
                             "band_max":  1.5,
@@ -826,7 +845,8 @@
                                             "glaze",
                                             "\\bwing",
                                             "vinaigrette",
-                                            "\\bsnack"
+                                            "\\bsnack",
+                                            "\\bsauce\\b"
                                         ],
                             "band_min":  0.08,
                             "band_max":  0.8,
@@ -955,7 +975,9 @@
                                             "garden",
                                             "martini",
                                             "tapenade",
-                                            "bruschetta"
+                                            "bruschetta",
+                                            "\\bpickle",
+                                            "mt\\.?\\s*olive"
                                         ],
                             "band_min":  0.1,
                             "band_max":  1.5,
@@ -1489,7 +1511,11 @@
                                             "red\\s*bull",
                                             "\\bc4\\b",
                                             "ghost",
-                                            "starbucks"
+                                            "starbucks",
+                                            "\\bcookies?\\b",
+                                            "\\boreo\\b",
+                                            "\\bjerky\\b",
+                                            "\\bsandwich\\b"
                                         ],
                             "band_min":  0.5,
                             "band_max":  12,

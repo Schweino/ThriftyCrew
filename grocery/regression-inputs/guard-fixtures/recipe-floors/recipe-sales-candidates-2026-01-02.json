@@ -1,0 +1,23 @@
+{
+  "week_of": "2026-01-02",
+  "_fixture": "FROZEN FIXTURE - the SECOND-CLASS candidate pool. recipe-commodities.json's own candidates, which derive-recipe-floors falls back to for a recipe-only id the staples board has no twin for. Founding case: boneless-skinless-chicken-thigh @ Hy-Vee held the recipe-board CROWN at $1.99/lb while the store charged $3.996 - nothing re-priced it because no staples commodity matches that cut, so it sat frozen at its 2026-07-12 hand-browse. 'recipe-pool-only' here is that shape. 'no-refresh-path' is DELIBERATELY ABSENT from this file: a row nothing can price must still get no invented identity, and that assertion has to survive the fallback existing. 'wrong-unit-pool' is present but declares a unit the row does not use, and must still be REFUSED - the fallback removes the mapping question, not the basis one. NEVER regenerate.",
+  "commodities": [
+    {
+      "id": "recipe-pool-only",
+      "label": "A Recipe-Only Ingredient",
+      "unit": "lb",
+      "candidates": [
+        { "store": "Hy-Vee", "name": "Tyson Boneless Skinless Chicken Thighs", "price_text": "$9.99", "size_text": "2.5 lb", "regular": 9.99, "unit_price": 3.996, "basis": "size 2.5 lb", "price_type": "everyday" },
+        { "store": "Hy-Vee", "name": "Some Sale Row That Must Not Win", "price_text": "$1.00", "size_text": "1 lb", "regular": 1.00, "unit_price": 1.00, "basis": "size 1 lb", "price_type": "sale" }
+      ]
+    },
+    {
+      "id": "wrong-unit-pool",
+      "label": "Pool Entry In The Wrong Unit",
+      "unit": "oz",
+      "candidates": [
+        { "store": "Hy-Vee", "name": "Something Priced Per Ounce", "price_text": "$2.00", "size_text": "8 oz", "regular": 2.00, "unit_price": 0.25, "basis": "size 8 oz", "price_type": "everyday" }
+      ]
+    }
+  ]
+}

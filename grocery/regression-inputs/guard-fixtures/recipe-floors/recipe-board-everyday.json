@@ -31,6 +31,24 @@
       "stores": [
         { "store": "Hy-Vee", "per_unit": 1.99, "type": "everyday", "bulk": false }
       ]
+    },
+    {
+      "id": "recipe-pool-only",
+      "commodity": "A Recipe-Only Ingredient",
+      "unit": "lb",
+      "cheapest_store": "Hy-Vee",
+      "stores": [
+        { "store": "Hy-Vee", "per_unit": 1.99, "type": "everyday", "bulk": false }
+      ]
+    },
+    {
+      "id": "wrong-unit-pool",
+      "commodity": "Pool Entry In The Wrong Unit",
+      "unit": "each",
+      "cheapest_store": "Hy-Vee",
+      "stores": [
+        { "store": "Hy-Vee", "per_unit": 1.49, "type": "everyday", "bulk": false }
+      ]
     }
   ]
 }

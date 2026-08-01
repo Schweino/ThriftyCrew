@@ -1,19 +1,6 @@
 ﻿{
-    "compare_file":  "comparison-2026-07-31.json",
+    "compare_file":  "comparison-2026-08-01.json",
     "findings":  [
-                     {
-                         "id":  "ground-cloves",
-                         "commodity":  "Cloves (ground)",
-                         "unit":  "oz",
-                         "store":  "Family Fare",
-                         "per_unit":  36,
-                         "median":  2.6412,
-                         "mult":  13.63,
-                         "size":  "1.25 oz",
-                         "item":  "Spice Supreme Spice Ground Cloves",
-                         "peers_packed":  "0 of 4",
-                         "size_shape_mismatch":  false
-                     },
                      {
                          "id":  "razors",
                          "commodity":  "Razors (disposable)",
@@ -80,32 +67,6 @@
                          "size_shape_mismatch":  false
                      },
                      {
-                         "id":  "hot-dogs",
-                         "commodity":  "Hot Dogs",
-                         "unit":  "oz",
-                         "store":  "Family Fare",
-                         "per_unit":  0.4579,
-                         "median":  0.0977,
-                         "mult":  4.69,
-                         "size":  "24 oz",
-                         "item":  "Wimmer\u0027s Wieners, Skinless 24 Oz",
-                         "peers_packed":  "1 of 6",
-                         "size_shape_mismatch":  false
-                     },
-                     {
-                         "id":  "honey",
-                         "commodity":  "Honey",
-                         "unit":  "oz",
-                         "store":  "Family Fare",
-                         "per_unit":  1.1658,
-                         "median":  0.2496,
-                         "mult":  4.67,
-                         "size":  "12 oz",
-                         "item":  "Mike\u0027s Hot The Original Honey 12 Oz",
-                         "peers_packed":  "0 of 6",
-                         "size_shape_mismatch":  false
-                     },
-                     {
                          "id":  "shampoo",
                          "commodity":  "Shampoo",
                          "unit":  "floz",
@@ -120,6 +81,6 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-01T04:47:43",
+    "generated":  "2026-08-01T17:53:46",
     "ratio":  4
 }
