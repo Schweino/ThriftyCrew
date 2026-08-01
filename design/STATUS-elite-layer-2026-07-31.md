@@ -150,6 +150,44 @@ files first). 34 frozen cases, must-fire plus clean twins, wired into `test-audi
 **`codeinjection_foot` has 164 chars free.** That blocks the Wave 3 interstitial restyle until something
 there is minified. It is the one hard resource limit in the way of finishing the program.
 
+## Wave 3, first piece: the join interstitial (2026-08-01)
+
+It was blocked on `codeinjection_foot` having 164 spare characters. Removing the dead TikTok ad pixel
+freed 1,578, so it shipped.
+
+Restyled into the receipt language: warm paper, CSS tear edges, Georgia head, a gold letterspaced
+eyebrow via `::before` (no markup change), and the price as a receipt total under a dotted leader and a
+double rule, with gold reserved for that one money line. **Trigger logic, frequency caps and targeting
+are unchanged** and the DOM is byte-identical, so the script's selectors could not drift.
+
+Two things were added, both required by the spec, plus two bugs fixed:
+
+- **The stacking ladder.** A full-screen mode (Aisle/Cook) or a primary action bar owns the screen, so
+  the prompt defers instead of landing on someone mid-shop, and releases on the `tc:mode` event. A
+  deferred attempt spends **nothing**: not the once-per-session flag, not the snooze. Verified.
+- **Suppression counting** (`tc_ji_defer` plus a `join_prompt_deferred` gtag event), so a ladder bug
+  cannot silently cost signups. While building it the counter read 6 deferrals in 4 seconds; the retry
+  chain was being started twice because the member-check promise can resolve down two paths. Fixed with
+  a single-chain guard, because a safety metric that inflates is one nobody can act on.
+- **The centred-flex clipping bug** (pre-existing, from v2.2). At 375x667 the **big** card - the variant
+  shown to first-time visitors on free-recipe pages, the highest-value audience - was 668px tall in a
+  667px viewport with `overflow: visible`, so it clipped top and bottom and could not be scrolled. Now
+  `overflow:auto` on the overlay and `margin:auto` on the card: centred when there is room, scrollable
+  when there is not. Verified live at 375x667, top moved from -1 to 20.
+
+`income\join-interstitial.html` is now the source of truth and is **tracked**; it had been stale for
+three weeks (repo held v1 while v2.2 was live) and was not versioned at all, while the script that
+deploys it was. `deploy-interstitial.ps1` was rewritten: it used to attempt the settings PUT with the
+Admin API key, which is read-only for `/settings/` and 403s, so its success path was unreachable. It now
+builds, minifies and gates the payload (24 load-bearing tokens asserted, budget checked against the live
+value, both Ads conversions and the Meta pixel asserted intact) and reproduces the deployed block
+byte-for-byte.
+
+Foot budget after: **967 free**. Watch a week of signup counts, per the spec.
+
+**Open, flagged not fixed:** 18 more site sources at the `income\` root are untracked - the member-tool
+HTML and their `build-*.ps1`. Same class of hole, worth its own change.
+
 ## Still parked
 
 **The board publishes after the freeze lifts (~08-07), with your go.** It builds green and is staged at

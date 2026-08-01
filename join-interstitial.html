@@ -1,0 +1,142 @@
+<!-- tc-join-interstitial v3 (2026-08-01) :: membership prompt (codeinjection_foot). Idempotent between markers.
+     THIS FILE IS THE SOURCE OF TRUTH. It was stale for three weeks (repo held v1 while v2.2 was live);
+     if you edit the live value by hand, mirror it back here in the same session.
+     v3 = the elite-layer restyle ONLY: receipt paper, tear edges, Georgia head, gold reserved for the
+     money line, letterpress base. TRIGGER LOGIC, FREQUENCY CAPS AND TARGETING ARE UNCHANGED from v2.2,
+     with one addition the design spec requires: the stacking ladder. A full-screen mode (Aisle/Cook)
+     or a primary action bar owns the screen, so the prompt DEFERS rather than firing over them, and a
+     deferred attempt never spends the once-per-session budget or the snooze.
+     v2 (2026-07-25, Brad): "Like what you see?" pitch; on FREE-ROTATION recipe pages (slugs from the
+     worker's free-dinners.json) it shows for EVERYONE incl. first visits with a bigger card + a line
+     explaining WHY this recipe is free; everywhere else, returning visitors only.
+     Paid members never see it; escalating snooze 24h/48h/1wk; once per session; Esc closes. -->
+<style>
+#tcji-ov{position:fixed;inset:0;z-index:2147482000;display:none;justify-content:center;overflow:auto;overscroll-behavior:contain;padding:20px calc(20px + env(safe-area-inset-right)) calc(20px + env(safe-area-inset-bottom)) calc(20px + env(safe-area-inset-left));background:rgba(16,27,46,.58);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+#tcji-ov.tcji-show{display:flex;animation:tcji-fade .2s ease}
+@keyframes tcji-fade{from{opacity:0}to{opacity:1}}
+#tcji-ov .tcji-card{position:relative;margin:auto;width:100%;max-width:760px;background:#fffdf6;border:1px solid #e7e2d4;border-bottom:3px solid #ddd6c2;border-radius:2px;padding:48px 46px 34px;box-shadow:0 24px 70px rgba(16,27,46,.34);text-align:center;animation:tcji-pop .22s cubic-bezier(.2,.9,.3,1.2)}
+#tcji-ov .tcji-card::before,#tcji-ov .tcji-card::after{content:'';position:absolute;left:-1px;right:-1px;height:9px;background:linear-gradient(-45deg,transparent 0 6.36px,#fffdf6 0) 0 0/18px 18px repeat-x,linear-gradient(45deg,transparent 0 6.36px,#fffdf6 0) 0 0/18px 18px repeat-x}
+#tcji-ov .tcji-card::before{top:-9px;transform:scaleY(-1)}
+#tcji-ov .tcji-card::after{bottom:-11px}
+#tcji-ov.tcji-big .tcji-card{max-width:860px;padding:52px 50px 38px}
+@keyframes tcji-pop{from{transform:translateY(12px) scale(.97);opacity:0}to{transform:none;opacity:1}}
+#tcji-ov .tcji-x{position:absolute;top:8px;right:11px;border:0;background:none;font-size:32px;line-height:1;color:#a8a08c;cursor:pointer;padding:8px 12px;border-radius:8px;min-width:46px;min-height:46px}
+#tcji-ov .tcji-x:hover{color:#16263F;background:rgba(22,38,63,.06)}
+#tcji-ov .tcji-logo{display:block;height:64px;width:auto;max-width:80%;margin:2px auto 18px}
+#tcji-ov .tcji-h::before{content:'Member access';display:block;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#8a6d1f;margin:0 0 10px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+#tcji-ov .tcji-h{font-family:Georgia,'Times New Roman',serif;font-size:33px;line-height:1.16;font-weight:700;color:#16263F;margin:0 0 12px;letter-spacing:-.015em}
+#tcji-ov .tcji-free{display:none;font-size:19px;line-height:1.5;color:#2e7d43;font-weight:700;margin:0 0 10px}
+#tcji-ov.tcji-big .tcji-free{display:block}
+#tcji-ov .tcji-p{font-size:19px;line-height:1.55;color:#5a6862;margin:0 auto;max-width:56ch}
+#tcji-ov .tcji-price{position:relative;font-size:26px;font-weight:750;color:#8a6d1f;font-variant-numeric:tabular-nums;margin:26px 0 26px;padding:14px 0 0;border-top:1px dotted #cfc7b0}
+#tcji-ov .tcji-price::after{content:'';position:absolute;left:0;right:0;bottom:-13px;border-top:3px double #16263F}
+#tcji-ov .tcji-price span{color:#a8a08c;font-weight:600}
+#tcji-ov .tcji-btns{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+#tcji-ov .tcji-join{display:block;width:100%;padding:20px;border:0;border-radius:12px;background:#E2A43C;color:#16263F;font-size:21px;font-weight:800;cursor:pointer;font-family:inherit;text-decoration:none;box-sizing:border-box;min-height:44px;transition:transform .1s cubic-bezier(.2,0,0,1)}
+#tcji-ov .tcji-join:hover{background:#d9992f;color:#16263F}
+#tcji-ov .tcji-join:active{transform:scale(.985)}
+#tcji-ov .tcji-not{display:block;width:100%;padding:14px;border:0;border-radius:12px;background:none;color:#5a6862;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;min-height:44px}
+#tcji-ov .tcji-not:hover{color:#16263F}
+#tcji-ov a:focus-visible,#tcji-ov button:focus-visible{outline:2px solid #E2A43C;outline-offset:2px}
+@media(max-width:560px){#tcji-ov .tcji-card,#tcji-ov.tcji-big .tcji-card{padding:32px 22px 24px}#tcji-ov .tcji-logo{height:48px}#tcji-ov .tcji-h{font-size:25px}#tcji-ov .tcji-h::before{font-size:11px}#tcji-ov .tcji-free{font-size:15px}#tcji-ov .tcji-p{font-size:16px}#tcji-ov .tcji-price{font-size:20px}#tcji-ov .tcji-join{font-size:18px;padding:16px}}
+@media(prefers-reduced-motion:reduce){#tcji-ov.tcji-show,#tcji-ov .tcji-card{animation:none}}
+</style>
+<div id="tcji-ov" role="dialog" aria-modal="true" aria-labelledby="tcji-h" aria-hidden="true">
+  <div class="tcji-card">
+    <button class="tcji-x" aria-label="Not now" data-tcji="no">&times;</button>
+    <img class="tcji-logo" src="https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-logo-1200.png" alt="Thrifty Crew" width="180" height="45">
+    <h2 class="tcji-h" id="tcji-h">Like what you see? Join the Crew!</h2>
+    <p class="tcji-free" id="tcji-free">This recipe is free this week because it is one of Omaha&rsquo;s cheapest dinners. Members keep the whole library, every week.</p>
+    <p class="tcji-p">You get every price, every tool, and every recipe, and you help keep the site running. Huge value for you, and one good grocery run pays for it almost instantly.</p>
+    <div class="tcji-price">Just $1/month <span>or</span> $10/year</div>
+    <div class="tcji-btns">
+      <a href="#/portal/signup" class="tcji-join" data-tcji="join">Join The Crew</a>
+      <button type="button" class="tcji-not" data-tcji="no">Not now</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  // don't collide with an open Portal
+  if(location.hash.indexOf('portal')>-1) return;
+  var K_UNTIL='tc_ji_until', K_COUNT='tc_ji_count', SESS='tc_ji_sess', now=Date.now();
+  function lg(k){try{return localStorage.getItem(k)}catch(e){return null}}
+  function ls(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+  var K_VISIT='tc_seen'; var isFirst=!lg(K_VISIT); ls(K_VISIT,String(now));
+  // within cooldown (all pages)
+  var until=parseInt(lg(K_UNTIL)||'0',10); if(until && now<until) return;
+  // already handled this session
+  try{ if(sessionStorage.getItem(SESS)) return; }catch(e){}
+  var ov=document.getElementById('tcji-ov'); if(!ov) return;
+  var shown=false, defers=0, waiting=false;
+  function esc(e){ if(e.key==='Escape') dismiss(); }
+  // THE STACKING LADDER. A full-screen mode (Aisle/Cook) or a primary action bar owns the screen, so the
+  // prompt WAITS instead of landing on someone mid-shop. A deferred attempt spends NOTHING: not the
+  // once-per-session flag, not the snooze. A suppression that silently burned the budget is exactly the
+  // bug that costs signups without ever surfacing as an error, so the counter below makes it visible.
+  function blocked(){
+    try{ return document.body.classList.contains('tc-mode-open') || !!document.querySelector('.tc-bar:not([hidden])'); }catch(e){ return false; }
+  }
+  function show(){
+    if(shown) return;
+    if(blocked()){
+      // ONE retry chain, however many callers. The member-check promise can resolve down two paths on
+      // some browsers, so show() gets scheduled twice; without this guard each deferral was counted and
+      // reported twice, and a safety metric that inflates is one nobody can act on.
+      if(waiting) return;
+      waiting=true;
+      defers++; ls('tc_ji_defer',String(parseInt(lg('tc_ji_defer')||'0',10)+1));
+      try{ if(window.gtag) gtag('event','join_prompt_deferred',{event_category:'membership',value:defers}); }catch(_){}
+      setTimeout(function(){ waiting=false; show(); },1500); return;
+    }
+    shown=true;
+    try{ sessionStorage.setItem(SESS,'1'); }catch(e){}
+    ov.classList.add('tcji-show'); ov.setAttribute('aria-hidden','false');
+    var j=ov.querySelector('.tcji-join'); if(j) j.focus();
+    document.addEventListener('keydown',esc);
+  }
+  document.addEventListener('tc:mode',function(e){ if(e.detail && !e.detail.open) setTimeout(show,400); });
+  function close(){ ov.classList.remove('tcji-show'); ov.setAttribute('aria-hidden','true'); document.removeEventListener('keydown',esc); }
+  function dismiss(){
+    close();
+    var c=parseInt(lg(K_COUNT)||'0',10)+1; ls(K_COUNT,String(c));
+    // escalating snooze: 24h -> 48h -> 1wk
+    var hrs = c>=3?168:(c===2?48:24);
+    ls(K_UNTIL,String(now + hrs*3600*1000));
+  }
+  function join(e){
+    if(e) e.preventDefault();
+    try{ if(window.gtag) gtag('event','join_crew_click',{event_category:'membership'}); else if(window.dataLayer) dataLayer.push({event:'join_crew_click'}); }catch(_){}
+    // open Ghost signup popup
+    close(); window.location.hash='#/portal/signup';
+  }
+  ov.addEventListener('click',function(e){
+    if(e.target===ov){ dismiss(); return; }
+    var el=e.target.closest ? e.target.closest('[data-tcji]') : null; if(!el) return;
+    if(el.getAttribute('data-tcji')==='join') join(e); else dismiss();
+  });
+  function begin(free){
+    if(free){ ov.classList.add('tcji-big'); }
+    // cold traffic: only free-recipe pages pitch on visit one
+    else if(isFirst){ return; }
+    setTimeout(show, free?900:1200);
+  }
+  function start(){
+    // Is this one of THIS WEEK's free rotation recipes? (list ships from the price worker; tiny + cached)
+    var path=location.pathname;
+    fetch('https://smp-feed.ancient-snow-93df.workers.dev/free-dinners.json').then(function(r){return r.ok?r.json():null}).then(function(d){
+      var free=false;
+      if(d && d.free){ for(var i=0;i<d.free.length;i++){ if(path==='/'+d.free[i].slug+'/'){ free=true; break; } } }
+      begin(free);
+    }).catch(function(){ begin(false); });
+  }
+  try{
+    fetch('/members/api/member/',{credentials:'include'}).then(function(r){return r.ok?r.json():null}).then(function(m){
+      // already a paying member - never prompt
+      if(m && m.paid===true) return;
+      start();
+    }).catch(start);
+  }catch(e){ start(); }
+})();
+</script>
+<!-- /tc-join-interstitial -->

@@ -13,6 +13,13 @@
 # shaped the way it is.
 !/lib/
 !/design/
+# The join interstitial's SOURCE. deploy-interstitial.ps1 was tracked while the payload it deploys was
+# not, so the only copy of a script running on every page of the site was one machine's disk plus a
+# minified blob inside Ghost settings. Same class as lib\ above.
+# NOTE (2026-08-01): 18 more site sources at this root are still untracked - the member-tool HTML and
+# their build-*.ps1 scripts. That is a real gap, listed in design\STATUS-elite-layer-2026-07-31.md, but
+# sweeping them in belongs in its own change rather than riding along with a redesign.
+!/join-interstitial.html
 # the agent prompts + scheduled-task SKILLs that DRIVE the estate, plus the audit that proves the backup is
 # current. They live under C:\Codex\.claude and C:\Users\Owner\.claude, neither of which is a repository, so
 # without this they were the only unversioned code in the system (2026-07-31).
