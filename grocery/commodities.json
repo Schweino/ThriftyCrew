@@ -1095,7 +1095,9 @@
                         "\\bbuns?\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "hand\\s*wash",
+                        "\\bshea\\b"
                     ]
     },
     {
@@ -1272,7 +1274,8 @@
                         "\\bheart\\s+health\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bchips\\b"
                     ]
     },
     {
@@ -1361,7 +1364,8 @@
                         "\\bheart\\s+health\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bcrackers?\\b"
                     ],
         "band_min":  0.06,
         "band_max":  0.7
@@ -1469,7 +1473,8 @@
                         "\\bheart\\s+health\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "balanced\\s*breaks"
                     ]
     },
     {
@@ -2643,7 +2648,9 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\bgranulated\\b",
+                        "\\bdiced\\b"
                     ]
     },
     {
@@ -2817,7 +2824,8 @@
                         "epsom",
                         "tampons?",
                         "lip\\s+balm",
-                        "marshmallows?"
+                        "marshmallows?",
+                        "lean\\s*cuisine"
                     ]
     },
     {
@@ -5421,7 +5429,10 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "vinaigrette",
+                        "marinade",
+                        "\\bdressing\\b"
                     ]
     },
     {
@@ -5796,7 +5807,8 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\bcherubs?\\b"
                     ]
     },
     {
@@ -7024,7 +7036,11 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "vinaigrette",
+                        "marinade",
+                        "\\bdressing\\b",
+                        "\\bgranulated\\b"
                     ]
     },
     {
@@ -7381,7 +7397,8 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\bbroth\\b"
                     ]
     },
     {
@@ -8590,7 +8607,8 @@
                         "\\bheart\\s+health\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "(?:lower|reduced|less)\\s+sugar"
                     ]
     },
     {
@@ -8792,7 +8810,9 @@
                         "\\bheart\\s+health\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\b(sunflower|canola|soybean|grapeseed)\\b",
+                        "\\b(tuna|sardines?|anchov|mackerel)\\b"
                     ]
     },
     {
@@ -12769,7 +12789,10 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "vinaigrette",
+                        "marinade",
+                        "\\bdressing\\b"
                     ]
     },
     {
@@ -17187,7 +17210,8 @@
                         "\\bv8\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "lunch\\s*meat"
                     ],
         "relax_global":  [
                              "seasoned"
@@ -24938,7 +24962,8 @@
                         "\\bheart\\s+health\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "balanced\\s*breaks"
                     ]
     },
     {
@@ -27237,7 +27262,9 @@
                         "\\bconfection\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "electrolyte",
+                        "electrolit"
                     ]
     },
     {
@@ -30171,7 +30198,8 @@
                              "beech[\\s-]?nut",
                              "gerber",
                              "happy\\s*baby",
-                             "baby\\s+food"
+                             "baby\\s+food",
+                             "serenity\\s*kids"
                          ]
     },
     {
@@ -30985,7 +31013,8 @@
                         "\\bgraham\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "lean\\s*cuisine"
                     ]
     },
     {
@@ -40600,7 +40629,10 @@
                         "\\bheart\\s+health\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "vinaigrette",
+                        "marinade",
+                        "\\bdressing\\b"
                     ]
     },
     {
@@ -44765,7 +44797,8 @@
                         "cherry\\s+tomatoes?",
                         "grape\\s+tomatoes?",
                         "tomatoes?,?\\s+cherry",
-                        "tomatoes?,?\\s+grape"
+                        "tomatoes?,?\\s+grape",
+                        "\\bcherubs?\\b"
                     ],
         "exclude":  [
                         "sun[\\s-]?dried",
@@ -46402,7 +46435,8 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "reduced\\s+sugar"
                     ]
     },
     {
@@ -47114,7 +47148,8 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "balanced\\s*breaks"
                     ]
     },
     {

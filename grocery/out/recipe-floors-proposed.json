@@ -143,7 +143,7 @@
                                               "per_unit":  0.3369,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "item":  "Land O Lakes Butter, Unsalted, Half Sticks 8 Ea",
+                                              "item":  "Land O Lakes Butter, Unsalted 4 Ea",
                                               "size":  "1 lb"
                                           }
                                       ]
@@ -1170,53 +1170,43 @@
                            "stores":  [
                                           {
                                               "store":  "Sam\u0027s Club",
-                                              "per_unit":  0.1332,
+                                              "per_unit":  0.13,
                                               "type":  "everyday",
-                                              "bulk":  true,
-                                              "item":  "Sun-Maid California Sun-Dried Raisins, 30 oz., 2 pk.",
-                                              "size":  "60 oz"
+                                              "bulk":  true
                                           },
                                           {
                                               "store":  "Aldi",
-                                              "per_unit":  0.1995,
+                                              "per_unit":  0.22,
                                               "type":  "everyday",
-                                              "bulk":  false,
-                                              "item":  "Southern Grove Seedless Raisins 20 OZ",
-                                              "size":  "20 oz"
+                                              "bulk":  false
                                           },
                                           {
                                               "store":  "Walmart",
-                                              "per_unit":  0.2178,
+                                              "per_unit":  0.265,
                                               "type":  "everyday",
-                                              "bulk":  false,
-                                              "item":  "Sun-Maid® California Sun-Dried Raisins 32oz Resealable Stand-Up Bag",
-                                              "size":  "32 oz"
+                                              "bulk":  false
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.27,
+                                              "type":  "everyday",
+                                              "bulk":  false
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.57,
+                                              "type":  "everyday",
+                                              "bulk":  false
                                           },
                                           {
                                               "store":  "Baker\u0027s",
-                                              "per_unit":  0.2408,
+                                              "per_unit":  0.4158,
                                               "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Smart Way Seedless Raisins",
+                                              "item":  "Sun-Maid® California Golden Raisins Dried Fruit Snack",
                                               "size":  "12 oz"
-                                          },
-                                          {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.266,
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "item":  "Hy-Vee Raisins California Sun-Dried",
-                                              "size":  "15 oz"
-                                          },
-                                          {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.2995,
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "item":  "Our Family Seedless Raisins 20 Oz",
-                                              "size":  "20 oz"
                                           }
                                       ],
                            "cheapest_store":  "Sam\u0027s Club",
@@ -1537,19 +1527,19 @@
                                               "size":  "24 oz"
                                           },
                                           {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.2915,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Our Family Honey, Pure 48 Oz",
+                                              "size":  "48 oz"
+                                          },
+                                          {
                                               "store":  "Hy-Vee",
                                               "per_unit":  0.3325,
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "item":  "That\u0027s Smart! 100% Honey",
-                                              "size":  "12 oz"
-                                          },
-                                          {
-                                              "store":  "Family Fare",
-                                              "per_unit":  1.1658,
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "item":  "Mike\u0027s Hot The Original Honey 12 Oz",
                                               "size":  "12 oz"
                                           }
                                       ]
@@ -4197,54 +4187,54 @@
                            "category":  "Meat \u0026 Poultry",
                            "stores":  [
                                           {
-                                              "store":  "Aldi",
-                                              "per_unit":  2.4842,
+                                              "store":  "Family Fare",
+                                              "per_unit":  5.89,
                                               "unit":  "lb",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "USDA Mild Italian Sausage",
+                                              "item":  "Johnsonville Sausage, Italian, Hot 19 Oz",
                                               "size":  "19 oz"
                                           },
                                           {
                                               "store":  "Walmart",
-                                              "per_unit":  2.5011,
+                                              "per_unit":  4.98,
                                               "unit":  "lb",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Marketside Mild Italian Sausage 5 Links",
+                                              "item":  "Johnsonville Hot Italian Pork Sausage Links, 19 oz, (5 Count) Refrigerated",
+                                              "size":  "19 oz (5 links)"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  5.0442,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Johnsonville Hot Italian Sausage, 5 Count",
+                                              "size":  "19 oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  2.5179,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Hot Italian Sausage Links",
                                               "size":  "19 oz"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
-                                              "per_unit":  3.5467,
+                                              "per_unit":  4.88,
                                               "unit":  "lb",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Kroger Sweet Italian Sausage",
-                                              "size":  "5 pk 3.6 oz"
-                                          },
-                                          {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  4.48,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Hy-Vee Midwest Pork Italian Pork Sausage",
-                                              "size":  "16 oz"
-                                          },
-                                          {
-                                              "store":  "Family Fare",
-                                              "per_unit":  4.49,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Ground Italian Sausage, Mild Our Family",
-                                              "size":  "16 oz"
+                                              "item":  "Kroger® Hot Italian Sausage",
+                                              "size":  "18 oz"
                                           }
                                       ],
                            "cheapest_store":  "Aldi",
@@ -4461,16 +4451,6 @@
                                               "size":  "101 fl oz"
                                           },
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.2068,
-                                              "unit":  "floz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Violi Mediterranean Blend, Italian Sunflower \u0026 Extra Virgin Olive Oil 33.8 Oz",
-                                              "size":  "33.8 oz"
-                                          },
-                                          {
                                               "store":  "Walmart",
                                               "per_unit":  0.3263,
                                               "unit":  "floz",
@@ -4509,6 +4489,16 @@
                                               "membership":  false,
                                               "item":  "Hy Vee Extra Virgin Olive Oil",
                                               "size":  "17 oz"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.4491,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Olive Oil, 100% Pure, Imported 16.9 Fl Oz",
+                                              "size":  "16.9 fl oz"
                                           }
                                       ],
                            "cheapest_store":  "Sam\u0027s Club",
@@ -8345,6 +8335,16 @@
                                               "size":  "1.38 oz"
                                           },
                                           {
+                                              "store":  "Family Fare",
+                                              "per_unit":  3.3333,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Spice Supreme Thyme Leaves 1.5 Oz",
+                                              "size":  "1.5 oz"
+                                          },
+                                          {
                                               "store":  "Hy-Vee",
                                               "per_unit":  3.9867,
                                               "unit":  "oz",
@@ -8353,16 +8353,6 @@
                                               "membership":  false,
                                               "item":  "Hy-Vee Thyme",
                                               "size":  "0.75 oz"
-                                          },
-                                          {
-                                              "store":  "Family Fare",
-                                              "per_unit":  5.98,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Local Roots Organic Thyme",
-                                              "size":  "0.5 oz"
                                           }
                                       ],
                            "cheapest_store":  "Sam\u0027s Club",
@@ -8782,6 +8772,16 @@
                                               "size":  "18 oz"
                                           },
                                           {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.4576,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Honey Maid Cinnamon Grahams 14.4 Oz",
+                                              "size":  "14.4 oz"
+                                          },
+                                          {
                                               "store":  "Hy-Vee",
                                               "per_unit":  0.5,
                                               "unit":  "oz",
@@ -8810,16 +8810,6 @@
                                               "membership":  false,
                                               "item":  "Smart Way Ground Cinnamon",
                                               "size":  "1.94 oz"
-                                          },
-                                          {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.676,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "That\u0027s Smart! Ground Cinnamon",
-                                              "size":  "2.5 oz"
                                           }
                                       ],
                            "cheapest_store":  "Aldi",
@@ -8890,6 +8880,6 @@
                                       ]
                        }
                    ],
-    "built_at":  "2026-08-01T16:34:50",
+    "built_at":  "2026-08-01T17:31:17",
     "reverified":  "2026-07-07 (monthly floor re-verify: Sam\u0027s+Walmart full re-pull; Aldi/Hy-Vee/Baker\u0027s spot-confirmed)"
 }

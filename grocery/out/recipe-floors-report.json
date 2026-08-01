@@ -1,6 +1,6 @@
 ﻿{
     "derived_from":  "candidates-2026-08-01.json",
-    "updated_cells":  379,
+    "updated_cells":  368,
     "unchanged_cells":  182,
     "ids_with_no_board_match":  [
                                     "93-7-ground-turkey",
@@ -8,6 +8,7 @@
                                     "1-3-fat-cream-cheese",
                                     "cashews",
                                     "frozen-chopped-spinach",
+                                    "golden-raisins",
                                     "greek-yogurt",
                                     "honey-dijon-mustard",
                                     "light-sour-cream",
@@ -24,6 +25,7 @@
                                     "fajita-seasoning",
                                     "frozen-green-beans",
                                     "hot-honey",
+                                    "hot-italian-sausage",
                                     "reduced-fat-mozzarella",
                                     "jasmine-rice",
                                     "salsa-verde",
@@ -77,6 +79,7 @@
                                              "dried-basil/Family Fare",
                                              "green-onions/Aldi",
                                              "apple-cider-vinegar/Hy-Vee",
+                                             "dried-thyme/Family Fare",
                                              "five-spice-powder/Baker\u0027s"
                                          ],
     "deltas_over_25pct":  [
@@ -228,20 +231,6 @@
                                   "item":  "Melissa Ginger Root"
                               },
                               {
-                                  "id":  "golden-raisins",
-                                  "store":  "Family Fare",
-                                  "old":  0.57,
-                                  "new":  0.2995,
-                                  "item":  "Our Family Seedless Raisins 20 Oz"
-                              },
-                              {
-                                  "id":  "golden-raisins",
-                                  "store":  "Baker\u0027s",
-                                  "old":  0.4158,
-                                  "new":  0.2408,
-                                  "item":  "Smart Way Seedless Raisins"
-                              },
-                              {
                                   "id":  "hickory-smoked-bacon",
                                   "store":  "Family Fare",
                                   "old":  7.99,
@@ -259,8 +248,8 @@
                                   "id":  "honey",
                                   "store":  "Family Fare",
                                   "old":  0.6867,
-                                  "new":  1.1658,
-                                  "item":  "Mike\u0027s Hot The Original Honey 12 Oz"
+                                  "new":  0.2915,
+                                  "item":  "Our Family Honey, Pure 48 Oz"
                               },
                               {
                                   "id":  "ketchup",
@@ -445,20 +434,6 @@
                                   "item":  "Lawry\u0027s Ground Cumin"
                               },
                               {
-                                  "id":  "hot-italian-sausage",
-                                  "store":  "Walmart",
-                                  "old":  4.98,
-                                  "new":  2.5011,
-                                  "item":  "Marketside Mild Italian Sausage 5 Links"
-                              },
-                              {
-                                  "id":  "hot-italian-sausage",
-                                  "store":  "Baker\u0027s",
-                                  "old":  4.88,
-                                  "new":  3.5467,
-                                  "item":  "Kroger Sweet Italian Sausage"
-                              },
-                              {
                                   "id":  "hot-sauce",
                                   "store":  "Family Fare",
                                   "old":  0.3742,
@@ -471,13 +446,6 @@
                                   "old":  0.3325,
                                   "new":  0.1667,
                                   "item":  "Chophouse Meats Jalapeno Pepper Hot Sauce"
-                              },
-                              {
-                                  "id":  "olive-oil",
-                                  "store":  "Family Fare",
-                                  "old":  0.3991,
-                                  "new":  0.2068,
-                                  "item":  "Violi Mediterranean Blend, Italian Sunflower \u0026 Extra Virgin Olive Oil 33.8 Oz"
                               },
                               {
                                   "id":  "onion-powder",
@@ -670,13 +638,6 @@
                               },
                               {
                                   "id":  "dried-thyme",
-                                  "store":  "Family Fare",
-                                  "old":  3.3333,
-                                  "new":  5.98,
-                                  "item":  "Local Roots Organic Thyme"
-                              },
-                              {
-                                  "id":  "dried-thyme",
                                   "store":  "Walmart",
                                   "old":  1.16,
                                   "new":  1.9857,
@@ -695,10 +656,17 @@
                                   "old":  0.128,
                                   "new":  0.0817,
                                   "item":  "That\u0027s Smart! Sweet Peas (Frozen)"
+                              },
+                              {
+                                  "id":  "ground-cinnamon",
+                                  "store":  "Family Fare",
+                                  "old":  0.676,
+                                  "new":  0.4576,
+                                  "item":  "Honey Maid Cinnamon Grahams 14.4 Oz"
                               }
                           ],
-    "cells_given_product_name":  542,
-    "cells_given_size":  541,
+    "cells_given_product_name":  530,
+    "cells_given_size":  529,
     "cells_whose_candidate_has_no_name":  [
 
                                           ],

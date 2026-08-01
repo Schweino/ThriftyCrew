@@ -605,6 +605,21 @@
                         "ruled_on":  "2026-08-01",
                         "ruled_by":  "plan-run-2026-08-01",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "olive-oil|FamilyFare|violi-mediterranean-blend-italian-sunflower-extr",
+                        "commodity":  "olive-oil",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Violi Mediterranean Blend, Italian Sunflower \u0026 Extra Virgin Olive Oil 33.8 Oz"
+                                  ],
+                        "product_id":  "2510964",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A SUNFLOWER/olive BLEND priced as olive oil, second-cheapest on the live main board at 0.2068/oz - it is cheaper precisely because it is not olive oil. The aisle test cannot catch it: the store shelves it under pantry/baking/oils_sprays, which is the correct department. Same permissive-include class as the Hendrickson\u0027s dressing on the Hy-Vee discovery docket. Fixed with a sunflower/canola/soybean/grapeseed exclude; a plain \u0027blend\u0027 exclude was measured first and REFUSED because it also killed three genuine California Olive Ranch Global Blend olive oils.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "plan-run-2026-08-01",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

@@ -1,4 +1,4 @@
-﻿{
+{
     "readme":  "recipe-floor-id -\u003e board-commodity-id mappings for derive-recipe-floors.ps1. EVERY entry is a ONE-TIME HUMAN VERIFICATION that the two ids are the SAME commodity in the SAME form (fresh vs frozen, block vs shredded, plain vs seasoned all count as DIFFERENT). A verified entry automates that row\u0027s monthly floor refresh forever; a wrong one silently prices the floor off a different product (the board-collision class). Add entries as the monthly agent hand-checks the no-board-match list; include reviewed dates.",
     "map":  {
                 "ginger":  "fresh-ginger",
@@ -11,7 +11,6 @@
                 "mozzarella-cheese":  "shredded-cheese",
                 "cucumber":  "cucumbers",
                 "traditional-pasta-sauce":  "pasta-sauce",
-                "golden-raisins":  "raisins",
                 "rotini-pasta":  "pasta",
                 "fries":  "frozen-fries",
                 "green-cabbage":  "cabbage",
@@ -27,7 +26,6 @@
                 "green-beans":  "canned-green-beans",
                 "parmesan-cheese":  "parmesan",
                 "pineapple-chunks":  "canned-pineapple",
-                "hot-italian-sausage":  "italian-sausage",
                 "cheddar-cheese-shredded":  "shredded-cheese",
                 "cheddar-cheese":  "shredded-cheese",
                 "pepperoncini":  "banana-peppers",
@@ -35,5 +33,9 @@
                 "all-purpose-flour":  "flour",
                 "apple":  "apples"
             },
-    "review_log":  "2026-07-23: 16 mappings accepted from propose-floor-id-map.ps1 evidence gate (full label-token match + unit reconciliation + multi-store price agreement \u003c=25%) with human review of each; REJECTED olives-\u003eolive-oil (single-token false positive, different product) - see out/floor-id-map-proposals.json for the evidence rows. pepperoncini-\u003ebanana-peppers verified intentional: the board commodity label is literally Banana Peppers / Pepperoncini. ROUND 2 (2026-07-23): 17 more accepted via curated price-test (\u003e=2-store everyday agreement + form review). REJECTED with evidence: boneless-skinless-chicken-thigh-\u003echicken-thighs (board=bone-in drumstick pricing, 1/6), jasmine-rice-\u003erice (0/6, jasmine pricier), salsa-verde-\u003esalsa (1/5), seasoned-black-beans-\u003ecanned-black-beans (1/4), 93-7-ground-turkey-\u003eground-turkey (3 stores cheapest = fattier grind, would understate), red-bell-pepper-\u003ebell-peppers (board cheapest = green), zero-sugar-soda-2l-\u003esoda (2L vs 12-pack economics), frozen-broccoli-florets-\u003efrozen-broccoli (cuts-vs-florets understating risk). apple-\u003eapples accepted on identity; its each-vs-lb unit mismatch is the deriver\u0027s refusal flow, safe."
+    "review_log":  "2026-07-23: 16 mappings accepted from propose-floor-id-map.ps1 evidence gate (full label-token match + unit reconciliation + multi-store price agreement \u003c=25%) with human review of each; REJECTED olives-\u003eolive-oil (single-token false positive, different product) - see out/floor-id-map-proposals.json for the evidence rows. pepperoncini-\u003ebanana-peppers verified intentional: the board commodity label is literally Banana Peppers / Pepperoncini. ROUND 2 (2026-07-23): 17 more accepted via curated price-test (\u003e=2-store everyday agreement + form review). REJECTED with evidence: boneless-skinless-chicken-thigh-\u003echicken-thighs (board=bone-in drumstick pricing, 1/6), jasmine-rice-\u003erice (0/6, jasmine pricier), salsa-verde-\u003esalsa (1/5), seasoned-black-beans-\u003ecanned-black-beans (1/4), 93-7-ground-turkey-\u003eground-turkey (3 stores cheapest = fattier grind, would understate), red-bell-pepper-\u003ebell-peppers (board cheapest = green), zero-sugar-soda-2l-\u003esoda (2L vs 12-pack economics), frozen-broccoli-florets-\u003efrozen-broccoli (cuts-vs-florets understating risk). apple-\u003eapples accepted on identity; its each-vs-lb unit mismatch is the deriver\u0027s refusal flow, safe.",
+    "retired":  {
+                    "golden-raisins":  "was \u0027raisins\u0027. REMOVED 2026-08-01: a FORM violation of this file\u0027s own rule. The board\u0027s raisins commodity is dark seedless; deriving from it priced golden raisins off \u0027Our Family Seedless Raisins\u0027 and \u0027Smart Way Seedless Raisins\u0027, dropping Family Fare 0.57 -\u003e 0.2995/oz and Baker\u0027s 0.4158 -\u003e 0.2408. Golden raisins genuinely cost more. The frozen 2026-07-12 hand-browse is the RIGHT product at a stale price, which beats the WRONG product at a fresh one.",
+                    "hot-italian-sausage":  "was \u0027italian-sausage\u0027. REMOVED 2026-08-01: a FORM violation. Deriving from the generic commodity picked \u0027Marketside MILD Italian Sausage\u0027 at Walmart (4.98 -\u003e 2.5011/lb) and \u0027Kroger SWEET Italian Sausage\u0027 at Baker\u0027s (4.88 -\u003e 3.5467). Hot vs mild vs sweet is the same \u0027plain vs seasoned\u0027 distinction this file already calls DIFFERENT."
+                }
 }
