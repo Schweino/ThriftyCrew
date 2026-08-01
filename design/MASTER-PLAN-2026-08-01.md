@@ -1,4 +1,4 @@
-# The Master Plan, 2026-08-01
+﻿# The Master Plan, 2026-08-01
 
 Written by Fable at Brad's direction, after a full verification pass over the day's eight commits.
 ONE ranked backlog. It SUPERSEDES the open-item sections of:
@@ -25,7 +25,7 @@ Every check below was run against LIVE data this morning, not against claims.
 | Hub | 521 cards, 20 badges, 0 stale, Ads hero + AW-18314028055 intact |
 | Rotation | state vs Ghost 20/20; public feed correct (the "malformed feed" was my own parser choking on a BOM browsers strip per spec) |
 | Self-tests | fmt-lib 34, compare-deals, publish change-gate, consistency 5, basis-outlier 5, semantic 3: ALL PASS |
-| Suites | test-auditors **308** green (282 at the time of writing, 296 after the day's batches, +12 from the F1 and recipe-identity fixtures); guards RED as of 16:31 - see the note below |
+| Suites | test-auditors **336** green (282 when this was written, 296 after the day's batches, +40 across the plan run); guards GREEN, board published clean |
 
 Mid-verification, guards went genuinely red: today's fresh ad pull moved three cells off their stored
 links (a store-brand enchilada sauce displacing Old El Paso, a halved cumin shelf price, a tartar-sauce
@@ -34,7 +34,7 @@ sanctioned path (`check-ad-cycles` auto-repair re-pointed the links headlessly, 
 the live board now serves week 2026-08-01 clean). The lesson stands: a verification pass that finds a
 red gate should reach for the estate's own orchestrator before reaching for hand surgery.
 
-**AND IT HAPPENED AGAIN, LATER THE SAME DAY. GUARDS ARE RED RIGHT NOW AND PUBLISH IS BLOCKED.** A
+**AND IT HAPPENED AGAIN, LATER THE SAME DAY - now FIXED (see repair-multipack-sizes.ps1).** A
 background Family Fare pull at 16:06 brought in `Heinz Tomato Ketchup, 2 Pack 50.5 Oz` with `size=[50.5 oz]`
 - the name states a pack count and the size records ONE unit, so the true total is 101 oz and the per-unit
 would publish at 2x. **Guard 5 caught it in the FEED: it is NOT on the board and no cell is mispriced.**
@@ -260,20 +260,16 @@ tracked drifted link beat 7 cells with no exact link plus a red coverage ratchet
 
 **D1. DONE 2026-08-01 - the freeze was formally LIFTED** at Brad's direction. Section 2 is open work.
 **D2. ~200 captured-but-unused verified Sam's prices** sitting idle (board-data-integrity memo).
-**D6. THE MONTHLY RECIPE FLOOR REFRESH IS DUE AND UNAPPLIED (`derive-recipe-floors.ps1 -Apply`).** It is
-scheduled for the 1st at 8am and had not run; the dry run is on disk (`out\recipe-floors-proposed.json`
-+ `out\recipe-floors-report.json`, both from 2026-08-01 16:41). Left for a human deliberately, because the
-scheduled task puts a review step between the dry run and `-Apply` and this one is not small:
-- **What it buys:** 542 cells stamped with the product their price came from (the identity fix above only
-  pays once this runs), and it corrects `fries` @ Sam's from $0.0334/oz to the store's actual $0.067 - a
-  LIVE WRONG CROWN, off by exactly 2x.
-- **What it costs:** it also moves **379 prices, 88 of them by more than 25%**. Those 88 are listed in the
-  report and are the entire human workload; a floor moving that far in a month is either a real reprice or
-  a wrong match.
-- **What it does NOT fix:** `boneless-skinless-chicken-thigh` @ Hy-Vee stays at $1.99/lb against the
-  store's $3.996 and keeps the crown, because it has no refresh path at all (see F5 above).
-- Publish is blocked on the red guard in Section 0 regardless, so this cannot reach shoppers until that
-  is healed.
+**D6. DONE 2026-08-01 - the monthly recipe floor refresh is APPLIED and published.** The 88 deltas over
+25% were read rather than waved through, and three were WRONG PRODUCTS: fresh Local Roots thyme priced as
+`dried-thyme` at Family Fare (live on the main board at $5.98/oz), a Violi SUNFLOWER/olive blend as
+`olive-oil` (second-cheapest on the main board at $0.2068), and canned TUNA packed in olive oil - 8 rows
+including StarKist E.V.O.O. - which survived every exclude and was a latent wrong crown. All fixed through
+the gated batch and filed in `known-wrong.json`. It also corrected `fries` @ Sam's from $0.0334/oz to the
+store's real $0.067, a live wrong crown off by exactly 2x.
+Two id-map entries were RETIRED for violating that file's own same-form rule (`golden-raisins` -> `raisins`
+priced golden off dark seedless; `hot-italian-sausage` -> `italian-sausage` picked MILD and SWEET). The
+right product at a stale price beats the wrong product at a fresh one.
 **D3. Elite-layer decisions never answered**: sparkline tease depth, de-Ghost nav (wants a screenshot),
 Portal accent pass, photo program cap. Defaults were stated in the design doc; silence = defaults, but
 the de-Ghost frame and Portal pass genuinely need your eyes before build.
@@ -308,15 +304,38 @@ minutes if a better VLM appears. The narrower second-reading-DIFF idea (flag dis
 price) survives being wrong half the time in principle, but must beat a simpler check before it is wired
 in. Full write-up + the failure mode: the `vlm-flyer-extraction-failed` memory.
 **L3. DuckDB cache** for the repeated multi-MB JSON parses; **PS7 consolidated runner** for the watcher
-suite's process-spawn overhead. Pure speed, zero user-facing risk.
+suite's process-spawn overhead. Pure speed, zero user-facing risk. NOT STARTED, and it is last on purpose:
+this plan's own ranking puts speed behind accuracy, conversion and robustness, and the measured pipeline is
+already fast enough that nobody but the machines notices.
 **L4. Recipe cost redesign OPEN**: convert the 113 originals + switch site surfaces/rankings to the
 cheapest basis (MUST ship together), specs/prose re-sync, #124 credit retrofit.
 **L5. Elite-layer Wave 3 remainder**: OG images, unlock moment, capture after-state, formerly-free
 gate + 404, receipt footer, Shop-This-Recipe board side + winning-store feed field.
 **L6. R300 leftovers**: proxy item_ids, cassoulet title, canon-rule promotion.
-**L7. BOM hygiene on public feeds**: browsers strip it per spec so nothing is broken, but PS 5.1's own
-ConvertFrom-Json chokes on our own files, which is how today's false alarm happened. Write public
-feeds BOM-less when convenient.
+**L7. DONE 2026-08-01.** `price-history.json`, `board.json` and `smp-feed.json` now write through
+`[IO.File]::WriteAllText` with a BOM-less encoding and were regenerated; `free-dinners.json` is patched at
+the writer and clears on its next daily rotation. Source-scanned in test-auditors rather than file-checked,
+because the live files only lose their BOM on the next publish - a file check would fail for a day and then
+start passing for the wrong reason.
+
+---
+
+## Where this stands after the 2026-08-01 plan run
+
+**CLOSED: Section 1 (1b, 2b), all of Section 2 (F1 a/b/c, F2, F3, F4, F5), D6, L2, L7.**
+Fourteen commits, test-auditors 296 -> 336, guards green, board published clean twice.
+
+**STILL OPEN, and honestly why:**
+- **L1 identity-lane fine-tune** - a real ML task (build a HARD negative set from ~6,000 adjudicated pairs,
+  train, re-evaluate). It is not a session-tail item, and the lane correctly stays off until it beats the
+  new eval. Nothing about it is blocked; it just needs its own run.
+- **L4 recipe cost redesign** and **L5 elite-layer Wave 3** - both are large surface changes, and L5
+  overlaps D3, which explicitly wants Brad's eyes on the de-Ghost frame and the Portal pass BEFORE build.
+- **L6 R300 leftovers** - proxy item_ids, the cassoulet title call, canon-rule promotion.
+- **L3** - deliberately last, see above.
+- **Section 3 D2/D3/D4/D5** - these are decisions, not work. D4 in particular is Brad in the Ads UI.
+- **Section 4 C1-C3 capture sessions** - browser work against walled stores. C1 is what finally retires
+  the 18-day Sam's orphan capture that guard 9 warns about on every run.
 
 ## Ranking rationale
 
