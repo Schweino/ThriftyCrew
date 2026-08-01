@@ -1,41 +1,5 @@
 ﻿[
     {
-        "id":  "canned-chili",
-        "store":  "Fareway",
-        "unit":  "oz",
-        "board":  0.1592,
-        "link":  0.176,
-        "ratio":  1.11,
-        "price":  2.64,
-        "size":  "15 oz",
-        "boardItem":  "Hormel Chili with Beans, No Artificial Ingredients, 25 oz Can",
-        "linkItem":  "Hormel Chili with Beans, No Artificial Ingredients, 15 Oz"
-    },
-    {
-        "id":  "chili-crisp",
-        "store":  "Fareway",
-        "unit":  "oz",
-        "board":  1.0891,
-        "link":  1.3482,
-        "ratio":  1.24,
-        "price":  9.99,
-        "size":  "7.41 oz",
-        "boardItem":  "Dynasty Hot Chili Oil, Spicy",
-        "linkItem":  "WUJU Chili Crisp Sweet Heat"
-    },
-    {
-        "id":  "diapers",
-        "store":  "Fareway",
-        "unit":  "each",
-        "board":  0.3735,
-        "link":  0.4461,
-        "ratio":  1.19,
-        "price":  29.44,
-        "size":  "66 ct",
-        "boardItem":  "Luvs Platinum Protection Baby Diapers, Size 6",
-        "linkItem":  "Huggies Little Movers Baby Diapers, Size 4 (22-37 lbs)"
-    },
-    {
         "id":  "frosting",
         "store":  "Walmart",
         "unit":  "oz",
@@ -60,54 +24,6 @@
         "linkItem":  "That\u0027s Smart Ground Cinnamon"
     },
     {
-        "id":  "mixed-nuts",
-        "store":  "Walmart",
-        "unit":  "oz",
-        "board":  0.3548,
-        "link":  0.3675,
-        "ratio":  1.04,
-        "price":  5.42,
-        "size":  "14.75 oz",
-        "boardItem":  "Great Value Mixed Nuts with Peanuts, 27 oz",
-        "linkItem":  "Great Value Roasted \u0026 Lightly Salted Mixed Nuts, 14.75 oz"
-    },
-    {
-        "id":  "pickled-jalapenos",
-        "store":  "Baker\u0027s",
-        "unit":  "oz",
-        "board":  0.1139,
-        "link":  0.0833,
-        "ratio":  0.73,
-        "price":  1.25,
-        "size":  "15 oz",
-        "boardItem":  "La Costena Sliced Jalapeno Peppers",
-        "linkItem":  "Ranch Style Beans with Sliced Jalapeno Peppers"
-    },
-    {
-        "id":  "queso",
-        "store":  "Fareway",
-        "unit":  "oz",
-        "board":  0.1952,
-        "link":  0.2327,
-        "ratio":  1.19,
-        "price":  3.49,
-        "size":  "15 oz",
-        "boardItem":  "Tostitos Medium Con Queso Salsa Dip",
-        "linkItem":  "Tostitos Salsa Con Queso, Medium"
-    },
-    {
-        "id":  "rice-cakes",
-        "store":  "Family Fare",
-        "unit":  "oz",
-        "board":  0.5662,
-        "link":  0.6487,
-        "ratio":  1.15,
-        "price":  4.69,
-        "size":  "7.23 oz",
-        "boardItem":  "Quaker Caramel Chocolate Chip Rice Cakes 7.4 Oz",
-        "linkItem":  "Quaker Rice Cakes, Chocolate 7.23 Oz"
-    },
-    {
         "id":  "ricotta",
         "store":  "Hy-Vee",
         "unit":  "oz",
@@ -118,18 +34,6 @@
         "size":  "32 oz",
         "boardItem":  "Hy-Vee Whole Milk Ricotta Cheese",
         "linkItem":  "Hy-Vee Whole Milk Ricotta Cheese"
-    },
-    {
-        "id":  "stuffing-mix",
-        "store":  "Fareway",
-        "unit":  "oz",
-        "board":  0.4158,
-        "link":  0.3158,
-        "ratio":  0.76,
-        "price":  3.79,
-        "size":  "12 oz",
-        "boardItem":  "Kraft Stove Top Everyday Stuffing Mix for Chicken",
-        "linkItem":  "Pepperidge Farm Herb Seasoned Classic Stuffing"
     },
     {
         "id":  "whole-chicken",

@@ -1,27 +1,6 @@
 ﻿{
     "resolved":  [
-                     {
-                         "id":  "cantaloupe",
-                         "fault":  "PRICE-DRIFT",
-                         "board":  "Cantaloupe/Rockmelon Melon, Small",
-                         "board_pu":  5.99,
-                         "name":  "Cantaloupe/Rockmelon Melon, Small",
-                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/melons/cantaloupe_rockmelon_melon_small/p/78513",
-                         "price":  "$5.99",
-                         "size":  "1 ct",
-                         "score":  1
-                     },
-                     {
-                         "id":  "eggplant",
-                         "fault":  "PRICE-DRIFT",
-                         "board":  "Regular Eggplant (Aubergine)",
-                         "board_pu":  2.49,
-                         "name":  "Regular Eggplant (Aubergine)",
-                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/other_vegetables/regular_eggplant_aubergine/p/12442",
-                         "price":  "$2.49",
-                         "size":  "1 ct",
-                         "score":  1
-                     }
+
                  ],
     "refused":  [
                     {
@@ -57,7 +36,7 @@
                         "why":  "match found but per-unit disagrees: board $1.99 vs link $2.49 (20.1%)"
                     }
                 ],
-    "worked":  10,
-    "generated":  "2026-07-31 09:03",
+    "worked":  8,
+    "generated":  "2026-08-01 06:14",
     "board":  "comparison-2026-07-31.json"
 }
