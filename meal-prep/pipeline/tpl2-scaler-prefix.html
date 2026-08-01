@@ -1,10 +1,11 @@
-<!--SMP-SCALER2--><style>.smp-sc{margin:1.6rem 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px;text-align:center}
-.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+<!--SMP-SCALER2--><style>.smp-sc{margin:1.6rem 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:14px;text-align:center;border-bottom:3px solid #ddd6c2}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem;letter-spacing:-.015em}
 .smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
 .smp-sc-row{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
 .smp-sc-row b{color:#16263F;font-size:1.5rem}
-.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
-.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-btn{width:44px;height:44px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1;transition:transform 100ms cubic-bezier(0.2,0,0,1)}
+.smp-sc-btn:active{transform:scale(.94)}
+.smp-sc-num{width:78px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px;font-variant-numeric:tabular-nums}
 .smp-sc-list{margin:0;padding:0;list-style:none}
 .smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
 .smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
@@ -13,45 +14,134 @@
 .smp-credit{background:#f8f6f0;border-left:4px solid #e2a43c;border-radius:0 8px 8px 0;padding:1rem 1.3rem;margin:0 0 1.8rem;font-size:1.38rem;line-height:1.55;color:#3a4658}
 .smp-credit a{color:#16263F;font-weight:600}
 .smp-credit-eyebrow{display:block;font-size:1.05rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8a6d1f;margin-bottom:.3rem}
-.smp-ct{margin:2.8rem 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
-.smp-ct h2{margin:0 0 .8rem}
-.smp-ct-why{margin:0 0 1.4rem}
-.smp-ct-list{margin-top:.4rem}
+/* ---------- JUMP NAV: cooks arrive mid-task with wet hands; these are 10-minute-read pages ---------- */
+.smp-jump{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 1.8rem;padding:0;list-style:none}
+.smp-jump a,.smp-jump button{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:.45rem 1.05rem;border-radius:10px;border:1.5px solid #e5dcc8;background:#fff;color:#16263F;font-size:1.26rem;font-weight:700;text-decoration:none;font-family:inherit;cursor:pointer;line-height:1.2;transition:transform 100ms cubic-bezier(0.2,0,0,1),border-color 200ms cubic-bezier(0.2,0,0,1)}
+.smp-jump a:active,.smp-jump button:active{transform:scale(.985)}
+.smp-jump .smp-jump-cook{border-color:#16263F;background:#16263F;color:#fff}
+.smp-ing,.smp-ct h2,.smp-mi,.smp-portion{scroll-margin-top:84px}
+h2[id]{scroll-margin-top:84px}
+/* ---------- THE RECEIPT ---------- */
+.smp-ct{margin:2.8rem 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-bottom:3px solid #ddd6c2;border-radius:14px}
+.smp-ct h2{margin:0 0 .8rem;letter-spacing:-.015em}
+.smp-ct-why{margin:0 0 1rem}
 .smp-ct-btns{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 1.2rem}
-.smp-ct-btn{flex:1 1 auto;min-width:110px;padding:.7rem .9rem;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.32rem;font-weight:700;cursor:pointer;line-height:1.2}
+.smp-ct-btn{flex:1 1 auto;min-width:110px;min-height:44px;padding:.7rem .9rem;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.32rem;font-weight:700;cursor:pointer;line-height:1.2;transition:transform 100ms cubic-bezier(0.2,0,0,1)}
+.smp-ct-btn:active{transform:scale(.985)}
 .smp-ct-btn.on{background:#16263F;color:#fff}
-.smp-ct-sub{color:#4a5568;font-size:1.3rem;margin:0 0 1rem;line-height:1.55}
+/* The savings delta. This is the sentence that RESOLVES the two-price confusion with a reason instead of
+   another label: it is the subtraction of two totals the widget already computes, nothing new. */
+.smp-ct-save{margin:0 0 1.2rem;padding:.85rem 1.1rem;background:#fffdf6;border:1px solid #e9dcc0;border-left:4px solid #E2A43C;border-radius:0 10px 10px 0;font-size:1.34rem;line-height:1.5;color:#3a4658}
+.smp-ct-save b{color:#0c5c3b;font-variant-numeric:tabular-nums;font-weight:750}
+.smp-ct-save[hidden]{display:none}
+/* Receipt paper: warm, lighter than the cream panel it sits on, with CSS zigzag tear teeth. */
+.smp-rc{position:relative;background:#fffdf6;border:1px solid #e7e2d4;border-radius:2px;box-shadow:0 2px 10px rgba(22,38,63,.07);padding:1.3rem 1.4rem 1.1rem;margin:0 0 1rem}
+.smp-rc::before,.smp-rc::after{content:'';position:absolute;left:0;right:0;height:8px;
+  background:linear-gradient(-45deg,transparent 0 5.66px,#fffdf6 0) 0 0/16px 16px repeat-x,
+             linear-gradient(45deg,transparent 0 5.66px,#fffdf6 0) 0 0/16px 16px repeat-x}
+.smp-rc::before{top:-8px;transform:scaleY(-1)}
+.smp-rc::after{bottom:-8px}
+.smp-ct-sub{color:#4a5568;font-size:1.28rem;margin:0 0 1rem;line-height:1.55}
 .smp-ct-sub b{color:#16263F}
 .smp-ct-list{margin:0;padding:0;list-style:none}
-.smp-ct-list li{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:.6rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-ct-list li{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:.6rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.36rem;color:#3a4658;flex-wrap:wrap}
 .smp-ct-list li.smp-ct-off{opacity:.45}
 .smp-ct-list li.smp-ct-off .smp-ct-r b{text-decoration:line-through}
-.smp-ct-ck{display:flex;align-items:center;gap:9px;cursor:pointer;margin:0}
-.smp-ct-ck input{width:19px;height:19px;accent-color:#16263F;cursor:pointer;margin:0;flex:none}
+.smp-ct-ck{display:flex;align-items:center;gap:9px;cursor:pointer;margin:0;min-height:32px}
+.smp-ct-ck input{width:24px;height:24px;accent-color:#8a6d1f;cursor:pointer;margin:0;flex:none}
 .smp-ct-r{text-align:right}
-.smp-ct-qty{color:#8a94a6;font-size:1.2rem;margin-right:6px}
-.smp-ct-r a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.22rem;white-space:nowrap}
-.smp-cp-un{color:#8a94a6;font-size:1.18rem;font-style:italic}
-.smp-cp-tot{color:#0c5c3b;font-size:1.42rem}
-.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b;font-size:1.24rem}
-.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
-@media (max-width:480px){.smp-sc,.smp-ct{padding:1.4rem 1.2rem}.smp-ct-btn{min-width:100%;flex:1 1 100%}.smp-ct-list li{flex-direction:column;align-items:flex-start;gap:4px}.smp-ct-r{text-align:left}}</style>
+.smp-ct-qty{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#8a94a6;font-size:1.14rem;margin-right:6px}
+.smp-ct-r a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.2rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.16rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.4rem;font-variant-numeric:tabular-nums;font-weight:750}
+.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b;font-size:1.22rem}
+/* winning-store chip on a receipt line: color dot + short store name. Hidden when the feed has no store
+   for that ingredient, because a half-populated row of chips reads as broken rather than honest. */
+.smp-wst{display:inline-flex;align-items:center;gap:5px;font-size:1.14rem;color:#5a6862;white-space:nowrap}
+.smp-wst i{width:8px;height:8px;border-radius:999px;background:currentColor;display:inline-block;flex:none}
+.smp-cp-total{border-top:3px double #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-rc-kitchen{margin:.9rem 0 0;font-size:1.3rem;color:#8a6d1f;font-weight:700;font-variant-numeric:tabular-nums}
+.smp-rc-kitchen[hidden]{display:none}
+.smp-rc-stamp{margin:1rem 0 0;text-align:right}
+.smp-rc-stamp span{display:inline-block;transform:rotate(-4deg);border:2px solid #8a6d1f;color:#8a6d1f;border-radius:4px;padding:2px 9px;font-size:1.02rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;opacity:.82}
+/* ---------- COST COMPOSITION BAR: where the money actually goes ---------- */
+.smp-comp{margin:0 0 1.4rem}
+.smp-comp-bar{display:flex;width:100%;height:22px;border-radius:6px;overflow:hidden;border:1px solid #e0d8c4;background:#efe9da}
+.smp-comp-bar i{display:block;height:100%;transition:background-color 200ms cubic-bezier(0.2,0,0,1),opacity 200ms cubic-bezier(0.2,0,0,1)}
+.smp-comp-bar i.is-own{background:#cfc9ba !important;opacity:.6}
+.smp-comp-key{display:flex;gap:14px;flex-wrap:wrap;margin:.6rem 0 0;font-size:1.18rem;color:#5a6862}
+.smp-comp-key span{display:inline-flex;align-items:center;gap:6px}
+.smp-comp-key i{width:10px;height:10px;border-radius:3px;display:inline-block;flex:none}
+.smp-comp-pay{margin:.7rem 0 0;font-size:1.3rem;line-height:1.5;color:#16263F;font-weight:600}
+/* ---------- SHOP THIS RECIPE ---------- */
+.smp-shop{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;margin:.4rem 0 0;padding:.8rem 1.6rem;background:#16263F;color:#fff !important;border:none;border-radius:10px;font-size:1.36rem;font-weight:800;text-decoration:none !important;cursor:pointer;font-family:inherit;transition:transform 100ms cubic-bezier(0.2,0,0,1)}
+.smp-shop:active{transform:scale(.985)}
+.smp-shop-note{font-size:1.14rem;color:#8a94a6;margin:.5rem 0 0;line-height:1.5}
+/* ---------- STICKY MINI-SCALER ---------- */
+.smp-mini{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:2147481000;display:none;
+  align-items:center;gap:6px;background:#16263F;color:#fff;border-radius:999px;padding:6px 8px;box-shadow:0 8px 24px rgba(22,38,63,.28)}
+.smp-mini.is-on{display:flex}
+.smp-mini button{width:38px;height:38px;border-radius:999px;border:none;background:rgba(255,255,255,.14);color:#fff;font-size:1.7rem;font-weight:700;line-height:1;cursor:pointer;font-family:inherit}
+.smp-mini .smp-mini-n{min-width:52px;text-align:center;font-size:1.35rem;font-weight:800;font-variant-numeric:tabular-nums;background:none;border:none;color:#E2A43C;cursor:pointer;font-family:inherit;padding:0 4px}
+.smp-mini .smp-mini-l{font-size:1.05rem;color:#b9c4d4;padding-right:6px}
+/* ---------- COOK MODE ---------- */
+.smp-cook{position:fixed;inset:0;z-index:2147483000;background:#fdf8ec;display:flex;flex-direction:column;overscroll-behavior:contain}
+.smp-cook-hd{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#16263F;color:#fff;padding:calc(10px + env(safe-area-inset-top)) 14px 10px}
+.smp-cook-hd b{font-size:1.35rem;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.smp-cook-hd button{min-width:44px;min-height:44px;border:none;background:rgba(255,255,255,.12);color:#fff;border-radius:10px;font-size:1.5rem;font-weight:700;cursor:pointer;font-family:inherit}
+.smp-cook-bar{height:4px;background:rgba(22,38,63,.12)}
+.smp-cook-bar i{display:block;height:100%;background:#E2A43C;transition:width 200ms cubic-bezier(0.2,0,0,1)}
+.smp-cook-body{flex:1;overflow:auto;padding:26px 22px 20px;display:flex;flex-direction:column;justify-content:center}
+.smp-cook-n{display:inline-block;align-self:flex-start;background:#16263F;color:#E2A43C;font-size:1.15rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:999px;margin:0 0 16px}
+.smp-cook-t{font-family:Georgia,serif;font-size:2.2rem;line-height:1.45;color:#16263F;margin:0}
+.smp-cook-ft{display:flex;gap:10px;padding:12px 14px calc(12px + env(safe-area-inset-bottom));background:#fdf8ec;border-top:1px solid #e5dcc8}
+.smp-cook-ft button{flex:1;min-height:48px;border-radius:10px;border:1.5px solid #16263F;background:#fff;color:#16263F;font-size:1.35rem;font-weight:800;cursor:pointer;font-family:inherit}
+.smp-cook-ft .smp-cook-ing{flex:0 0 auto;padding:0 18px}
+.smp-cook-sheet{position:fixed;left:0;right:0;bottom:0;max-height:52vh;overflow:auto;background:#fff;border-radius:16px 16px 0 0;box-shadow:0 -10px 30px rgba(22,38,63,.25);padding:18px 20px calc(18px + env(safe-area-inset-bottom));z-index:2147483001}
+.smp-cook-sheet h4{font-family:Georgia,serif;font-size:1.6rem;color:#16263F;margin:0 0 10px}
+.smp-cook-sheet ul{margin:0;padding:0;list-style:none}
+.smp-cook-sheet li{padding:.5rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.32rem;color:#3a4658}
+/* inline step state (the fallback that makes Cook Mode optional, not required) */
+.smp-mi li{cursor:pointer}
+.smp-mi li.smp-done{opacity:.5}
+.smp-mi-resume{font-size:1.24rem;color:#8a6d1f;font-weight:700;margin:.2rem 0 1rem}
+.smp-mi-resume[hidden]{display:none}
+/* ---------- shared degraded / empty copy ---------- */
+.smp-degraded{font-size:1.18rem;color:#8a94a6;line-height:1.5;margin:.5rem 0 0}
+@media (prefers-reduced-motion:no-preference){
+  .smp-ct-list li{transition:opacity 200ms cubic-bezier(0.2,0,0,1)}
+  .smp-ct-list li.smp-pulse{animation:smpPulse 520ms cubic-bezier(0.2,0,0,1)}
+  @keyframes smpPulse{0%{background-color:rgba(226,164,60,.20)}100%{background-color:transparent}}
+  .smp-sc-num.smp-pop{animation:smpPop 220ms cubic-bezier(0.2,0,0,1)}
+  @keyframes smpPop{0%{transform:scale(1)}45%{transform:scale(1.08)}100%{transform:scale(1)}}
+  .smp-cook-body{animation:smpFade 200ms cubic-bezier(0.2,0,0,1)}
+  @keyframes smpFade{from{opacity:0}to{opacity:1}}
+}
+@media (max-width:480px){.smp-sc,.smp-ct{padding:1.4rem 1.2rem}.smp-ct-btn{min-width:100%;flex:1 1 100%}.smp-ct-list li{flex-direction:column;align-items:flex-start;gap:4px}.smp-ct-r{text-align:left}.smp-cook-t{font-size:1.95rem}}
+</style>
 <script>
 (function(){
 if(window.__smpScaler2)return; window.__smpScaler2=1;
 // live price feed (Cloudflare). Fetched once per page; everyday package prices show instantly if slow/down.
-var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null,feedData=null;
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null,feedData=null,feedFailed=false;
 function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
 function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
 function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
 function esc(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
 function money(v){ return '$'+v.toFixed(2); }
+function rm(){ return (window.TC&&window.TC.rm)?window.TC.rm():false; }
+function tween(el,from,to){ if(window.TC&&window.TC.tween){ window.TC.tween(el,from,to,money); } else if(el){ el.textContent=money(to); } }
+function tap(n){ if(window.TC&&window.TC.tap)window.TC.tap(n); }
+function wake(on){ if(window.TC&&window.TC.wake)window.TC.wake(on); }
+function modeFlag(on){ if(window.TC&&window.TC.mode)window.TC.mode(on); }
+function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
 function init(box){
   var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
   var num=box.querySelector('.smp-sc-num');
   var ct=document.querySelector('.smp-ct');
   var ingUl=document.querySelector('.smp-ing');   // the Ingredients section list - rewritten in place when servings change
-  var removed={}, tab='custom';
+  var removed={}, tab='custom', lastTotal=null, lastN=null;
   function nServ(){ return Math.max(2,Math.min(42,parseInt(num.value)||data.base)); }
   // WHOLE-PACKAGE MODEL: you cannot buy 7.5 tbsp of vinegar. Packages needed = ceil of what the batch
   // uses over the package size, never less than one. Every tab prices whole packages; only the price
@@ -65,6 +155,9 @@ function init(box){
     if(e&&e.cheapest>0&&it.gpu>0){ return {cost:k*(it.pkg_g/it.gpu)*e.cheapest,live:true,k:k,store:e.store,url:e.url,unit:e.unit,up:e.cheapest,sale:e.type==='sale',cn:e.n}; }
     return {cost:ev,live:false,k:k,fallback:true};
   }
+  function totalAt(nn,basis,skipRemoved){
+    var t=0; data.ing.forEach(function(it,i){ if(skipRemoved&&removed[i])return; t+=price(it,nn,basis).cost; }); return t;
+  }
   function renderIngredients(){
     // No duplicate list in the scaler box: the recipe's own Ingredients section IS the scaled view.
     if(!ingUl) return;
@@ -72,77 +165,267 @@ function init(box){
     data.ing.forEach(function(it){ html+='<li><strong>'+esc(it.disp||it.item)+':</strong> '+scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'')+'</li>'; });
     ingUl.innerHTML=html;
   }
-  function renderTabs(){
+  // THE COMPOSITION BAR follows the same package prices as the checklist. Owned (unchecked) ingredients
+  // go gray rather than disappearing, so the shape of the bill stays readable while you subtract from it.
+  function renderComp(){
+    var bar=document.querySelector('.smp-comp-bar'); if(!bar) return;
+    bar.querySelectorAll('i').forEach(function(seg){
+      var i=seg.getAttribute('data-i');
+      seg.classList.toggle('is-own', tab==='custom' && !!removed[i]);
+    });
+  }
+  // THE SAVINGS DELTA. One computed sentence, the subtraction of two totals the widget already has.
+  // Suppressed under a dollar: a 40-cent "saving" is noise pretending to be news.
+  function renderSave(){
+    var el=document.querySelector('.smp-ct-save'); if(!el) return;
+    if(!feedData){ el.hidden=true; return; }
+    var nn=nServ(), ev=totalAt(nn,'everyday',false), ch=totalAt(nn,'cheapest',false), d=ev-ch;
+    if(!(d>=1)){ el.hidden=true; return; }
+    el.innerHTML='Shopping this batch at each ingredient’s cheapest store saves <b>'+money(d)+'</b> versus everyday prices this week. That is the difference between the two tabs below, nothing else.';
+    el.hidden=false;
+  }
+  function renderTabs(anim){
     if(!ct) return;
-    var nn=nServ(), html='', tot=0;
+    var nn=nServ(), html='', tot=0, own=0;
     var basis=(tab==='everyday')?'everyday':'cheapest';
     data.ing.forEach(function(it,i){
       var p=price(it,nn,basis);
       var inc=!(tab==='custom'&&removed[i]);
-      if(inc){ tot+=p.cost; }
+      if(inc){ tot+=p.cost; } else { own+=p.cost; }
       var left, right, qty='<span class="smp-ct-qty">'+pkgLabel(it,p.k)+'</span> ';
       if(tab==='custom'){ left='<label class="smp-ct-ck"><input type="checkbox" data-i="'+i+'"'+(inc?' checked':'')+'> <span>'+esc(it.item)+(p.sale?'<span class="smp-sc-saletag">sale</span>':'')+'</span></label>'; }
       else{ left='<span>'+esc(it.item)+(p.sale?'<span class="smp-sc-saletag">sale</span>':'')+'</span>'; }
+      // winning-store chip: only when the feed actually named a store for this ingredient
+      var wst=(p.live&&p.store)?(' <span class="smp-wst" style="color:'+storeHue(p.store)+'"><i></i>'+esc(p.store)+'</span>'):'';
       if(tab==='cheapest'&&p.live){
         var covN=(p.cn>0&&p.cn<6)?(' <span class="smp-cp-un">(checked at '+p.cn+' of 6 stores)</span>'):'';
         var link=p.url?(' <a href="'+esc(p.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
-        right=qty+'<b class="smp-cp-tot">'+money(p.cost)+'</b> <span class="smp-sc-lp">'+money(p.up)+'/'+p.unit+' at '+esc(p.store)+'</span>'+covN+link;
+        right=qty+'<b class="smp-cp-tot">'+money(p.cost)+'</b> <span class="smp-sc-lp">'+money(p.up)+'/'+p.unit+'</span>'+wst+covN+link;
       } else if(tab==='cheapest'){
         right=qty+'<b class="smp-cp-tot">'+money(p.cost)+'</b> <span class="smp-cp-un">everyday price (no live price this week)</span>';
       } else if(tab==='custom'&&p.live){
-        right=qty+'<b class="smp-cp-tot">'+money(p.cost)+'</b> <span class="smp-cp-un">at '+esc(p.store)+'</span>';
+        right=qty+'<b class="smp-cp-tot">'+money(p.cost)+'</b>'+wst;
       } else {
         right=qty+'<b class="smp-cp-tot">'+money(p.cost)+'</b>';
       }
       html+='<li'+((tab==='custom'&&!inc)?' class="smp-ct-off"':'')+'>'+left+'<span class="smp-ct-r">'+right+'</span></li>';
     });
     var lbl = (tab==='custom')?'Your shopping total':((tab==='everyday')?'Everyday register total':'Register total at the cheapest stores');
-    html+='<li class="smp-cp-total"><span><b>'+lbl+', '+nn+' servings</b></span><span class="smp-ct-r"><b class="smp-cp-tot">'+money(tot)+'</b> <span class="smp-cp-un">about '+money(nn>0?tot/nn:0)+' a serving</span></span></li>';
+    html+='<li class="smp-cp-total"><span><b>'+lbl+', '+nn+' servings</b></span><span class="smp-ct-r"><b class="smp-cp-tot smp-ct-grand">'+money((lastTotal===null||rm())?tot:lastTotal)+'</b> <span class="smp-cp-un">about '+money(nn>0?tot/nn:0)+' a serving</span></span></li>';
     ct.querySelector('.smp-ct-list').innerHTML=html;
+    // roll the total down (or up) instead of snapping, but only when a real number preceded it
+    var grand=ct.querySelector('.smp-ct-grand');
+    if(grand){ if(anim&&lastTotal!==null&&lastTotal!==tot){ tween(grand,lastTotal,tot); } else { grand.textContent=money(tot); } }
+    lastTotal=tot;
+    // "Already in your kitchen" accumulates what unchecking has paid you back
+    var kit=ct.querySelector('.smp-rc-kitchen');
+    if(kit){ if(tab==='custom'&&own>0.005){ kit.textContent='Already in your kitchen: '+money(own); kit.hidden=false; } else { kit.hidden=true; } }
     var sub=ct.querySelector('.smp-ct-sub');
     if(sub){
       if(tab==='custom'){ sub.innerHTML='Your real register trip. Every ingredient is priced as the <b>whole package</b> you would buy, at this week&rsquo;s cheapest verified store (everyday price where we don&rsquo;t have a live one). <b>Already have something at home? Uncheck it</b> and the total becomes what you still need to spend.'; }
       else if(tab==='everyday'){ sub.innerHTML='Typical Omaha shelf prices on a normal week, whole packages, no sales. This is the number to beat.'; }
       else { sub.innerHTML='This week&rsquo;s cheapest verified price for each package across the stores we track. Links go to the exact item.'; }
     }
-    ct.querySelectorAll('.smp-ct-ck input').forEach(function(cb){ cb.addEventListener('change',function(){ removed[cb.getAttribute('data-i')]=!cb.checked; renderTabs(); }); });
+    ct.querySelectorAll('.smp-ct-ck input').forEach(function(cb){
+      cb.addEventListener('change',function(){
+        var i=cb.getAttribute('data-i');
+        removed[i]=!cb.checked;
+        var li=cb.closest('li'); if(li&&!rm()){ li.classList.add('smp-pulse'); setTimeout(function(){ li.classList.remove('smp-pulse'); },560); }
+        tap(10);
+        renderTabs(true); renderComp();
+        // The list is re-rendered wholesale, which detaches the input that was just activated. Put focus
+        // back on its replacement or a keyboard user is dropped to the top of the document on every tick.
+        var again=ct.querySelector('.smp-ct-ck input[data-i="'+i+'"]');
+        if(again && document.activeElement===document.body){ try{ again.focus({preventScroll:true}); }catch(e){ again.focus(); } }
+      });
+    });
+    renderComp();
+  }
+  // store hue: the same seven stable hues the board uses. Kept here as a tiny literal because a recipe
+  // page must not fetch the store registry just to color a dot.
+  function storeHue(s){
+    var m={'Hy-Vee':'#c4342c','Aldi':'#1b64b0','Family Fare':'#2e7d43','Fareway':'#7b3fa0',"Baker's":'#c56a1a',"Sam's Club":'#0b6d9e','Walmart':'#0f7a8c'};
+    return m[s]||'#5a6862';
   }
   function updateStats(){
     // The blue stat rectangle follows the scaler: servings shows the chosen count, and per-serving
     // is the current-cheapest whole-package total at that count (everyday fallback pre-feed/untracked).
+    // It also carries BOTH numbers with micro-labels, because a first-time reader used to meet
+    // "$1.51 PER SERVING" in the band and "about $2.44" in the prose with no explanation until the
+    // cost section 4,000 pixels down.
     try{
       var bar=document.querySelector('.mts-recipe-stats'); if(!bar) return;
-      var nn=nServ(), t=0;
-      data.ing.forEach(function(it){ t+=price(it,nn,'cheapest').cost; });
+      var nn=nServ(), t=totalAt(nn,'cheapest',false), ev=totalAt(nn,'everyday',false);
       bar.querySelectorAll('.stat').forEach(function(s){
         var lEl=s.querySelector('.lbl'), b=s.querySelector('b');
         if(!lEl||!b) return;
         var l=lEl.textContent.trim();
-        if(/per serving/i.test(l) && t>0){ b.textContent='$'+(t/nn).toFixed(2); }
+        // CLAIM THE CELL ONCE. The first pass relabels this cell, so a later pass can no longer find it by
+        // its original wording; the flag is how the post-feed update reaches the number it already wrote.
+        // (Without it the band froze at the pre-feed everyday figure and quietly contradicted the receipt.)
+        if((s.hasAttribute('data-tc-ps') || /per serving/i.test(l)) && t>0){
+          s.setAttribute('data-tc-ps','1');
+          b.textContent='$'+(t/nn).toFixed(2);
+          var extra=s.querySelector('.smp-stat-ev');
+          // Two numbers ONLY when there are genuinely two. Pre-feed, or for a recipe with no live prices,
+          // cheapest IS everyday, and printing the same figure twice under two labels invents a comparison.
+          if(Math.abs(ev-t) >= 0.01*nn){
+            lEl.textContent='cheapest this week';
+            if(!extra){ extra=document.createElement('div'); extra.className='smp-stat-ev'; extra.style.cssText='font-size:.82em;opacity:.8;margin-top:2px;font-variant-numeric:tabular-nums'; s.appendChild(extra); }
+            extra.textContent='$'+(ev/nn).toFixed(2)+' everyday';
+          } else {
+            lEl.textContent='per serving';
+            if(extra){ extra.parentNode.removeChild(extra); }
+          }
+        }
         else if(/^servings$/i.test(l)){ b.textContent=String(nn); }
       });
     }catch(e){}
     // The bold "Makes N servings ... per serving (at everyday cost)" line and the Portion It
     // "divide by N" instruction follow the scaler too (idempotent regex rewrites of the numbers).
     try{
-      var nn2=nServ(), tev=0;
-      data.ing.forEach(function(it){ tev+=price(it,nn2,'everyday').cost; });
+      var nn2=nServ(), tev=totalAt(nn2,'everyday',false);
       var stat=document.querySelector('.smp-stat');
       if(stat){ stat.innerHTML=stat.innerHTML
         .replace(/Makes \d+ servings/,'Makes '+nn2+' servings')
         .replace(/~\$\d+(?:\.\d+)? per serving/,'~$'+(tev/nn2).toFixed(2)+' per serving'); }
       var por=document.querySelector('.smp-portion');
       if(por){ por.innerHTML=por.innerHTML.replace(/divide by \d+/,'divide by '+nn2); }
+      var mn=document.querySelector('.smp-mini-n'); if(mn) mn.textContent=String(nn2);
     }catch(e){}
   }
-  function renderAll(){ renderIngredients(); renderTabs(); updateStats(); }
-  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); renderAll(); }); });
-  num.addEventListener('change',renderAll);
-  if(ct){ ct.querySelectorAll('.smp-ct-btn').forEach(function(b){ b.addEventListener('click',function(){ tab=b.getAttribute('data-t'); ct.querySelectorAll('.smp-ct-btn').forEach(function(x){ x.classList.toggle('on',x===b); }); renderTabs(); }); }); }
-  renderAll();
-  smpGetFeed().then(function(f){ feedData=f; renderTabs(); updateStats(); });
+  function renderAll(anim){ renderIngredients(); renderTabs(anim); updateStats(); renderSave(); }
+  function bump(d){
+    num.value=(parseInt(num.value)||data.base)+d;
+    if(!rm()){ num.classList.remove('smp-pop'); void num.offsetWidth; num.classList.add('smp-pop'); }
+    tap(8); renderAll(true);
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ bump(parseInt(b.getAttribute('data-d'))); }); });
+  num.addEventListener('change',function(){ renderAll(true); });
+  if(ct){ ct.querySelectorAll('.smp-ct-btn').forEach(function(b){ b.addEventListener('click',function(){ tab=b.getAttribute('data-t'); ct.querySelectorAll('.smp-ct-btn').forEach(function(x){ x.classList.toggle('on',x===b); }); lastTotal=null; renderTabs(false); }); }); }
+  renderAll(false);
+  smpGetFeed().then(function(f){
+    feedData=f;
+    if(!f){
+      feedFailed=true;
+      var sv=document.querySelector('.smp-ct-save');
+      if(sv){ sv.innerHTML='Showing everyday prices. This week’s live store prices would not load.'; sv.hidden=false; }
+    }
+    lastTotal=null; renderTabs(false); updateStats(); renderSave();
+  });
+
+  // ---------- STICKY MINI-SCALER: the servings control follows you down a 5,000px page ----------
+  var mini=document.querySelector('.smp-mini');
+  if(mini){
+    mini.querySelector('.smp-mini-dn').addEventListener('click',function(){ bump(-1); });
+    mini.querySelector('.smp-mini-up').addEventListener('click',function(){ bump(1); });
+    mini.querySelector('.smp-mini-n').addEventListener('click',function(){ box.scrollIntoView({behavior:rm()?'auto':'smooth',block:'center'}); });
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        // the ladder: the pill never shows while a full-screen mode owns the bottom edge
+        var show=!e.isIntersecting && e.boundingClientRect.top<0 && !(window.TC&&window.TC.modeOpen&&window.TC.modeOpen());
+        mini.classList.toggle('is-on',show);
+      });
+    },{threshold:0});
+    io.observe(box);
+    // the ladder again, this time on the way in: a full-screen mode owns the bottom edge outright
+    document.addEventListener('tc:mode',function(e){ if(e.detail&&e.detail.open){ mini.classList.remove('is-on'); } });
+  }
+
+  // ---------- SHOP THIS RECIPE: hand the still-checked ingredients to the price board ----------
+  var shop=document.querySelector('.smp-shop');
+  if(shop){
+    shop.addEventListener('click',function(e){
+      e.preventDefault();
+      var ids=[],names=[];
+      data.ing.forEach(function(it,i){ if(removed[i])return; if(it.bid){ ids.push(it.bid); } names.push(it.item); });
+      lsSet('tc-shop-list',JSON.stringify({slug:data.slug,title:(document.title||'').replace(/\s*\|.*$/,''),ids:ids,names:names,n:data.ing.length,ts:Date.now()}));
+      window.location.href='/omaha-grocery-prices/';
+    });
+  }
 }
-function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+// ---------- COOK MODE: built at tap time from the Make It list, so it costs zero nodes until asked ----------
+function cookMode(){
+  var ol=document.querySelector('.smp-mi'); if(!ol) return;
+  var steps=[].slice.call(ol.querySelectorAll('li')).map(function(li){ return li.innerHTML; });
+  if(!steps.length) return;
+  var slug=(location.pathname||'').replace(/\//g,'')||'recipe';
+  var i=parseInt(lsGet('tc-cook-'+slug)||'0',10); if(isNaN(i)||i<0||i>=steps.length) i=0;
+  var wrap=document.createElement('div'); wrap.className='smp-cook'; wrap.setAttribute('role','dialog'); wrap.setAttribute('aria-modal','true');
+  var title=(document.querySelector('h1')||{}).textContent||'Cook mode';
+  wrap.innerHTML='<div class="smp-cook-hd"><b></b><button type="button" class="smp-cook-x" aria-label="Close cook mode">Done</button></div>'
+    +'<div class="smp-cook-bar"><i style="width:0%"></i></div>'
+    +'<div class="smp-cook-body"><span class="smp-cook-n"></span><p class="smp-cook-t"></p></div>'
+    +'<div class="smp-cook-ft"><button type="button" class="smp-cook-ing">Ingredients</button><button type="button" class="smp-cook-back">Back</button><button type="button" class="smp-cook-next">Next step</button></div>';
+  wrap.querySelector('.smp-cook-hd b').textContent=title;
+  document.body.appendChild(wrap);
+  modeFlag(true); wake(true);
+  var untrap=(window.TC&&window.TC.trap)?window.TC.trap(wrap,close):function(){};
+  function draw(){
+    wrap.querySelector('.smp-cook-n').textContent='Step '+(i+1)+' of '+steps.length;
+    wrap.querySelector('.smp-cook-t').innerHTML=steps[i];
+    wrap.querySelector('.smp-cook-bar i').style.width=Math.round(((i+1)/steps.length)*100)+'%';
+    lsSet('tc-cook-'+slug,String(i));
+    var body=wrap.querySelector('.smp-cook-body');
+    if(!rm()){ body.style.animation='none'; void body.offsetWidth; body.style.animation=''; }
+  }
+  function go(d){ var n=i+d; if(n<0)n=0; if(n>=steps.length){ close(); return; } i=n; tap(8); draw(); }
+  function close(){
+    try{ document.body.removeChild(wrap); }catch(e){}
+    var sh=document.querySelector('.smp-cook-sheet'); if(sh){ try{ document.body.removeChild(sh); }catch(e){} }
+    modeFlag(false); wake(false); untrap();
+    try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){}
+    markInline();
+  }
+  // Tap the right two thirds to advance, the left third to go back. No swipe handlers: they fight scroll,
+  // and a step that scrolls is more common than a step that fits.
+  wrap.querySelector('.smp-cook-body').addEventListener('click',function(e){
+    var r=this.getBoundingClientRect();
+    go((e.clientX-r.left) < r.width/3 ? -1 : 1);
+  });
+  wrap.querySelector('.smp-cook-next').addEventListener('click',function(){ go(1); });
+  wrap.querySelector('.smp-cook-back').addEventListener('click',function(){ go(-1); });
+  wrap.querySelector('.smp-cook-x').addEventListener('click',close);
+  wrap.querySelector('.smp-cook-ing').addEventListener('click',function(){
+    var old=document.querySelector('.smp-cook-sheet'); if(old){ document.body.removeChild(old); return; }
+    var ul=document.querySelector('.smp-ing'); if(!ul) return;
+    var sh=document.createElement('div'); sh.className='smp-cook-sheet';
+    sh.innerHTML='<h4>Ingredients, at your servings</h4><ul>'+[].slice.call(ul.querySelectorAll('li')).map(function(li){ return '<li>'+li.innerHTML+'</li>'; }).join('')+'</ul>';
+    document.body.appendChild(sh);
+    sh.addEventListener('click',function(){ try{ document.body.removeChild(sh); }catch(e){} });
+  });
+  // hardware back closes the mode instead of leaving the page
+  try{ history.pushState({tcCook:1},'',location.pathname+location.search+'#cook'); }catch(e){}
+  window.addEventListener('popstate',function h(){ window.removeEventListener('popstate',h); if(document.body.contains(wrap)) close(); });
+  draw();
+}
+// Inline fallback: the same progress, in the ordinary page, for anyone who never opens Cook Mode.
+function markInline(){
+  var ol=document.querySelector('.smp-mi'); if(!ol) return;
+  var slug=(location.pathname||'').replace(/\//g,'')||'recipe';
+  var i=parseInt(lsGet('tc-cook-'+slug)||'-1',10);
+  var lis=ol.querySelectorAll('li');
+  lis.forEach(function(li,n){ li.classList.toggle('smp-done', i>0 && n<i); });
+  var res=document.querySelector('.smp-mi-resume');
+  if(res){ if(i>0&&i<lis.length){ res.textContent='Picking up at step '+(i+1)+'.'; res.hidden=false; } else { res.hidden=true; } }
+}
+function go(){
+  document.querySelectorAll('.smp-sc').forEach(init);
+  var cook=document.querySelector('.smp-jump-cook');
+  if(cook){ cook.addEventListener('click',function(e){ e.preventDefault(); cookMode(); }); }
+  var ol=document.querySelector('.smp-mi');
+  if(ol){
+    ol.addEventListener('click',function(e){
+      var li=e.target.closest('li'); if(!li||li.parentNode!==ol) return;
+      var idx=[].slice.call(ol.children).indexOf(li);
+      var slug=(location.pathname||'').replace(/\//g,'')||'recipe';
+      var cur=parseInt(lsGet('tc-cook-'+slug)||'0',10);
+      lsSet('tc-cook-'+slug,String(cur===idx+1?idx:idx+1));
+      tap(8); markInline();
+    });
+  }
+  markInline();
+}
 if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
 })();
-</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">Enter the # of servings and the recipe adapts.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-note">The ingredient list and every cost below update as you change it. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">Enter the # of servings and the recipe adapts.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1" aria-label="One fewer serving">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14" inputmode="numeric" aria-label="Servings"><button type="button" class="smp-sc-btn" data-d="1" aria-label="One more serving">+</button></div><p class="smp-sc-note">The ingredient list and every cost below update as you change it. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">

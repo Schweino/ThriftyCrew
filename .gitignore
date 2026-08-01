@@ -5,6 +5,14 @@
 !/README.md
 !/grocery/
 !/meal-prep/
+# SHARED CODE THE BUILDERS CANNOT RUN WITHOUT. lib\ held ghost-lib.ps1 (dot-sourced by every publisher)
+# and, from 2026-07-31, design-tokens.ps1 (dot-sourced by all three page builders) while being entirely
+# untracked - a fresh clone of this repo could not build a single page. Same class as the "the agent
+# prompts are code" finding below: the thing every script depends on was the thing nobody versioned.
+# design\ carries the specs those builders implement, which is the only record of WHY the markup is
+# shaped the way it is.
+!/lib/
+!/design/
 # the agent prompts + scheduled-task SKILLs that DRIVE the estate, plus the audit that proves the backup is
 # current. They live under C:\Codex\.claude and C:\Users\Owner\.claude, neither of which is a repository, so
 # without this they were the only unversioned code in the system (2026-07-31).

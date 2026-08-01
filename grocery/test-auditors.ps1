@@ -2298,5 +2298,15 @@ if (Test-Path $pb) {
   else { Bad ('prompt-backup drift (rc=' + $rc + ') - run ops\audit-prompt-backup.ps1 -Sync and commit: ' + ($txt -replace "`n", ' ')) }
 } else { Bad 'prompt-backup audit is MISSING from ops\ - the agent prompts have no backup check' }
 
+# ---- (h) THE DISPLAY FORMATTER (2026-07-31) ------------------------------------------------------------
+# Two wrong numbers reached shoppers through the formatter, not the pipeline: "356&cent;/oz" on Mint (fresh)
+# because the ounce branch never rolled over to dollars, and "Cotton Swabs $0.00 each, ties record" because
+# a real $0.0043-per-swab price has no second decimal to land in. Both were invisible to every existing
+# guard, which all watch prices and none watched the printing of them. fmt-lib carries the frozen
+# founding cases plus clean twins; this is what runs them daily.
+$r = RunPS 'fmt-lib.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'fmt-lib: per-unit display still rolls over at a dollar and still shows a real sub-cent price' }
+else { Bad ('fmt-lib -SelfTest failed (rc=' + $r.rc + ') - the board can print a three-digit cent price or a $0.00 record again: ' + ($r.text -replace "`n", ' ')) }
+
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2

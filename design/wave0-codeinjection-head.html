@@ -1,0 +1,43 @@
+<!-- ============================================================================================
+     THRIFTY CREW - ELITE LAYER WAVE 0: app chrome + light-only, on the record
+     Written 2026-07-31 (income\design\design-elite-layer-2026-07-31.md, Wave 0).
+
+     WHERE THIS GOES: APPEND to Settings -> Code injection -> Site header, as-is, at the END of
+     whatever is already there. Nothing here overrides an existing rule; it only adds.
+
+     HOW TO DEPLOY: the Ghost Admin API key is READ-ONLY for settings, so this needs a logged-in
+     owner browser session (the fetch-PUT method in the rebrand/interstitial notes). Measure first:
+     on 2026-07-31 codeinjection_head was 28,424 of 65,535 chars, so this block (about 900) fits
+     with room to spare. codeinjection_foot, by contrast, had 164 chars left - anything that needs
+     the FOOT (the Wave 3 interstitial restyle) has to make room before it can ship.
+
+     BEFORE DEPLOYING, CONFIRM: the theme does not already emit its own theme-color. As of the
+     backup taken the same day it does not (codeinjection-head-BEFORE-elite-2026-07-31.html), but
+     a theme update can add one, and two theme-colors is a coin flip about which one a phone uses.
+     ============================================================================================ -->
+
+<!-- Navy app chrome. ONE value for every scheme on purpose: this site is light-only by design
+     (elite-layer decision 6), and a second dark-scheme theme-color is how "light only" quietly
+     becomes "light except the address bar". -->
+<meta name="theme-color" content="#16263F">
+<meta name="apple-mobile-web-app-title" content="Thrifty Crew">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" sizes="180x180" href="https://smp-feed.ancient-snow-93df.workers.dev/tc-touch-icon-180.png">
+<link rel="icon" type="image/png" sizes="512x512" href="https://smp-feed.ancient-snow-93df.workers.dev/tc-touch-icon-512.png">
+
+<style>
+/* LIGHT ONLY, ON THE RECORD. Declared once, here, so no future change can helpfully add a dark
+   variant to one surface and leave the other six on warm paper. The receipts, the ledger and the
+   chalkboard are all built on light; a half-dark site reads as broken, not as a preference. */
+:root{color-scheme:light}
+
+/* The gold focus ring, site-wide, keyboard only. Every builder ships this for its own markup; this
+   line covers the Ghost theme's own chrome (nav, portal triggers, footer links) so tabbing through
+   the site never loses the caret on a page we did not generate. */
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #E2A43C;outline-offset:2px;border-radius:4px}
+
+/* Touch ergonomics on theme chrome we do not render: 16px inputs (below that, iOS zooms the whole
+   page on focus, which reads as the site jumping away from the reader). */
+input,select,textarea{font-size:16px}
+</style>

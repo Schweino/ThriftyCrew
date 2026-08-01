@@ -1,0 +1,970 @@
+{
+  "summary": "Five design lenses attack the v1 redesign plan, feasibility judges filter, critic sweeps gaps",
+  "agentCount": 11,
+  "logs": [
+    "62 proposals survived judging across 5 lenses"
+  ],
+  "result": {
+    "kept": [
+      {
+        "lens": "visual",
+        "surface": "site-wide",
+        "title": "Typographic scale and rhythm system (the invisible 80%)",
+        "spec": "Ship as specced EXCEPT: prices get tabular-nums + font-weight 750 only, as plain text nodes; no sup-style dollar sign, no superscript cents anywhere. Add a hard rule to the token include comment: price strings are always plain text so PS builders and JS templates stay interchangeable. The stanza (eyebrow + Georgia head + one-line dek) must be applied to every section head in both builders in one commit, verified with a grep for orphan heads before publish. Fold in the spacing rhythm from the stitched-divider proposal: 56px above every stanza, consistent sub-spacing, replacing the ad hoc 26/34/12px margins.",
+        "wow": 4,
+        "risk": "Low. Main risk is inconsistency if only some sections adopt the stanza; it must be applied to every section head in both builders in one pass or the page looks half-dressed. Superscript cents must not break the board's right-aligned price column alignment (apply only in expanded cards and stat bands, never in the scanning column).",
+        "effort": "S",
+        "refined": true
+      },
+      {
+        "lens": "visual",
+        "surface": "recipe",
+        "title": "Turn 'What This Batch Costs' into a literal paper receipt",
+        "spec": "The best feature on the site currently looks like a generic white card. Restyle the existing checklist (function untouched) as a register receipt: background #fffdf6 with a barely-there paper grain (two stacked repeating-linear-gradients at 0.015 opacity), width capped to the article column (fixes v1 item C4 at the same time), and perforated tear edges top and bottom made with a zigzag linear-gradient mask (background: linear-gradient(-45deg, transparent 8px, #fffdf6 0) plus the +45deg pair, 16px repeat; standard CSS receipt-edge trick, no assets). Inside: each ingredient line uses a dotted leader between name and price (span with flex:1 and border-bottom:2px dotted #d8d2c0 aligned to baseline), quantities in ui-monospace for that register feel, the TOTAL row under a double rule (border-top:3px double var(--ink)) in the big-number price style. The 'priced at Walmart this week' line becomes an ink stamp: rotated -3deg, 2px solid gold border, uppercase letterspaced, slight opacity 0.9. Unchecking items still live-updates the total; only classnames and CSS change in build-card2.ps1. Ships inside the one bundled 513-post republish wave the v1 plan already schedules.",
+        "wow": 5,
+        "risk": "The checklist has live JS (uncheck-to-update); any DOM restructuring for the leader dots must keep the existing ids/data hooks or the total silently stops updating. Zigzag edges via gradients can look cheap if the tooth size is too big; keep teeth 8px and test at 375px where the receipt goes full-bleed of the column. Also the spec-guards-prose-merge REVERT trap applies to any build-card2 touch.",
+        "effort": "M"
+      },
+      {
+        "lens": "visual",
+        "surface": "board",
+        "title": "Chalkboard 'Price Records' strip",
+        "spec": "Restyle the records strip as the board's one dark panel: background #101B2E (or brand navy), 10px radius, chips inverted to chalk-white text with gold prices, secondary text lifted to #b9c4d4 for AA, eyebrow reads THE RECORD BOARD in the standard gold eyebrow style. Cut the feTurbulence texture, the wood tray border, the hand-drawn underline SVGs, and the handwriting italic. ALL-TIME LOW labels use the same letterspaced-caps treatment as other labels, gold on navy. Same flex-wrap layout, 375px unchanged. Board work, so wave 2 after the freeze, and it rides with v1 P2-7's strip tightening (cap at one row) in the same pass.",
+        "wow": 5,
+        "risk": "Contrast: chalk-white on #101B2E passes AA easily but the muted secondary text must be lifted to #b9c4d4 or it fails. feTurbulence renders slightly differently across GPUs; keep opacity so low that variance is invisible. Do not extend the chalkboard treatment to other sections or the metaphor becomes a theme park.",
+        "effort": "M",
+        "refined": true
+      },
+      {
+        "lens": "visual",
+        "surface": "board",
+        "title": "Ledger row treatment: dotted leaders and index-tab category heads",
+        "spec": "Make the 430-row list read as a kept ledger instead of a div stack. Rows: item name and price joined by a dotted leader line (flex spacer span, border-bottom 2px dotted #e0ddd2, 4px bottom offset so dots sit on the baseline), price pinned to a fixed right edge (already tabular). Row hairlines go from solid gray to 1px solid #eee9dc (warm, paper-like) with every row getting 2px more vertical padding for rhythm. Category heads become index tabs: the existing Georgia head gets a gold tab marker (an 8px-wide, 60%-height rounded rectangle to the left, like a ledger's thumb tab) and the count moves into a small navy pill on the right of the same line. The section's top border band from v1 P1-6 becomes a 3px double rule (border-top:3px double var(--bd)) which is the accounting idiom for 'new account section'. All CSS on existing nodes plus one spacer span per row; well under the node budget.",
+        "wow": 4,
+        "risk": "Dotted leaders between name and price can collide with long item names at 375px; the leader span needs min-width:12px and the name white-space rules kept so wrapping beats truncation. Must not fight the v1 store-color-dot chip, which sits between name and price; sequence is name, dot-chip, leader, price.",
+        "effort": "S"
+      },
+      {
+        "lens": "visual",
+        "surface": "site-wide",
+        "title": "One inline SVG icon set, hand-cut for the brand",
+        "spec": "Cut from 14 icons to the functional 8: basket, price tag, receipt, flame (sale), pin, calendar, envelope, checkmark, cart-split (drop whichever of those the layouts do not actually use). Drop all five protein/animal marks; protein chips are identified by v1's accent colors plus text. Do not draw from scratch: adapt paths from a single MIT-licensed stroke set (Feather/Lucide style) onto one 24px grid, 1.75px round-cap stroke, currentColor, embedded inline. Shipping gate: a 16px-actual-size contact sheet screenshot reviewed before either builder references the sprite. Keep icons off board rows; eyebrows, category heads, stat band, footer only.",
+        "wow": 4,
+        "risk": "Amateur icon drawing is the fastest way to look cheap; the set must share one grid (24px viewBox, same stroke, same corner radius) and be reviewed at 16px actual size before shipping. The <use> element count on the board must be counted against the 8k node budget (430 category-head icons is fine, per-row icons are not; keep icons off the rows).",
+        "effort": "M",
+        "refined": true
+      },
+      {
+        "lens": "visual",
+        "surface": "board",
+        "title": "Receipt-styled trip planner output",
+        "spec": "When the planner splits a list across stores, render each store's list as a mini receipt instead of the current green rounded box: white paper card with the zigzag tear edge (same CSS technique as the recipe receipt so it ships as one shared class), store name as the receipt header in uppercase letterspaced caps with the store's registry color dot, items with dotted leaders and right-aligned prices, store subtotal over a single rule, and at the bottom of all receipts one 'YOU SAVE $X.XX vs one-store shopping' line in the big-number gold treatment inside a navy strip. That savings number already exists in the planner math; promoting it visually is the single most persuasive pixel on the page. Receipts lay out as a horizontal scroll-snap rail at 375px (scroll-snap-type:x mandatory, each receipt 80vw) and a flex row on desktop.",
+        "wow": 5,
+        "risk": "Planner output is generated by existing JS; the template lives in the script string and is easy to regress. Board is under the code freeze until ~08-07 so this stages in wave 2. Horizontal snap rails need visible affordance (peek 10% of the next receipt) or mobile users miss stores.",
+        "effort": "M"
+      },
+      {
+        "lens": "visual",
+        "surface": "site-wide",
+        "title": "Card depth system: letterpress instead of flat",
+        "spec": "Every card on the site (board chips, hub cards, recipe stat cells, CTA panels) currently sits flat: 1px gray border on white. Define three depth tokens in the shared include and apply mechanically. Level 1 resting: border 1px solid #e7e2d4 plus border-bottom 3px solid #ddd6c2 (the letterpress lift, warmer than a shadow and costs zero paint). Level 2 raised (hover/expanded/featured): translateY(-1px) with box-shadow 0 6px 16px rgba(22,38,63,.08) and border-bottom-color gold. Level 3 modal/overlay: existing 0 24px 64px shadow, kept. Winning store cards (is-best) additionally get a 2px gold top border so 'CHEAPEST' reads before the badge text does. Radius unifies to 14px for containers, 10px for chips-in-containers (today it wanders across 8/9/10/11/12/14/16). One find-replace pass per builder.",
+        "wow": 3,
+        "risk": "Nearly none technically. The risk is over-application: buttons and pills must NOT get the letterpress bottom border or everything looks beveled-2005. Cards only.",
+        "effort": "S"
+      },
+      {
+        "lens": "visual",
+        "surface": "board",
+        "title": "Masthead moment: navy hero band with the live tally",
+        "spec": "The board opens today as plain article text. Give it a masthead: directly under the H1/dek (SEO text untouched), a full-column navy #16263F band, 16px radius, with a subtle depth gradient (radial-gradient at 20% 0%, #1E3A5F 0%, #16263F 60%) and a 1px inner gold hairline (box-shadow inset 0 0 0 1px rgba(226,164,60,.25)). Inside, three engraved stats set in the big-number style: '434 items priced', '7 Omaha stores', 'Updated Wed 6 AM', each with its sprite icon, white numerals, gold labels in the eyebrow style. The numbers are already computed at build time. Right edge of the band (desktop) or below (375px, stats become a 3-across grid at 0.85 scale): the Wednesday-refresh line restyled as a small gold stamp. This is the 'somebody crafted this' moment in the first viewport and it costs about 20 nodes.",
+        "wow": 4,
+        "risk": "Pushes the actual board down ~120px, directly against v1 P2-7's goal of getting rows above the fold; cap the band at 96px tall on mobile and ship it in the same wave as the trust-copy collapse so net scroll-to-board improves. Numbers must come from the same variables the page already trusts, never hardcoded, or the masthead lies the week an item count changes.",
+        "effort": "S"
+      },
+      {
+        "lens": "visual",
+        "surface": "hub",
+        "title": "Shelf-tag stat chips on recipe cards and stat bands",
+        "spec": "Ship the clipped corner (clip-path polygon as specced) and the gold/cream cost-tag variant on hub cards and the recipe stat band. Drop the punched hole on hub-card chips entirely; allow it only on the larger recipe stat band tags, and only if a 375px device screenshot shows it reading as a hole. Keep the specced paint-cost spot-check on a mid phone alongside v1's content-visibility work. CSS-only on existing chip nodes, so the -Validate regex is untouched, but state that explicitly in the commit to close the loop on the known trap. The stat-band two-price treatment must implement v1 item C1's labeling, not a variant of it.",
+        "wow": 4,
+        "risk": "513-card grid: clip-path on ~2,000 chips is cheap but must be spot-checked for paint cost on a mid phone alongside the v1 content-visibility work. The hub card markup change must update the -Validate regex in the same commit (known silent-rot trap).",
+        "effort": "S",
+        "refined": true
+      },
+      {
+        "lens": "visual",
+        "surface": "site-wide",
+        "title": "Section transitions: the stitched divider",
+        "spec": "Ship the rhythm rule only, folded into the typographic stanza system (56px above every section stanza, consistent sub-spacing, one pass per builder). Delete the thread-and-diamond SVG. If any zone boundary still feels unmarked after the rhythm pass, reuse an existing system motif (the receipt perforation edge on panels that already carry it, or the double-rule) rather than introducing a new one.",
+        "wow": 3,
+        "risk": "Ornament fatigue if used at every h3; majors only (zones, not subsections). Trivial otherwise.",
+        "effort": "S",
+        "refined": true
+      },
+      {
+        "lens": "visual",
+        "surface": "site-wide",
+        "title": "Footer craft: the bottom of the receipt",
+        "spec": "Ship the footer as specced (navy panel, tear edge top, decorative abstract barcode with bars only and no numerals, THRIFTY CREW OMAHA NE caps, cadence line, three gold pill cross-links, 'Thanks for shopping smart.' sign-off) with ONE change: replace the person-checked line with a truthful Brad-approved line, e.g. 'Prices pulled fresh from 7 Omaha stores every Wednesday.' Draft two options and route through Brad before publish per the microcopy rule. Keep it short and non-navigational beyond the three pillar links so it does not fight the Ghost theme footer.",
+        "wow": 4,
+        "risk": "Duplicates some Ghost theme footer content (links) so keep it short and non-navigational beyond the three pillar links. The barcode must stay obviously decorative and abstract; bars only, no numerals under it, so it never reads as a fake scannable code.",
+        "effort": "S",
+        "refined": true
+      },
+      {
+        "lens": "visual",
+        "surface": "site-wide",
+        "title": "Micro-interaction pass: the gold check and friends",
+        "spec": "Four tiny animations, all CSS/SVG, all under 200ms, all wrapped in @media (prefers-reduced-motion: no-preference). 1) Board checkboxes become a 20px inline SVG check whose path draws in via stroke-dashoffset transition when checked, gold stroke, with a 1.06-scale pop on the box; picking items for a trip should feel like ticking a paper list. 2) Filter chips get transform:scale(.96) on :active for tactile press. 3) Expanded store panels fade+rise 6px on open (opacity/transform only, no layout animation). 4) The recipe receipt TOTAL flashes a 300ms gold background pulse when an item is unchecked and the number changes, teaching the interaction without a tooltip. Each is a few lines; together they are the difference between 'web page' and 'product'.",
+        "wow": 3,
+        "risk": "The checkbox swap touches the trip planner's selection logic; keep the real input in the DOM (visually hidden, sibling SVG styled off :checked) so existing JS reads state unchanged. Animation on 430 rows must be transition-on-interaction only, never on scroll or load.",
+        "effort": "S"
+      },
+      {
+        "lens": "interaction",
+        "surface": "board",
+        "title": "SIGNATURE: Live savings ticker in the trip bar",
+        "spec": "Extend the v1 floating trip bar into a money readout, but the numbers come from the trip solver itself: on pg-pick change, debounce 300ms, call the SAME split function the planner uses (refactor it into one shared function if needed; never a parallel sum) and show its cheapest-trip total. Baseline for the savings line is the BEST single-store total among stores pricing >=80% of the basket: 'even the best one-store trip costs $X more' is the honest and actually stronger claim. If no store hits 80% coverage, fall back to count + total only ('7 items · $23.18'). 250ms rAF count-up tween, tabular-nums, savings figure in gold, tap scrolls to the planner. Reduced-motion: instant swap. All copy variants past Brad before shipping. Board work waits for the freeze lift per v1 sequencing.",
+        "wow": 5,
+        "effort": "M",
+        "risk": "The 'saves you' framing carries a claim, so the comparison basis must be defensible (use the max single-store total only over stores that price >=80% of the basket, else fall back to 'cheapest split $X'); copy goes past Brad. Math must reuse the trip solver's numbers, never a second copy (two-copies-of-the-same-math trap).",
+        "refined": true
+      },
+      {
+        "lens": "interaction",
+        "surface": "board",
+        "title": "Checkbox tick with a price token that flies to the bar",
+        "spec": "Ship only the checkbox layer: 22px custom box, SVG check via stroke-dashoffset (140ms ease-out), gold fill snap, 300ms cream row pulse on check; uncheck reverses instantly with no celebration. All feedback on the change event, not hover. Reduced-motion: instant state, no pulse. Cut the flying token entirely; the trip bar's animating total is the 'it went in the basket' signal.",
+        "wow": 4,
+        "effort": "M",
+        "risk": "Fly-to-cart animations read as cheap if slow or large; keep the token under 60px wide and under 350ms. Fixed-position math must account for the sticky rail and safe-area insets at 375px. Concurrency cap prevents jank when someone speed-checks 10 rows.",
+        "refined": true
+      },
+      {
+        "lens": "interaction",
+        "surface": "board",
+        "title": "Row expansion that unfolds instead of snapping",
+        "spec": "pgToggle currently toggles pg-open and the panel pops in. Wrap the lazy-built store panel in a grid container and animate grid-template-rows 0fr to 1fr over 220ms ease-out (this animates auto-height with pure CSS, no measured heights, works with the lazy pgFillRow build). Chevron on the row head rotates 90deg in the same duration. Store cards inside stagger in with opacity+4px translateY, 25ms delay per card capped at 7 cards. The CHEAPEST card finishes with a one-time 400ms gold underline sweep (background-position animation on a pseudo-element) so the eye lands on the answer. Collapse animates 1fr to 0fr at 160ms (closing should feel faster than opening). Reduced-motion: instant open/close, no stagger, static gold underline.",
+        "wow": 4,
+        "effort": "S",
+        "risk": "grid-template-rows fr animation needs the panel's single child to have overflow hidden or content leaks during the transition; verify with the lazy-fill path (panel built on first toggle) so the first open does not animate an empty box then jump. Test both open paths including the expand-all toggle, which should skip animation entirely."
+      },
+      {
+        "lens": "interaction",
+        "surface": "board",
+        "title": "One-shot record-low shimmer",
+        "spec": "Gate the shimmer to records SET OR TIED THIS WEEK only (build-deals-page.ps1 already computes badges at build time against the current prices, so stamp a this-week class there), and add a build-time cap: if more than ~15 rows qualify, the build emits no shimmer classes at all and logs it, so a data anomaly can never turn the page into a disco. Keep the single observer, one-shot unobserve, and reduced-motion final-state render. Drop the 600ms long-press tooltip (it fights text selection and the context menu on mobile); the chip's existing title text and the records strip already explain the concept.",
+        "wow": 3,
+        "effort": "S",
+        "risk": "Sparkle inflation: if 300+ rows shimmer the effect is noise, so gate it to true record rows only and confirm the count is modest before shipping (the $0.00 Cotton Swabs records bug from v1 must be fixed first or the shimmer decorates wrong data). One observer for all rows, not one per row.",
+        "refined": true
+      },
+      {
+        "lens": "interaction",
+        "surface": "board",
+        "title": "Chip rail that answers back: auto-center, springy press, breathing counts",
+        "spec": "On the v1 one-line scrollable chip rail: tapping a chip calls scrollIntoView({inline:'center', behavior:'smooth'}) on itself so the active filter is never half-hidden off the rail edge; every chip gets an :active transform scale(0.96) at 80ms for tactile press (touch parity, no hover dependency); the active pill's background transitions 150ms rather than snapping. When a filter or search runs, a small results line under the rail ('118 items · cheapest first') updates with a 200ms count tween, and sections that empty collapse with a 150ms opacity fade before display:none (batch the class flip in one rAF so applyFilters stays one reflow). Reduced-motion: instant everything, counts still update.",
+        "wow": 3,
+        "effort": "S",
+        "risk": "The fade-before-hide must not fight content-visibility: apply the fade class, then hide on transitionend with a 200ms fallback timer, or filtering feels laggy. Smooth-scroll of the rail must not scroll the page vertically (scrollIntoView on a horizontal container can; use the container's scrollTo instead if it does)."
+      },
+      {
+        "lens": "interaction",
+        "surface": "board",
+        "title": "Score strip bars that grow on first sight",
+        "spec": "The wins-per-store strip becomes the page's one moment of choreography: when it first enters the viewport (IntersectionObserver, once), each store's bar animates width from 0 to its share over 500ms ease-out with a 60ms stagger in rank order, win counts count up in sync, and the leading store's count lands with a single 1.0 to 1.08 to 1.0 scale pop. Uses the v1 registry store colors on the bars. Pure CSS transitions driven by one class add; widths precomputed at build time as CSS custom properties per bar. Reduced-motion: bars render at final width immediately.",
+        "wow": 3,
+        "effort": "S",
+        "risk": "The strip sits near the top so it may be in the first viewport, meaning the animation plays during initial scroll-settle; delay the class add 300ms after intersection so it does not compete with page load. Must not introduce layout shift: animate width inside a fixed-height track."
+      },
+      {
+        "lens": "interaction",
+        "surface": "hub",
+        "title": "SIGNATURE: The shuffle - cards visibly reorder on sort change",
+        "spec": "When the v1 sort toggle changes (cheapest / protein-per-dollar / lowest calories), do a FLIP animation instead of an instant re-order: record getBoundingClientRect for only the cards currently within viewport plus one screenful (roughly 12-16 cards), reorder the DOM, invert with transforms, then play 300ms ease-out transitions with 15ms stagger; all offscreen cards just jump (content-visibility means nobody sees them move). Cards leaving the visible set fade out 150ms, entrants fade in. The result reads as the deck physically re-dealing itself by price, which demonstrates the protein-per-dollar argument better than any copy: tap the sort, watch the $0.87 chicken recipes slide to the top. Reduced-motion: instant reorder, no transforms.",
+        "wow": 5,
+        "effort": "M",
+        "risk": "FLIP over content-visibility:auto cards can force layout on hidden ones; strictly measure only the visible slice and never call getBoundingClientRect in a loop interleaved with writes (read all, write all). This page is the Ads landing page: the animation runs only on user interaction, never on load, so CLS and first paint are untouched. Test at 375px where the grid is 1-col and travel distances are large; cap travel at one viewport by fading instead when displacement exceeds it."
+      },
+      {
+        "lens": "interaction",
+        "surface": "hub",
+        "title": "Cards that feel pressable and a results line that talks",
+        "spec": "Make the entire recipe card the tap target (it already links): :active state scales to 0.985 with the shadow easing down 100ms so taps feel physical on phones; on hover-capable devices the card lifts 2px with a 150ms shadow ease and the title underlines in link navy. Filter changes update a persistent one-line readout above the grid: '42 recipes match · cheapest is $0.87 a serving', both numbers tweened 200ms, the cheapest figure recomputed from the visible set's data attributes. When a filter empties the set, the readout swaps to 'Nothing at that calorie range. Loosen it a notch.' with the clear-filters chip pulsing once in gold. Reduced-motion drops tweens and the pulse.",
+        "wow": 3,
+        "effort": "S",
+        "risk": "Whole-card links plus the macro chips must not create nested interactive elements (keep chips non-interactive spans). The empty-state copy carries voice, so it goes past Brad. Recomputing cheapest over 513 nodes on every keystroke needs the values cached in a JS array once at load, not re-read from DOM."
+      },
+      {
+        "lens": "interaction",
+        "surface": "hub",
+        "title": "Calorie filter with live consequence",
+        "spec": "On calorie min/max input: debounce 250ms, then batch all card class flips in one rAF (120ms opacity+scale(0.98) fade before hide, transitionend plus fallback timer), and let the SHARED results line above the grid be the only count feedback, rolling its numbers with the same tween. No per-input preview chip. Same cached data array as the results line. Reduced-motion: instant hide, live counts. Verify the debounce feel on a mid-range phone as proposed.",
+        "wow": 2,
+        "effort": "S",
+        "risk": "Debounce too short causes churn on slow phones, too long feels dead; 250ms, then measure on a mid-range device. The fade-then-hide must batch class flips in one rAF across up to 513 cards or the filter itself becomes the jank.",
+        "refined": true
+      },
+      {
+        "lens": "interaction",
+        "surface": "recipe",
+        "title": "SIGNATURE: The checklist that pays you back",
+        "spec": "The 'What This Batch Costs' checklist is already the best thing on the site; give it the tactile layer it deserves. Unchecking an ingredient (I already own this) animates a strike-through drawn left to right over 200ms (scaleX on a pseudo-element line), the row dims to 55% opacity, and the batch total rolls down with the same 250ms rAF odometer tween used on the board (tabular-nums). A second line under the total accumulates in gold: 'Already in your kitchen: $6.40', counting up as items are unchecked. Re-checking reverses cleanly. The per-serving figure in the stat band updates in sync so the price story stays coherent top to bottom. This is the friend-demo moment: 'watch, I uncheck rice and oil and my real cost drops to $9'. Reduced-motion: instant strike and totals.",
+        "wow": 5,
+        "effort": "M",
+        "risk": "Ships inside the one build-card2 wave across 513 posts, so it must ride the v1 batch and pass the spec-guards-prose-merge REVERT trap review; the totals logic already exists, this only animates it, and any drift into recomputing prices is out of bounds. 'Already in your kitchen' copy past Brad."
+      },
+      {
+        "lens": "interaction",
+        "surface": "recipe",
+        "title": "Serving scaler numbers that morph, rows that acknowledge",
+        "spec": "Keep: 44px +/- stepper targets, the servings figure's 1.0-1.08-1.0 pop per step, and the 250ms cream row pulse cascading top-to-bottom (20ms stagger) across changed rows. Numbers swap instantly inside tabular-nums cells given a min-width in ch units sized generously in CSS (no build-time measuring, no clipping). Cut the two-span cross-fade and the press-and-hold auto-repeat (513 recipes at 14 servings do not need rapid-fire scaling). Reduced-motion: no pulse or pop. Rides the same single build-card2 wave and its gates.",
+        "wow": 4,
+        "effort": "M",
+        "risk": "Two-span swap on 15+ ingredient rows must be built once at load, not created per change, or scaling feels sticky on old phones. Fixed-width number containers need the widest plausible value measured at build time or grams like 1,360 clip. Rides the same 513-post republish wave, same batch gates.",
+        "refined": true
+      },
+      {
+        "lens": "interaction",
+        "surface": "recipe",
+        "title": "Cook mode: check off steps with wet hands",
+        "spec": "Each numbered Make It step gets a full-width tap target (the entire step block, min 56px tall) that toggles done: checked steps dim to 50%, their number badge fills gold with the SVG stroke check from the board, and the next unchecked step gains a subtle 2px gold left border so your place is always obvious. A slim 3px progress bar pinned under the v1 jump-nav chip row fills proportionally with a 200ms width ease. State persists in localStorage keyed by post slug, so leaving to check the grocery board and coming back restores your place, with a quiet 'Picking up at step 4' line and a reset link. Reduced-motion: no transitions, state still works.",
+        "wow": 4,
+        "effort": "M",
+        "risk": "Steps are inside Ghost post content built by build-card2, so the tap targets must not break the existing print-recipe injector's selectors (recipe-suggest-and-print memory documents the real chrome selectors; verify against them). localStorage keys need a version prefix so a future step-format change does not restore garbage."
+      },
+      {
+        "lens": "interaction",
+        "surface": "site-wide",
+        "title": "One motion vocabulary: tokens, touch parity, reduced-motion gate",
+        "spec": "Everything above draws from one small motion spec emitted by the v1 design-tokens include so all three builders share it: durations (fast 100ms for presses, standard 200ms for state, slow 300ms for choreography), one easing (cubic-bezier(0.2, 0, 0, 1)), the rAF number-tween as a shared 15-line JS function, the SVG check as a shared snippet, gold #E2A43C reserved exclusively for 'money moment' feedback (savings, records, totals) so the color keeps meaning. Rules encoded as CSS: every interactive element gets an :active state (touch parity, since half the effects above are hover-invisible on phones), :focus-visible gets a 2px gold ring, and the entire motion layer sits inside @media (prefers-reduced-motion: no-preference) so reduced-motion is the default-safe path rather than an afterthought. No animation ever runs on page load on the hub (Ads landing page) and nothing animates layout properties, transforms and opacity only.",
+        "wow": 2,
+        "effort": "S",
+        "risk": "Low direct wow but it is what keeps the other 13 from feeling like 13 different apps; the risk is scope creep into the full runtime consolidation (overhaul item 5), so it stays a token block plus two shared snippets, nothing more. Board pieces wait for the code freeze to lift per the v1 sequencing."
+      },
+      {
+        "lens": "mobile",
+        "surface": "board",
+        "title": "Aisle Mode: a full-screen in-store shopping checklist",
+        "spec": "A new mode reached from the trip planner output and the floating trip bar: after the planner splits the list across stores, each store card gets a gold 'Shop this store' button. Tapping it opens a full-screen fixed overlay (position:fixed, inset:0, z-index above the interstitial) built by JS at open time so it costs zero initial nodes. Layout at 375px: navy header bar with the store name, its registry color dot, and an X to close; body is the picked items for that store as giant tap rows, one per line, 64px tall, item name at 1.1em and the price right-aligned at 1.6em bold tabular-nums on cream #fdf8ec, high contrast for fluorescent aisle light. Tapping anywhere on a row checks it off: strikethrough, row dims to 40% opacity and animates to the bottom of the list. A fixed footer shows a progress fraction ('4 of 11') and a running total of what is still unchecked, counting down as you shop. On open, request navigator.wakeLock('screen') so the phone never sleeps mid-aisle (re-acquire on visibilitychange; silently skip where unsupported). Check state persists to localStorage keyed by week stamp + store, so a reload in the store resumes exactly where you were. Data comes from the same per-item per-store objects the trip planner already computes; no new pipeline work.",
+        "wow": 5,
+        "effort": "L",
+        "risk": "Overlay must coexist with the join interstitial and the trip bar (suppress both while Aisle Mode is open). Wake lock fails on old iOS; degrade silently, never show an error. Biggest brand risk is a half-baked overlay that traps scroll; needs overscroll-behavior:contain and a hardware-back-friendly close (history.pushState on open, popstate closes)."
+      },
+      {
+        "lens": "mobile",
+        "surface": "recipe",
+        "title": "Cook Mode: tap-to-advance full-screen steps with wake lock",
+        "spec": "As proposed, minus all touch/swipe gesture handlers. Advance = tap right two-thirds, back = tap left third, faint chevrons fade after first use; no touchstart/touchmove code at all. Everything else stands: runtime build from the existing Make It <ol>, Georgia serif at ~1.5em, step counter chip, gold progress bar, half-height Ingredients sheet reading the scaler's current rewritten quantities, wake lock with visibilitychange re-acquire, localStorage last-step per slug, pushState/popstate close, under 4 KB, and it MUST ride the one bundled build-card2 republish wave from v1, tested with the print injector and interstitial active.",
+        "wow": 5,
+        "effort": "M",
+        "risk": "It ships to 513 posts, so the JS must be bulletproof and tiny (target under 4 KB) and ride the ONE bundled build-card2 republish wave from the v1 plan, not its own wave. Swipe handlers must not fight vertical scroll (only intercept clearly-horizontal gestures). Test with the print-button injector and interstitial active.",
+        "refined": true
+      },
+      {
+        "lens": "mobile",
+        "surface": "board",
+        "title": "Bottom-sheet store comparison on phones",
+        "spec": "At <=640px, row tap opens v1's lazy-built store panel in a bottom sheet: white, ~70vh, 16px top radius, item name + unit header, store cards vertically scrolled with CHEAPEST first and gold-bordered. Dismiss = tap scrim, X, or hardware back (pushState/popstate) ONLY; no drag-to-dismiss, the drag handle is removed (it would be a lie). CSS transform slide-up, overscroll-behavior:contain. Desktop keeps inline expansion. Ships under the single shared bottom-edge z-order token (interstitial, trip bar, sheets, Aisle Mode) which suppresses the trip bar while a sheet is open. Board JS: wave 2, after the freeze.",
+        "wow": 4,
+        "effort": "M",
+        "risk": "Sheet + interstitial + trip bar all claim the bottom edge; define a strict z-order and suppress the trip bar while a sheet is open. Drag-to-dismiss physics done badly feels cheaper than no sheet at all; if the spring feel is not right, ship tap-scrim + back-button dismiss only and skip the drag.",
+        "refined": true
+      },
+      {
+        "lens": "mobile",
+        "surface": "site-wide",
+        "title": "Navy app chrome: theme-color plus standalone display polish",
+        "spec": "One line in Ghost codeinjection_head: <meta name='theme-color' content='#16263F'> (plus a media='(prefers-color-scheme: dark)' twin). On Android Chrome and iOS Safari this paints the browser toolbar ink navy so the site instantly reads as a branded app instead of a white webpage. Pair with <meta name='apple-mobile-web-app-title' content='Thrifty Crew'> and a 180px apple-touch-icon (a simple navy square with the gold TC monogram generated once with the existing GDI+ pipeline from the TikTok factory, uploaded to Ghost as a normal image asset, so no external hosts). This is the cheapest wow on the whole list: it changes the first half-second impression on every page for one afternoon of work.",
+        "wow": 3,
+        "effort": "S",
+        "risk": "Nearly none technically. Only risk is icon design quality; keep it to the monogram, no clip art. Verify Ghost does not already emit a conflicting theme-color from the theme."
+      },
+      {
+        "lens": "mobile",
+        "surface": "site-wide",
+        "title": "State that survives: localStorage persistence and a resume pill",
+        "spec": "Persist the three pieces of state users build with their thumbs: (1) board picks (pg-pick checkboxes) keyed by commodity id + board week stamp; (2) recipe cost-checklist unchecks ('what I already own') keyed by slug; (3) scaler serving count per slug. On page load, restore silently. On the board, if a saved list from THIS week exists, show a one-line dismissible pill under the sticky rail: 'Your list from earlier is loaded, 12 items' with a Clear link. If the saved list is from a previous week stamp, discard it (prices changed; never resurrect stale picks). Native apps never lose your work when you lock the phone in aisle 7; right now one accidental reload wipes the whole trip. About 60 lines of JS total across both builders.",
+        "wow": 3,
+        "effort": "S",
+        "risk": "The week-stamp invalidation is the load-bearing part: restoring picks against re-priced or re-ordered rows would silently build a wrong trip, which is a board-data-integrity class bug. Key strictly by stable commodity id, never by row index, and add the stamp check to the guard fixtures."
+      },
+      {
+        "lens": "mobile",
+        "surface": "recipe",
+        "title": "Sticky mini-scaler pill",
+        "spec": "Once the user scrolls past the Make It Your Size block, a small floating pill appears bottom-right (above safe-area): '14 servings' with 44px minus/plus steppers. Tapping the steppers calls the exact same scaler function that already rewrites ingredients and the cost checklist live. Tapping the number scrolls back to the full scaler. The point: people decide to resize while reading the ingredient grams or the batch cost, three viewports below the control; the pill puts the site's best interactive trick under the thumb everywhere on the page. Hidden while Cook Mode is open.",
+        "wow": 3,
+        "effort": "S",
+        "risk": "One more floating element; on 375px it must dodge the print button injector and interstitial (single shared bottom-edge stacking rule fixes all of these at once, worth writing down as a token). Otherwise low risk since it reuses existing scaler code paths."
+      },
+      {
+        "lens": "mobile",
+        "surface": "board",
+        "title": "Haptic ticks and money-counter microinteractions",
+        "spec": "Ship: (1) navigator.vibrate(10) on pick and Aisle Mode check-off, Android only, silent elsewhere; (2) 28px custom checkbox springing to a gold check, one 120ms scale curve, one duration token, disabled under prefers-reduced-motion; (3) html{overscroll-behavior-y:none} on the board, -webkit-tap-highlight-color:transparent, and real :active states on all tap targets. Cut the rolling-digit animation entirely; counters update instantly with tabular-nums. Board JS: wave 2.",
+        "wow": 3,
+        "effort": "S",
+        "risk": "Restraint is the whole game: one spring curve, one duration token, used everywhere. Overdone motion reads as cheap; respect prefers-reduced-motion by disabling the rolls and springs.",
+        "refined": true
+      },
+      {
+        "lens": "mobile",
+        "surface": "recipe",
+        "title": "Shop This Recipe: send the batch checklist to the trip planner",
+        "spec": "Under the What This Batch Costs total, a navy button: 'Shop this list in Omaha'. Tapping writes the recipe's still-checked (not-owned) ingredient item ids + the recipe title to localStorage, then navigates to /omaha-grocery-prices/. The board, on load, sees the handoff key, pre-checks the matching pg-pick rows, opens the trip bar showing 'Chicken Bulgogi list · 9 of 11 items matched', and drops a pill offering 'Plan my trip'. Unmatched ingredients (no board commodity id) are listed honestly in the pill: 'gochujang not on the board yet'. Mapping uses the item_ids the cost engine already prices from, which are the same registry the board rows key on, so this is a join the data already supports. This turns two good features into one killer loop: pick dinner, get the cheapest store split for it, walk in and shop it in Aisle Mode.",
+        "wow": 5,
+        "effort": "L",
+        "risk": "The id join is the honest risk: proxy item_ids from the R300 open-items list will not all resolve to board rows, so the unmatched-items honesty line is mandatory, not optional. Board side of this touches board JS and is under the code freeze until ~08-07; build recipe-side now, ship the loop in wave 2. Never silently drop unmatched items (silent-partial class bug)."
+      },
+      {
+        "lens": "mobile",
+        "surface": "hub",
+        "title": "Touch ergonomics pass: 44px targets and honest inputs",
+        "spec": "A sweep of both interactive surfaces to native-app input standards: every tap target minimum 44x44 (current filter chips and calorie fields are under); calorie min/max get inputmode='numeric' so phones open the number pad; the new v1 search fields get type='search' with the built-in clear X and enterkeyhint='search'; whole recipe cards are one tap target (not just the See-it link) with an :active press state (2% scale-down, 60ms); font-size on all inputs >=16px so iOS never auto-zooms the viewport on focus; select controls (cuisine, sort) use native <select> so the OS bottom-wheel picker appears instead of a custom dropdown. Zero visual redesign, pure feel; this is the difference between 'website with buttons' and 'app'.",
+        "wow": 2,
+        "effort": "S",
+        "risk": "Almost none. Card-as-tap-target must keep a real <a> wrapping for SEO and middle-click. Do it as part of v1's hub wave so 513 cards are only republished once."
+      },
+      {
+        "lens": "mobile",
+        "surface": "board",
+        "title": "Scroll-synced current-aisle header",
+        "spec": "No new strip. One IntersectionObserver on the existing .pg-cat section heads drives the v1 sticky chip rail: the current category's chip gets an active state (navy fill, cream text) and the rail auto-scrolls horizontally to keep it in view, like a tab bar tracking scroll position. Tapping any chip filters and jumps as v1 already specs. ~20 lines of JS, no new sticky element, no dependency on any bottom sheet. Real-device test the observer against content-visibility:auto sections; if flaky, fall back to a throttled offsetTop lookup. Board JS: wave 2.",
+        "wow": 3,
+        "effort": "S",
+        "risk": "IntersectionObserver against content-visibility:auto sections needs a real device test (observers fire on intersection even when paint is skipped, but verify); if flaky, fall back to a scroll-throttled offsetTop lookup. Keep it 32px or it becomes the viewport-eating sticky bar v1 just dieted.",
+        "refined": true
+      },
+      {
+        "lens": "mobile",
+        "surface": "hub",
+        "title": "Free-this-week shelf as a swipeable card rail",
+        "spec": "Render v1's new Free This Week shelf as a horizontal snap-scroll rail rather than a stacked list: five cards at 78vw width, scroll-snap-type:x mandatory, snap-align center, a sliver of the next card peeking at the right edge as the swipe affordance, five small dot indicators below (pure CSS scroll-driven where supported, tiny scroll listener elsewhere). Each card is the richest card style on the site: gold FREE ribbon, protein-colored left border, the four macro chips, price per serving at 1.4em, and 'Free until Friday' as the urgency line. Horizontal card rails are the single strongest 'this is an app' signal on a phone (every streaming and food app opens with one) and it puts the top-of-funnel hook in a premium frame without any photography.",
+        "wow": 4,
+        "effort": "M",
+        "risk": "This page is the Ads landing page: the rail must sit below the fixed H1/top structure and add zero layout shift (fixed-height rail container). Horizontal scroll regions need visible affordance or users miss cards 3-5; the peek + dots are mandatory. Desktop falls back to a 5-across grid."
+      },
+      {
+        "lens": "mobile",
+        "surface": "board",
+        "title": "Share my list as a text message",
+        "spec": "In the trip planner output and Aisle Mode footer, a 'Share list' button calling navigator.share with a plain-text rendering of the split: store name, its items with prices, subtotal per store, total, and the /omaha-grocery-prices/ link with a ?utm_source=share tag. Falls back to clipboard-copy + 'Copied' toast where Web Share is unsupported. Households split shopping; the person with the list texts half of it to the person driving past Aldi. Every share is a zero-cost referral carrying real prices, which is the most convincing ad the board could ever run.",
+        "wow": 3,
+        "effort": "S",
+        "risk": "Low. Keep the text under ~1,500 chars for SMS-friendliness (truncate with 'plus 6 more, full list at the link'). Board JS, so it waits for the freeze lift with the rest of wave 2."
+      },
+      {
+        "lens": "story",
+        "surface": "board",
+        "title": "Wrong-store tax headline: one defensible percent above the fold",
+        "spec": "Under the dek, one Georgia-serif stat sentence in a cream panel: 'The same item costs a median 34% more at the wrong store. We check so you never pay it.' Computed at build in build-deals-page.ps1 from $doc.comparison: for every row with 4+ priced stores, spread = (max per_unit - min per_unit) / max per_unit; take the median (median resists the one weird 3x outlier). Exclude membership-priced cells when computing so the claim holds for a non-member (same filter as the existing nomem_* logic). Number is stamped as static text, restated in the Friday-email capture copy ('the drops that matter, before you shop'). No JS, ~3 DOM nodes.",
+        "wow": 4,
+        "effort": "S",
+        "risk": "The stat is a public claim in Brad's name, so the math must survive scrutiny: mixed units are fine because the ratio is within-row, but sale-vs-everyday mixing inflates it; compute it and let Brad approve the final wording. If the number comes out boring (under 15%) it goes in the drawer, not on the page."
+      },
+      {
+        "lens": "story",
+        "surface": "board",
+        "title": "Biggest Drops spotlight: 3 hero cards of week-over-week wins",
+        "spec": "A 'This week's biggest drops' module directly under the scoreboard: three cards, each 'Pork loin down 31% · $1.79/lb at Fareway · was $2.59 last week', gold down-arrow, store color dot, tap scrolls to the row. Computed at build: join $doc.comparison cheapest_price against price-history.json history[] entry for the immediately prior week (same join the record-badge block at lines 77-116 already does), rank by percent drop, take top 3. Reuse the existing 30%-below-runner-up outlier guard (line 90) so a parse error never becomes the poster child, and require the item to have 2+ prior weeks like records do. Cards are static HTML, ~15 nodes each, mobile: horizontal 3-up scroll rail at 375px.",
+        "wow": 5,
+        "effort": "M",
+        "risk": "A drop caused by a product/size mis-match is the brand-killing failure; the outlier guard plus the verified-board preference (line 19) mitigate but a must-fire fixture (fake 90% drop must be suppressed) should ship with it. Some weeks the biggest drop is 6% and the module reads flat; below a 10% floor, show record-low items instead."
+      },
+      {
+        "lens": "story",
+        "surface": "board",
+        "title": "23-week price sparklines in the expanded row (the member tease done right)",
+        "spec": "Render the sparkline client-side from the SAME lazy worker fetch the existing history pill already uses (one fetch of price-history.json on first history interaction, then cached); zero bytes added to the page HTML and no new data plumbing. Free tier shows the line shape only, navy polyline plus gold record dot, no numeric endpoints; the low/high figures, per-week values, and axis stay behind the existing gate modal. Brad signs off on the free/gated split before build. Items with under 6 weeks of history render text instead. Still depends on v1 P0-1.",
+        "wow": 5,
+        "effort": "M",
+        "risk": "Depends on v1 P0-1 shipping first (adding sparklines to the current 33k-node DOM is malpractice). History is cheapest-across-stores, not per-store; label it 'best price in Omaha, weekly' so it never reads as one store's chart. Items with under ~6 weeks of history get text instead of a 3-point line that looks broken.",
+        "refined": true
+      },
+      {
+        "lens": "story",
+        "surface": "board",
+        "title": "Store spread bar: where every store sits on one line",
+        "spec": "Same rail, dumber collision rule: snap each dot to one of 24 fixed slots across the track; when two or more dots share a slot, offset them vertically into at most two rows (no count badges, no clustering logic). Label only the cheapest (price) and priciest (+N%) dots. Sale-price dots get the ring; membership-priced dots excluded from the rail entirely (matching nomem logic) rather than annotated, so the rail always shows prices a walk-in shopper can get. Roughly 10 nodes, built by the same lazy-expansion JS.",
+        "wow": 4,
+        "effort": "M",
+        "risk": "Dots collide when 5 stores are within 3 cents; cluster-collapse (stack count badge '3 stores here') needed or it looks glitchy at 375px. Membership and sale prices on one rail can mislead; sale dots get a ring so the basis difference stays visible.",
+        "refined": true
+      },
+      {
+        "lens": "story",
+        "surface": "board",
+        "title": "Freshness receipt: checked-this-morning proof plus ad-flip countdown",
+        "spec": "Replace the abstract 'checked every morning by 7am' sentence with evidence: a slim strip under the H1 reading 'Checked this morning · 7 stores · new ads drop Wednesday (2 days)'. The timestamp is the max of NewestUpd across $storeFiles (lines 424-433), formatted 'this morning' when date == today, else 'Jul 30' (honesty when a pull fails). The countdown to Wednesday is 3 lines of JS off the ad-schedule.json window already loaded into $adWin. Per-store freshness moves onto the scoreboard tiles as a tiny green dot when that store's pull is from today, replacing the buried bottom status strip's job for 95% of readers.",
+        "wow": 3,
+        "effort": "S",
+        "risk": "A stale pull now shows publicly instead of hiding in the footer; that is the point, but it means a broken puller becomes visible brand damage within a day. Wire it to the existing alert triage so a not-today timestamp also emails."
+      },
+      {
+        "lens": "story",
+        "surface": "board",
+        "title": "Trip planner receipt: the you-keep number plus copyable list",
+        "spec": "Baseline is the CHEAPEST single store with full coverage of the picked items: 'Your 12 items: $42.10 across 2 stores. All at one store, even the best one: $47.30. You keep $5.20.' That number says split-shopping beats even the smartest one-stop trip, which is the actual product claim. When no single store covers every item, suppress the comparison line entirely (no invented denominators). Keep the Copy-my-list button exactly as specced, grouped by store, with the execCommand fallback.",
+        "wow": 4,
+        "effort": "M",
+        "risk": "Coverage gaps make 'priciest store' ill-defined when no single store carries all picked items; fall back to 'versus everyday prices at your usual store' framing or suppress the comparison rather than inventing a denominator. Clipboard API needs the execCommand fallback for older Android.",
+        "refined": true
+      },
+      {
+        "lens": "story",
+        "surface": "board",
+        "title": "Ledger banner: the numbers that prove the work",
+        "spec": "Extend the existing pg-board-sub line in place rather than adding a new element: '430 items · 2,600+ prices verified · 7 stores · 23 weeks tracked · 433 direct links', small caps, tabular-nums, every figure computed in-build from the sources named in the proposal, round-down only. Net new DOM: zero elements, one longer text node.",
+        "wow": 3,
+        "effort": "S",
+        "risk": "Counter inflation temptation; every number must be the real computed value or the whole trust posture is fake. Rounding down ('2,600+') is the only acceptable fudge.",
+        "refined": true
+      },
+      {
+        "lens": "story",
+        "surface": "hub",
+        "title": "Protein-per-dollar leaderboard: the brand argument as a podium",
+        "spec": "Below the intro sections (H1/top structure untouched for Ads), a 'Most protein for your dollar this week' module: top 5 recipes ranked by per_serving.protein_g / cheapest_ps, each showing the one big number ('29g protein per $1'), title, price per serving, See-it link. Both inputs are already loaded in build-hub-grid.ps1: recipes-db per_serving.protein_g (line 67) and v2-perserving.json cheapest_ps (line 55). Because cheapest_ps tracks the live board, 'this week' is literally true and the podium reshuffles weekly, giving repeat visitors a changed page. Distinct from v1's protein-per-dollar sort: this is the story module a first-timer sees without touching a control. Free-rotation recipes in the top 5 get their FREE badge here too.",
+        "wow": 4,
+        "effort": "S",
+        "risk": "The list can be 5 near-identical chicken recipes; apply a max-2-per-protein rule so it reads like a menu, not a rut. Number needs a one-line footnote of method or a skeptic calls it out."
+      },
+      {
+        "lens": "story",
+        "surface": "hub",
+        "title": "Live kitchen ticker: what 513 dinners cost this week",
+        "spec": "Ship the three computed stats as specced ('average dinner $1.84 · 247 of 513 under $2 · cheapest $0.89'), static, below the existing hero blocks, zero layout shift. The provenance sentence renders a static absolute date at build ('prices from 7 Omaha stores, checked Jul 31') and is then upgraded client-side to 'checked this morning' only when a lightweight timestamp fetched from the smp-feed Worker says the pull is from today. Never claim 'this morning' from build-time data alone. Alternatively, wire build-hub-grid into the daily chain after rotate-free-dinners (v1 already contemplates that chain) and the static claim becomes honest; either path, pick one and state it in the PR.",
+        "wow": 4,
+        "effort": "S",
+        "risk": "Ads landing page: the band must add zero layout shift and sit below the existing hero blocks (v1 hard constraint). The 'checked this morning' claim must degrade to a date if the grocery pull is stale, same rule as the board.",
+        "refined": true
+      },
+      {
+        "lens": "story",
+        "surface": "recipe",
+        "title": "The savings delta: make the two prices tell one story",
+        "spec": "In 'What This Batch Costs', above the tab buttons, one computed sentence: 'Shopping this batch at each ingredient's cheapest store saves $6.40 versus everyday prices this week.' The widget already computes both totals to render the Everyday and Current-cheapest tabs (pkg_p per ingredient from the build-card2 payload, line 72-75, versus the live feed price per bid); the delta is a subtraction it is currently not showing. Update it live when the serving scaler changes and when items are unchecked, so the number always describes the shopper's actual cart. This rides the single build-card2 republish wave v1 already plans, so it is nearly free to ship and it resolves the two-price confusion (v1 recipe item 1) with a reason instead of just labels.",
+        "wow": 4,
+        "effort": "S",
+        "risk": "When the feed is unreachable the widget falls back to baseline prices and the delta can be $0.00 or negative; suppress the sentence below a $1 threshold rather than printing 'saves $0.13'. Bundle with the v1 card wave or it doubles the 513-post republish cost."
+      },
+      {
+        "lens": "story",
+        "surface": "recipe",
+        "title": "Winning-store chips on the cost checklist",
+        "spec": "Each line of the Customized-pricing checklist gets a mini store chip (registry color dot + short name) showing where that ingredient's cheapest price is from this week: 'Chicken thighs · 2 packs · $7.98 · Aldi'. The widget resolves each ingredient by bid against the live smp-feed; extend the feed entry to carry cheapest_store alongside the price (the board build already knows it: cheapest_store per commodity in comparison-*.json, so the feed generator adds one field). Payoff: the checklist stops being an estimate and becomes a shopping plan, and it visibly connects the recipe pages to the board, the site's two halves finally pointing at each other. Chips render client-side inside the existing list, zero build-size cost.",
+        "wow": 4,
+        "effort": "M",
+        "risk": "Requires a feed schema addition (touches price-feed-cloud, currently under the grocery code freeze until ~08-07, so stage it for wave 2). Ingredients priced from the recipe-board rather than the staples board must resolve identically or chips show for some lines and not others, which reads as broken; hide the chip when store is absent."
+      },
+      {
+        "lens": "story",
+        "surface": "site-wide",
+        "title": "One shared 'verified' voice: the checkmark system",
+        "spec": "The shared include emits the badge markup, CSS class, and copy template only. The timestamp SOURCE is per surface: the board (rebuilt daily) stamps it at build from max NewestUpd with the degrade-to-date rule; the hub and recipe pages render the badge shell at build with the date filled client-side from the smp-feed Worker's freshness field (the recipe widget already fetches that feed, so this is one more read, and the hub adds one small fetch). Fixture asserts all three builders emit the shared class AND that no non-daily surface contains a build-time 'this morning' literal. Badge appears once per page, never per row.",
+        "wow": 3,
+        "effort": "S",
+        "risk": "A shared component with three consumers is exactly the rules-that-silently-disarm shape if one builder inlines a stale copy; it must live in the single include with a fixture asserting all three outputs contain the class. Overuse dilutes it: the badge appears once per page, never per row.",
+        "refined": true
+      },
+      {
+        "lens": "skeptic",
+        "surface": "board",
+        "title": "This Week in Omaha hero stat band (the missing wow moment)",
+        "spec": "Compact static navy strip (~90px, no animation, no JS) under the dek with two build-time stats only: biggest week-over-week drop (computed from price-history.json prior-cycle logic, same rules the record badges use) as a tap-target that scrolls to and expands that row, and '431 items priced across 7 stores Wednesday' (count and date derived from the data file, zero-rows honesty applies). Flat-week fallback copy 'Prices held steady this week' with a must-fire fixture on a known drop and a clean twin on a flat week, wired into test-auditors.ps1. No basket-savings dollar claim anywhere; if a split-trip stat is wanted, quote the planner's own honest metric (see demo-basket refine). Net top-of-page height must still shrink versus today after v1 P2-7.",
+        "wow": 5,
+        "effort": "M",
+        "risk": "The savings and biggest-drop claims are live numbers on a page Brad stakes his name on; they need a guard fixture (must-fire on a known drop, clean twin on a flat week) and a floor rule for weeks with no interesting drop ('Prices held steady this week' fallback) or the band lies. Count-up animation must be dull, not casino.",
+        "refined": true
+      },
+      {
+        "lens": "skeptic",
+        "surface": "board",
+        "title": "One-tap demo basket: prove the trip planner in 5 seconds",
+        "spec": "Build-time 'Try it: the family staples basket' chip beside the planner box: one tap checks ~15 curated item ids (stamped in a data attribute), drives the EXISTING pg-tripbar and tripSolve, pre-selects 3 stores, and scrolls to the existing output, which already says 'Your best 3-store trip gets the cheapest available price on 14 of 15 selected items.' That real sentence is the payoff; add one line under it: 'One store cannot do that. Untick anything you do not need.' Build validates all curated ids have prices this week and swaps ranked alternates in, failing the build (not the page) if coverage drops below 15. No dollar delta anywhere. Board is under code freeze; stage with wave 2.",
+        "wow": 5,
+        "effort": "M",
+        "risk": "Curated basket items can rotate out of coverage (zero-rows honesty rule); the build must validate all 15 ids have prices and swap in alternates or the demo 404s the wow. Also must not fight the v1 floating trip bar; the demo should drive it, not duplicate it.",
+        "refined": true
+      },
+      {
+        "lens": "skeptic",
+        "surface": "board",
+        "title": "Sparklines in the lazy store panels (23 weeks of history, finally visible)",
+        "spec": "On first row expansion, fetch the existing lazily published history JSON once, cache it, and render the ~110x28 inline SVG polyline (cheapest-price series, gold dot on record low, 'Record: $1.98, Apr 22' label, tabular-nums) above the store cards. Zero bytes added to initial HTML. Suppress under 6 weeks of history. Free depth (8 weeks) versus the member full-history-plus-alerts gate goes to Brad before build; default to shipping the sparkline members-only with a blurred teaser for free users if he does not approve the free tease. Board freeze applies; wave 2.",
+        "wow": 5,
+        "effort": "M",
+        "risk": "The 40 KB payload and per-toggle SVG build must be measured against the v1 budget, not assumed. Free/member split changes the gate surface, so Brad approves the tease depth. Sparklines with 2-3 data points (new items) look broken; suppress under 6 weeks of history.",
+        "refined": true
+      },
+      {
+        "lens": "skeptic",
+        "surface": "board",
+        "title": "Trip planner output as store-route cards, not a text list",
+        "spec": "Restyle the existing tripSolve output only: each store becomes a card with its stores.json registry color as a 4px top band, store name, item count, and item chips; cards stack vertically at 375px with a small 'then' connector. Keep the existing honest summary line ('cheapest available price on X of Y items') as the navy header of the result. Reuse the existing copy/email controls unchanged. Pure templating inside tripSolve's html builder, no new math, no dollar figures. Wave 2, behind the freeze.",
+        "wow": 4,
+        "effort": "M",
+        "risk": "At 375px the cards must stack vertically or the route metaphor dies; needs the mobile-first pass. Clipboard API needs a fallback (textarea select) for older phones. Savings-vs-one-store math must reuse the planner's existing numbers, not a second copy of the math (two-copies-of-the-same-math trap).",
+        "refined": true
+      },
+      {
+        "lens": "skeptic",
+        "surface": "hub",
+        "title": "Brad phone-photo program for the 30 cards that matter",
+        "spec": "Photos attach to recipes, never to ranks or shelves. Card template gets an OPTIONAL photo slot (lazy-loaded Ghost-hosted WebP, ~30 KB, fixed aspect box so zero layout shift on the ads landing page); cards without photos render the current text layout, mixed grid designed-for from day one so abandonment degrades gracefully. Initial scope: the 3 hand-picked intro cards plus up to 25 recipes Brad actually cooks and shoots, one-page shot checklist (overhead, navy placemat, window light, 4:3). No surface ever REQUIRES a photo. Ship the checklist and the template slot; whether Brad shoots is his call and nothing blocks on it.",
+        "wow": 4,
+        "effort": "M",
+        "risk": "Depends on Brad actually shooting and staying consistent; an abandoned half-photographed grid looks worse than none, so scope is hard-capped at the free shelf + top 25 with the typographic system as the universal fallback. Rotation means free-shelf photos must exist for all rotation candidates or the shelf gets mixed cards. Bad lighting reads cheap; ship a one-page shot checklist.",
+        "refined": true
+      },
+      {
+        "lens": "skeptic",
+        "surface": "hub",
+        "title": "Protein-per-dollar leaderboard module below the fixed hero",
+        "spec": "The ads land here and the top structure is frozen, but nothing stops a proof module directly below it. Add a compact navy band: 'The best protein deals this week' with the top 5 recipes ranked by protein-per-dollar (v1 already computes this for sort), each a one-line entry: rank numeral in gold, name, '42g protein per dollar', price. This is the brand argument (analytical, data-first) compressed into the first viewport after the hero, it gives the ad visitor an immediate reason to believe the '$1.51/serving' claims are computed rather than marketing, and it deep-links into the grid. Static build-time HTML, ~60 nodes, zero layout shift risk if height is fixed.",
+        "wow": 4,
+        "effort": "S",
+        "risk": "Anything inserted on the ad landing page risks Quality Score and layout shift; must be static height, no JS, and re-verify the AW conversion tag after publish. Ranking must read from the same v2 per-serving manifest as everything else or the leaderboard contradicts the cards (bid single-source guard class)."
+      },
+      {
+        "lens": "skeptic",
+        "surface": "recipe",
+        "title": "Cost-composition bar: show WHERE the money goes",
+        "spec": "The 'What This Batch Costs' checklist is the best thing on the site but it opens as a text list; the insight it contains is invisible until you read every line. Add a build-time horizontal stacked bar above the checklist: each ingredient a segment sized by its share of batch cost, top 3 labeled ('Chicken 58%', 'Rice 9%', 'Sauce 8%'), rest grouped as 'everything else'. One inline SVG, ~30 nodes, generated by build-card2 from data it already sums. Payoff line underneath in Brad's voice: 'The chicken is the whole bill. Everything else is pocket change.' When a user unchecks owned items, JS re-tints the owned segments gray so the bar stays truthful. Nobody else on the internet shows cost anatomy per recipe; this becomes the screenshot people share.",
+        "wow": 5,
+        "effort": "M",
+        "risk": "Rides on the expensive 513-post republish wave, so it must bundle with v1's card changes (one build+publish wave, resume/change-gate path) or it doubles the batch cost. Percentages must recompute from the same package prices as the checklist, never a second sum. Read the spec-guards-prose-merge REVERT trap notes before touching build-card2 output."
+      },
+      {
+        "lens": "skeptic",
+        "surface": "site-wide",
+        "title": "Navy rhythm: full-bleed brand bands instead of white-on-white everywhere",
+        "spec": "Full-COLUMN-width navy panels (the content column edge, not the viewport), defined once in the v1 design-tokens include: navy #16263F panel class with cream/gold typography for the board hero band, trip-planner summary, hub leaderboard, and recipe membership CTA; cream #fdf8ec reserved for tip asides. Encode the two rules (never two navy bands adjacent, navy never behind body prose) as comments PLUS a cheap grep in the builders' self-checks that fails if two navy panel classes render adjacent in output HTML, since a comment-only rule will drift. Verify AA contrast for muted text on navy, and 375px plus 1568px screenshots.",
+        "wow": 3,
+        "effort": "S",
+        "risk": "Overuse turns it into a flag; the discipline lives in a comment block, not an enforceable guard, so drift is likely as future modules get added. Navy panels need AA contrast for the muted #c9d2de body text. Full-bleed inside a Ghost post column may require negative-margin tricks that break at odd widths; verify 375px and 1568px.",
+        "refined": true
+      },
+      {
+        "lens": "skeptic",
+        "surface": "site-wide",
+        "title": "Provenance badge: make the data feel alive and audited",
+        "spec": "Trust is the product, but the evidence is buried in prose ('I'm Brad...' folded into a details in v1). Create a small reusable provenance chip rendered by both builders near every price surface: a gold dot + 'Priced Wednesday 6:12am from 3,041 shelf prices across 7 Omaha stores', with the count and timestamp stamped at build from the comparison file (the hub builder already reads it for store counts). On recipe pages the stat band gets the store-specific variant: 'cheapest package prices, Walmart + Aldi, this Wednesday'. One line, ~10 nodes, but it converts 'some website's numbers' into 'a dated, counted, sourced measurement', which is the emotional core of the wow for a skeptical shopper.",
+        "wow": 3,
+        "effort": "S",
+        "risk": "A stale timestamp is worse than none; the chip must derive from the actual data file's date, and the zero-rows honesty rule applies (if a store pull failed, the count shrinks and must be allowed to). Copy carries a factual claim, so wording goes past Brad."
+      },
+      {
+        "lens": "skeptic",
+        "surface": "board",
+        "title": "Microinteraction pass: the page should feel hand-built, not exported",
+        "spec": "Keep: gold checkbox stroke draw (SVG dashoffset, 160ms), 1.03 press state on filter chips and buttons only, single small pop on the trip-bar count increment, score-strip bars filling once on scroll-into-view (reuse the one IntersectionObserver). Drop entirely: the 2s SALE-tick fade-in. All under 2 KB in the shared tokens include, all prefers-reduced-motion guarded, verified on a mid-range phone with the board at full row count before publish. Board pieces wait for the freeze; hub chips can take the press state in wave 1.",
+        "wow": 3,
+        "effort": "S",
+        "risk": "The line between crafted and cute is thin; anything bouncing or over 200ms will read as a toy and clash with the trustworthy-ledger personality. Must be tested on a mid-range phone since transform animations on 430 rows can jank exactly the scroll performance v1 just bought back (apply states only to interactive elements, never rows in bulk).",
+        "refined": true
+      },
+      {
+        "lens": "skeptic",
+        "surface": "hub",
+        "title": "Tonight-mode picker: answer 'what should I cook' in two taps",
+        "spec": "One module, one gold button: 'Pick 3 dinners for me' with two small preset rows that VISIBLY drive the existing filter controls (tapping 'chicken, under $1.50' sets the real protein chip and calorie field, so users learn the filters by watching them move), then renders 3 matching cards inline with a reshuffle link. Selection order: free-rotation recipes first, then cheapest; if fewer than 3 free matches, label the paid ones with their price and the FREE badge absence rather than hiding the distinction. Ships only after v1 free shelf and badges are live. Client-side only, no new data, below the leaderboard, fixed-height container so the ads page takes no CLS.",
+        "wow": 4,
+        "effort": "M",
+        "risk": "If the picker surfaces paywalled recipes to a first-timer, the wow becomes a bait-and-switch; free-first ordering is load-bearing and depends on v1's free badges shipping first. Duplicates some filter UI, so it must visually read as a shortcut on top of the filters, not a second competing control set.",
+        "refined": true
+      },
+      {
+        "lens": "skeptic",
+        "surface": "site-wide",
+        "title": "De-Ghost the frame: style the theme chrome to match the product inside",
+        "spec": "Precondition: measure remaining codeinjection_head budget in the live settings first (owner-Chrome fetch, established method). If the nav/footer CSS does not fit, minify the existing mts-home block to make room; CSS stays in head, never foot. Scope: navy nav bar with gold active-link underline, Georgia wordmark treatment, tightened post-header zone scoped to the two tool pages only (body-class or path-scoped selectors), footer provenance line with store color dots from stores.json. Document every theme selector used, and add the applied-check as an advisory assertion in an EXISTING daily task (a JS probe that the nav override computes, alert via send-alert.ps1 triage queue) rather than a new standalone watcher. Settings PUT via logged-in browser session, not the API key. Brad approves the nav look from a screenshot before it goes live site-wide.",
+        "wow": 4,
+        "effort": "M",
+        "risk": "codeinjection_head has a 65,535-char hard limit that mts-home already leans on; this CSS must fit the remaining budget or move to codeinjection_foot. Theme-selector overrides are a rules-that-silently-disarm class risk if Ghost updates the theme; document selectors and add a cheap weekly check that the nav override still applies. Settings PUT needs the logged-in browser session, not the API key.",
+        "refined": true
+      },
+      {
+        "lens": "skeptic",
+        "surface": "board",
+        "title": "Record-low moments: celebrate the catch, gate the chase",
+        "spec": "Two narrow changes only. One: surface the EXISTING record badge as a small gold flag on the collapsed row line (same treatment slot as v1 P1-6's SALE tick), capped per category so 40 flags do not dilute to noise; reuse the existing recBadge computation, zero new record math. Two: on record-flagged rows only, the expanded panel's existing alerts pill gets one added line: 'Want an email next time this happens? That is the $1 membership.' (copy past Brad). Drop the records-strip rework (v1 P2-7 already tightens it) and drop new drama copy (it exists in the badge titles). Hard dependency: v1 P0-3's $0.00-record data fix first. Board freeze applies; wave 2.",
+        "wow": 4,
+        "effort": "S",
+        "risk": "Depends on the $0.00-record data bug (v1 P0-3) being fixed first or the flag celebrates garbage. 'Stock up' style urgency copy must stay factual and pass Brad; overuse across 40 rows dilutes it, so cap flags per category. Record math must reuse the existing records computation, not re-derive it.",
+        "refined": true
+      }
+    ],
+    "gaps": [
+      {
+        "surface": "site-wide",
+        "title": "Empty and zero-result states that recover instead of dead-ending",
+        "spec": "Nobody designed the nothing-found moment, and the new search/sort/calorie proposals multiply how often it happens. Board: search or filter yielding zero rows renders one cream card under the sticky rail: 'No matches for chik. Check the spelling, or ask us to track it.' with a Clear search button and a link to /suggest-an-item/ (the request form already exists and this is its best entry point). Hub: zero-result filter combos (protein + cuisine + calories + search can easily hit zero among 513) render 'Nothing under 400 calories in Thai this week' plus one-tap chips that relax the binding constraint, computed client-side by re-running the filter with each constraint dropped and offering whichever recovers results ('Show 6 Thai over 400 cal', 'Show 41 under 400 cal any cuisine'). Trip planner with picks but no plannable coverage keeps its existing honesty line but gains the same recovery-chip pattern. Never a blank void below a sticky bar; the empty card always fills the viewport gap.",
+        "wow": 3,
+        "effort": "S",
+        "risk": "Recovery chips need the same filter code path as the real filters or they will drift; build them by calling the existing filter function with modified state, never parallel logic (rules-that-silently-disarm class)."
+      },
+      {
+        "surface": "site-wide",
+        "title": "Loading and fetch-failure states for every lazy thing the survivors added",
+        "spec": "The survivors added lazy store panels, a lazy history JSON fetch feeding two sparkline proposals, the live smp-feed fetch on recipe checklists, and a trip solver on debounce. None specced the waiting or broken state. One shared rule in the tokens include: any async slot shows nothing for the first 300ms (fast networks never see it), then a 3-line skeleton in cream with a subtle pulse; on fetch failure it degrades to honest copy in brand voice, never a spinner forever and never a raw error. Board history fetch fail: 'Could not load the 23-week history right now. The prices above are still today's.' Recipe smp-feed fail: the checklist already falls back to baseline prices; add the visible one-liner 'Showing everyday prices; live store prices would not load' so the two-price story stays coherent. Trip ticker while solving shows the last total dimmed to 60%, never a flash to $0.00. Each degraded state ships with a forced-failure test (block the URL in DevTools at 375px).",
+        "wow": 2,
+        "effort": "M",
+        "risk": "Skeletons that flash on fast connections read as jank; the 300ms delay rule is load-bearing. Silent catch blocks that swallow the failure state are the exact dead-path pattern from gates-that-can-never-arm."
+      },
+      {
+        "surface": "site-wide",
+        "title": "The unlock moment: what happens in the 60 seconds after someone pays",
+        "spec": "The whole site funnels to #/portal/signup, and no proposal covers the seconds after Stripe succeeds. Ghost Portal returns the user to the same page with a success hash and the ghost-members-ssr cookie now set, but every gated pill, sparkline blur, alert form, and join CTA was rendered for the anonymous state and stays locked until a manual reload. Fix in the shared include: on portal success (hashchange to #/portal/account or success, plus a visibilitychange recheck of the member cookie), re-run the existing TC_MEMBER detection and flip the page live: gated history pills become active, blur comes off sparklines, join CTAs and the capture bar hide, and one gold toast says 'You are in. Price history and alerts are unlocked.' Same pass handles the returning signed-in member on normal loads: paying members never see Join for $1 buttons, the interstitial, or FREE badges pitched at them (the cookie check at line 901 of build-deals-page.ps1 exists; apply it consistently across all three builders). This is the moment the customer decides whether the $1 was smart; today it is a locked page they just paid to unlock.",
+        "wow": 5,
+        "effort": "M",
+        "risk": "Cookie-presence detection cannot distinguish free-tier from paid-tier members client-side; may need the Ghost members API (members/api/member) for tier, which adds one fetch. Get the tier logic wrong and free members see paid features or paid members see the gate, both worse than today."
+      },
+      {
+        "surface": "site-wide",
+        "title": "Style Ghost Portal itself, or the checkout moment breaks the spell",
+        "spec": "Every signup link opens Ghost Portal's popup: default Ghost styling, default accent color, rounded-sans generic. After the survivors ship, it will be the single off-brand surface, and it appears at the exact moment of conversion. Scope: set the Portal accent color to gold #E2A43C in Ghost admin settings (one owner-Chrome settings change), set the site icon and portal button off, and verify the Portal modal at 375px with the new navy theme-color meta behind it. Also audit the Portal plan copy (name, description, benefits list shown on the signup card) so it matches the receipt language the site now speaks: benefits as short receipt lines, no orphaned old copy from the Substack era. This is configuration, not code, but nobody owns it and it is the last screen before money.",
+        "wow": 3,
+        "effort": "S",
+        "risk": "Portal customization in Ghost is limited (accent color, icon, copy fields only); do not attempt CSS injection into the Portal iframe, it is cross-origin and any hack there breaks on Ghost updates."
+      },
+      {
+        "surface": "board",
+        "title": "Friday email capture: the after state, not just the ask",
+        "spec": "The capture panel and the slide-in bar both link to Portal free signup, and after signup they keep showing forever because the page only checks the member cookie on load. Extend the same TC_MEMBER recheck from the unlock-moment proposal: once the free signup completes, the capture panel swaps in place to its receipt-stamped after state: gold check, 'You are on the Friday list. First board lands Friday morning.' and the slide-in bar never fires again (cookie check, not just the 30-day snooze). Returning free members see the after state, not the ask; the panel becomes proof instead of a pitch. Zero new network calls; it is the existing cookie check applied to two more elements.",
+        "wow": 2,
+        "effort": "S",
+        "risk": "The ghost-members-ssr cookie appears for paid members too; the after-state copy must work for both ('You get the Friday board by email') or paid members read copy about a free tier they outgrew."
+      },
+      {
+        "surface": "site-wide",
+        "title": "Branded link previews: the share moment happens off-site",
+        "spec": "The share-list proposal and the TikTok funnel both drive links into group chats, and the preview card is currently Ghost's bare default with no image (no food photography exists, so most shares render as a gray text stub). Build a build-time OG image generator using the existing GDI+ rendering pipeline from the TikTok video factory (C:\\Codex\\income\\tiktok\\): a 1200x630 navy card, Georgia serif title, gold price ('$1.51 per serving' or '430 items, 7 stores, checked this morning'), the shelf-tag motif from the visual system, THRIFTY CREW wordmark. Upload once per post via the Admin API images endpoint and set og_image and twitter_image fields only (never feature_image, which would render on-page and violate the no-imagery layout). Recipes get title + per-serving price + protein per dollar; the board gets the weekly tally and regenerates on the weekly build; the hub gets one static card. This is the only wow moment that reaches people before they ever visit.",
+        "wow": 4,
+        "effort": "L",
+        "risk": "513 uploads plus og_image PUTs must ride the existing resume/change-gate publish path or it becomes the blind-loop trap from scale-hardening; GDI+ text rendering needs a device-pixel check so serif titles do not rasterize blurry; og_image changes only show after scrapers re-crawl, so expect a slow rollout."
+      },
+      {
+        "surface": "site-wide",
+        "title": "Print styles: the site is a receipt, let it print like one",
+        "spec": "A print-button injector already exists site-wide, and the survivors restyle everything as paper receipts, yet nobody wrote @media print. One shared print block in the tokens include: hide nav, footer, CTAs, interstitial, floating bars, cook mode, and all animation; recipe pages print as ingredients + cost checklist (checked state preserved, checkboxes as real 14px bordered squares, dotted leaders intact since they are borders) + numbered steps, black on white, Georgia. The trip planner output prints as the actual shopping list: one store per block, items with prices, subtotals, total, the you-keep line. The board suppresses mass printing (rows collapse to the cheapest-price line, expanded panels hidden) so nobody gets a 90-page accident. The audience plans on phones but a paper list still goes to the store with plenty of them; this is one CSS block and it makes the receipt metaphor literal.",
+        "wow": 2,
+        "effort": "S",
+        "risk": "Print CSS is invisible until someone prints, so it silently rots; add a print-preview check to the 375px verification checklist so it gets eyeballed each wave."
+      },
+      {
+        "surface": "site-wide",
+        "title": "Dark mode: decide no, and enforce it",
+        "spec": "No survivor mentions dark mode, and one (navy app chrome) ships a prefers-color-scheme dark theme-color twin, which promises a dark experience that does not exist. Decide explicitly: this site is light-only; the cream-paper-receipt identity is the brand and a half-dark rendering (dark Ghost chrome around light injected receipts) would look broken. Enforcement: color-scheme: light on :root in the tokens include so dark-mode phones do not auto-darken form controls and scrollbars; drop the dark theme-color twin from the app-chrome proposal (one navy value for all schemes; navy works on both); verify the Ghost theme has no dark variant enabled; verify Portal renders light. One paragraph in the tokens include comment records the decision so a future agent does not helpfully add dark mode to one surface.",
+        "wow": 1,
+        "effort": "S",
+        "risk": "Users with dark-mode OS get a bright page at night; acceptable for this brand, but the decision should be Brad's on the record, not inherited silently."
+      },
+      {
+        "surface": "site-wide",
+        "title": "Restyle the join interstitial to the new visual language",
+        "spec": "The site-wide $1 popup (codeinjection_foot) is the most-seen conversion surface on the site and no proposal touches it. After the survivors ship, it will be the one element still wearing the old style, and it appears on top of the new design. Restyle only: navy panel, receipt-line benefits, gold join button, the shared letterpress depth token, same tear-edge motif as the footer so it reads as part of the system. Trigger logic, frequency capping, and non-paying-only targeting stay byte-identical (that logic is tuned and live). Edit via the established owner-Chrome fetch-PUT method against codeinjection_foot; mind the 65,535-char head limit interplay if any CSS moves to head.",
+        "wow": 3,
+        "effort": "S",
+        "risk": "The interstitial converts today; a restyle that accidentally changes trigger timing or z-index could cost real signups. Ship it last, after the bottom-edge stacking policy exists, and A-B eyeball a week of signup counts."
+      },
+      {
+        "surface": "site-wide",
+        "title": "Bottom-edge stacking policy: five proposals want the same 80 pixels",
+        "spec": "CONFLICT RESOLUTION. Competing for the bottom of a 375px screen: v1 floating trip bar, the savings ticker (extends it, fine), the resume pill, the sticky mini-scaler pill, the share button placements, the free-email slide-in bar, and the join interstitial; plus Aisle Mode and Cook Mode overlays above everything. Define one layer ladder in the tokens include: full-screen modes > interstitial > primary action bar (trip bar with ticker on board, mini-scaler on recipe) > transient pills (resume, toasts). Rules: at most ONE bar plus ONE transient visible at once; the resume pill yields the moment any pick is made; the email slide-in bar never fires while the trip bar is up (they currently would stack); the interstitial is suppressed entirely while Aisle or Cook mode is open (someone mid-store or mid-recipe must never get a popup); everything respects safe-area-inset-bottom. One z-index token scale, no ad hoc values in any builder.",
+        "wow": 2,
+        "effort": "S",
+        "risk": "The suppression logic touches the interstitial's live trigger code; a bug that suppresses it too broadly silently costs conversions, so log suppression counts for a week after shipping."
+      },
+      {
+        "surface": "board",
+        "title": "One masthead, not five: consolidate the top-of-board pileup",
+        "spec": "CONFLICT RESOLUTION. Five survivors stack new elements between the H1 and the first row: the navy masthead with live tally (visual), This Week in Omaha stat band (skeptic), the freshness receipt strip (story), the wrong-store tax headline (story), and the extended ledger banner (story), plus Biggest Drops cards (story) duplicating the masthead's drop stat. Together they rebuild the exact top-heavy pileup v1's P2-7 just dieted. Merge into ONE navy masthead band, three lines max: line 1 freshness ('Checked this morning · 7 stores · new ads Wednesday'), line 2 the tally in tabular small caps ('430 items · 2,600+ prices · 23 weeks'), line 3 the wrong-store stat sentence with the biggest weekly drop as a tappable gold chip that scrolls to that row. Kill the separate Biggest Drops 3-card module and the standalone stat band; the ledger-banner numbers live here, not in pg-board-sub too. Board must be visible within 1.5 viewports of the H1 at 375px; that budget is the acceptance test.",
+        "wow": 4,
+        "effort": "M",
+        "risk": "Merging five proposals means five authors' favorite lines fight for three slots; whoever implements needs the 1.5-viewport budget as the tiebreaker or the band grows back."
+      },
+      {
+        "surface": "site-wide",
+        "title": "Dedupe ledger: the survivors that are the same feature twice",
+        "spec": "CONFLICT RESOLUTION for the remaining collisions. (1) Sparklines appear twice with contradictory gating: story version shows free users the line shape only, skeptic version shows the full line with record label free; pick one policy (recommend skeptic's free-visible line with values and alerts gated, since the shape alone reads as broken, and the tease is the record label). (2) Trip output styled twice: visual wants paper receipts with tear edges, skeptic wants store-route cards with registry color bands; merge to receipt cards that carry the store color as the receipt's top band. (3) Three checkbox specs at 20px, 22px, and 28px with three animation timings; one checkbox, one size (24px), one motion token. (4) Two microinteraction passes plus the motion vocabulary; the vocabulary is the spec, the two passes are its backlog, implement once. (5) Protein-per-dollar leaderboard proposed twice (story podium, skeptic navy band); build the skeptic band once, it is the same data. (6) Verified-voice and provenance-badge are one system; one include, one class. (7) The receipt footer (visual) and de-Ghost-the-frame (skeptic) both restyle the page bottom; the receipt footer is the page-content footer, de-Ghost owns the theme footer below it, and the two must not read as two stacked footers: theme footer shrinks to a one-line legal strip under the receipt footer.",
+        "wow": 2,
+        "effort": "S",
+        "risk": "Dedupe decisions made silently by the implementer will each pick differently per surface; this ledger needs Brad or the design lead to sign the seven calls before wave planning."
+      },
+      {
+        "surface": "recipe",
+        "title": "The formerly-free recipe gate: a warm no instead of a cold wall",
+        "spec": "Free recipes rotate every Friday, so links shared in week 30 hit the paywall in week 31; with the share features shipping, this becomes the most common cold-visitor dead end and nobody designed it. On gated recipe pages, the Ghost content CTA slot gets the brand treatment: 'This one went back behind the counter when the free five rotated Friday.' followed by the five currently-free recipes as real cards (build-time from the rotation data, refreshed by the same chain that flips visibility) and the $1 pitch under them. The visitor who came for tonight's dinner leaves with a free dinner either way. Same pass styles the Ghost 404 page (old domain links are dead forever per the no-redirect decision, and typos happen): search box, the free five, links to the board and hub, in the site voice.",
+        "wow": 3,
+        "effort": "M",
+        "risk": "The gated-post CTA renders from the Ghost theme or Portal, not from the post HTML that build-card2 controls; confirm which slot Ghost 6 exposes for paid-gap content before promising per-recipe dynamic cards, else fall back to a static five refreshed weekly by the rotation script."
+      },
+      {
+        "surface": "board",
+        "title": "Handoff arrival moment and unmatched-ingredient honesty",
+        "spec": "The Shop This Recipe handoff proposal covers the send side but not the landing. When the board loads with a handoff key, the arrival needs a moment: scroll settles on the trip planner, pre-checked rows pulse once in sequence (the existing cream pulse token), and a dismissible cream banner states the truth: 'Loaded 11 of 13 ingredients from Chicken Bulgogi. We do not track prices for: gochujang, mirin.' Unmatched ingredients are the honest gap in the whole pipeline (recipe items resolve by bid against the feed; some will not match a board commodity) and silently dropping them means someone stands in Aldi missing two ingredients. The unmatched list also links to /suggest-an-item/ prefilled, which is both honest and a request-form growth loop. Persist the banner state so a reload does not re-fire the choreography.",
+        "wow": 3,
+        "effort": "S",
+        "risk": "The bid-to-commodity match rate is unmeasured; if it is low (say under 70%) the banner reads as an apology on every handoff and the feature should not ship until the mapping improves. Measure match rate across all 513 recipes at build time first."
+      },
+      {
+        "surface": "board",
+        "title": "Aisle Mode offline resilience: stores are signal dead zones",
+        "spec": "Aisle Mode's spec builds the overlay from in-page data at open, which is right, but nobody stated the constraint: grocery stores have terrible reception, so Aisle Mode must make zero network requests after open and must survive a tab reload. Harden: check-off state persists to localStorage per store per board week on every tap (piggybacks the persistence proposal's storage keys); if the tab reloads inside the store with no signal, the board page is likely bfcache or HTTP-cached, and Aisle Mode re-opens from the persisted state via the resume pill. All assets are inline already (hard constraint), so the only risk is a lazy fetch sneaking in; add a review rule that Aisle Mode's code path contains no fetch(). One line of UI: the overlay footer says 'Works with no signal. Your checkmarks are saved on this phone.' which is both true and a quiet flex no competitor page can make.",
+        "wow": 3,
+        "effort": "S",
+        "risk": "A cold reload without cache on a dead connection still loses the page; that is browser reality, do not promise full offline (no service workers possible under Ghost injection constraints), promise only saved checkmarks."
+      },
+      {
+        "surface": "site-wide",
+        "title": "Keyboard, focus, and screen-reader states for everything the survivors animate",
+        "spec": "The motion vocabulary gates on prefers-reduced-motion but no proposal covers focus or announcement states, and the survivors add overlays, bottom sheets, live totals, and custom checkboxes, all of which have accessibility failure modes. One pass in the tokens include: a single :focus-visible style (2px gold outline, 2px offset) on every interactive element; the results line, trip ticker total, and batch-cost total get aria-live=polite so their tweened numbers announce once, not per frame (tween the visual, set the text once at the end); custom checkboxes stay real input[type=checkbox] visually replaced, never divs; row expansion sets aria-expanded; the bottom sheet and Aisle and Cook modes trap focus, close on Escape, and return focus to their trigger (the pushState back-button handling already specced doubles for this). Cheap, invisible when right, and the difference between hand-built and exported when someone tabs through.",
+        "wow": 1,
+        "effort": "M",
+        "risk": "aria-live on a debounced ticker can still chatter if wired per-frame; the announce-once-at-end rule must be in the shared tween helper, not left to each call site."
+      }
+    ],
+    "lensCount": 5
+  },
+  "workflowProgress": [
+    {
+      "type": "workflow_phase",
+      "index": 1,
+      "title": "Design lenses"
+    },
+    {
+      "type": "workflow_phase",
+      "index": 2,
+      "title": "Feasibility judge"
+    },
+    {
+      "type": "workflow_phase",
+      "index": 3,
+      "title": "Completeness critic"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 1,
+      "label": "lens:visual",
+      "phaseIndex": 1,
+      "phaseTitle": "Design lenses",
+      "agentId": "aadf5cd5196ef373a",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1785540837758,
+      "queuedAt": 1785540837747,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "You are working on the Thrifty Crew site (thriftycrew.com), a budget-grocery + meal-prep membership site run by Brad in Omaha. Audience: budget shoppers on phones. Brand voice: Morgan Freeman warmth + Dave Ramsey directness, analytical, no swearing, NO em dashes in copy. Visual identity today: ink navy #16263F, link navy #1E3A5F, gold #E2A43C, cream #fdf8ec, Georgia serif headings, system sans bod…",
+      "lastProgressAt": 1785540991118,
+      "tokens": 50930,
+      "toolCalls": 4,
+      "durationMs": 153360,
+      "resultPreview": "{\"proposals\":[{\"surface\":\"site-wide\",\"title\":\"Typographic scale and rhythm system (the invisible 80%)\",\"spec\":\"Codify a real display scale in the shared token block instead of today's near-uniform sizing: Georgia display at 3 fixed steps (page title ~2.1em, section head 1.45em, card head 1.1em) with negative letter-spacing (-0.015em) at the two large steps so the serif reads set, not typed. Introd…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 2,
+      "label": "lens:interaction",
+      "phaseIndex": 1,
+      "phaseTitle": "Design lenses",
+      "agentId": "a930c04ec7bc2a08e",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1785540837759,
+      "queuedAt": 1785540837747,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "You are working on the Thrifty Crew site (thriftycrew.com), a budget-grocery + meal-prep membership site run by Brad in Omaha. Audience: budget shoppers on phones. Brand voice: Morgan Freeman warmth + Dave Ramsey directness, analytical, no swearing, NO em dashes in copy. Visual identity today: ink navy #16263F, link navy #1E3A5F, gold #E2A43C, cream #fdf8ec, Georgia serif headings, system sans bod…",
+      "lastProgressAt": 1785540988211,
+      "tokens": 49368,
+      "toolCalls": 4,
+      "durationMs": 150452,
+      "resultPreview": "{\"proposals\":[{\"surface\":\"board\",\"title\":\"SIGNATURE: Live savings ticker in the trip bar\",\"spec\":\"Extend the v1 floating trip bar from a count into a running money story. The JS already holds tripSel and per-item per-store prices arrive with the lazy data blob, so on every pg-pick change compute two numbers client-side: basket total at the cheapest-split (sum of each item's cheapest price) and the…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 3,
+      "label": "lens:mobile",
+      "phaseIndex": 1,
+      "phaseTitle": "Design lenses",
+      "agentId": "ab00f126cefaf605c",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1785540837759,
+      "queuedAt": 1785540837747,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "You are working on the Thrifty Crew site (thriftycrew.com), a budget-grocery + meal-prep membership site run by Brad in Omaha. Audience: budget shoppers on phones. Brand voice: Morgan Freeman warmth + Dave Ramsey directness, analytical, no swearing, NO em dashes in copy. Visual identity today: ink navy #16263F, link navy #1E3A5F, gold #E2A43C, cream #fdf8ec, Georgia serif headings, system sans bod…",
+      "lastProgressAt": 1785540989477,
+      "tokens": 49858,
+      "toolCalls": 4,
+      "durationMs": 151718,
+      "resultPreview": "{\"proposals\":[{\"surface\":\"board\",\"title\":\"Aisle Mode: a full-screen in-store shopping checklist\",\"spec\":\"A new mode reached from the trip planner output and the floating trip bar: after the planner splits the list across stores, each store card gets a gold 'Shop this store' button. Tapping it opens a full-screen fixed overlay (position:fixed, inset:0, z-index above the interstitial) built by JS at…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 4,
+      "label": "lens:story",
+      "phaseIndex": 1,
+      "phaseTitle": "Design lenses",
+      "agentId": "aca690bae9200bd41",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1785540837760,
+      "queuedAt": 1785540837747,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "You are working on the Thrifty Crew site (thriftycrew.com), a budget-grocery + meal-prep membership site run by Brad in Omaha. Audience: budget shoppers on phones. Brand voice: Morgan Freeman warmth + Dave Ramsey directness, analytical, no swearing, NO em dashes in copy. Visual identity today: ink navy #16263F, link navy #1E3A5F, gold #E2A43C, cream #fdf8ec, Georgia serif headings, system sans bod…",
+      "lastProgressAt": 1785541001272,
+      "tokens": 77087,
+      "toolCalls": 7,
+      "durationMs": 163511,
+      "resultPreview": "{\"proposals\":[{\"surface\":\"board\",\"title\":\"Wrong-store tax headline: one defensible percent above the fold\",\"spec\":\"Under the dek, one Georgia-serif stat sentence in a cream panel: 'The same item costs a median 34% more at the wrong store. We check so you never pay it.' Computed at build in build-deals-page.ps1 from $doc.comparison: for every row with 4+ priced stores, spread = (max per_unit - min …"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 5,
+      "label": "lens:skeptic",
+      "phaseIndex": 1,
+      "phaseTitle": "Design lenses",
+      "agentId": "a45da20671ce7444f",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1785540837760,
+      "queuedAt": 1785540837747,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "You are working on the Thrifty Crew site (thriftycrew.com), a budget-grocery + meal-prep membership site run by Brad in Omaha. Audience: budget shoppers on phones. Brand voice: Morgan Freeman warmth + Dave Ramsey directness, analytical, no swearing, NO em dashes in copy. Visual identity today: ink navy #16263F, link navy #1E3A5F, gold #E2A43C, cream #fdf8ec, Georgia serif headings, system sans bod…",
+      "lastProgressAt": 1785540989939,
+      "tokens": 55229,
+      "toolCalls": 5,
+      "durationMs": 152179,
+      "resultPreview": "{\"proposals\":[{\"surface\":\"board\",\"title\":\"This Week in Omaha hero stat band (the missing wow moment)\",\"spec\":\"After v1 the board still opens with an H1, a details fold, and rows. No first-time visitor says wow at a ledger. Add a build-time hero band directly under the dek: a full-bleed navy #16263F strip with 3 big gold Georgia numbers computed by build-deals-page.ps1 from data it already has: 'Bi…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 6,
+      "label": "judge:interaction",
+      "phaseIndex": 2,
+      "phaseTitle": "Feasibility judge",
+      "agentId": "aafd4611165612d40",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1785540988226,
+      "queuedAt": 1785540988213,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "You are working on the Thrifty Crew site (thriftycrew.com), a budget-grocery + meal-prep membership site run by Brad in Omaha. Audience: budget shoppers on phones. Brand voice: Morgan Freeman warmth + Dave Ramsey directness, analytical, no swearing, NO em dashes in copy. Visual identity today: ink navy #16263F, link navy #1E3A5F, gold #E2A43C, cream #fdf8ec, Georgia serif headings, system sans bod…",
+      "lastProgressAt": 1785541131720,
+      "tokens": 56299,
+      "toolCalls": 3,
+      "durationMs": 143494,
+      "resultPreview": "{\"verdicts\":[{\"title\":\"SIGNATURE: Live savings ticker in the trip bar\",\"decision\":\"REFINE\",\"reason\":\"Right instinct and the genuine friend-demo moment for this page, but the math spec is wrong in two ways for a trust brand. First, 'sum of each item's cheapest price' is NOT the trip planner's answer: the planner solves a constrained N-store split, so the bar can promise $23.18 and the planner then …"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 7,
+      "label": "judge:mobile",
+      "phaseIndex": 2,
+      "phaseTitle": "Feasibility judge",
+      "agentId": "a36c5930035d347ea",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1785540989482,
+      "queuedAt": 1785540989481,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "You are working on the Thrifty Crew site (thriftycrew.com), a budget-grocery + meal-prep membership site run by Brad in Omaha. Audience: budget shoppers on phones. Brand voice: Morgan Freeman warmth + Dave Ramsey directness, analytical, no swearing, NO em dashes in copy. Visual identity today: ink navy #16263F, link navy #1E3A5F, gold #E2A43C, cream #fdf8ec, Georgia serif headings, system sans bod…",
+      "lastProgressAt": 1785541134870,
+      "tokens": 54101,
+      "toolCalls": 4,
+      "durationMs": 145387,
+      "resultPreview": "{\"verdicts\":[{\"title\":\"Aisle Mode: a full-screen in-store shopping checklist\",\"decision\":\"KEEP\",\"reason\":\"This is the truest wow-5 on the list: the trip planner already computes per-store item lists, and a giant-type, wake-locked, resume-on-reload checklist is exactly what a budget shopper standing in Aldi needs. Zero initial DOM cost (built at open), data already exists, and the spec pre-answers …"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 8,
+      "label": "judge:skeptic",
+      "phaseIndex": 2,
+      "phaseTitle": "Feasibility judge",
+      "agentId": "a8aba46e169a95a47",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1785540989940,
+      "queuedAt": 1785540989940,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "You are working on the Thrifty Crew site (thriftycrew.com), a budget-grocery + meal-prep membership site run by Brad in Omaha. Audience: budget shoppers on phones. Brand voice: Morgan Freeman warmth + Dave Ramsey directness, analytical, no swearing, NO em dashes in copy. Visual identity today: ink navy #16263F, link navy #1E3A5F, gold #E2A43C, cream #fdf8ec, Georgia serif headings, system sans bod…",
+      "lastProgressAt": 1785541239896,
+      "tokens": 61342,
+      "toolCalls": 7,
+      "durationMs": 249956,
+      "resultPreview": "{\"verdicts\":[{\"title\":\"This Week in Omaha hero stat band (the missing wow moment)\",\"decision\":\"REFINE\",\"reason\":\"Right instinct (the board opens like a ledger, a weekly headline is on-brand and build-computable from price-history.json), but two spec errors. First, the 'saves $14.72' stat is fabricated: the planner works in per-unit prices across mixed units and deliberately shows no dollar totals …"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 9,
+      "label": "judge:visual",
+      "phaseIndex": 2,
+      "phaseTitle": "Feasibility judge",
+      "agentId": "a242cdedd347bc084",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1785540991119,
+      "queuedAt": 1785540991119,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "You are working on the Thrifty Crew site (thriftycrew.com), a budget-grocery + meal-prep membership site run by Brad in Omaha. Audience: budget shoppers on phones. Brand voice: Morgan Freeman warmth + Dave Ramsey directness, analytical, no swearing, NO em dashes in copy. Visual identity today: ink navy #16263F, link navy #1E3A5F, gold #E2A43C, cream #fdf8ec, Georgia serif headings, system sans bod…",
+      "lastProgressAt": 1785541170033,
+      "tokens": 56435,
+      "toolCalls": 4,
+      "durationMs": 178914,
+      "resultPreview": "{\"verdicts\":[{\"title\":\"Typographic scale and rhythm system (the invisible 80%)\",\"decision\":\"REFINE\",\"reason\":\"The scale, eyebrow stanza, 66ch measure, and price weight are exactly the invisible craft this site lacks and cost almost nothing. But the intra-price span treatments (raised 0.7em dollar sign, superscript cents) are a trap: after v1 P0-1 the board's store cards are built by JS templates, …"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 10,
+      "label": "judge:story",
+      "phaseIndex": 2,
+      "phaseTitle": "Feasibility judge",
+      "agentId": "ab206658bf876c0df",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1785541001273,
+      "queuedAt": 1785541001272,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "You are working on the Thrifty Crew site (thriftycrew.com), a budget-grocery + meal-prep membership site run by Brad in Omaha. Audience: budget shoppers on phones. Brand voice: Morgan Freeman warmth + Dave Ramsey directness, analytical, no swearing, NO em dashes in copy. Visual identity today: ink navy #16263F, link navy #1E3A5F, gold #E2A43C, cream #fdf8ec, Georgia serif headings, system sans bod…",
+      "lastProgressAt": 1785541176085,
+      "tokens": 57717,
+      "toolCalls": 6,
+      "durationMs": 174812,
+      "resultPreview": "{\"verdicts\":[{\"title\":\"Wrong-store tax headline: one defensible percent above the fold\",\"decision\":\"KEEP\",\"reason\":\"Cheap, static, on-brand, and the math is computable exactly as specced (within-row spread over $doc.comparison, nomem_* filter exists at build-deals-page.ps1 lines 46-53). The risk section already contains the two rules that make it safe: Brad approves the wording, and a boring numbe…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 11,
+      "label": "critic",
+      "phaseIndex": 3,
+      "phaseTitle": "Completeness critic",
+      "agentId": "ac9f52ce4ac6d7039",
+      "model": "claude-fable-5",
+      "state": "done",
+      "startedAt": 1785541239899,
+      "queuedAt": 1785541239898,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "You are working on the Thrifty Crew site (thriftycrew.com), a budget-grocery + meal-prep membership site run by Brad in Omaha. Audience: budget shoppers on phones. Brand voice: Morgan Freeman warmth + Dave Ramsey directness, analytical, no swearing, NO em dashes in copy. Visual identity today: ink navy #16263F, link navy #1E3A5F, gold #E2A43C, cream #fdf8ec, Georgia serif headings, system sans bod…",
+      "lastProgressAt": 1785541476168,
+      "tokens": 66003,
+      "toolCalls": 4,
+      "durationMs": 236269,
+      "resultPreview": "{\"proposals\":[{\"surface\":\"site-wide\",\"title\":\"Empty and zero-result states that recover instead of dead-ending\",\"spec\":\"Nobody designed the nothing-found moment, and the new search/sort/calorie proposals multiply how often it happens. Board: search or filter yielding zero rows renders one cream card under the sticky rail: 'No matches for chik. Check the spelling, or ask us to track it.' with a Cle…"
+    }
+  ],
+  "totalTokens": 634369,
+  "totalToolCalls": 52
+}
