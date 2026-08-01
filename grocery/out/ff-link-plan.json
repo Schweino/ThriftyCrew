@@ -20,8 +20,12 @@
                         "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
-                        "id":  "hamburger-buns",
+                        "id":  "deli-ham",
                         "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                    },
+                    {
+                        "id":  "hamburger-buns",
+                        "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "orange-juice",
@@ -36,7 +40,7 @@
                         "why":  "not attempted - circuit breaker tripped"
                     }
                 ],
-    "worked":  8,
-    "generated":  "2026-08-01 09:38",
+    "worked":  9,
+    "generated":  "2026-08-01 10:50",
     "board":  "comparison-2026-08-01.json"
 }

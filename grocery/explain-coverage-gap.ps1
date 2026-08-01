@@ -64,6 +64,14 @@ foreach ($r in $rows) {
   $e = Explain ([string]$r.product) ([string]$r.id)
   $out.Add([pscustomobject]@{ id = [string]$r.id; store = [string]$r.store; product = [string]$r.product; verdict = $e.verdict; detail = $e.detail })
 }
+# Write the output file BEFORE any display. Side effects must not sit downstream of Write-Output loops:
+# piping this script through `Select-Object -First N` raises StopUpstreamCommandsException, which
+# terminates it mid-run, so a trailing Set-Content never executes. That happened on 2026-08-01 - the
+# script printed a correct "explained 62" while leaving the PREVIOUS run's 88-row file on disk, and the
+# stale file nearly drove a batch of rule widenings for 16 commodities that had already been fixed. The
+# console said one thing and the artifact said another, with no error anywhere.
+($out.ToArray() | ConvertTo-Json -Depth 4) | Set-Content (Join-Path $root 'out\coverage-gap-explained.json') -Encoding UTF8
+
 $by = @($out | Group-Object verdict | Sort-Object { -(@($_.Group).Count) })
 Write-Output ("explained {0} coverage finding(s):" -f $out.Count)
 foreach ($g in $by) { Write-Output ("  {0,-11} {1}" -f $g.Name, @($g.Group).Count) }
@@ -75,5 +83,4 @@ foreach ($g in $by) {
     Write-Output ("      {0}" -f $r.detail)
   }
 }
-($out.ToArray() | ConvertTo-Json -Depth 4) | Set-Content (Join-Path $root 'out\coverage-gap-explained.json') -Encoding UTF8
 exit 0

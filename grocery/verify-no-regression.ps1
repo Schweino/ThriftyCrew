@@ -17,10 +17,17 @@
   Usage:
     verify-no-regression.ps1 -Baseline out\_baseline.json -New out\comparison-2026-07-15.json
   Take the baseline BEFORE the first edit:  Copy-Item out\comparison-<date>.json out\_baseline.json
+
+  -IgnoreIds is for the ONE legitimate case where a price is SUPPOSED to move: the commodities a rule edit
+  deliberately targets. Widen chicken-noodle-soup's include and a cheaper real product may win that cell -
+  that is the intended outcome, not a regression. Exempting the targets keeps the contract strict where it
+  matters (every OTHER commodity, which is where theft shows up) instead of forcing the caller to skip the
+  check entirely. Pass ONLY the ids you edited.
 #>
 param(
   [Parameter(Mandatory = $true)][string]$Baseline,
   [string]$New = "",
+  [string[]]$IgnoreIds = @(),
   [switch]$Quiet
 )
 $ErrorActionPreference = 'Stop'
@@ -40,8 +47,13 @@ function Cells($p) {
 $A = Cells $Baseline
 $B = Cells $New
 
+$ignore = @{}
+foreach ($i in @($IgnoreIds)) { if ($i) { $ignore[[string]$i] = $true } }
+function IdOf([string]$k) { return ($k -split '\|')[0] }
+
 $lost = @(); $moved = @(); $gained = @()
 foreach ($k in $A.cells.Keys) {
+  if ($ignore.ContainsKey((IdOf $k))) { continue }
   if (-not $B.cells.ContainsKey($k)) { $lost += [pscustomobject]@{ k = $k; pu = $A.cells[$k].per_unit; item = $A.cells[$k].item }; continue }
   $p1 = [double]$A.cells[$k].per_unit; $p2 = [double]$B.cells[$k].per_unit
   if ($p1 -gt 0 -and [math]::Abs($p1 - $p2) / $p1 -gt 0.001) {
@@ -49,7 +61,8 @@ foreach ($k in $A.cells.Keys) {
   }
 }
 foreach ($k in $B.cells.Keys) { if (-not $A.cells.ContainsKey($k)) { $gained += [pscustomobject]@{ k = $k; pu = $B.cells[$k].per_unit; item = $B.cells[$k].item } } }
-$rowsLost = @($A.ids.Keys | Where-Object { -not $B.ids.ContainsKey($_) })
+$rowsLost = @($A.ids.Keys | Where-Object { -not $B.ids.ContainsKey($_) -and -not $ignore.ContainsKey($_) })
+if (-not $Quiet -and $ignore.Count) { Write-Output ("  exempt (edited on purpose): " + (($ignore.Keys | Sort-Object) -join ', ')) }
 
 if (-not $Quiet) {
   Write-Output ("verify-no-regression: " + (Split-Path $Baseline -Leaf) + "  ->  " + (Split-Path $New -Leaf))

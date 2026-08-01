@@ -1180,13 +1180,6 @@
                                                          "verified":  "2026-08-01",
                                                          "board_pu":  0.1873
                                                      },
-                                    "Family Fare":  {
-                                                        "url":  "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/infant_meals/gerber_sitter_2nd_foods_nourishing_blends_sweet_potato_turkey_with_oats_2_ea/p/15911",
-                                                        "name":  "Gerber Sitter 2nd Foods Nourishing Blends Sweet Potato Turkey With Oats 2 Ea",
-                                                        "price":  "$2.19",
-                                                        "size":  "2pk 4oz",
-                                                        "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                                    },
                                     "Hy-Vee":  {
                                                    "url":  "https://www.hy-vee.com/aisles-online/p/4097528/gerber-stage-4-toddler-food-cherry-banana-vanilla-puree-pouch",
                                                    "name":  "Gerber Stage 4 Toddler Food, Cherry Banana Vanilla Puree Pouch",
@@ -1215,7 +1208,14 @@
                                                     "price":  "$1.49",
                                                     "size":  "4 oz",
                                                     "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
-                                                }
+                                                },
+                                    "Family Fare":  {
+                                                        "url":  "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/infant_meals/gerber_sitter_2nd_foods_6_months_veggie_blends_carrot_sweet_potato_pea_2_ea/p/2050464",
+                                                        "name":  "Gerber Sitter 2nd Foods (6+ Months) Veggie Blends Carrot Sweet Potato Pea 2 Ea",
+                                                        "price":  "$2.19",
+                                                        "size":  "2pk 4oz",
+                                                        "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                    }
                                 },
                   "baby-formula":  {
                                        "commodity":  "baby-formula",
@@ -1304,7 +1304,14 @@
                                                           "price":  2.29,
                                                           "size":  "72 ct",
                                                           "verified":  "2026-08-01"
-                                                      }
+                                                      },
+                                     "Family Fare":  {
+                                                         "url":  "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/diapers_wipes/huggies_disney_baby_fragrance_free_wipes_huge_value_704_ea/p/1564405684711368760",
+                                                         "name":  "Huggies Disney Baby Fragrance Free Wipes Huge Value 704 Ea",
+                                                         "price":  "$21.99",
+                                                         "size":  "704 ea",
+                                                         "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                     }
                                  },
                   "bacon":  {
                                 "commodity":  "Bacon",
@@ -3498,7 +3505,14 @@
                                                           "size":  "8 fl oz",
                                                           "name":  "Kraft Classic Caesar Dressing, 8 fl oz Bottle",
                                                           "board_pu":  0.125
-                                                      }
+                                                      },
+                                          "Baker\u0027s":  {
+                                                               "url":  "https://www.bakersplus.com/p/kroger-classic-caesar-salad-dressing/0001111004867",
+                                                               "name":  "Kroger Classic Caesar Salad Dressing",
+                                                               "price":  "$2.79",
+                                                               "size":  "16 fl oz",
+                                                               "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                           }
                                       },
                   "caesar-salad-kit":  {
                                            "commodity":  "Caesar Salad Kit",
@@ -4103,13 +4117,6 @@
                                      },
                   "canned-pears":  {
                                        "commodity":  "Canned Pears",
-                                       "Baker\u0027s":  {
-                                                            "url":  "https://www.bakersplus.com/p/kroger-canned-sliced-pears-no-sugar-added/0001111002938",
-                                                            "name":  "Kroger Canned Sliced Pears No Sugar Added",
-                                                            "price":  1.89,
-                                                            "size":  "14.5 oz",
-                                                            "verified":  "2026-08-01"
-                                                        },
                                        "Fareway":  {
                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25806497-fareway-pears-in-pear-juice-sliced-15-oz",
                                                        "price":  1.84,
@@ -4131,7 +4138,21 @@
                                                        "size":  "29 oz",
                                                        "verified":  "2026-07-17 Walmart warm-browser board-match; stored record re-prices to the board",
                                                        "board_pu":  0.0959
-                                                   }
+                                                   },
+                                       "Aldi":  {
+                                                    "url":  "https://www.aldi.us/store/aldi/products/18647949-sweet-harvest-bartlett-pear-slices-in-heavy-syrup-15-25-oz",
+                                                    "name":  "Sweet Harvest Bartlett Pear Slices IN Heavy Syrup 15.25 OZ",
+                                                    "price":  "$1.59",
+                                                    "size":  "15.25 oz",
+                                                    "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                },
+                                       "Baker\u0027s":  {
+                                                            "url":  "https://www.bakersplus.com/p/kroger-canned-pear-slices-in-extra-light-syrup/0001111002939",
+                                                            "name":  "Kroger Canned Pear Slices in Extra Light Syrup",
+                                                            "price":  "$1.89",
+                                                            "size":  "15 oz",
+                                                            "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                        }
                                    },
                   "canned-peas":  {
                                       "commodity":  "canned-peas",
@@ -4298,12 +4319,11 @@
                                                          "board_pu":  0.064
                                                      },
                                           "Walmart":  {
-                                                          "url":  "https://www.walmart.com/ip/10318792",
-                                                          "name":  "Del Monte Whole Canned Potatoes, Canned Vegetables, 14.5 oz Can",
-                                                          "price":  1.67,
+                                                          "url":  "https://www.walmart.com/ip/10295221",
+                                                          "name":  "Del Monte Sliced New Potatoes, Canned Vegetables, 14.5 oz Can",
+                                                          "price":  "$1.67",
                                                           "size":  "14.5 oz",
-                                                          "verified":  "2026-07-17 Walmart warm-browser board-match; stored record re-prices to the board",
-                                                          "board_pu":  0.1152
+                                                          "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                       }
                                       },
                   "canned-pumpkin":  {
@@ -5625,7 +5645,14 @@
                                                              "size":  "10.75 oz",
                                                              "verified":  "2026-07-16 DERIVED from the price row (same record the board priced)",
                                                              "board_pu":  0.1191
-                                                         }
+                                                         },
+                                              "Walmart":  {
+                                                              "url":  "https://www.walmart.com/ip/10314962",
+                                                              "name":  "Great Value Chicken Noodle Condensed Soup, 10.5 oz",
+                                                              "price":  "$0.74",
+                                                              "size":  "10.5 oz",
+                                                              "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                          }
                                           },
                   "chicken-nuggets":  {
                                           "commodity":  "chicken-nuggets",
@@ -7986,13 +8013,6 @@
                                                         "size":  "lb",
                                                         "verified":  "2026-08-01"
                                                     },
-                                   "Family Fare":  {
-                                                       "url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/fresh_sliced_meats/deli_fresh_sliced_quincy_street_black_forest_ham/p/1564405684714629220",
-                                                       "name":  "Deli Fresh Sliced Quincy Street Black Forest Ham",
-                                                       "price":  "$11.99",
-                                                       "size":  "lb",
-                                                       "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                                   },
                                    "Fareway":  {
                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/42950-oscar-mayer-deli-fresh-smoked-ham-16-oz",
                                                    "price":  4.99,
@@ -8020,7 +8040,14 @@
                                                    "price":  "$3.97",
                                                    "size":  "lb",
                                                    "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                               }
+                                               },
+                                   "Family Fare":  {
+                                                       "url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/pre_packaged_chicken_turkey/oscar_mayer_uncured_oven_roasted_smoked_turkey_breast_ham_variety_pack_9_oz/p/530379",
+                                                       "name":  "Oscar Mayer Uncured Oven Roasted Smoked Turkey Breast/Ham Variety Pack 9 Oz",
+                                                       "price":  "$5.99",
+                                                       "size":  "9 oz",
+                                                       "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                   }
                                },
                   "deodorant":  {
                                     "commodity":  "deodorant",
@@ -8522,14 +8549,6 @@
                                                 "name":  "Pure Being Chicken and Rice Premium Dog Food",
                                                 "board_pu":  1.358
                                             },
-                                   "Baker\u0027s":  {
-                                                        "url":  "https://www.bakersplus.com/p/pet-pride-chunk-style-chicken-flavor-dog-food/0001111012946",
-                                                        "name":  "Pet Pride Chunk Style Chicken Flavor Dog Food",
-                                                        "price":  25.99,
-                                                        "size":  "45 lb",
-                                                        "verified":  "2026-08-01",
-                                                        "board_pu":  0.5776
-                                                    },
                                    "Family Fare":  {
                                                        "url":  "https://www.shopfamilyfare.com/shop/pets_wildlife/dog/dry_dog_food/dog_chow_purina_dog_chow_complete_adult_dry_dog_food_kibble_with_chicken_flavor_40_lb/p/1564405684713777979",
                                                        "name":  "Dog Chow Purina Dog Chow Complete Adult Dry Dog Food Kibble With Chicken Flavor 40 Lb",
@@ -8565,7 +8584,14 @@
                                                    "price":  "$19.99",
                                                    "size":  "208 oz",
                                                    "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
-                                               }
+                                               },
+                                   "Baker\u0027s":  {
+                                                        "url":  "https://www.bakersplus.com/p/pet-pride-steak-and-vegetable-dry-dog-food/0001111013217",
+                                                        "name":  "Pet Pride Steak and Vegetable Dry Dog Food",
+                                                        "price":  "$25.99",
+                                                        "size":  "45 lb",
+                                                        "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                    }
                                },
                   "dog-treats":  {
                                      "commodity":  "dog-treats",
@@ -8710,13 +8736,6 @@
                                          },
                   "dried-arbol-chiles":  {
                                              "commodity":  "Dried Arbol Chiles",
-                                             "Family Fare":  {
-                                                                 "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/chile_de_arbol/p/1564405684702623794",
-                                                                 "name":  "Chile De Arbol",
-                                                                 "price":  "$2.49",
-                                                                 "size":  "3 oz",
-                                                                 "board_pu":  0.83
-                                                             },
                                              "Hy-Vee":  {
                                                             "url":  "https://www.hy-vee.com/aisles-online/p/16685/don-enrique-de-arbol-dried-chile-peppers",
                                                             "price":  2.99,
@@ -8724,7 +8743,14 @@
                                                             "name":  "Don Enrique De Arbol Dried Chile Peppers",
                                                             "verified":  "2026-07-28 Hy-Vee search API (storeId 1465)",
                                                             "board_pu":  5.98
-                                                        }
+                                                        },
+                                             "Family Fare":  {
+                                                                 "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/chile_de_arbol/p/1564405684708922046",
+                                                                 "name":  "Chile De Arbol",
+                                                                 "price":  "$5.39",
+                                                                 "size":  "8 oz",
+                                                                 "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                             }
                                          },
                   "dried-basil":  {
                                       "commodity":  "Basil (dried)",
@@ -8802,7 +8828,14 @@
                                                                     "price":  "$7.62",
                                                                     "size":  "48 oz",
                                                                     "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                                }
+                                                                },
+                                            "Family Fare":  {
+                                                                "url":  "https://www.shopfamilyfare.com/shop/pantry/snacks/dried_fruit/ocean_spray_cranberries_dried_value_pack_24_oz/p/573399",
+                                                                "name":  "Ocean Spray Cranberries, Dried, Value Pack 24 Oz",
+                                                                "price":  "$9.99",
+                                                                "size":  "24 oz",
+                                                                "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                            }
                                         },
                   "dried-dill":  {
                                      "commodity":  "Dill Weed (dried)",
@@ -9611,21 +9644,6 @@
                                        },
                   "feminine-pads":  {
                                         "commodity":  "feminine-pads",
-                                        "Baker\u0027s":  {
-                                                             "url":  "https://www.bakersplus.com/p/stayfree-maxi-pads-super-absorbency-unscented/0007830007023",
-                                                             "name":  "Stayfree Maxi Pads Super Absorbency Unscented",
-                                                             "price":  9.29,
-                                                             "size":  "66 ct",
-                                                             "verified":  "2026-08-01",
-                                                             "board_pu":  0.1408
-                                                         },
-                                        "Family Fare":  {
-                                                            "url":  "https://www.shopfamilyfare.com/shop/health_beauty/grooming_hygiene/feminine_products/top_care_super_unscented_maxi_pads_24_ea/p/2027703",
-                                                            "name":  "Top Care Super Unscented Maxi Pads 24 Ea",
-                                                            "price":  "$2.99",
-                                                            "size":  "24 ea",
-                                                            "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                                        },
                                         "Fareway":  {
                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16846730-always-pads-size-2-long-with-wings-32-0-ct",
                                                         "price":  6.99,
@@ -9653,7 +9671,21 @@
                                                         "price":  "$3.98",
                                                         "size":  "48 ct",
                                                         "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                                    }
+                                                    },
+                                        "Family Fare":  {
+                                                            "url":  "https://www.shopfamilyfare.com/shop/health_beauty/grooming_hygiene/feminine_products/top_care_maxi_regular_unscented_pads_24_ea/p/562241",
+                                                            "name":  "Top Care Maxi Regular Unscented Pads 24 Ea",
+                                                            "price":  "$2.99",
+                                                            "size":  "24 ea",
+                                                            "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                        },
+                                        "Baker\u0027s":  {
+                                                             "url":  "https://www.bakersplus.com/p/kroger-ultra-thin-pads-with-wings-regular-size-1-unscented/0004126002498",
+                                                             "name":  "Kroger Ultra Thin Pads with Wings Regular Size 1 Unscented",
+                                                             "price":  "$2.99",
+                                                             "size":  "22 ct",
+                                                             "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                         }
                                     },
                   "feta":  {
                                "commodity":  "feta",
@@ -11083,11 +11115,11 @@
                                                                  "board_pu":  0.1649
                                                              },
                                          "Baker\u0027s":  {
-                                                              "url":  "https://www.bakersplus.com/p/kroger-buttermilk-waffles/0001111078990",
-                                                              "name":  "Kroger Buttermilk Waffles",
-                                                              "price":  4.29,
+                                                              "url":  "https://www.bakersplus.com/p/kroger-chocolate-chip-waffles/0001111010552",
+                                                              "name":  "Kroger Chocolate Chip Waffles",
+                                                              "price":  "$4.29",
                                                               "size":  "24 pk 1.23 oz",
-                                                              "verified":  "2026-08-01"
+                                                              "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                           }
                                      },
                   "fruit-cocktail":  {
@@ -11908,13 +11940,6 @@
                                  },
                   "grape-juice":  {
                                       "commodity":  "grape-juice",
-                                      "Aldi":  {
-                                                   "url":  "https://www.aldi.us/store/aldi/products/19673951-nature-s-nectar-100-grape-juice-64-fl-oz",
-                                                   "price":  2.95,
-                                                   "size":  "64 fl oz",
-                                                   "name":  "Nature\u0027s Nectar 100% Grape Juice",
-                                                   "board_pu":  0.0461
-                                               },
                                       "Baker\u0027s":  {
                                                            "url":  "https://www.bakersplus.com/p/kroger-100-white-grape-juice/0001111003973",
                                                            "name":  "Kroger 100% White Grape Juice",
@@ -11950,7 +11975,14 @@
                                                       "price":  "$2.97",
                                                       "size":  "64 fl oz",
                                                       "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                  },
+                                      "Aldi":  {
+                                                   "url":  "https://www.aldi.us/store/aldi/products/19673955-nature-s-nectar-white-grape-100-juice-64-fl-oz",
+                                                   "name":  "Nature S Nectar White Grape 100 Juice 64 FL OZ",
+                                                   "price":  "$2.95",
+                                                   "size":  "64 fl oz",
+                                                   "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                               }
                                   },
                   "grapes":  {
                                  "commodity":  "Grapes",
@@ -14198,13 +14230,6 @@
                                               },
                   "italian-dressing":  {
                                            "commodity":  "italian-dressing",
-                                           "Aldi":  {
-                                                        "url":  "https://www.aldi.us/store/aldi/products/20971350-tuscan-garden-zesty-italian-dressing-16-fl-oz",
-                                                        "price":  1.95,
-                                                        "size":  "16 fl oz",
-                                                        "name":  "Tuscan Garden Zesty Italian Dressing",
-                                                        "board_pu":  0.1219
-                                                    },
                                            "Baker\u0027s":  {
                                                                 "url":  "https://www.bakersplus.com/p/kroger-zesty-italian-salad-dressing-big-deal-/0001111003356",
                                                                 "name":  "Kroger Zesty Italian Salad Dressing BIG DEAL!",
@@ -14246,7 +14271,14 @@
                                                            "size":  "36 fl oz",
                                                            "name":  "Great Value Zesty Italian Dressing \u0026 Marinade, 36 fl oz",
                                                            "verified":  "2026-07-30 price-pull self-capture"
-                                                       }
+                                                       },
+                                           "Aldi":  {
+                                                        "url":  "https://www.aldi.us/store/aldi/products/21017024-tuscan-garden-italian-salad-dressing-16-fl-oz",
+                                                        "name":  "Tuscan Garden Italian Salad Dressing 16 FL OZ",
+                                                        "price":  "$1.95",
+                                                        "size":  "16 fl oz",
+                                                        "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                    }
                                        },
                   "italian-sausage":  {
                                           "commodity":  "italian-sausage",
@@ -15830,7 +15862,14 @@
                                                         "size":  "8 oz",
                                                         "verified":  "2026-07-26 DERIVED from the price row (same record the board priced)",
                                                         "board_pu":  0.61
-                                                    }
+                                                    },
+                                        "Family Fare":  {
+                                                            "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/tropical_fruits/sun_lovin_dates_whole_medjool/p/1564405684716871919",
+                                                            "name":  "Sun Lovin Dates Whole Medjool",
+                                                            "price":  "$5.99",
+                                                            "size":  "12 oz",
+                                                            "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                        }
                                     },
                   "microwave-popcorn":  {
                                             "commodity":  "microwave-popcorn",
@@ -17387,11 +17426,11 @@
                                                 "board_pu":  0.0606
                                             },
                                 "Baker\u0027s":  {
-                                                     "url":  "https://www.bakersplus.com/p/kroger-thin-spaghetti/0001111085020",
-                                                     "name":  "Kroger Thin Spaghetti",
-                                                     "price":  1.25,
+                                                     "url":  "https://www.bakersplus.com/p/kroger-100-whole-grain-thin-spaghetti/0001111087271",
+                                                     "name":  "Kroger 100% Whole Grain Thin Spaghetti",
+                                                     "price":  "$1.25",
                                                      "size":  "16 oz",
-                                                     "verified":  "2026-08-01"
+                                                     "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                  }
                             },
                   "pasta-sauce":  {
@@ -17924,8 +17963,8 @@
                                                   "verified":  "2026-07-30 price-pull self-capture"
                                               },
                                   "Family Fare":  {
-                                                      "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/pickles/our_family_spears_polish_dill_pickles_24_fl_oz/p/7081395",
-                                                      "name":  "Our Family Spears Polish Dill Pickles 24 Fl Oz",
+                                                      "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/pickles/our_family_reduced_sodium_kosher_dill_pickle_spears_24_fl_oz/p/5100004",
+                                                      "name":  "Our Family Reduced Sodium Kosher Dill Pickle Spears 24 Fl Oz",
                                                       "price":  "$2.79",
                                                       "size":  "24 fl oz",
                                                       "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
@@ -21003,10 +21042,10 @@
                                                   "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
                                               },
                                   "Family Fare":  {
-                                                      "url":  "https://www.shopfamilyfare.com/shop/health_beauty/grooming_hygiene/shampoo_conditioner/vo5_royal_honey_shampoo/p/1764405684715766590",
-                                                      "name":  "Vo5 Royal Honey Shampoo",
+                                                      "url":  "https://www.shopfamilyfare.com/shop/health_beauty/grooming_hygiene/shampoo_conditioner/alberto_vo5_extra_body_with_collagen_volumizing_shampoo_for_body_bounce_bonus_size_15_fl_oz/p/2458463",
+                                                      "name":  "Alberto Vo5 Extra Body With Collagen Volumizing Shampoo For Body \u0026 Bounce Bonus Size 15 Fl Oz",
                                                       "price":  "$1.29",
-                                                      "size":  "15 oz",
+                                                      "size":  "15 fl oz",
                                                       "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                   }
                               },
@@ -22206,13 +22245,6 @@
                                                             "size":  "6 oz",
                                                             "verified":  "2026-08-01"
                                                         },
-                                       "Family Fare":  {
-                                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/dry_goods/other_great_choices/our_family_stuffing_mix_cornbread_6_oz/p/6787178",
-                                                           "name":  "Our Family Stuffing Mix, Cornbread 6 Oz",
-                                                           "price":  "$1.39",
-                                                           "size":  "6 oz",
-                                                           "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                                       },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2919762/that-s-smart-chicken-stuffing-mix",
                                                       "name":  "That\u0027s Smart Chicken Stuffing Mix",
@@ -22241,7 +22273,14 @@
                                                        "price":  "$4.99",
                                                        "size":  "12 oz",
                                                        "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
-                                                   }
+                                                   },
+                                       "Family Fare":  {
+                                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/dry_goods/other_great_choices/our_family_stuffing_mix_chicken_flavor_6_oz/p/6787175",
+                                                           "name":  "Our Family Stuffing Mix, Chicken Flavor 6 Oz",
+                                                           "price":  "$1.39",
+                                                           "size":  "6 oz",
+                                                           "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                       }
                                    },
                   "sugar":  {
                                 "commodity":  "Sugar",
@@ -23948,7 +23987,14 @@
                                                              "price":  14.99,
                                                              "size":  "3 lb",
                                                              "verified":  "2026-08-01"
-                                                         }
+                                                         },
+                                        "Family Fare":  {
+                                                            "url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_meals_more/healthier_choices/smart_ones_turkey_breast_slow_roasted_9_oz/p/20288",
+                                                            "name":  "Smart Ones Turkey Breast, Slow Roasted 9 Oz",
+                                                            "price":  "$2.99",
+                                                            "size":  "9 oz",
+                                                            "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                        }
                                     },
                   "turkey-lunchmeat":  {
                                            "commodity":  "turkey-lunchmeat",
@@ -23996,7 +24042,14 @@
                                                            "price":  "$3.76",
                                                            "size":  "9 oz",
                                                            "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
-                                                       }
+                                                       },
+                                           "Family Fare":  {
+                                                               "url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/pre_packaged_chicken_turkey/bar_s_deli_style_oven_roasted_turkey_breast_and_white_turkey_14_oz/p/2208690",
+                                                               "name":  "Bar S Deli Style Oven Roasted Turkey Breast And White Turkey 14 Oz",
+                                                               "price":  "$4.99",
+                                                               "size":  "14 oz",
+                                                               "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                           }
                                        },
                   "turkey-pepperoni":  {
                                            "commodity":  "Turkey Pepperoni",

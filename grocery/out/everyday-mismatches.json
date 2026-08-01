@@ -1,5 +1,17 @@
 ﻿[
     {
+        "id":  "chicken-noodle-soup",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.1133,
+        "link":  0.1191,
+        "ratio":  1.05,
+        "price":  1.28,
+        "size":  "10.75 oz",
+        "boardItem":  "Hy Vee Chicken Noodle Condensed Soup",
+        "linkItem":  "Campbell\u0027s Condensed Chicken Noodle Soup, 10.75 oz Can"
+    },
+    {
         "id":  "frosting",
         "store":  "Walmart",
         "unit":  "oz",
@@ -22,6 +34,18 @@
         "size":  "2.5 oz",
         "boardItem":  "That\u0027s Smart Ground Cinnamon",
         "linkItem":  "That\u0027s Smart Ground Cinnamon"
+    },
+    {
+        "id":  "jarred-gravy",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.1543,
+        "link":  0.161,
+        "ratio":  1.04,
+        "price":  1.69,
+        "size":  "10.5 oz",
+        "boardItem":  "Campbell’s Turkey Gravy, 10.5 oz Can",
+        "linkItem":  "Campbell’s Turkey Gravy, 10.5 oz Can"
     },
     {
         "id":  "ricotta",

@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-01 09:53",
+    "generated":  "2026-08-01 10:27",
     "board":  "comparison-2026-08-01.json",
-    "sidecar_generated":  "2026-08-01 09:53:09",
+    "sidecar_generated":  "2026-08-01 10:27:46",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,12 +9,12 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2824,
+                     "board_pairs":  2825,
                      "corpus":  22921,
-                     "rule_invisible":  3412
+                     "rule_invisible":  3348
                  },
     "identity_count":  0,
-    "coverage_count":  88,
+    "coverage_count":  62,
     "identity":  [
 
                  ],
@@ -47,16 +47,6 @@
                          "product":  "ARM \u0026 HAMMER Clean Burst Scent Liquid Laundry Detergent",
                          "cos":  0.7704,
                          "score":  0.981365,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "pickled-jalapenos",
-                         "commodity":  "Pickled Jalapenos (sliced)",
-                         "store":  "Family Fare",
-                         "product":  "La Costena Jalapeno Peppers, Pickled 12 Oz",
-                         "cos":  0.7554,
-                         "score":  0.978412,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -101,16 +91,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "feminine-pads",
-                         "commodity":  "Feminine Pads",
-                         "store":  "Baker\u0027s",
-                         "product":  "Kroger Ultra Thin Pads with Wings Regular Size 1 Unscented",
-                         "cos":  0.6575,
-                         "score":  0.973681,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "laundry-detergent",
                          "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
                          "store":  "Baker\u0027s",
@@ -137,26 +117,6 @@
                          "product":  "MARY KITCHEN Roast Beef Hash, Canned Roast Beef Hash, 14 oz Can",
                          "cos":  0.7068,
                          "score":  0.970477,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "chicken-noodle-soup",
-                         "commodity":  "Chicken Noodle Soup (canned)",
-                         "store":  "Walmart",
-                         "product":  "Progresso Traditional Chicken Noodle Canned Soup, 19 oz",
-                         "cos":  0.7011,
-                         "score":  0.969909,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "trash-bags",
-                         "commodity":  "Trash Bags (13 gal)",
-                         "store":  "Baker\u0027s",
-                         "product":  "Kroger Clean Linen Scent Strong-Flex Tall Kitchen 13 Gallon Drawstring Bags",
-                         "cos":  0.7825,
-                         "score":  0.969352,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -197,16 +157,6 @@
                          "product":  "Bella Sun Luci Sun Dried Julienne Cut with Italian Herbs Tomatoes",
                          "cos":  0.6696,
                          "score":  0.965453,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "trash-bags",
-                         "commodity":  "Trash Bags (13 gal)",
-                         "store":  "Baker\u0027s",
-                         "product":  "Kroger Strong-Flex Unscented Tall Kitchen 13 Gallon Drawstring Bags",
-                         "cos":  0.7869,
-                         "score":  0.964731,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -261,16 +211,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "microwave-popcorn",
-                         "commodity":  "Microwave Popcorn",
-                         "store":  "Family Fare",
-                         "product":  "Pop Secret Microwave Movie Theater Butter Popcorn 6 Ea",
-                         "cos":  0.7512,
-                         "score":  0.959691,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "pie-pumpkins",
                          "commodity":  "Pie Pumpkins",
                          "store":  "Baker\u0027s",
@@ -281,32 +221,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "trash-bags",
-                         "commodity":  "Trash Bags (13 gal)",
-                         "store":  "Baker\u0027s",
-                         "product":  "Kroger Lavender Scent Strong-Flex Tall Kitchen 13 Gallon Drawstring Bags",
-                         "cos":  0.7667,
-                         "score":  0.957424,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "laundry-detergent",
                          "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
                          "store":  "Family Fare",
                          "product":  "Arm \u0026 Hammer Liquid Laundry Clean Burst",
                          "cos":  0.6943,
                          "score":  0.957421,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "feminine-pads",
-                         "commodity":  "Feminine Pads",
-                         "store":  "Family Fare",
-                         "product":  "Top Care Maxi Regular Unscented Pads 24 Ea",
-                         "cos":  0.6984,
-                         "score":  0.957358,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -331,26 +251,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "chipotle-adobo",
-                         "commodity":  "Chipotle Peppers in Adobo",
-                         "store":  "Family Fare",
-                         "product":  "La Costena Chipotles, Peppers In Adobo Sauce 7 Oz",
-                         "cos":  0.6826,
-                         "score":  0.953428,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "sun-dried-tomatoes",
-                         "commodity":  "Sun-Dried Tomatoes",
-                         "store":  "Baker\u0027s",
-                         "product":  "California Sun Dry Sun-Dried Julienne Cut Tomatoes in Oil with Herbs",
-                         "cos":  0.6946,
-                         "score":  0.95293,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "pork-tenderloin",
                          "commodity":  "Pork Tenderloin",
                          "store":  "Walmart",
@@ -361,32 +261,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "caesar-dressing",
-                         "commodity":  "Caesar Dressing",
-                         "store":  "Baker\u0027s",
-                         "product":  "Kraft Classic Caesar Salad Dressing",
-                         "cos":  0.7078,
-                         "score":  0.951898,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "corned-beef-hash",
                          "commodity":  "Corned Beef Hash (canned)",
                          "store":  "Walmart",
                          "product":  "MARY KITCHEN Roast Beef Hash, Canned Roast Beef Hash, 14 oz",
                          "cos":  0.6971,
                          "score":  0.949258,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "trash-bags",
-                         "commodity":  "Trash Bags (13 gal)",
-                         "store":  "Baker\u0027s",
-                         "product":  "Kroger Island Nectar Scent Strong-Flex Tall Kitchen 13 Gallon Drawstring Bags BIG DEAL!",
-                         "cos":  0.7422,
-                         "score":  0.947325,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -447,26 +327,6 @@
                          "product":  "Smithfield All-Natural Boneless Pork Loin Filet, 1.0 - 2.8 lb, 24 G of Protein per 4 oz Serving",
                          "cos":  0.6852,
                          "score":  0.941533,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "feminine-pads",
-                         "commodity":  "Feminine Pads",
-                         "store":  "Baker\u0027s",
-                         "product":  "Kroger Ultra Thin Pads with Wings Long Super Size 2 Unscented",
-                         "cos":  0.653,
-                         "score":  0.940507,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "sun-dried-tomatoes",
-                         "commodity":  "Sun-Dried Tomatoes",
-                         "store":  "Baker\u0027s",
-                         "product":  "California Sun Dry Sun-Dried Julienne Tomatoes in Oil with Herbs",
-                         "cos":  0.6997,
-                         "score":  0.9404,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -571,26 +431,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "italian-dressing",
-                         "commodity":  "Italian Dressing",
-                         "store":  "Aldi",
-                         "product":  "Tuscan Garden Italian Salad Dressing 16 OZ",
-                         "cos":  0.6469,
-                         "score":  0.926476,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "italian-dressing",
-                         "commodity":  "Italian Dressing",
-                         "store":  "Aldi",
-                         "product":  "Tuscan Garden Italian Salad Dressing 16 FL OZ",
-                         "cos":  0.6469,
-                         "score":  0.926476,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "laundry-detergent",
                          "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
                          "store":  "Baker\u0027s",
@@ -621,52 +461,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "sun-dried-tomatoes",
-                         "commodity":  "Sun-Dried Tomatoes",
-                         "store":  "Baker\u0027s",
-                         "product":  "California Sun Dry Sun-Dried Julienne Cut Tomatoes",
-                         "cos":  0.6708,
-                         "score":  0.921119,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "laundry-detergent",
                          "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
                          "store":  "Baker\u0027s",
                          "product":  "ARM \u0026 HAMMER Baking Soda Fresh Liquid Laundry Detergent Sparkling Fresh Scent",
                          "cos":  0.7706,
                          "score":  0.92061,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "sun-dried-tomatoes",
-                         "commodity":  "Sun-Dried Tomatoes",
-                         "store":  "Baker\u0027s",
-                         "product":  "California Sun Dry Sun-Dried Julienne Tomatoes in Oil",
-                         "cos":  0.6953,
-                         "score":  0.918868,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "baby-wipes",
-                         "commodity":  "Baby Wipes",
-                         "store":  "Family Fare",
-                         "product":  "Huggies Disney Baby Sensitive Fragrance Free Wipes 56 Ea",
-                         "cos":  0.693,
-                         "score":  0.918283,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "baby-wipes",
-                         "commodity":  "Baby Wipes",
-                         "store":  "Family Fare",
-                         "product":  "Huggies Disney Baby Sensitive Fragrance Free Wipes 168 Ea",
-                         "cos":  0.693,
-                         "score":  0.918283,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -707,26 +507,6 @@
                          "product":  "Kroger Protein Peanut Butter and Dark Chocolate Flavored Chewy Bars",
                          "cos":  0.7193,
                          "score":  0.916802,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "baby-wipes",
-                         "commodity":  "Baby Wipes",
-                         "store":  "Family Fare",
-                         "product":  "Huggies Wipes, Fragrance Free, Sensitive, Disney Baby 560 Ea",
-                         "cos":  0.7028,
-                         "score":  0.91666,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "canned-pears",
-                         "commodity":  "Canned Pears",
-                         "store":  "Baker\u0027s",
-                         "product":  "Kroger Canned Pear Slices in Pear Juice",
-                         "cos":  0.6364,
-                         "score":  0.916205,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -801,32 +581,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "canned-pears",
-                         "commodity":  "Canned Pears",
-                         "store":  "Baker\u0027s",
-                         "product":  "Kroger Canned Pear Slices in Extra Light Syrup",
-                         "cos":  0.6914,
-                         "score":  0.91132,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "chicken-thighs",
                          "commodity":  "Chicken Thighs / Drumsticks",
                          "store":  "Aldi",
                          "product":  "Kirkwood Fresh Chicken Drumsticks Per LB",
                          "cos":  0.6699,
                          "score":  0.90917,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "chicken-noodle-soup",
-                         "commodity":  "Chicken Noodle Soup (canned)",
-                         "store":  "Walmart",
-                         "product":  "Progresso Rich and Hearty Chicken and Homestyle Noodles Canned Soup, 19 oz",
-                         "cos":  0.7002,
-                         "score":  0.905573,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -847,16 +607,6 @@
                          "product":  "Chef S Cupboard Homestyle Four Cheese Mashed Potatoes 4 OZ",
                          "cos":  0.6181,
                          "score":  0.903958,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "instant-coffee",
-                         "commodity":  "Instant Coffee",
-                         "store":  "Family Fare",
-                         "product":  "Folgers Instant Classic Roast Coffee Crystals 8 Oz",
-                         "cos":  0.6659,
-                         "score":  0.903257,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -887,16 +637,6 @@
                          "product":  "Johnsonville Turkey Cheddar Smoked Sausage Links",
                          "cos":  0.6156,
                          "score":  0.901481,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "baby-wipes",
-                         "commodity":  "Baby Wipes",
-                         "store":  "Family Fare",
-                         "product":  "Huggies Wipes, Fragrance Free, Sensitive, Disney Baby, Refill Pack 184 Ea",
-                         "cos":  0.6819,
-                         "score":  0.900014,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ]

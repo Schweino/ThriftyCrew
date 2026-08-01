@@ -3754,7 +3754,8 @@
         "label":  "Orange Juice",
         "unit":  "floz",
         "include":  [
-                        "orange\\s+juice"
+                        "orange\\s+juice",
+                        "(?:100%\\s+)?juice,?\\s+(?:\\w+\\s+)?orange\\b"
                     ],
         "exclude":  [
                         "drink",
@@ -26838,7 +26839,8 @@
         "include":  [
                         "grape\\s+juice",
                         "(?:100%\\s+)?juice,?\\s+(?:\\w+\\s+)?grape\\b",
-                        "grape\\b.{0,15}100%\\s*juice"
+                        "grape\\b.{0,15}100%\\s*juice",
+                        "grape\\b.{0,15}100\\s*%?\\s*juice"
                     ],
         "exclude":  [
                         "sparkling",
@@ -32662,7 +32664,8 @@
         "label":  "Corned Beef Hash (canned)",
         "unit":  "oz",
         "include":  [
-                        "corned\\s+beef\\s+hash"
+                        "corned\\s+beef\\s+hash",
+                        "corned\\s+beef,\\s+hash"
                     ],
         "exclude":  [
                         "hash\\s*browns?",
@@ -33625,7 +33628,8 @@
                         "100%\\s+pumpkin",
                         "pure\\s+pumpkin",
                         "pumpkin\\s+pur[e\\u00e9]e",
-                        "solid\\s+pack\\s+pumpkin"
+                        "solid\\s+pack\\s+pumpkin",
+                        "canned\\s+pumpkin"
                     ],
         "exclude":  [
                         "\\bpie\\b",
@@ -34223,7 +34227,8 @@
         "unit":  "oz",
         "include":  [
                         "black\\s+olives?",
-                        "ripe\\s+olives?"
+                        "ripe\\s+olives?",
+                        "black\\s+ripe\\b.{0,20}olives?"
                     ],
         "exclude":  [
                         "green\\s+olives?",
@@ -34704,7 +34709,8 @@
                         "canned\\s+potatoes?",
                         "whole\\s+white\\s+potatoes?",
                         "sliced\\s+white\\s+potatoes?",
-                        "diced\\s+white\\s+potatoes?"
+                        "diced\\s+white\\s+potatoes?",
+                        "(?:diced|sliced|whole|new)\\s+potatoes,?\\s+canned"
                     ],
         "exclude":  [
                         "\\bfresh\\b",
@@ -46920,7 +46926,8 @@
         "include":  [
                         "dried\\s+cranberr(?:y|ies)",
                         "craisins?\\b",
-                        "cranberr(?:y|ies),?\\s+dried\\b"
+                        "cranberr(?:y|ies),?\\s+dried\\b",
+                        "cranberr(?:y|ies),.{0,20}\\bdried\\b"
                     ],
         "exclude":  [
                         "\\bfresh\\b",

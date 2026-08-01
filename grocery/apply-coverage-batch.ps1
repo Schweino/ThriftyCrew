@@ -42,6 +42,9 @@ function Snapshot {
 $comFile = Join-Path $root 'commodities.json'
 $bak = Join-Path $OutDir ('_commodities-batchbak-' + (Get-Date -Format 'HHmmss') + '.json')
 Copy-Item $comFile $bak -Force
+# freeze the pre-edit board so the theft check has a fixed baseline (compare-deals overwrites the live one)
+$baseCmp = Join-Path $OutDir '_baseline-batch.json'
+Copy-Item (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1).FullName $baseCmp -Force
 $before = Snapshot
 Write-Output ("before: {0} commodities on the board" -f $before.Count)
 
@@ -102,7 +105,63 @@ foreach ($id in $Patterns.Keys) {
 $detail | ForEach-Object { Write-Output $_ }
 Write-Output ("value: +{0} cell(s), -{1} cell(s), {2} commodit(y/ies) got a cheaper real price" -f $gained, $lost, $cheaper)
 if ($lost -gt 0) { Revert "the batch REMOVED $lost cell(s); a widening must never cost coverage" }
-if ($gained -eq 0 -and $cheaper -eq 0) { Revert 'the batch added ZERO cells AND lowered ZERO prices - it bought nothing and can only add risk' }
+
+# ---- gate 2b: VISIBILITY. This is the measurement the first two versions of this gate got wrong.
+# Board effects are weekly: a correct new pattern often changes nothing today simply because the product it
+# reveals is not this week's cheapest at that store. Judging a rule edit by today's cells therefore throws
+# away correct work - it reverted 8 verified patterns on 2026-08-01, every one of which revealed a real
+# product the rules genuinely could not see. And an invisible product can never win in ANY future week
+# either, which is the whole reason the coverage backlog exists.
+# So the durable question is: does this pattern make real, currently-INVISIBLE rows visible? A pattern that
+# reveals nothing bought nothing and is still rejected. A pattern that reveals rows is kept even when the
+# board does not move today - provided the theft check and every downstream gate stay clean.
+$corpusFile = Join-Path (Split-Path $root -Parent) 'sidecar\data\corpus-current.json'
+$revealed = @{}; $blind = $false
+if (Test-Path $corpusFile) {
+  $corp = Get-Content $corpusFile -Raw | ConvertFrom-Json
+  $comsNow = Get-Content $comFile -Raw | ConvertFrom-Json
+  foreach ($id in $Patterns.Keys) {
+    $cdef = @($comsNow | Where-Object { $_.id -eq $id })[0]
+    $exRx = @(); foreach ($xp in @($cdef.exclude)) { if ($xp) { $exRx += [regex]::new([string]$xp, 'IgnoreCase,Compiled') } }
+    $n = 0
+    foreach ($p in @($Patterns[$id])) {
+      $r = [regex]::new([string]$p, 'IgnoreCase,Compiled')
+      foreach ($row in $corp) {
+        if ($row.rule_match) { continue }                       # already visible to some rule; not a gain
+        $nm = [string]$row.product
+        if (-not $r.IsMatch($nm)) { continue }
+        $killed = $false; foreach ($x in $exRx) { if ($x.IsMatch($nm)) { $killed = $true; break } }
+        if (-not $killed) { $n++ }
+      }
+    }
+    $revealed[$id] = $n
+  }
+  $dead = @($Patterns.Keys | Where-Object { $revealed[$_] -eq 0 })
+  foreach ($id in ($Patterns.Keys | Sort-Object)) { Write-Output ("    {0,-24} reveals {1} previously-invisible row(s)" -f $id, $revealed[$id]) }
+  if ($dead.Count -eq @($Patterns.Keys).Count) { Revert 'no pattern in the batch revealed a single invisible row - it bought nothing' }
+  if ($dead.Count -gt 0) { Write-Output ("    NOTE: {0} pattern(s) revealed nothing and should be dropped: {1}" -f $dead.Count, ($dead -join ', ')) }
+} else {
+  # BLIND, not block: no corpus means we cannot measure visibility, so fall back to the board-effect test
+  # rather than silently passing an unmeasured batch.
+  $blind = $true
+  Write-Output '    BLIND: no sidecar corpus - cannot measure visibility; falling back to board effect'
+  if ($gained -eq 0 -and $cheaper -eq 0) { Revert 'blind on visibility AND the board did not move - nothing proves this batch bought anything' }
+}
+
+# ---- gate 2c: THEFT. Matching is first-match-wins by array order, so a widened rule in an earlier
+# commodity silently steals products from a later one, and theft LOOKS like success (the thief gains, the
+# victim quietly loses a cell). verify-no-regression is the estate's existing check for exactly this; the
+# batch's own targets are exempt because their prices are supposed to move.
+# NOTE: invoked IN-PROCESS, not through `powershell -File`. An array argument does not survive -File - it
+# arrives flattened into positional junk ("A positional parameter cannot be found"), the same trap that bit
+# withdraw-stale-link. Splatting a hashtable to the call operator keeps -IgnoreIds an actual array.
+$vnrArgs = @{ Baseline = $baseCmp; IgnoreIds = @($Patterns.Keys) }
+$vnrOut = & (Join-Path $root 'verify-no-regression.ps1') @vnrArgs 2>&1
+if ($LASTEXITCODE -ne 0) {
+  $vnrOut | Select-String -Pattern 'LOST|MOVED|was:|now:' | ForEach-Object { Write-Output ("    " + $_) }
+  Revert 'verify-no-regression FAILED - the batch took a cell or re-priced one at a commodity it does not own (first-match-wins theft)'
+}
+Write-Output '    theft check: OK - no other commodity lost a cell or was re-priced'
 
 if ($WhatIfOnly) { Copy-Item $bak $comFile -Force; & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'compare-deals.ps1') *>&1 | Out-Null; Write-Output 'WhatIfOnly: reverted'; exit 0 }
 

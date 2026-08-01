@@ -5884,9 +5884,9 @@
                                                                   "Walmart":  0.02,
                                                                   "Sam\u0027s Club":  0.02,
                                                                   "Aldi":  0.0229,
+                                                                  "Family Fare":  0.0312,
                                                                   "Baker\u0027s":  0.0318,
                                                                   "Fareway":  0.0358,
-                                                                  "Family Fare":  0.0436,
                                                                   "Hy-Vee":  0.0554
                                                               }
                                             }
@@ -17054,8 +17054,8 @@
                                                                   "Walmart":  0.125,
                                                                   "Hy-Vee":  0.1612,
                                                                   "Family Fare":  0.1744,
-                                                                  "Fareway":  0.1827,
-                                                                  "Baker\u0027s":  0.2181
+                                                                  "Baker\u0027s":  0.1744,
+                                                                  "Fareway":  0.1827
                                                               }
                                             }
                                         ]
@@ -21531,9 +21531,10 @@
                                                 "per_store":  {
                                                                   "Hy-Vee":  0.0959,
                                                                   "Walmart":  0.0959,
+                                                                  "Aldi":  0.1043,
                                                                   "Fareway":  0.1227,
                                                                   "Sam\u0027s Club":  0.1248,
-                                                                  "Baker\u0027s":  0.1303
+                                                                  "Baker\u0027s":  0.126
                                                               }
                                             }
                                         ]
@@ -26857,9 +26858,9 @@
                             "label":  "Chicken Noodle Soup (canned)",
                             "unit":  "oz",
                             "record_low":  {
-                                               "price":  0.0752,
-                                               "store":  "Baker\u0027s",
-                                               "week_of":  "2026-07-24"
+                                               "price":  0.0705,
+                                               "store":  "Walmart",
+                                               "week_of":  "2026-08-01"
                                            },
                             "history":  [
                                             {
@@ -27088,16 +27089,16 @@
                                             },
                                             {
                                                 "week_of":  "2026-08-01",
-                                                "cheapest_price":  0.0752,
-                                                "cheapest_store":  "Baker\u0027s",
+                                                "cheapest_price":  0.0705,
+                                                "cheapest_store":  "Walmart",
                                                 "per_store":  {
+                                                                  "Walmart":  0.0705,
                                                                   "Baker\u0027s":  0.0752,
                                                                   "Aldi":  0.0909,
                                                                   "Sam\u0027s Club":  0.0919,
                                                                   "Fareway":  0.0933,
-                                                                  "Walmart":  0.1156,
-                                                                  "Family Fare":  0.1177,
-                                                                  "Hy-Vee":  0.1191
+                                                                  "Hy-Vee":  0.1133,
+                                                                  "Family Fare":  0.1177
                                                               }
                                             }
                                         ]
@@ -43720,7 +43721,7 @@
                                                                   "Walmart":  0.0829,
                                                                   "Family Fare":  0.1246,
                                                                   "Sam\u0027s Club":  0.13,
-                                                                  "Baker\u0027s":  0.1408,
+                                                                  "Baker\u0027s":  0.1359,
                                                                   "Fareway":  0.2184,
                                                                   "Hy-Vee":  0.3395
                                                               }

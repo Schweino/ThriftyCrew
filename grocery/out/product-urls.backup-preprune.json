@@ -1271,13 +1271,6 @@
                                                   "name":  "Little Journey Thick \u0026 Quilted Baby Wipes Value Pack",
                                                   "board_pu":  0.0229
                                               },
-                                     "Family Fare":  {
-                                                         "url":  "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/diapers_wipes/pampers_baby_wipes_pampers_sensitive_504_wipes_9_x_504_ct/p/4818769",
-                                                         "name":  "Pampers Baby Wipes Pampers Sensitive 504 Wipes, 9 X 504 Ct",
-                                                         "price":  "$21.99",
-                                                         "size":  "504 ct",
-                                                         "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                                     },
                                      "Fareway":  {
                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18311864-huggies-simply-clean-unscented-baby-wipes-1-flip-top-pack-64-ea",
                                                      "price":  2.29,
@@ -1311,7 +1304,14 @@
                                                           "price":  2.29,
                                                           "size":  "72 ct",
                                                           "verified":  "2026-08-01"
-                                                      }
+                                                      },
+                                     "Family Fare":  {
+                                                         "url":  "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/diapers_wipes/huggies_disney_baby_fragrance_free_wipes_huge_value_704_ea/p/1564405684711368760",
+                                                         "name":  "Huggies Disney Baby Fragrance Free Wipes Huge Value 704 Ea",
+                                                         "price":  "$21.99",
+                                                         "size":  "704 ea",
+                                                         "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                     }
                                  },
                   "bacon":  {
                                 "commodity":  "Bacon",
@@ -3478,14 +3478,6 @@
                                                        "name":  "Tuscan Garden Classic Caesar Dressing16 fl oz",
                                                        "board_pu":  0.1219
                                                    },
-                                          "Baker\u0027s":  {
-                                                               "url":  "https://www.bakersplus.com/p/ken-s-steak-house-lite-creamy-caesar-salad-dressing/0004133533425",
-                                                               "name":  "Ken\u0027s Steak House Lite Creamy Caesar Salad Dressing",
-                                                               "price":  3.49,
-                                                               "size":  "16 fl oz",
-                                                               "verified":  "2026-08-01",
-                                                               "board_pu":  0.2181
-                                                           },
                                           "Family Fare":  {
                                                               "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressing/our_family_creamy_caesar_dressing_16_fl_oz/p/7081373",
                                                               "name":  "Our Family Creamy Caesar Dressing 16 Fl Oz",
@@ -3513,7 +3505,14 @@
                                                           "size":  "8 fl oz",
                                                           "name":  "Kraft Classic Caesar Dressing, 8 fl oz Bottle",
                                                           "board_pu":  0.125
-                                                      }
+                                                      },
+                                          "Baker\u0027s":  {
+                                                               "url":  "https://www.bakersplus.com/p/kroger-classic-caesar-salad-dressing/0001111004867",
+                                                               "name":  "Kroger Classic Caesar Salad Dressing",
+                                                               "price":  "$2.79",
+                                                               "size":  "16 fl oz",
+                                                               "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                           }
                                       },
                   "caesar-salad-kit":  {
                                            "commodity":  "Caesar Salad Kit",
@@ -4118,13 +4117,6 @@
                                      },
                   "canned-pears":  {
                                        "commodity":  "Canned Pears",
-                                       "Baker\u0027s":  {
-                                                            "url":  "https://www.bakersplus.com/p/kroger-canned-sliced-pears-no-sugar-added/0001111002938",
-                                                            "name":  "Kroger Canned Sliced Pears No Sugar Added",
-                                                            "price":  1.89,
-                                                            "size":  "14.5 oz",
-                                                            "verified":  "2026-08-01"
-                                                        },
                                        "Fareway":  {
                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25806497-fareway-pears-in-pear-juice-sliced-15-oz",
                                                        "price":  1.84,
@@ -4146,7 +4138,21 @@
                                                        "size":  "29 oz",
                                                        "verified":  "2026-07-17 Walmart warm-browser board-match; stored record re-prices to the board",
                                                        "board_pu":  0.0959
-                                                   }
+                                                   },
+                                       "Aldi":  {
+                                                    "url":  "https://www.aldi.us/store/aldi/products/18647949-sweet-harvest-bartlett-pear-slices-in-heavy-syrup-15-25-oz",
+                                                    "name":  "Sweet Harvest Bartlett Pear Slices IN Heavy Syrup 15.25 OZ",
+                                                    "price":  "$1.59",
+                                                    "size":  "15.25 oz",
+                                                    "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                },
+                                       "Baker\u0027s":  {
+                                                            "url":  "https://www.bakersplus.com/p/kroger-canned-pear-slices-in-extra-light-syrup/0001111002939",
+                                                            "name":  "Kroger Canned Pear Slices in Extra Light Syrup",
+                                                            "price":  "$1.89",
+                                                            "size":  "15 oz",
+                                                            "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                        }
                                    },
                   "canned-peas":  {
                                       "commodity":  "canned-peas",
@@ -4313,12 +4319,11 @@
                                                          "board_pu":  0.064
                                                      },
                                           "Walmart":  {
-                                                          "url":  "https://www.walmart.com/ip/10318792",
-                                                          "name":  "Del Monte Whole Canned Potatoes, Canned Vegetables, 14.5 oz Can",
-                                                          "price":  1.67,
+                                                          "url":  "https://www.walmart.com/ip/10295221",
+                                                          "name":  "Del Monte Sliced New Potatoes, Canned Vegetables, 14.5 oz Can",
+                                                          "price":  "$1.67",
                                                           "size":  "14.5 oz",
-                                                          "verified":  "2026-07-17 Walmart warm-browser board-match; stored record re-prices to the board",
-                                                          "board_pu":  0.1152
+                                                          "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                       }
                                       },
                   "canned-pumpkin":  {
@@ -4408,9 +4413,9 @@
                                         "Baker\u0027s":  {
                                                              "url":  "https://www.bakersplus.com/p/kroger-wild-caught-canned-alaskan-pink-salmon/0001111083301",
                                                              "name":  "Kroger Wild Caught Canned Alaskan Pink Salmon",
-                                                             "price":  3.99,
+                                                             "price":  "$3.99",
                                                              "size":  "14.75 oz",
-                                                             "verified":  "2026-08-01"
+                                                             "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                          }
                                     },
                   "canned-sweet-corn":  {
@@ -5642,11 +5647,11 @@
                                                              "board_pu":  0.1191
                                                          },
                                               "Walmart":  {
-                                                              "url":  "https://www.walmart.com/ip/43671426",
-                                                              "name":  "Campbell’s Condensed Chicken Noodle Soup, 10.75 oz Can (4 Pack)",
-                                                              "price":  "$4.97",
-                                                              "size":  "43 oz",
-                                                              "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
+                                                              "url":  "https://www.walmart.com/ip/10314962",
+                                                              "name":  "Great Value Chicken Noodle Condensed Soup, 10.5 oz",
+                                                              "price":  "$0.74",
+                                                              "size":  "10.5 oz",
+                                                              "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                           }
                                           },
                   "chicken-nuggets":  {
@@ -9639,21 +9644,6 @@
                                        },
                   "feminine-pads":  {
                                         "commodity":  "feminine-pads",
-                                        "Baker\u0027s":  {
-                                                             "url":  "https://www.bakersplus.com/p/stayfree-maxi-pads-super-absorbency-unscented/0007830007023",
-                                                             "name":  "Stayfree Maxi Pads Super Absorbency Unscented",
-                                                             "price":  9.29,
-                                                             "size":  "66 ct",
-                                                             "verified":  "2026-08-01",
-                                                             "board_pu":  0.1408
-                                                         },
-                                        "Family Fare":  {
-                                                            "url":  "https://www.shopfamilyfare.com/shop/health_beauty/grooming_hygiene/feminine_products/top_care_super_unscented_maxi_pads_24_ea/p/2027703",
-                                                            "name":  "Top Care Super Unscented Maxi Pads 24 Ea",
-                                                            "price":  "$2.99",
-                                                            "size":  "24 ea",
-                                                            "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                                        },
                                         "Fareway":  {
                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16846730-always-pads-size-2-long-with-wings-32-0-ct",
                                                         "price":  6.99,
@@ -9681,7 +9671,21 @@
                                                         "price":  "$3.98",
                                                         "size":  "48 ct",
                                                         "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                                    }
+                                                    },
+                                        "Family Fare":  {
+                                                            "url":  "https://www.shopfamilyfare.com/shop/health_beauty/grooming_hygiene/feminine_products/top_care_maxi_regular_unscented_pads_24_ea/p/562241",
+                                                            "name":  "Top Care Maxi Regular Unscented Pads 24 Ea",
+                                                            "price":  "$2.99",
+                                                            "size":  "24 ea",
+                                                            "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                        },
+                                        "Baker\u0027s":  {
+                                                             "url":  "https://www.bakersplus.com/p/kroger-ultra-thin-pads-with-wings-regular-size-1-unscented/0004126002498",
+                                                             "name":  "Kroger Ultra Thin Pads with Wings Regular Size 1 Unscented",
+                                                             "price":  "$2.99",
+                                                             "size":  "22 ct",
+                                                             "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                         }
                                     },
                   "feta":  {
                                "commodity":  "feta",
@@ -11936,13 +11940,6 @@
                                  },
                   "grape-juice":  {
                                       "commodity":  "grape-juice",
-                                      "Aldi":  {
-                                                   "url":  "https://www.aldi.us/store/aldi/products/19673951-nature-s-nectar-100-grape-juice-64-fl-oz",
-                                                   "price":  2.95,
-                                                   "size":  "64 fl oz",
-                                                   "name":  "Nature\u0027s Nectar 100% Grape Juice",
-                                                   "board_pu":  0.0461
-                                               },
                                       "Baker\u0027s":  {
                                                            "url":  "https://www.bakersplus.com/p/kroger-100-white-grape-juice/0001111003973",
                                                            "name":  "Kroger 100% White Grape Juice",
@@ -11978,7 +11975,14 @@
                                                       "price":  "$2.97",
                                                       "size":  "64 fl oz",
                                                       "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                  },
+                                      "Aldi":  {
+                                                   "url":  "https://www.aldi.us/store/aldi/products/19673955-nature-s-nectar-white-grape-100-juice-64-fl-oz",
+                                                   "name":  "Nature S Nectar White Grape 100 Juice 64 FL OZ",
+                                                   "price":  "$2.95",
+                                                   "size":  "64 fl oz",
+                                                   "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                               }
                                   },
                   "grapes":  {
                                  "commodity":  "Grapes",
@@ -14226,13 +14230,6 @@
                                               },
                   "italian-dressing":  {
                                            "commodity":  "italian-dressing",
-                                           "Aldi":  {
-                                                        "url":  "https://www.aldi.us/store/aldi/products/20971350-tuscan-garden-zesty-italian-dressing-16-fl-oz",
-                                                        "price":  1.95,
-                                                        "size":  "16 fl oz",
-                                                        "name":  "Tuscan Garden Zesty Italian Dressing",
-                                                        "board_pu":  0.1219
-                                                    },
                                            "Baker\u0027s":  {
                                                                 "url":  "https://www.bakersplus.com/p/kroger-zesty-italian-salad-dressing-big-deal-/0001111003356",
                                                                 "name":  "Kroger Zesty Italian Salad Dressing BIG DEAL!",
@@ -14274,7 +14271,14 @@
                                                            "size":  "36 fl oz",
                                                            "name":  "Great Value Zesty Italian Dressing \u0026 Marinade, 36 fl oz",
                                                            "verified":  "2026-07-30 price-pull self-capture"
-                                                       }
+                                                       },
+                                           "Aldi":  {
+                                                        "url":  "https://www.aldi.us/store/aldi/products/21017024-tuscan-garden-italian-salad-dressing-16-fl-oz",
+                                                        "name":  "Tuscan Garden Italian Salad Dressing 16 FL OZ",
+                                                        "price":  "$1.95",
+                                                        "size":  "16 fl oz",
+                                                        "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                    }
                                        },
                   "italian-sausage":  {
                                           "commodity":  "italian-sausage",
@@ -14492,11 +14496,11 @@
                                                    },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/50157/campbell-s-turkey-gravy-10-5-oz-can",
-                                                      "name":  "Campbell’s Turkey Gravy, 10.5 oz Can",
-                                                      "board_pu":  0.161,
-                                                      "price":  1.62,
+                                                      "price":  1.69,
                                                       "size":  "10.5 oz",
-                                                      "verified":  "2026-08-01 Hy-Vee GraphQL (storeId 1465, current shelf price)"
+                                                      "name":  "Campbell’s Turkey Gravy, 10.5 oz Can",
+                                                      "verified":  "2026-07-27 Hy-Vee search API (storeId 1465)",
+                                                      "board_pu":  0.161
                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/5000005328",
