@@ -369,6 +369,40 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           $summary += "REVIEW    coverage-gaps scanned 0 products for $ns - the 'no gaps' result does not cover those stores"
         } else { if (Test-Path (Join-Path $OutDir 'coverage-gap-alert.sig')) { Remove-Item (Join-Path $OutDir 'coverage-gap-alert.sig') -ErrorAction SilentlyContinue } }
       } catch { Log ('coverage-gap guard threw: ' + $_.Exception.Message) }
+      # ---- SEMANTIC SWEEP (added 2026-08-01): the coverage guard above is REGEX reasoning about regex - it can
+      # only find a store that a LOOSENED version of the same include would have matched. It cannot see a product
+      # whose name shares no vocabulary with the rule at all, which is how a $45 spice jar won ground-cloves
+      # unopposed: Family Fare writes "Cloves, Ground" and every include read "ground cloves". This scans the raw
+      # pulls with an embedding model instead, so it reads MEANING and finds what the words hide.
+      # Strictly advisory, and BLIND-not-block: exit 3 (no GPU, no python, no corpus) must never stop the daily
+      # publish, and findings never change a price, a crown, a rule or a link on their own. Signature de-dup so
+      # a standing backlog is reported ONCE and only genuinely NEW findings speak up again.
+      try {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-semantic-identity.ps1') *>&1 | Out-Null
+        $semRc = $LASTEXITCODE
+        if ($semRc -eq 3) {
+          Log 'semantic sweep BLIND (no sidecar/GPU available) - the board still ships; no coverage opinion today'
+          $summary += 'REVIEW    semantic sweep could not run (BLIND) - no semantic coverage check on this board'
+        } else {
+          $sf = try { Get-Content (Join-Path $OutDir 'semantic-findings.json') -Raw | ConvertFrom-Json } catch { $null }
+          $semRows = @($sf.coverage)
+          if ($semRows.Count -gt 0) {
+            $semSig = (@($semRows | ForEach-Object { [string]$_.id + '|' + [string]$_.store + '|' + [string]$_.product } | Sort-Object) -join ';')
+            $semF = Join-Path $OutDir 'semantic-alert.sig'
+            $semPrev = if (Test-Path $semF) { ((Get-Content $semF -Raw) + '').Trim() } else { '' }
+            $semIds = (@($semRows | ForEach-Object { [string]$_.id } | Sort-Object -Unique) -join ', ')
+            Log ("semantic sweep: $($semRows.Count) product(s) invisible to the rules across $(@($semRows | Group-Object id).Count) commodit(y/ies) - $semIds")
+            $summary += "REVIEW    semantic sweep: $($semRows.Count) real product(s) no rule can see - see semantic-findings.json"
+            if ($semSig -ne $semPrev -and (-not $NoAlert)) {
+              try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: semantic sweep found $($semRows.Count) product(s) no rule can see - $asofS" -Body "The embedding sweep found real store products that look like a tracked commodity but match NO include pattern, so they can never win a cell - not this week and not any future week. Commodities: $semIds. Work them with explain-coverage-gap.ps1 (diagnose WHY: NO-INCLUDE / EXCLUDED / CLAIMED / MATCHES) then apply-coverage-batch.ps1 (applies and gates one batch). Anything that is genuinely a different product gets a ruling via add-known-wrong.ps1 instead of a rule. Details: grocery/out/semantic-findings.json." | Out-Null
+                    if ($LASTEXITCODE -eq 0) { Set-Content -Path $semF -Value $semSig -Encoding UTF8; Log 'semantic sweep alert sent' } } catch { Log ('semantic alert threw: ' + $_.Exception.Message) }
+            } else { Log 'semantic findings unchanged since last alert - not re-alerting' }
+          } else {
+            Log 'semantic sweep: no invisible products found'
+            if (Test-Path (Join-Path $OutDir 'semantic-alert.sig')) { Remove-Item (Join-Path $OutDir 'semantic-alert.sig') -ErrorAction SilentlyContinue }
+          }
+        }
+      } catch { Log ('semantic sweep threw: ' + $_.Exception.Message) }
       # ---- MATCHING-SOUNDNESS GUARD: a WRONG product landing in a commodity, or a rule change quietly moving/
       # dropping an existing product vs the reviewed baseline (the 2026-07-13 matching-audit class). No other
       # guard catches theft-IN. audit-match-soundness -Alert self-dedups and emails on a NEW issue-set; a

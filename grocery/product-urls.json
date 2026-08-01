@@ -3025,13 +3025,6 @@
                                                                "verified":  "2026-08-01",
                                                                "board_pu":  0.5431
                                                            },
-                                          "Family Fare":  {
-                                                              "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_sauces_gravies/our_family_gravy_mix_brown_0_87_oz/p/6787112",
-                                                              "name":  "Our Family Gravy Mix, Brown 0.87 Oz",
-                                                              "price":  "$0.59",
-                                                              "size":  "0.87 oz",
-                                                              "board_pu":  0.6782
-                                                          },
                                           "Fareway":  {
                                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20671242-fareway-gravy-mix-brown-087-oz",
                                                           "price":  0.98,
@@ -3051,7 +3044,14 @@
                                                           "price":  "$0.48",
                                                           "size":  "0.87 oz",
                                                           "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                                      }
+                                                      },
+                                          "Family Fare":  {
+                                                              "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/gravy/our_family_gravy_mix_reduced_sodium_brown_0_87_oz/p/7083802",
+                                                              "name":  "Our Family Gravy Mix, Reduced Sodium, Brown 0.87 Oz",
+                                                              "price":  "$0.59",
+                                                              "size":  "0.87 oz",
+                                                              "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                          }
                                       },
                   "brownie-mix":  {
                                       "commodity":  "brownie-mix",
@@ -14176,13 +14176,6 @@
                                      },
                   "instant-mashed-potatoes":  {
                                                   "commodity":  "instant-mashed-potatoes",
-                                                  "Aldi":  {
-                                                               "url":  "https://www.aldi.us/store/aldi/products/20753478-chef-s-cupboard-homestyle-butter-mashed-potatoes-4-oz",
-                                                               "price":  0.99,
-                                                               "size":  "4 oz",
-                                                               "name":  "Chef\u0027s Cupboard Homestyle Butter Mashed Potatoes",
-                                                               "board_pu":  0.2475
-                                                           },
                                                   "Baker\u0027s":  {
                                                                        "url":  "https://www.bakersplus.com/p/betty-crocker-instant-mashed-potatoes/0001600041660",
                                                                        "name":  "Betty Crocker Instant Mashed Potatoes",
@@ -14226,7 +14219,14 @@
                                                                   "size":  "13.75 oz",
                                                                   "name":  "Idahoan Original Mashed Potatoes, 13.75 oz Box",
                                                                   "verified":  "2026-07-30 price-pull self-capture"
-                                                              }
+                                                              },
+                                                  "Aldi":  {
+                                                               "url":  "https://www.aldi.us/store/aldi/products/20752483-chef-s-cupboard-homestyle-four-cheese-mashed-potatoes-4-oz",
+                                                               "name":  "Chef S Cupboard Homestyle Four Cheese Mashed Potatoes 4 OZ",
+                                                               "price":  "$0.99",
+                                                               "size":  "4 oz",
+                                                               "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                           }
                                               },
                   "italian-dressing":  {
                                            "commodity":  "italian-dressing",
@@ -18934,14 +18934,6 @@
                                                     "name":  "Millville Peanut Butter Dark Chocolate Protein Chewy Bars",
                                                     "board_pu":  0.578
                                                 },
-                                       "Baker\u0027s":  {
-                                                            "url":  "https://www.bakersplus.com/p/perfect-bar-mini-dark-chocolate-chip-peanut-butter-protein-bar-organic-8-count/0085556911035",
-                                                            "name":  "Perfect Bar Mini Dark Chocolate Chip Peanut Butter Protein Bar Organic 8 Count",
-                                                            "price":  8.99,
-                                                            "size":  "8 pk 0.88 oz",
-                                                            "verified":  "2026-08-01",
-                                                            "board_pu":  1.1238
-                                                        },
                                        "Family Fare":  {
                                                            "url":  "https://www.shopfamilyfare.com/shop/health_beauty/adult_nutrition/protein_energy_meal_bars/builders_chocolatey_peanut_butter_protein_bars_6_ea/p/525550",
                                                            "name":  "Builders Chocolatey Peanut Butter Protein Bars 6 Ea",
@@ -18969,7 +18961,14 @@
                                                                "price":  "$11.98",
                                                                "size":  "30 ct",
                                                                "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                           }
+                                                           },
+                                       "Baker\u0027s":  {
+                                                            "url":  "https://www.bakersplus.com/p/nature-valley-protein-peanut-butter-dark-chocolate-chewy-snack-bars/0001600045723",
+                                                            "name":  "Nature Valley Protein Peanut Butter Dark Chocolate Chewy Snack Bars",
+                                                            "price":  "$3.99",
+                                                            "size":  "5 pk 1.42 oz",
+                                                            "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                        }
                                    },
                   "provolone-cheese":  {
                                            "commodity":  "Provolone Cheese",
@@ -20464,7 +20463,14 @@
                                                     "price":  "$2.48",
                                                     "size":  "24 oz",
                                                     "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                                }
+                                                },
+                                    "Family Fare":  {
+                                                        "url":  "https://www.shopfamilyfare.com/shop/bakery/packaged_bread/rye_bread/beefsteak_bread_soft_rye_no_seeds_18_oz/p/41613",
+                                                        "name":  "Beefsteak Bread, Soft Rye, No Seeds 18 Oz",
+                                                        "price":  "$4.99",
+                                                        "size":  "18 oz",
+                                                        "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                    }
                                 },
                   "salmon":  {
                                  "commodity":  "salmon",
@@ -24257,13 +24263,6 @@
                                     },
                   "vegetable-soup":  {
                                          "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
-                                         "Baker\u0027s":  {
-                                                              "url":  "https://www.bakersplus.com/p/campbell-s-chunky-old-fashioned-vegetable-beef-soup-18-8-oz-can/0005100000549",
-                                                              "name":  "Campbell\u0027s Chunky Old Fashioned Vegetable Beef Soup 18.8 Oz Can",
-                                                              "price":  2.99,
-                                                              "size":  "18.8 oz",
-                                                              "verified":  "2026-08-01"
-                                                          },
                                          "Fareway":  {
                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/37442-campbell-s-chunky-old-fashioned-vegetable-beef-soup-18-8-oz",
                                                          "price":  2.48,
@@ -24283,7 +24282,14 @@
                                                          "size":  "19 oz",
                                                          "name":  "Progresso Vegetable Soup, Vegetable Classics Canned Soup, 19 oz",
                                                          "verified":  "2026-07-31 price-pull self-capture"
-                                                     }
+                                                     },
+                                         "Baker\u0027s":  {
+                                                              "url":  "https://www.bakersplus.com/p/progresso-vegetable-classics-vegetable-canned-soup/0004119691113",
+                                                              "name":  "Progresso Vegetable Classics Vegetable Canned Soup",
+                                                              "price":  "$2.99",
+                                                              "size":  "19 oz",
+                                                              "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                          }
                                      },
                   "walnuts":  {
                                   "commodity":  "Walnuts",
