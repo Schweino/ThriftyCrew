@@ -264,9 +264,18 @@ the tiles do. Until the capture changes, `audit-unit-basis-outlier` is the defen
 **L1. Identity-lane fine-tune**: train on the ~6,000 adjudicated pairs, build a HARD negative set
 (subtle wrongness, not bath soap), re-evaluate behind `-IncludeIdentity`. The lane stays off until it
 beats the new eval.
-**L2. VLM flyer extraction** (qwen2.5vl:7b is pulled and ready): Fareway/Baker's flyer JPGs as a
-headless pipeline step behind the existing import gates; screenshot second-reading diff for walled
-stores.
+**L2. TESTED AND FAILED 2026-08-01. Do not re-attempt without a better model.** The hypothesis was that a
+VLM could read Fareway/Baker's flyer JPGs and give a HEADLESS path to the stores that need capture
+sessions (C1-C3). `qwen2.5vl:7b` was run against a real Baker's ad page (`out\bakers\page-01.jpg`):
+43 seconds, 12 rows, and **roughly half carried a merge or basis error** - `Powerade | $10` (a MULTI-BUY
+flattened into a unit price), `Takis | $7 | ... or Kroger Purified Drinking Water, 24-Pack` (two tiles
+merged), a size bled in from the next tile. It reads TEXT fine; it cannot reliably BIND price to product
+to size across a dense tile layout, and the multi-buy flattening is the same arithmetic class as the FF
+`N for $M` -> `$NM` parser bug. **Unusable as a price source** for a board that promises real numbers, and
+"extract then verify by hand" defeats the reason for wanting it. Model removed to reclaim 6 GB; re-pull is
+minutes if a better VLM appears. The narrower second-reading-DIFF idea (flag disagreement, never source a
+price) survives being wrong half the time in principle, but must beat a simpler check before it is wired
+in. Full write-up + the failure mode: the `vlm-flyer-extraction-failed` memory.
 **L3. DuckDB cache** for the repeated multi-MB JSON parses; **PS7 consolidated runner** for the watcher
 suite's process-spawn overhead. Pure speed, zero user-facing risk.
 **L4. Recipe cost redesign OPEN**: convert the 113 originals + switch site surfaces/rankings to the
