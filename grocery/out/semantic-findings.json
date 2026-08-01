@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-01 10:27",
+    "generated":  "2026-08-01 11:01",
     "board":  "comparison-2026-08-01.json",
-    "sidecar_generated":  "2026-08-01 10:27:46",
+    "sidecar_generated":  "2026-08-01 11:01:14",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -11,10 +11,10 @@
     "examined":  {
                      "board_pairs":  2825,
                      "corpus":  22921,
-                     "rule_invisible":  3348
+                     "rule_invisible":  3319
                  },
     "identity_count":  0,
-    "coverage_count":  62,
+    "coverage_count":  46,
     "identity":  [
 
                  ],
@@ -103,40 +103,10 @@
                          "kind":  "coverage",
                          "id":  "corned-beef-hash",
                          "commodity":  "Corned Beef Hash (canned)",
-                         "store":  "Family Fare",
-                         "product":  "Hormel Corned Beef, Hash, Homestyle 25 Oz",
-                         "cos":  0.6854,
-                         "score":  0.972136,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "corned-beef-hash",
-                         "commodity":  "Corned Beef Hash (canned)",
                          "store":  "Walmart",
                          "product":  "MARY KITCHEN Roast Beef Hash, Canned Roast Beef Hash, 14 oz Can",
                          "cos":  0.7068,
                          "score":  0.970477,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "canned-pumpkin",
-                         "commodity":  "Canned Pumpkin (100% puree)",
-                         "store":  "Baker\u0027s",
-                         "product":  "Libby\u0027s 100% Pure Canned Pumpkin",
-                         "cos":  0.7662,
-                         "score":  0.967408,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "fruit-cups",
-                         "commodity":  "Fruit Cups",
-                         "store":  "Baker\u0027s",
-                         "product":  "Kroger Diced Mango Cups in 100% Juice",
-                         "cos":  0.7046,
-                         "score":  0.966572,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -147,16 +117,6 @@
                          "product":  "Nature Valley Protein Peanut Butter Dark Chocolate Chewy Snack Bars",
                          "cos":  0.826,
                          "score":  0.966469,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "sun-dried-tomatoes",
-                         "commodity":  "Sun-Dried Tomatoes",
-                         "store":  "Baker\u0027s",
-                         "product":  "Bella Sun Luci Sun Dried Julienne Cut with Italian Herbs Tomatoes",
-                         "cos":  0.6696,
-                         "score":  0.965453,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -231,26 +191,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "dried-cranberries",
-                         "commodity":  "Dried Cranberries",
-                         "store":  "Family Fare",
-                         "product":  "Ocean Spray Cranberries, Cherry, Dried 6 Oz",
-                         "cos":  0.7257,
-                         "score":  0.957104,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "brown-gravy-mix",
-                         "commodity":  "Brown Gravy Mix (dry packet)",
-                         "store":  "Family Fare",
-                         "product":  "Our Family Gravy Mix, Reduced Sodium, Brown 0.87 Oz",
-                         "cos":  0.6859,
-                         "score":  0.955875,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "pork-tenderloin",
                          "commodity":  "Pork Tenderloin",
                          "store":  "Walmart",
@@ -271,42 +211,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "canned-potatoes",
-                         "commodity":  "Canned Potatoes",
-                         "store":  "Walmart",
-                         "product":  "Del Monte Diced Potatoes, Canned Vegetables, 14.5 oz Can",
-                         "cos":  0.6991,
-                         "score":  0.947145,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "laundry-detergent",
                          "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
                          "store":  "Family Fare",
                          "product":  "Arm \u0026 Hammer Lndry Dtrgnt Fresh Scent Pls O",
                          "cos":  0.7318,
                          "score":  0.945348,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "vegetable-soup",
-                         "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
-                         "store":  "Baker\u0027s",
-                         "product":  "Progresso Vegetable Classics Vegetable Canned Soup",
-                         "cos":  0.7872,
-                         "score":  0.943798,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "grape-juice",
-                         "commodity":  "Grape Juice",
-                         "store":  "Aldi",
-                         "product":  "Nature S Nectar White Grape 100 Juice 64 FL OZ",
-                         "cos":  0.709,
-                         "score":  0.943674,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -331,16 +241,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "breakfast-sandwiches",
-                         "commodity":  "Frozen Breakfast Sandwiches",
-                         "store":  "Baker\u0027s",
-                         "product":  "Jimmy Dean Protein Breakfast Sausage Egg Cheese Croissant Fully Cooked Frozen Sandwiches",
-                         "cos":  0.7953,
-                         "score":  0.940282,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "walnuts",
                          "commodity":  "Walnuts",
                          "store":  "Walmart",
@@ -361,42 +261,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "toaster-pastries",
-                         "commodity":  "Toaster Pastries",
-                         "store":  "Walmart",
-                         "product":  "Great Value Frosted Toasted Pastries, 12 Count",
-                         "cos":  0.6723,
-                         "score":  0.934504,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "orange-juice",
-                         "commodity":  "Orange Juice",
-                         "store":  "Fareway",
-                         "product":  "Fareway 100% Juice Orange",
-                         "cos":  0.5884,
-                         "score":  0.933447,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "ground-beef-93-7",
                          "commodity":  "93/7 Lean Ground Beef",
                          "store":  "Aldi",
                          "product":  "Simply Nature 93 07 Lean Organic Grass Fed Ground Beef 1 LB",
                          "cos":  0.7039,
                          "score":  0.930861,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "black-olives",
-                         "commodity":  "Black Olives (canned, ripe)",
-                         "store":  "Walmart",
-                         "product":  "Lindsay Black Ripe Sliced Olives, 3.8 oz",
-                         "cos":  0.6747,
-                         "score":  0.92899,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -437,16 +307,6 @@
                          "product":  "ARM \u0026 HAMMER Baking Soda Fresh Sparkling Fresh Scent Liquid Laundry Detergent",
                          "cos":  0.7648,
                          "score":  0.925798,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "rye-bread",
-                         "commodity":  "Rye Bread (loaf)",
-                         "store":  "Family Fare",
-                         "product":  "Beefsteak Bread, Soft Rye, No Seeds 18 Oz",
-                         "cos":  0.5725,
-                         "score":  0.924407,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -541,16 +401,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "dishwasher-detergent",
-                         "commodity":  "Dishwasher Detergent (pacs)",
-                         "store":  "Hy-Vee",
-                         "product":  "Cascade Platinum Action Pacs Fresh Scent, 71Ct",
-                         "cos":  0.6481,
-                         "score":  0.912383,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "storage-bags",
                          "commodity":  "Food Storage Bags (gallon)",
                          "store":  "Aldi",
@@ -567,16 +417,6 @@
                          "product":  "Birds Eye Normandy Blend, Frozen Vegetables Mix",
                          "cos":  0.6455,
                          "score":  0.911675,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "canned-potatoes",
-                         "commodity":  "Canned Potatoes",
-                         "store":  "Walmart",
-                         "product":  "Del Monte Sliced New Potatoes, Canned Vegetables, 14.5 oz Can",
-                         "cos":  0.6955,
-                         "score":  0.911461,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {

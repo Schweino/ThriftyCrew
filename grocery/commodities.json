@@ -11417,7 +11417,8 @@
         "band_max":  1,
         "include":  [
                         "dishwasher\\s+(?:detergent|pacs?|pods?|tabs?)",
-                        "dishwasher"
+                        "dishwasher",
+                        "cascade\\b.{0,40}\\bpacs?\\b"
                     ],
         "exclude":  [
                         "\\bcleaner\\b",
@@ -26045,7 +26046,8 @@
                         "toaster\\s+pastr",
                         "pop[\\s-]?tarts?",
                         "toaster\\s+tarts?",
-                        "pop-?ups"
+                        "pop-?ups",
+                        "toasted\\s+pastr"
                     ],
         "exclude":  [
                         "\\bbites\\b",
@@ -26437,7 +26439,8 @@
                         "peach\\s+cups?",
                         "fruit\\s+bowls?",
                         "mandarin\\s+oranges?\\b.{0,30}juice",
-                        "mixed\\s+fruits?\\b.{0,25}(?:cups?|variety)"
+                        "mixed\\s+fruits?\\b.{0,25}(?:cups?|variety)",
+                        "\\bcups?\\s+in\\s+100%\\s+juice"
                     ],
         "exclude":  [
                         "yog",
@@ -28434,7 +28437,8 @@
                         "breakfast\\s+sandwich",
                         "croissant\\s+sandwich",
                         "biscuit\\s+sandwich",
-                        "sandwiches\\b.{0,35}(?:sausage|egg)"
+                        "sandwiches\\b.{0,35}(?:sausage|egg)",
+                        "breakfast\\b.{0,70}\\bsandwich"
                     ],
         "exclude":  [
                         "\\bmaker\\b",
@@ -32756,7 +32760,8 @@
         "label":  "Vegetable / Vegetable Beef Soup (canned)",
         "unit":  "oz",
         "include":  [
-                        "vegetable\\s+(?:beef\\s+)?soup"
+                        "vegetable\\s+(?:beef\\s+)?soup",
+                        "vegetable\\s+canned\\s+soup"
                     ],
         "exclude":  [
                         "cream\\s+of",
@@ -41158,7 +41163,8 @@
         "unit":  "oz",
         "include":  [
                         "sun.?dried\\s+tomato",
-                        "sun.?dried.{0,30}tomato"
+                        "sun.?dried.{0,30}tomato",
+                        "sun.?dried.{0,40}tomato"
                     ],
         "exclude":  [
                         "pesto",
@@ -42919,7 +42925,8 @@
         "include":  [
                         "brown\\s+gravy\\s+mix",
                         "gravy\\s+mix,?\\s+brown",
-                        "brown\\s+gravy\\b.{0,15}\\b(?:packet|envelope|dry)"
+                        "brown\\s+gravy\\b.{0,15}\\b(?:packet|envelope|dry)",
+                        "gravy\\s+mix,.{0,25}\\bbrown\\b"
                     ],
         "exclude":  [
                         "\\bjar\\b",
@@ -44356,7 +44363,8 @@
                         "marble\\s+rye",
                         "pumpernickel",
                         "rye\\s+loaf",
-                        "bread,?\\s+rye"
+                        "bread,?\\s+rye",
+                        "bread,\\s+(?:\\w+\\s+)?rye\\b"
                     ],
         "exclude":  [
                         "\\bcrisp",

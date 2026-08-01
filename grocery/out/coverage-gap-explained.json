@@ -57,29 +57,8 @@
     },
     {
         "id":  "corned-beef-hash",
-        "store":  "Family Fare",
-        "product":  "Hormel Corned Beef, Hash, Homestyle 25 Oz",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "corned-beef-hash",
         "store":  "Walmart",
         "product":  "MARY KITCHEN Roast Beef Hash, Canned Roast Beef Hash, 14 oz Can",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "canned-pumpkin",
-        "store":  "Baker\u0027s",
-        "product":  "Libby\u0027s 100% Pure Canned Pumpkin",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "fruit-cups",
-        "store":  "Baker\u0027s",
-        "product":  "Kroger Diced Mango Cups in 100% Juice",
         "verdict":  "NO-INCLUDE",
         "detail":  "no include pattern matches"
     },
@@ -87,13 +66,6 @@
         "id":  "protein-bars",
         "store":  "Baker\u0027s",
         "product":  "Nature Valley Protein Peanut Butter Dark Chocolate Chewy Snack Bars",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "sun-dried-tomatoes",
-        "store":  "Baker\u0027s",
-        "product":  "Bella Sun Luci Sun Dried Julienne Cut with Italian Herbs Tomatoes",
         "verdict":  "NO-INCLUDE",
         "detail":  "no include pattern matches"
     },
@@ -147,20 +119,6 @@
         "detail":  "no include pattern matches"
     },
     {
-        "id":  "dried-cranberries",
-        "store":  "Family Fare",
-        "product":  "Ocean Spray Cranberries, Cherry, Dried 6 Oz",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "brown-gravy-mix",
-        "store":  "Family Fare",
-        "product":  "Our Family Gravy Mix, Reduced Sodium, Brown 0.87 Oz",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
         "id":  "pork-tenderloin",
         "store":  "Walmart",
         "product":  "Smithfield Steakhouse Fresh Seasoned Pork Tenderloin, 0.5–1.9 lb, 20 Grams of Protein per 4 oz Serving",
@@ -175,30 +133,9 @@
         "detail":  "no include pattern matches"
     },
     {
-        "id":  "canned-potatoes",
-        "store":  "Walmart",
-        "product":  "Del Monte Diced Potatoes, Canned Vegetables, 14.5 oz Can",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
         "id":  "laundry-detergent",
         "store":  "Family Fare",
         "product":  "Arm \u0026 Hammer Lndry Dtrgnt Fresh Scent Pls O",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "vegetable-soup",
-        "store":  "Baker\u0027s",
-        "product":  "Progresso Vegetable Classics Vegetable Canned Soup",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "grape-juice",
-        "store":  "Aldi",
-        "product":  "Nature S Nectar White Grape 100 Juice 64 FL OZ",
         "verdict":  "NO-INCLUDE",
         "detail":  "no include pattern matches"
     },
@@ -217,13 +154,6 @@
         "detail":  "no include pattern matches"
     },
     {
-        "id":  "breakfast-sandwiches",
-        "store":  "Baker\u0027s",
-        "product":  "Jimmy Dean Protein Breakfast Sausage Egg Cheese Croissant Fully Cooked Frozen Sandwiches",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
         "id":  "walnuts",
         "store":  "Walmart",
         "product":  "Fisher Chef\u0027s Naturals Gluten Free, No Preservatives, Non-GM",
@@ -238,30 +168,9 @@
         "detail":  "no include pattern matches"
     },
     {
-        "id":  "toaster-pastries",
-        "store":  "Walmart",
-        "product":  "Great Value Frosted Toasted Pastries, 12 Count",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "orange-juice",
-        "store":  "Fareway",
-        "product":  "Fareway 100% Juice Orange",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
         "id":  "ground-beef-93-7",
         "store":  "Aldi",
         "product":  "Simply Nature 93 07 Lean Organic Grass Fed Ground Beef 1 LB",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "black-olives",
-        "store":  "Walmart",
-        "product":  "Lindsay Black Ripe Sliced Olives, 3.8 oz",
         "verdict":  "NO-INCLUDE",
         "detail":  "no include pattern matches"
     },
@@ -290,13 +199,6 @@
         "id":  "laundry-detergent",
         "store":  "Baker\u0027s",
         "product":  "ARM \u0026 HAMMER Baking Soda Fresh Sparkling Fresh Scent Liquid Laundry Detergent",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "rye-bread",
-        "store":  "Family Fare",
-        "product":  "Beefsteak Bread, Soft Rye, No Seeds 18 Oz",
         "verdict":  "NO-INCLUDE",
         "detail":  "no include pattern matches"
     },
@@ -364,13 +266,6 @@
         "detail":  "include \u0027pure\\s+pumpkin\u0027 matched, exclude \u0027\\bpie\\b\u0027 killed it"
     },
     {
-        "id":  "dishwasher-detergent",
-        "store":  "Hy-Vee",
-        "product":  "Cascade Platinum Action Pacs Fresh Scent, 71Ct",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
         "id":  "storage-bags",
         "store":  "Aldi",
         "product":  "Boulder Quart Freezer Twin Lock Bags 40 CT",
@@ -381,13 +276,6 @@
         "id":  "frozen-vegetables",
         "store":  "Baker\u0027s",
         "product":  "Birds Eye Normandy Blend, Frozen Vegetables Mix",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "canned-potatoes",
-        "store":  "Walmart",
-        "product":  "Del Monte Sliced New Potatoes, Canned Vegetables, 14.5 oz Can",
         "verdict":  "NO-INCLUDE",
         "detail":  "no include pattern matches"
     },
