@@ -71,6 +71,7 @@ $KNOWN = [ordered]@{
   'explain-coverage-gap.ps1'         = 'diagnoses WHY a swept product is invisible (NO-INCLUDE / EXCLUDED / CLAIMED / MATCHES) before any rule is touched'
   'apply-coverage-batch.ps1'         = 'applies + GATES one batch of commodity include widenings; reverts itself on a batch-attributable tile fault'
   'withdraw-stale-link.ps1'          = 'removes a stored product URL that no longer describes its cell, at a store with no headless resolver'
+  'aisle-test.ps1'                   = 'gates a candidate crown flip on the store''s own shelf department; the prerequisite for any FF/Hy-Vee catalogue-depth work'
   # -- staples-500 per-batch pipeline (batch 1 of 10 done; run once per batch, by hand)
   'prime-batch-headless.ps1'         = 'staples-500 per-batch primer'
   'merge-candidates.ps1'             = 'staples-500 per-batch candidate merge'

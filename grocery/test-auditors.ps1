@@ -1031,6 +1031,20 @@ if ($mpuSrc -match 'url-inputs-archive') { Ok 'merge-product-urls still archives
 else { Bad 'merge-product-urls no longer archives consumed inputs - every past capture will replay on the next run' }
 if ($mpuSrc -match "size field corrupted") { Ok 'the size-field clean twin is armed (a URL-only diff cannot see a basis overwrite)' }
 else { Bad 'merge-product-urls lost the size-verbatim fixture - a replay could flip "100 ct" to "each" with the URL unchanged and every URL diff would call it clean' }
+
+# --- aisle-test (added 2026-08-01) -------------------------------------------------------------------
+# The gate that has to exist before a catalogue browse is allowed to flip crowns: the FF browse test
+# flipped 26 verdicts, ~2/3 to the wrong product (watermelon -> Hefty Fabuloso Watermelon TRASH BAGS).
+$r = RunPS 'aisle-test.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELFTEST: 12/12 pass') { Ok 'aisle-test -SelfTest passes (4 founding flips blocked, hard positive allowed, blind refuses, multi-row unrolls)' }
+else { Bad ('aisle-test -SelfTest failed or lost its founding-bug fixtures: ' + ((($r.text -split "`n") | Select-Object -Last 3) -join ' | ')) }
+$atSrc = Get-Content (Join-Path $root 'aisle-test.ps1') -Raw
+if ($atSrc -match 'Wimmer') { Ok 'the hard-positive fixture (a real hot dog scoring BELOW three of the four failures) is still armed' }
+else { Bad 'aisle-test lost the Wimmer''s Wieners fixture - that case is the whole reason this is not a semantic threshold, and without it someone will rebuild the version that fails' }
+if ($atSrc -match 'the PS 5\.1 unroll bug is back') { Ok 'the multi-row unroll fixture is armed (a collapsed candidates file returns a tidy BLIND and reads as clean)' }
+else { Bad 'aisle-test lost the array-unroll fixture - a multi-candidate file could silently collapse to one row again' }
+if ($atSrc -match 'BLIND REFUSES THE FLIP') { Ok 'aisle-test still documents that BLIND refuses the flip (the one place the estate inverts blind-not-block)' }
+else { Bad 'aisle-test lost the inverted-BLIND rule - if blind starts ALLOWING flips, unjudgeable depth reaches the board' }
 if ($pvlSrc -match 'Remove-OverturnedRejects \$rej \$overturns') { Ok 'the purge still honours a later KEEP verdict (verify-apply''s human-overturn rule)' }
 else { Bad 'purge-verdict-lows no longer subtracts overturned verdicts - it will delete history for a product a human re-reviewed and KEPT' }
 $wpc2 = Get-Content (Join-Path $root 'weekly-post-capture.ps1') -Raw

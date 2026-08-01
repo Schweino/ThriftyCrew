@@ -1,0 +1,74 @@
+﻿[
+    {
+        "id":  "watermelon",
+        "store":  "Family Fare",
+        "product":  "Starbucks Lime Watermelon Refreshers Concentrate 32 Fl Oz",
+        "dept":  "beverages",
+        "aisle":  "beverages/coffee",
+        "verdict":  "BLOCK",
+        "reason":  "candidate sits in \u0027beverages\u0027; category \u0027fruit\u0027 allows only: fresh_fruits_vegetables"
+    },
+    {
+        "id":  "watermelon",
+        "store":  "Family Fare",
+        "product":  "Olay Body Wash Watermelon Agave",
+        "dept":  "health_beauty",
+        "aisle":  "health_beauty/grooming_hygiene",
+        "verdict":  "BLOCK",
+        "reason":  "candidate sits in \u0027health_beauty\u0027; category \u0027fruit\u0027 allows only: fresh_fruits_vegetables"
+    },
+    {
+        "id":  "watermelon",
+        "store":  "Family Fare",
+        "product":  "Pure Kick Drink Mix, Zero Sugar, Strawberry Watermelon, Hydrate 6 Ea",
+        "dept":  "beverages",
+        "aisle":  "beverages/powdered_fluid_drink_mixes",
+        "verdict":  "BLOCK",
+        "reason":  "candidate sits in \u0027beverages\u0027; category \u0027fruit\u0027 allows only: fresh_fruits_vegetables"
+    },
+    {
+        "id":  "milk",
+        "store":  "Family Fare",
+        "product":  "Nestle Hot Cocoa Mix, Rich Milk Chocolate Flavor, Premium 8 Ea",
+        "dept":  "beverages",
+        "aisle":  "beverages/other_hot_beverages",
+        "verdict":  "BLOCK",
+        "reason":  "candidate sits in \u0027beverages\u0027; category \u0027dairy\u0027 allows only: dairy, deli"
+    },
+    {
+        "id":  "milk",
+        "store":  "Family Fare",
+        "product":  "Swiss Miss Milk Chocolate Flavor Hot Cocoa Mix 38.27 Oz",
+        "dept":  "beverages",
+        "aisle":  "beverages/other_hot_beverages",
+        "verdict":  "BLOCK",
+        "reason":  "candidate sits in \u0027beverages\u0027; category \u0027dairy\u0027 allows only: dairy, deli"
+    },
+    {
+        "id":  "milk",
+        "store":  "Family Fare",
+        "product":  "Milk Chocolate Hot Cocoa Mix Our Family (10 Ct)",
+        "dept":  "beverages",
+        "aisle":  "beverages/other_hot_beverages",
+        "verdict":  "BLOCK",
+        "reason":  "candidate sits in \u0027beverages\u0027; category \u0027dairy\u0027 allows only: dairy, deli"
+    },
+    {
+        "id":  "coffee",
+        "store":  "Family Fare",
+        "product":  "Planet Oat Brown Sugar Cookie Oatmilk Creamer 32 Fl Oz",
+        "dept":  "dairy",
+        "aisle":  "dairy/cream_half_half",
+        "verdict":  "BLOCK",
+        "reason":  "candidate sits in \u0027dairy\u0027; category \u0027oils\u0027 allows only: pantry"
+    },
+    {
+        "id":  "coffee",
+        "store":  "Family Fare",
+        "product":  "Natural Bliss Plant Based Oat Brown Sugar Creamer 32 Fl Oz",
+        "dept":  "beverages",
+        "aisle":  "beverages/coffee",
+        "verdict":  "BLOCK",
+        "reason":  "candidate sits in \u0027beverages\u0027; category \u0027oils\u0027 allows only: pantry"
+    }
+]
