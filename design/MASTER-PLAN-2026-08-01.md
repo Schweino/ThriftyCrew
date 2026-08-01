@@ -25,7 +25,7 @@ Every check below was run against LIVE data this morning, not against claims.
 | Hub | 521 cards, 20 badges, 0 stale, Ads hero + AW-18314028055 intact |
 | Rotation | state vs Ghost 20/20; public feed correct (the "malformed feed" was my own parser choking on a BOM browsers strip per spec) |
 | Self-tests | fmt-lib 34, compare-deals, publish change-gate, consistency 5, basis-outlier 5, semantic 3: ALL PASS |
-| Suites | test-auditors 282 green; guards green on the 2026-08-01 board |
+| Suites | test-auditors **308** green (282 at the time of writing, 296 after the day's batches, +12 from the F1 and recipe-identity fixtures); guards RED as of 16:31 - see the note below |
 
 Mid-verification, guards went genuinely red: today's fresh ad pull moved three cells off their stored
 links (a store-brand enchilada sauce displacing Old El Paso, a halved cumin shelf price, a tartar-sauce
@@ -33,6 +33,15 @@ repricing). That was REAL and FRESH, not a regression from the day's work, and i
 sanctioned path (`check-ad-cycles` auto-repair re-pointed the links headlessly, re-guarded, republished:
 the live board now serves week 2026-08-01 clean). The lesson stands: a verification pass that finds a
 red gate should reach for the estate's own orchestrator before reaching for hand surgery.
+
+**AND IT HAPPENED AGAIN, LATER THE SAME DAY. GUARDS ARE RED RIGHT NOW AND PUBLISH IS BLOCKED.** A
+background Family Fare pull at 16:06 brought in `Heinz Tomato Ketchup, 2 Pack 50.5 Oz` with `size=[50.5 oz]`
+- the name states a pack count and the size records ONE unit, so the true total is 101 oz and the per-unit
+would publish at 2x. **Guard 5 caught it in the FEED: it is NOT on the board and no cell is mispriced.**
+Confirmed data-side, not a regression from the F1 or recipe-identity work (nothing committed today touches
+compare-deals or any board builder, and the offending row is in a store file written by a scheduled pull).
+Heal it the sanctioned way - `check-ad-cycles` first, a `multipack-allowlist` entry only if the pack really
+is one unit - and re-guard before anything publishes.
 
 Verification also CAUGHT and FIXED, same morning:
 
@@ -236,6 +245,14 @@ an unreconcilable unit. Never guess a mapping.
 poultry-seasoning/Hy-Vee divergence (board 2.7667 vs link 4.7571) and grows the backlog. Its output was
 discarded both times. The resolver has a quality problem on that row independent of the queue.
 
+**FOLLOW-UP on that row, 2026-08-01 late: `product-urls.json` currently has NO Hy-Vee entry for
+`poultry-seasoning` at all** (only Baker's, Family Fare and Walmart), and none of those three names is the
+"Morton & Bassett Poultry Seasoning / 2.1 oz" the 15:59 consistency report attributes to Hy-Vee. So that
+report row describes a link that is not in the file, i.e. **the mismatch backlog is probably 7, not 8**,
+and the discarded-resolver-output story reads as the link having been withdrawn rather than restored.
+Worth one look before anyone works the backlog off that count. `product-urls.json` was verified unchanged
+against HEAD at the end of the session, so nothing today moved it.
+
 The withdrawals were REVERTED and `product-urls.json` restored to its committed state: 7 cells with a
 tracked drifted link beat 7 cells with no exact link plus a red coverage ratchet. Board verified green.
 
@@ -243,6 +260,20 @@ tracked drifted link beat 7 cells with no exact link plus a red coverage ratchet
 
 **D1. DONE 2026-08-01 - the freeze was formally LIFTED** at Brad's direction. Section 2 is open work.
 **D2. ~200 captured-but-unused verified Sam's prices** sitting idle (board-data-integrity memo).
+**D6. THE MONTHLY RECIPE FLOOR REFRESH IS DUE AND UNAPPLIED (`derive-recipe-floors.ps1 -Apply`).** It is
+scheduled for the 1st at 8am and had not run; the dry run is on disk (`out\recipe-floors-proposed.json`
++ `out\recipe-floors-report.json`, both from 2026-08-01 16:41). Left for a human deliberately, because the
+scheduled task puts a review step between the dry run and `-Apply` and this one is not small:
+- **What it buys:** 542 cells stamped with the product their price came from (the identity fix above only
+  pays once this runs), and it corrects `fries` @ Sam's from $0.0334/oz to the store's actual $0.067 - a
+  LIVE WRONG CROWN, off by exactly 2x.
+- **What it costs:** it also moves **379 prices, 88 of them by more than 25%**. Those 88 are listed in the
+  report and are the entire human workload; a floor moving that far in a month is either a real reprice or
+  a wrong match.
+- **What it does NOT fix:** `boneless-skinless-chicken-thigh` @ Hy-Vee stays at $1.99/lb against the
+  store's $3.996 and keeps the crown, because it has no refresh path at all (see F5 above).
+- Publish is blocked on the red guard in Section 0 regardless, so this cannot reach shoppers until that
+  is healed.
 **D3. Elite-layer decisions never answered**: sparkline tease depth, de-Ghost nav (wants a screenshot),
 Portal accent pass, photo program cap. Defaults were stated in the design doc; silence = defaults, but
 the de-Ghost frame and Portal pass genuinely need your eyes before build.
