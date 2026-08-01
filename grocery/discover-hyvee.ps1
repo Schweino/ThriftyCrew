@@ -215,13 +215,46 @@ foreach ($id in $work) {
 }
 
 $outF = Join-Path $OutDir 'hyvee-discovery.json'
+
+# ---- MERGE, NEVER OVERWRITE ---------------------------------------------------------------------------
+# This used to write only the current slice, and that quietly destroyed the queue. The run is a BOUNDED
+# ROTATION - 40 of 526 terms - so a candidate nobody adjudicated before the cursor moved on vanished until
+# the rotation came back around, about 13 days later. Measured the moment discovery ran twice: a 12-term
+# slice replaced yesterday's 11 open candidates (including That's Smart! peanut butter at -33.4% and
+# ketchup at -29%) with 2. The docket is a QUEUE, not a report of the last slice, and the whole point of
+# F1's adjudication path is that a human works it down over time.
+# So: carry every prior candidate forward EXCEPT the ones that are now settled (they have a ruling) or now
+# re-found in this slice (this run's row is fresher). Settled ones are dropped here as well as suppressed
+# above, so a ruling actually shrinks the file rather than just hiding a line.
+$carried = 0; $dropped = 0
+$prior = @()
+if (Test-Path $outF) {
+  try {
+    $praw = ((Get-Content $outF -Raw -Encoding UTF8) + '').Trim()
+    if ($praw -ne '') { $pj = $praw | ConvertFrom-Json; $prior = @($pj) }
+  } catch {
+    # LOUD. An unreadable docket must not read like an empty one - that would silently discard the queue,
+    # which is the bug this merge exists to stop, wearing the other hat.
+    Write-Output 'WARNING: the existing docket is UNREADABLE - carrying nothing forward. The open queue in it is being lost; restore it from git before trusting this file.'
+    $prior = @()
+  }
+  $thisRun = @{}
+  foreach ($d in $docket) { $thisRun[(Get-DiscoveryKey -Store 'Hy-Vee' -Commodity ([string]$d.id) -ProductId ([string]$d.product_id) -Product ([string]$d.product))] = $true }
+  foreach ($p in @($prior | Where-Object { $_ })) {
+    $k = Get-DiscoveryKey -Store 'Hy-Vee' -Commodity ([string]$p.id) -ProductId ([string]$p.product_id) -Product ([string]$p.product)
+    if ($verdicts.ContainsKey($k)) { $dropped++; continue }
+    if ($thisRun.ContainsKey($k)) { continue }
+    $docket.Add($p); $carried++
+  }
+}
 ($docket.ToArray() | ConvertTo-Json -Depth 4) | Set-Content $outF -Encoding UTF8
 Write-Output ''
 Write-Output ("searched {0} term(s), {1} failed, {2} product(s) scanned" -f $searched, $failed, $scanned)
 if ($noCommodity.Count) { Write-Output ("  {0} requested id(s) are in NO commodity: {1}" -f $noCommodity.Count, (($noCommodity | Select-Object -First 12) -join ', ')) }
 if ($noTerm.Count) { Write-Output ("  {0} commodit(y/ies) have no search term: {1}" -f $noTerm.Count, (($noTerm | Select-Object -First 12) -join ', ')) }
-Write-Output ("DOCKET: {0} candidate(s) that beat what we hold -> {1}" -f $docket.Count, $outF)
-if ($settled -gt 0) { Write-Output ("  ({0} further candidate(s) suppressed - already ruled in discovery-verdicts.json)" -f $settled) }
+Write-Output ("DOCKET: {0} open candidate(s) that beat what we hold -> {1}" -f $docket.Count, $outF)
+Write-Output ("  ({0} found by this slice, {1} carried forward from earlier runs, {2} removed because they are now ruled)" -f ($docket.Count - $carried), $carried, $dropped)
+if ($settled -gt 0) { Write-Output ("  ({0} further candidate(s) suppressed during the search - already ruled)" -f $settled) }
 Write-Output 'ADVISORY ONLY: nothing here reaches a board. Adjudicate before any of it is priced -'
 Write-Output 'Hy-Vee publishes no per-product department, so aisle-test CANNOT vet these (see the header).'
 Write-Output 'Read them ranked in the arrivals desk PROSPECTS section; rule them with adjudicate-discovery.ps1.'

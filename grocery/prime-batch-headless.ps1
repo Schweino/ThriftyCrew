@@ -138,7 +138,11 @@ if ($Store -eq 'hyvee' -or $Store -eq 'both') {
   $HStore = 1465
   function HV-Search($term) {
     $h = @{ 'content-type' = 'application/json'; 'User-Agent' = $HUA; 'x-hy-vee-correlation-id' = [guid]::NewGuid().ToString() }
-    $body = @{ pageNumber = 1; pageSize = 40; searchFilters = @(); searchTerm = $term; sortDirection = 'RELEVANCE'; storeId = $HStore; pageViewId = [guid]::NewGuid().ToString() } | ConvertTo-Json -Compress
+    # pageSize 90, was 40 (F1(c), 2026-08-01). Cheap - one request either way - but MEASURED to be a small
+    # lever, not the one the plan assumed: Hy-Vee's own "baking soda" search returns 10 products in TOTAL,
+    # so the extra 50 slots only do anything for genuinely broad terms. Taken because it costs nothing, not
+    # because it fixes the depth problem; the depth problem is discover-hyvee.ps1.
+    $body = @{ pageNumber = 1; pageSize = 90; searchFilters = @(); searchTerm = $term; sortDirection = 'RELEVANCE'; storeId = $HStore; pageViewId = [guid]::NewGuid().ToString() } | ConvertTo-Json -Compress
     for ($a = 1; $a -le 3; $a++) { try { return @((Invoke-RestMethod -Uri $EP -Method Post -Headers $h -Body $body -TimeoutSec 25).results) } catch { Start-Sleep -Seconds (2 * $a) } }
     return @()
   }

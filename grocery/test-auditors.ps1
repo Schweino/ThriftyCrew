@@ -1579,6 +1579,24 @@ $rpF = @((Get-Content (Join-Path $fix 'arrivals-prospects.json') -Raw) + (Get-Co
 if ($rpF -match 'NEVER regenerate' -and $rpF -match '9990003') { Ok 'prospects fixtures are still the frozen founding cases' }
 else { Bad 'the prospects fixtures were regenerated - they no longer pin the founding wrong products' }
 
+# MUST FIRE: the docket is a QUEUE, not a report of the last slice. discover-hyvee walks a BOUNDED ROTATION
+# (40 of 526 terms), and it used to overwrite the file - so a candidate nobody adjudicated before the cursor
+# moved on vanished until the rotation came back around ~13 days later. Caught the first time discovery ran
+# twice: a 12-term slice replaced 11 open candidates (That's Smart! peanut butter at -33.4%, ketchup at -29%)
+# with 2. Source-scanned because reproducing it needs two live network runs.
+$dhSrc = Get-Content (Join-Path $root 'discover-hyvee.ps1') -Raw
+$dhMergeAt = $dhSrc.IndexOf('MERGE, NEVER OVERWRITE')
+$dhWriteAt = $dhSrc.IndexOf('($docket.ToArray() | ConvertTo-Json')
+if ($dhMergeAt -gt 0 -and $dhWriteAt -gt $dhMergeAt -and $dhSrc -match '\$docket\.Add\(\$p\); \$carried\+\+') {
+  Ok 'discovery docket MERGES the open queue forward instead of overwriting it with the current slice'
+} else { Bad 'discover-hyvee overwrites its docket again - every unadjudicated candidate outside the current 40-term slice is being discarded' }
+# MUST FIRE, the ordering half of the cycle wiring: the desk reads the docket, so discovery has to run first.
+$cacSrc = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
+$cacDisc = $cacSrc.IndexOf("'discover-hyvee.ps1'")
+$cacArr  = $cacSrc.IndexOf("'build-arrivals-docket.ps1'")
+if ($cacDisc -gt 0 -and $cacArr -gt $cacDisc) { Ok 'the cycle runs discover-hyvee BEFORE the arrivals desk that reads its docket' }
+else { Bad 'check-ad-cycles builds the arrivals docket before discovery writes it - the PROSPECTS section will always show yesterday' }
+
 # the verdict intake itself: 14 hermetic checks, including that ACCEPT writes a work-list row and not a price
 $r = RunPS 'adjudicate-discovery.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELFTEST: all') { Ok ('adjudicate-discovery self-test: ' + (($r.text -split "`n" | Where-Object { $_ -match 'SELFTEST: all' }) -join '')) }

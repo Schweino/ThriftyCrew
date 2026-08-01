@@ -497,6 +497,24 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # ADVISORY BY CONSTRUCTION. Measured precision on the flag tier is 5-15% (2026-07-30: 14 flags, 1 real
       # defect), so it is a queue for an agent, not a gate. The script exits only 0 or 3 and this block turns
       # every outcome into a $summary line. Do NOT promote it to a publish hold on that precision.
+      # ---- DISCOVERY, BEFORE THE DESK THAT READS IT (F1(b), 2026-08-01) -------------------------------
+      # pull-regular-hyvee is a REFRESH, not a pull: its work list is two closed sets, so 1,538 rows is a
+      # fixed point and 89.3% of the Hy-Vee catalogue is absent. discover-hyvee is the only door in, and it
+      # writes a DOCKET rather than the feed because Hy-Vee publishes no per-product department and its
+      # CATEGORY facet is silently ignored as a filter - so ~14% of what it finds is a wrong product and a
+      # human has to rule on every one.
+      # AFFORDABLE, measured rather than assumed: 2.14s per term (one search per TERM, not per product), so
+      # the 40-term slice below costs ~85s and walks all 526 terms in about 13 days. The plan's earlier
+      # caution quoted ~598 ms/PRODUCT, which is the per-product GraphQL cost of the PULLER and does not
+      # apply here.
+      # ORDER MATTERS: it runs BEFORE build-arrivals-docket, because the desk's PROSPECTS section reads the
+      # docket this writes. Reversed, the desk would always show yesterday's findings.
+      # Non-fatal and advisory - it can never touch a board.
+      try {
+        $dhOut = @(& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'discover-hyvee.ps1') -Slice 40)
+        @($dhOut | Where-Object { $_ -match '^DOCKET:|^  \(|SEARCH FAILED|^BLIND' }) | ForEach-Object { Log ('discover-hyvee: ' + $_) }
+      } catch { Log ('discover-hyvee threw: ' + $_.Exception.Message); $summary += 'REVIEW    discover-hyvee threw - no NEW Hy-Vee products were looked for today (the refresh-only puller cannot find any on its own)' }
+
       try {
         # No 2>&1 on the child: under EAP=Stop a native child's first stderr line becomes a TERMINATING throw,
         # which would swallow the docket into the catch below and log it as "threw" with no docket written.

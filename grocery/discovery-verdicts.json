@@ -1,4 +1,43 @@
 {
-  "readme": "SETTLED RULINGS on discovery candidates - the adjudication ledger for out\\hyvee-discovery.json. Written ONLY by adjudicate-discovery.ps1, which requires a named reviewer and real evidence. A candidate with an entry here never appears on the arrivals desk again: discover-hyvee.ps1 stops surfacing it and build-arrivals-docket.ps1 stops listing it. verdict 'accepted' means a human judged the product IS the commodity, and it was added to hyvee-catalog-adds.json so the daily Hy-Vee refresh prices it from the store's own API - acceptance NEVER writes a price or a board cell. verdict 'rejected' means the product is NOT the commodity; the same command also files it in known-wrong.json, which compare-deals enforces, so the row is not eligible to be priced at all. An accepted product that later proves wrong is retired the normal way, through add-known-wrong.ps1 - the ledger records what was decided, it does not outrank a later ruling.",
-  "entries": []
+    "readme":  "SETTLED RULINGS on discovery candidates - the adjudication ledger for out\\hyvee-discovery.json. Written ONLY by adjudicate-discovery.ps1, which requires a named reviewer and real evidence. A candidate with an entry here never appears on the arrivals desk again: discover-hyvee.ps1 stops surfacing it and build-arrivals-docket.ps1 stops listing it. verdict \u0027accepted\u0027 means a human judged the product IS the commodity, and it was added to hyvee-catalog-adds.json so the daily Hy-Vee refresh prices it from the store\u0027s own API - acceptance NEVER writes a price or a board cell. verdict \u0027rejected\u0027 means the product is NOT the commodity; the same command also files it in known-wrong.json, which compare-deals enforces, so the row is not eligible to be priced at all. An accepted product that later proves wrong is retired the normal way, through add-known-wrong.ps1 - the ledger records what was decided, it does not outrank a later ruling.",
+    "entries":  [
+                    {
+                        "key":  "hyvee|olive-oil|39221",
+                        "store":  "Hy-Vee",
+                        "commodity":  "olive-oil",
+                        "product":  "Pasta Roni Garlic \u0026 Olive Oil Vermicelli",
+                        "product_id":  "39221",
+                        "size":  "4.6 oz",
+                        "per_unit":  0.3217,
+                        "unit":  "floz",
+                        "held_per_unit":  0.4112,
+                        "beats_by_pct":  21.8,
+                        "verdict":  "rejected",
+                        "basis_suspect":  "size \u00274.6 oz\u0027 names a WEIGHT but this commodity is priced per floz - the per-unit divided weight ounces as if they were fluid ounces",
+                        "basis_overridden":  false,
+                        "evidence":  "Pasta Roni Garlic \u0026 Olive Oil VERMICELLI - a boxed pasta side dish, not olive oil. It matched the include on the words olive oil in a flavour name, and its 21.8% saving is also an artefact: 4.6 WEIGHT ounces divided as fluid ounces.",
+                        "ruled_by":  "plan-run-2026-08-01",
+                        "ruled_on":  "2026-08-01",
+                        "docket_source":  "hyvee-discovery.json"
+                    },
+                    {
+                        "key":  "hyvee|olive-oil|65514",
+                        "store":  "Hy-Vee",
+                        "commodity":  "olive-oil",
+                        "product":  "Hendrickson\u0027s Sweet Vinegar \u0026 Olive Oil",
+                        "product_id":  "65514",
+                        "size":  "16 fl oz",
+                        "per_unit":  0.3119,
+                        "unit":  "floz",
+                        "held_per_unit":  0.4112,
+                        "beats_by_pct":  24.2,
+                        "verdict":  "rejected",
+                        "basis_suspect":  "",
+                        "basis_overridden":  false,
+                        "evidence":  "Hendrickson\u0027s Sweet Vinegar \u0026 Olive Oil is a salad DRESSING, not olive oil. Same permissive-include class as the Violi sunflower blend already ruled wrong for olive-oil at Family Fare.",
+                        "ruled_by":  "plan-run-2026-08-01",
+                        "ruled_on":  "2026-08-01",
+                        "docket_source":  "hyvee-discovery.json"
+                    }
+                ]
 }

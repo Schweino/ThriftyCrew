@@ -620,6 +620,36 @@
                         "ruled_on":  "2026-08-01",
                         "ruled_by":  "plan-run-2026-08-01",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "olive-oil|HyVee|pasta-roni-garlic-olive-oil-vermicelli",
+                        "commodity":  "olive-oil",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Pasta Roni Garlic \u0026 Olive Oil Vermicelli"
+                                  ],
+                        "product_id":  "39221",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Pasta Roni Garlic \u0026 Olive Oil VERMICELLI - a boxed pasta side dish, not olive oil. It matched the include on the words olive oil in a flavour name, and its 21.8% saving is also an artefact: 4.6 WEIGHT ounces divided as fluid ounces.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "plan-run-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "olive-oil|HyVee|hendricksons-sweet-vinegar-olive-oil",
+                        "commodity":  "olive-oil",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Hendrickson\u0027s Sweet Vinegar \u0026 Olive Oil"
+                                  ],
+                        "product_id":  "65514",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Hendrickson\u0027s Sweet Vinegar \u0026 Olive Oil is a salad DRESSING, not olive oil. Same permissive-include class as the Violi sunflower blend already ruled wrong for olive-oil at Family Fare.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "plan-run-2026-08-01",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
