@@ -109,7 +109,26 @@ try { (Get-Content (Join-Path $root 'pipeline\v2-perserving.json') -Raw | Conver
 $freeSet=@{}; $freeList=@()
 try {
   $fr=Get-Content (Join-Path $root 'free-rotation.json') -Raw | ConvertFrom-Json
-  foreach($f in $fr.free){ $freeSet[[string]$f.slug]=$true }
+  # THE BADGE FOLLOWS GHOST, NOT THE ROTATION'S INTENT. free-rotation.json records what the rotation MEANT
+  # to free; the paywall is what a visitor actually meets. On 2026-07-31 those disagreed on one recipe
+  # (chicken-40-cloves-garlic: listed free, live paid), so the hub was showing a gold "Free this week"
+  # ribbon on a post that opens a paywall. That is the worst kind of wrong on a conversion surface - it
+  # spends the trust the free shelf exists to build. Every candidate is checked against the live post
+  # before it earns a badge, and a mismatch is reported loudly rather than absorbed.
+  $jwtF=New-GhostJWT; $skew=@()
+  foreach($f in $fr.free){
+    $sl=[string]$f.slug
+    try {
+      $p=(Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/slug/$sl/?fields=id,visibility" -Headers @{Authorization="Ghost $jwtF";'Accept-Version'='v5.0'}).posts[0]
+      if([string]$p.visibility -eq 'public'){ $freeSet[$sl]=$true } else { $skew += ($sl + '=' + [string]$p.visibility) }
+    } catch {
+      # cannot confirm -> no badge. An unverified promise is not a promise worth printing.
+      $skew += ($sl + '=UNVERIFIABLE')
+    }
+  }
+  if(@($skew).Count){
+    Write-Warning ("FREE-ROTATION SKEW: free-rotation.json lists these as free but Ghost does not serve them free, so they are NOT badged: " + ($skew -join ', ') + ". Re-run rotate-free-dinners.ps1 or fix the post visibility; the rotation owns this, not the hub build.")
+  }
 } catch { Write-Warning 'free-rotation.json unreadable - FREE badges will be absent this run' }
 
 $rows=@()
@@ -508,21 +527,26 @@ $hubJs = Compress-TcAsset ((Get-TcMotionJs) + @'
       }
     });
   }
-  // FREE badges, honestly. The rotation flips daily-ish and this page rebuilds on publish, so the build
-  // stamps the badges and the rotation's own feed corrects them in between.
+  // FREE badges between rebuilds. The rotation flips daily-ish and this page only rebuilds on publish,
+  // so the feed keeps the badges current in the gap.
+  //
+  // THIS PASS CAN ONLY TAKE A BADGE AWAY, NEVER ADD ONE, and the asymmetry is deliberate. The build
+  // verified each badge against the live post's actual visibility; this feed carries the rotation's
+  // INTENT, and the two disagreed on 2026-07-31 (one recipe listed free, still paywalled). Letting the
+  // feed add badges would put the unverified source back in charge of the promise. A recipe freed since
+  // the last build waits for the next one to get its ribbon, which costs nothing; a gold "Free this week"
+  // ribbon on a paywall costs the trust the free shelf exists to build.
   fetch("https://smp-feed.ancient-snow-93df.workers.dev/free-dinners.json").then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}).then(function(fd){
     if(!fd||!fd.free||!fd.free.length) return;
     var live={}; fd.free.forEach(function(x){ live[x.slug]=1; });
-    var changed=0;
     cards.forEach(function(c){
+      if(!c.free) return;
       var m=(c.el.getAttribute("href")||"").match(/thriftycrew\.com\/([a-z0-9-]+)\//);
-      var isFree=!!(m&&live[m[1]]);
-      if(isFree===c.free) return;
-      changed++;
-      c.free=isFree;
+      if(m&&live[m[1]]) return;
+      c.free=false;
+      c.el.removeAttribute("data-free");
       var rib=c.el.querySelector(".mpr-free");
-      if(isFree){ c.el.setAttribute("data-free","1"); if(!rib){ var s=document.createElement("span"); s.className="mpr-free"; s.textContent="Free this week"; c.el.insertBefore(s,c.el.firstChild); } }
-      else { c.el.removeAttribute("data-free"); if(rib) rib.parentNode.removeChild(rib); }
+      if(rib) rib.parentNode.removeChild(rib);
     });
   });
 })();
@@ -678,7 +702,10 @@ if($Publish){
   Start-Sleep -Seconds 2
   $pub=(Invoke-WebRequest -Uri 'https://www.thriftycrew.com/meal-prep-recipes/' -UseBasicParsing -TimeoutSec 30).Content
   $liveCards=([regex]::Matches($pub,'<a class="mpr-card"')).Count
-  $hasCount=($pub -match "$total high-protein meal prep dinners")
+  # the count is wrapped in <span class="tc-rc"> (so the site-wide head script can live-update it between
+  # rebuilds), which means the old literal "513 high-protein..." test has been reporting False since that
+  # wrapping landed on 2026-07-26. A verification line that always says False is not a verification line.
+  $hasCount=($pub -match ('<span class="tc-rc">' + $total + '</span> high-protein meal prep dinners'))
   $hasFilters=($pub -match 'id="mpr-sort"')
   $hasScript=($pub -match 'mpr-tonight-out')
   "PUBLISHED. live cards=$liveCards  copy-updated=$hasCount  sort-live=$hasFilters  script-live=$hasScript"

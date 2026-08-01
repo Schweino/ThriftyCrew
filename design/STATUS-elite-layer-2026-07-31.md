@@ -3,8 +3,8 @@
 Implementation of `design-elite-layer-2026-07-31.md` (which assumes `redesign-board-mealprep-2026-07-31.md`,
 also unbuilt at the start of this session, so both were built together).
 
-**Everything below is BUILT, GATED and STAGED. Nothing has been published.** Three publish actions are
-waiting on Brad, listed at the bottom.
+**SHIPPED 2026-07-31**, except the board, which stays staged behind the grocery freeze. Committed as
+`da9ae9f8` and pushed. What went live and what is verified is at the bottom.
 
 ---
 
@@ -128,20 +128,38 @@ files first). 34 frozen cases, must-fire plus clean twins, wired into `test-audi
 
 ---
 
-## Waiting on Brad
+## What went live, and how it was verified
 
-1. **Publish the hub.** `build-hub-grid.ps1 -Publish`. One page, reversible from
-   `site-backups\meal-prep-recipes-BEFORE-elite-2026-07-31.html`. This is the Google Ads landing page, so
-   re-verify the AW-18314028055 conversion tag fires afterward.
-2. **Republish 513 recipe posts.** `engine\publish.ps1 -All`, through the existing change-gate/resume path.
-   Read the spec-guards-prose-merge REVERT notes first.
-3. **Paste `design\wave0-codeinjection-head.html`** into Settings -> Code injection -> Site header. Needs a
-   logged-in owner browser session; the Admin API key is read-only for settings. Head has 37,111 chars
-   free. **`codeinjection_foot` has 164 chars free**, which blocks the Wave 3 interstitial restyle until
-   something there is minified.
-4. **The board publishes after the freeze lifts (~08-07), with your go.** Two live display bugs (the
-   `356¢/oz` and the `$0.00` record card) are fixed in the staged build; whether they ride ahead of the
-   freeze was already yours to call.
+1. **The hub** (`build-hub-grid.ps1 -Publish`). 521 cards live (513 grid + 8 rail), free rail, leaderboard,
+   ticker, sort control and the client script all present on the public page. The Ads contract held: the
+   H1 and hero copy are byte-identical and the **AW-18314028055 conversion tag is still on the page**.
+   At 375px there is zero horizontal page scroll and zero element overflowing the viewport outside the
+   free rail, which is a horizontal scroller by design. Reversible from
+   `site-backups\meal-prep-recipes-BEFORE-elite-2026-07-31.html`.
+2. **Wave 0 site chrome**, appended to `codeinjection_head` through a logged-in owner browser session (the
+   Admin API key is read-only for settings). Head went 28,424 -> 29,659 of 65,535. Verified live:
+   theme-color, apple-mobile-web-app-title, both touch icons (served 200 by the worker), `color-scheme:
+   light`, and exactly **one** theme-color on the page, so nothing in the theme is competing with it.
+3. **513 recipe posts**, through `engine\publish.ps1 -All` and its existing change-gate/resume path.
+   Spot-checked live at 375px: the stat band reads "$1.51 cheapest this week / $2.01 everyday" and agrees
+   with the receipt total of $21.08, the savings sentence is showing, the composition bar has its
+   segments, three related cards render, the mini-scaler is present, and nothing overflows.
+   `publish.ps1` preserves each post's existing visibility (the rotation owns it), so the twenty
+   currently-free dinners stayed free.
+
+**`codeinjection_foot` has 164 chars free.** That blocks the Wave 3 interstitial restyle until something
+there is minified. It is the one hard resource limit in the way of finishing the program.
+
+## Still parked
+
+**The board publishes after the freeze lifts (~08-07), with your go.** It builds green and is staged at
+`out\deals-page.html`. Two live display bugs (`356¢/oz` and the `$0.00` record card) are fixed there;
+whether they ride ahead of the freeze was already your call, and the fix is one publish away whenever
+you want it.
+
+Not built, deliberately: the de-Ghost frame and the Portal pass (both need your sign-off on a screenshot
+first), the interstitial restyle (blocked on foot budget, and it ships last by design), OG images, the
+unlock moment, and the board half of Shop-This-Recipe. Those are Wave 3.
 
 Not built, and deliberately: the de-Ghost frame and the Portal pass (both need your sign-off on a
 screenshot first), the interstitial restyle (blocked on foot budget, and it ships last by design), OG
