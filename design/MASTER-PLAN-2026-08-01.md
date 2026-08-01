@@ -83,10 +83,27 @@ THE ORIGINAL PROCEDURE, learned from the `cheese,\s+shredded` regression:
 - Skip anything ambiguous (a "Pumpkin Pie" under pie-pumpkins is a judgment call): leave it in the
   findings file with a note rather than forcing a rule.
 
-**2. The Family Fare aisle test, built on `/rank-commodity`.** Resume-list item 2, and the sidecar was
-built partly to unblock it: score every FF catalogue product against its would-be commodity BEFORE
-letting depth flip crowns (the browse test flipped 26, two-thirds wrongly). Deliverable: a gate script
-that takes a candidate crown flip and returns match confidence. This is the prerequisite for item F1.
+**2. DONE 2026-08-01 - `grocery\aisle-test.ps1` ships.** F1 is unblocked.
+
+It is NOT built on `/rank-commodity`, and that matters. The semantic build was measured and FAILED: across
+all 2,825 shipped board pairs the score distributions interleave (a real hot dog, "Wimmer's Wieners",
+scores BELOW three of the four founding failures), because a cross-encoder measures vocabulary overlap,
+not membership. The peer-relative variant failed too. What works is the store's own taxonomy - Family
+Fare's `canonical_url` is a shelf path on 99.7% of rows - gated on DEPARTMENT via an authored, reviewed
+category->department allowlist. An earlier version that LEARNED the allowlist from rule-matched rows
+allowed an Olay body wash into `watermelon`, because the polluted rule had already taught it that
+health_beauty was normal: a gate cannot learn its baseline from the thing it audits.
+
+Result: 7.8% of rule-matched FF rows blocked, ~8 in 10 true pollution. BLIND INVERTS here (no shelf
+evidence = no flip). Known limit: department-level only, so it cannot separate coffee from creamer when
+the store shelves both in `beverages`.
+
+**2b. FINDING that fell out of it, worth its own work:** `fruit` commodities are only 34% produce - 26%
+pantry, 24% BEVERAGES, 7% HEALTH_BEAUTY. A quarter of everything the fruit rules match is a drink. Those
+wrong matches lose on price today, which is precisely the accidental-relevance-filter effect. `snacks`
+(47% beverages) and `oils` (69% pantry / 29% beverages) are similar. Also: `coffee` is filed under the
+estate category `oils`, almost certainly a miscategorisation - recategorising moves it on the public
+board's category filter, so it was left for a deliberate call.
 
 **3. DONE 2026-08-01 - the sweep runs nightly** inside check-ad-cycles as an advisory step beside the
 coverage-gap guard: BLIND-not-block (proven reachable by pointing `-Python` at a path that does not
@@ -97,8 +114,11 @@ about regex and structurally cannot see a product whose name shares no vocabular
 ## Section 2: UNBLOCKED 2026-08-01 (was freeze-gated; the freeze was lifted at Brad's word)
 
 **F1. Discovery depth**: `discover-hyvee.ps1` + prime-batch-headless pageSize 40->90 + cycle wiring.
-Built and verified per the resume list; the dominant defect class is ABSENT catalogue (Hy-Vee misses
-89.3%). Ships only behind the aisle test (item 2 above).
+The dominant defect class is ABSENT catalogue (Hy-Vee misses 89.3%). **The aisle-test prerequisite is now
+MET (item 2), so this is unblocked.** CORRECTION to the earlier note that it was "built and verified":
+`discover-hyvee.ps1` does NOT exist in the repo - a file search on 2026-08-01 found no `discover-*.ps1`
+at all. It needs building, not applying. Budget it as a real piece of work, and run the aisle test over
+its candidate flips before any of them reach a board.
 **F2. everyday-mismatch reads BOTH boards** (16 of 19 pins sit outside its view today).
 **F3. ff-carry window contention + the freezer-pops term.**
 **F4. Baseline tolerance narrowing** from the week's accumulated ledger data (the freeze week's whole
