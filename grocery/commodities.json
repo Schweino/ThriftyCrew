@@ -11435,7 +11435,8 @@
         "include":  [
                         "trash\\s+bags?",
                         "garbage\\s+bags?",
-                        "\\bkitchen\\s+bags?\\b"
+                        "\\bkitchen\\s+bags?\\b",
+                        "tall\\s+kitchen.{0,40}bags?"
                     ],
         "exclude":  [
                         "\\bcans?\\b",
@@ -21898,7 +21899,8 @@
         "band_max":  0.5,
         "include":  [
                         "italian\\s+dressing",
-                        "zesty\\s+italian"
+                        "zesty\\s+italian",
+                        "italian\\s+salad\\s+dressing"
                     ],
         "exclude":  [
                         "\\bmix\\b",
@@ -22884,7 +22886,8 @@
                              "\\bcanned\\b"
                          ],
         "include":  [
-                        "chicken\\s+noodle\\s+soup"
+                        "chicken\\s+noodle\\s+soup",
+                        "chicken\\s+noodle\\b.{0,25}soup"
                     ],
         "exclude":  [
                         "ramen",
@@ -25439,7 +25442,8 @@
                          ],
         "include":  [
                         "microwave\\s+popcorn",
-                        "popcorn\\b.{0,20}\\bbags?\\b"
+                        "popcorn\\b.{0,20}\\bbags?\\b",
+                        "microwave\\b.{0,30}popcorn"
                     ],
         "exclude":  [
                         "chicken",
@@ -27918,7 +27922,8 @@
         "band_min":  0.4,
         "band_max":  3,
         "include":  [
-                        "instant\\s+coffee"
+                        "instant\\s+coffee",
+                        "instant\\b.{0,25}coffee"
                     ],
         "exclude":  [
                         "creamer",
@@ -30045,7 +30050,9 @@
                         "(?:maxi|feminine|overnight)\\s+pads?",
                         "always\\s+pads?",
                         "always\\b.{0,25}pads?",
-                        "maxi\\b.{0,15}pads?"
+                        "maxi\\b.{0,15}pads?",
+                        "ultra\\s*thin\\b.{0,25}pads?",
+                        "maxi\\b.{0,30}pads?"
                     ],
         "exclude":  [
                         "pupp",
@@ -30095,7 +30102,8 @@
         "band_max":  0.12,
         "include":  [
                         "baby\\s+wipes?",
-                        "pampers\\s+wipes?"
+                        "pampers\\s+wipes?",
+                        "huggies\\b.{0,45}wipes?"
                     ],
         "exclude":  [
                         "\\bwarmer\\b"
@@ -33919,7 +33927,8 @@
                         "pear\\s+halves",
                         "sliced\\s+pears?",
                         "diced\\s+pears?",
-                        "pears?\\s+in\\s+(?:light\\s+|heavy\\s+|100%\\s+)?(?:juice|syrup)"
+                        "pears?\\s+in\\s+(?:light\\s+|heavy\\s+|100%\\s+)?(?:juice|syrup)",
+                        "pear\\s+slices?"
                     ],
         "exclude":  [
                         "\\bfresh\\b",
@@ -35380,7 +35389,8 @@
         "include":  [
                         "caesar\\s+dressing",
                         "creamy\\s+caesar",
-                        "caesar\\s+vinaigrette"
+                        "caesar\\s+vinaigrette",
+                        "caesar\\s+salad\\s+dressing"
                     ],
         "exclude":  [
                         "crouton",
@@ -36924,7 +36934,8 @@
         "include":  [
                         "pickled\\s+jalape[n\\u00f1]os?",
                         "jalape[n\\u00f1]o\\s+(?:slices|rings|nacho)",
-                        "(?:nacho|tamed|sliced|diced)\\s+(?:hot\\s+)?jalape[n\\u00f1]os?"
+                        "(?:nacho|tamed|sliced|diced)\\s+(?:hot\\s+)?jalape[n\\u00f1]os?",
+                        "jalape[nñ]o\\s+peppers,?\\s+pickled"
                     ],
         "exclude":  [
                         "green\\s+chil",
@@ -41140,7 +41151,8 @@
         "label":  "Sun-Dried Tomatoes",
         "unit":  "oz",
         "include":  [
-                        "sun.?dried\\s+tomato"
+                        "sun.?dried\\s+tomato",
+                        "sun.?dried.{0,30}tomato"
                     ],
         "exclude":  [
                         "pesto",
@@ -41238,7 +41250,8 @@
         "unit":  "oz",
         "include":  [
                         "chipotles?\\s+(peppers?\\s+)?in\\s+adobo",
-                        "chipotles?\\s+en\\s+adobo"
+                        "chipotles?\\s+en\\s+adobo",
+                        "chipotles?,?\\s+(?:peppers?\\s+)?in\\s+adobo"
                     ],
         "exclude":  [
                         "seasoning",

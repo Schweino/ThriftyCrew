@@ -1,0 +1,618 @@
+﻿[
+    {
+        "id":  "laundry-detergent",
+        "store":  "Family Fare",
+        "product":  "Arm \u0026 Hammer Stain Fighters Fresh Scent Detergent 32.5 Fl Oz",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "laundry-detergent",
+        "store":  "Family Fare",
+        "product":  "Arm \u0026 Hammer Stain Fighters Fresh Scent Detergent 100.5 Fl Oz",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "laundry-detergent",
+        "store":  "Baker\u0027s",
+        "product":  "ARM \u0026 HAMMER Clean Burst Scent Liquid Laundry Detergent",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "pickled-jalapenos",
+        "store":  "Family Fare",
+        "product":  "La Costena Jalapeno Peppers, Pickled 12 Oz",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "laundry-detergent",
+        "store":  "Baker\u0027s",
+        "product":  "ARM \u0026 HAMMER Sensitive Skin Plus Fresh Scent Liquid Laundry Detergent",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "ground-pork",
+        "store":  "Baker\u0027s",
+        "product":  "Ground Beef and Pork Blend, 80% Lean/20% Fat",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "laundry-detergent",
+        "store":  "Baker\u0027s",
+        "product":  "ARM \u0026 HAMMER Clean Burst Liquid Laundry Detergent",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "ground-beef-93-7",
+        "store":  "Walmart",
+        "product":  "Marketside Organic Grass-Fed Ground Beef, 93% Lean/7% Fat, 1 lb",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u002793\\s*%?\\s*lean\u0027 matched, exclude \u0027organic\u0027 killed it"
+    },
+    {
+        "id":  "feminine-pads",
+        "store":  "Baker\u0027s",
+        "product":  "Kroger Ultra Thin Pads with Wings Regular Size 1 Unscented",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "laundry-detergent",
+        "store":  "Baker\u0027s",
+        "product":  "ARM \u0026 HAMMER Plus OxiClean Fresh Scent Powder Laundry Detergent",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer.{0,60}(?:oxi\\s*-?\\s*clean|odor\\s*blasters?)\u0027 matched, exclude \u0027\\bpowder\\b\u0027 killed it"
+    },
+    {
+        "id":  "corned-beef-hash",
+        "store":  "Family Fare",
+        "product":  "Hormel Corned Beef, Hash, Homestyle 25 Oz",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "corned-beef-hash",
+        "store":  "Walmart",
+        "product":  "MARY KITCHEN Roast Beef Hash, Canned Roast Beef Hash, 14 oz Can",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "chicken-noodle-soup",
+        "store":  "Walmart",
+        "product":  "Progresso Traditional Chicken Noodle Canned Soup, 19 oz",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "trash-bags",
+        "store":  "Baker\u0027s",
+        "product":  "Kroger Clean Linen Scent Strong-Flex Tall Kitchen 13 Gallon Drawstring Bags",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "canned-pumpkin",
+        "store":  "Baker\u0027s",
+        "product":  "Libby\u0027s 100% Pure Canned Pumpkin",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "fruit-cups",
+        "store":  "Baker\u0027s",
+        "product":  "Kroger Diced Mango Cups in 100% Juice",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "protein-bars",
+        "store":  "Baker\u0027s",
+        "product":  "Nature Valley Protein Peanut Butter Dark Chocolate Chewy Snack Bars",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "sun-dried-tomatoes",
+        "store":  "Baker\u0027s",
+        "product":  "Bella Sun Luci Sun Dried Julienne Cut with Italian Herbs Tomatoes",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "trash-bags",
+        "store":  "Baker\u0027s",
+        "product":  "Kroger Strong-Flex Unscented Tall Kitchen 13 Gallon Drawstring Bags",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "cranberry-juice",
+        "store":  "Family Fare",
+        "product":  "Ocean Spray Juice Drink, Cranberry, Zero Sugar 64 Fl Oz",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "pork-tenderloin",
+        "store":  "Walmart",
+        "product":  "Prairie Fresh Natural Fresh Pork Half Loin, Boneless, 3.5- 5.5 lb, 22g of Protein per 4oz Serving",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "laundry-detergent",
+        "store":  "Family Fare",
+        "product":  "Arm \u0026 Hammer Odor Blst Fresh Burst",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "chicken-thighs",
+        "store":  "Aldi",
+        "product":  "Fresh Fresh Chicken Drumsticks Family Pack Per LB",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027chicken\\s+(thigh|drumstick|leg)\u0027 matched, exclude \u0027\\bdrumsticks?\\b\u0027 killed it"
+    },
+    {
+        "id":  "frozen-lasagna",
+        "store":  "Walmart",
+        "product":  "Stouffers Classic Lasagna with Meat and Sauce, Large Size, Oven Ready, Frozen Dinners 19 oz",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027lasagna\\b.{0,30}(?:frozen|family|meat|cheese)\u0027 matched, exclude \u0027oven[\\s-]?ready\u0027 killed it"
+    },
+    {
+        "id":  "microwave-popcorn",
+        "store":  "Family Fare",
+        "product":  "Pop Secret Microwave Movie Theater Butter Popcorn 6 Ea",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "pie-pumpkins",
+        "store":  "Baker\u0027s",
+        "product":  "Bakery Fresh Pumpkin Pie",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "trash-bags",
+        "store":  "Baker\u0027s",
+        "product":  "Kroger Lavender Scent Strong-Flex Tall Kitchen 13 Gallon Drawstring Bags",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "laundry-detergent",
+        "store":  "Family Fare",
+        "product":  "Arm \u0026 Hammer Liquid Laundry Clean Burst",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "feminine-pads",
+        "store":  "Family Fare",
+        "product":  "Top Care Maxi Regular Unscented Pads 24 Ea",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "dried-cranberries",
+        "store":  "Family Fare",
+        "product":  "Ocean Spray Cranberries, Cherry, Dried 6 Oz",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "brown-gravy-mix",
+        "store":  "Family Fare",
+        "product":  "Our Family Gravy Mix, Reduced Sodium, Brown 0.87 Oz",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "chipotle-adobo",
+        "store":  "Family Fare",
+        "product":  "La Costena Chipotles, Peppers In Adobo Sauce 7 Oz",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "sun-dried-tomatoes",
+        "store":  "Baker\u0027s",
+        "product":  "California Sun Dry Sun-Dried Julienne Cut Tomatoes in Oil with Herbs",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "pork-tenderloin",
+        "store":  "Walmart",
+        "product":  "Smithfield Steakhouse Fresh Seasoned Pork Tenderloin, 0.5–1.9 lb, 20 Grams of Protein per 4 oz Serving",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027pork\\s+tenderloin\u0027 matched, exclude \u0027seasoned\u0027 killed it"
+    },
+    {
+        "id":  "caesar-dressing",
+        "store":  "Baker\u0027s",
+        "product":  "Kraft Classic Caesar Salad Dressing",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "corned-beef-hash",
+        "store":  "Walmart",
+        "product":  "MARY KITCHEN Roast Beef Hash, Canned Roast Beef Hash, 14 oz",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "trash-bags",
+        "store":  "Baker\u0027s",
+        "product":  "Kroger Island Nectar Scent Strong-Flex Tall Kitchen 13 Gallon Drawstring Bags BIG DEAL!",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "canned-potatoes",
+        "store":  "Walmart",
+        "product":  "Del Monte Diced Potatoes, Canned Vegetables, 14.5 oz Can",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "laundry-detergent",
+        "store":  "Family Fare",
+        "product":  "Arm \u0026 Hammer Lndry Dtrgnt Fresh Scent Pls O",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "vegetable-soup",
+        "store":  "Baker\u0027s",
+        "product":  "Progresso Vegetable Classics Vegetable Canned Soup",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "grape-juice",
+        "store":  "Aldi",
+        "product":  "Nature S Nectar White Grape 100 Juice 64 FL OZ",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "laundry-detergent",
+        "store":  "Walmart",
+        "product":  "ARM \u0026 HAMMER Plus OxiClean 5-in-1 Laundry Detergent Paks, Fresh Scent, 42 Count",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer.{0,60}(?:oxi\\s*-?\\s*clean|odor\\s*blasters?)\u0027 matched, exclude \u0027\\bpaks?\\b\u0027 killed it"
+    },
+    {
+        "id":  "pork-tenderloin",
+        "store":  "Walmart",
+        "product":  "Smithfield All-Natural Boneless Pork Loin Filet, 1.0 - 2.8 lb, 24 G of Protein per 4 oz Serving",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "feminine-pads",
+        "store":  "Baker\u0027s",
+        "product":  "Kroger Ultra Thin Pads with Wings Long Super Size 2 Unscented",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "sun-dried-tomatoes",
+        "store":  "Baker\u0027s",
+        "product":  "California Sun Dry Sun-Dried Julienne Tomatoes in Oil with Herbs",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "breakfast-sandwiches",
+        "store":  "Baker\u0027s",
+        "product":  "Jimmy Dean Protein Breakfast Sausage Egg Cheese Croissant Fully Cooked Frozen Sandwiches",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "walnuts",
+        "store":  "Walmart",
+        "product":  "Fisher Chef\u0027s Naturals Gluten Free, No Preservatives, Non-GM",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "coconut-milk-canned",
+        "store":  "Walmart",
+        "product":  "Thai Kitchen Gluten Free Unsweetened Coconut Cream, 13.66 fl oz Can",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "toaster-pastries",
+        "store":  "Walmart",
+        "product":  "Great Value Frosted Toasted Pastries, 12 Count",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "orange-juice",
+        "store":  "Fareway",
+        "product":  "Fareway 100% Juice Orange",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "ground-beef-93-7",
+        "store":  "Aldi",
+        "product":  "Simply Nature 93 07 Lean Organic Grass Fed Ground Beef 1 LB",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "black-olives",
+        "store":  "Walmart",
+        "product":  "Lindsay Black Ripe Sliced Olives, 3.8 oz",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "cranberry-juice",
+        "store":  "Family Fare",
+        "product":  "Ocean Spray Juice Drink, Cranberry Mixed Berry, Zero Sugar 64 Fl Oz",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "ground-beef-8020",
+        "store":  "Baker\u0027s",
+        "product":  "Kroger 80/20 Ground Beef Patties",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u002780/20\\s+ground\u0027 matched, exclude \u0027patties\u0027 killed it"
+    },
+    {
+        "id":  "ground-beef-93-7",
+        "store":  "Walmart",
+        "product":  "All Natural Extra Lean Ground Beef 96% Lean/4% Fat, 1 lb",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "italian-dressing",
+        "store":  "Aldi",
+        "product":  "Tuscan Garden Italian Salad Dressing 16 OZ",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "italian-dressing",
+        "store":  "Aldi",
+        "product":  "Tuscan Garden Italian Salad Dressing 16 FL OZ",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "laundry-detergent",
+        "store":  "Baker\u0027s",
+        "product":  "ARM \u0026 HAMMER Baking Soda Fresh Sparkling Fresh Scent Liquid Laundry Detergent",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "rye-bread",
+        "store":  "Family Fare",
+        "product":  "Beefsteak Bread, Soft Rye, No Seeds 18 Oz",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "pie-pumpkins",
+        "store":  "Family Fare",
+        "product":  "Marie Callender\u0027s Pumpkin Pie 36 Oz",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "sun-dried-tomatoes",
+        "store":  "Baker\u0027s",
+        "product":  "California Sun Dry Sun-Dried Julienne Cut Tomatoes",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "laundry-detergent",
+        "store":  "Baker\u0027s",
+        "product":  "ARM \u0026 HAMMER Baking Soda Fresh Liquid Laundry Detergent Sparkling Fresh Scent",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "sun-dried-tomatoes",
+        "store":  "Baker\u0027s",
+        "product":  "California Sun Dry Sun-Dried Julienne Tomatoes in Oil",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "baby-wipes",
+        "store":  "Family Fare",
+        "product":  "Huggies Disney Baby Sensitive Fragrance Free Wipes 56 Ea",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "baby-wipes",
+        "store":  "Family Fare",
+        "product":  "Huggies Disney Baby Sensitive Fragrance Free Wipes 168 Ea",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "frozen-fries",
+        "store":  "Baker\u0027s",
+        "product":  "Kroger Seasoned Crispy Frozen French Fries",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027french\\s+fri(?:es|ed)\u0027 matched, exclude \u0027seasoned\u0027 killed it"
+    },
+    {
+        "id":  "canned-pumpkin",
+        "store":  "Walmart",
+        "product":  "Libby\u0027s 100% Pure Pumpkin Puree, All Natural Gluten Free Canned Pumpkin for Baking Pumpkin Pie Dessert, 15 oz Can",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027pure\\s+pumpkin\u0027 matched, exclude \u0027\\bpie\\b\u0027 killed it"
+    },
+    {
+        "id":  "frozen-lasagna",
+        "store":  "Walmart",
+        "product":  "Stouffers Meat Lovers Lasagna, Family Size, Oven Ready Lasagna, Frozen Dinners 34 oz",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027lasagna\\b.{0,30}(?:frozen|family|meat|cheese)\u0027 matched, exclude \u0027oven[\\s-]?ready\u0027 killed it"
+    },
+    {
+        "id":  "protein-bars",
+        "store":  "Baker\u0027s",
+        "product":  "Kroger Protein Peanut Butter and Dark Chocolate Flavored Chewy Bars",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "baby-wipes",
+        "store":  "Family Fare",
+        "product":  "Huggies Wipes, Fragrance Free, Sensitive, Disney Baby 560 Ea",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "canned-pears",
+        "store":  "Baker\u0027s",
+        "product":  "Kroger Canned Pear Slices in Pear Juice",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "ground-beef-93-7",
+        "store":  "Aldi",
+        "product":  "96 Lean Ground Beef Per LB",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "chicken-thighs",
+        "store":  "Baker\u0027s",
+        "product":  "Tyson All Natural Fresh Chicken Drumsticks",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027chicken\\s+(thigh|drumstick|leg)\u0027 matched, exclude \u0027\\bdrumsticks?\\b\u0027 killed it"
+    },
+    {
+        "id":  "canned-pumpkin",
+        "store":  "Walmart",
+        "product":  "Libby\u0027s 100% Pure Pumpkin Puree, All Natural Gluten Free Canned Pumpkin for Baking Pumpkin Pie Dessert, 29 oz Can",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027pure\\s+pumpkin\u0027 matched, exclude \u0027\\bpie\\b\u0027 killed it"
+    },
+    {
+        "id":  "dishwasher-detergent",
+        "store":  "Hy-Vee",
+        "product":  "Cascade Platinum Action Pacs Fresh Scent, 71Ct",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "storage-bags",
+        "store":  "Aldi",
+        "product":  "Boulder Quart Freezer Twin Lock Bags 40 CT",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "frozen-vegetables",
+        "store":  "Baker\u0027s",
+        "product":  "Birds Eye Normandy Blend, Frozen Vegetables Mix",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "canned-potatoes",
+        "store":  "Walmart",
+        "product":  "Del Monte Sliced New Potatoes, Canned Vegetables, 14.5 oz Can",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "canned-pears",
+        "store":  "Baker\u0027s",
+        "product":  "Kroger Canned Pear Slices in Extra Light Syrup",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "chicken-thighs",
+        "store":  "Aldi",
+        "product":  "Kirkwood Fresh Chicken Drumsticks Per LB",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027chicken\\s+(thigh|drumstick|leg)\u0027 matched, exclude \u0027\\bdrumsticks?\\b\u0027 killed it"
+    },
+    {
+        "id":  "chicken-noodle-soup",
+        "store":  "Walmart",
+        "product":  "Progresso Rich and Hearty Chicken and Homestyle Noodles Canned Soup, 19 oz",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "frozen-vegetables",
+        "store":  "Baker\u0027s",
+        "product":  "Birds Eye Steamfresh Cut Green Beans, Frozen Vegetables",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "instant-mashed-potatoes",
+        "store":  "Aldi",
+        "product":  "Chef S Cupboard Homestyle Four Cheese Mashed Potatoes 4 OZ",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "instant-coffee",
+        "store":  "Family Fare",
+        "product":  "Folgers Instant Classic Roast Coffee Crystals 8 Oz",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "almond-milk",
+        "store":  "Baker\u0027s",
+        "product":  "Simple Truth Dairy Free Chocolate Almond Milk Half Gallon",
+        "verdict":  "EXCLUDED",
+        "detail":  "include \u0027almond\\s*milk\u0027 matched, exclude \u0027chocolate\u0027 killed it"
+    },
+    {
+        "id":  "canned-chicken",
+        "store":  "Aldi",
+        "product":  "Brookdale Chicken Breast Extra Lean White Premium Chunk With Rib Meat IN Water 12.5 OZ",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "smoked-turkey-sausage",
+        "store":  "Baker\u0027s",
+        "product":  "Johnsonville Turkey Cheddar Smoked Sausage Links",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "baby-wipes",
+        "store":  "Family Fare",
+        "product":  "Huggies Wipes, Fragrance Free, Sensitive, Disney Baby, Refill Pack 184 Ea",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    }
+]

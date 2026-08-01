@@ -1,121 +1,23 @@
 ﻿[
     {
-        "id":  "chicken-breast",
-        "url":  "https://www.shopfamilyfare.com/shop/meat/chicken/fresh_chicken/boneless_skinless_chicken_breasts/p/1564405684713031766",
-        "price":  2.99,
-        "size":  "lb",
-        "name":  "Boneless Skinless Chicken Breasts"
-    },
-    {
-        "id":  "shredded-cheese",
-        "url":  "https://www.shopfamilyfare.com/shop/deli/cheese/shredded_cheese/our_family_natural_part_skim_mozzarella_shredded_cheese_32_oz/p/7081847",
-        "price":  7.89,
-        "size":  "32 oz",
-        "name":  "Our Family Natural Part Skim Mozzarella Shredded Cheese 32 Oz"
-    },
-    {
-        "id":  "strawberries",
-        "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/berries/fresh_strawberries/p/2318460",
-        "price":  3.99,
-        "size":  "16 oz",
-        "name":  "Fresh Strawberries"
-    },
-    {
-        "id":  "watermelon",
-        "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/melons/watermelon_mini_seedless/p/2310779",
-        "price":  5.99,
-        "size":  "1 ct",
-        "name":  "Watermelon Mini Seedless"
-    },
-    {
-        "id":  "ketchup",
-        "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/ketchup/heinz_tomato_ketchup_32_oz/p/2319053",
-        "price":  5.99,
-        "size":  "32 oz",
-        "name":  "Heinz Tomato Ketchup 32 Oz"
-    },
-    {
-        "id":  "white-mushrooms",
-        "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/mushrooms/our_family_mushrooms_white_whole_8_oz/p/1564405684713576546",
-        "price":  2.49,
+        "id":  "mushrooms",
+        "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/mushrooms/our_family_mushrooms_baby_bella_sliced_8_oz/p/1564405684713576556",
+        "price":  3.49,
         "size":  "8 oz",
-        "name":  "Our Family Mushrooms, White, Whole 8 Oz"
+        "name":  "Our Family Mushrooms, Baby Bella, Sliced 8 Oz"
     },
     {
-        "id":  "sugar-free-bbq-sauce",
-        "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/bbq_sauce/g_hughes_sugar_free_original_bbq_sauce_18_oz/p/8145902",
-        "price":  6.99,
-        "size":  "18 oz",
-        "name":  "G Hughes Sugar Free Original Bbq Sauce 18 Oz"
+        "id":  "cookies",
+        "url":  "https://www.shopfamilyfare.com/shop/bakery/cookies/10_ct_signature_chocolate_dipped_peanut_butter_cookies/p/1564405684713024856",
+        "price":  5.99,
+        "size":  "15 oz",
+        "name":  "10 Ct Signature Chocolate Dipped Peanut Butter Cookies"
     },
     {
-        "id":  "buffalo-wing-sauce",
-        "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/marinades/sweet_baby_ray_s_buffalo_wing_wing_sauce_16_fl_oz/p/536061",
-        "price":  4.99,
-        "size":  "16 fl oz",
-        "name":  "Sweet Baby Ray\u0027s Buffalo Wing Wing Sauce 16 Fl Oz"
-    },
-    {
-        "id":  "ground-cumin",
-        "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/lawry_s_ground_cumin_2_oz/p/1564405684713583933",
-        "price":  3.49,
-        "size":  "2 oz",
-        "name":  "Lawry\u0027s Ground Cumin 2 Oz"
-    },
-    {
-        "id":  "turkey-pepperoni",
-        "url":  "https://www.shopfamilyfare.com/shop/meat/sausage/pepperoni/armour_turkey_pepperoni_4_oz/p/588138",
-        "price":  3.99,
-        "size":  "4 oz",
-        "name":  "Armour Turkey Pepperoni 4 Oz"
-    },
-    {
-        "id":  "worcestershire-sauce",
-        "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/other_sauce/our_family_worcestershire_sauce_10_fl_oz/p/7081427",
-        "price":  1.69,
-        "size":  "10 fl oz",
-        "name":  "Our Family Worcestershire Sauce 10 Fl Oz"
-    },
-    {
-        "id":  "dried-parsley",
-        "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/herbs/mc_cormick_parsley_flakes_0_5_oz/p/34845",
-        "price":  2.79,
-        "size":  "0.5 oz",
-        "name":  "Mc Cormick Parsley Flakes 0.5 Oz"
-    },
-    {
-        "id":  "cayenne-pepper",
-        "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/lawry_s_ground_cayenne_pepper_1_87_oz/p/1564405684713605868",
-        "price":  3.49,
-        "size":  "1.87 oz",
-        "name":  "Lawry\u0027s Ground Cayenne Pepper 1.87 Oz"
-    },
-    {
-        "id":  "dried-dill",
-        "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/herbs/our_family_dill_weed_0_56_oz/p/1564405684702629730",
-        "price":  2.49,
-        "size":  "0.56 oz",
-        "name":  "Our Family Dill Weed 0.56 Oz"
-    },
-    {
-        "id":  "dried-basil",
-        "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/herbs/our_family_basil_leaves_0_62_oz/p/1564405684702629729",
-        "price":  2.99,
-        "size":  "0.62 oz",
-        "name":  "Our Family Basil Leaves 0.62 Oz"
-    },
-    {
-        "id":  "ground-ginger",
-        "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/full_circle_market_ground_ginger_1_6_oz/p/599157",
-        "price":  4.49,
-        "size":  "1.6 oz",
-        "name":  "Full Circle Market Ground Ginger 1.6 Oz"
-    },
-    {
-        "id":  "dried-rosemary",
-        "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/herbs/mc_cormick_whole_rosemary_leaves_0_62_oz/p/1564405684703136649",
-        "price":  5.79,
-        "size":  "0.62 oz",
-        "name":  "Mc Cormick Whole Rosemary Leaves 0.62 Oz"
+        "id":  "garlic-bread",
+        "url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_breads/garlic_bread/our_family_slices_original_garlic_texas_toast_8_ea/p/7081079",
+        "price":  2.89,
+        "size":  "8 ea",
+        "name":  "Our Family Slices Original Garlic Texas Toast 8 Ea"
     }
 ]

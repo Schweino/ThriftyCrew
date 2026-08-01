@@ -6,11 +6,11 @@
     "source":  "Hy-Vee Aisles Online GraphQL storeProducts.price - the CURRENT shelf price at storeId 1465 (Omaha #01). NOT basePrice (the regular price) and NOT ssrPricing (a different store).",
     "size_policy":  "sizes are OUR verified ones, not Hy-Vee\u0027s - their size field mixes totals, single units of a multipack, and mislabelled units",
     "deal_count":  1538,
-    "refreshed_today":  868,
-    "marked_down":  166,
+    "refreshed_today":  844,
+    "marked_down":  162,
     "newly_priced":  0,
-    "not_reverified":  670,
-    "cap_skipped":  77,
+    "not_reverified":  694,
+    "cap_skipped":  99,
     "failed":  0,
     "deals":  [
                   {
@@ -9355,17 +9355,17 @@
                   {
                       "store":  "Hy-Vee",
                       "item":  "Hormel Dinty Moore Beef Stew",
-                      "ad_price":  "$2.99",
+                      "ad_price":  "$2.48",
                       "size":  "10 oz",
-                      "regular":  2.99,
-                      "current_price":  2.99,
+                      "regular":  2.48,
+                      "current_price":  2.48,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
                       "product_id":  47115,
                       "store_department":  "Packaged Meals \u0026 Sides",
                       "store_department_group":  "Pantry",
                       "store_category":  "Heat \u0026 Eat Meals",
-                      "base_price":  2.99
+                      "base_price":  2.48
                   },
                   {
                       "store":  "Hy-Vee",
@@ -12146,17 +12146,17 @@
                   {
                       "store":  "Hy-Vee",
                       "item":  "Campbell’s Turkey Gravy, 10.5 oz Can",
-                      "ad_price":  "$1.69",
+                      "ad_price":  "$1.62",
                       "size":  "10.5 oz",
-                      "regular":  1.69,
-                      "current_price":  1.69,
+                      "regular":  1.62,
+                      "current_price":  1.62,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
                       "product_id":  50157,
                       "store_department":  "Canned \u0026 Jarred Foods",
                       "store_department_group":  "Pantry",
                       "store_category":  "Sauces \u0026 Gravies",
-                      "base_price":  1.69
+                      "base_price":  1.62
                   },
                   {
                       "store":  "Hy-Vee",
@@ -12206,17 +12206,17 @@
                   {
                       "store":  "Hy-Vee",
                       "item":  "Heinz Caramelized onion \u0026 thyme Gravy 12 oz",
-                      "ad_price":  "$2.99",
+                      "ad_price":  "$2.62",
                       "size":  "12 oz",
-                      "regular":  2.99,
-                      "current_price":  2.99,
+                      "regular":  2.62,
+                      "current_price":  2.62,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
                       "product_id":  3939895,
                       "store_department":  "Canned \u0026 Jarred Foods",
                       "store_department_group":  "Pantry",
                       "store_category":  "Sauces \u0026 Gravies",
-                      "base_price":  2.99
+                      "base_price":  2.62
                   },
                   {
                       "store":  "Hy-Vee",
@@ -12296,32 +12296,32 @@
                   {
                       "store":  "Hy-Vee",
                       "item":  "Campbell’s Chicken Gravy, 10.5 oz Can",
-                      "ad_price":  "$1.69",
+                      "ad_price":  "$1.62",
                       "size":  "10.5 oz",
-                      "regular":  1.69,
-                      "current_price":  1.69,
+                      "regular":  1.62,
+                      "current_price":  1.62,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
                       "product_id":  16385,
                       "store_department":  "Canned \u0026 Jarred Foods",
                       "store_department_group":  "Pantry",
                       "store_category":  "Sauces \u0026 Gravies",
-                      "base_price":  1.69
+                      "base_price":  1.62
                   },
                   {
                       "store":  "Hy-Vee",
                       "item":  "Campbell’s Beef Gravy, 10.5 oz Can",
-                      "ad_price":  "$1.69",
+                      "ad_price":  "$1.62",
                       "size":  "10.5 oz",
-                      "regular":  1.69,
-                      "current_price":  1.69,
+                      "regular":  1.62,
+                      "current_price":  1.62,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
                       "product_id":  50156,
                       "store_department":  "Canned \u0026 Jarred Foods",
                       "store_department_group":  "Pantry",
                       "store_category":  "Sauces \u0026 Gravies",
-                      "base_price":  1.69
+                      "base_price":  1.62
                   },
                   {
                       "store":  "Hy-Vee",
@@ -16025,14 +16025,9 @@
                       "ad_price":  "$7.99",
                       "size":  "8 oz",
                       "regular":  7.99,
-                      "current_price":  7.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
-                      "product_id":  3586293,
-                      "store_department":  "Canned \u0026 Jarred Foods",
-                      "store_department_group":  "Pantry",
-                      "store_category":  "Sauces \u0026 Gravies",
-                      "base_price":  7.99
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -16040,14 +16035,9 @@
                       "ad_price":  "$7.99",
                       "size":  "7 oz",
                       "regular":  7.99,
-                      "current_price":  7.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
-                      "product_id":  4223514,
-                      "store_department":  "Canned \u0026 Jarred Foods",
-                      "store_department_group":  "Pantry",
-                      "store_category":  "Sauces \u0026 Gravies",
-                      "base_price":  7.99
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -16055,14 +16045,9 @@
                       "ad_price":  "$7.99",
                       "size":  "8 oz",
                       "regular":  7.99,
-                      "current_price":  7.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
-                      "product_id":  3740417,
-                      "store_department":  "Frozen Fruits \u0026 Vegetables",
-                      "store_department_group":  "Frozen",
-                      "store_category":  "Other International Foods",
-                      "base_price":  7.99
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -16070,14 +16055,9 @@
                       "ad_price":  "$11.99",
                       "size":  "6 oz",
                       "regular":  11.99,
-                      "current_price":  11.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
-                      "product_id":  3482888,
-                      "store_department":  "Canned \u0026 Jarred Foods",
-                      "store_department_group":  "Pantry",
-                      "store_category":  "Sauces \u0026 Gravies",
-                      "base_price":  11.99
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -16085,14 +16065,9 @@
                       "ad_price":  "$7.99",
                       "size":  "7 oz",
                       "regular":  7.99,
-                      "current_price":  7.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
-                      "product_id":  4223515,
-                      "store_department":  "Canned \u0026 Jarred Foods",
-                      "store_department_group":  "Pantry",
-                      "store_category":  "Sauces \u0026 Gravies",
-                      "base_price":  7.99
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -16100,14 +16075,9 @@
                       "ad_price":  "$11.99",
                       "size":  "6 oz",
                       "regular":  11.99,
-                      "current_price":  11.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
-                      "product_id":  3809694,
-                      "store_department":  "Canned \u0026 Jarred Foods",
-                      "store_department_group":  "Pantry",
-                      "store_category":  "Sauces \u0026 Gravies",
-                      "base_price":  11.99
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -16115,14 +16085,9 @@
                       "ad_price":  "$7.99",
                       "size":  "7 oz",
                       "regular":  7.99,
-                      "current_price":  7.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
-                      "product_id":  4223516,
-                      "store_department":  "Canned \u0026 Jarred Foods",
-                      "store_department_group":  "Pantry",
-                      "store_category":  "Sauces \u0026 Gravies",
-                      "base_price":  7.99
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -16130,14 +16095,9 @@
                       "ad_price":  "$5.99",
                       "size":  "5 oz",
                       "regular":  5.99,
-                      "current_price":  5.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
-                      "product_id":  4193503,
-                      "store_department":  "Snack Foods",
-                      "store_department_group":  "Pantry",
-                      "store_category":  "Nuts \u0026 Seeds",
-                      "base_price":  5.99
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -16145,14 +16105,9 @@
                       "ad_price":  "$3.99",
                       "size":  "8 oz",
                       "regular":  3.99,
-                      "current_price":  3.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
-                      "product_id":  4008267,
-                      "store_department":  "Packaged Meals \u0026 Sides",
-                      "store_department_group":  "Pantry",
-                      "store_category":  "Sides",
-                      "base_price":  3.99
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -16160,14 +16115,9 @@
                       "ad_price":  "$6.49",
                       "size":  "20 oz",
                       "regular":  6.49,
-                      "current_price":  6.49,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
-                      "product_id":  4223512,
-                      "store_department":  "Canned \u0026 Jarred Foods",
-                      "store_department_group":  "Pantry",
-                      "store_category":  "Sauces \u0026 Gravies",
-                      "base_price":  6.49
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -16175,14 +16125,9 @@
                       "ad_price":  "$6.99",
                       "size":  "4 oz",
                       "regular":  6.99,
-                      "current_price":  6.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
-                      "product_id":  67057,
-                      "store_department":  "Canned \u0026 Jarred Foods",
-                      "store_department_group":  "Pantry",
-                      "store_category":  "Sauces \u0026 Gravies",
-                      "base_price":  6.99
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -16190,14 +16135,9 @@
                       "ad_price":  "$11.99",
                       "size":  "1.9 oz",
                       "regular":  11.99,
-                      "current_price":  11.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
-                      "product_id":  2345453,
-                      "store_department":  "Cooking \u0026 Baking",
-                      "store_department_group":  "Pantry",
-                      "store_category":  "Herbs, Spices \u0026 Seasoning",
-                      "base_price":  11.99
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -16205,14 +16145,9 @@
                       "ad_price":  "$6.99",
                       "size":  "4 oz",
                       "regular":  6.99,
-                      "current_price":  6.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
-                      "product_id":  35932,
-                      "store_department":  "Produce",
-                      "store_department_group":  "Fresh",
-                      "store_category":  "Fresh Vegetables",
-                      "base_price":  6.99
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -16220,15 +16155,9 @@
                       "ad_price":  "$2.99",
                       "size":  "8 oz",
                       "regular":  2.99,
-                      "current_price":  2.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
-                      "product_id":  12104,
-                      "store_department":  "Cooking \u0026 Baking",
-                      "store_department_group":  "Pantry",
-                      "store_category":  "Herbs, Spices \u0026 Seasoning",
-                      "base_price":  3.29,
-                      "marked_down":  true
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -16236,14 +16165,9 @@
                       "ad_price":  "$4.99",
                       "size":  "8 oz",
                       "regular":  4.99,
-                      "current_price":  4.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
-                      "product_id":  284034,
-                      "store_department":  "Cooking \u0026 Baking",
-                      "store_department_group":  "Pantry",
-                      "store_category":  "Herbs, Spices \u0026 Seasoning",
-                      "base_price":  4.99
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -16251,14 +16175,9 @@
                       "ad_price":  "$3.99",
                       "size":  "2.75 oz",
                       "regular":  3.99,
-                      "current_price":  3.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
-                      "product_id":  51792,
-                      "store_department":  "Cooking \u0026 Baking",
-                      "store_department_group":  "Pantry",
-                      "store_category":  "Herbs, Spices \u0026 Seasoning",
-                      "base_price":  3.99
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -16276,14 +16195,9 @@
                       "ad_price":  "$6.99",
                       "size":  "5 oz",
                       "regular":  6.99,
-                      "current_price":  6.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
-                      "product_id":  3972751,
-                      "store_department":  "Cooking \u0026 Baking",
-                      "store_department_group":  "Pantry",
-                      "store_category":  "Herbs, Spices \u0026 Seasoning",
-                      "base_price":  6.99
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -16301,14 +16215,9 @@
                       "ad_price":  "$6.99",
                       "size":  "2.25 oz",
                       "regular":  6.99,
-                      "current_price":  6.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
-                      "product_id":  400574,
-                      "store_department":  "Cooking \u0026 Baking",
-                      "store_department_group":  "Pantry",
-                      "store_category":  "Herbs, Spices \u0026 Seasoning",
-                      "base_price":  6.99
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -16316,14 +16225,9 @@
                       "ad_price":  "$1.19",
                       "size":  "1 oz",
                       "regular":  1.19,
-                      "current_price":  1.19,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
-                      "product_id":  1908412,
-                      "store_department":  "Packaged Meals \u0026 Sides",
-                      "store_department_group":  "Pantry",
-                      "store_category":  "Meal Starters \u0026 Seasoning",
-                      "base_price":  1.19
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -16331,16 +16235,9 @@
                       "ad_price":  "$1.5",
                       "size":  "1.13 oz",
                       "regular":  1.5,
-                      "current_price":  3,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
-                      "product_id":  62015,
-                      "store_department":  "Packaged Meals \u0026 Sides",
-                      "store_department_group":  "Pantry",
-                      "store_category":  "Meal Starters \u0026 Seasoning",
-                      "price_multiple":  2,
-                      "base_price":  1.99,
-                      "marked_down":  true
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -16348,16 +16245,9 @@
                       "ad_price":  "$0.6667",
                       "size":  "1.25 oz",
                       "regular":  0.6667,
-                      "current_price":  2,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
-                      "product_id":  58545,
-                      "store_department":  "Packaged Meals \u0026 Sides",
-                      "store_department_group":  "Pantry",
-                      "store_category":  "Meal Starters \u0026 Seasoning",
-                      "price_multiple":  3,
-                      "base_price":  0.99,
-                      "marked_down":  true
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -16365,16 +16255,9 @@
                       "ad_price":  "$0.6667",
                       "size":  "1.25 oz",
                       "regular":  0.6667,
-                      "current_price":  2,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
-                      "product_id":  25807,
-                      "store_department":  "Packaged Meals \u0026 Sides",
-                      "store_department_group":  "Pantry",
-                      "store_category":  "Meal Starters \u0026 Seasoning",
-                      "price_multiple":  3,
-                      "base_price":  0.99,
-                      "marked_down":  true
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -16382,14 +16265,9 @@
                       "ad_price":  "$1.49",
                       "size":  "0.8 oz",
                       "regular":  1.49,
-                      "current_price":  1.49,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
-                      "product_id":  3482957,
-                      "store_department":  "Packaged Meals \u0026 Sides",
-                      "store_department_group":  "Pantry",
-                      "store_category":  "Meal Starters \u0026 Seasoning",
-                      "base_price":  1.49
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -16397,14 +16275,9 @@
                       "ad_price":  "$1.29",
                       "size":  "1 oz",
                       "regular":  1.29,
-                      "current_price":  1.29,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-01",
-                      "product_id":  50901,
-                      "store_department":  "Packaged Meals \u0026 Sides",
-                      "store_department_group":  "Pantry",
-                      "store_category":  "Meal Starters \u0026 Seasoning",
-                      "base_price":  1.29
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",

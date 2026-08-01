@@ -1015,6 +1015,22 @@ if ($pvlSrc -match 'board-rebuilt-same-day drift') { Ok 'the price-exact name lo
 else { Bad 'purge-verdict-lows lost the price-drift clean twin - it can label a history row with a product that was never at that price' }
 if ($pvlSrc -match 'verdict-lib\.ps1') { Ok 'purge-verdict-lows sources verdict-lib (one definition of item identity)' }
 else { Bad 'purge-verdict-lows no longer sources verdict-lib - the purge and verify-apply can disagree on what "the same item" means' }
+
+# --- merge-product-urls consume-once (added 2026-08-01) ---------------------------------------------
+# Founding bug: the merge re-consumed EVERY store-*-urls.json on every run and never removed them, so an
+# already-merged capture REPLAYED over links that had since been corrected (~226 links on 07-14; 36 Fareway
+# links on 08-01). An age filter alone would not have caught the second one - that file was a day old. The
+# defense is consume-once ARCHIVING, so the must-fire fixture is "a consumed input is gone afterwards".
+$r = RunPS 'merge-product-urls.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELFTEST: 6/6 pass') { Ok 'merge-product-urls -SelfTest passes (fresh merged, stale refused, consumed archived, size verbatim)' }
+else { Bad ('merge-product-urls -SelfTest failed or lost its founding-bug fixtures: ' + ((($r.text -split "`n") | Select-Object -Last 3) -join ' | ')) }
+$mpuSrc = Get-Content (Join-Path $root 'merge-product-urls.ps1') -Raw
+if ($mpuSrc -match 'replay bug is live again') { Ok 'the consume-once must-fire fixture (a merged input must be archived) is still armed' }
+else { Bad 'merge-product-urls lost the consume-once fixture - a stale capture could silently replay over corrected links again' }
+if ($mpuSrc -match 'url-inputs-archive') { Ok 'merge-product-urls still archives consumed inputs' }
+else { Bad 'merge-product-urls no longer archives consumed inputs - every past capture will replay on the next run' }
+if ($mpuSrc -match "size field corrupted") { Ok 'the size-field clean twin is armed (a URL-only diff cannot see a basis overwrite)' }
+else { Bad 'merge-product-urls lost the size-verbatim fixture - a replay could flip "100 ct" to "each" with the URL unchanged and every URL diff would call it clean' }
 if ($pvlSrc -match 'Remove-OverturnedRejects \$rej \$overturns') { Ok 'the purge still honours a later KEEP verdict (verify-apply''s human-overturn rule)' }
 else { Bad 'purge-verdict-lows no longer subtracts overturned verdicts - it will delete history for a product a human re-reviewed and KEPT' }
 $wpc2 = Get-Content (Join-Path $root 'weekly-post-capture.ps1') -Raw

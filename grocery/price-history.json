@@ -41246,9 +41246,9 @@
                             "label":  "Dried Arbol Chiles",
                             "unit":  "oz",
                             "record_low":  {
-                                               "price":  0.83,
+                                               "price":  0.6738,
                                                "store":  "Family Fare",
-                                               "week_of":  "2026-07-26"
+                                               "week_of":  "2026-08-01"
                                            },
                             "history":  [
                                             {
@@ -41307,10 +41307,10 @@
                                             },
                                             {
                                                 "week_of":  "2026-08-01",
-                                                "cheapest_price":  0.83,
+                                                "cheapest_price":  0.6738,
                                                 "cheapest_store":  "Family Fare",
                                                 "per_store":  {
-                                                                  "Family Fare":  0.83,
+                                                                  "Family Fare":  0.6738,
                                                                   "Hy-Vee":  5.98
                                                               }
                                             }
@@ -41397,7 +41397,8 @@
                                                                   "Sam\u0027s Club":  0.1588,
                                                                   "Baker\u0027s":  0.2591,
                                                                   "Hy-Vee":  0.2904,
-                                                                  "Fareway":  0.2912
+                                                                  "Fareway":  0.2912,
+                                                                  "Family Fare":  0.4162
                                                               }
                                             }
                                         ]
@@ -57578,7 +57579,7 @@
                                                                   "Hy-Vee":  0.3119,
                                                                   "Fareway":  0.3119,
                                                                   "Baker\u0027s":  0.3119,
-                                                                  "Family Fare":  0.7494
+                                                                  "Family Fare":  0.6656
                                                               }
                                             }
                                         ]
@@ -63569,7 +63570,7 @@
                                                 "cheapest_store":  "Sam\u0027s Club",
                                                 "per_store":  {
                                                                   "Sam\u0027s Club":  0.0912,
-                                                                  "Hy-Vee":  0.161,
+                                                                  "Hy-Vee":  0.1543,
                                                                   "Walmart":  0.1956,
                                                                   "Fareway":  0.2075,
                                                                   "Baker\u0027s":  0.2658
@@ -69746,6 +69747,7 @@
                                                 "per_store":  {
                                                                   "Sam\u0027s Club":  0.3109,
                                                                   "Baker\u0027s":  0.4059,
+                                                                  "Family Fare":  0.4992,
                                                                   "Fareway":  0.5825,
                                                                   "Walmart":  0.61,
                                                                   "Hy-Vee":  0.6658
@@ -104814,10 +104816,10 @@
                                                 "per_store":  {
                                                                   "Aldi":  0.2594,
                                                                   "Baker\u0027s":  0.3431,
+                                                                  "Family Fare":  0.3564,
                                                                   "Sam\u0027s Club":  0.41,
                                                                   "Fareway":  0.4178,
                                                                   "Hy-Vee":  0.4311,
-                                                                  "Family Fare":  0.7494,
                                                                   "Walmart":  0.8943
                                                               }
                                             }
@@ -105164,6 +105166,7 @@
                                                                   "Fareway":  2.99,
                                                                   "Walmart":  4.8133,
                                                                   "Baker\u0027s":  4.9967,
+                                                                  "Family Fare":  5.3156,
                                                                   "Aldi":  6.0267,
                                                                   "Hy-Vee":  6.66
                                                               }

@@ -67,6 +67,10 @@ $KNOWN = [ordered]@{
   'stamp-fareway-instore.ps1'        = 'stamps Fareway price_mode after a manual shelf verification'
   'recover-sams-quarantine.ps1'      = "recovers a quarantined Sam's capture"
   'get-tiers.ps1'                    = 'Ghost tier lookup, used while editing the join interstitial'
+  # -- semantic coverage backlog (2026-08-01): the sweep finds gaps, these three work them by hand
+  'explain-coverage-gap.ps1'         = 'diagnoses WHY a swept product is invisible (NO-INCLUDE / EXCLUDED / CLAIMED / MATCHES) before any rule is touched'
+  'apply-coverage-batch.ps1'         = 'applies + GATES one batch of commodity include widenings; reverts itself on a batch-attributable tile fault'
+  'withdraw-stale-link.ps1'          = 'removes a stored product URL that no longer describes its cell, at a store with no headless resolver'
   # -- staples-500 per-batch pipeline (batch 1 of 10 done; run once per batch, by hand)
   'prime-batch-headless.ps1'         = 'staples-500 per-batch primer'
   'merge-candidates.ps1'             = 'staples-500 per-batch candidate merge'

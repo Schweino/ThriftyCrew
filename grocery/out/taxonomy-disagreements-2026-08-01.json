@@ -1,12 +1,12 @@
 ﻿{
     "no_taxonomy_rows":  0,
-    "judged":  3960,
+    "judged":  4015,
     "unknown_departments":  [
 
                             ],
     "sources":  [
-                    "Family Fare: canonical_url from 17 file(s) within 30d -\u003e 4472 product(s) with a department (newest family-fare-regular-2026-08-01.json)",
-                    "Hy-Vee: row field store_department in hyvee-regular-2026-08-01.json -\u003e 859 product(s) with a department",
+                    "Family Fare: canonical_url from 17 file(s) within 30d -\u003e 4546 product(s) with a department (newest family-fare-regular-2026-08-01.json)",
+                    "Hy-Vee: row field store_department in hyvee-regular-2026-08-01.json -\u003e 835 product(s) with a department",
                     "Baker\u0027s: row field store_category in bakers-regular-2026-08-01.json -\u003e 6382 product(s) with a department"
                 ],
     "note":  "The store said one thing about this product and our include regex said another. A LIVE CELL entry is on the board right now. A candidate entry has not won a cell but proves the rule matches the wrong product. This is a REVIEW QUEUE, not a gate - see the header.",
@@ -25,6 +25,26 @@
                                     }
                                 ],
     "candidate_disagreements":  [
+                                    {
+                                        "subcategory":  "pharmacy",
+                                        "item":  "Phillips\u0027 Phillips\u0027 Genuine Sugar Free Fresh Mint Milk Of Magnesia 12 Fl Oz",
+                                        "id":  "milk",
+                                        "unit_price":  null,
+                                        "rankable":  false,
+                                        "store":  "Family Fare",
+                                        "department":  "health_beauty",
+                                        "taxonomy_src":  "family-fare-regular-2026-08-01.json"
+                                    },
+                                    {
+                                        "subcategory":  "pharmacy",
+                                        "item":  "Top Care Milk Of Magnesia, Fresh Mint Flavor 12 Fl Oz",
+                                        "id":  "milk",
+                                        "unit_price":  null,
+                                        "rankable":  false,
+                                        "store":  "Family Fare",
+                                        "department":  "health_beauty",
+                                        "taxonomy_src":  "family-fare-regular-2026-08-01.json"
+                                    },
                                     {
                                         "subcategory":  "adult_nutrition",
                                         "item":  "Optimum Nutrition Vanilla Ice Cream 100% Whey Protein 24.05 Oz",
