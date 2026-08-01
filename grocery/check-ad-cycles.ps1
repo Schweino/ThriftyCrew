@@ -403,6 +403,40 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           }
         }
       } catch { Log ('semantic sweep threw: ' + $_.Exception.Message) }
+      # ---- AISLE TEST ON THE LIVE BOARD (added 2026-08-01). The sweep above finds products no rule can
+      # SEE. This finds the opposite defect: a product the rules DID match that the STORE files in a
+      # department the commodity has no business occupying. First live run read 406 Family Fare cells and
+      # found five wrong products, TWO holding the cheapest-price crown - cat litter as `baking-soda` at
+      # $0.0375/oz, teriyaki brats as `pineapple` at $1.3725. Neither is a pricing error, which is exactly
+      # why no price guard could see them, and audit-food-category caught 0 of the 26 browse-test flips.
+      # Advisory + signature-deduped: ~22 known department-map false positives (spices shelved in produce,
+      # canned milks in dairy) would otherwise shout every day, so only a CHANGED block-set speaks. The
+      # gate is deliberately NOT loosened to silence them - that would trade a real defect class for quiet.
+      try {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'aisle-test.ps1') -LiveBoard *>&1 | Out-Null
+        $atRc = $LASTEXITCODE
+        if ($atRc -eq 3) {
+          Log 'aisle test BLIND (no board or no Family Fare feed) - no shelf opinion on this board'
+        } else {
+          $atJ = try { Get-Content (Join-Path $OutDir 'aisle-test.json') -Raw | ConvertFrom-Json } catch { $null }
+          $atBlocked = @($atJ | Where-Object { [string]$_.verdict -eq 'BLOCK' })
+          if ($atBlocked.Count -gt 0) {
+            $atSig = (@($atBlocked | ForEach-Object { [string]$_.id + '|' + [string]$_.product } | Sort-Object) -join ';')
+            $atF = Join-Path $OutDir 'aisle-alert.sig'
+            $atPrev = if (Test-Path $atF) { ((Get-Content $atF -Raw) + '').Trim() } else { '' }
+            $atIds = (@($atBlocked | ForEach-Object { [string]$_.id } | Sort-Object -Unique) -join ', ')
+            Log ("aisle test: $($atBlocked.Count) live cell(s) sit in a department their commodity does not occupy - $atIds")
+            $summary += "REVIEW    aisle test: $($atBlocked.Count) live cell(s) in the wrong store department - see out\aisle-test.json"
+            if ($atSig -ne $atPrev -and (-not $NoAlert)) {
+              try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: $($atBlocked.Count) board cell(s) sit in the wrong store department - $asofS" -Body "aisle-test judged the LIVE board against Family Fare's own shelf paths and found cells whose product the STORE files in a department the commodity never occupies. This is the class that finds cat litter priced as baking soda and teriyaki brats priced as pineapple - real prices on the wrong product, so no price guard can see them. Commodities: $atIds. Check the CROWN rows first (a wrong crown is the cheapest-price verdict shoppers see). Fix by tightening that commodity's exclude, then record the product via add-known-wrong.ps1. NOTE: a standing ~22 are known department-map false positives (spices shelved in produce, canned milks in dairy) - compare against the previous set. Details: grocery/out/aisle-test.json." | Out-Null
+                    if ($LASTEXITCODE -eq 0) { Set-Content -Path $atF -Value $atSig -Encoding UTF8; Log 'aisle-test alert sent' } } catch { Log ('aisle alert threw: ' + $_.Exception.Message) }
+            } else { Log 'aisle-test block-set unchanged since last alert - not re-alerting' }
+          } else {
+            Log 'aisle test: no live cell sits in a wrong department'
+            if (Test-Path (Join-Path $OutDir 'aisle-alert.sig')) { Remove-Item (Join-Path $OutDir 'aisle-alert.sig') -ErrorAction SilentlyContinue }
+          }
+        }
+      } catch { Log ('aisle test threw: ' + $_.Exception.Message) }
       # ---- MATCHING-SOUNDNESS GUARD: a WRONG product landing in a commodity, or a rule change quietly moving/
       # dropping an existing product vs the reviewed baseline (the 2026-07-13 matching-audit class). No other
       # guard catches theft-IN. audit-match-soundness -Alert self-dedups and emails on a NEW issue-set; a

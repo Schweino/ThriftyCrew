@@ -77,6 +77,7 @@ param(
   [string]$Product = '',
   [string]$Url = '',
   [switch]$SelfTest,
+  [switch]$LiveBoard,
   [int]$MinProfile = 2,
   [string]$OutFile = ''
 )
@@ -295,6 +296,37 @@ $catMap = Get-CategoryMap
 Write-Output ("category map: {0} commodit(y/ies) carry an estate category; {1} categories have a reviewed department allowlist" -f $catMap.Count, $CAT_DEPT.Count)
 
 $rows = @()
+# -LiveBoard: judge the cells ALREADY ON THE BOARD, not hypothetical flips. This was not the use it was
+# built for and it is the one that paid first: on 2026-08-01 it read 406 live Family Fare cells and found
+# five wrong products, TWO of them holding the cheapest-price crown - Arm & Hammer Baking Soda Clumping
+# CAT LITTER at $0.0375/oz as `baking-soda`, and Pineapple Teriyaki BRATS at $1.3725 as `pineapple`.
+# Neither is a pricing error (both prices are real), which is exactly why no price guard could see them.
+# Reads BOTH boards, for the reason in the recipe-board note on audit-everyday-mismatch.
+if ($LiveBoard) {
+  $cmpF = Get-ChildItem (Join-Path $root 'out\comparison-*.json') -EA SilentlyContinue |
+  Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
+  if (-not $cmpF) { Write-Output 'BLIND: no comparison-*.json'; exit 3 }
+  $boardRows = @((ConvertFrom-Json (Get-Content $cmpF.FullName -Raw)).comparison)
+  $rbF2 = Join-Path $root 'out\recipe-board.json'
+  if (Test-Path $rbF2) { $boardRows += @((ConvertFrom-Json (Get-Content $rbF2 -Raw)).comparison) }
+  $feedF = Get-ChildItem (Join-Path $root 'out\regular\family-fare-regular-*.json') -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
+  if (-not $feedF) { Write-Output 'BLIND: no Family Fare feed - shelf paths come from it'; exit 3 }
+  $fd = ConvertFrom-Json (Get-Content $feedF.FullName -Raw)
+  $frows = @($fd.deals); if (-not $frows.Count) { $frows = @($fd) }
+  $urlByName = @{}
+  foreach ($fr in $frows) { if ($fr.item -and $fr.canonical_url) { $urlByName[([string]$fr.item).Trim()] = [string]$fr.canonical_url } }
+  $lb = New-Object System.Collections.Generic.List[object]
+  foreach ($br in $boardRows) {
+    foreach ($s in $br.stores) {
+      if ([string]$s.store -ne 'Family Fare') { continue }   # only store publishing a shelf path today
+      $nm = ([string]$s.item).Trim(); if (-not $nm) { continue }
+      $u = $urlByName[$nm]; if (-not $u) { continue }
+      $lb.Add([pscustomobject]@{ id = [string]$br.id; store = 'Family Fare'; product = $nm; canonical_url = $u })
+    }
+  }
+  $rows = $lb.ToArray()
+  Write-Output ("live-board mode: {0} Family Fare cell(s) carry a shelf path" -f $rows.Count)
+}
 # ConvertFrom-Json is called as a FUNCTION, not through a pipeline. In PS 5.1 `@(... | ConvertFrom-Json)`
 # does NOT unroll a JSON array - the whole array arrives as one pipeline object, @() wraps it in a
 # 1-element array, and the foreach below then sees a single "row" whose .id is every id concatenated
@@ -302,7 +334,7 @@ $rows = @()
 # looks like a clean run. Fixtured below.
 if ($Candidates) { $parsed = ConvertFrom-Json (Get-Content $Candidates -Raw); $rows = @($parsed) }
 elseif ($Id) { $rows = @([pscustomobject]@{ id = $Id; product = $Product; canonical_url = $Url }) }
-else { Write-Output 'nothing to judge (pass -Candidates or -Id/-Url)'; exit 0 }
+elseif (-not $LiveBoard) { Write-Output 'nothing to judge (pass -Candidates, -Id/-Url, or -LiveBoard)'; exit 0 }
 
 $out = New-Object System.Collections.Generic.List[object]
 foreach ($r in $rows) {

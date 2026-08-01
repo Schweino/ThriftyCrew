@@ -1,27 +1,6 @@
 ﻿{
     "resolved":  [
-                     {
-                         "id":  "baked-beans",
-                         "fault":  "WRONG-PRODUCT",
-                         "board":  "Our Family Original Baked Beans 28 Oz",
-                         "board_pu":  0.0925,
-                         "name":  "Our Family Original Baked Beans 28 Oz",
-                         "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/heat_serve_meals/our_family_original_baked_beans_28_oz/p/6786962",
-                         "price":  "$2.59",
-                         "size":  "28 oz",
-                         "score":  1
-                     },
-                     {
-                         "id":  "milk",
-                         "fault":  "WRONG-PRODUCT",
-                         "board":  "Our Family Skim Milk 1 Gal",
-                         "board_pu":  3.59,
-                         "name":  "Our Family Skim Milk 1 Gal",
-                         "url":  "https://www.shopfamilyfare.com/shop/dairy/milk/dairy_gallon/our_family_skim_milk_1_gal/p/7081907",
-                         "price":  "$3.59",
-                         "size":  "1 gal",
-                         "score":  1
-                     }
+
                  ],
     "refused":  [
                     {
@@ -57,7 +36,7 @@
                         "why":  "match found but per-unit disagrees: board $1.99 vs link $2.49 (20.1%)"
                     }
                 ],
-    "worked":  10,
-    "generated":  "2026-08-01 15:17",
+    "worked":  8,
+    "generated":  "2026-08-01 15:26",
     "board":  "comparison-2026-08-01.json"
 }
