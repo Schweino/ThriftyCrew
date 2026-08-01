@@ -1,0 +1,25 @@
+{
+  "week_of": "2026-01-02",
+  "_fixture": "FROZEN FIXTURE. The candidate pool derive-recipe-floors picks each cell's price from. minced-garlic/Hy-Vee prices UNCHANGED on purpose - identity must be stamped even when the number does not move, because 313 live cells were sitting at an unchanged price with no product name. rye-bread/Hy-Vee carries an EMPTY size_text, and an empty size must be written as NOTHING: '' is precisely what produces the resolver's 'ours: / ' and it reads as an answer, while absent reads as the question it is. no-refresh-path has NO commodity here at all, which is the real state of 47 recipe-only ids - and a row nothing re-prices must not be handed a product name, because the name would describe a price that came from somewhere else. NEVER regenerate.",
+  "commodities": [
+    {
+      "id": "minced-garlic",
+      "label": "Minced Garlic",
+      "unit": "oz",
+      "candidates": [
+        { "store": "Hy-Vee", "name": "Spice World Minced Garlic", "price_text": "$8.99", "size_text": "32 oz", "regular": 8.99, "unit_price": 0.2809, "basis": "size 32 oz", "price_type": "everyday" },
+        { "store": "Hy-Vee", "name": "Spice World Minced Garlic", "price_text": "$3.49", "size_text": "4.5 oz", "regular": 3.49, "unit_price": 0.7756, "basis": "size 4.5 oz", "price_type": "everyday" },
+        { "store": "Walmart", "name": "Great Value Minced Garlic, 8 oz", "price_text": "$2.73", "size_text": "8 oz", "regular": 2.73, "unit_price": 0.3412, "basis": "size 8 oz", "price_type": "everyday" }
+      ]
+    },
+    {
+      "id": "rye-bread",
+      "label": "Rye Bread",
+      "unit": "oz",
+      "candidates": [
+        { "store": "Hy-Vee", "name": "Hy-Vee Jewish Rye Bread", "price_text": "$3.50", "size_text": "", "regular": 3.50, "unit_price": 0.2188, "basis": "size 16 oz", "price_type": "everyday" },
+        { "store": "Walmart", "name": "Great Value Rye Bread, 16 oz", "price_text": "$2.98", "size_text": "16 oz", "regular": 2.98, "unit_price": 0.1863, "basis": "size 16 oz", "price_type": "everyday" }
+      ]
+    }
+  ]
+}

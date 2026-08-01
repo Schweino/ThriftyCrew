@@ -1584,6 +1584,48 @@ $r = RunPS 'adjudicate-discovery.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELFTEST: all') { Ok ('adjudicate-discovery self-test: ' + (($r.text -split "`n" | Where-Object { $_ -match 'SELFTEST: all' }) -join '')) }
 else { Bad ('adjudicate-discovery self-test FAILED: ' + $r.text) }
 
+# ---------------------------------------------------------------- N3. recipe-board product identity
+# MUST FIRE: recipe-board store rows carried {store, per_unit, type, bulk} and nothing else. derive-recipe-
+# floors CHOSE a product to price each cell from and threw its identity away, so nothing downstream could
+# match those cells: resolve-hyvee-links matches BY SIZE FIRST and logged "no size match (ours: / )" -
+# correctly REFUSING rather than guess, which is the founding minced-garlic fix (board published 32 oz while
+# the link opened 4.5 oz) - and guard 3 reported 10 pins whose board cell has no product name to check.
+# The fixture is COPIED to a temp dir first: this script writes its proposal and report into -OutDir, and a
+# fixture run must never write where the live run writes.
+$fxRf = Join-Path $env:TEMP ('taudit-rf-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+New-Item -ItemType Directory -Path $fxRf -Force | Out-Null
+Copy-Item (Join-Path $fix 'recipe-floors\*.json') $fxRf -Force
+$r = RunPS 'derive-recipe-floors.ps1' @('-Root', $fxRf, '-OutDir', $fxRf)
+$rfProp = $null
+try { $rfProp = ((Get-Content (Join-Path $fxRf 'recipe-floors-proposed.json') -Raw) + '').Trim() | ConvertFrom-Json } catch {}
+function RfCell($id, $store) {
+  foreach ($row in @($rfProp.comparison)) { if ([string]$row.id -eq $id) { foreach ($s in @($row.stores)) { if ([string]$s.store -eq $store) { return $s } } } }
+  return $null
+}
+$mg = RfCell 'minced-garlic' 'Hy-Vee'
+# The cheapest everyday candidate is the 32 oz jar at the SAME per-unit the row already held, so this also
+# pins that identity is stamped when the PRICE DOES NOT MOVE - 313 live cells sat at an unchanged price with
+# no product name, and a fix that only stamped changed cells would have left them exactly as they were.
+if ($mg -and [string]$mg.item -eq 'Spice World Minced Garlic' -and [string]$mg.size -eq '32 oz') {
+  Ok 'recipe floors: a cell is stamped with the product its price came from, even when the price is unchanged'
+} else { Bad ('recipe-board rows are being written without product identity again: ' + ($mg | ConvertTo-Json -Compress)) }
+# MUST FIRE: an EMPTY size is written as NOTHING. '' is exactly what produces the resolver's "ours: / " and
+# it reads as an answer; absent reads as the question it is.
+$rb2 = RfCell 'rye-bread' 'Hy-Vee'
+if ($rb2 -and [string]$rb2.item -eq 'Hy-Vee Jewish Rye Bread' -and -not ($rb2.PSObject.Properties.Name -contains 'size')) {
+  Ok 'recipe floors: a candidate with no size writes NO size rather than an empty one the resolver would read as an answer'
+} else { Bad ('an empty size was written as a real size - the resolver will match against nothing: ' + ($rb2 | ConvertTo-Json -Compress)) }
+# MUST FIRE: identity travels WITH the price or not at all. A row nothing re-prices keeps its old number, so
+# it must NOT be handed a product name - that name would describe a price that came from somewhere else,
+# which is the wrong-basis class (a real product attached to a real price that is not its own).
+$nr = RfCell 'no-refresh-path' 'Hy-Vee'
+if ($nr -and -not ($nr.PSObject.Properties.Name -contains 'item') -and $r.text -match 'no-board-match') {
+  Ok 'recipe floors: a row with no candidate keeps its price AND gets no invented identity'
+} else { Bad ('identity was stamped onto a cell whose price came from somewhere else: ' + ($nr | ConvertTo-Json -Compress)) }
+if ((Get-Content (Join-Path $fix 'recipe-floors\recipe-board-everyday.json') -Raw) -match 'NEVER regenerate') { Ok 'recipe-floors fixture is still the frozen identity gap' }
+else { Bad 'the recipe-floors fixture was regenerated - it no longer pins the shape the bug lived in' }
+Remove-Item $fxRf -Recurse -Force -ErrorAction SilentlyContinue
+
 # ---------------------------------------------------------------- (u) store-taxonomy: the second opinion
 # The ONLY watcher that does not inherit the include regex's premise. Its founding bug is the class that
 # produced 47 of the 99 wrong numbers in 22 days: Family Fare's own catalogue files "Blue Buffalo Natural

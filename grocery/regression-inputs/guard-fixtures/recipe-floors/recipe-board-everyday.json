@@ -1,0 +1,36 @@
+{
+  "week_of": "2026-01-01",
+  "built_at": "2026-01-01T00:00:00",
+  "source": "FROZEN FIXTURE - MUST FIRE. The recipe-board identity gap, reduced. Every store row here carries {store, per_unit, type, bulk} and NOTHING else, exactly as the live file did before 2026-08-01: no item, no size. That shape is why resolve-hyvee-links logged 'no size match (ours: / )' and correctly REFUSED rather than guess, and why guard 3 reported it could not check that a pinned link was the product the board priced. minced-garlic is the founding refusal itself (the board published 32 oz while the link opened 4.5 oz). NEVER regenerate from the live file.",
+  "comparison": [
+    {
+      "id": "minced-garlic",
+      "commodity": "Minced Garlic",
+      "unit": "oz",
+      "cheapest_store": "Hy-Vee",
+      "stores": [
+        { "store": "Hy-Vee", "per_unit": 0.2809, "type": "everyday", "bulk": false },
+        { "store": "Walmart", "per_unit": 0.3412, "type": "everyday", "bulk": false }
+      ]
+    },
+    {
+      "id": "rye-bread",
+      "commodity": "Rye Bread",
+      "unit": "oz",
+      "cheapest_store": "Walmart",
+      "stores": [
+        { "store": "Walmart", "per_unit": 0.1875, "type": "everyday", "bulk": false },
+        { "store": "Hy-Vee", "per_unit": 0.2188, "type": "everyday", "bulk": false }
+      ]
+    },
+    {
+      "id": "no-refresh-path",
+      "commodity": "A Row Nothing Re-Prices",
+      "unit": "oz",
+      "cheapest_store": "Hy-Vee",
+      "stores": [
+        { "store": "Hy-Vee", "per_unit": 1.99, "type": "everyday", "bulk": false }
+      ]
+    }
+  ]
+}
