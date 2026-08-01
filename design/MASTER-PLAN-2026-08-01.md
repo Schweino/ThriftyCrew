@@ -55,9 +55,23 @@ Either lift it formally or reaffirm it; the ambiguity is now the only thing it p
 
 ## Section 1: NOW (highest value, nothing blocking)
 
-**1. Work the 45-commodity coverage backlog** from `grocery\out\semantic-findings.json`, using the
-procedure below. This is shopper-facing accuracy: 89 real products invisible to the rules, including
-Libby's canned pumpkin. THE PROCEDURE, learned from the `cheese,\s+shredded` regression:
+**1. DONE 2026-08-01 - the coverage backlog is worked.** 88 findings -> 27; NO-INCLUDE 74 -> 13, and
+all 13 remaining are recorded judgments rather than open questions (laundry-detergent is brand-narrow
+by design, cranberry-juice is a juice-drink basis call, walnuts is a truncated name nobody can
+verify). Four gated batches, one commit each; 12 wrong-product rulings in `known-wrong.json`.
+
+The procedure below survived contact, but the GATE it describes was wrong twice and is now rebuilt:
+it judged rule edits by today's cells, when board effects are weekly, so it reverted correct work
+that revealed real invisible products. It now measures VISIBILITY (rows revealed, after the
+commodity's own excludes) and THEFT (verify-no-regression `-IgnoreIds`) instead. Full write-up in the
+`coverage-backlog-worked` memory. One limit worth carrying forward: the gates protect OTHER
+commodities and the links; **nothing automated can tell you a revealed row is wrong for the commodity
+being widened** - `frozen\s+vegetables` passed every gate while matching an entire Kroger aisle.
+
+**1b. STILL OPEN from this work:** 13 adjudicated-skip findings stay in the sweep output by design.
+`walnuts` needs an untruncated catalogue name before anyone can rule on it.
+
+THE ORIGINAL PROCEDURE, learned from the `cheese,\s+shredded` regression:
 
 - Batches of ~8 commodities, ONE commit each.
 - Per batch: edit `commodities.json` -> `compare-deals` -> **crown-diff AND tile-integrity AND
@@ -74,9 +88,11 @@ built partly to unblock it: score every FF catalogue product against its would-b
 letting depth flip crowns (the browse test flipped 26, two-thirds wrongly). Deliverable: a gate script
 that takes a candidate crown flip and returns match confidence. This is the prerequisite for item F1.
 
-**3. Schedule the semantic sweep nightly** once the backlog from item 1 is worked, so it reports only
-what is NEW. Wire as an advisory line in check-ad-cycles, BLIND-not-block (the plumbing already
-behaves that way; this is one call-site addition).
+**3. DONE 2026-08-01 - the sweep runs nightly** inside check-ad-cycles as an advisory step beside the
+coverage-gap guard: BLIND-not-block (proven reachable by pointing `-Python` at a path that does not
+exist, not asserted from the code), signature-deduped so a standing backlog is reported once and only
+NEW products speak again. It is not redundant with audit-coverage-gaps, which is regex reasoning
+about regex and structurally cannot see a product whose name shares no vocabulary with the rule.
 
 ## Section 2: FREEZE-GATED (grocery code, ~08-07 or Brad's word)
 
