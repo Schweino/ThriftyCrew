@@ -847,7 +847,13 @@ $GLOBAL_EXCLUDE = @(
     # 'happy\s*tot' added 2026-07-28: the Stage-token exclusions stop at "Stage 1-3", so "Happy Tot Stage 4
   # Organic Pears Blueberries & Spinach Pouch" evaded every baby-food rule and kept surfacing as fresh
   # spinach (and as a contested match on other produce). The brand is baby/toddler food only, so name it.
-'dog\s+food','dog\s+treats?','dog\s+biscuits?','cat\s+food','cat\s+litter','beech[\s-]?nut','gerber','happy\s*baby','happy\s*tot','baby\s+food'
+  # 'serenity\s*kids' added 2026-08-01 (triage 2026-08-01-08b14e): the SAME evasion, one brand later.
+  # "Serenity Kids Free Range Chicken & Thyme with Organic Parsnip & Beet Pouch" carries no Stage token and
+  # no 'baby food' phrase, so it reached canned-beets - and estate-wide it is 10 names on produce commodities.
+  # The brand is baby/toddler food only. baby-food declares this token in relax_global so its OWN 9 pouches
+  # keep routing to baby-food: the first simulation without that relax EVICTED all nine, which is the
+  # opposite of the fix. Never add a brand here without checking who legitimately sells under it.
+'dog\s+food','dog\s+treats?','dog\s+biscuits?','cat\s+food','cat\s+litter','beech[\s-]?nut','gerber','happy\s*baby','happy\s*tot','baby\s+food','serenity\s*kids'
 )
 # a wrapper rule-file can replace the global list (the recipe set relaxes sauce/canned/frozen/juice)
 if ($GEX_OVERRIDE) { $GLOBAL_EXCLUDE = $GEX_OVERRIDE }

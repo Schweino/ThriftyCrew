@@ -1,0 +1,183 @@
+﻿{
+  "generated": "2026-08-01T17:20:00",
+  "round": 1,
+  "board_week": "2026-08-01",
+  "queue_ids_seen": ["2026-08-01-9da3a8", "2026-08-01-08b14e", "2026-08-01-b6c064"],
+  "routing_artifact": "plan-2026-08-01.routing.json",
+
+  "items": [
+    {
+      "queue_id": "2026-08-01-9da3a8",
+      "subject": "Grocery: 26 store(s) dropped from a commodity they carry - 2026-08-01",
+      "classification": "capture-gap",
+      "evidence": [
+        "21 of 26 gaps are Fareway, 5 are Family Fare. fareway-regular-2026-07-31.json carry_note: '+105 carried ... 196 expired' at the 14-day cap; the 07-27 file expired 0. The expiry removed the old SIZED rows and left the 07-31 storefront-sweep rows, which carry no usable size.",
+        "bottled-water | Fareway | 'Fareway Purified Drinking Water' | $3.87 | size='each' | slug '...-fareway-drinking-water-purified-24-each' - a 24-pack whose count exists ONLY in the URL slug. The expired 07-15 twin was named 'Fareway 24 Pack Purified Drinking Water' at the same $3.87, so heal-degraded-sizes (keyed item+price) missed the rename.",
+        "trash-bags | Fareway | 'Bright Essentials Trash Bags, Black, Drawstring, Unscented, Large' | $7.88 | size='each' | slug '...-28-each'. Same shape: storage-bags 20-each, dryer-sheets 120-each, croissants 3-ct, tortillas 23-0-oz (=23.0), mangoes 12-oz. 61 rows in the file have size='each', 48 of them carry a size-bearing slug.",
+        "hand-soap | Fareway | 'Softsoap Liquid Hand Soap Pump, Fresh Breeze' | $1.99 | size='221 fl oz' vs slug '...-7-5-oz' (=7.5 fl oz) - a CORRUPTED size ~30x too big; per-unit $0.009/fl oz fell below band and the cell dropped. Same class: fruit-punch 'Hawaiian Punch Multi-serve Polar Blast' $3.48 size='512 fl oz' vs slug '1-gal' (=128 fl oz), 4x too big, band-dropped.",
+        "soda | Fareway | 'Pepsi Soda - Pack' | $9.49 | size='' | slug '...-pepsi-cola-12-fl-oz' names the PER-CAN size while the price is the PACK price - adopting the slug here would recreate the Aldi pack-price-vs-per-unit-size bug (2026-07-31-96ae4a). Same for 'Gatorade Frost, Glacier Cherry - Pack' (slug 20-fl-oz) and 'Shasta Cola, Diet' (slug 12-fl-oz).",
+        "SLUG DECIMAL LOSS: the slug encodes decimals as dashes ('15-25 oz' = 15.25) but sometimes drops the dot entirely: 'fareway-original-macaroni-cheese-dinner-725-oz' is a 7.25 oz box, not 725 oz. A naive slug parse would deflate per-unit 100x. Dashless 3+ digit weight tokens are ambiguous; counts (ct/each) have no decimals and are safe at any length.",
+        "Family Fare gaps: kale is IN family-fare-regular-2026-08-01.json at $1.79/lb but the kale commodity is unit=each, so the engine honestly refuses a per-lb row (board kale: Walmart 1.48 each etc.). feta candidates are premium 4 oz crumbles at $1.2475/oz vs the live row 0.30-0.745/oz (band refusal). brownie-mix / canned-green-beans / frozen-lasagna: only premium rows in the capture (Rao's lasagna 0.566/oz vs board 0.15-0.28) while the cheap search terms 'brownie mix', 'cut green beans can', 'frozen lasagna' sit in the file's 466-term empty_terms throttle ledger - the 3-hourly sweep self-heals these.",
+        "The rotisserie-chicken @ Fareway and onions @ Fareway gaps are audit FALSE CANDIDATES (Oscar Mayer rotisserie-seasoned LUNCH MEAT; a 6 oz diced-onion cup) - fixed as routing excludes in item 2026-08-01-08b14e, which removes them from the candidate pool."
+      ],
+      "surface_fix": {
+        "what": "derive the missing sizes from Fareway's own catalog slugs and re-emit the regular file, so the 14-day expiry stops taking sized rows with no sized successor",
+        "files": ["grocery/build-fareway-regular.ps1"],
+        "exact_change": "extend the existing SLUG BASIS OVERRIDE (currently only '-1-lb'): when the row's size is 'each' or empty AND the item name does not end in '- Pack', parse the slug tail '-<num>-<unit>' where dashes inside <num> are decimal points. Adopt: any integer for ct/each units; dash-decimal or 1-2 digit dashless for oz/fl-oz/lb/gal. REFUSE dashless 3+ digit weight tokens (the 725-oz=7.25oz ambiguity) unless the NAME carries the same size. When a NON-empty captured size disagrees with the slug size by a factor of 1.5x or more, route the row to the existing basis-conflict drop path (the Softsoap 221-vs-7.5 and Hawaiian 512-vs-128 corruptions) instead of publishing either number."
+      },
+      "root_cause": "Three stacked mechanisms: (1) the Fareway storefront DOM extract reads a surface that does not carry the pack size for many products, so the builder writes size='each' or '' while the price is the pack price - the same surface-without-the-fact class as the Aldi product-page finding (2026-07-31-96ae4a); (2) heal-degraded-sizes keys on item+price, so a store RENAME ('Fareway 24 Pack Purified Drinking Water' -> 'Fareway Purified Drinking Water') defeats the heal even though the product id in the link_url (20544533) is identical; (3) the 14-day carry cap had been hiding this - on 07-31 it expired 196 old sized rows at once and every per-unit commodity whose only remaining Fareway row was size-less dropped off the board at the next comparison (08-01 06:10). The engine's refusal to price a size-less row is CORRECT and must stay.",
+      "root_fix": {
+        "what": "make the heal rename-proof and the slug the declared fallback surface",
+        "files": ["grocery/heal-degraded-sizes.ps1", "grocery/build-fareway-regular.ps1"],
+        "exact_change": "heal-degraded-sizes: match prior-capture rows by the numeric product id parsed from link_url (stable across renames) in addition to item+price, keeping the existing same-price guard. build-fareway-regular: the slug-size derivation from surface_fix, with a frozen self-test."
+      },
+      "blast_radius": {
+        "measured_as": "rows",
+        "measured_by": "all 554 deal rows of fareway-regular-2026-07-31.json (the newest Fareway regular file), plus coverage-gaps.json 15:23 and the board cells in comparison-2026-08-01.json",
+        "affected_now": 65,
+        "detail": "61 rows with size='each' + 4 with size=''. 48 of the 61 carry a size-bearing slug. Under the adoption rules: RECOVER with a safe count (ct/each slugs): bottled-water 24, trash-bags 28, storage-bags 20, dryer-sheets 120, dishwasher pacs 43, croissants 3. RECOVER with a safe weight (dash-decimal or short): tortillas 23.0 oz, mangoes 12 oz, lemons 16 oz (a bag; the engine and band then decide, refusal stays honest), microwave-popcorn 19.74 oz, granola-bars 10.91 oz, fruit-snacks 32 oz, hot-dog-buns 12.4 oz, instant-mashed-potatoes 6 oz (band-gated), plus the remaining non-gap rows. QUARANTINE as slug-vs-size conflict: hand-soap (Softsoap), fruit-punch (Hawaiian Punch) - absent by decision, visible in the conflict report. NOT RECOVERABLE (correctly): soda / sports-drinks '- Pack' rows (slug is per-unit), hamburger-buns 'sesame-yellow-hamburger-buns' (no size anywhere), mac-and-cheese '725-oz' ambiguity. Board risk: zero existing cells change; the change only ADDS Fareway cells to commodities that currently have none, every one at a price the store itself states, gated by the same bands.",
+        "risk": "a wrongly adopted slug size would mint a wrong per-unit; contained by the pack-name refusal, the 3-digit-dashless refusal, the conflict quarantine, and the commodity bands downstream"
+      },
+      "freshness": "measured against fareway-regular-2026-07-31.json (built 07-31 11:52, still the newest Fareway file), coverage-gaps.json of 2026-08-01 15:23, family-fare-regular-2026-08-01.json of 16:06, and comparison-2026-08-01.json built 15:23. The FF sweep lands every 3 hours; if family-fare gaps have changed on rebuild, only the FF sub-classification needs a re-look, the Fareway mechanism does not.",
+      "proof": {
+        "guard_or_fixture": "NEW frozen fixtures in build-fareway-regular.ps1 -SelfTest, run by the harness like the other builder self-tests",
+        "must_fire_case": "frozen from today's real rows: (a) the PurAqua-class row (size 'each', slug 24-each, price 3.87) must emit size '24 ct'; (b) the Softsoap row (size '221 fl oz', slug 7-5-oz) must go to the basis-conflict drop, never publish; (c) 'Pepsi Soda - Pack' with a per-unit slug must stay size-less; (d) the 725-oz dashless token must be refused",
+        "clean_twin": "(e) a '-1-lb' slug row must keep today's behavior exactly; (f) a row with a real captured size and an agreeing slug must pass through untouched; heal-degraded-sizes gets a rename fixture: same product id + same price + different name must re-adopt the prior size",
+        "commands": ["powershell -File grocery/build-fareway-regular.ps1 -SelfTest", "powershell -File grocery/test-guards.ps1", "post-rebuild: verify bottled-water / trash-bags / dryer-sheets show a Fareway cell in the new comparison and on the live board"]
+      },
+      "rollback": "revert the two script hunks and re-emit fareway-regular from the same shop capture; the never-shrink guard already protects the file, and no historical capture is modified",
+      "do_not_touch": ["the engine's refusal to price a size-less row on a per-unit commodity", "the 14-day carry cap", "the never-shrink overwrite guard", "coverage-gap-allowlist entries owned by earlier triages"],
+      "resolution_note": "26 drops classified: 21 Fareway = the storefront sweep captures no pack size (size 'each' or empty) and the 14-day cap expired the 196 old sized rows on 07-31, so per-unit commodities lost their Fareway cells at the next compare. Fixed by deriving sizes from Fareway's own catalog slugs (dash-decimal aware, pack-suffix and ambiguity refusals, conflict quarantine for two corrupted-size rows) and making heal-degraded-sizes rename-proof via the link_url product id. 5 Family Fare = honest band/unit refusals of premium rows while the cheap terms sit in the throttle ledger; the 3-hourly sweep self-heals them. 2 gaps were audit false candidates, removed by the item-08b14e routing excludes.",
+      "publish_batch": 1,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-08-01-08b14e",
+      "subject": "Grocery matching soundness - review needed",
+      "classification": "wrong-product",
+      "evidence": [
+        "One growing condition: the alert (06:11) said new-contested=13, the 08:59 run logged 16, and soundness-report.json of 15:27 lists 21 - the 3-hourly FF sweeps add names through the day. MOVED=0 DROPPED=0 drift=0 every time, and ZERO of the misrouted names holds a live cell in comparison-2026-08-01.json (checked cell by cell), so nothing wrong is published; this is candidate-pool adjudication before -Accept.",
+        "14 of the 21 contested names MISROUTE today (winner from the audit's own match-sweep-cache, commodities.json array order):",
+        "'Dove Advanced Care Shea Butter & Warm Vanilla Hand Wash' -> butter (idx 8) - a HAND WASH on the butter commodity; belongs at hand-soap (99)",
+        "'Gatorade Lower Sugar Fruit Punch Electrolyte Beverage 28 Fl Oz' -> sugar (62) - sugar's excludes cover 'no sugar' and 'zero sugar' but not the LOWER/REDUCED/LESS modifier; belongs at sports-drinks (237). Same mechanism: 'Our Family Cranberries, Reduced Sugar 5 Oz' -> sugar (a shelf bag of reduced-sugar cranberries, neither sugar nor fresh produce; after the release it must NOT land in fresh-cranberries either, so fresh-cranberries gets 'reduced\\s+sugar' and the name goes honestly unmatched)",
+        "'Electrolit Fruit Punch Electrolyte Beverage 21 Fl Oz' -> fruit-punch (236) - fruit-punch excludes gatorade/powerade by brand but not the electrolyte class; belongs at sports-drinks (237)",
+        "'Tampico Garlic Granulated' / 'Tampico Onion Granulated' (real Tampico-brand spices; the brand's other spices hold Baker's cells at ground-allspice, bay-leaves, ground-coriander, ground-cumin) -> fresh garlic (49) / onions (19); belong at garlic-powder (315) / onion-powder (316)",
+        "'Kettle & Fire Mushroom Chicken Bone Broth' -> fresh mushrooms (51); belongs at chicken-broth (73). 'Lance Cream Cheese And Chives Sandwich Crackers' -> cream-cheese (11); belongs at crackers (216). 'Ruffles Cheddar and Sour Cream Potato Chips Party Size' -> sour-cream (10); belongs at potato-chips (82) - and the full-corpus sweep shows sour-cream currently claims NINE chips products estate-wide",
+        "'Ken's Steak House Raspberry Walnut Vinaigrette' -> raspberries (106); 'Ken's Tuscan Italian With Lemon, Garlic & Herbs Dressing & Marinade' -> lemons (40); the sweep shows garlic/lemons also block Stubb's, Lawry's and Great Value marinades from the bottled-marinade commodity (371) they belong to",
+        "'Sargento Balanced Breaks' (2 SKUs) -> shredded-cheese (12) - a snack kit; 'Serenity Kids Free Range Chicken & Thyme with Organic Parsnip & Beet Pouch' -> canned-beets (336) - a baby-food brand evading the stage-1-3 rules exactly like happy-tot did on 07-28; 'Lean Cuisine ... Cinnamon Apples' -> apples (20) - a frozen dinner on fresh apples; 'NatureSweet Cherubs Tomatoes' -> tomatoes (42) but it is a grape/cherry tomato the cherry-tomatoes (447) include cannot see without the brand token",
+        "7 of 21 route CORRECTLY and need no change: Cocina Fresca salsa -> salsa; Kraft Parmesan Pesto Mac & Cheese -> mac-and-cheese; Pacific Foods bone broth -> chicken-broth; Pear Slices Each -> pears; both StarKist tunas -> canned-tuna; Triscuit Balsamic Vinegar & Basil -> crackers"
+      ],
+      "surface_fix": {
+        "what": "the 21 rule edits simulated in the routing artifact: 19 commodity-level excludes, 1 include, 1 global with a relax",
+        "files": ["grocery/commodities.json", "grocery/compare-deals.ps1"],
+        "exact_change": "sugar.exclude += '(?:lower|reduced|less)\\s+sugar'; fruit-punch.exclude += 'electrolyte','electrolit'; butter.exclude += 'hand\\s*wash','body\\s*wash','\\bshea\\b'; raspberries/walnuts/lemons.exclude += 'vinaigrette','marinade','\\bdressing\\b'; garlic.exclude += those three + '\\bgranulated\\b'; onions.exclude += '\\bgranulated\\b','\\bdiced\\b'; mushrooms.exclude += '\\bbroth\\b'; cream-cheese.exclude += '\\bcrackers?\\b'; sour-cream.exclude += '\\bchips\\b'; shredded-cheese/almonds/dried-cranberries.exclude += 'balanced\\s*breaks'; fresh-cranberries.exclude += 'reduced\\s+sugar'; apples.exclude += 'lean\\s*cuisine'; ground-cinnamon.exclude += 'lean\\s*cuisine'; tomatoes.exclude += '\\bcherubs?\\b'; cherry-tomatoes.include += '\\bcherubs?\\b'; rotisserie-chicken.exclude += 'lunch\\s*meat'; GLOBAL_EXCLUDE += 'serenity\\s*kids' WITH baby-food.relax_global += 'serenity\\s*kids' (without the relax the 9 legitimate Serenity Kids pouches are evicted from baby-food - measured, see the artifact)"
+      },
+      "root_cause": "Seven wrong-product classes the rule library cannot express, each proven by more names than the one that alerted: (a) flavor-carrier snacks - 'sour cream & onion' names 9 chips products that all reach the sour-cream commodity; (b) modifier-phrase sugar claims - 'lower/reduced/less sugar' names 7 products (Gatorade x2, Craisins x3, Quaker oatmeal, a ketchup) that all reach the sugar commodity because its excludes only cover no/zero/added; (c) granulated spices vs fresh produce - 7 names; (d) rotisserie-SEASONED lunch meat vs the rotisserie-chicken each-commodity - 8 names; (e) dressing/marinade carriers on produce and nuts, which also BLOCK bottled-marinade from names it should own - 6 names; (f) snack kits and personal-care 'butter' - 5 names; (g) a baby-food brand outside the brand list - 10 names. Where these tokens are estate-wide classes they belong in the category-excludes library so the bake applies them everywhere, not only where today's names happened to land.",
+      "root_fix": {
+        "what": "add the class tokens at the library level and re-bake, so the classes are closed estate-wide instead of patched per-commodity",
+        "files": ["grocery/category-excludes.json", "grocery/commodities.json"],
+        "exact_change": "put (a) flavor-carrier chips, (b) the lower/reduced/less-sugar modifier, (e) vinaigrette/marinade-carrier, (f) shea/hand-wash personal care, and (g) 'serenity\\s*kids' into the appropriate category-excludes classes for produce/dairy/pantry categories; run the apply-category-excludes re-bake until -WhatIf reports +0 (the 07-31 lesson: an unbaked library silently drifts). The purely local tokens (granulated on garlic/onions, broth on mushrooms, crackers on cream-cheese, cherubs, lunch meat, balanced breaks, lean cuisine, diced) stay commodity-level."
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "before/after first-match-wins routing of all 22,618 unique product names in match-sweep-cache.json (fingerprint era 2026-08-01 15:11; the same feed set audit-match-soundness ingests), using a faithful re-implementation of its Get-Eligible matcher verified against the cache on 60 random names + all 21 contested names with 0 mismatches. Full frozen diff in plan-2026-08-01.routing.json.",
+        "affected_now": 57,
+        "names": ["57 names change routing; every one is listed in the artifact. Highlights: 9 chips -> potato-chips or unmatched; 3 Craisins '50% Less Sugar' -> dried-cranberries (a commodity that was a coverage gap at Walmart on 07-31); 5 granulated garlic -> garlic-powder; 2 granulated onion -> onion-powder; 4 marinades -> bottled-marinade; 2 Gatorade -> sports-drinks; Electrolit -> sports-drinks; Quaker -> oatmeal; a ketchup row -> ketchup; 2 Kettle & Fire -> chicken-broth; 3 Lance -> crackers; Dove -> hand-soap; Billie + Gillette shave products -> shaving-cream (286); Cherubs -> cherry-tomatoes; 8 lunchmeats, 4 diced-onion cups, 2 Balanced Breaks, both Ken's, Lean Cuisine, Our Family reduced-sugar cranberries -> unmatched (honest)"],
+        "risk": "ZERO live board cells are held by any changed name (checked against comparison-2026-08-01 built 15:23), so no cell moves or is lost at ship time. New cells may APPEAR at dried-cranberries, garlic-powder, onion-powder, bottled-marinade, sports-drinks, potato-chips, cherry-tomatoes (Fareway at 0.399/oz, inside today's live 0.1772-0.399 range, no crown change), oatmeal, ketchup, hand-soap, shaving-cream, chicken-broth; the arrivals watcher and the match-soundness accept review cover them. Warehouse-size granulated garlic (Member's Mark 7.25 lb at Sam's) will likely trip a sanity outlier at garlic-powder - that is real bulk economics, pre-answered here."
+      },
+      "claimed_by_earlier": [
+        { "name": "NatureSweet Cherubs Tomatoes", "claimed_by": "tomatoes", "index": 42, "release_needed": "tomatoes.exclude += '\\bcherubs?\\b' (cherry-tomatoes sits at 447; without the release the include is unreachable)" },
+        { "name": "Electrolit Fruit Punch Electrolyte Beverage 21 Fl Oz", "claimed_by": "fruit-punch", "index": 236, "release_needed": "fruit-punch.exclude += 'electrolyte','electrolit' (sports-drinks is at 237)" },
+        { "name": "Gatorade Lower Sugar Fruit Punch / Variety 24 pk (2 names)", "claimed_by": "sugar", "index": 62, "release_needed": "sugar.exclude += '(?:lower|reduced|less)\\s+sugar' (sports-drinks 237)" },
+        { "name": "Ocean Spray Craisins 50% Less Sugar (3 names)", "claimed_by": "sugar", "index": 62, "release_needed": "same sugar release (dried-cranberries 461)" },
+        { "name": "Quaker Lower Sugar Instant Oatmeal 52 pk", "claimed_by": "sugar", "index": 62, "release_needed": "same sugar release (oatmeal 67)" },
+        { "name": "Kettle & Fire Mushroom Chicken Bone Broth (2 names)", "claimed_by": "mushrooms", "index": 51, "release_needed": "mushrooms.exclude += '\\bbroth\\b' (chicken-broth 73)" },
+        { "name": "Lance Cream Cheese And Chives Sandwich Crackers (3 names)", "claimed_by": "cream-cheese", "index": 11, "release_needed": "cream-cheese.exclude += '\\bcrackers?\\b' (crackers 216)" },
+        { "name": "sour cream & onion / cheddar & sour cream chips (9 names)", "claimed_by": "sour-cream", "index": 10, "release_needed": "sour-cream.exclude += '\\bchips\\b' (potato-chips 82; the 2 Pringles land unmatched because potato-chips has its own crisps handling - honest)" },
+        { "name": "granulated garlic (5 names) / granulated onion (2 names)", "claimed_by": "garlic / onions", "index": 49, "release_needed": "garlic.exclude and onions.exclude += '\\bgranulated\\b' (garlic-powder 315, onion-powder 316)" },
+        { "name": "Stubb's / Lawry's / Great Value marinades (4 names)", "claimed_by": "garlic (49) and lemons (40)", "index": 49, "release_needed": "the vinaigrette/marinade/dressing excludes (bottled-marinade 371)" },
+        { "name": "Dove Advanced Care Shea Butter Hand Wash", "claimed_by": "butter", "index": 8, "release_needed": "butter.exclude += 'hand\\s*wash' (hand-soap 99); the shave products need '\\bshea\\b' and 'body\\s*wash' (shaving-cream 286)" }
+      ],
+      "freshness": "routing measured on match-sweep-cache of 15:11 and cells checked against comparison-2026-08-01 built 15:23. family-fare-regular-2026-08-01.json was rewritten at 16:06 (after the measurement) and the FF sweep lands every 3 hours, so the developer MUST re-run the diff against the artifact on the current corpus before -Accept; new FF names may add contested rows but cannot invalidate the 57 measured changes.",
+      "proof": {
+        "guard_or_fixture": "audit-match-soundness -Accept review plus NEW frozen fixture rows in test-auditors for the class tokens",
+        "must_fire_case": "frozen from today's real rows: the Ruffles chips row must NOT route to sour-cream, the Gatorade Lower Sugar row must NOT route to sugar, the Dove hand wash must NOT route to butter, the Serenity Kids pouch must NOT route to canned-beets",
+        "clean_twin": "'Daisy Sour Cream' stays sour-cream; 'Domino Granulated Sugar' stays sugar (its include is 'granulated\\s+sugar', untouched by the modifier exclude); 'Tampico Allspice Ground' keeps its live Baker's ground-allspice cell; a Serenity Kids pouch STAYS in baby-food (proves the relax_global); apply-category-excludes -WhatIf reports +0 after the re-bake",
+        "commands": ["powershell -File grocery/audit-match-soundness.ps1 (review, then -Accept, never -Force)", "powershell -File grocery/test-auditors.ps1", "diff the rebuilt routing against plan-2026-08-01.routing.json - 57 changes expected, 0 live cells lost"]
+      },
+      "rollback": "revert the commodities.json / category-excludes.json / compare-deals GLOBAL_EXCLUDE hunks and re-bake; the baseline has NOT been accepted yet so no baseline rollback is needed",
+      "do_not_touch": ["any price band (no misrouted name holds a cell, so no band needs to move)", "the match-baseline except through -Accept after the line-by-line review", "the apples snack_carrier exempt from 07-31"],
+      "resolution_note": "21 contested names adjudicated in array order against their raw rows: 7 route correctly, 14 misroute across 7 library-expressibility classes (flavor-carrier chips, lower/reduced-sugar modifier, granulated spices, rotisserie lunchmeat, marinade carriers, snack kits and personal-care butter, a baby-food brand). Fixed at library+commodity level, re-baked, routing re-measured over 22,618 names: 57 changes, all intended, zero live cells moved, several real recoveries (Craisins to dried-cranberries, marinades to bottled-marinade, granulated spices to their powder commodities). Baseline accepted after review.",
+      "publish_batch": 1,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-08-01-b6c064",
+      "subject": "Grocery: 3 NEW price flag(s) - 2026-08-01",
+      "classification": "real-economics",
+      "evidence": [
+        "Furniture Polish wow ($0.16 -> $0.24): last week's crown was Baker's 'Murphy Oil Soap Wood Cleaner Original' 32 fl oz at 0.1559/oz (comparison-2026-07-30); Murphy is ABSENT from bakers-regular-2026-08-01.json (the daily Kroger API pull rotates its catalog), so the crown correctly moved to Fareway 'Behold Furniture Polish, Lemon' $2.99 / 12.5 oz = 0.2392/oz (arithmetic exact). Catalog rotation, not a parse.",
+        "Gelatin outlier (Hy-Vee $0.99, 39% below Walmart $1.62): winner is 'Hy-Vee Strawberry Gelatin Dessert 3 oz' at $0.99 per 1 ct box, source 'verified on store page 2026-07-14 (boxed gelatin, open-item resolution)'; runner-up is brand-name 'Jell-O Strawberry Gelatin Dessert Mix, 3 oz Box' $1.62 at Walmart. Store brand vs Jell-O on an each commodity - both parses correct.",
+        "Wild Rice outlier (Hy-Vee $0.69/oz, 41% below Fareway $1.16/oz): winner is 'Hy-Vee Select Wild Rice' $10.99 / 16 oz = 0.6869/oz, source 'Aisles Online current shelf price (storeId 1465)' as_of 07-30; runner-up is 'Lundberg Family Farms ORGANIC Wild Rice' 8 oz at $1.1612/oz. Store brand at double the size vs a premium organic half-pound - real economics, and the 07-28 'Canoe cooked wild rice' wrong-form bug is not involved."
+      ],
+      "surface_fix": {
+        "what": "ack the three flags through the designed valve so they stop re-paging while staying reviewable",
+        "files": ["grocery/out/review-ack.json"],
+        "exact_change": "add SANITY ack entries for furniture-polish (wow), gelatin (outlier), wild-rice (outlier) with the evidence lines above and expiry 2026-08-14"
+      },
+      "root_cause": "All three flags are the sanity watcher doing its job on real cross-brand and cross-size economics: a premium store-brand or organic runner-up magnifies the percentage gap, and the wow metric keys on crown movement, which legitimately moves when a catalog-rotating API store drops last week's crown product. No parse, basis or routing error is involved; each winner's arithmetic reproduces exactly from its raw captured row.",
+      "root_fix": null,
+      "root_fix_note": "surface fix IS the fix: the ack file with a short expiry is the designed valve for verified-real sanity flags (established pattern: 2026-07-29-3e0426, 2026-07-31-17f5d4). Not renewable blind: if the same flags re-fire after 2026-08-14, re-verify the rows against fresh captures rather than re-acking.",
+      "blast_radius": {
+        "measured_as": "cells",
+        "measured_by": "the three flagged commodity rows in comparison-2026-08-01.json (built 15:23) traced to their raw rows in bakers-regular-2026-08-01.json, hyvee-regular-2026-08-01.json and fareway-regular-2026-07-31.json; comparison-2026-07-30.json for the prior crown",
+        "affected_now": 3,
+        "risk": "acks change no board number; the only risk is acking a future different bug under the same key, bounded by the 2-week expiry"
+      },
+      "freshness": "verified against comparison-2026-08-01 built 15:23 and the captures named above; the Hy-Vee wild rice price was store-verified 07-30 and gelatin 07-14 (hyvee rows carry not_reverified today because the 14-min GraphQL wall-clock cap stopped at 868 of 960 refreshables - a coverage note, not a doubt about these two rows)",
+      "proof": {
+        "guard_or_fixture": "check-ad-cycles sanity pass on the next scheduled run",
+        "must_fire_case": "n/a - no code changes; the existing sanity watcher must keep flagging unacked outliers (its test-auditors fixtures already prove that)",
+        "clean_twin": "after the acks, the next daily run reports these three as acked and raises NO new flag for them; ack expiry 2026-08-14 forces re-review",
+        "commands": ["powershell -File grocery/check-ad-cycles.ps1 (next scheduled run)"]
+      },
+      "rollback": "delete the three ack entries from out/review-ack.json",
+      "resolution_note": "All 3 flags verified real against their raw rows: furniture-polish wow is Baker's Murphy Oil Soap rotating out of the daily Kroger pull (crown correctly moved to Behold at Fareway, $2.99/12.5 oz); gelatin is Hy-Vee store brand $0.99 vs Walmart Jell-O $1.62; wild rice is Hy-Vee Select 16 oz $10.99 vs Fareway organic Lundberg 8 oz. Acked with evidence until 2026-08-14; no rule or engine change.",
+      "publish_batch": 1,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    }
+  ],
+  "ship_sequence": [
+    "1. item 08b14e rule edits: commodities.json excludes/include, compare-deals GLOBAL_EXCLUDE += serenity kids WITH baby-food relax_global, category-excludes library tokens; apply-category-excludes re-bake until -WhatIf reports +0",
+    "2. item 9da3a8 script edits: build-fareway-regular.ps1 slug-size derivation + conflict quarantine + -SelfTest fixtures; heal-degraded-sizes.ps1 product-id matching + rename fixture; run both self-tests (must pass)",
+    "3. re-emit the Fareway regular file through the changed builder from the existing out/fareway shop capture (never-shrink guard stays armed; do NOT -Force past it without reading why it fired)",
+    "4. compare-deals full rebuild -> audit-name-drift -> prune-bad-links -> generate-board-overrides -> build-deals-page",
+    "5. diff the rebuilt routing against plan-2026-08-01.routing.json: expect the 57 changes, ZERO lost cells, new-cell arrivals only at the commodities listed in item 08b14e blast_radius; any deviation outside the artifact is a bounce candidate, measured not observed",
+    "6. audit-match-soundness.ps1: review the report line by line against the artifact, then -Accept (never -Force)",
+    "7. guards.ps1 (MUST exit 0) + audit-food-category + audit-basis-reconcile + audit-pack-basis + audit-unit-basis-outlier",
+    "8. write the three review-ack entries for item b6c064 (expiry 2026-08-14)",
+    "9. publish-deals-page.ps1; verify LIVE with a cache-busting query param: a recovered Fareway cell (bottled-water or trash-bags) and the cherry-tomatoes Fareway cell at 0.399/oz",
+    "10. test-auditors.ps1 (MUST exit 0, including the new fixtures)",
+    "11. commit plan + routing artifact + fixes, push; close the three queue items with the resolution notes; also backfill notes/resolved_ts on 2026-07-31-96ae4a, -24c014, -1ecf1f (see side_check_0731_closures)"
+  ],
+
+  "open_questions_for_brad": [],
+
+  "side_check_0731_closures": {
+    "requested_by": "dispatch bounded side-check",
+    "verdict": "NO REQUEUE NEEDED - all three root causes verifiably shipped in code; only the queue bookkeeping is nonstandard",
+    "id_96ae4a": "SHIPPED: audit-unit-basis-outlier.ps1 exists, test-auditors.ps1 line 2484 runs its -SelfTest daily, commit 9851faa7 documents the detector design (size-shape tell, two must-fire fixtures, three clean twins) and its first live catch (FF ground cloves at $36/oz); aldi-regular-2026-07-29.json was hand-restamped 07-31 11:23. The recorded residual (the puller still reads the countless product page) is honest.",
+    "id_24c014": "SHIPPED: Get-ChipLinkKind is a single function in audit-board-consistency.ps1 with -SelfTest frozen fixtures (the 2026-08-01 founding case), and test-auditors.ps1 line 2488 runs that self-test daily.",
+    "id_1ecf1f": "SHIPPED via commit 9851faa7: known-wrong.json rulings now drop adjudicated cells at compare time (known-wrong-lib.ps1 shared matcher) and 7 commodities were widened for the noun-first name inversion; the resolution's zero-clamps claim is consistent with that chain but was NOT independently re-run from this read-only seat (compute-v2 writes artifacts).",
+    "queue_hygiene": "all three entries carry status=resolved with notes=null and resolved_ts=null, using nonstandard 'resolution' + 'resolved_on' fields instead. The developer should backfill notes/resolved_ts from those fields so triage-due and future audits read them uniformly."
+  }
+}

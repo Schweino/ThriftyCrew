@@ -46,6 +46,15 @@ param(
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 
+# A [string[]] PARAM DOES NOT SURVIVE `powershell -File` (2026-08-01). Called as
+# `-OpenIds 'a','b','c'` through -File, all three arrive as ONE comma-joined string, so the gate compared
+# the plan against a single id that matches nothing and reported the whole plan missing - on a plan that
+# was actually complete. That is the THIRD instance of this shape in two days (send-alert's -Body, the
+# post-processor's -Raw), and the other two also produced a confident wrong answer rather than an error.
+# A gate that can be defeated by the caller's quoting is not a gate, so normalise here instead of trusting
+# every future caller to use -Command with a real array.
+$OpenIds = @($OpenIds | Where-Object { $_ } | ForEach-Object { ([string]$_) -split '[,;]' } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+
 # classifications that legitimately carry no code change, so no blast radius / proof / rollback is demanded
 $NO_CODE = @('no-code-change','needs-brad','superseded','needs-more-time')
 
@@ -188,6 +197,11 @@ if ($SelfTest) {
   _Case 'no-code item needs no blast radius/proof/rollback' $ok2 0 $null
   # BLIND: zero items proves nothing
   _Case 'zero items reports BLIND (rc 3)' ([pscustomobject]@{ queue_ids_seen=@(); ship_sequence=@('x'); items=@() }) 3 'ZERO items'
+  # MUST-FIRE: a comma-joined -OpenIds (what `powershell -File` does to a [string[]]) must be split, not
+  # treated as one id. Before this, a COMPLETE plan was reported as missing every queue id.
+  $split = @('q1,q2' | Where-Object { $_ } | ForEach-Object { ([string]$_) -split '[,;]' } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+  if ($split.Count -eq 2 -and $split[0] -eq 'q1' -and $split[1] -eq 'q2') { Write-Output 'ok    comma-joined -OpenIds is split back into real ids' }
+  else { Write-Output "FAIL  comma-joined -OpenIds not split (got $($split.Count) id(s))"; $script:fail++ }
   Write-Output ''
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
   Write-Output 'SELF-TEST PASS (all 7 plan-gate cases)'
