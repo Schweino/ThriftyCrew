@@ -1626,6 +1626,25 @@ if ((Get-Content (Join-Path $fix 'recipe-floors\recipe-board-everyday.json') -Ra
 else { Bad 'the recipe-floors fixture was regenerated - it no longer pins the shape the bug lived in' }
 Remove-Item $fxRf -Recurse -Force -ErrorAction SilentlyContinue
 
+# ---------------------------------------------------------------- N4. multipack SIZE REPAIR
+# The repair half of guard 5. Its 8 hermetic cases include the two that decide whether it is safe at all:
+# the founding Heinz row must repair (name states 2 x 50.5 oz, feed returned one bottle, $0.2968/oz against
+# a true $0.1484), and guard 5's OWN founding bug must still be REFUSED ("ReaLemon 100% Lemon Juice (2 pk)",
+# size "48 fl oz", no per-unit weight in the name) - inventing a total there is guessing at the exact point
+# the guard exists to stop guessing. It also round-trips through Test-MpClassify, so a repair that does not
+# actually satisfy the gate it was written for cannot pass.
+$r = RunPS 'repair-multipack-sizes.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELFTEST: all') { Ok ('multipack size repair self-test: ' + (($r.text -split "`n" | Where-Object { $_ -match 'SELFTEST: all' }) -join '')) }
+else { Bad ('multipack size repair self-test FAILED: ' + $r.text) }
+# MUST FIRE: a repair that writes a size guard 5 still rejects is decoration. Pinned as a pair here as well
+# as inside the self-test, because THIS suite is what runs daily.
+. (Join-Path $root 'multipack-lib.ps1')
+$mpBad = 'Heinz Tomato Ketchup, 2 Pack 50.5 Oz'
+$mpFix = Get-MpRepairedSize $mpBad '50.5 oz'
+if ((Test-MpClassify 'Family Fare' $mpBad '50.5 oz' @()) -eq 'reject' -and $mpFix -eq '2 pk 50.5 oz' -and (Test-MpClassify 'Family Fare' $mpBad $mpFix @()) -ne 'reject') {
+  Ok 'multipack repair and guard 5 agree: the rejected row repairs, and the repaired row passes'
+} else { Bad ('the repair and the guard have drifted apart - repaired size was [' + $mpFix + ']') }
+
 # ---------------------------------------------------------------- (u) store-taxonomy: the second opinion
 # The ONLY watcher that does not inherit the include regex's premise. Its founding bug is the class that
 # produced 47 of the 99 wrong numbers in 22 days: Family Fare's own catalogue files "Blue Buffalo Natural

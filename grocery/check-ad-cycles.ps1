@@ -279,6 +279,25 @@ if (-not $NoAlert) {
 # board price signature, so an unchanged day is a no-op. This is what keeps pricing current relative to ad
 # dates every day, not just on the weekly ad flip.
 if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
+  # ---- REPAIR PACK SIZES BEFORE COMPARING (2026-08-01) ----------------------------------------------
+  # A store's own feed can return ONE unit of a pack it already counted in the product name - Family Fare
+  # returned size "50.5 oz" for "Heinz Tomato Ketchup, 2 Pack 50.5 Oz" at $14.99, which prices at $0.2968/oz
+  # against $0.1484 for the real 101 oz. Guard 5 hard-fails those, correctly, and that blocked the whole
+  # nightly publish with no honest way to clear it: a multipack-allowlist entry asserts a human checked the
+  # size IS the pack total, which here it is not. So repair the arithmetic the store's own name proves, and
+  # refuse everything else. Must run BEFORE compare-deals or the board prices the unrepaired size (same
+  # ordering rule heal-degraded-sizes.ps1 states). Shares multipack-lib with the guard, so the repair and
+  # the verdict cannot drift apart. Non-fatal and LOUD: a repair that throws must not take the cycle down,
+  # but it must never pass silently either - the row it left behind is a 2x price.
+  try {
+    $mpOut = @(& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'repair-multipack-sizes.ps1') -Apply)
+    @($mpOut | Where-Object { $_ -match 'REPAIR |REFUSED |^repair-multipack-sizes:' }) | ForEach-Object { Log ('multipack-repair: ' + $_) }
+    $mpRep = @($mpOut | Where-Object { $_ -match '^\s*REPAIR ' }).Count
+    $mpRef = @($mpOut | Where-Object { $_ -match '^\s*REFUSED ' }).Count
+    if ($mpRep -gt 0) { $summary += ('REVIEW    multipack-repair rewrote ' + $mpRep + ' pack size(s) the store reported as ONE unit - each was a ' + [char]0x2248 + 'Nx per-unit price before the fix') }
+    if ($mpRef -gt 0) { $summary += ('REVIEW    multipack-repair REFUSED ' + $mpRef + ' row(s) it could not prove (name counts a pack but states no per-unit weight) - these stay a guard-5 HARD FAIL until a human rules in multipack-allowlist.json') }
+  } catch { Log ('multipack-repair threw: ' + $_.Exception.Message); $summary += 'REVIEW    multipack-repair threw - any pack-size defect in today''s feeds is unrepaired and guard 5 will block the publish' }
+
   $bakers = Get-ChildItem (Join-Path $OutDir 'bakers\bakers-deals-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
   $fareway = Get-ChildItem (Join-Path $OutDir 'fareway\fareway-deals-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
   $args = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'compare-deals.ps1'),'-MinStores','1')
