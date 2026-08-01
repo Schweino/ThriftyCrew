@@ -25,7 +25,14 @@ Every check below was run against LIVE data this morning, not against claims.
 | Hub | 521 cards, 20 badges, 0 stale, Ads hero + AW-18314028055 intact |
 | Rotation | state vs Ghost 20/20; public feed correct (the "malformed feed" was my own parser choking on a BOM browsers strip per spec) |
 | Self-tests | fmt-lib 34, compare-deals, publish change-gate, consistency 5, basis-outlier 5, semantic 3: ALL PASS |
-| Suites | guards + test-auditors (282) green as of this pass |
+| Suites | test-auditors 282 green; guards green on the 2026-08-01 board |
+
+Mid-verification, guards went genuinely red: today's fresh ad pull moved three cells off their stored
+links (a store-brand enchilada sauce displacing Old El Paso, a halved cumin shelf price, a tartar-sauce
+repricing). That was REAL and FRESH, not a regression from the day's work, and it was healed through the
+sanctioned path (`check-ad-cycles` auto-repair re-pointed the links headlessly, re-guarded, republished:
+the live board now serves week 2026-08-01 clean). The lesson stands: a verification pass that finds a
+red gate should reach for the estate's own orchestrator before reaching for hand surgery.
 
 Verification also CAUGHT and FIXED, same morning:
 
