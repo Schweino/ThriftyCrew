@@ -3958,7 +3958,8 @@
         "unit":  "floz",
         "include":  [
                         "arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer.{0,60}(?:oxi\\s*-?\\s*clean|odor\\s*blasters?)",
-                        "(?:oxi\\s*-?\\s*clean|odor\\s*blasters?).{0,60}arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer"
+                        "(?:oxi\\s*-?\\s*clean|odor\\s*blasters?).{0,60}arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer",
+                        "arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer.{0,60}odor\\s*bl(?:asters?|st)\\b"
                     ],
         "exclude":  [
                         "\\bpods?\\b",
@@ -11067,7 +11068,9 @@
                         "mixed\\s+vegetables",
                         "peas\\s+(?:\u0026|and)\\s+carrots",
                         "vegetable\\s+medley",
-                        "vegetables\\b.{0,12}mixed"
+                        "vegetables\\b.{0,12}mixed",
+                        "\\bblend\\b.{0,20}frozen\\s+vegetables",
+                        "frozen\\s+vegetables\\s+mix"
                     ],
         "exclude":  [
                         "\\bsoup\\b",
@@ -11476,7 +11479,8 @@
         "include":  [
                         "(?:storage|freezer)\\s+bags?",
                         "zipper\\s+bags?",
-                        "slider\\s+bags?"
+                        "slider\\s+bags?",
+                        "freezer\\b.{0,20}bags?\\b"
                     ],
         "exclude":  [
                         "vacuum",
@@ -17445,7 +17449,8 @@
         "include":  [
                         "canned\\s+chicken",
                         "chunk\\s+chicken\\s+breast",
-                        "premium\\s+chicken\\s+breast\\b.{0,20}\\bcan"
+                        "premium\\s+chicken\\s+breast\\b.{0,20}\\bcan",
+                        "chicken\\s+breast\\b.{0,40}premium\\s+chunk"
                     ],
         "exclude":  [
                         "\\bdog\\b",
@@ -23276,7 +23281,8 @@
                         "mashed\\s+potatoes?\\b.{0,20}(?:flakes|instant|pouch)",
                         "potato\\s+flakes",
                         "\\bidahoan\\b",
-                        "homestyle\\s+(?:butter(?:y)?\\s+)?mashed"
+                        "homestyle\\s+(?:butter(?:y)?\\s+)?mashed",
+                        "homestyle\\b.{0,25}mashed\\s+potatoes"
                     ],
         "exclude":  [
                         "\\bfrozen\\b",
@@ -25843,7 +25849,8 @@
                          ],
         "include":  [
                         "protein\\s+bars?",
-                        "protein\\b.{0,18}bars?"
+                        "protein\\b.{0,18}bars?",
+                        "protein\\b.{0,55}\\bbars?\\b"
                     ],
         "exclude":  [
                         "powder",
@@ -45130,7 +45137,8 @@
                         "smoked\\s+turkey\\s+sausage",
                         "turkey\\s+(?:polska\\s+)?kielbasa",
                         "turkey\\s+sausage\\b.{0,20}smoked",
-                        "smoked\\s+sausage\\b.{0,20}turkey"
+                        "smoked\\s+sausage\\b.{0,20}turkey",
+                        "turkey\\b.{0,20}smoked\\s+sausage"
                     ],
         "exclude":  [
                         "breakfast",

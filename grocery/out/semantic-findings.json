@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-01 11:01",
+    "generated":  "2026-08-01 11:19",
     "board":  "comparison-2026-08-01.json",
-    "sidecar_generated":  "2026-08-01 11:01:14",
+    "sidecar_generated":  "2026-08-01 11:19:40",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -11,10 +11,10 @@
     "examined":  {
                      "board_pairs":  2825,
                      "corpus":  22921,
-                     "rule_invisible":  3319
+                     "rule_invisible":  3301
                  },
     "identity_count":  0,
-    "coverage_count":  46,
+    "coverage_count":  27,
     "identity":  [
 
                  ],
@@ -61,16 +61,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "ground-pork",
-                         "commodity":  "Ground Pork",
-                         "store":  "Baker\u0027s",
-                         "product":  "Ground Beef and Pork Blend, 80% Lean/20% Fat",
-                         "cos":  0.6985,
-                         "score":  0.978094,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "laundry-detergent",
                          "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
                          "store":  "Baker\u0027s",
@@ -101,52 +91,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "corned-beef-hash",
-                         "commodity":  "Corned Beef Hash (canned)",
-                         "store":  "Walmart",
-                         "product":  "MARY KITCHEN Roast Beef Hash, Canned Roast Beef Hash, 14 oz Can",
-                         "cos":  0.7068,
-                         "score":  0.970477,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "protein-bars",
-                         "commodity":  "Protein Bars",
-                         "store":  "Baker\u0027s",
-                         "product":  "Nature Valley Protein Peanut Butter Dark Chocolate Chewy Snack Bars",
-                         "cos":  0.826,
-                         "score":  0.966469,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "cranberry-juice",
                          "commodity":  "Cranberry Juice",
                          "store":  "Family Fare",
                          "product":  "Ocean Spray Juice Drink, Cranberry, Zero Sugar 64 Fl Oz",
                          "cos":  0.6774,
                          "score":  0.963291,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "pork-tenderloin",
-                         "commodity":  "Pork Tenderloin",
-                         "store":  "Walmart",
-                         "product":  "Prairie Fresh Natural Fresh Pork Half Loin, Boneless, 3.5- 5.5 lb, 22g of Protein per 4oz Serving",
-                         "cos":  0.7525,
-                         "score":  0.962797,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "laundry-detergent",
-                         "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
-                         "store":  "Family Fare",
-                         "product":  "Arm \u0026 Hammer Odor Blst Fresh Burst",
-                         "cos":  0.6769,
-                         "score":  0.962176,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -171,16 +121,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "pie-pumpkins",
-                         "commodity":  "Pie Pumpkins",
-                         "store":  "Baker\u0027s",
-                         "product":  "Bakery Fresh Pumpkin Pie",
-                         "cos":  0.7412,
-                         "score":  0.959258,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "laundry-detergent",
                          "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
                          "store":  "Family Fare",
@@ -197,16 +137,6 @@
                          "product":  "Smithfield Steakhouse Fresh Seasoned Pork Tenderloin, 0.5–1.9 lb, 20 Grams of Protein per 4 oz Serving",
                          "cos":  0.7417,
                          "score":  0.952633,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "corned-beef-hash",
-                         "commodity":  "Corned Beef Hash (canned)",
-                         "store":  "Walmart",
-                         "product":  "MARY KITCHEN Roast Beef Hash, Canned Roast Beef Hash, 14 oz",
-                         "cos":  0.6971,
-                         "score":  0.949258,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -231,32 +161,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "pork-tenderloin",
-                         "commodity":  "Pork Tenderloin",
-                         "store":  "Walmart",
-                         "product":  "Smithfield All-Natural Boneless Pork Loin Filet, 1.0 - 2.8 lb, 24 G of Protein per 4 oz Serving",
-                         "cos":  0.6852,
-                         "score":  0.941533,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "walnuts",
                          "commodity":  "Walnuts",
                          "store":  "Walmart",
                          "product":  "Fisher Chef\u0027s Naturals Gluten Free, No Preservatives, Non-GM",
                          "cos":  0.5769,
                          "score":  0.939885,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "coconut-milk-canned",
-                         "commodity":  "Canned Coconut Milk",
-                         "store":  "Walmart",
-                         "product":  "Thai Kitchen Gluten Free Unsweetened Coconut Cream, 13.66 fl oz Can",
-                         "cos":  0.7596,
-                         "score":  0.935197,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -291,32 +201,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "ground-beef-93-7",
-                         "commodity":  "93/7 Lean Ground Beef",
-                         "store":  "Walmart",
-                         "product":  "All Natural Extra Lean Ground Beef 96% Lean/4% Fat, 1 lb",
-                         "cos":  0.7473,
-                         "score":  0.926817,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "laundry-detergent",
                          "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
                          "store":  "Baker\u0027s",
                          "product":  "ARM \u0026 HAMMER Baking Soda Fresh Sparkling Fresh Scent Liquid Laundry Detergent",
                          "cos":  0.7648,
                          "score":  0.925798,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "pie-pumpkins",
-                         "commodity":  "Pie Pumpkins",
-                         "store":  "Family Fare",
-                         "product":  "Marie Callender\u0027s Pumpkin Pie 36 Oz",
-                         "cos":  0.7264,
-                         "score":  0.924247,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -361,26 +251,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "protein-bars",
-                         "commodity":  "Protein Bars",
-                         "store":  "Baker\u0027s",
-                         "product":  "Kroger Protein Peanut Butter and Dark Chocolate Flavored Chewy Bars",
-                         "cos":  0.7193,
-                         "score":  0.916802,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-beef-93-7",
-                         "commodity":  "93/7 Lean Ground Beef",
-                         "store":  "Aldi",
-                         "product":  "96 Lean Ground Beef Per LB",
-                         "cos":  0.7043,
-                         "score":  0.913747,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "chicken-thighs",
                          "commodity":  "Chicken Thighs / Drumsticks",
                          "store":  "Baker\u0027s",
@@ -401,26 +271,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "storage-bags",
-                         "commodity":  "Food Storage Bags (gallon)",
-                         "store":  "Aldi",
-                         "product":  "Boulder Quart Freezer Twin Lock Bags 40 CT",
-                         "cos":  0.599,
-                         "score":  0.912227,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "frozen-vegetables",
-                         "commodity":  "Frozen Mixed Vegetables",
-                         "store":  "Baker\u0027s",
-                         "product":  "Birds Eye Normandy Blend, Frozen Vegetables Mix",
-                         "cos":  0.6455,
-                         "score":  0.911675,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "chicken-thighs",
                          "commodity":  "Chicken Thighs / Drumsticks",
                          "store":  "Aldi",
@@ -431,52 +281,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "frozen-vegetables",
-                         "commodity":  "Frozen Mixed Vegetables",
-                         "store":  "Baker\u0027s",
-                         "product":  "Birds Eye Steamfresh Cut Green Beans, Frozen Vegetables",
-                         "cos":  0.6477,
-                         "score":  0.905458,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "instant-mashed-potatoes",
-                         "commodity":  "Instant Mashed Potatoes",
-                         "store":  "Aldi",
-                         "product":  "Chef S Cupboard Homestyle Four Cheese Mashed Potatoes 4 OZ",
-                         "cos":  0.6181,
-                         "score":  0.903958,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "almond-milk",
                          "commodity":  "Almond Milk",
                          "store":  "Baker\u0027s",
                          "product":  "Simple Truth Dairy Free Chocolate Almond Milk Half Gallon",
                          "cos":  0.7017,
                          "score":  0.903096,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "canned-chicken",
-                         "commodity":  "Canned Chicken Breast",
-                         "store":  "Aldi",
-                         "product":  "Brookdale Chicken Breast Extra Lean White Premium Chunk With Rib Meat IN Water 12.5 OZ",
-                         "cos":  0.6744,
-                         "score":  0.901846,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "smoked-turkey-sausage",
-                         "commodity":  "Smoked Turkey Sausage",
-                         "store":  "Baker\u0027s",
-                         "product":  "Johnsonville Turkey Cheddar Smoked Sausage Links",
-                         "cos":  0.6156,
-                         "score":  0.901481,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ]

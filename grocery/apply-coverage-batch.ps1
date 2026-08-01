@@ -137,7 +137,17 @@ if (Test-Path $corpusFile) {
     $revealed[$id] = $n
   }
   $dead = @($Patterns.Keys | Where-Object { $revealed[$_] -eq 0 })
-  foreach ($id in ($Patterns.Keys | Sort-Object)) { Write-Output ("    {0,-24} reveals {1} previously-invisible row(s)" -f $id, $revealed[$id]) }
+  foreach ($id in ($Patterns.Keys | Sort-Object)) {
+    $flag = ''
+    # An outsized reveal count is the CATEGORY-SUFFIX tell. Stores append their aisle name to every SKU in
+    # it ("... , Frozen Vegetables" on Kroger's asparagus spears, corn on the cob and teriyaki stir fry),
+    # so a pattern built from that phrase matches an entire aisle rather than a product. On 2026-08-01
+    # `frozen\s+vegetables\b` revealed 40 rows and passed every gate - because the gates protect OTHER
+    # commodities (theft) and the links (tile integrity), and neither can see that a single-vegetable bag
+    # is wrong for a MIXED-vegetable commodity. Nothing here can decide that; a human has to read the rows.
+    if ($revealed[$id] -ge 15) { $flag = '   <-- REVIEW: reads like an aisle, not a product. Check the revealed rows before shipping.' }
+    Write-Output ("    {0,-24} reveals {1} previously-invisible row(s){2}" -f $id, $revealed[$id], $flag)
+  }
   if ($dead.Count -eq @($Patterns.Keys).Count) { Revert 'no pattern in the batch revealed a single invisible row - it bought nothing' }
   if ($dead.Count -gt 0) { Write-Output ("    NOTE: {0} pattern(s) revealed nothing and should be dropped: {1}" -f $dead.Count, ($dead -join ', ')) }
 } else {

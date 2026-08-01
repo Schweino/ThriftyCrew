@@ -341,6 +341,210 @@
                         "ruled_on":  "2026-08-01",
                         "ruled_by":  "accuracy pass 2026-08-01",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "corned-beef-hash|Walmart|mary-kitchen-roast-beef-hash-canned-roast-beef-h",
+                        "commodity":  "corned-beef-hash",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "MARY KITCHEN Roast Beef Hash, Canned Roast Beef Hash, 14 oz Can"
+                                  ],
+                        "product_id":  "206684852",
+                        "verdict":  "wrong-product",
+                        "evidence":  "ROAST beef hash, not CORNED beef hash. Different cure and different product; the semantic sweep matched on \"beef hash\" alone.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "coconut-milk-canned|Walmart|thai-kitchen-gluten-free-unsweetened-coconut-cre",
+                        "commodity":  "coconut-milk-canned",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Thai Kitchen Gluten Free Unsweetened Coconut Cream, 13.66 fl oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Coconut CREAM, not coconut milk. Higher fat, different concentration, different per-unit basis.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed",
+                        "reversed_on":  "2026-08-01",
+                        "reversed_by":  "coverage-backlog-2026-08-01",
+                        "reversal_reason":  "Reversing my own entry: the stored name was a TRUNCATED copy read off a 60-char display, so it can never match the real product row - an unfirable ruling that looks like coverage. Re-added with the exact catalogue name."
+                    },
+                    {
+                        "key":  "ground-pork|Bakers|ground-beef-and-pork-blend-80-lean-20-fat",
+                        "commodity":  "ground-pork",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Ground Beef and Pork Blend, 80% Lean/20% Fat"
+                                  ],
+                        "product_id":  "0002718256550",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A beef-and-pork BLEND, not ground pork. Pricing it as ground pork misstates what the shopper buys.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pork-tenderloin|Walmart|prairie-fresh-natural-fresh-pork-half-loin-bonel",
+                        "commodity":  "pork-tenderloin",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Prairie Fresh Natural Fresh Pork Half Loin, Boneless, 3.5-6 lb"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Pork LOIN, a different cut from tenderloin, and materially cheaper per lb. Would undercut the real tenderloin crown with the wrong cut.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed",
+                        "reversed_on":  "2026-08-01",
+                        "reversed_by":  "coverage-backlog-2026-08-01",
+                        "reversal_reason":  "Reversing my own entry: the stored name was a TRUNCATED copy read off a 60-char display, so it can never match the real product row - an unfirable ruling that looks like coverage. Re-added with the exact catalogue name."
+                    },
+                    {
+                        "key":  "pork-tenderloin|Walmart|smithfield-all-natural-boneless-pork-loin-filet",
+                        "commodity":  "pork-tenderloin",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Smithfield All-Natural Boneless Pork Loin Filet, 1.0 - 2.87 lb"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Pork loin filet, not tenderloin. Same cut confusion as the half loin.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed",
+                        "reversed_on":  "2026-08-01",
+                        "reversed_by":  "coverage-backlog-2026-08-01",
+                        "reversal_reason":  "Reversing my own entry: the stored name was a TRUNCATED copy read off a 60-char display, so it can never match the real product row - an unfirable ruling that looks like coverage. Re-added with the exact catalogue name."
+                    },
+                    {
+                        "key":  "pie-pumpkins|Bakers|bakery-fresh-pumpkin-pie",
+                        "commodity":  "pie-pumpkins",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Bakery Fresh Pumpkin Pie"
+                                  ],
+                        "product_id":  "0001111027021",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A baked pumpkin PIE (dessert), not a pie pumpkin (the squash). The commodity exclude for \\bpie\\b is correct; this is the sweep guessing on the word pumpkin.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pie-pumpkins|FamilyFare|marie-callenders-pumpkin-pie-36-oz",
+                        "commodity":  "pie-pumpkins",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Marie Callender\u0027s Pumpkin Pie 36 Oz"
+                                  ],
+                        "product_id":  "391146",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Frozen pumpkin pie dessert, not a pie pumpkin.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-93-7|Walmart|all-natural-extra-lean-ground-beef-96-lean-4-fat",
+                        "commodity":  "ground-beef-93-7",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "All Natural Extra Lean Ground Beef 96% Lean/4% Fat, 1 lb"
+                                  ],
+                        "product_id":  "16322759490",
+                        "verdict":  "wrong-product",
+                        "evidence":  "96/4, not 93/7. Leaner grade, priced higher; the board tracks the ratios separately on purpose.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-93-7|Aldi|96-lean-ground-beef-per-lb",
+                        "commodity":  "ground-beef-93-7",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "96 Lean Ground Beef Per LB"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "96% lean, not 93/7. Same reason as the Walmart 96/4.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pork-tenderloin|Walmart|prairie-fresh-pork-half-loin-v2",
+                        "commodity":  "pork-tenderloin",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Prairie Fresh Natural Fresh Pork Half Loin, Boneless, 3.5- 5.5 lb, 22g of Protein per 4oz Serving"
+                                  ],
+                        "product_id":  "301957080",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Pork LOIN, a different cut from tenderloin and materially cheaper per lb; pricing it as tenderloin would undercut the real crown with the wrong cut. Re-keyed with the exact catalogue name after the first entry was reversed for carrying a truncated one.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pork-tenderloin|Walmart|smithfield-pork-loin-filet-v2",
+                        "commodity":  "pork-tenderloin",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Smithfield All-Natural Boneless Pork Loin Filet, 1.0 - 2.8 lb, 24 G of Protein per 4 oz Serving"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Pork loin filet, not tenderloin. Same cut confusion as the half loin. Re-keyed with the exact catalogue name.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "coconut-milk-canned|Walmart|thai-kitchen-coconut-cream-v2",
+                        "commodity":  "coconut-milk-canned",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Thai Kitchen Gluten Free Unsweetened Coconut Cream, 13.66 fl oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Coconut CREAM, not coconut milk: higher fat, different concentration, different per-unit basis. Re-keyed after an unnecessary reversal.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "frozen-vegetables|Bakers|birds-eye-steamfresh-cut-green-beans-frozen-vege",
+                        "commodity":  "frozen-vegetables",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Birds Eye Steamfresh Cut Green Beans, Frozen Vegetables"
+                                  ],
+                        "product_id":  "0001450002101",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A single-vegetable bag (cut green beans). \"Frozen Vegetables\" here is Kroger\u0027s AISLE suffix appended to every frozen SKU, not a product descriptor - the same suffix appears on asparagus spears and corn on the cob. This commodity tracks MIXED vegetable blends, so a single-veg bag winning the cell would misrepresent it.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

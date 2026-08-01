@@ -28,13 +28,6 @@
         "detail":  "no include pattern matches"
     },
     {
-        "id":  "ground-pork",
-        "store":  "Baker\u0027s",
-        "product":  "Ground Beef and Pork Blend, 80% Lean/20% Fat",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
         "id":  "laundry-detergent",
         "store":  "Baker\u0027s",
         "product":  "ARM \u0026 HAMMER Clean Burst Liquid Laundry Detergent",
@@ -56,37 +49,9 @@
         "detail":  "include \u0027arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer.{0,60}(?:oxi\\s*-?\\s*clean|odor\\s*blasters?)\u0027 matched, exclude \u0027\\bpowder\\b\u0027 killed it"
     },
     {
-        "id":  "corned-beef-hash",
-        "store":  "Walmart",
-        "product":  "MARY KITCHEN Roast Beef Hash, Canned Roast Beef Hash, 14 oz Can",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "protein-bars",
-        "store":  "Baker\u0027s",
-        "product":  "Nature Valley Protein Peanut Butter Dark Chocolate Chewy Snack Bars",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
         "id":  "cranberry-juice",
         "store":  "Family Fare",
         "product":  "Ocean Spray Juice Drink, Cranberry, Zero Sugar 64 Fl Oz",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "pork-tenderloin",
-        "store":  "Walmart",
-        "product":  "Prairie Fresh Natural Fresh Pork Half Loin, Boneless, 3.5- 5.5 lb, 22g of Protein per 4oz Serving",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "laundry-detergent",
-        "store":  "Family Fare",
-        "product":  "Arm \u0026 Hammer Odor Blst Fresh Burst",
         "verdict":  "NO-INCLUDE",
         "detail":  "no include pattern matches"
     },
@@ -105,13 +70,6 @@
         "detail":  "include \u0027lasagna\\b.{0,30}(?:frozen|family|meat|cheese)\u0027 matched, exclude \u0027oven[\\s-]?ready\u0027 killed it"
     },
     {
-        "id":  "pie-pumpkins",
-        "store":  "Baker\u0027s",
-        "product":  "Bakery Fresh Pumpkin Pie",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
         "id":  "laundry-detergent",
         "store":  "Family Fare",
         "product":  "Arm \u0026 Hammer Liquid Laundry Clean Burst",
@@ -124,13 +82,6 @@
         "product":  "Smithfield Steakhouse Fresh Seasoned Pork Tenderloin, 0.5–1.9 lb, 20 Grams of Protein per 4 oz Serving",
         "verdict":  "EXCLUDED",
         "detail":  "include \u0027pork\\s+tenderloin\u0027 matched, exclude \u0027seasoned\u0027 killed it"
-    },
-    {
-        "id":  "corned-beef-hash",
-        "store":  "Walmart",
-        "product":  "MARY KITCHEN Roast Beef Hash, Canned Roast Beef Hash, 14 oz",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
     },
     {
         "id":  "laundry-detergent",
@@ -147,23 +98,9 @@
         "detail":  "include \u0027arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer.{0,60}(?:oxi\\s*-?\\s*clean|odor\\s*blasters?)\u0027 matched, exclude \u0027\\bpaks?\\b\u0027 killed it"
     },
     {
-        "id":  "pork-tenderloin",
-        "store":  "Walmart",
-        "product":  "Smithfield All-Natural Boneless Pork Loin Filet, 1.0 - 2.8 lb, 24 G of Protein per 4 oz Serving",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
         "id":  "walnuts",
         "store":  "Walmart",
         "product":  "Fisher Chef\u0027s Naturals Gluten Free, No Preservatives, Non-GM",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "coconut-milk-canned",
-        "store":  "Walmart",
-        "product":  "Thai Kitchen Gluten Free Unsweetened Coconut Cream, 13.66 fl oz Can",
         "verdict":  "NO-INCLUDE",
         "detail":  "no include pattern matches"
     },
@@ -189,23 +126,9 @@
         "detail":  "include \u002780/20\\s+ground\u0027 matched, exclude \u0027patties\u0027 killed it"
     },
     {
-        "id":  "ground-beef-93-7",
-        "store":  "Walmart",
-        "product":  "All Natural Extra Lean Ground Beef 96% Lean/4% Fat, 1 lb",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
         "id":  "laundry-detergent",
         "store":  "Baker\u0027s",
         "product":  "ARM \u0026 HAMMER Baking Soda Fresh Sparkling Fresh Scent Liquid Laundry Detergent",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "pie-pumpkins",
-        "store":  "Family Fare",
-        "product":  "Marie Callender\u0027s Pumpkin Pie 36 Oz",
         "verdict":  "NO-INCLUDE",
         "detail":  "no include pattern matches"
     },
@@ -238,20 +161,6 @@
         "detail":  "include \u0027lasagna\\b.{0,30}(?:frozen|family|meat|cheese)\u0027 matched, exclude \u0027oven[\\s-]?ready\u0027 killed it"
     },
     {
-        "id":  "protein-bars",
-        "store":  "Baker\u0027s",
-        "product":  "Kroger Protein Peanut Butter and Dark Chocolate Flavored Chewy Bars",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "ground-beef-93-7",
-        "store":  "Aldi",
-        "product":  "96 Lean Ground Beef Per LB",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
         "id":  "chicken-thighs",
         "store":  "Baker\u0027s",
         "product":  "Tyson All Natural Fresh Chicken Drumsticks",
@@ -266,20 +175,6 @@
         "detail":  "include \u0027pure\\s+pumpkin\u0027 matched, exclude \u0027\\bpie\\b\u0027 killed it"
     },
     {
-        "id":  "storage-bags",
-        "store":  "Aldi",
-        "product":  "Boulder Quart Freezer Twin Lock Bags 40 CT",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "frozen-vegetables",
-        "store":  "Baker\u0027s",
-        "product":  "Birds Eye Normandy Blend, Frozen Vegetables Mix",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
         "id":  "chicken-thighs",
         "store":  "Aldi",
         "product":  "Kirkwood Fresh Chicken Drumsticks Per LB",
@@ -287,38 +182,10 @@
         "detail":  "include \u0027chicken\\s+(thigh|drumstick|leg)\u0027 matched, exclude \u0027\\bdrumsticks?\\b\u0027 killed it"
     },
     {
-        "id":  "frozen-vegetables",
-        "store":  "Baker\u0027s",
-        "product":  "Birds Eye Steamfresh Cut Green Beans, Frozen Vegetables",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "instant-mashed-potatoes",
-        "store":  "Aldi",
-        "product":  "Chef S Cupboard Homestyle Four Cheese Mashed Potatoes 4 OZ",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
         "id":  "almond-milk",
         "store":  "Baker\u0027s",
         "product":  "Simple Truth Dairy Free Chocolate Almond Milk Half Gallon",
         "verdict":  "EXCLUDED",
         "detail":  "include \u0027almond\\s*milk\u0027 matched, exclude \u0027chocolate\u0027 killed it"
-    },
-    {
-        "id":  "canned-chicken",
-        "store":  "Aldi",
-        "product":  "Brookdale Chicken Breast Extra Lean White Premium Chunk With Rib Meat IN Water 12.5 OZ",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "smoked-turkey-sausage",
-        "store":  "Baker\u0027s",
-        "product":  "Johnsonville Turkey Cheddar Smoked Sausage Links",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
     }
 ]
