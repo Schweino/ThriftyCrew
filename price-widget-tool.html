@@ -1,0 +1,225 @@
+<div id="tcwg">
+<style>
+#tcwg{--navy:#16263f;--gold:#e2a43c;--gold-d:#8a6d1f;--ink:#3a4658;--line:#e2e8f0;--cream:#f6f1e7;--soft:#fbfcfe;
+  max-width:760px;margin:0 auto;font-size:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);}
+#tcwg *{box-sizing:border-box;}
+#tcwg .tb-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.6em 1.4em;margin:0 0 1.5em;box-shadow:0 6px 24px rgba(22,38,63,.06);}
+#tcwg h2{font-size:1.3em;color:var(--navy);margin:0 0 .3em;}
+#tcwg .wg-sub{font-size:.95em;margin:.2em 0 1.1em;line-height:1.5;}
+#tcwg .wg-types{display:flex;gap:.7em;flex-wrap:wrap;margin:0 0 1em;}
+#tcwg .wg-type{flex:1 1 14em;padding:.85em 1em;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font-family:inherit;font-size:.95em;text-align:left;cursor:pointer;line-height:1.4;}
+#tcwg .wg-type b{display:block;color:var(--navy);font-size:1.02em;margin:0 0 .15em;}
+#tcwg .wg-type.wg-on{border-color:var(--gold);background:#fdf8ec;box-shadow:0 0 0 3px rgba(226,164,60,.18);}
+#tcwg .wg-pickrow{display:flex;gap:.6em;align-items:center;flex-wrap:wrap;}
+#tcwg .wg-pickrow label{font-weight:700;color:var(--navy);font-size:.95em;}
+#tcwg select{padding:.72em .8em;font-size:1em;color:var(--navy);background:#fff;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;cursor:pointer;min-width:14em;}
+#tcwg select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(226,164,60,.22);}
+#tcwg .wg-stage{border-radius:12px;padding:2em 1em;display:flex;justify-content:center;background:linear-gradient(90deg,#f6f7f9 50%,#242a35 50%);border:1px solid var(--line);}
+#tcwg .wg-badge{max-width:280px;width:100%;background:var(--navy);color:var(--cream);border-radius:12px;padding:14px 16px 12px;line-height:1.45;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,.25);}
+#tcwg .wg-pvmsg{text-align:center;font-size:.88em;color:#68748a;margin:.8em 0 0;line-height:1.5;}
+#tcwg textarea{width:100%;min-height:11em;padding:.9em;font-family:Consolas,Menlo,'Courier New',monospace;font-size:.78em;line-height:1.5;color:var(--navy);background:var(--soft);border:1.5px solid var(--line);border-radius:10px;resize:vertical;white-space:pre-wrap;word-break:break-all;}
+#tcwg textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(226,164,60,.22);}
+#tcwg .wg-actions{display:flex;gap:.8em;align-items:center;flex-wrap:wrap;margin:.9em 0 0;}
+#tcwg .wg-btn{padding:.9em 1.7em;border:none;border-radius:10px;font-size:1em;font-weight:800;cursor:pointer;font-family:inherit;background:var(--gold);color:var(--navy);}
+#tcwg .wg-copied{font-size:.9em;color:#1f7a4d;font-weight:700;min-height:1.3em;}
+#tcwg .wg-hint{font-size:.85em;color:#68748a;line-height:1.5;margin:.9em 0 0;}
+#tcwg .wg-deal{background:#fdf8ec;border:1px solid #eee3c8;border-radius:12px;padding:.9em 1.1em;font-size:.92em;line-height:1.55;margin:0 0 1.6em;}
+#tcwg .wg-deal b{color:var(--navy);}
+#tcwg .wg-week{font-size:.8em;color:#8a94a6;margin:.5em 0 0;text-align:center;}
+@media (max-width:560px){
+  #tcwg .tb-card{padding:1.2em 1em;}
+  #tcwg select{min-width:100%;width:100%;}
+  #tcwg .wg-stage{padding:1.4em .7em;}
+}
+</style>
+
+<p style="font-size:1.05em;line-height:1.6;margin:0 0 1.2em;">Got a blog, a neighborhood site, a church newsletter page, or a local Facebook group with a website? Put a live Omaha grocery price on it. Pick a badge below, copy one block of code, and paste it anywhere your site allows HTML. The price updates itself every week from our public feed. Nothing to install, nothing to host, nothing to pay.</p>
+
+<div class="wg-deal"><b>The deal is simple.</b> The badge is free for any website, forever. The only thing we ask is that the little thriftycrew.com link on the badge stays where it is. That link is what keeps the free stuff free.</div>
+
+<div class="tb-card">
+  <h2>1. Pick your badge</h2>
+  <p class="wg-sub">Two flavors. A single grocery item, or the cheapest meal prep dinner in Omaha this week.</p>
+  <div class="wg-types">
+    <button class="wg-type wg-on" id="wg-t-item" type="button"><b>Single grocery item</b>Shows this week's lowest price and which store has it.</button>
+    <button class="wg-type" id="wg-t-dinner" type="button"><b>Cheapest dinner this week</b>Shows the lowest cost per serving across our 100+ meal prep recipes.</button>
+  </div>
+  <div class="wg-pickrow" id="wg-itemrow">
+    <label for="wg-item">Item:</label>
+    <select id="wg-item" aria-label="Pick a grocery item"></select>
+  </div>
+  <p class="wg-hint">Prices come from our weekly sweep of Walmart, Aldi, Hy-Vee, Baker's, Family Fare, and Sam's Club here in Omaha.</p>
+</div>
+
+<div class="tb-card">
+  <h2>2. Preview</h2>
+  <p class="wg-sub">This is the real badge with this week's real numbers, shown on a light and a dark background. It is solid navy, so it looks right on either.</p>
+  <div class="wg-stage"><div class="wg-badge" id="wg-badge"></div></div>
+  <p class="wg-pvmsg" id="wg-pvmsg"></p>
+  <p class="wg-week" id="wg-week"></p>
+</div>
+
+<div class="tb-card">
+  <h2>3. Copy the code</h2>
+  <p class="wg-sub">Paste it anywhere HTML is allowed: a blog post, a sidebar widget, your footer. On WordPress, use a Custom HTML block.</p>
+  <textarea id="wg-code" readonly spellcheck="false" aria-label="Your embed code"></textarea>
+  <div class="wg-actions">
+    <button class="wg-btn" id="wg-copy" type="button">Copy the code</button>
+    <span class="wg-copied" id="wg-copied"></span>
+  </div>
+  <p class="wg-hint">Each badge is fully self contained. It loads one small price file from our free feed and nothing else. No tracking, no cookies, no other requests. And if the feed is ever unreachable, the badge quietly hides itself instead of showing a broken box.</p>
+</div>
+
+<script>
+(function(){
+  var root = document.getElementById('tcwg');
+  if (!root) return;
+  var FEED = 'https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json';
+  var LINK = 'https://www.thriftycrew.com/omaha-grocery-prices/?ref=embed-widget';
+  var ITEMS = [
+    {k:'eggs', l:'Eggs', u:'dozen'},
+    {k:'milk', l:'Milk', u:'gallon'},
+    {k:'chicken-breast', l:'Chicken breast', u:'lb'},
+    {k:'ground-beef-8020', l:'Ground beef 80/20', u:'lb'},
+    {k:'ground-turkey', l:'Ground turkey', u:'lb'},
+    {k:'bacon', l:'Bacon', u:'lb'},
+    {k:'butter', l:'Butter', u:'lb'},
+    {k:'bananas', l:'Bananas', u:'lb'},
+    {k:'strawberries', l:'Strawberries', u:'oz'},
+    {k:'blueberries', l:'Blueberries', u:'oz'},
+    {k:'russet-potatoes', l:'Russet potatoes', u:'lb'},
+    {k:'onions', l:'Onions', u:'lb'},
+    {k:'apples', l:'Apples', u:'lb'},
+    {k:'bread', l:'Bread', u:'each'},
+    {k:'peanut-butter', l:'Peanut butter', u:'oz'},
+    {k:'coffee', l:'Coffee', u:'oz'},
+    {k:'shredded-cheese', l:'Shredded cheese', u:'oz'},
+    {k:'yogurt', l:'Yogurt', u:'oz'}
+  ];
+  var state = { type: 'item', key: 'eggs' };
+  var feed = null;
+
+  function $(id){ return document.getElementById(id); }
+  function findItem(k){ for (var i = 0; i < ITEMS.length; i++) if (ITEMS[i].k === k) return ITEMS[i]; return null; }
+  function priceStr(p, u){ var s = '$' + Number(p).toFixed(2); return u === 'each' ? s + ' each' : s + '/' + u; }
+  function cheapestDinner(f){
+    var rs = f && f.recipes, best = null, k, r;
+    if (!rs) return null;
+    for (k in rs){ r = rs[k]; if (r && Number(r.per_serving) > 0 && (!best || r.per_serving < best.per_serving)) best = r; }
+    return best;
+  }
+
+  /* Badge inner HTML, mirrored exactly by the generated snippet's script. */
+  var FOOT = '<div style="border-top:1px solid rgba(246,241,231,.18);margin-top:10px;padding-top:8px;font-size:11px;color:rgba(246,241,231,.72);">live Omaha prices &middot; <a href="' + LINK + '" style="color:#e2a43c;font-weight:700;text-decoration:none;" target="_blank" rel="noopener">thriftycrew.com</a></div>';
+  function itemHTML(label, ing){
+    return '<div style="font-size:15px;font-weight:800;">' + label + '</div>' +
+      '<div style="font-size:14px;margin-top:3px;"><span style="font-size:17px;font-weight:800;color:#e2a43c;">' + priceStr(ing.cheapest, ing.unit) + '</span> at ' + ing.store + ' this week</div>' + FOOT;
+  }
+  function dinnerHTML(b){
+    return '<div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#e2a43c;">Cheapest dinner in Omaha</div>' +
+      '<div style="font-size:21px;font-weight:800;margin-top:4px;">$' + Number(b.per_serving).toFixed(2) + '<span style="font-size:13px;font-weight:600;color:rgba(246,241,231,.8);">/serving</span></div>' +
+      '<div style="font-size:12px;margin-top:2px;color:rgba(246,241,231,.85);">' + b.name + ' this week</div>' + FOOT;
+  }
+
+  function buildSnippet(){
+    var id = 'tcw' + Math.random().toString(36).slice(2, 8);
+    var open = '<scr' + 'ipt>', close = '</scr' + 'ipt>';
+    var wrap = '<div id="' + id + '" style="display:none;max-width:280px;box-sizing:border-box;border:0;background:#16263f;color:#f6f1e7;border-radius:12px;padding:14px 16px 12px;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,Helvetica,Arial,sans-serif;line-height:1.45;text-align:left;"></div>';
+    var foot = "'" + FOOT.replace(/'/g, "\\'") + "'";
+    var body;
+    if (state.type === 'item'){
+      var it = findItem(state.key);
+      body =
+        "var i=f.ingredients&&f.ingredients['" + it.k + "'];" +
+        "if(!i||!(Number(i.cheapest)>0))return;" +
+        "var p='$'+Number(i.cheapest).toFixed(2)+(i.unit==='each'?' each':'/'+i.unit);" +
+        "d.innerHTML='<div style=\"font-size:15px;font-weight:800;\">" + it.l + "</div>'+" +
+        "'<div style=\"font-size:14px;margin-top:3px;\"><span style=\"font-size:17px;font-weight:800;color:#e2a43c;\">'+p+'</span> at '+i.store+' this week</div>'+" + foot + ";";
+    } else {
+      body =
+        "var rs=f.recipes,b=null,k,r;if(!rs)return;" +
+        "for(k in rs){r=rs[k];if(r&&Number(r.per_serving)>0&&(!b||r.per_serving<b.per_serving))b=r;}" +
+        "if(!b)return;" +
+        "d.innerHTML='<div style=\"font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#e2a43c;\">Cheapest dinner in Omaha</div>'+" +
+        "'<div style=\"font-size:21px;font-weight:800;margin-top:4px;\">$'+Number(b.per_serving).toFixed(2)+'<span style=\"font-size:13px;font-weight:600;color:rgba(246,241,231,.8);\">/serving</span></div>'+" +
+        "'<div style=\"font-size:12px;margin-top:2px;color:rgba(246,241,231,.85);\">'+b.name+' this week</div>'+" + foot + ";";
+    }
+    var js = "(function(){var d=document.getElementById('" + id + "');if(!d)return;" +
+      "try{var x=new XMLHttpRequest();x.open('GET','" + FEED + "',true);" +
+      "x.onload=function(){try{var f=JSON.parse(x.responseText.replace(/^\\uFEFF/,''));" + body +
+      "d.style.display='block';}catch(e){d.style.display='none';}};" +
+      "x.onerror=function(){d.style.display='none';};" +
+      "x.send();}catch(e){}})();";
+    return wrap + '\n' + open + js + close;
+  }
+
+  function renderPreview(){
+    var badge = $('wg-badge'), msg = $('wg-pvmsg'), html = '';
+    if (feed){
+      if (state.type === 'item'){
+        var it = findItem(state.key);
+        var ing = feed.ingredients && feed.ingredients[it.k];
+        if (ing && Number(ing.cheapest) > 0) html = itemHTML(it.l, ing);
+      } else {
+        var b = cheapestDinner(feed);
+        if (b) html = dinnerHTML(b);
+      }
+    }
+    if (html){
+      badge.style.display = '';
+      badge.innerHTML = html;
+      msg.textContent = '';
+    } else {
+      badge.style.display = 'none';
+      badge.innerHTML = '';
+      msg.textContent = feed ? 'No price for that item this week, so the badge hides itself. Pick another item.' : 'Could not reach the live feed just now, so there is nothing to preview. Your code below still works. On your site the badge simply stays hidden until the feed answers.';
+    }
+    $('wg-week').textContent = (feed && feed.week_of) ? 'Live feed, week of ' + feed.week_of + '.' : '';
+  }
+
+  function refresh(){
+    renderPreview();
+    $('wg-code').value = buildSnippet();
+    $('wg-copied').textContent = '';
+  }
+
+  function setType(t){
+    state.type = t;
+    $('wg-t-item').className = 'wg-type' + (t === 'item' ? ' wg-on' : '');
+    $('wg-t-dinner').className = 'wg-type' + (t === 'dinner' ? ' wg-on' : '');
+    $('wg-itemrow').style.display = t === 'item' ? '' : 'none';
+    refresh();
+  }
+
+  function copyCode(){
+    var t = $('wg-code');
+    t.focus();
+    t.select();
+    try { t.setSelectionRange(0, t.value.length); } catch(e){}
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch(e){ ok = false; }
+    $('wg-copied').textContent = ok ? 'Copied. Go paste it into your site.' : 'Press Ctrl+C (Cmd+C on a Mac) to copy the selected code.';
+  }
+
+  var sel = $('wg-item'), opts = '';
+  for (var i = 0; i < ITEMS.length; i++) opts += '<option value="' + ITEMS[i].k + '">' + ITEMS[i].l + '</option>';
+  sel.innerHTML = opts;
+  sel.value = state.key;
+  sel.onchange = function(){ state.key = sel.value; refresh(); };
+  $('wg-t-item').onclick = function(){ setType('item'); };
+  $('wg-t-dinner').onclick = function(){ setType('dinner'); };
+  $('wg-copy').onclick = copyCode;
+  $('wg-code').onclick = function(){ this.select(); };
+
+  refresh();
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', FEED, true);
+  xhr.onload = function(){
+    try { feed = JSON.parse(xhr.responseText.replace(/^\uFEFF/, '')); } catch(e){ feed = null; }
+    refresh();
+  };
+  xhr.onerror = function(){ feed = null; refresh(); };
+  xhr.send();
+})();
+</script>
+</div>

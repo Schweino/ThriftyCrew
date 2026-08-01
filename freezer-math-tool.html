@@ -1,0 +1,218 @@
+<div id="tcfm">
+<style>
+#tcfm{--navy:#16263f;--gold:#e2a43c;--gold-d:#8a6d1f;--ink:#3a4658;--line:#e2e8f0;--green:#1f7a4d;--red:#b23b2e;--soft:#fbfcfe;
+  max-width:760px;margin:0 auto;font-size:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);}
+#tcfm *{box-sizing:border-box;}
+#tcfm .fm-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.6em 1.4em;margin:0 0 1.5em;box-shadow:0 6px 24px rgba(22,38,63,.06);}
+#tcfm h2{font-size:1.3em;color:var(--navy);margin:0 0 .3em;}
+#tcfm .fm-sub{font-size:.95em;margin:.2em 0 1.1em;line-height:1.5;}
+#tcfm .fm-lbl{display:block;font-size:.8em;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-d);margin:1.2em 0 .5em;}
+#tcfm .fm-lbl:first-of-type{margin-top:.2em;}
+#tcfm .fm-presets{display:flex;gap:.6em;flex-wrap:wrap;}
+#tcfm .fm-pre{flex:1 1 8em;padding:.8em .4em;border:1.5px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;font-family:inherit;text-align:center;color:var(--ink);}
+#tcfm .fm-pre b{display:block;font-size:1.25em;color:var(--navy);}
+#tcfm .fm-pre span{font-size:.78em;color:#68748a;}
+#tcfm .fm-pre.on{border-color:var(--gold);background:#fdf8ec;box-shadow:0 0 0 3px rgba(226,164,60,.22);}
+#tcfm .fm-money{position:relative;display:inline-block;width:8em;}
+#tcfm .fm-money>span{position:absolute;left:.7em;top:50%;transform:translateY(-50%);color:#8a94a6;pointer-events:none;}
+#tcfm .fm-money input{width:100%;padding:.72em .8em .72em 1.7em;font-size:1em;color:var(--navy);background:#fff;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;text-align:right;}
+#tcfm .fm-money input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(226,164,60,.22);}
+#tcfm .fm-custom{display:flex;gap:.6em;align-items:center;margin:.7em 0 0;font-size:.9em;color:#68748a;}
+#tcfm .fm-sliderow{display:flex;gap:.9em;align-items:center;}
+#tcfm .fm-sliderow input[type=range]{flex:1 1 auto;accent-color:var(--gold);min-width:0;height:2em;cursor:pointer;}
+#tcfm .fm-note{font-size:.85em;color:#68748a;line-height:1.5;margin:.6em 0 0;}
+#tcfm .fm-result{text-align:center;padding:.6em 0 .2em;}
+#tcfm .fm-r-label{font-size:.85em;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-d);}
+#tcfm .fm-r-big{font-size:2.2em;font-weight:800;color:var(--navy);letter-spacing:-.02em;line-height:1.15;margin:.1em 0;}
+#tcfm .fm-r-sub{font-size:1em;margin:.4em auto 0;max-width:34em;line-height:1.55;}
+#tcfm .fm-verdict{margin:1.1em auto 0;max-width:36em;padding:.8em 1em;border-radius:12px;font-size:.97em;line-height:1.55;background:#eaf6ef;border:1px solid #bfe3cd;color:var(--green);font-weight:700;}
+#tcfm .fm-verdict.bad{background:#fbeceb;border-color:#f2c9c5;color:var(--red);}
+#tcfm .fm-verdict.meh{background:#fdf8ec;border-color:#eee3c8;color:var(--gold-d);}
+#tcfm .fm-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(9em,1fr));gap:.8em;margin:1.2em 0 0;}
+#tcfm .fm-stat{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:.8em;text-align:center;}
+#tcfm .fm-stat b{display:block;font-size:1.25em;color:var(--navy);}
+#tcfm .fm-stat span{font-size:.8em;color:#68748a;}
+#tcfm .fm-twrap{overflow-x:auto;margin:.4em 0 0;}
+#tcfm table.fm-t{width:100%;border-collapse:collapse;font-size:.88em;min-width:26em;}
+#tcfm .fm-t th{text-align:right;font-size:.78em;letter-spacing:.05em;text-transform:uppercase;color:#8a94a6;padding:.45em .5em;border-bottom:2px solid var(--line);white-space:nowrap;}
+#tcfm .fm-t th:first-child,#tcfm .fm-t td:first-child{text-align:left;}
+#tcfm .fm-t td{padding:.5em;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--ink);}
+#tcfm .fm-t td:first-child{font-weight:700;color:var(--navy);white-space:normal;}
+#tcfm .fm-t td.hot{color:var(--green);font-weight:800;}
+#tcfm .fm-t td.flat{color:#8a94a6;}
+#tcfm .fm-caveats{background:#fdf8ec;border:1px solid #eee3c8;border-radius:12px;padding:1em 1.1em;margin:1.4em 0 0;}
+#tcfm .fm-caveats h3{color:var(--gold-d);margin:0 0 .3em;font-size:1.02em;}
+#tcfm .fm-caveats ul{margin:.4em 0 0;padding-left:1.2em;font-size:.92em;line-height:1.6;}
+#tcfm .fm-caveats li b{color:var(--navy);}
+@media (max-width:560px){
+  #tcfm .fm-card{padding:1.2em 1em;}
+  #tcfm .fm-r-big{font-size:1.7em;}
+  #tcfm .fm-pre{flex:1 1 5.5em;padding:.6em .3em;}
+  #tcfm .fm-pre b{font-size:1.05em;}
+}
+</style>
+
+<p style="font-size:1.05em;line-height:1.6;margin:0 0 1.2em;">Everybody has an opinion about chest freezers. Almost nobody has data. We track real Omaha grocery prices every week, so instead of guessing, this tool runs your numbers against what meat and freezables actually cost around town. A freezer earns its keep two ways: it lets you buy only when prices hit their lows, and it lets you buy the big bulk packs that cost less per pound. Punch in your numbers and see if the box pays for itself.</p>
+
+<div class="fm-card">
+  <h2>Your numbers</h2>
+  <p class="fm-sub">Two inputs. That is all it takes.</p>
+
+  <span class="fm-lbl">What does the freezer cost?</span>
+  <div class="fm-presets">
+    <button class="fm-pre" type="button" data-p="120"><b>$120</b><span>Small (5 cu ft)</span></button>
+    <button class="fm-pre on" type="button" data-p="200"><b>$200</b><span>Mid (7 cu ft)</span></button>
+    <button class="fm-pre" type="button" data-p="300"><b>$300</b><span>Big (10+ cu ft)</span></button>
+  </div>
+  <div class="fm-custom"><span>Or type your own:</span><span class="fm-money"><span>$</span><input type="text" inputmode="decimal" id="fm-price" placeholder="200" maxlength="6"></span></div>
+
+  <span class="fm-lbl">Monthly spend on meat and freezables</span>
+  <div class="fm-sliderow">
+    <input type="range" id="fm-slide" min="20" max="400" step="5" value="120" aria-label="Monthly spend on meat and freezables">
+    <span class="fm-money"><span>$</span><input type="text" inputmode="decimal" id="fm-spend" value="120" maxlength="5"></span>
+  </div>
+  <p class="fm-note">Count chicken, beef, turkey, pork, bacon, butter, cheese, bread. Anything you could stash in a freezer. For a family of four that is often $100 to $180 a month.</p>
+
+  <p class="fm-note"><b>Electricity:</b> we bake in $4 a month of running cost. A modern 7 cu ft chest freezer pulls roughly 25 to 30 kWh a month, which at about $0.14 per kWh works out to $3 to $5. It is already subtracted from every number below.</p>
+</div>
+
+<div class="fm-card">
+  <div class="fm-result">
+    <p class="fm-r-label">This freezer pays for itself in about</p>
+    <p class="fm-r-big" id="fm-months"></p>
+    <p class="fm-r-sub" id="fm-rsub"></p>
+    <div class="fm-verdict" id="fm-verdict"></div>
+  </div>
+  <div class="fm-stats">
+    <div class="fm-stat"><b id="fm-net"></b><span>saved per month, after electricity</span></div>
+    <div class="fm-stat"><b id="fm-yr1"></b><span>net position after year 1</span></div>
+    <div class="fm-stat"><b id="fm-yr5"></b><span>net position after 5 years</span></div>
+  </div>
+  <p class="fm-note" id="fm-how"></p>
+</div>
+
+<div class="fm-card">
+  <h2>The receipts</h2>
+  <p class="fm-sub" id="fm-src"></p>
+  <div class="fm-twrap"><table class="fm-t">
+    <thead><tr><th>Item</th><th>Avg weekly best</th><th>Record low</th><th>Stock-up spread</th><th>Bulk spread</th></tr></thead>
+    <tbody id="fm-rows"></tbody>
+  </table></div>
+  <p class="fm-note"><b>Stock-up spread</b> is how far the average weekly best price sits above the record low we have seen. That gap is what a freezer captures when you buy only at the lows. <b>Bulk spread</b> is how much cheaper the Sam&rsquo;s Club bulk pack is per unit than the average regular-store price. Items showing 0% have been flat so far, or bulk was not cheaper. Those zeros are in the blend, dragging it down honestly.</p>
+
+  <div class="fm-caveats">
+    <h3>Read this before you buy a freezer</h3>
+    <ul>
+      <li><b>Freezer burn is real.</b> Food you freeze and then throw out is negative savings. Wrap it right, label it, and rotate. If 10% of what you freeze goes to waste, most of the edge goes with it.</li>
+      <li><b>This only works if you cook what you freeze.</b> A freezer full of forgotten chicken is a $200 nightlight. The savings come from eating the cheap meat, not from owning it.</li>
+      <li><b>The bulk channel assumes warehouse access.</b> Sam&rsquo;s Club membership runs about $50 a year, roughly $4 a month, if you do not already have one. That would push your payback out a few months.</li>
+      <li><b>We assume you shift 60% of freezable buying</b> to lows and bulk packs. Perfect discipline would beat that. Real life usually will not.</li>
+      <li><b>Electricity is estimated</b> at $4 a month ($0.14 per kWh, modern 7 cu ft chest). An old garage freezer from 1995 can triple that.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+(function(){
+  var root = document.getElementById('tcfm');
+  if (!root) return;
+
+  // Generated by C:\Codex\income\grocery\build-freezer-data.ps1 from live Omaha price tracking.
+  // Rerun that script and paste its DATA block here when the history deepens.
+  var DATA = {
+    updated:'2026-07-10', weeks:5,
+    stockup:0.0612, bulk:0.1719,
+    rows:[
+      {id:'chicken-breast',label:'Boneless Skinless Chicken Breast',unit:'lb',avg:2.366,low:2.29,lowStore:'Baker\'s',spread:0.0321,bulkSpread:0.0886},
+      {id:'chicken-thighs',label:'Chicken Thighs / Drumsticks',unit:'lb',avg:1.28,low:1.28,lowStore:'Sam\'s Club',spread:0,bulkSpread:0.3568},
+      {id:'ground-beef-8020',label:'80/20 Ground Beef',unit:'lb',avg:5.446,low:4.99,lowStore:'Hy-Vee',spread:0.0837,bulkSpread:0.1146},
+      {id:'ground-turkey',label:'Ground Turkey',unit:'lb',avg:3.306,low:2.6633,lowStore:'Aldi',spread:0.1944,bulkSpread:0.0652},
+      {id:'bacon',label:'Bacon',unit:'lb',avg:3.952,low:3.94,lowStore:'Sam\'s Club',spread:0.0030,bulkSpread:0.1834},
+      {id:'pork-chops',label:'Pork Chops',unit:'lb',avg:2.52,low:2.52,lowStore:'Sam\'s Club',spread:0,bulkSpread:0.2466},
+      {id:'butter',label:'Butter',unit:'lb',avg:2.74,low:2.74,lowStore:'Sam\'s Club',spread:0,bulkSpread:0.2642},
+      {id:'shredded-cheese',label:'Shredded / Block Cheese',unit:'oz',avg:0.1741,low:0.1559,lowStore:'Baker\'s',spread:0.1044,bulkSpread:0.2279},
+      {id:'bread',label:'Bread (loaf)',unit:'each',avg:1.1516,low:0.998,lowStore:'Hy-Vee',spread:0.1334,bulkSpread:0}
+    ]
+  };
+  var SHIFT = 0.60;   // share of freezable buying we assume you actually move to lows + bulk
+  var ELEC = 4;       // $/month running cost assumption, stated on the page
+
+  var price = 200, spend = 120;
+
+  function num(x){ var n = parseFloat(String(x).replace(/[^0-9.]/g,'')); return isNaN(n) ? 0 : n; }
+  function money(x){ var neg = x < 0; var v = Math.abs(Math.round(x)); return (neg?'-$':'$') + v.toLocaleString('en-US'); }
+  function money2(x){ var neg = x < 0; var v = Math.abs(Math.round(x*100)/100); return (neg?'-$':'$') + v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function pct(x){ return (Math.round(x*1000)/10) + '%'; }
+
+  function calc(){
+    var gross = spend * SHIFT * (DATA.stockup + DATA.bulk);
+    var net = gross - ELEC;
+    var big = document.getElementById('fm-months');
+    var sub = document.getElementById('fm-rsub');
+    var ver = document.getElementById('fm-verdict');
+    document.getElementById('fm-net').textContent = money2(net);
+    document.getElementById('fm-yr1').textContent = money(net*12 - price);
+    document.getElementById('fm-yr5').textContent = money(net*60 - price);
+    document.getElementById('fm-how').textContent = 'How we got there: ' + money2(spend) + ' a month, we assume you shift 60% of it to price lows and bulk packs, times a combined ' + pct(DATA.stockup + DATA.bulk) + ' spread (' + pct(DATA.stockup) + ' stock-up + ' + pct(DATA.bulk) + ' bulk) = ' + money2(gross) + ' saved, minus $' + ELEC + ' of electricity = ' + money2(net) + ' a month.';
+
+    if (net <= 0){
+      big.textContent = 'never, honestly';
+      sub.textContent = 'At ' + money2(spend) + ' a month of freezable spending, the savings do not even cover the electricity. A freezer is not your move right now.';
+      ver.className = 'fm-verdict bad';
+      ver.textContent = 'Skip it. Put the ' + money(price) + ' toward the grocery budget instead.';
+      return;
+    }
+    var mo = Math.ceil(price / net);
+    big.textContent = mo + ' month' + (mo === 1 ? '' : 's');
+    sub.textContent = 'This ' + money(price) + ' freezer earns back about ' + money2(net) + ' a month at your spending level. After it pays for itself, that is roughly ' + money(net*12) + ' a year in your pocket, every year it keeps running.';
+    if (mo <= 12){
+      ver.className = 'fm-verdict';
+      ver.textContent = 'At your numbers this is a good buy. Under a year to break even, then it just prints grocery savings.';
+    } else if (mo <= 24){
+      ver.className = 'fm-verdict meh';
+      ver.textContent = 'Decent, not instant. You are looking at ' + mo + ' months before the freezer has paid its own way. Worth it if you will actually stock up and cook from it.';
+    } else {
+      ver.className = 'fm-verdict bad';
+      ver.textContent = 'At your numbers, this is not a slam dunk. ' + mo + ' months is a long time to wait for a box to break even. A cheaper freezer, or more of your spending shifted to lows, changes the math.';
+    }
+  }
+
+  function renderTable(){
+    var h = '';
+    for (var i = 0; i < DATA.rows.length; i++){ var r = DATA.rows[i];
+      var sTd = r.spread > 0 ? '<td class="hot">' + pct(r.spread) + '</td>' : '<td class="flat">0% flat so far</td>';
+      var bTd = r.bulkSpread > 0 ? '<td class="hot">' + pct(r.bulkSpread) + '</td>' : '<td class="flat">0%</td>';
+      h += '<tr><td>' + r.label + '</td><td>' + money2(r.avg) + '/' + r.unit + '</td><td>' + money2(r.low) + ' (' + r.lowStore + ')</td>' + sTd + bTd + '</tr>';
+    }
+    document.getElementById('fm-rows').innerHTML = h;
+    document.getElementById('fm-src').textContent = 'Per-item numbers from our weekly Omaha price tracking across 6 stores, based on ' + DATA.weeks + ' weeks of history so far (updated ' + DATA.updated + '). Five weeks is a short window; the spreads sharpen as we track more, and this page updates with them. The blended stock-up spread is ' + pct(DATA.stockup) + ' and the blended bulk spread is ' + pct(DATA.bulk) + '.';
+  }
+
+  function setPresetUI(){
+    var pres = root.querySelectorAll('.fm-pre');
+    for (var i = 0; i < pres.length; i++){
+      if (num(pres[i].getAttribute('data-p')) === price) pres[i].className = 'fm-pre on';
+      else pres[i].className = 'fm-pre';
+    }
+  }
+
+  root.addEventListener('click', function(e){
+    var pre = e.target.closest ? e.target.closest('.fm-pre') : null;
+    if (!pre && e.target.getAttribute && e.target.getAttribute('data-p')) pre = e.target;
+    if (pre){
+      price = num(pre.getAttribute('data-p'));
+      document.getElementById('fm-price').value = '';
+      setPresetUI(); calc();
+    }
+  });
+  root.addEventListener('input', function(e){
+    var id = e.target.id;
+    if (id === 'fm-price'){ var p = num(e.target.value); if (p > 0) price = p; setPresetUI(); calc(); }
+    if (id === 'fm-slide'){ spend = num(e.target.value); document.getElementById('fm-spend').value = spend; calc(); }
+    if (id === 'fm-spend'){ var s = num(e.target.value); if (s >= 0) spend = s; var sl = document.getElementById('fm-slide'); sl.value = Math.min(400, Math.max(20, spend)); calc(); }
+  });
+
+  renderTable(); calc();
+})();
+</script>
+</div>

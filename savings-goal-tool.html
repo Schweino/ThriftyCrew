@@ -1,0 +1,183 @@
+<div id="tcsg">
+<style>
+#tcsg{--navy:#16263f;--gold:#e2a43c;--gold-d:#8a6d1f;--ink:#3a4658;--line:#e2e8f0;--green:#1f7a4d;--red:#b23b2e;--soft:#fbfcfe;
+  max-width:760px;margin:0 auto;font-size:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);}
+#tcsg *{box-sizing:border-box;}
+#tcsg .tb-privacy{display:flex;gap:.7em;align-items:flex-start;background:#fdf8ec;border:1px solid #eee3c8;border-radius:12px;padding:.9em 1.1em;font-size:.92em;line-height:1.5;margin:0 0 1.6em;}
+#tcsg .tb-privacy b{color:var(--navy);}
+#tcsg .tb-lock{flex:0 0 auto;width:1.6em;height:1.6em;border-radius:50%;background:var(--gold);color:var(--navy);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.95em;}
+#tcsg .tb-goal{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.4em 1.3em 1.2em;margin:0 0 1.3em;box-shadow:0 6px 24px rgba(22,38,63,.06);}
+#tcsg .tb-goal-top{display:flex;gap:.6em;align-items:center;margin:0 0 1em;}
+#tcsg .tb-goal-top input{flex:1 1 auto;min-width:0;padding:.72em .8em;font-size:1.05em;font-weight:700;color:var(--navy);border:1.5px solid var(--line);border-radius:10px;font-family:inherit;}
+#tcsg input:focus,#tcsg select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(226,164,60,.22);}
+#tcsg .tb-del{flex:0 0 auto;width:2.2em;height:2.2em;border:none;border-radius:8px;background:#f1f4f8;color:#8a94a6;font-size:1.05em;font-weight:700;cursor:pointer;line-height:1;}
+#tcsg .tb-del:hover{background:#fbeceb;color:var(--red);}
+#tcsg .tb-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(10.5em,1fr));gap:.9em;}
+#tcsg .tb-field label{display:block;font-size:.8em;font-weight:700;color:var(--navy);margin:0 0 .35em;}
+#tcsg .tb-field .wrap{position:relative;display:block;}
+#tcsg .tb-field input{width:100%;padding:.65em .75em .65em 1.7em;font-size:1em;color:var(--navy);border:1.5px solid var(--line);border-radius:10px;font-family:inherit;text-align:right;}
+#tcsg .tb-field .pre{position:absolute;left:.7em;top:50%;transform:translateY(-50%);color:#8a94a6;pointer-events:none;}
+#tcsg .tb-field select{width:100%;padding:.65em .6em;font-size:.95em;color:var(--navy);border:1.5px solid var(--line);border-radius:10px;font-family:inherit;background:#fff;}
+#tcsg .tb-when{display:flex;gap:.4em;}
+#tcsg .tb-bar-track{height:1.05em;background:#eef2f7;border-radius:99px;overflow:hidden;margin:1.1em 0 .4em;}
+#tcsg .tb-bar-fill{height:100%;border-radius:99px;background:var(--gold);transition:width .3s;min-width:0;}
+#tcsg .tb-bar-fill.done{background:var(--green);}
+#tcsg .tb-goal-read{display:flex;justify-content:space-between;gap:1em;font-size:.9em;flex-wrap:wrap;}
+#tcsg .tb-goal-read b{color:var(--navy);}
+#tcsg .tb-verdict{margin:.8em 0 0;font-size:.95em;line-height:1.55;padding:.75em .95em;border-radius:10px;background:var(--soft);border:1px solid var(--line);}
+#tcsg .tb-verdict.ok{background:#eaf6ef;border-color:#bfe3cd;}
+#tcsg .tb-verdict.warn{background:#fbeceb;border-color:#f2c9c5;}
+#tcsg .tb-verdict b{color:var(--navy);}
+#tcsg .tb-add{display:block;width:100%;margin:0 0 1.5em;padding:.9em;border:1.5px dashed #cbd5e1;border-radius:12px;background:#fff;color:var(--navy);font-weight:800;font-size:1em;cursor:pointer;font-family:inherit;}
+#tcsg .tb-add:hover{border-color:var(--gold);color:var(--gold-d);}
+#tcsg .tb-summary{background:var(--navy);border-radius:16px;padding:1.4em 1.3em;color:#f6f1e7;margin:0 0 1.5em;}
+#tcsg .tb-summary h2{font-size:1.1em;color:#fff;margin:0 0 .8em;}
+#tcsg .tb-sum-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(9em,1fr));gap:.8em;text-align:center;}
+#tcsg .tb-sum-grid b{display:block;font-size:1.35em;color:var(--gold);}
+#tcsg .tb-sum-grid span{font-size:.8em;color:#dfe7f1;}
+#tcsg .tb-actions{display:flex;gap:.8em;flex-wrap:wrap;justify-content:center;margin:.4em 0;}
+#tcsg .tb-btn{padding:.9em 1.7em;border:none;border-radius:10px;font-size:1em;font-weight:800;cursor:pointer;font-family:inherit;}
+#tcsg .tb-btn-gold{background:var(--gold);color:var(--navy);}
+#tcsg .tb-btn-ghost{background:#fff;color:var(--red);border:1.5px solid #f2c9c5;}
+#tcsg .tb-saved{text-align:center;font-size:.85em;color:#8a94a6;margin:.4em 0 0;min-height:1.3em;}
+@media (max-width:560px){ #tcsg .tb-goal{padding:1.1em 1em;} }
+</style>
+
+<p style="font-size:1.05em;line-height:1.6;margin:0 0 1.2em;">Name the goal, the price tag, and when you want it. This turns &ldquo;someday&rdquo; into a number per month, tells you if you&rsquo;re on track, and shows the month you&rsquo;ll actually arrive at your current pace.</p>
+<div class="tb-privacy"><span class="tb-lock">&#128274;</span><span><b>Your goals stay on this device.</b> They save automatically in your browser and never leave it. Come back anytime, update &ldquo;saved so far,&rdquo; and watch the bars fill up.</span></div>
+
+<div id="sg-goals"></div>
+<button class="tb-add" id="sg-add" type="button">+ Add a goal</button>
+
+<div class="tb-summary" id="sg-summary" style="display:none">
+  <h2>The big picture</h2>
+  <div class="tb-sum-grid">
+    <div><b id="sg-sum-goals">0</b><span>goals</span></div>
+    <div><b id="sg-sum-target">$0</b><span>all goals add up to</span></div>
+    <div><b id="sg-sum-saved">$0</b><span>saved so far</span></div>
+    <div><b id="sg-sum-pct">0%</b><span>of the way there</span></div>
+  </div>
+</div>
+
+<div class="tb-actions">
+  <button class="tb-btn tb-btn-gold" id="sg-print" type="button">Print my goals</button>
+  <button class="tb-btn tb-btn-ghost" id="sg-clear" type="button">Erase my numbers</button>
+</div>
+<p class="tb-saved" id="sg-saved"></p>
+
+<script>
+(function(){
+  var root = document.getElementById('tcsg');
+  if (!root) return;
+  var KEY = 'tcsg-v1';
+  var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  function defGoal(){ var d = new Date(); d.setMonth(d.getMonth()+12); return {n:'', t:'', s:'', p:'', wm:d.getMonth(), wy:d.getFullYear()}; }
+  var SEED = { goals: [ (function(){ var g = defGoal(); g.n = 'Emergency fund'; return g; })() ] };
+  var S;
+  try { S = JSON.parse(localStorage.getItem(KEY)) || null; } catch(e){ S = null; }
+  if (!S || !S.goals || !S.goals.length) S = JSON.parse(JSON.stringify(SEED));
+
+  function num(x){ var n = parseFloat(String(x).replace(/[^0-9.]/g,'')); return isNaN(n) ? 0 : n; }
+  function money(x){ return '$' + Math.round(x).toLocaleString('en-US'); }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function monthsUntil(wm, wy){ var d = new Date(); return (wy - d.getFullYear())*12 + (wm - d.getMonth()); }
+  function arriveLabel(addMonths){ var d = new Date(); d.setMonth(d.getMonth()+addMonths); return MONTHS[d.getMonth()] + ' ' + d.getFullYear(); }
+
+  var saveT = null;
+  function save(){ clearTimeout(saveT); saveT = setTimeout(function(){ try { localStorage.setItem(KEY, JSON.stringify(S)); var el = document.getElementById('sg-saved'); el.textContent = 'Saved on this device just now.'; setTimeout(function(){ el.textContent = ''; }, 2200); } catch(e){} }, 400); }
+
+  function goalMath(g){
+    var target = num(g.t), saved = num(g.s), pace = num(g.p);
+    var remaining = Math.max(0, target - saved);
+    var pct = target > 0 ? Math.min(100, saved/target*100) : 0;
+    var mu = monthsUntil(Number(g.wm), Number(g.wy));
+    var needed = (remaining > 0 && mu > 0) ? remaining/mu : 0;
+    var arriveIn = (remaining > 0 && pace > 0) ? Math.ceil(remaining/pace) : (remaining <= 0 && target > 0 ? 0 : -1);
+    return { target:target, saved:saved, pace:pace, remaining:remaining, pct:pct, mu:mu, needed:needed, arriveIn:arriveIn };
+  }
+
+  function render(){
+    var h = '';
+    for (var i = 0; i < S.goals.length; i++){
+      var g = S.goals[i], m = goalMath(g);
+      var mo = ''; for (var k = 0; k < 12; k++) mo += '<option value="'+k+'"'+(Number(g.wm)===k?' selected':'')+'>'+MONTHS[k].slice(0,3)+'</option>';
+      var yo = ''; var ynow = new Date().getFullYear();
+      for (var yy = ynow; yy <= ynow+15; yy++) yo += '<option value="'+yy+'"'+(Number(g.wy)===yy?' selected':'')+'>'+yy+'</option>';
+      var verdict = '', vc = '';
+      if (m.target <= 0) verdict = 'Give this goal a price tag and the plan appears.';
+      else if (m.remaining <= 0){ verdict = '<b>Done!</b> This goal is fully funded. Go enjoy it, you earned it.'; vc = ' ok'; }
+      else if (m.mu <= 0) verdict = 'That date is here (or behind us). Pick a new month and this recalculates.';
+      else {
+        verdict = 'To have it by <b>' + MONTHS[Number(g.wm)] + ' ' + g.wy + '</b> you need <b>' + money(m.needed) + ' a month</b>.';
+        if (m.pace > 0){
+          if (m.pace >= m.needed){ verdict += ' At your ' + money(m.pace) + ' a month you are <b>on track</b>, arriving around <b>' + arriveLabel(m.arriveIn) + '</b>.'; vc = ' ok'; }
+          else { verdict += ' At your ' + money(m.pace) + ' a month you would arrive around <b>' + arriveLabel(m.arriveIn) + '</b>. To hit the date, find ' + money(m.needed - m.pace) + ' more a month or move the date.'; vc = ' warn'; }
+        }
+      }
+      h += '<div class="tb-goal" data-i="'+i+'">' +
+        '<div class="tb-goal-top"><input type="text" value="'+esc(g.n)+'" placeholder="What are you saving for?" data-f="n" maxlength="60"><button class="tb-del" type="button" aria-label="Remove this goal">&times;</button></div>' +
+        '<div class="tb-grid">' +
+        '<div class="tb-field"><label>It costs</label><span class="wrap"><span class="pre">$</span><input type="text" inputmode="decimal" value="'+esc(g.t)+'" placeholder="0" data-f="t" maxlength="10"></span></div>' +
+        '<div class="tb-field"><label>Saved so far</label><span class="wrap"><span class="pre">$</span><input type="text" inputmode="decimal" value="'+esc(g.s)+'" placeholder="0" data-f="s" maxlength="10"></span></div>' +
+        '<div class="tb-field"><label>Saving per month</label><span class="wrap"><span class="pre">$</span><input type="text" inputmode="decimal" value="'+esc(g.p)+'" placeholder="0" data-f="p" maxlength="10"></span></div>' +
+        '<div class="tb-field"><label>Want it by</label><span class="tb-when"><select data-f="wm">'+mo+'</select><select data-f="wy">'+yo+'</select></span></div>' +
+        '</div>' +
+        '<div class="tb-bar-track"><div class="tb-bar-fill'+(m.remaining<=0&&m.target>0?' done':'')+'" style="width:'+m.pct+'%"></div></div>' +
+        '<div class="tb-goal-read"><span><b>'+Math.round(m.pct)+'%</b> there</span><span>'+money(m.saved)+' of '+money(m.target)+'</span><span>'+(m.remaining>0?money(m.remaining)+' to go':'complete')+'</span></div>' +
+        '<div class="tb-verdict'+vc+'">'+verdict+'</div>' +
+        '</div>';
+    }
+    document.getElementById('sg-goals').innerHTML = h;
+    var tt = 0, ts = 0, n = 0;
+    for (i = 0; i < S.goals.length; i++){ var mm = goalMath(S.goals[i]); if (mm.target > 0){ n++; tt += mm.target; ts += Math.min(mm.saved, mm.target); } }
+    var sum = document.getElementById('sg-summary');
+    if (n >= 2){ sum.style.display = '';
+      document.getElementById('sg-sum-goals').textContent = n;
+      document.getElementById('sg-sum-target').textContent = money(tt);
+      document.getElementById('sg-sum-saved').textContent = money(ts);
+      document.getElementById('sg-sum-pct').textContent = (tt > 0 ? Math.round(ts/tt*100) : 0) + '%';
+    } else sum.style.display = 'none';
+  }
+
+  root.addEventListener('input', function(e){ handleField(e); });
+  root.addEventListener('change', function(e){ if (e.target.tagName === 'SELECT') handleField(e); });
+  function handleField(e){
+    var card = e.target.closest('.tb-goal');
+    if (!card) return;
+    var i = Number(card.getAttribute('data-i')), f = e.target.getAttribute('data-f');
+    if (S.goals[i] && f){ S.goals[i][f] = e.target.value;
+      if (f === 'n'){ save(); return; }
+      var focused = document.activeElement, fi = focused ? focused.getAttribute('data-f') : null;
+      render(); save();
+      if (fi){ var again = document.querySelector('.tb-goal[data-i="'+i+'"] [data-f="'+fi+'"]'); if (again){ again.focus(); if (again.setSelectionRange && again.type === 'text'){ var L = again.value.length; again.setSelectionRange(L, L); } } }
+    }
+  }
+  root.addEventListener('click', function(e){
+    if (e.target.closest('#sg-add')){ S.goals.push(defGoal()); render(); save(); var cards = document.querySelectorAll('.tb-goal'); var inp = cards[cards.length-1].querySelector('input'); if (inp) inp.focus(); return; }
+    var del = e.target.closest('.tb-del');
+    if (del){ var i = Number(del.closest('.tb-goal').getAttribute('data-i')); S.goals.splice(i,1); if (!S.goals.length) S.goals.push(defGoal()); render(); save(); return; }
+    if (e.target.id === 'sg-clear'){ if (confirm('Erase all your goals from this device?')){ try { localStorage.removeItem(KEY); } catch(err){} S = JSON.parse(JSON.stringify(SEED)); render(); } return; }
+    if (e.target.id === 'sg-print'){ doPrint(); }
+  });
+
+  function doPrint(){
+    var rows = '';
+    for (var i = 0; i < S.goals.length; i++){ var g = S.goals[i], m = goalMath(g);
+      if (m.target <= 0) continue;
+      rows += '<tr><td>'+esc(g.n||'Goal')+'</td><td class="r">'+money(m.saved)+' of '+money(m.target)+' ('+Math.round(m.pct)+'%)</td><td class="r">'+(m.remaining<=0?'done':(m.mu>0?money(m.needed)+'/mo by '+MONTHS[Number(g.wm)].slice(0,3)+' '+g.wy:'-'))+'</td></tr>';
+    }
+    if (!rows){ alert('Give at least one goal a price tag first.'); return; }
+    var w = window.open('', '_blank');
+    if (!w){ alert('Your browser blocked the print window. Allow pop-ups for this site and try again.'); return; }
+    w.document.write('<html><head><title>My Savings Goals - Thrifty Crew</title><style>body{font-family:Georgia,serif;color:#16263f;max-width:640px;margin:2em auto;padding:0 1em;}h1{font-size:1.5em;border-bottom:2px solid #e2a43c;padding-bottom:.3em;}table{width:100%;border-collapse:collapse;font-size:.95em;}td{padding:.35em 0;border-bottom:1px dotted #ccc;}td.r{text-align:right;white-space:nowrap;}.foot{margin-top:2em;font-size:.8em;color:#777;}</style></head><body>' +
+      '<h1>My Savings Goals</h1><table><tr><td style="font-weight:bold">Goal</td><td class="r" style="font-weight:bold">Progress</td><td class="r" style="font-weight:bold">The plan</td></tr>' + rows + '</table>' +
+      '<p class="foot">Printed from the Thrifty Crew savings goal tracker. Your numbers live on your device, not on our servers. thriftycrew.com</p>' +
+      '</body></html>');
+    w.document.close();
+    setTimeout(function(){ w.print(); }, 350);
+  }
+
+  render();
+})();
+</script>
+</div>

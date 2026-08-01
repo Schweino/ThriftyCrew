@@ -1,0 +1,566 @@
+<div id="mpp-root">
+<style>
+#mpp-root{--navy:#16263f;--gold:#e2a43c;--gold-d:#8a6d1f;--cream:#f6f1e7;--ink:#3a4658;--line:#e2e8f0;--ok:#1f7a4d;--err:#b23b2e;--mut:#8a94a6;
+  max-width:760px;margin:0 auto;font-size:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);}
+#mpp-root *{box-sizing:border-box;}
+.mpp-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 20px;margin:0 0 18px;box-shadow:0 6px 24px rgba(22,38,63,.07);}
+.mpp-step{display:inline-block;background:var(--navy);color:#fff;font-weight:800;font-size:.8em;border-radius:999px;padding:3px 12px;margin:0 0 8px;letter-spacing:.04em;}
+.mpp-h{color:var(--navy);font-size:1.25em;font-weight:800;margin:0 0 4px;}
+.mpp-sub{font-size:.95em;line-height:1.5;margin:0 0 14px;color:var(--ink);}
+.mpp-grid{display:flex;flex-wrap:wrap;gap:12px;}
+.mpp-field{flex:1 1 140px;min-width:130px;}
+.mpp-field label{display:block;color:var(--navy);font-weight:700;font-size:.85em;margin:0 0 5px;}
+.mpp-field input,.mpp-field select{width:100%;padding:10px 11px;font-size:1em;color:var(--navy);background:#fff;border:1.5px solid var(--line);border-radius:10px;appearance:none;}
+.mpp-field input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(226,164,60,.22);}
+.mpp-target{margin:14px 0 0;padding:11px 14px;background:var(--cream);border:1px solid #e5dcc8;border-radius:10px;font-size:.95em;color:var(--navy);}
+.mpp-target b{color:var(--gold-d);}
+.mpp-bar{height:10px;background:#eef1f6;border-radius:999px;overflow:hidden;margin:10px 0 4px;}
+.mpp-bar div{height:100%;background:var(--gold);border-radius:999px;transition:width .2s;}
+.mpp-bar div.over{background:var(--ok);}
+.mpp-barlbl{font-size:.85em;color:var(--mut);}
+.mpp-search{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 10px;}
+.mpp-search input{flex:1 1 180px;padding:10px 12px;font-size:1em;border:1.5px solid var(--line);border-radius:10px;color:var(--navy);}
+.mpp-chips{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px;}
+.mpp-chip{border:1.5px solid var(--line);background:#fff;color:var(--navy);font-weight:700;font-size:.85em;border-radius:999px;padding:6px 13px;cursor:pointer;}
+.mpp-chip.on{background:var(--navy);color:#fff;border-color:var(--navy);}
+.mpp-list{max-height:340px;overflow-y:auto;border:1px solid var(--line);border-radius:10px;}
+.mpp-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid #f0f3f7;cursor:pointer;}
+.mpp-row:hover{background:#fafbfd;}
+.mpp-row:last-child{border-bottom:none;}
+.mpp-rname{flex:1;color:var(--navy);font-weight:600;font-size:.93em;line-height:1.3;}
+.mpp-rmeta{font-size:.8em;color:var(--mut);white-space:nowrap;}
+.mpp-add{background:var(--gold);color:var(--navy);border:none;border-radius:8px;font-weight:800;font-size:.85em;padding:7px 12px;cursor:pointer;}
+.mpp-picks{margin:0 0 12px;}
+.mpp-pick{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--cream);border:1px solid #e5dcc8;border-radius:10px;margin:0 0 8px;flex-wrap:wrap;}
+.mpp-pick .mpp-rname{min-width:150px;}
+.mpp-step-ctl{display:flex;align-items:center;gap:6px;}
+.mpp-sbtn{width:32px;height:32px;border-radius:999px;border:2px solid var(--navy);background:#fff;color:var(--navy);font-size:1.1em;font-weight:800;cursor:pointer;line-height:1;}
+.mpp-snum{width:52px;text-align:center;font-size:1em;font-weight:800;color:var(--navy);border:1.5px solid #d8dee8;border-radius:8px;padding:5px 3px;}
+.mpp-slbl{font-size:.8em;color:var(--mut);}
+.mpp-x{background:none;border:none;color:var(--err);font-weight:800;font-size:1.1em;cursor:pointer;padding:4px 6px;}
+.mpp-btn{width:100%;padding:14px 18px;font-size:1.05em;font-weight:800;color:var(--navy);background:var(--gold);border:none;border-radius:10px;cursor:pointer;margin:6px 0 0;}
+.mpp-btn:hover{filter:brightness(1.04);}
+.mpp-btn:disabled{opacity:.55;cursor:default;}
+.mpp-btn2{background:#fff;border:2px solid var(--navy);color:var(--navy);width:auto;padding:10px 18px;font-size:.95em;margin-right:8px;}
+.mpp-warn{margin:10px 0 0;padding:10px 13px;border-radius:10px;font-size:.9em;background:#fbf3e8;color:#8a6d1f;border:1px solid #efd9b4;}
+.mpp-cal{list-style:none;margin:0 0 6px;padding:0;}
+.mpp-cal li{display:flex;gap:10px;padding:7px 4px;border-bottom:1px dotted #d8d0bc;font-size:.93em;}
+.mpp-cal .d{width:92px;color:var(--mut);white-space:nowrap;font-size:.88em;padding-top:1px;}
+.mpp-cal .cook{color:var(--navy);font-weight:700;}
+.mpp-cal .cook .tag{display:inline-block;background:var(--navy);color:#fff;font-size:.72em;border-radius:6px;padding:1px 7px;margin-right:6px;vertical-align:1px;}
+.mpp-cal .left{color:var(--ink);}
+.mpp-cal .none{color:#b3bcc9;font-style:italic;}
+.mpp-fillbtn{display:inline-block;margin-top:8px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-weight:800;font-size:.9em;padding:8px 14px;cursor:pointer;}
+.mpp-tot{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0;}
+.mpp-tile{flex:1 1 120px;background:var(--navy);color:#fff;border-radius:12px;padding:12px 10px;text-align:center;}
+.mpp-tile .n{font-size:1.25em;font-weight:800;}
+.mpp-tile .l{font-size:.72em;opacity:.85;text-transform:uppercase;letter-spacing:.05em;}
+.mpp-store{margin:14px 0 4px;color:var(--navy);font-weight:800;font-size:1em;border-bottom:2px solid var(--gold);padding-bottom:3px;}
+.mpp-store span{color:var(--mut);font-weight:600;font-size:.85em;}
+.mpp-gl{list-style:none;margin:0;padding:0;}
+.mpp-gl li{display:flex;align-items:center;gap:8px;padding:6px 2px;border-bottom:1px dotted #e2e8f0;font-size:.92em;flex-wrap:wrap;}
+.mpp-gl .it{color:var(--navy);font-weight:600;flex:1 1 130px;}
+.mpp-gl .amt{color:var(--ink);}
+.mpp-gl .pkgn{color:var(--gold-d);font-weight:700;white-space:nowrap;}
+.mpp-gl .pr{color:var(--ok);font-weight:700;white-space:nowrap;margin-left:auto;}
+.mpp-gl .un{color:var(--mut);font-size:.85em;font-style:italic;}
+.mpp-minus{width:26px;height:26px;border-radius:999px;border:1.5px solid #d8dee8;background:#fff;color:var(--err);font-weight:800;font-size:1em;line-height:1;cursor:pointer;flex:0 0 auto;}
+.mpp-minus:hover{border-color:var(--err);}
+.mpp-reg{margin:12px 0 4px;padding:12px 14px;background:var(--cream);border:1px solid #e5dcc8;border-radius:10px;font-size:.98em;color:var(--navy);}
+.mpp-reg b{color:var(--ok);}
+.mpp-removedwrap{margin:12px 0 0;padding:10px 13px;background:#f6f8fb;border:1px dashed #c9d2de;border-radius:10px;font-size:.88em;}
+.mpp-removedwrap b{color:var(--navy);}
+.mpp-back{display:inline-block;margin:3px 4px 0 0;background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:3px 10px;font-size:.92em;color:var(--navy);cursor:pointer;}
+.mpp-back:hover{border-color:var(--gold);}
+.mpp-storehint{margin:8px 0 0;padding:10px 13px;border-radius:10px;font-size:.9em;background:#fbf3e8;color:#8a6d1f;border:1px solid #efd9b4;}
+.mpp-note{font-size:.83em;color:var(--mut);line-height:1.5;margin:12px 0 0;}
+.mpp-hide{display:none!important;}
+@media (max-width:520px){.mpp-card{padding:18px 14px;border-radius:14px;}.mpp-cal .d{width:78px;}.mpp-row{flex-wrap:wrap;}.mpp-rmeta{white-space:normal;}}
+</style>
+
+<div class="mpp-card">
+  <span class="mpp-step">STEP 1</span>
+  <h3 class="mpp-h">When, and for how many?</h3>
+  <p class="mpp-sub">Pick your dates and household size. We compute how many dinner servings your plan needs to cover.</p>
+  <div class="mpp-grid">
+    <div class="mpp-field"><label for="mpp-sd">Start date</label><input type="date" id="mpp-sd"></div>
+    <div class="mpp-field"><label for="mpp-ed">End date</label><input type="date" id="mpp-ed"></div>
+    <div class="mpp-field"><label for="mpp-hh">People in your household</label><input type="number" id="mpp-hh" min="1" max="12" value="2" inputmode="numeric"></div>
+    <div class="mpp-field"><label for="mpp-rc">How many recipes</label><input type="number" id="mpp-rc" min="1" max="14" value="3" inputmode="numeric"></div>
+  </div>
+  <div class="mpp-target" id="mpp-target"></div>
+</div>
+
+<div class="mpp-card">
+  <span class="mpp-step">STEP 2</span>
+  <h3 class="mpp-h">Pick your recipes</h3>
+  <p class="mpp-sub">Tap a recipe to add it. Adjust servings on each pick; every recipe scales from 2 to 42 servings and amounts update everywhere.</p>
+  <div class="mpp-picks" id="mpp-picks"></div>
+  <div class="mpp-bar"><div id="mpp-barfill" style="width:0%"></div></div>
+  <div class="mpp-barlbl" id="mpp-barlbl"></div>
+  <div class="mpp-search" style="margin-top:12px"><input type="search" id="mpp-q" placeholder="Search recipes..." autocomplete="off"></div>
+  <div class="mpp-chips" id="mpp-chips">
+    <button class="mpp-chip on" data-p="all">All</button>
+    <button class="mpp-chip" data-p="chicken">Chicken</button>
+    <button class="mpp-chip" data-p="pork">Pork</button>
+    <button class="mpp-chip" data-p="beef">Beef</button>
+    <button class="mpp-chip" data-p="turkey">Turkey</button>
+  </div>
+  <div class="mpp-list" id="mpp-list"></div>
+</div>
+
+<div class="mpp-card">
+  <span class="mpp-step">STEP 3</span>
+  <h3 class="mpp-h">Your plan</h3>
+  <p class="mpp-sub" id="mpp-plansub">Add at least one recipe above and your plan builds itself: cook nights, leftovers, one combined grocery list, and live cheapest prices.</p>
+  <div id="mpp-out" class="mpp-hide">
+    <div id="mpp-calwarn"></div>
+    <ul class="mpp-cal" id="mpp-cal"></ul>
+    <div class="mpp-tot" id="mpp-tot"></div>
+    <h4 style="color:var(--navy);margin:16px 0 2px;font-size:1.05em">Your grocery list</h4>
+    <p class="mpp-sub" style="margin:0 0 8px">Which store(s) are you shopping at? We split your list so every item lands at the cheapest of YOUR stores, priced as the whole packages you have to buy.</p>
+    <div class="mpp-chips" id="mpp-storechips"></div>
+    <div id="mpp-removed"></div>
+    <div id="mpp-gl"></div>
+    <p class="mpp-note">Prices assume you own none of it: every item is priced as full packages (a 2 lb bag of rice costs what the bag costs). Tap the minus on anything you already have and the totals update. Prices come from our verified Omaha grocery board and refresh daily.</p>
+    <div style="margin-top:14px">
+      <button type="button" class="mpp-btn mpp-btn2" id="mpp-printlist">Print shopping list</button>
+      <button type="button" class="mpp-btn mpp-btn2" id="mpp-print">Print full plan</button>
+      <button type="button" class="mpp-btn mpp-btn2" id="mpp-reset" style="border-color:#c9d2de;color:var(--mut)">Start over</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// planner data fetched from the Worker at runtime (see gen-planner-data.ps1)
+(function(){
+if(window.__mpp)return; window.__mpp=1;
+// SCALE (2026-07-26): the per-recipe planner data is fetched from the Worker at load time, NOT embedded
+// in the post. Embedding it grew the Ghost post ~1.5 KB/recipe (815 KB at 513, ~2.35 MB at 1500) and
+// Ghost Pro 503s processing a lexical card near ~1.6 MB. Now the post stays template-size and the data
+// rides the same Worker+edge-cache path as the price feed. See gen-planner-data.ps1 (writes public/planner-data.json).
+var MPP=[];
+var PDATA='https://smp-feed.ancient-snow-93df.workers.dev/planner-data.json?v=2';
+var FEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json?s=2';   // ?s=2: new cache key since the feed gained per-store prices
+var $=function(id){return document.getElementById(id);};
+var sd=$('mpp-sd'),ed=$('mpp-ed'),hh=$('mpp-hh'),rc=$('mpp-rc'),q=$('mpp-q');
+var byslug={};   // populated in boot() once MPP is fetched
+var picks=[];          // [{s, sv}]
+var curP='all';
+var feedData=null;
+
+function esc(s){var d=document.createElement('span');d.textContent=s;return d.innerHTML;}
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return String(buy).replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function money(v){ return '$'+v.toFixed(2); }
+function parseDate(v){ var p=v.split('-'); return new Date(+p[0],+p[1]-1,+p[2]); }
+function fmtDay(d){ return d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}); }
+
+function days(){
+  if(!sd.value||!ed.value)return 0;
+  var n=Math.round((parseDate(ed.value)-parseDate(sd.value))/86400000)+1;
+  return (n>=1&&n<=31)?n:0;
+}
+function target(){ return days()*Math.max(1,Math.min(12,parseInt(hh.value)||1)); }
+function planned(){ return picks.reduce(function(a,p){return a+p.sv;},0); }
+
+function renderTarget(){
+  var d=days(),t=target();
+  var el=$('mpp-target');
+  if(!d){ el.innerHTML='Pick a start and end date (up to 31 days).'; return; }
+  el.innerHTML='That is <b>'+d+' dinner'+(d>1?'s':'')+'</b> for <b>'+(parseInt(hh.value)||1)+' '+((parseInt(hh.value)||1)>1?'people':'person')+'</b> = <b>'+t+' servings</b> to plan across <b>'+(parseInt(rc.value)||1)+' recipe'+((parseInt(rc.value)||1)>1?'s':'')+'</b>.';
+}
+function suggestSv(){
+  var t=target(),n=Math.max(1,Math.min(14,parseInt(rc.value)||1));
+  var remaining=Math.max(0,t-planned());
+  var slots=Math.max(1,n-picks.length);
+  return Math.max(2,Math.min(42,Math.round(remaining/slots)||2));
+}
+
+function renderBar(){
+  var t=target(),p=planned();
+  var pct=t?Math.min(100,Math.round(100*p/t)):0;
+  var f=$('mpp-barfill'); f.style.width=pct+'%'; f.className=(t&&p>=t)?'over':'';
+  $('mpp-barlbl').textContent=t?(p+' of '+t+' servings planned'+(p>=t?' (covered!)':'')) : 'Set your dates above to see the servings target.';
+}
+
+function renderPicks(){
+  var host=$('mpp-picks'); var html='';
+  picks.forEach(function(p,i){
+    var r=byslug[p.s];
+    html+='<div class="mpp-pick"><span class="mpp-rname">'+esc(r.n)+'</span>'
+      +'<span class="mpp-step-ctl"><button type="button" class="mpp-sbtn" data-i="'+i+'" data-d="-1">&minus;</button>'
+      +'<input class="mpp-snum" data-i="'+i+'" type="number" min="2" max="42" value="'+p.sv+'" inputmode="numeric">'
+      +'<button type="button" class="mpp-sbtn" data-i="'+i+'" data-d="1">+</button>'
+      +'<span class="mpp-slbl">servings</span></span>'
+      +'<span class="mpp-rmeta">'+money(r.cps*p.sv)+' est.</span>'
+      +'<button type="button" class="mpp-x" data-x="'+i+'" aria-label="Remove">&times;</button></div>';
+  });
+  host.innerHTML=html||'<p class="mpp-sub" style="margin:0">No recipes picked yet.</p>';
+  renderBar(); renderPlan(); save();
+}
+
+function listRows(){
+  var term=(q.value||'').toLowerCase().trim();
+  var rows=MPP.filter(function(r){
+    if(curP!=='all'&&r.p!==curP)return false;
+    if(term&&r.n.toLowerCase().indexOf(term)<0&&r.c.toLowerCase().indexOf(term)<0)return false;
+    return !picks.some(function(p){return p.s===r.s;});
+  });
+  rows.sort(function(a,b){return a.cps-b.cps;});
+  return rows.slice(0,60);
+}
+function renderList(){
+  var html='';
+  listRows().forEach(function(r){
+    html+='<div class="mpp-row" data-s="'+r.s+'"><span class="mpp-rname">'+esc(r.n)+'</span>'
+      +'<span class="mpp-rmeta">'+money(r.cps)+'/sv &middot; '+r.cal+' cal &middot; '+r.pro+'g pro</span>'
+      +'<button type="button" class="mpp-add">Add</button></div>';
+  });
+  $('mpp-list').innerHTML=html||'<p class="mpp-sub" style="padding:12px">Nothing matches. Clear the search or filters.</p>';
+}
+
+function buildCalendar(){
+  var d=days(); if(!d||!picks.length)return {rows:[],short:0,extra:0};
+  var H=Math.max(1,Math.min(12,parseInt(hh.value)||1));
+  var start=parseDate(sd.value);
+  var rows=[],di=0,short=0,extra=0;
+  picks.forEach(function(p){
+    var r=byslug[p.s];
+    var cover=Math.max(1,Math.ceil(p.sv/H));
+    for(var k=0;k<cover;k++){
+      if(di>=d){ extra+=H; continue; }
+      var day=new Date(start.getTime()+di*86400000);
+      rows.push({d:fmtDay(day),cook:(k===0),name:r.n,slug:r.s});
+      di++;
+    }
+  });
+  // every day in the range appears, planned or not: the calendar must reflect the full date range
+  while(di<d){
+    var day2=new Date(start.getTime()+di*86400000);
+    rows.push({d:fmtDay(day2),empty:true});
+    di++;
+  }
+  short=Math.max(0,target()-planned());
+  if(extra>0){ extra=Math.max(0,planned()-target()); }
+  return {rows:rows,short:short,extra:extra};
+}
+
+function mergeList(){
+  var items={};
+  picks.forEach(function(p){
+    var f=p.sv/14;
+    byslug[p.s].ing.forEach(function(ing){
+      var k=ing.i;
+      if(!items[k]) items[k]={i:k,g:0,buyNum:0,buySkel:null,skelOk:true,bid:ing.bid,gpu:ing.gpu,pk:ing.pk,pl:ing.pl};
+      var it=items[k];
+      it.g+=ing.g*f;
+      var m=String(ing.b).match(/^(\d+(?:\.\d+)?)(.*)$/);
+      if(m){
+        var skel=m[2];
+        if(it.buySkel===null){ it.buySkel=skel; }
+        if(it.buySkel===skel){ it.buyNum+=parseFloat(m[1])*f; } else { it.skelOk=false; }
+      } else { it.skelOk=false; }
+    });
+  });
+  return Object.keys(items).map(function(k){return items[k];});
+}
+
+// ---- store split with WHOLE-PACKAGE pricing (assume the user owns none of it) ----
+var STORES=['Walmart','Aldi',"Baker's",'Family Fare','Fareway','Hy-Vee',"Sam's Club"];
+var selStores=[]; var removed={};
+var SINGULAR={'lb':1,'each':1,'pint':1,'orange':1,'head':1,'bunch':1,'piece':1,'dozen':1,'gallon':1};
+function pkgN(it){ if(!it.pk||it.pk<=0)return null; var n=Math.ceil(it.g/it.pk-0.02); return n<1?1:n; }
+function pkgLabel(it){
+  var n=pkgN(it); if(n===null||!it.pl)return null;
+  var base=it.pl.replace(/\s*\(.*\)$/,'');
+  if(SINGULAR[base]){ return n+' '+base+(n>1&&base==='lb'?'':''); }
+  return n+' × '+base;
+}
+function storePkgCost(it,store){
+  if(!it.bid||!it.gpu||!feedData||!feedData.ingredients||!feedData.ingredients[it.bid])return null;
+  var e=feedData.ingredients[it.bid];
+  if(!e.stores||!e.stores[store]||e.stores[store]<=0)return null;
+  var ppg=e.stores[store]/it.gpu;
+  var n=pkgN(it);
+  if(n===null){ return {cost:it.g*ppg, partial:true}; }
+  return {cost:n*it.pk*ppg, partial:false};
+}
+function computeAssignment(){
+  var merged=mergeList().filter(function(it){return !removed[it.i];});
+  var groups={}; var other=[]; var regTotal=0; var priced=0;
+  merged.forEach(function(it){
+    var best=null,bestStore=null;
+    selStores.forEach(function(st){
+      var c=storePkgCost(it,st);
+      if(c&&(best===null||c.cost<best.cost)){ best=c; bestStore=st; }
+    });
+    var amt=it.skelOk&&it.buySkel!==null?(fmtQty(it.buyNum)+it.buySkel):null;
+    var d={i:it.i,amt:amt,g:Math.round(it.g),pkg:pkgLabel(it)};
+    if(best){
+      d.cost=best.cost; d.partial=best.partial;
+      regTotal+=best.cost; priced++;
+      if(!groups[bestStore])groups[bestStore]={items:[],sub:0};
+      groups[bestStore].items.push(d); groups[bestStore].sub+=best.cost;
+    } else { other.push(d); }
+  });
+  return {groups:groups,other:other,regTotal:regTotal,priced:priced,total:merged.length};
+}
+
+function renderPlan(){
+  var out=$('mpp-out');
+  if(!picks.length||!days()){ out.classList.add('mpp-hide'); $('mpp-plansub').classList.remove('mpp-hide'); return; }
+  out.classList.remove('mpp-hide'); $('mpp-plansub').classList.add('mpp-hide');
+
+  var cal=buildCalendar();
+  var ch='';
+  cal.rows.forEach(function(row){
+    if(row.empty){ ch+='<li><span class="d">'+row.d+'</span><span class="none">Not planned yet</span></li>'; }
+    else if(row.cook){ ch+='<li><span class="d">'+row.d+'</span><span class="cook"><span class="tag">COOK</span><a href="/'+row.slug+'/" style="color:inherit">'+esc(row.name)+'</a></span></li>'; }
+    else { ch+='<li><span class="d">'+row.d+'</span><span class="left">Leftovers: '+esc(row.name)+'</span></li>'; }
+  });
+  $('mpp-cal').innerHTML=ch;
+  var w='';
+  if(cal.short>0){ w='<div class="mpp-warn">Your picks cover '+planned()+' of '+target()+' servings, so some days below are not planned yet. Add a recipe, or spread the difference across your picks.<br><button type="button" class="mpp-fillbtn" id="mpp-fill">Bump my picks to cover all '+target()+' servings</button></div>'; }
+  else if(cal.extra>0){ w='<div class="mpp-warn" style="background:#ecf6f0;color:var(--ok);border-color:#bfe3cd">About '+cal.extra+' extra servings. Freeze them; future you says thanks.</div>'; }
+  $('mpp-calwarn').innerHTML=w;
+
+  var sv=planned();
+  var cost=picks.reduce(function(a,p){return a+byslug[p.s].cps*p.sv;},0);
+  var cal_=0,pro=0;
+  picks.forEach(function(p){var r=byslug[p.s];cal_+=r.cal*p.sv;pro+=r.pro*p.sv;});
+  $('mpp-tot').innerHTML=
+    '<div class="mpp-tile"><div class="n">'+sv+'</div><div class="l">servings</div></div>'
+    +'<div class="mpp-tile"><div class="n">'+money(cost)+'</div><div class="l">est. total</div></div>'
+    +'<div class="mpp-tile"><div class="n">'+money(sv?cost/sv:0)+'</div><div class="l">per serving</div></div>'
+    +'<div class="mpp-tile"><div class="n">'+(sv?Math.round(pro/sv):0)+'g</div><div class="l">avg protein</div></div>';
+
+  renderGrocery();
+}
+
+function itemRow(d,withPrice){
+  var h='<li><button type="button" class="mpp-minus" data-rm="'+esc(d.i)+'" aria-label="I already have this">&minus;</button>'
+    +'<span class="it">'+esc(d.i)+'</span>'
+    +'<span class="amt">'+(d.amt?esc(d.amt)+' ':'')+'('+d.g+' g)</span>'
+    +(d.pkg?'<span class="pkgn">'+esc(d.pkg)+'</span>':'');
+  if(withPrice&&typeof d.cost==='number'){ h+='<span class="pr">'+money(d.cost)+(d.partial?' <span class="un">partial-pack est.</span>':'')+'</span>'; }
+  else if(!withPrice){ h+='<span class="un" style="margin-left:auto">pick stores to price</span>'; }
+  else { h+='<span class="un" style="margin-left:auto">not priced at your stores</span>'; }
+  return h+'</li>';
+}
+function renderRemoved(){
+  var names=Object.keys(removed);
+  if(!names.length){ $('mpp-removed').innerHTML=''; return; }
+  var h='<div class="mpp-removedwrap"><b>Already have ('+names.length+'):</b> tap to put one back. ';
+  names.sort().forEach(function(n){ h+='<button type="button" class="mpp-back" data-add="'+esc(n)+'">'+esc(n)+' +</button>'; });
+  h+='</div>';
+  $('mpp-removed').innerHTML=h;
+}
+function renderGrocery(){
+  renderRemoved();
+  // store chips
+  var ch='';
+  STORES.forEach(function(st){ ch+='<button type="button" class="mpp-chip'+(selStores.indexOf(st)>=0?' on':'')+'" data-st="'+esc(st)+'">'+esc(st)+'</button>'; });
+  $('mpp-storechips').innerHTML=ch;
+
+  if(!feedData){ $('mpp-gl').innerHTML='<p class="mpp-sub">Live prices are loading...</p>'; return; }
+  var html='';
+  if(!selStores.length){
+    html+='<div class="mpp-storehint">Select at least one store above and we will split your list and price it in whole packages.</div>';
+    var merged=mergeList().filter(function(it){return !removed[it.i];});
+    html+='<ul class="mpp-gl" style="margin-top:10px">';
+    merged.sort(function(a,b){return a.i<b.i?-1:1;}).forEach(function(it){
+      var amt=it.skelOk&&it.buySkel!==null?(fmtQty(it.buyNum)+it.buySkel):null;
+      html+=itemRow({i:it.i,amt:amt,g:Math.round(it.g),pkg:pkgLabel(it)},false);
+    });
+    html+='</ul>';
+    $('mpp-gl').innerHTML=html; return;
+  }
+  var A=computeAssignment();
+  html+='<div class="mpp-reg">Register estimate at your '+selStores.length+' store'+(selStores.length>1?'s':'')+': <b>'+money(A.regTotal)+'</b> <span style="color:var(--mut);font-size:.85em">('+A.priced+' of '+A.total+' items priced, whole packages)</span></div>';
+  Object.keys(A.groups).sort(function(a,b){return A.groups[b].sub-A.groups[a].sub;}).forEach(function(st){
+    var s=A.groups[st];
+    html+='<div class="mpp-store">'+esc(st)+' <span>'+s.items.length+' item'+(s.items.length>1?'s':'')+' &middot; about '+money(s.sub)+'</span></div><ul class="mpp-gl">';
+    s.items.sort(function(a,b){return a.i<b.i?-1:1;}).forEach(function(d){ html+=itemRow(d,true); });
+    html+='</ul>';
+  });
+  if(A.other.length){
+    html+='<div class="mpp-store">Not priced at your stores <span>'+A.other.length+' item'+(A.other.length>1?'s':'')+' &middot; still on your list</span></div><ul class="mpp-gl">';
+    A.other.sort(function(a,b){return a.i<b.i?-1:1;}).forEach(function(d){ html+=itemRow(d,true); });
+    html+='</ul>';
+  }
+  $('mpp-gl').innerHTML=html;
+}
+
+function save(){
+  try{ localStorage.setItem('mpp-v1',JSON.stringify({sd:sd.value,ed:ed.value,hh:hh.value,rc:rc.value,picks:picks,sel:selStores,rem:Object.keys(removed)})); }catch(e){}
+}
+function restore(){
+  try{
+    var s=JSON.parse(localStorage.getItem('mpp-v1')||'null');
+    if(!s)return false;
+    if(s.sd)sd.value=s.sd; if(s.ed)ed.value=s.ed; if(s.hh)hh.value=s.hh; if(s.rc)rc.value=s.rc;
+    if(s.picks&&s.picks.length){ picks=s.picks.filter(function(p){return byslug[p.s];}); }
+    if(s.sel&&s.sel.length){ selStores=s.sel.filter(function(x){return STORES.indexOf(x)>=0;}); }
+    if(s.rem&&s.rem.length){ removed={}; s.rem.forEach(function(n){removed[n]=1;}); }
+    return true;
+  }catch(e){ return false; }
+}
+
+function printPlan(){
+  var cal=buildCalendar();
+  var rowsH='';
+  cal.rows.forEach(function(r){ rowsH+='<tr><td class="d">'+r.d+'</td><td>'+(r.cook?'<b>COOK: '+esc(r.name)+'</b>':'Leftovers: '+esc(r.name))+'</td></tr>'; });
+  var listH='';
+  if(selStores.length){
+    var A=computeAssignment();
+    Object.keys(A.groups).sort().forEach(function(st){
+      listH+='<li style="border-bottom:2px solid #e2a43c"><b>'+esc(st)+'</b><span>about '+money(A.groups[st].sub)+'</span></li>';
+      A.groups[st].items.sort(function(a,b){return a.i<b.i?-1:1;}).forEach(function(d){
+        listH+='<li><span>&#9744; '+esc(d.i)+'</span><span>'+(d.pkg?esc(d.pkg)+' &middot; ':'')+money(d.cost)+'</span></li>';
+      });
+    });
+    if(A.other.length){
+      listH+='<li style="border-bottom:2px solid #e2a43c"><b>Also on your list</b><span></span></li>';
+      A.other.forEach(function(d){ listH+='<li><span>&#9744; '+esc(d.i)+'</span><span>'+(d.amt?esc(d.amt)+' ':'')+'('+d.g+' g)</span></li>'; });
+    }
+  } else {
+    mergeList().filter(function(it){return !removed[it.i];}).sort(function(a,b){return a.i<b.i?-1:1;}).forEach(function(it){
+      var amt=it.skelOk&&it.buySkel!==null?(fmtQty(it.buyNum)+it.buySkel):null;
+      listH+='<li><span>&#9744; '+esc(it.i)+'</span><span>'+(amt?esc(amt)+' ':'')+'('+Math.round(it.g)+' g)</span></li>';
+    });
+  }
+  var sv=planned();
+  var cost=picks.reduce(function(a,p){return a+byslug[p.s].cps*p.sv;},0);
+  var css='@page{margin:14mm}body{font:13px/1.5 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#16263f;max-width:720px;margin:0 auto}h1{font-size:20px;margin:0 0 2px}.m{color:#555;font-size:12px;margin:0 0 12px}h2{font-size:14px;border-bottom:2px solid #e2a43c;padding-bottom:3px;margin:16px 0 8px}table{width:100%;border-collapse:collapse}td{padding:4px 6px;border-bottom:1px dotted #ccc;font-size:12px}td.d{width:110px;color:#666}ul{list-style:none;margin:0;padding:0}li{display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-bottom:1px dotted #ccc;font-size:12px}li span:last-child{white-space:nowrap;color:#333}.b{margin-top:12px;font-size:12px}.f{margin-top:14px;font-size:10px;color:#999}';
+  var html='<!doctype html><html><head><meta charset="utf-8"><title>Meal Plan</title><style>'+css+'</style></head><body>'
+    +'<h1>Your meal plan</h1><p class="m">'+esc(sd.value)+' to '+esc(ed.value)+' &middot; '+esc(hh.value)+' people &middot; '+sv+' servings &middot; est. '+money(cost)+' ('+money(sv?cost/sv:0)+' a serving)</p>'
+    +'<h2>Cook nights</h2><table>'+rowsH+'</table>'
+    +'<h2>Grocery list</h2><ul>'+listH+'</ul>'
+    +'<p class="f">Thrifty Crew &middot; thriftycrew.com &middot; prices verified weekly at Omaha stores</p></body></html>';
+  printHtml(html);
+}
+function printHtml(html){
+  var f=document.createElement('iframe'); f.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0;opacity:0';
+  document.body.appendChild(f); var d=f.contentWindow.document; d.open(); d.write(html); d.close();
+  f.contentWindow.focus(); setTimeout(function(){ try{f.contentWindow.print();}catch(e){} setTimeout(function(){f.remove();},2000); },350);
+}
+function printList(){
+  var css='@page{margin:14mm}body{font:13px/1.55 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#16263f;max-width:640px;margin:0 auto}h1{font-size:19px;margin:0 0 2px}.m{color:#555;font-size:12px;margin:0 0 12px}h2{font-size:14px;border-bottom:2px solid #e2a43c;padding-bottom:3px;margin:14px 0 6px}h2 span{color:#777;font-weight:400;font-size:11px}ul{list-style:none;margin:0;padding:0}li{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px dotted #ccc;font-size:12.5px}li span:last-child{white-space:nowrap;color:#333}.t{margin-top:12px;font-size:13px;font-weight:700}.f{margin-top:14px;font-size:10px;color:#999}';
+  var body='<h1>Shopping list</h1>';
+  if(selStores.length){
+    var A=computeAssignment();
+    body+='<p class="m">'+esc(sd.value)+' to '+esc(ed.value)+' &middot; '+selStores.map(esc).join(' + ')+' &middot; whole packages, nothing assumed on hand</p>';
+    Object.keys(A.groups).sort(function(a,b){return A.groups[b].sub-A.groups[a].sub;}).forEach(function(st){
+      var s=A.groups[st];
+      body+='<h2>'+esc(st)+' <span>'+s.items.length+' items &middot; about '+money(s.sub)+'</span></h2><ul>';
+      s.items.sort(function(a,b){return a.i<b.i?-1:1;}).forEach(function(d){
+        body+='<li><span>&#9744; '+esc(d.i)+(d.amt?' &middot; '+esc(d.amt):'')+'</span><span>'+(d.pkg?esc(d.pkg)+' &middot; ':'')+money(d.cost)+'</span></li>';
+      });
+      body+='</ul>';
+    });
+    if(A.other.length){
+      body+='<h2>Also on your list <span>not priced at your stores</span></h2><ul>';
+      A.other.sort(function(a,b){return a.i<b.i?-1:1;}).forEach(function(d){
+        body+='<li><span>&#9744; '+esc(d.i)+'</span><span>'+(d.amt?esc(d.amt)+' ':'')+'('+d.g+' g)</span></li>';
+      });
+      body+='</ul>';
+    }
+    body+='<p class="t">Register estimate: '+money(A.regTotal)+'</p>';
+  } else {
+    body+='<p class="m">'+esc(sd.value)+' to '+esc(ed.value)+'</p><ul>';
+    mergeList().filter(function(it){return !removed[it.i];}).sort(function(a,b){return a.i<b.i?-1:1;}).forEach(function(it){
+      var amt=it.skelOk&&it.buySkel!==null?(fmtQty(it.buyNum)+it.buySkel):null;
+      body+='<li><span>&#9744; '+esc(it.i)+'</span><span>'+(amt?esc(amt)+' ':'')+'('+Math.round(it.g)+' g)</span></li>';
+    });
+    body+='</ul>';
+  }
+  body+='<p class="f">Thrifty Crew &middot; thriftycrew.com &middot; prices verified at Omaha stores</p>';
+  printHtml('<!doctype html><html><head><meta charset="utf-8"><title>Shopping list</title><style>'+css+'</style></head><body>'+body+'</body></html>');
+}
+
+// ---- events ----
+[sd,ed,hh,rc].forEach(function(el){ el.addEventListener('change',function(){ renderTarget(); renderBar(); renderPlan(); save(); }); });
+q.addEventListener('input',renderList);
+$('mpp-chips').addEventListener('click',function(e){
+  var b=e.target.closest('.mpp-chip'); if(!b)return;
+  curP=b.getAttribute('data-p');
+  [].forEach.call(document.querySelectorAll('.mpp-chip'),function(x){x.classList.toggle('on',x===b);});
+  renderList();
+});
+$('mpp-list').addEventListener('click',function(e){
+  var row=e.target.closest('.mpp-row'); if(!row)return;
+  picks.push({s:row.getAttribute('data-s'),sv:suggestSv()});
+  renderPicks(); renderList();
+});
+$('mpp-picks').addEventListener('click',function(e){
+  var x=e.target.closest('.mpp-x');
+  if(x){ picks.splice(parseInt(x.getAttribute('data-x')),1); renderPicks(); renderList(); return; }
+  var b=e.target.closest('.mpp-sbtn');
+  if(b){ var i=parseInt(b.getAttribute('data-i')); picks[i].sv=Math.max(2,Math.min(42,picks[i].sv+parseInt(b.getAttribute('data-d')))); renderPicks(); }
+});
+$('mpp-picks').addEventListener('change',function(e){
+  var n=e.target.closest('.mpp-snum'); if(!n)return;
+  var i=parseInt(n.getAttribute('data-i'));
+  picks[i].sv=Math.max(2,Math.min(42,parseInt(n.value)||2));
+  renderPicks();
+});
+$('mpp-calwarn').addEventListener('click',function(e){
+  if(!e.target.closest('#mpp-fill'))return;
+  // round-robin +1 serving across picks until the target is covered or everything hits the 42 cap
+  var missing=Math.max(0,target()-planned());
+  var guard=0;
+  while(missing>0 && guard<1000){
+    var bumped=false;
+    for(var i=0;i<picks.length && missing>0;i++){
+      if(picks[i].sv<42){ picks[i].sv++; missing--; bumped=true; }
+    }
+    if(!bumped)break;   // every pick is at 42; they need another recipe
+    guard++;
+  }
+  renderPicks();
+});
+$('mpp-print').addEventListener('click',printPlan);
+$('mpp-printlist').addEventListener('click',printList);
+$('mpp-reset').addEventListener('click',function(){
+  picks=[]; removed={}; try{localStorage.removeItem('mpp-v1');}catch(e){}
+  renderPicks(); renderList();
+});
+$('mpp-storechips').addEventListener('click',function(e){
+  var b=e.target.closest('.mpp-chip'); if(!b)return;
+  var st=b.getAttribute('data-st');
+  var i=selStores.indexOf(st);
+  if(i>=0){ selStores.splice(i,1); } else { selStores.push(st); }
+  renderGrocery(); save();
+});
+$('mpp-gl').addEventListener('click',function(e){
+  var b=e.target.closest('.mpp-minus'); if(!b)return;
+  removed[b.getAttribute('data-rm')]=1;
+  renderGrocery(); save();
+});
+$('mpp-removed').addEventListener('click',function(e){
+  var b=e.target.closest('.mpp-back'); if(!b)return;
+  delete removed[b.getAttribute('data-add')];
+  renderGrocery(); save();
+});
+
+// ---- init ----  (boot: fetch the planner data from the Worker, THEN build the index + render)
+function boot(){
+  MPP.forEach(function(r){byslug[r.s]=r;});
+  if(!restore()){
+    var t=new Date(); var e=new Date(t.getTime()+6*86400000);
+    function iso(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+    sd.value=iso(t); ed.value=iso(e);
+  }
+  renderTarget(); renderPicks(); renderList();
+  fetch(FEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}).then(function(f){ feedData=f; if(picks.length)renderPlan(); });
+}
+if(rc){ rc.textContent='Loading recipes...'; }
+fetch(PDATA).then(function(r){return r.ok?r.json():[];}).catch(function(){return [];}).then(function(d){
+  MPP=d||[];
+  if(!MPP.length){ if(rc){ rc.textContent='Could not load recipes. Refresh to try again.'; } return; }
+  boot();
+});
+})();
+</script>
+</div>

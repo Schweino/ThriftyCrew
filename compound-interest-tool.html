@@ -1,0 +1,140 @@
+<div id="tcci">
+<style>
+#tcci{--navy:#16263f;--gold:#e2a43c;--gold-d:#8a6d1f;--ink:#3a4658;--line:#e2e8f0;--green:#1f7a4d;--soft:#fbfcfe;
+  max-width:760px;margin:0 auto;font-size:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);}
+#tcci *{box-sizing:border-box;}
+#tcci .tb-privacy{display:flex;gap:.7em;align-items:flex-start;background:#fdf8ec;border:1px solid #eee3c8;border-radius:12px;padding:.9em 1.1em;font-size:.92em;line-height:1.5;margin:0 0 1.6em;}
+#tcci .tb-privacy b{color:var(--navy);}
+#tcci .tb-lock{flex:0 0 auto;width:1.6em;height:1.6em;border-radius:50%;background:var(--gold);color:var(--navy);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.95em;}
+#tcci .tb-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.6em 1.4em;margin:0 0 1.5em;box-shadow:0 6px 24px rgba(22,38,63,.06);}
+#tcci h2{font-size:1.3em;color:var(--navy);margin:0 0 .3em;}
+#tcci .tb-sub{font-size:.95em;margin:.2em 0 1.1em;line-height:1.5;}
+#tcci .tb-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(14em,1fr));gap:1em;}
+#tcci .tb-field label{display:block;font-size:.85em;font-weight:700;color:var(--navy);margin:0 0 .4em;}
+#tcci .tb-field .wrap{position:relative;}
+#tcci .tb-field input{width:100%;padding:.72em .8em;font-size:1em;color:var(--navy);border:1.5px solid var(--line);border-radius:10px;font-family:inherit;text-align:right;}
+#tcci .tb-field input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(226,164,60,.22);}
+#tcci .tb-field .pre{position:absolute;left:.7em;top:50%;transform:translateY(-50%);color:#8a94a6;pointer-events:none;}
+#tcci .tb-field .suf{position:absolute;right:.7em;top:50%;transform:translateY(-50%);color:#8a94a6;pointer-events:none;}
+#tcci .tb-field input.hasPre{padding-left:1.7em;}
+#tcci .tb-field input.hasSuf{padding-right:2.2em;}
+#tcci .tb-result{text-align:center;padding:.6em 0 .2em;}
+#tcci .tb-r-label{font-size:.85em;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-d);}
+#tcci .tb-r-big{font-size:2.6em;font-weight:800;color:var(--green);letter-spacing:-.02em;line-height:1.15;}
+#tcci .tb-r-sub{font-size:1em;margin:.5em auto 0;max-width:34em;line-height:1.55;}
+#tcci .tb-split{display:flex;height:1.3em;border-radius:99px;overflow:hidden;margin:1.2em 0 .4em;background:#eef2f7;}
+#tcci .tb-split i{display:block;height:100%;}
+#tcci .tb-split .in{background:var(--navy);}
+#tcci .tb-split .gr{background:var(--gold);}
+#tcci .tb-legend{display:flex;gap:1.4em;justify-content:center;font-size:.85em;flex-wrap:wrap;}
+#tcci .tb-legend b{color:var(--navy);}
+#tcci .tb-dot{display:inline-block;width:.8em;height:.8em;border-radius:50%;vertical-align:-.05em;margin-right:.35em;}
+#tcci .tb-chart{margin:1.4em 0 0;}
+#tcci .tb-chart-h{font-size:.85em;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-d);margin:0 0 .5em;}
+#tcci .tb-cbar{display:flex;align-items:center;gap:.6em;margin:0 0 .35em;font-size:.82em;}
+#tcci .tb-cbar span{flex:0 0 4.6em;text-align:right;color:#68748a;}
+#tcci .tb-cbar .track{flex:1 1 auto;display:flex;height:.95em;border-radius:99px;overflow:hidden;background:#f2f5f9;}
+#tcci .tb-cbar .track i{display:block;height:100%;}
+#tcci .tb-cbar b{flex:0 0 auto;font-size:.9em;color:var(--navy);font-variant-numeric:tabular-nums;white-space:nowrap;}
+#tcci .tb-wait{background:var(--soft);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:0;border-top-right-radius:12px;border-bottom-right-radius:12px;padding:.9em 1.1em;margin:1.4em 0 0;font-size:.95em;line-height:1.55;}
+#tcci .tb-wait b{color:var(--navy);}
+#tcci .tb-actions{display:flex;gap:.8em;justify-content:center;margin:1.6em 0 .4em;}
+#tcci .tb-btn{padding:.9em 1.7em;border:none;border-radius:10px;font-size:1em;font-weight:800;cursor:pointer;font-family:inherit;background:var(--gold);color:var(--navy);}
+#tcci .tb-hint{font-size:.85em;color:#68748a;line-height:1.5;margin:.8em 0 0;}
+@media (max-width:560px){ #tcci .tb-card{padding:1.2em 1em;} #tcci .tb-r-big{font-size:2.1em;} }
+</style>
+
+<p style="font-size:1.05em;line-height:1.6;margin:0 0 1.2em;">Four numbers in, one big number out. See what steady saving turns into, how much of it is growth you never had to earn, and exactly what waiting costs.</p>
+<div class="tb-privacy"><span class="tb-lock">&#128274;</span><span><b>Nothing you type here is saved or sent anywhere.</b> Play with the numbers all you like. Close the page and they are gone.</span></div>
+
+<div class="tb-card">
+  <h2>Your numbers</h2>
+  <p class="tb-sub">Guesses are fine. The point is seeing the shape of the thing.</p>
+  <div class="tb-grid">
+    <div class="tb-field"><label for="ci-start">Starting with</label><span class="wrap"><span class="pre">$</span><input class="hasPre" type="text" inputmode="decimal" id="ci-start" value="1,000" maxlength="12"></span></div>
+    <div class="tb-field"><label for="ci-monthly">Adding each month</label><span class="wrap"><span class="pre">$</span><input class="hasPre" type="text" inputmode="decimal" id="ci-monthly" value="100" maxlength="10"></span></div>
+    <div class="tb-field"><label for="ci-rate">Yearly return</label><span class="wrap"><input class="hasSuf" type="text" inputmode="decimal" id="ci-rate" value="7" maxlength="5"><span class="suf">%</span></span></div>
+    <div class="tb-field"><label for="ci-years">For this many years</label><span class="wrap"><input class="hasSuf" type="text" inputmode="decimal" id="ci-years" value="20" maxlength="3"><span class="suf">yrs</span></span></div>
+  </div>
+</div>
+
+<div class="tb-card">
+  <div class="tb-result">
+    <p class="tb-r-label">What it becomes</p>
+    <p class="tb-r-big" id="ci-fv">$0</p>
+    <p class="tb-r-sub" id="ci-sub"></p>
+  </div>
+  <div class="tb-split"><i class="in" id="ci-bar-in"></i><i class="gr" id="ci-bar-gr"></i></div>
+  <div class="tb-legend">
+    <span><span class="tb-dot" style="background:var(--navy)"></span>Money you put in: <b id="ci-in">$0</b></span>
+    <span><span class="tb-dot" style="background:var(--gold)"></span>Growth on top: <b id="ci-gr">$0</b></span>
+  </div>
+  <div class="tb-chart"><p class="tb-chart-h">Watch the gold overtake the navy</p><div id="ci-chart"></div></div>
+  <div class="tb-wait" id="ci-wait"></div>
+  <p class="tb-hint">Educational math, not a promise. Real returns bounce around year to year, and this assumes a steady average. For decisions about your own money, talk to a licensed professional.</p>
+</div>
+
+<div class="tb-actions"><button class="tb-btn" id="ci-print" type="button">Print this</button></div>
+
+<script>
+(function(){
+  var root = document.getElementById('tcci');
+  if (!root) return;
+  function num(x){ var n = parseFloat(String(x).replace(/[^0-9.]/g,'')); return isNaN(n) ? 0 : n; }
+  function money(x){ return '$' + Math.round(x).toLocaleString('en-US'); }
+  function fv(start, monthly, apr, years){
+    var r = apr/100/12, n = Math.round(years*12);
+    if (r === 0) return start + monthly*n;
+    return start*Math.pow(1+r, n) + monthly*(Math.pow(1+r, n)-1)/r;
+  }
+  function calc(){
+    var s = num(document.getElementById('ci-start').value),
+        m = num(document.getElementById('ci-monthly').value),
+        r = num(document.getElementById('ci-rate').value),
+        y = Math.min(60, Math.max(0, num(document.getElementById('ci-years').value)));
+    var total = fv(s, m, r, y), contrib = s + m*12*y, growth = Math.max(0, total - contrib);
+    document.getElementById('ci-fv').textContent = money(total);
+    document.getElementById('ci-in').textContent = money(contrib);
+    document.getElementById('ci-gr').textContent = money(growth);
+    var ip = total > 0 ? contrib/total*100 : 50;
+    document.getElementById('ci-bar-in').style.width = ip + '%';
+    document.getElementById('ci-bar-gr').style.width = (100-ip) + '%';
+    var sub = document.getElementById('ci-sub');
+    if (total <= 0) sub.textContent = 'Enter your numbers above and watch this space.';
+    else if (growth > contrib) sub.textContent = 'Read that split below again: the growth outgrew everything you put in. That is compounding doing your heavy lifting.';
+    else sub.textContent = 'Every year you leave it alone, the growth slice gets bigger. Give it enough time and it overtakes what you put in.';
+    var step = y > 30 ? 10 : y > 12 ? 5 : y > 4 ? 2 : 1, ch = '', maxv = Math.max(1, total);
+    for (var yr = step; yr <= y; yr += step){
+      var t = fv(s, m, r, yr), c = s + m*12*yr, g = Math.max(0, t-c);
+      ch += '<div class="tb-cbar"><span>Year '+yr+'</span><span class="track"><i style="background:var(--navy);width:'+(c/maxv*100)+'%"></i><i style="background:var(--gold);width:'+(g/maxv*100)+'%"></i></span><b>'+money(t)+'</b></div>';
+    }
+    if (y % step !== 0 && y > 0){ var t2 = fv(s,m,r,y), c2 = s+m*12*y, g2 = Math.max(0,t2-c2);
+      ch += '<div class="tb-cbar"><span>Year '+y+'</span><span class="track"><i style="background:var(--navy);width:'+(c2/maxv*100)+'%"></i><i style="background:var(--gold);width:'+(g2/maxv*100)+'%"></i></span><b>'+money(t2)+'</b></div>'; }
+    document.getElementById('ci-chart').innerHTML = ch;
+    var wait = document.getElementById('ci-wait');
+    if (y > 5){
+      var late = fv(s, m, r, y-5), lost = total - late;
+      wait.innerHTML = '<b>The cost of waiting:</b> start the exact same plan five years later and you end with ' + money(late) + ' instead of ' + money(total) + '. Waiting costs ' + money(lost) + ', and you never write a check for it. It just quietly never shows up.';
+      wait.style.display = '';
+    } else wait.style.display = 'none';
+    return { total: total, contrib: contrib, growth: growth, s:s, m:m, r:r, y:y };
+  }
+  root.addEventListener('input', function(e){ if (e.target.tagName === 'INPUT') calc(); });
+  document.getElementById('ci-print').addEventListener('click', function(){
+    var d = calc();
+    var w = window.open('', '_blank');
+    if (!w){ alert('Your browser blocked the print window. Allow pop-ups for this site and try again.'); return; }
+    w.document.write('<html><head><title>Compound Interest - Thrifty Crew</title><style>body{font-family:Georgia,serif;color:#16263f;max-width:640px;margin:2em auto;padding:0 1em;}h1{font-size:1.5em;border-bottom:2px solid #e2a43c;padding-bottom:.3em;}.big{font-size:1.3em;font-weight:bold;margin:.8em 0;padding:.6em .8em;background:#f6f1e7;border-radius:8px;}.foot{margin-top:2em;font-size:.8em;color:#777;}</style></head><body>' +
+      '<h1>My Compounding Plan</h1>' +
+      '<p>Starting with ' + money(d.s) + ', adding ' + money(d.m) + ' a month, at ' + d.r + '% a year, for ' + d.y + ' years:</p>' +
+      '<p class="big">It becomes ' + money(d.total) + '</p>' +
+      '<p>Money put in: ' + money(d.contrib) + '. Growth on top: ' + money(d.growth) + '.</p>' +
+      '<p class="foot">Printed from the Thrifty Crew compound interest calculator. Educational math, not a promise or financial advice. thriftycrew.com</p>' +
+      '</body></html>');
+    w.document.close();
+    setTimeout(function(){ w.print(); }, 350);
+  });
+  calc();
+})();
+</script>
+</div>

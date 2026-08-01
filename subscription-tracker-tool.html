@@ -1,0 +1,241 @@
+<div id="tcsub">
+<style>
+#tcsub{--navy:#16263f;--gold:#e2a43c;--gold-d:#8a6d1f;--ink:#3a4658;--line:#e2e8f0;--green:#1f7a4d;--red:#b23b2e;--soft:#fbfcfe;
+  max-width:760px;margin:0 auto;font-size:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);}
+#tcsub *{box-sizing:border-box;}
+#tcsub .tb-privacy{display:flex;gap:.7em;align-items:flex-start;background:#fdf8ec;border:1px solid #eee3c8;border-radius:12px;padding:.9em 1.1em;font-size:.92em;line-height:1.5;margin:0 0 1.6em;}
+#tcsub .tb-privacy b{color:var(--navy);}
+#tcsub .tb-lock{flex:0 0 auto;width:1.6em;height:1.6em;border-radius:50%;background:var(--gold);color:var(--navy);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.95em;}
+#tcsub .tb-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.6em 1.4em;margin:0 0 1.5em;box-shadow:0 6px 24px rgba(22,38,63,.06);}
+#tcsub h2{font-size:1.3em;color:var(--navy);margin:0 0 .3em;}
+#tcsub .tb-sub{font-size:.95em;margin:.2em 0 1.1em;line-height:1.5;}
+#tcsub .tb-row{display:flex;gap:.5em;align-items:center;margin:0 0 .55em;flex-wrap:nowrap;}
+#tcsub .tb-row input{padding:.72em .8em;font-size:1em;color:var(--navy);background:#fff;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;min-width:0;}
+#tcsub .tb-row input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(226,164,60,.22);}
+#tcsub .tb-name{flex:1 1 auto;}
+#tcsub .tb-money{position:relative;flex:0 0 6.6em;}
+#tcsub .tb-money>span{position:absolute;left:.7em;top:50%;transform:translateY(-50%);color:#8a94a6;pointer-events:none;}
+#tcsub .tb-money input{width:100%;padding-left:1.7em;text-align:right;}
+#tcsub .tb-cyc{flex:0 0 6.6em;}
+#tcsub .tb-cyc select{width:100%;padding:.72em .4em;font-size:.9em;color:var(--navy);background:#fff;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;cursor:pointer;}
+#tcsub .tb-cyc select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(226,164,60,.22);}
+#tcsub .tb-st{flex:0 0 4.3em;padding:.62em .2em;border:1.5px solid var(--line);border-radius:10px;background:#fff;font-weight:800;font-size:.8em;cursor:pointer;color:var(--ink);line-height:1;font-family:inherit;}
+#tcsub .tb-st-keep{background:#eaf6ef;border-color:#bfe3cd;color:var(--green);}
+#tcsub .tb-st-cut{background:#fbeceb;border-color:#f2c9c5;color:var(--red);}
+#tcsub .tb-st-unsure{background:#f4f6f9;border-color:var(--line);color:#68748a;}
+#tcsub .tb-del{flex:0 0 auto;width:2.1em;height:2.1em;border:none;border-radius:8px;background:#f1f4f8;color:#8a94a6;font-size:1.05em;font-weight:700;cursor:pointer;line-height:1;}
+#tcsub .tb-del:hover{background:#fbeceb;color:var(--red);}
+#tcsub .tb-add{display:inline-block;margin:.2em 0 0;padding:.55em 1.1em;border:1.5px dashed #cbd5e1;border-radius:10px;background:#fff;color:var(--navy);font-weight:700;font-size:.92em;cursor:pointer;}
+#tcsub .tb-add:hover{border-color:var(--gold);color:var(--gold-d);}
+#tcsub .tb-cols{font-size:.72em;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#8a94a6;display:flex;gap:.5em;margin:0 0 .3em;}
+#tcsub .tb-cols span:nth-child(1){flex:1 1 auto;}
+#tcsub .tb-cols span:nth-child(2){flex:0 0 6.6em;text-align:right;}
+#tcsub .tb-cols span:nth-child(3){flex:0 0 6.6em;}
+#tcsub .tb-cols span:nth-child(4){flex:0 0 4.3em;text-align:center;}
+#tcsub .tb-cols span:nth-child(5){flex:0 0 2.1em;}
+#tcsub .tb-result{text-align:center;padding:.6em 0 .2em;}
+#tcsub .tb-r-label{font-size:.85em;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-d);}
+#tcsub .tb-r-big{font-size:2.4em;font-weight:800;color:var(--navy);letter-spacing:-.02em;line-height:1.15;}
+#tcsub .tb-r-sub{font-size:1em;margin:.4em auto 0;max-width:34em;line-height:1.55;}
+#tcsub .tb-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(9em,1fr));gap:.8em;margin:1.2em 0 0;}
+#tcsub .tb-stat{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:.8em;text-align:center;}
+#tcsub .tb-stat b{display:block;font-size:1.25em;color:var(--navy);}
+#tcsub .tb-stat span{font-size:.8em;color:#68748a;}
+#tcsub .tb-chart{margin:1.3em 0 0;}
+#tcsub .tb-chart-h{font-size:.85em;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-d);margin:0 0 .6em;}
+#tcsub .tb-cbar{display:flex;align-items:center;gap:.6em;margin:0 0 .45em;font-size:.85em;}
+#tcsub .tb-cbar>span{flex:0 0 8em;text-align:right;color:var(--navy);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#tcsub .tb-cbar i{flex:1 1 auto;height:1.1em;background:#eef1f6;border-radius:99px;display:block;position:relative;overflow:hidden;}
+#tcsub .tb-cbar i em{position:absolute;left:0;top:0;bottom:0;background:var(--navy);border-radius:99px;display:block;min-width:2px;}
+#tcsub .tb-cbar i em.cut{background:var(--red);}
+#tcsub .tb-cbar b{flex:0 0 5.4em;text-align:right;color:var(--navy);font-variant-numeric:tabular-nums;white-space:nowrap;}
+#tcsub .tb-cut{background:#eaf6ef;border:1px solid #bfe3cd;border-radius:12px;padding:1em 1.1em;margin:1.3em 0 0;}
+#tcsub .tb-cut h3{color:var(--green);margin:0 0 .3em;font-size:1.08em;}
+#tcsub .tb-cut ul{margin:.4em 0 0;padding-left:1.2em;font-size:.95em;line-height:1.6;}
+#tcsub .tb-cut li b{color:var(--navy);}
+#tcsub .tb-actions{display:flex;gap:.8em;flex-wrap:wrap;justify-content:center;margin:1.6em 0 .4em;}
+#tcsub .tb-btn{padding:.9em 1.7em;border:none;border-radius:10px;font-size:1em;font-weight:800;cursor:pointer;font-family:inherit;}
+#tcsub .tb-btn-gold{background:var(--gold);color:var(--navy);}
+#tcsub .tb-btn-ghost{background:#fff;color:var(--red);border:1.5px solid #f2c9c5;}
+#tcsub .tb-hint{font-size:.85em;color:#68748a;line-height:1.5;margin:.9em 0 0;}
+#tcsub .tb-saved{text-align:center;font-size:.85em;color:#8a94a6;margin:.4em 0 0;min-height:1.3em;}
+@media (max-width:560px){
+  #tcsub .tb-card{padding:1.2em 1em;}
+  #tcsub .tb-row{gap:.4em;}
+  #tcsub .tb-money{flex:0 0 5em;}
+  #tcsub .tb-cyc{flex:0 0 5.2em;}
+  #tcsub .tb-cyc select{padding:.72em .2em;font-size:.82em;}
+  #tcsub .tb-st{flex:0 0 3.5em;font-size:.72em;}
+  #tcsub .tb-cols span:nth-child(2){flex:0 0 5em;}
+  #tcsub .tb-cols span:nth-child(3){flex:0 0 5.2em;}
+  #tcsub .tb-cols span:nth-child(4){flex:0 0 3.5em;}
+  #tcsub .tb-cbar>span{flex:0 0 5.5em;}
+}
+</style>
+
+<p style="font-size:1.05em;line-height:1.6;margin:0 0 1.2em;">Every subscription looks small on its own. Stacked up, they are usually the biggest leak in a budget nobody notices. List them once, mark the ones to keep, cut, or think about, and this tool shows you the real number: what all of it costs you in a year, and exactly how much you claw back by canceling the dead weight.</p>
+<div class="tb-privacy"><span class="tb-lock">&#128274;</span><span><b>Your list stays on this device.</b> It saves automatically in your browser and never leaves it. Hit &ldquo;Erase my list&rdquo; anytime.</span></div>
+
+<div class="tb-card">
+  <h2>Your subscriptions</h2>
+  <p class="tb-sub">Name it, put in the price, pick how often it bills, then tap the last button to mark it Keep, Cut, or not sure (&ldquo;?&rdquo;).</p>
+  <div class="tb-cols"><span>Subscription</span><span>Cost</span><span>Bills</span><span>Verdict</span><span></span></div>
+  <div id="sb-rows"></div>
+  <button class="tb-add" id="sb-add" type="button">+ Add a subscription</button>
+  <p class="tb-hint">Don&rsquo;t forget the sneaky ones: cloud storage, app upgrades, that free trial that started charging, gym you skip, subscriptions billed once a year.</p>
+</div>
+
+<div class="tb-card" id="sb-out" style="display:none">
+  <div class="tb-result">
+    <p class="tb-r-label">Your subscriptions cost you</p>
+    <p class="tb-r-big" id="sb-year"></p>
+    <p class="tb-r-sub" id="sb-sub"></p>
+  </div>
+  <div class="tb-stats">
+    <div class="tb-stat"><b id="sb-month"></b><span>every month</span></div>
+    <div class="tb-stat"><b id="sb-count"></b><span>recurring charges</span></div>
+    <div class="tb-stat"><b id="sb-five"></b><span>over 5 years</span></div>
+  </div>
+  <div class="tb-chart"><p class="tb-chart-h">Where the money goes (per year)</p><div id="sb-chart"></div></div>
+  <div id="sb-cut"></div>
+  <p class="tb-hint" id="sb-note"></p>
+</div>
+
+<div class="tb-actions">
+  <button class="tb-btn tb-btn-gold" id="sb-print" type="button">Print my cancel list</button>
+  <button class="tb-btn tb-btn-ghost" id="sb-clear" type="button">Erase my list</button>
+</div>
+<p class="tb-saved" id="sb-saved"></p>
+
+<script>
+(function(){
+  var root = document.getElementById('tcsub');
+  if (!root) return;
+  var KEY = 'tcsub-v1';
+  var CYCLES = [
+    {v:'w', label:'Weekly',    per:52/12},
+    {v:'m', label:'Monthly',   per:1},
+    {v:'q', label:'Quarterly', per:1/3},
+    {v:'y', label:'Yearly',    per:1/12}
+  ];
+  var STATES = { keep:{next:'cut',   txt:'Keep', cls:'tb-st-keep'},
+                 cut: {next:'unsure',txt:'Cut',  cls:'tb-st-cut'},
+                 unsure:{next:'keep',txt:'?',    cls:'tb-st-unsure'} };
+  var SEED = { subs: [ {n:'',c:'',cy:'m',s:'keep'}, {n:'',c:'',cy:'m',s:'keep'}, {n:'',c:'',cy:'m',s:'keep'} ] };
+  var S;
+  try { S = JSON.parse(localStorage.getItem(KEY)) || null; } catch(e){ S = null; }
+  if (!S || !S.subs) S = JSON.parse(JSON.stringify(SEED));
+
+  function num(x){ var n = parseFloat(String(x).replace(/[^0-9.\-]/g,'')); return isNaN(n) ? 0 : n; }
+  function money(x){ return '$' + Math.round(x).toLocaleString('en-US'); }
+  function money2(x){ return '$' + (Math.round(x*100)/100).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function perMonth(it){ var cy = CYCLES.filter(function(c){return c.v===it.cy;})[0] || CYCLES[1]; return num(it.c) * cy.per; }
+
+  var saveT = null;
+  function save(){ clearTimeout(saveT); saveT = setTimeout(function(){ try { localStorage.setItem(KEY, JSON.stringify(S)); var el = document.getElementById('sb-saved'); el.textContent = 'Saved on this device just now.'; setTimeout(function(){ el.textContent = ''; }, 2200); } catch(e){} }, 400); }
+
+  function renderRows(){
+    var h = '';
+    for (var i = 0; i < S.subs.length; i++){ var it = S.subs[i];
+      var st = STATES[it.s] || STATES.keep;
+      var opts = '';
+      for (var c = 0; c < CYCLES.length; c++) opts += '<option value="'+CYCLES[c].v+'"'+(CYCLES[c].v===it.cy?' selected':'')+'>'+CYCLES[c].label+'</option>';
+      h += '<div class="tb-row" data-i="'+i+'">' +
+        '<input class="tb-name" type="text" value="'+esc(it.n)+'" placeholder="Netflix, gym, iCloud..." data-f="n" maxlength="50">' +
+        '<span class="tb-money"><span>$</span><input type="text" inputmode="decimal" value="'+esc(it.c)+'" placeholder="0" data-f="c" maxlength="9"></span>' +
+        '<span class="tb-cyc"><select data-f="cy" aria-label="Billing cycle">'+opts+'</select></span>' +
+        '<button class="tb-st '+st.cls+'" type="button" data-st="1" aria-label="Keep, cut, or unsure">'+st.txt+'</button>' +
+        '<button class="tb-del" type="button" aria-label="Remove this subscription">&times;</button></div>';
+    }
+    document.getElementById('sb-rows').innerHTML = h;
+  }
+
+  function calc(){
+    var items = [];
+    for (var i = 0; i < S.subs.length; i++){ var it = S.subs[i];
+      if (it.n.trim() !== '' || num(it.c) > 0){ var pm = perMonth(it);
+        if (pm > 0) items.push({ n: it.n.trim() || 'Untitled', pm: pm, py: pm*12, s: it.s }); } }
+    var out = document.getElementById('sb-out');
+    if (!items.length){ out.style.display = 'none'; return; }
+    out.style.display = '';
+    var totM = 0, cutM = 0, keepCount = items.length, cutCount = 0, unsureCount = 0;
+    for (i = 0; i < items.length; i++){ totM += items[i].pm; if (items[i].s === 'cut'){ cutM += items[i].pm; cutCount++; } if (items[i].s === 'unsure') unsureCount++; }
+    var totY = totM * 12;
+    document.getElementById('sb-year').textContent = money(totY) + ' a year';
+    document.getElementById('sb-month').textContent = money2(totM);
+    document.getElementById('sb-count').textContent = keepCount;
+    document.getElementById('sb-five').textContent = money(totY * 5);
+    document.getElementById('sb-sub').textContent = 'That is ' + money2(totM) + ' a month across ' + keepCount + ' subscription' + (keepCount>1?'s':'') + ', or about ' + money2(totY/365) + ' every single day.';
+
+    var ranked = items.slice().sort(function(a,b){ return b.py - a.py; });
+    var max = ranked[0].py || 1, ch = '';
+    for (i = 0; i < ranked.length; i++){ var r = ranked[i];
+      ch += '<div class="tb-cbar"><span>'+esc(r.n)+'</span><i><em class="'+(r.s==='cut'?'cut':'')+'" style="width:'+Math.max(3, r.py/max*100)+'%"></em></i><b>'+money(r.py)+'</b></div>'; }
+    document.getElementById('sb-chart').innerHTML = ch;
+
+    var cutEl = document.getElementById('sb-cut');
+    if (cutCount > 0){
+      var cutList = ranked.filter(function(r){ return r.s === 'cut'; });
+      var li = '';
+      for (i = 0; i < cutList.length; i++) li += '<li><b>'+esc(cutList[i].n)+'</b> &mdash; '+money(cutList[i].py)+' a year</li>';
+      cutEl.innerHTML = '<div class="tb-cut"><h3>Cancel these ' + cutCount + ' and keep ' + money(cutM*12) + ' every year</h3>' +
+        '<p style="margin:0;font-size:.95em;line-height:1.5">That is ' + money2(cutM) + ' a month back in your pocket. Print the list below and knock them out one call at a time.</p>' +
+        '<ul>' + li + '</ul></div>';
+    } else cutEl.innerHTML = '';
+
+    var note = document.getElementById('sb-note');
+    if (unsureCount > 0) note.textContent = 'You marked ' + unsureCount + ' as &ldquo;not sure.&rdquo; That is where the easy money usually hides. For each one ask: have I actually used it in the last 30 days? If not, it is a cut.';
+    else if (cutCount === 0) note.textContent = 'Nothing marked to cut yet. Go back through the list and be honest about the ones you forgot you had.';
+    else note.textContent = '';
+    note.innerHTML = note.textContent;
+  }
+
+  root.addEventListener('input', handleChange);
+  root.addEventListener('change', handleChange);
+  function handleChange(e){
+    var row = e.target.closest('.tb-row');
+    if (!row) return;
+    var i = Number(row.getAttribute('data-i')), f = e.target.getAttribute('data-f');
+    if (S.subs[i] && f){ S.subs[i][f] = e.target.value; calc(); save(); }
+  }
+  root.addEventListener('click', function(e){
+    if (e.target.closest('#sb-add')){ S.subs.push({n:'',c:'',cy:'m',s:'keep'}); renderRows(); calc(); save(); return; }
+    var st = e.target.closest('.tb-st');
+    if (st){ var ri = Number(st.closest('.tb-row').getAttribute('data-i')); var cur = S.subs[ri].s || 'keep'; S.subs[ri].s = (STATES[cur]||STATES.keep).next; renderRows(); calc(); save(); return; }
+    var del = e.target.closest('.tb-del');
+    if (del){ var di = Number(del.closest('.tb-row').getAttribute('data-i')); S.subs.splice(di,1); if (!S.subs.length) S.subs.push({n:'',c:'',cy:'m',s:'keep'}); renderRows(); calc(); save(); return; }
+    if (e.target.id === 'sb-clear'){ if (confirm('Erase every subscription you typed into this tool on this device?')){ try { localStorage.removeItem(KEY); } catch(err){} S = JSON.parse(JSON.stringify(SEED)); renderRows(); calc(); } return; }
+    if (e.target.id === 'sb-print'){ doPrint(); }
+  });
+
+  function doPrint(){
+    var items = [];
+    for (var i = 0; i < S.subs.length; i++){ var it = S.subs[i]; var pm = perMonth(it);
+      if ((it.n.trim() !== '' || num(it.c) > 0) && pm > 0) items.push({ n: it.n.trim() || 'Untitled', pm: pm, py: pm*12, s: it.s }); }
+    if (!items.length){ alert('Add a subscription or two first, then print.'); return; }
+    items.sort(function(a,b){ return b.py - a.py; });
+    var totM = 0, cutM = 0; for (i = 0; i < items.length; i++){ totM += items[i].pm; if (items[i].s==='cut') cutM += items[i].pm; }
+    var rows = '', cancel = '';
+    for (i = 0; i < items.length; i++){ var r = items[i];
+      var tag = r.s==='cut' ? 'CANCEL' : (r.s==='unsure' ? 'review' : 'keep');
+      rows += '<tr><td>'+esc(r.n)+'</td><td class="r">'+money2(r.pm)+'/mo</td><td class="r">'+money(r.py)+'/yr</td><td class="r">'+tag+'</td></tr>';
+      if (r.s==='cut' || r.s==='unsure') cancel += '<tr><td>&#9744; '+esc(r.n)+'</td><td class="r">saves '+money(r.py)+'/yr</td></tr>';
+    }
+    var w = window.open('', '_blank');
+    if (!w){ alert('Your browser blocked the print window. Allow pop-ups for this site and try again.'); return; }
+    w.document.write('<html><head><title>My Subscription Audit - Thrifty Crew</title><style>body{font-family:Georgia,serif;color:#16263f;max-width:640px;margin:2em auto;padding:0 1em;}h1{font-size:1.5em;border-bottom:2px solid #e2a43c;padding-bottom:.3em;}h2{font-size:1.05em;margin-top:1.4em;}table{width:100%;border-collapse:collapse;font-size:.95em;margin:.4em 0;}td{padding:.3em 0;border-bottom:1px dotted #ccc;}td.r{text-align:right;}.big{font-size:1.25em;font-weight:bold;margin:.8em 0;padding:.6em .8em;background:#f6f1e7;border-radius:8px;}.save{background:#eaf6ef;}.foot{margin-top:2em;font-size:.8em;color:#777;}</style></head><body>' +
+      '<h1>My Subscription Audit</h1>' +
+      '<p class="big">Total: ' + money2(totM) + ' a month &nbsp;|&nbsp; ' + money(totM*12) + ' a year</p>' +
+      '<h2>Everything I pay for</h2><table><tr><td><b>Subscription</b></td><td class="r"><b>Monthly</b></td><td class="r"><b>Yearly</b></td><td class="r"><b>Verdict</b></td></tr>' + rows + '</table>' +
+      (cancel ? '<h2>My cancel / review list</h2><p class="big save">Canceling everything marked to cut saves ' + money(cutM*12) + ' a year.</p><table>' + cancel + '</table>' : '') +
+      '<p class="foot">Printed from the Thrifty Crew subscription tracker. Your numbers live on your device, not on our servers. thriftycrew.com</p>' +
+      '</body></html>');
+    w.document.close();
+    setTimeout(function(){ w.print(); }, 350);
+  }
+
+  renderRows(); calc();
+})();
+</script>
+</div>

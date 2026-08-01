@@ -16,10 +16,29 @@
 # The join interstitial's SOURCE. deploy-interstitial.ps1 was tracked while the payload it deploys was
 # not, so the only copy of a script running on every page of the site was one machine's disk plus a
 # minified blob inside Ghost settings. Same class as lib\ above.
-# NOTE (2026-08-01): 18 more site sources at this root are still untracked - the member-tool HTML and
-# their build-*.ps1 scripts. That is a real gap, listed in design\STATUS-elite-layer-2026-07-31.md, but
-# sweeping them in belongs in its own change rather than riding along with a redesign.
+
 !/join-interstitial.html
+# The member-tool SOURCES and the build scripts that publish them. Same hole as lib\ and the interstitial:
+# these run on the live site, several are the only copy in existence, and none of them were versioned
+# while unrelated tool HTML at the same path was. Swept in 2026-08-01.
+!/budget-tracker-tool.html
+!/compound-interest-tool.html
+!/debt-payoff-tool.html
+!/freezer-math-tool.html
+!/meal-plan-builder-tool.html
+!/my-crew-template.html
+!/my-staples-tool.html
+!/price-widget-tool.html
+!/sams-worth-it-tool.html
+!/savings-goal-tool.html
+!/subscription-tracker-tool.html
+!/start-here.new.html
+!/build-budget-tracker.ps1
+!/build-compound-calculator.ps1
+!/build-debt-calculator.ps1
+!/build-mycrew.ps1
+!/build-new-foot.ps1
+!/build-savings-tracker.ps1
 # the agent prompts + scheduled-task SKILLs that DRIVE the estate, plus the audit that proves the backup is
 # current. They live under C:\Codex\.claude and C:\Users\Owner\.claude, neither of which is a repository, so
 # without this they were the only unversioned code in the system (2026-07-31).

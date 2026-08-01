@@ -1,0 +1,279 @@
+<div id="tcst">
+<style>
+#tcst{--navy:#16263f;--gold:#e2a43c;--gold-d:#8a6d1f;--ink:#3a4658;--line:#e2e8f0;--green:#1f7a4d;--red:#b23b2e;--soft:#fbfcfe;
+  max-width:760px;margin:0 auto;font-size:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);}
+#tcst *{box-sizing:border-box;}
+#tcst .tb-privacy{display:flex;gap:.7em;align-items:flex-start;background:#fdf8ec;border:1px solid #eee3c8;border-radius:12px;padding:.9em 1.1em;font-size:.92em;line-height:1.5;margin:0 0 1.6em;}
+#tcst .tb-privacy b{color:var(--navy);}
+#tcst .tb-lock{flex:0 0 auto;width:1.6em;height:1.6em;border-radius:50%;background:var(--gold);color:var(--navy);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.95em;}
+#tcst .tb-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.6em 1.4em;margin:0 0 1.5em;box-shadow:0 6px 24px rgba(22,38,63,.06);}
+#tcst h2{font-size:1.3em;color:var(--navy);margin:0 0 .3em;}
+#tcst .tb-sub{font-size:.95em;margin:.2em 0 1.1em;line-height:1.5;}
+#tcst .st-search{width:100%;padding:.72em .9em;font-size:1em;color:var(--navy);background:#fff;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;margin:0 0 1em;}
+#tcst .st-search:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(226,164,60,.22);}
+#tcst .st-cat{margin:0 0 1.1em;}
+#tcst .st-cat-h{font-size:.78em;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-d);margin:0 0 .45em;}
+#tcst .st-chips{display:flex;flex-wrap:wrap;gap:.45em;}
+#tcst .st-chip{padding:.42em .85em;border:1.5px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);font-size:.88em;font-weight:600;cursor:pointer;font-family:inherit;line-height:1.2;}
+#tcst .st-chip:hover{border-color:var(--gold);}
+#tcst .st-chip.on{background:var(--navy);border-color:var(--navy);color:#fff;}
+#tcst .st-chip.on::before{content:"\2713\00a0";color:var(--gold);font-weight:800;}
+#tcst .st-more{padding:.42em .85em;border:1.5px dashed #cbd5e1;border-radius:999px;background:#fff;color:#68748a;font-size:.85em;font-weight:700;cursor:pointer;font-family:inherit;}
+#tcst .st-more:hover{border-color:var(--gold);color:var(--gold-d);}
+#tcst .st-bar{display:flex;align-items:center;justify-content:space-between;gap:1em;margin:1.1em 0 0;flex-wrap:wrap;}
+#tcst .st-count{font-size:.92em;font-weight:800;color:var(--navy);}
+#tcst .st-clear{background:none;border:none;color:var(--red);font-size:.88em;font-weight:700;cursor:pointer;font-family:inherit;padding:0;}
+#tcst .st-row{display:flex;align-items:baseline;gap:.7em;padding:.6em 0;border-bottom:1px solid #eef1f5;flex-wrap:wrap;}
+#tcst .st-row:last-child{border-bottom:none;}
+#tcst .st-l{flex:1 1 auto;font-weight:700;color:var(--navy);min-width:9em;}
+#tcst .st-p{font-weight:800;color:var(--green);white-space:nowrap;}
+#tcst .st-s{font-size:.85em;color:#68748a;white-space:nowrap;}
+#tcst .st-low{display:inline-block;background:var(--green);color:#fff;font-size:.62em;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:999px;vertical-align:2px;}
+#tcst .st-ends{display:inline-block;background:#fdf8ec;color:var(--gold-d);border:1px solid #ecd9ae;font-size:.62em;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:999px;vertical-align:2px;}
+#tcst .st-ends.st-urgent{background:var(--red);border-color:var(--red);color:#fff;}
+#tcst .st-ics{font-size:.76em;color:#68748a;text-decoration:underline;cursor:pointer;white-space:nowrap;font-weight:600;}
+#tcst .st-ics:hover{color:var(--gold-d);}
+#tcst .st-tr{font-size:.78em;color:var(--gold-d);text-decoration:none;font-weight:700;white-space:nowrap;}
+#tcst .st-tr:hover{color:var(--navy);}
+#tcst .st-split{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:1em 1.1em;margin:1.2em 0 0;}
+#tcst .st-split-h{font-size:.8em;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--gold-d);margin:0 0 .6em;}
+#tcst .st-split-r{display:flex;justify-content:space-between;gap:.8em;font-size:.95em;padding:.3em 0;}
+#tcst .st-split-r b{color:var(--navy);}
+#tcst .st-split-r span{color:#68748a;}
+#tcst .st-total{display:flex;justify-content:space-between;align-items:baseline;border-top:2px solid var(--line);margin-top:.6em;padding-top:.7em;font-weight:800;color:var(--navy);}
+#tcst .st-total b{font-size:1.25em;color:var(--green);}
+#tcst .st-note{font-size:.8em;color:#8a94a6;line-height:1.5;margin:.7em 0 0;}
+#tcst .st-fresh{text-align:center;font-size:.82em;color:#8a94a6;margin:.8em 0 0;}
+#tcst .tb-actions{display:flex;gap:.8em;flex-wrap:wrap;justify-content:center;margin:1.6em 0 .4em;}
+#tcst .tb-btn{padding:.9em 1.7em;border:none;border-radius:10px;font-size:1em;font-weight:800;cursor:pointer;font-family:inherit;}
+#tcst .tb-btn-gold{background:var(--gold);color:var(--navy);}
+#tcst .tb-btn-ghost{background:#fff;color:var(--red);border:1.5px solid #f2c9c5;}
+#tcst .tb-saved{text-align:center;font-size:.85em;color:#8a94a6;margin:.4em 0 0;min-height:1.3em;}
+@media (max-width:560px){ #tcst .tb-card{padding:1.2em 1em;} }
+</style>
+
+<p style="font-size:1.05em;line-height:1.6;margin:0 0 1.2em;">You buy the same fifteen things every week. Tap them once, and every time you come back this page shows the cheapest store for each one, flags anything sitting at its tracked low, and splits your list by store. Check it before every run; it does the price-shopping for you.</p>
+<div class="tb-privacy"><span class="tb-lock">&#128274;</span><span><b>Your list stays on this device.</b> It saves automatically in your browser, so next visit your staples are already loaded with fresh prices. Hit &ldquo;Erase my list&rdquo; anytime.</span></div>
+
+<div class="tb-card">
+  <h2>Pick your staples</h2>
+  <p class="tb-sub">Everything we price-check in Omaha, 184 items. Tap what you actually buy.</p>
+  <input type="text" class="st-search" id="st-search" placeholder="Search items (eggs, chicken, coffee...)" maxlength="40">
+  <div id="st-cats"></div>
+  <div class="st-bar">
+    <span class="st-count" id="st-count"></span>
+    <button class="st-clear" id="st-clearsel" type="button">Clear all</button>
+  </div>
+</div>
+
+<div class="tb-card">
+  <h2>Your staples this week</h2>
+  <p class="tb-sub" id="st-sub"></p>
+  <div id="st-list"></div>
+  <div id="st-splitbox"></div>
+  <p class="st-fresh" id="st-fresh"></p>
+</div>
+
+<div class="tb-actions">
+  <button class="tb-btn tb-btn-gold" id="st-print" type="button">Print my shopping list</button>
+  <button class="tb-btn tb-btn-ghost" id="st-erase" type="button">Erase my list</button>
+</div>
+<p class="tb-saved" id="st-saved"></p>
+
+<script>
+var ST={week:"2026-07-08",items:[{"k":"chicken-breast","l":"Boneless Skinless Chicken Breast","u":"lb","c":"Meat & Poultry","f":2.29,"fs":"Baker's","rec":2.29,"t":"chicken-breast-price-omaha","w":1,"se":"2026-07-14"},{"k":"chicken-thighs","l":"Chicken Thighs / Drumsticks","u":"lb","c":"Meat & Poultry","f":1.28,"fs":"Sam's Club","rec":1.28,"t":"chicken-thighs-price-omaha","w":1,"se":null},{"k":"ground-beef-8020","l":"80/20 Ground Beef","u":"lb","c":"Meat & Poultry","f":5.56,"fs":"Sam's Club","rec":4.99,"t":"ground-beef-8020-price-omaha","w":1,"se":null},{"k":"ground-turkey","l":"Ground Turkey","u":"lb","c":"Meat & Poultry","f":2.6633,"fs":"Aldi","rec":2.6633,"t":"ground-turkey-price-omaha","w":1,"se":"2026-07-14"},{"k":"bacon","l":"Bacon","u":"lb","c":"Meat & Poultry","f":3.96,"fs":"Sam's Club","rec":3.94,"t":"bacon-price-omaha","w":1,"se":null},{"k":"pork-chops","l":"Pork Chops","u":"lb","c":"Meat & Poultry","f":2.52,"fs":"Sam's Club","rec":2.52,"t":"pork-chops-price-omaha","w":1,"se":null},{"k":"eggs","l":"Large Eggs (dozen)","u":"dozen","c":"Dairy & Eggs","f":1.47,"fs":"Walmart","rec":1,"t":"eggs-price-omaha","w":1,"se":null},{"k":"milk","l":"Milk (gallon)","u":"gallon","c":"Dairy & Eggs","f":2.99,"fs":"Hy-Vee","rec":2.99,"t":"milk-price-omaha","w":1,"se":null},{"k":"butter","l":"Butter","u":"lb","c":"Dairy & Eggs","f":2.74,"fs":"Sam's Club","rec":2.74,"t":"butter-price-omaha","w":1,"se":null},{"k":"cottage-cheese","l":"Cottage Cheese","u":"oz","c":"Dairy & Eggs","f":0.1196,"fs":"Walmart","rec":0.1042,"t":"cottage-cheese-price-omaha","w":1,"se":null},{"k":"sour-cream","l":"Sour Cream","u":"oz","c":"Dairy & Eggs","f":0.115,"fs":"Walmart","rec":0.1042,"t":"sour-cream-price-omaha","w":1,"se":null},{"k":"cream-cheese","l":"Cream Cheese","u":"oz","c":"Dairy & Eggs","f":0.13,"fs":"Sam's Club","rec":0.13,"t":"cream-cheese-price-omaha","w":1,"se":null},{"k":"shredded-cheese","l":"Shredded / Block Cheese","u":"oz","c":"Dairy & Eggs","f":0.1862,"fs":"Baker's","rec":0.1559,"t":"shredded-cheese-price-omaha","w":1,"se":"2026-07-14"},{"k":"yogurt","l":"Yogurt","u":"oz","c":"Dairy & Eggs","f":0.0825,"fs":"Walmart","rec":0.0825,"t":"yogurt-price-omaha","w":1,"se":null},{"k":"bananas","l":"Bananas","u":"lb","c":"Fruit","f":0.48,"fs":"Aldi","rec":0.48,"t":"bananas-price-omaha","w":1,"se":null},{"k":"strawberries","l":"Strawberries","u":"oz","c":"Fruit","f":0.1241,"fs":"Sam's Club","rec":0.1241,"t":"strawberries-price-omaha","w":1,"se":null},{"k":"blueberries","l":"Blueberries","u":"oz","c":"Fruit","f":0.2578,"fs":"Walmart","rec":0.2578,"t":"blueberries-price-omaha","w":1,"se":null},{"k":"avocados","l":"Avocados","u":"each","c":"Fruit","f":0.59,"fs":"Aldi","rec":0.4817,"t":"avocados-price-omaha","w":1,"se":"2026-07-14"},{"k":"russet-potatoes","l":"Russet Potatoes","u":"lb","c":"Vegetables","f":0.439,"fs":"Aldi","rec":0.439,"t":"russet-potatoes-price-omaha","w":1,"se":null},{"k":"onions","l":"Yellow / Sweet Onions","u":"lb","c":"Vegetables","f":0.74,"fs":"Sam's Club","rec":0.74,"t":"onions-price-omaha","w":1,"se":null},{"k":"apples","l":"Apples","u":"lb","c":"Fruit","f":1.08,"fs":"Walmart","rec":1.08,"t":"apples-price-omaha","w":1,"se":null},{"k":"grapes","l":"Grapes","u":"lb","c":"Fruit","f":1.69,"fs":"Aldi","rec":1.69,"t":"grapes-price-omaha","w":1,"se":null},{"k":"sweet-corn","l":"Sweet Corn (ear)","u":"each","c":"Vegetables","f":0.4,"fs":"Baker's","rec":0.4,"t":"sweet-corn-price-omaha","w":1,"se":"2026-07-14"},{"k":"watermelon","l":"Whole Watermelon","u":"each","c":"Fruit","f":2.99,"fs":"Baker's","rec":2.99,"t":"watermelon-price-omaha","w":1,"se":"2026-07-14"},{"k":"peaches","l":"Peaches","u":"lb","c":"Fruit","f":1.79,"fs":"Baker's","rec":1.49,"t":"peaches-price-omaha","w":1,"se":null},{"k":"bread","l":"Bread (loaf)","u":"each","c":"Pantry & Beverages","f":1.19,"fs":"Baker's","rec":0.998,"t":"bread-price-omaha","w":1,"se":null},{"k":"peanut-butter","l":"Peanut Butter","u":"oz","c":"Pantry & Beverages","f":0.0995,"fs":"Walmart","rec":0.0995,"t":"peanut-butter-price-omaha","w":1,"se":null},{"k":"orange-juice","l":"Orange Juice","u":"floz","c":"Pantry & Beverages","f":0.0648,"fs":"Sam's Club","rec":0.0648,"t":"orange-juice-price-omaha","w":1,"se":null},{"k":"coffee","l":"Coffee (ground/beans)","u":"oz","c":"Pantry & Beverages","f":0.411,"fs":"Sam's Club","rec":0.411,"t":"coffee-price-omaha","w":1,"se":null},{"k":"93-7-ground-turkey","l":"93/7 Ground Turkey","u":"lb","c":"Meat & Poultry","f":4.33,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"boneless-skinless-chicken-thigh","l":"Boneless Skinless Chicken Thigh","u":"lb","c":"Meat & Poultry","f":1.99,"fs":"Hy-Vee","rec":null,"t":null,"w":0,"se":null},{"k":"1-3-fat-cream-cheese","l":"1/3 Fat Cream Cheese","u":"oz","c":"Cheese & Dairy","f":0.1488,"fs":"Aldi","rec":null,"t":null,"w":0,"se":null},{"k":"apple","l":"Apple","u":"each","c":"Produce","f":0.39,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"balsamic-vinegar","l":"Balsamic Vinegar","u":"oz","c":"Sauces & Condiments","f":0.1757,"fs":"Hy-Vee","rec":null,"t":null,"w":0,"se":null},{"k":"bread-crumbs","l":"Bread Crumbs","u":"oz","c":"Spices & Baking","f":0.0744,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"brown-sugar","l":"Brown Sugar","u":"oz","c":"Spices & Baking","f":0.03,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"cannellini-beans","l":"Cannellini Beans","u":"oz","c":"Beans & Canned","f":0.055,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"carrots","l":"Carrots","u":"lb","c":"Produce","f":0.87,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"cashews","l":"Cashews","u":"oz","c":"Spices & Baking","f":0.39,"fs":"Aldi","rec":null,"t":null,"w":0,"se":null},{"k":"cheddar-cheese-shredded","l":"Cheddar Cheese, Shredded","u":"oz","c":"Cheese & Dairy","f":0.18,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"chickpeas","l":"Chickpeas","u":"oz","c":"Beans & Canned","f":0.055,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"cornstarch","l":"Cornstarch","u":"oz","c":"Spices & Baking","f":0.12,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"crushed-tomatoes","l":"Crushed Tomatoes","u":"oz","c":"Beans & Canned","f":0.0536,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"curry-powder","l":"Curry Powder","u":"oz","c":"Spices & Baking","f":0.5,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"dijon-mustard","l":"Dijon Mustard","u":"oz","c":"Sauces & Condiments","f":0.1375,"fs":"Aldi","rec":null,"t":null,"w":0,"se":null},{"k":"enchilada-sauce","l":"Enchilada Sauce","u":"oz","c":"Sauces & Condiments","f":0.1,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"fries","l":"Fries","u":"oz","c":"Produce","f":0.0334,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"frozen-chopped-spinach","l":"Frozen Chopped Spinach","u":"oz","c":"Produce","f":0.079,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"frozen-green-peas","l":"Frozen Green Peas","u":"oz","c":"Produce","f":0.078,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"ginger","l":"Ginger","u":"lb","c":"Produce","f":3.41,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"gochujang","l":"Gochujang","u":"oz","c":"Sauces & Condiments","f":0.261,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"golden-raisins","l":"Golden Raisins","u":"oz","c":"Spices & Baking","f":0.13,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"greek-yogurt","l":"Greek Yogurt","u":"oz","c":"Cheese & Dairy","f":0.0872,"fs":"Aldi","rec":null,"t":null,"w":0,"se":null},{"k":"green-beans","l":"Green Beans","u":"oz","c":"Beans & Canned","f":0.054,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"green-cabbage","l":"Green Cabbage","u":"lb","c":"Produce","f":0.79,"fs":"Aldi","rec":null,"t":null,"w":0,"se":null},{"k":"hickory-smoked-bacon","l":"Hickory Smoked Bacon","u":"lb","c":"Meat & Poultry","f":3.96,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"hoisin-sauce","l":"Hoisin Sauce","u":"oz","c":"Sauces & Condiments","f":0.271,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"hominy","l":"Hominy","u":"oz","c":"Beans & Canned","f":0.0507,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"honey","l":"Honey","u":"oz","c":"Sauces & Condiments","f":0.225,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"honey-dijon-mustard","l":"Honey Dijon Mustard","u":"oz","c":"Sauces & Condiments","f":0.1375,"fs":"Aldi","rec":null,"t":null,"w":0,"se":null},{"k":"ketchup","l":"Ketchup","u":"oz","c":"Sauces & Condiments","f":0.047,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"kidney-beans","l":"Kidney Beans","u":"oz","c":"Beans & Canned","f":0.055,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"light-sour-cream","l":"Light Sour Cream","u":"oz","c":"Cheese & Dairy","f":0.1044,"fs":"Baker's","rec":null,"t":null,"w":0,"se":null},{"k":"marinara-sauce","l":"Marinara Sauce","u":"oz","c":"Sauces & Condiments","f":0.076,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"olives","l":"Olives","u":"oz","c":"Sauces & Condiments","f":0.21,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"paprika","l":"Paprika","u":"oz","c":"Spices & Baking","f":0.432,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"pineapple-chunks","l":"Pineapple Chunks","u":"oz","c":"Beans & Canned","f":0.081,"fs":"Hy-Vee","rec":null,"t":null,"w":0,"se":null},{"k":"poblano-peppers","l":"Poblano Peppers","u":"lb","c":"Produce","f":2.99,"fs":"Family Fare","rec":null,"t":null,"w":0,"se":null},{"k":"potato","l":"Potato","u":"lb","c":"Produce","f":0.44,"fs":"Aldi","rec":null,"t":null,"w":0,"se":null},{"k":"provolone-cheese","l":"Provolone Cheese","u":"oz","c":"Cheese & Dairy","f":0.209,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"red-bell-pepper","l":"Red Bell Pepper","u":"each","c":"Produce","f":0.83,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"red-wine-vinegar","l":"Red Wine Vinegar","u":"oz","c":"Sauces & Condiments","f":0.1473,"fs":"Hy-Vee","rec":null,"t":null,"w":0,"se":null},{"k":"roasted-red-peppers","l":"Roasted Red Peppers","u":"oz","c":"Sauces & Condiments","f":0.178,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"rotini-pasta","l":"Rotini Pasta","u":"oz","c":"Pasta, Rice & Grains","f":0.078,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"sesame-oil","l":"Sesame Oil","u":"oz","c":"Sauces & Condiments","f":0.536,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"soy-sauce","l":"Soy Sauce","u":"oz","c":"Sauces & Condiments","f":0.112,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"sugar-free-maple-syrup","l":"Sugar-Free Maple Syrup","u":"oz","c":"Sauces & Condiments","f":0.1121,"fs":"Baker's","rec":null,"t":null,"w":0,"se":null},{"k":"tahini","l":"Tahini","u":"oz","c":"Sauces & Condiments","f":0.331,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"toasted-sesame-seeds","l":"Toasted Sesame Seeds","u":"oz","c":"Spices & Baking","f":0.36,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"tomatillos","l":"Tomatillos","u":"lb","c":"Produce","f":1.99,"fs":"Family Fare","rec":null,"t":null,"w":0,"se":null},{"k":"tomato-paste","l":"Tomato Paste","u":"oz","c":"Beans & Canned","f":0.1117,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"tomato-sauce","l":"Tomato Sauce","u":"oz","c":"Beans & Canned","f":0.05,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"traditional-pasta-sauce","l":"Traditional Pasta Sauce","u":"oz","c":"Sauces & Condiments","f":0.07,"fs":"Hy-Vee","rec":null,"t":null,"w":0,"se":null},{"k":"white-mushrooms","l":"White Mushrooms","u":"oz","c":"Produce","f":0.17,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"white-vinegar","l":"White Vinegar","u":"oz","c":"Sauces & Condiments","f":0.034,"fs":"Family Fare","rec":null,"t":null,"w":0,"se":null},{"k":"zero-sugar-soda","l":"Zero-Sugar Soda","u":"each","c":"Sauces & Condiments","f":1,"fs":"Baker's","rec":null,"t":null,"w":0,"se":null},{"k":"93-7-ground-beef","l":"93/7 Ground Beef","u":"lb","c":"Meat & Poultry","f":6.17,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"sugar-free-bbq-sauce","l":"Sugar-Free BBQ Sauce","u":"oz","c":"Sauces & Condiments","f":0.174,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"beef-broth","l":"Beef Broth","u":"floz","c":"Meat & Poultry","f":0.04,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"beef-chuck-roast","l":"Beef Chuck Roast","u":"lb","c":"Meat & Poultry","f":7.47,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"frozen-broccoli-florets","l":"Frozen Broccoli Florets","u":"oz","c":"Produce","f":0.097,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"buffalo-wing-sauce","l":"Buffalo Wing Sauce","u":"floz","c":"Sauces & Condiments","f":0.13,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"chicken-broth","l":"Chicken Broth","u":"floz","c":"Meat & Poultry","f":0.04,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"chili-powder","l":"Chili Powder","u":"oz","c":"Spices & Baking","f":0.36,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"chipotle-in-adobo","l":"Chipotle Peppers in Adobo","u":"oz","c":"Beans & Canned","f":0.21,"fs":"Baker's","rec":null,"t":null,"w":0,"se":null},{"k":"coconut-milk","l":"Coconut Milk (Canned)","u":"floz","c":"Beans & Canned","f":0.1369,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"diced-green-chiles","l":"Diced Green Chiles","u":"oz","c":"Beans & Canned","f":0.22,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"diced-tomatoes","l":"Diced Tomatoes","u":"oz","c":"Beans & Canned","f":0.0559,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"fajita-seasoning","l":"Fajita Seasoning Packet","u":"each","c":"Spices & Baking","f":0.64,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"garlic","l":"Garlic (Bulb)","u":"each","c":"Produce","f":0.63,"fs":"Aldi","rec":null,"t":null,"w":0,"se":null},{"k":"garlic-powder","l":"Garlic Powder","u":"oz","c":"Spices & Baking","f":0.318,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"frozen-green-beans","l":"Frozen Cut Green Beans","u":"oz","c":"Beans & Canned","f":0.061,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"green-bell-pepper","l":"Green Bell Pepper","u":"each","c":"Spices & Baking","f":0.83,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"ground-cumin","l":"Ground Cumin","u":"oz","c":"Spices & Baking","f":0.545,"fs":"Aldi","rec":null,"t":null,"w":0,"se":null},{"k":"hot-honey","l":"Hot Honey","u":"oz","c":"Sauces & Condiments","f":0.3992,"fs":"Aldi","rec":null,"t":null,"w":0,"se":null},{"k":"hot-italian-sausage","l":"Hot Italian Sausage","u":"lb","c":"Meat & Poultry","f":2.5179,"fs":"Aldi","rec":null,"t":null,"w":0,"se":null},{"k":"hot-sauce","l":"Hot Sauce","u":"floz","c":"Sauces & Condiments","f":0.12,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"italian-seasoning","l":"Italian Seasoning","u":"oz","c":"Spices & Baking","f":1.14,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"limes","l":"Limes","u":"each","c":"Produce","f":0.25,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"olive-oil","l":"Olive Oil","u":"floz","c":"Sauces & Condiments","f":0.19,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"onion-powder","l":"Onion Powder","u":"oz","c":"Spices & Baking","f":0.332,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"parmesan-cheese","l":"Parmesan Cheese, Grated","u":"oz","c":"Cheese & Dairy","f":0.31,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"penne-pasta","l":"Penne Pasta","u":"oz","c":"Pasta, Rice & Grains","f":0.078,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"pepperoncini","l":"Pepperoncini","u":"floz","c":"Produce","f":0.158,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"pork-tenderloin","l":"Pork Tenderloin","u":"lb","c":"Meat & Poultry","f":2.94,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"ranch-seasoning-mix","l":"Ranch Seasoning Packet","u":"each","c":"Spices & Baking","f":0.64,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"reduced-fat-mozzarella","l":"Part-Skim Mozzarella, Shredded","u":"oz","c":"Cheese & Dairy","f":0.18,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"jasmine-rice","l":"Jasmine Rice (Dry)","u":"oz","c":"Pasta, Rice & Grains","f":0.05,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"salsa","l":"Salsa","u":"oz","c":"Sauces & Condiments","f":0.1,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"salsa-verde","l":"Salsa Verde","u":"oz","c":"Sauces & Condiments","f":0.165,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"seasoned-black-beans","l":"Seasoned Black Beans (Canned)","u":"oz","c":"Beans & Canned","f":0.0993,"fs":"Hy-Vee","rec":null,"t":null,"w":0,"se":null},{"k":"shredded-carrots","l":"Shredded Carrots","u":"oz","c":"Produce","f":0.193,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"sun-dried-tomatoes","l":"Sun-Dried Tomatoes","u":"oz","c":"Beans & Canned","f":0.42,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"canned-sweet-corn","l":"Canned Sweet Corn","u":"each","c":"Beans & Canned","f":0.78,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"taco-seasoning","l":"Taco Seasoning Packet","u":"each","c":"Spices & Baking","f":0.47,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"teriyaki-sauce","l":"Teriyaki Sauce","u":"floz","c":"Sauces & Condiments","f":0.165,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"turkey-pepperoni","l":"Turkey Pepperoni","u":"oz","c":"Meat & Poultry","f":0.584,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"zero-sugar-soda-2l","l":"Zero-Sugar Soda (2 L)","u":"floz","c":"Sauces & Condiments","f":0.01,"fs":"Baker's","rec":null,"t":null,"w":0,"se":null},{"k":"zucchini","l":"Zucchini","u":"lb","c":"Sauces & Condiments","f":1.39,"fs":"Aldi","rec":null,"t":null,"w":0,"se":null},{"k":"pork-loin","l":"Pork Loin","u":"lb","c":"Meat & Poultry","f":1.98,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"fat-free-cheddar","l":"Fat-Free Cheddar Cheese","u":"oz","c":"Dairy","f":0.281,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"bay-leaves","l":"Bay Leaves","u":"oz","c":"Spices & Baking","f":1.25,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"garam-masala","l":"Garam Masala","u":"oz","c":"Spices & Baking","f":0.994,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"rice-vinegar","l":"Rice Vinegar","u":"floz","c":"Sauces & Condiments","f":0.187,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"corn-tortillas","l":"Corn Tortillas","u":"each","c":"Pasta, Rice & Grains","f":0.0561,"fs":"Baker's","rec":null,"t":null,"w":0,"se":null},{"k":"jerk-seasoning","l":"Jerk Seasoning","u":"oz","c":"Spices & Baking","f":0.497,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"dried-oregano","l":"Dried Oregano","u":"oz","c":"Spices & Baking","f":1.064,"fs":"Hy-Vee","rec":null,"t":null,"w":0,"se":null},{"k":"salt","l":"Salt","u":"oz","c":"Spices & Baking","f":0.0342,"fs":"Aldi","rec":null,"t":null,"w":0,"se":null},{"k":"black-pepper","l":"Black Pepper","u":"oz","c":"Spices & Baking","f":0.4433,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"fresh-cilantro","l":"Fresh Cilantro","u":"each","c":"Produce","f":0.93,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"jalapeno","l":"Jalapeno Pepper","u":"lb","c":"Produce","f":1.9,"fs":"Aldi","rec":null,"t":null,"w":0,"se":null},{"k":"liquid-smoke","l":"Liquid Smoke","u":"floz","c":"Sauces & Condiments","f":0.423,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"worcestershire-sauce","l":"Worcestershire Sauce","u":"floz","c":"Sauces & Condiments","f":0.0686,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"dried-parsley","l":"Dried Parsley","u":"oz","c":"Spices & Baking","f":1.44,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"cayenne-pepper","l":"Cayenne Pepper","u":"oz","c":"Spices & Baking","f":0.4167,"fs":"Hy-Vee","rec":null,"t":null,"w":0,"se":null},{"k":"vegetable-oil","l":"Vegetable Oil","u":"floz","c":"Oils","f":0.068,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"smoked-paprika","l":"Smoked Paprika","u":"oz","c":"Spices & Baking","f":0.631,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"feta-cheese","l":"Feta Cheese","u":"oz","c":"Dairy & Cheese","f":0.3033,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"dried-dill","l":"Dried Dill","u":"oz","c":"Spices & Baking","f":1.51,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"mozzarella-cheese","l":"Mozzarella Cheese","u":"oz","c":"Dairy & Cheese","f":0.1521,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"cucumber","l":"Cucumber","u":"each","c":"Produce","f":0.65,"fs":"Aldi","rec":null,"t":null,"w":0,"se":null},{"k":"dried-basil","l":"Dried Basil","u":"oz","c":"Spices & Baking","f":1.2,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"apple-cider","l":"Apple Cider","u":"floz","c":"Beverages","f":0.0561,"fs":"Hy-Vee","rec":null,"t":null,"w":0,"se":null},{"k":"celery","l":"Celery","u":"each","c":"Produce","f":1.88,"fs":"Hy-Vee","rec":null,"t":null,"w":0,"se":null},{"k":"ground-ginger","l":"Ground Ginger","u":"oz","c":"Spices & Baking","f":0.7971,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"au-jus-gravy-mix","l":"Au Jus Gravy Mix","u":"oz","c":"Sauces & Condiments","f":0.98,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"dried-rosemary","l":"Dried Rosemary","u":"oz","c":"Spices & Baking","f":1.3,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"green-onions","l":"Green Onions","u":"each","c":"Produce","f":1.19,"fs":"Aldi","rec":null,"t":null,"w":0,"se":null},{"k":"ground-coriander","l":"Ground Coriander","u":"oz","c":"Spices & Baking","f":1.96,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"lemon-juice","l":"Lemon Juice","u":"floz","c":"Beverages","f":0.035,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"condensed-french-onion-soup","l":"Condensed French Onion Soup","u":"each","c":"Canned & Jarred","f":1.12,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"celery-salt","l":"Celery Salt","u":"oz","c":"Spices & Baking","f":0.415,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"sweet-chili-sauce","l":"Sweet Chili Sauce","u":"floz","c":"Sauces & Condiments","f":0.187,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"swiss-cheese","l":"Swiss Cheese","u":"oz","c":"Dairy & Cheese","f":0.209,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"half-and-half","l":"Half and Half","u":"floz","c":"Dairy & Cheese","f":0.0675,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"white-wine-vinegar","l":"White Wine Vinegar","u":"floz","c":"Sauces & Condiments","f":0.1473,"fs":"Hy-Vee","rec":null,"t":null,"w":0,"se":null},{"k":"ground-nutmeg","l":"Ground Nutmeg","u":"oz","c":"Spices & Baking","f":1.1745,"fs":"Hy-Vee","rec":null,"t":null,"w":0,"se":null},{"k":"pineapple-juice","l":"Pineapple Juice","u":"floz","c":"Beverages","f":0.0633,"fs":"Baker's","rec":null,"t":null,"w":0,"se":null},{"k":"sugar","l":"Sugar","u":"oz","c":"Spices & Baking","f":0.0411,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"fish-sauce","l":"Fish Sauce","u":"floz","c":"Sauces & Condiments","f":0.284,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"apple-cider-vinegar","l":"Apple Cider Vinegar","u":"floz","c":"Sauces & Condiments","f":0.052,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"ground-allspice","l":"Ground Allspice","u":"oz","c":"Spices & Baking","f":1.06,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"cheddar-cheese","l":"Cheddar Cheese","u":"oz","c":"Dairy & Cheese","f":0.1763,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"dried-thyme","l":"Dried Thyme","u":"oz","c":"Spices & Baking","f":0.8776,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"ground-turmeric","l":"Ground Turmeric","u":"oz","c":"Spices & Baking","f":0.399,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"red-pepper-flakes","l":"Red Pepper Flakes","u":"oz","c":"Spices & Baking","f":0.433,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"all-purpose-flour","l":"All-Purpose Flour","u":"oz","c":"Spices & Baking","f":0.0212,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"sriracha","l":"Sriracha","u":"floz","c":"Sauces & Condiments","f":0.2139,"fs":"Baker's","rec":null,"t":null,"w":0,"se":null},{"k":"breadcrumbs","l":"Panko Breadcrumbs","u":"oz","c":"Spices & Baking","f":0.218,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"frozen-peas","l":"Frozen Peas","u":"oz","c":"Frozen","f":0.065,"fs":"Walmart","rec":null,"t":null,"w":0,"se":null},{"k":"ground-cinnamon","l":"Ground Cinnamon","u":"oz","c":"Spices & Baking","f":0.4433,"fs":"Sam's Club","rec":null,"t":null,"w":0,"se":null},{"k":"capers","l":"Capers","u":"floz","c":"Sauces & Condiments","f":1.0257,"fs":"Family Fare","rec":null,"t":null,"w":0,"se":null},{"k":"five-spice-powder","l":"Five-Spice Powder","u":"oz","c":"Spices & Baking","f":3.63,"fs":"Baker's","rec":null,"t":null,"w":0,"se":null},{"k":"fresh-mint","l":"Fresh Mint","u":"each","c":"Produce","f":2.49,"fs":"Baker's","rec":null,"t":null,"w":0,"se":null}]};
+(function(){
+  var root = document.getElementById('tcst');
+  if (!root || typeof ST === 'undefined') return;
+  var KEY = 'tcst-v1';
+  var FEED_URL = 'https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json';
+  var GROUPS = [
+    {t:'Meat & poultry', rx:/Meat|Poultry/},
+    {t:'Dairy, eggs & cheese', rx:/Dairy|Cheese|Egg/},
+    {t:'Produce', rx:/Fruit|Vegetable|Produce/},
+    {t:'Pantry & everything else', rx:/./}
+  ];
+  var SHOW_N = 12;
+  var S;
+  try { S = JSON.parse(localStorage.getItem(KEY)) || null; } catch(e){ S = null; }
+  if (!S || !S.have) S = { have: [] };
+  var have = {};
+  for (var i = 0; i < S.have.length; i++) have[S.have[i]] = true;
+  var expanded = {};
+  var weekOf = ST.week, liveLoaded = false;
+  var byKey = {};
+  for (i = 0; i < ST.items.length; i++) byKey[ST.items[i].k] = ST.items[i];
+
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function money(x){ return '$' + (Math.round(x*100)/100).toFixed(2); }
+  function priceStr(it){ var p = it.f < 1 ? '$' + it.f.toFixed(it.f < 0.2 ? 3 : 2) : money(it.f); return p + (it.u === 'each' ? ' each' : '/' + it.u); }
+  function groupOf(cat){ for (var g = 0; g < GROUPS.length; g++) if (GROUPS[g].rx.test(cat)) return g; return GROUPS.length - 1; }
+  function endsChip(it){
+    if (!it.se) return '';
+    var end = new Date(it.se + 'T23:59:59');
+    var now = new Date();
+    if (isNaN(end.getTime()) || end < now) return '';
+    var days = Math.floor((end - now) / 86400000);
+    var label, urgent = false;
+    if (days <= 0){ label = 'Sale ends today'; urgent = true; }
+    else if (days === 1){ label = 'Sale ends tomorrow'; urgent = true; }
+    else { label = 'Sale thru ' + ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][end.getDay()]; }
+    return ' <span class="st-ends' + (urgent ? ' st-urgent' : '') + '" title="This price is a sale that runs through ' + it.se + '. After that it goes back up.">' + label + '</span>';
+  }
+
+  var saveT = null;
+  function save(){ clearTimeout(saveT); saveT = setTimeout(function(){ try { S.have = []; for (var k in have) if (have[k]) S.have.push(k); localStorage.setItem(KEY, JSON.stringify(S)); var el = document.getElementById('st-saved'); el.textContent = 'Saved on this device just now.'; setTimeout(function(){ el.textContent = ''; }, 2200); } catch(e){} }, 400); }
+
+  function renderCats(){
+    var q = document.getElementById('st-search').value.trim().toLowerCase();
+    var buckets = [[],[],[],[]];
+    for (var i = 0; i < ST.items.length; i++){ var it = ST.items[i];
+      if (q && it.l.toLowerCase().indexOf(q) < 0) continue;
+      buckets[groupOf(it.c)].push(it);
+    }
+    var h = '';
+    for (var g = 0; g < GROUPS.length; g++){
+      var items = buckets[g];
+      if (!items.length) continue;
+      items.sort(function(a,b){ if (a.w !== b.w) return b.w - a.w; return a.l < b.l ? -1 : 1; });
+      var lim = (q || expanded[g]) ? items.length : SHOW_N;
+      var shown = [], hid = 0;
+      for (i = 0; i < items.length; i++){ if (i < lim || have[items[i].k]) shown.push(items[i]); else hid++; }
+      h += '<div class="st-cat"><p class="st-cat-h">' + GROUPS[g].t + '</p><div class="st-chips">';
+      for (i = 0; i < shown.length; i++){ var s2 = shown[i];
+        h += '<button type="button" class="st-chip' + (have[s2.k] ? ' on' : '') + '" data-k="' + esc(s2.k) + '" aria-pressed="' + (have[s2.k] ? 'true' : 'false') + '">' + esc(s2.l) + '</button>';
+      }
+      if (hid > 0) h += '<button type="button" class="st-more" data-g="' + g + '">+ ' + hid + ' more</button>';
+      h += '</div></div>';
+    }
+    document.getElementById('st-cats').innerHTML = h || '<p class="tb-sub">Nothing matches that search.</p>';
+    var n = 0; for (var k in have) if (have[k]) n++;
+    document.getElementById('st-count').textContent = n ? (n + ' staple' + (n > 1 ? 's' : '') + ' on your list') : 'Nothing picked yet';
+  }
+
+  function selected(){
+    var out = [];
+    for (var k in have) if (have[k] && byKey[k]) out.push(byKey[k]);
+    out.sort(function(a,b){ return a.l < b.l ? -1 : 1; });
+    return out;
+  }
+
+  function renderList(){
+    var sel = selected();
+    var sub = document.getElementById('st-sub');
+    var box = document.getElementById('st-list');
+    var split = document.getElementById('st-splitbox');
+    if (!sel.length){
+      sub.textContent = 'Tap your usual buys above and this fills in with the cheapest store for each, updated as the ads change.';
+      box.innerHTML = ''; split.innerHTML = '';
+      return;
+    }
+    sub.textContent = 'The cheapest place in Omaha for each of your staples right now.';
+    var h = '', total = 0, lows = 0;
+    var byStore = {};
+    for (var i = 0; i < sel.length; i++){ var it = sel[i];
+      total += it.f;
+      var isLow = (it.rec !== null && it.f <= it.rec + 0.0001);
+      if (isLow) lows++;
+      if (!byStore[it.fs]) byStore[it.fs] = { n: 0, sum: 0 };
+      byStore[it.fs].n++; byStore[it.fs].sum += it.f;
+      h += '<div class="st-row"><span class="st-l">' + esc(it.l) + (isLow ? ' <span class="st-low">At its low</span>' : '') + endsChip(it) + '</span>' +
+           '<span class="st-p">' + priceStr(it) + '</span><span class="st-s">at ' + esc(it.fs) + '</span>' +
+           (it.se ? '<span class="st-ics" data-k="' + esc(it.k) + '" title="Download a calendar reminder for the last day of this sale">remind me</span>' : '') +
+           (it.t ? '<a class="st-tr" href="/' + esc(it.t) + '/?ref=staples">history &rarr;</a>' : '') + '</div>';
+    }
+    box.innerHTML = h;
+    var stores = [];
+    for (var s2 in byStore) stores.push({ s: s2, n: byStore[s2].n, sum: byStore[s2].sum });
+    stores.sort(function(a,b){ return b.n - a.n; });
+    var sh = '<div class="st-split"><p class="st-split-h">Your trip, split by store</p>';
+    for (i = 0; i < stores.length; i++) sh += '<div class="st-split-r"><b>' + esc(stores[i].s) + '</b><span>' + stores[i].n + ' item' + (stores[i].n > 1 ? 's' : '') + ' &middot; ' + money(stores[i].sum) + '</span></div>';
+    sh += '<div class="st-total"><span>One of each, at the cheapest stores</span><b>' + money(total) + '</b></div>';
+    if (lows > 0) sh += '<p class="st-note">' + lows + ' of your staples ' + (lows > 1 ? 'are' : 'is') + ' at the lowest price we have tracked. Good week for those.</p>';
+    sh += '<p class="st-note">Total counts one unit of each item (a dozen eggs, a pound of chicken, and so on). Your cart will differ; the store split is the useful part.</p></div>';
+    split.innerHTML = sh;
+  }
+
+  function renderAll(){ renderCats(); renderList(); }
+
+  root.addEventListener('click', function(e){
+    var chip = e.target.closest('.st-chip');
+    if (chip){ var k = chip.getAttribute('data-k'); if (have[k]) delete have[k]; else have[k] = true; renderAll(); save(); return; }
+    var more = e.target.closest('.st-more');
+    if (more){ expanded[more.getAttribute('data-g')] = true; renderCats(); return; }
+    if (e.target.id === 'st-clearsel'){ have = {}; renderAll(); save(); return; }
+    if (e.target.id === 'st-erase'){ if (confirm('Erase your saved staples list from this device?')){ try { localStorage.removeItem(KEY); } catch(err){} have = {}; S = { have: [] }; document.getElementById('st-search').value = ''; renderAll(); } return; }
+    if (e.target.id === 'st-print'){ doPrint(); }
+    var ics = e.target.closest('.st-ics');
+    if (ics){ downloadIcs(ics.getAttribute('data-k')); return; }
+  });
+
+  function downloadIcs(k){
+    var it = byKey[k];
+    if (!it || !it.se) return;
+    var d = it.se.replace(/-/g, '');
+    var stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
+    var uid = 'tc-' + k + '-' + it.se + '@thriftycrew.com';
+    var summary = 'Last day: ' + it.l + ' ' + priceStr(it) + ' at ' + it.fs;
+    var lines = [
+      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Thrifty Crew//My Staples//EN',
+      'BEGIN:VEVENT',
+      'UID:' + uid,
+      'DTSTAMP:' + stamp,
+      'DTSTART;VALUE=DATE:' + d,
+      'SUMMARY:' + summary.replace(/[,;\\]/g, ' '),
+      'DESCRIPTION:Sale ends today. From your Thrifty Crew staples list: https://www.thriftycrew.com/my-staples/',
+      'END:VEVENT', 'END:VCALENDAR'
+    ];
+    try {
+      var blob = new Blob([lines.join('\r\n')], { type: 'text/calendar' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'sale-reminder-' + k + '.ics';
+      document.body.appendChild(a); a.click(); a.parentNode.removeChild(a);
+    } catch(err){}
+  }
+  root.addEventListener('input', function(e){ if (e.target.id === 'st-search') renderCats(); });
+
+  function doPrint(){
+    var sel = selected();
+    if (!sel.length){ alert('Pick a few staples first, then print.'); return; }
+    var byStore = {};
+    for (var i = 0; i < sel.length; i++){ var it = sel[i]; if (!byStore[it.fs]) byStore[it.fs] = []; byStore[it.fs].push(it); }
+    var body = '';
+    for (var s2 in byStore){
+      body += '<h2 style="font-size:1.05em;margin:1.2em 0 .3em">' + esc(s2) + '</h2><table>';
+      for (i = 0; i < byStore[s2].length; i++){ var x = byStore[s2][i];
+        body += '<tr><td>&#9744; ' + esc(x.l) + '</td><td class="r">' + priceStr(x) + '</td></tr>';
+      }
+      body += '</table>';
+    }
+    var w = window.open('', '_blank');
+    if (!w){ alert('Your browser blocked the print window. Allow pop-ups for this site and try again.'); return; }
+    w.document.write('<html><head><title>My Staples - Thrifty Crew</title><style>body{font-family:Georgia,serif;color:#16263f;max-width:640px;margin:2em auto;padding:0 1em;}h1{font-size:1.5em;border-bottom:2px solid #e2a43c;padding-bottom:.3em;}table{width:100%;border-collapse:collapse;font-size:.95em;}td{padding:.3em 0;border-bottom:1px dotted #ccc;}td.r{text-align:right;}.foot{margin-top:2em;font-size:.8em;color:#777;}</style></head><body>' +
+      '<h1>My staples, cheapest stores this week</h1>' + body +
+      '<p class="foot">Prices checked for the week of ' + esc(weekOf) + '. Printed from the Thrifty Crew staples watchlist. thriftycrew.com</p>' +
+      '</body></html>');
+    w.document.close();
+    setTimeout(function(){ w.print(); }, 350);
+  }
+
+  renderAll();
+
+  try {
+    fetch(FEED_URL).then(function(r){ return r.json(); }).then(function(f){
+      if (!f || !f.ingredients) return;
+      for (var i = 0; i < ST.items.length; i++){ var it = ST.items[i]; var g = f.ingredients[it.k];
+        if (g && Number(g.cheapest) > 0 && g.unit === it.u){ it.f = Number(g.cheapest); it.fs = String(g.store); it.se = g.sale_end ? String(g.sale_end) : null; }
+      }
+      if (f.week_of) weekOf = f.week_of;
+      liveLoaded = true;
+      document.getElementById('st-fresh').textContent = 'Live prices checked across six Omaha stores for the week of ' + weekOf + '.';
+      renderList();
+    }).catch(function(){
+      document.getElementById('st-fresh').textContent = 'Showing our most recent saved prices (week of ' + weekOf + ').';
+    });
+  } catch(e){}
+})();
+</script>
+</div>

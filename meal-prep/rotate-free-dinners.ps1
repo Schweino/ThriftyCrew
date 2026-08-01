@@ -94,6 +94,18 @@ $flips = 0; $errors = 0
 $visChanges = @{}   # slug -> 'public'|'paid' for the rows the rotation flipped; patched key-scoped below
 
 # revert: only slugs THIS system freed that are not in the new set
+# THE STATE FILE RECORDS WHAT GHOST ACTUALLY DID, NOT WHAT WE INTENDED (fixed 2026-08-01).
+# It used to be written as `free = $target` unconditionally, whether or not the flips succeeded. So a
+# single failed PUT - a 409 on updated_at, a transient 5xx, a rate limit - left the post PAID while the
+# state file swore it was free. Worse, it could never heal: the next run compares target-set to state-set,
+# finds them identical, prints "same week, same set - nothing to do", and never retries. That is exactly
+# how chicken-40-cloves-garlic sat listed-free and served-paid, with the hub badging a gold "Free this
+# week" ribbon over a paywall until it was caught by hand.
+# Now: only CONFIRMED-public slugs go into the state, so a failure makes the two sets differ and the very
+# next run retries it. A failed REVERT likewise stays in the ledger, because a post we could not re-paywall
+# is still one this rotation owns; dropping it would silently promote it to hand-freed and free forever.
+$confirmedFree = New-Object System.Collections.Generic.List[object]
+$stillOwned    = New-Object System.Collections.Generic.List[object]
 if ($state) {
   foreach ($old in @($state.free)) {
     if ($targetSlugs -notcontains [string]$old.slug) {
@@ -101,7 +113,10 @@ if ($state) {
         $res = Set-PostVisibility ([string]$old.slug) 'paid'
         Write-Output ('  REVERT ' + $old.slug + ' -> ' + $res); $flips++
         $visChanges[[string]$old.slug] = 'paid'
-      } catch { Write-Output ('  REVERT FAILED ' + $old.slug + ': ' + $_.Exception.Message); $errors++ }
+      } catch {
+        Write-Output ('  REVERT FAILED ' + $old.slug + ': ' + $_.Exception.Message); $errors++
+        [void]$stillOwned.Add($old)   # could not re-paywall it: keep owning it so a later run can
+      }
       Start-Sleep -Milliseconds 300
     }
   }
@@ -112,15 +127,22 @@ foreach ($t in $target) {
     $res = Set-PostVisibility ($t.slug) 'public'
     Write-Output ('  FREE   ' + $t.slug + ' -> ' + $res); $flips++
     $visChanges[[string]$t.slug] = 'public'
+    [void]$confirmedFree.Add($t)
   } catch { Write-Output ('  FREE FAILED ' + $t.slug + ': ' + $_.Exception.Message); $errors++ }
   Start-Sleep -Milliseconds 300
 }
 
 # ---------------------------------------------------------------- persist state + db + public list
+$stateFree = New-Object System.Collections.Generic.List[object]
+foreach ($x in $confirmedFree) { [void]$stateFree.Add($x) }
+foreach ($x in $stillOwned)    { [void]$stateFree.Add($x) }
+$stateFree = $stateFree.ToArray()
 [pscustomobject]@{
   readme = 'State of the free-dinner rotation (rotate-free-dinners.ps1). Only slugs listed here are ever reverted to paid by the rotation.'
   week_of = $boardWeek; rotated_at = (Get-Date).ToString('s')
-  free = $target
+  # PS 5.1 TRAP: @($aGenericList) inside a [pscustomobject] cast throws "Argument types do not match".
+  # Build one list and hand the cast a real array. Same family as the @(pipeline|ConvertFrom-Json) trap.
+  free = $stateFree
 } | ConvertTo-Json -Depth 4 | Set-Content $stateFile -Encoding UTF8
 if ($visChanges.Count) { $nvis = Set-RecipeVisibility -DbPath (Join-Path $root 'recipes-db.json') -Map $visChanges; Write-Output ("  recipes-db: patched $nvis visibility field(s) key-scoped (no whole-file round-trip)") }
 [pscustomobject]@{
@@ -129,6 +151,12 @@ if ($visChanges.Count) { $nvis = Set-RecipeVisibility -DbPath (Join-Path $root '
   free = $target
 } | ConvertTo-Json -Depth 4 | Set-Content (Join-Path $pubDir 'free-dinners.json') -Encoding UTF8
 Write-Output ("rotation: $flips flip(s), $errors error(s); state + recipes-db + public/free-dinners.json written")
+if ($errors -gt 0) {
+  # say it plainly and exit non-zero: a partially-applied rotation means the site is promising something
+  # Ghost is not serving, and the state now differs from the target so the next run WILL retry.
+  Write-Output ("rotation INCOMPLETE: $errors flip(s) failed. The state file records only what Ghost confirmed, so the next run retries them. Until then the hub badge check (build-hub-grid verifies visibility per slug) will simply not badge them.")
+  exit 1
+}
 
 # HUB SECTION REMOVED (Brad, 2026-07-25 - he preferred the original SMP-TOP5 box, which top5-weekly
 # renders; the green SMP-FREEWEEK grid was deleted from the live page the same day). The rotation is

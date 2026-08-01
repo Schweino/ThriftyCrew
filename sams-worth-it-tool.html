@@ -1,0 +1,316 @@
+<div id="tcsc">
+<style>
+#tcsc{--navy:#16263f;--gold:#e2a43c;--gold-d:#8a6d1f;--ink:#3a4658;--line:#e2e8f0;--green:#1f7a4d;--red:#b23b2e;--soft:#fbfcfe;
+  max-width:760px;margin:0 auto;font-size:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);}
+#tcsc *{box-sizing:border-box;}
+#tcsc .tb-privacy{display:flex;gap:.7em;align-items:flex-start;background:#fdf8ec;border:1px solid #eee3c8;border-radius:12px;padding:.9em 1.1em;font-size:.92em;line-height:1.5;margin:0 0 1.6em;}
+#tcsc .tb-privacy b{color:var(--navy);}
+#tcsc .tb-lock{flex:0 0 auto;width:1.6em;height:1.6em;border-radius:50%;background:var(--gold);color:var(--navy);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.95em;}
+#tcsc .tb-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.6em 1.4em;margin:0 0 1.5em;box-shadow:0 6px 24px rgba(22,38,63,.06);}
+#tcsc h2{font-size:1.3em;color:var(--navy);margin:0 0 .3em;}
+#tcsc h3{font-size:1.05em;color:var(--navy);margin:0 0 .3em;}
+#tcsc .tb-sub{font-size:.95em;margin:.2em 0 1.1em;line-height:1.5;}
+#tcsc .sc-search{width:100%;padding:.72em .9em;font-size:1em;color:var(--navy);background:#fff;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;margin:0 0 1em;}
+#tcsc .sc-search:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(226,164,60,.22);}
+#tcsc .sc-cat{margin:0 0 1.1em;}
+#tcsc .sc-cat-h{font-size:.78em;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-d);margin:0 0 .45em;}
+#tcsc .sc-chips{display:flex;flex-wrap:wrap;gap:.45em;}
+#tcsc .sc-chip{padding:.42em .85em;border:1.5px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);font-size:.88em;font-weight:600;cursor:pointer;font-family:inherit;line-height:1.2;}
+#tcsc .sc-chip:hover{border-color:var(--gold);}
+#tcsc .sc-chip.on{background:var(--navy);border-color:var(--navy);color:#fff;}
+#tcsc .sc-chip.on::before{content:"\2713\00a0";color:var(--gold);font-weight:800;}
+#tcsc .sc-chip.on em{font-style:normal;font-size:.85em;font-weight:800;margin-left:.4em;}
+#tcsc .sc-chip.on.w em{color:#8fd7ae;}
+#tcsc .sc-chip.on.lo em{color:#f3a89e;}
+#tcsc .sc-more{padding:.42em .85em;border:1.5px dashed #cbd5e1;border-radius:999px;background:#fff;color:#68748a;font-size:.85em;font-weight:700;cursor:pointer;font-family:inherit;}
+#tcsc .sc-more:hover{border-color:var(--gold);color:var(--gold-d);}
+#tcsc .sc-bar{display:flex;align-items:center;justify-content:space-between;gap:1em;margin:1.1em 0 0;flex-wrap:wrap;}
+#tcsc .sc-count{font-size:.92em;font-weight:800;color:var(--navy);}
+#tcsc .sc-clear{background:none;border:none;color:var(--red);font-size:.88em;font-weight:700;cursor:pointer;font-family:inherit;padding:0;}
+#tcsc .tb-row{display:flex;gap:.6em;align-items:center;flex-wrap:wrap;}
+#tcsc .tb-money{position:relative;flex:0 0 7.4em;}
+#tcsc .tb-money>span{position:absolute;left:.7em;top:50%;transform:translateY(-50%);color:#8a94a6;pointer-events:none;}
+#tcsc .tb-money input{width:100%;padding:.72em .8em .72em 1.7em;font-size:1em;color:var(--navy);background:#fff;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;text-align:right;}
+#tcsc .tb-money input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(226,164,60,.22);}
+#tcsc .tb-result{text-align:center;padding:.6em 0 .2em;}
+#tcsc .tb-r-label{font-size:.85em;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-d);margin:0;}
+#tcsc .tb-r-big{font-size:2em;font-weight:800;color:var(--navy);letter-spacing:-.02em;line-height:1.15;margin:.15em 0;}
+#tcsc .tb-r-big.bad{color:var(--red);}
+#tcsc .tb-r-big.good{color:var(--green);}
+#tcsc .tb-r-sub{font-size:1em;margin:.4em auto 0;max-width:34em;line-height:1.55;}
+#tcsc .tb-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(9em,1fr));gap:.8em;margin:1.2em 0 0;}
+#tcsc .tb-stat{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:.8em;text-align:center;}
+#tcsc .tb-stat b{display:block;font-size:1.25em;color:var(--navy);}
+#tcsc .tb-stat span{font-size:.8em;color:#68748a;}
+#tcsc .sc-rec{margin:1.3em 0 0;}
+#tcsc .sc-rec-h{font-size:.85em;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin:0 0 .5em;}
+#tcsc .sc-rec-h.win{color:var(--green);}
+#tcsc .sc-rec-h.loss{color:var(--red);}
+#tcsc .sc-line{display:flex;justify-content:space-between;gap:.8em;font-size:.9em;padding:.35em 0;border-bottom:1px dotted var(--line);}
+#tcsc .sc-line span:first-child{color:var(--navy);font-weight:700;}
+#tcsc .sc-line span:last-child{text-align:right;font-variant-numeric:tabular-nums;}
+#tcsc .sc-line .g{color:var(--green);font-weight:700;}
+#tcsc .sc-line .r{color:var(--red);font-weight:700;}
+#tcsc .sc-math{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:.9em 1.1em;font-size:.88em;line-height:1.6;margin:1.3em 0 0;}
+#tcsc .sc-math b{color:var(--navy);}
+#tcsc .sc-cave{background:#fdf8ec;border:1px solid #eee3c8;border-radius:12px;padding:1em 1.2em;font-size:.9em;line-height:1.55;margin:0 0 1.5em;}
+#tcsc .sc-cave h3{color:var(--gold-d);}
+#tcsc .sc-cave ul{margin:.4em 0 0;padding-left:1.2em;}
+#tcsc .sc-cave li{margin:0 0 .35em;}
+#tcsc .tb-actions{display:flex;gap:.8em;flex-wrap:wrap;justify-content:center;margin:1.6em 0 .4em;}
+#tcsc .tb-btn{padding:.9em 1.7em;border:none;border-radius:10px;font-size:1em;font-weight:800;cursor:pointer;font-family:inherit;}
+#tcsc .tb-btn-ghost{background:#fff;color:var(--red);border:1.5px solid #f2c9c5;}
+#tcsc .tb-saved{text-align:center;font-size:.85em;color:#8a94a6;margin:.4em 0 0;min-height:1.3em;}
+@media (max-width:560px){
+  #tcsc .tb-card{padding:1.2em 1em;}
+  #tcsc .tb-r-big{font-size:1.6em;}
+}
+</style>
+
+<p style="font-size:1.05em;line-height:1.6;margin:0 0 1.2em;">Every budget family has had this argument in the car: is the Sam&rsquo;s Club membership actually paying for itself? Here is the honest answer, from real Omaha shelf prices we track every week. Tap the items you actually buy, tell us what you spend on them in a month, and we will run the math: Sam&rsquo;s bulk price vs the best regular store in town, minus the membership fee. Sometimes Sam&rsquo;s wins big. Sometimes the weekly ads quietly beat it. Your basket decides.</p>
+<div class="tb-privacy"><span class="tb-lock">&#128274;</span><span><b>Your picks stay on this device.</b> They save automatically in your browser and never leave it. Hit &ldquo;Erase my picks&rdquo; anytime.</span></div>
+
+<div class="tb-card">
+  <h2>What do you regularly buy?</h2>
+  <p class="tb-sub">Tap everything that goes in your cart most months. After you tap, each item shows how Sam&rsquo;s stacks up: a green number means Sam&rsquo;s wins on it right now, a red one means another store beats Sam&rsquo;s.</p>
+  <input type="text" class="sc-search" id="sc-search" placeholder="Search items (chicken, butter, rice...)" maxlength="40">
+  <div id="sc-cats"></div>
+  <div class="sc-bar">
+    <span class="sc-count" id="sc-count"></span>
+    <button class="sc-clear" id="sc-clearsel" type="button">Clear all picks</button>
+  </div>
+</div>
+
+<div class="tb-card">
+  <h2>Your monthly spend</h2>
+  <p class="tb-sub">About how much do you spend a month on the items you tapped? A rough number is fine; you can nudge it and watch the verdict move.</p>
+  <div class="tb-row">
+    <span class="tb-money"><span>$</span><input type="text" inputmode="decimal" id="sc-spend" value="200" maxlength="7" aria-label="Monthly spend on tapped items"></span>
+    <span style="font-size:.9em;color:#68748a;">per month on these items</span>
+  </div>
+</div>
+
+<div class="tb-card" id="sc-out" style="display:none">
+  <div class="tb-result">
+    <p class="tb-r-label">The verdict</p>
+    <p class="tb-r-big" id="sc-verdict"></p>
+    <p class="tb-r-sub" id="sc-vsub"></p>
+  </div>
+  <div class="tb-stats" id="sc-stats"></div>
+  <div class="sc-rec" id="sc-wins"></div>
+  <div class="sc-rec" id="sc-losses"></div>
+  <div class="sc-math" id="sc-math"></div>
+</div>
+
+<div class="sc-cave">
+  <h3>Read this before you decide</h3>
+  <ul>
+    <li><b>Bulk sizes are the catch.</b> Sam&rsquo;s prices assume you buy the big pack and actually use it. If half the 3-pound bag of spinach dies in the fridge, your real savings die with it.</li>
+    <li><b>Gas and trips count.</b> If Sam&rsquo;s means an extra drive across town every week, knock a few dollars a month off whatever this tool shows you.</li>
+    <li><b>The fee here is the basic $50 Club tier.</b> The $110 Plus line is shown too, but Plus perks (early hours, fuel discounts, 2% back) are not in this math.</li>
+    <li><b>Prices are from the week of <span id="sc-week"></span></b> and refresh weekly. Sale prices come and go; run your basket again next week if it was a close call.</li>
+    <li><b>This is based on <span id="sc-nitems"></span> tracked items,</b> not the whole store. Electronics, clothes, tires, and the food court are on you.</li>
+  </ul>
+</div>
+
+<div class="tb-actions">
+  <button class="tb-btn tb-btn-ghost" id="sc-erase" type="button">Erase my picks</button>
+</div>
+<p class="tb-saved" id="sc-saved"></p>
+
+<script>
+var SC={week:"2026-07-08",fee:50,feePlus:110,items:[{"k":"fries","l":"Fries","u":"oz","c":"Produce","s":0.0334,"o":0.092,"os":"Walmart","sp":0.637},{"k":"toasted-sesame-seeds","l":"Toasted Sesame Seeds","u":"oz","c":"Spices & Baking","s":0.36,"o":0.784,"os":"Walmart","sp":0.5408},{"k":"curry-powder","l":"Curry Powder","u":"oz","c":"Spices & Baking","s":0.5,"o":1.04,"os":"Walmart","sp":0.5192},{"k":"ground-turmeric","l":"Ground Turmeric","u":"oz","c":"Spices & Baking","s":0.399,"o":0.815,"os":"Walmart","sp":0.5104},{"k":"brown-sugar","l":"Brown Sugar","u":"oz","c":"Spices & Baking","s":0.03,"o":0.0588,"os":"Hy-Vee","sp":0.4898},{"k":"feta-cheese","l":"Feta Cheese","u":"oz","c":"Dairy & Cheese","s":0.3033,"o":0.5225,"os":"Aldi","sp":0.4195},{"k":"olive-oil","l":"Olive Oil","u":"floz","c":"Sauces & Condiments","s":0.19,"o":0.324,"os":"Walmart","sp":0.4136},{"k":"golden-raisins","l":"Golden Raisins","u":"oz","c":"Spices & Baking","s":0.13,"o":0.22,"os":"Aldi","sp":0.4091},{"k":"jasmine-rice","l":"Jasmine Rice (Dry)","u":"oz","c":"Pasta, Rice & Grains","s":0.05,"o":0.078,"os":"Walmart","sp":0.359},{"k":"buffalo-wing-sauce","l":"Buffalo Wing Sauce","u":"floz","c":"Sauces & Condiments","s":0.13,"o":0.1958,"os":"Aldi","sp":0.3361},{"k":"worcestershire-sauce","l":"Worcestershire Sauce","u":"floz","c":"Sauces & Condiments","s":0.0686,"o":0.1,"os":"Hy-Vee","sp":0.314},{"k":"mozzarella-cheese","l":"Mozzarella Cheese","u":"oz","c":"Dairy & Cheese","s":0.1521,"o":0.218,"os":"Walmart","sp":0.3023},{"k":"cream-cheese","l":"Cream Cheese","u":"oz","c":"Dairy & Eggs","s":0.13,"o":0.1856,"os":"Walmart","sp":0.2996},{"k":"red-pepper-flakes","l":"Red Pepper Flakes","u":"oz","c":"Spices & Baking","s":0.433,"o":0.595,"os":"Walmart","sp":0.2723},{"k":"dried-thyme","l":"Dried Thyme","u":"oz","c":"Spices & Baking","s":0.8776,"o":1.16,"os":"Walmart","sp":0.2434},{"k":"white-mushrooms","l":"White Mushrooms","u":"oz","c":"Produce","s":0.17,"o":0.22,"os":"Aldi","sp":0.2273},{"k":"tomato-paste","l":"Tomato Paste","u":"oz","c":"Beans & Canned","s":0.1117,"o":0.1433,"os":"Walmart","sp":0.2205},{"k":"all-purpose-flour","l":"All-Purpose Flour","u":"oz","c":"Spices & Baking","s":0.0212,"o":0.0269,"os":"Aldi","sp":0.2119},{"k":"black-pepper","l":"Black Pepper","u":"oz","c":"Spices & Baking","s":0.4433,"o":0.5556,"os":"Baker's","sp":0.2021},{"k":"pork-tenderloin","l":"Pork Tenderloin","u":"lb","c":"Meat & Poultry","s":2.94,"o":3.59,"os":"Aldi","sp":0.1811},{"k":"reduced-fat-mozzarella","l":"Part-Skim Mozzarella, Shredded","u":"oz","c":"Cheese & Dairy","s":0.18,"o":0.218,"os":"Walmart","sp":0.1743},{"k":"cheddar-cheese-shredded","l":"Cheddar Cheese, Shredded","u":"oz","c":"Cheese & Dairy","s":0.18,"o":0.218,"os":"Walmart","sp":0.1743},{"k":"chicken-thighs","l":"Chicken Thighs / Drumsticks","u":"lb","c":"Meat & Poultry","s":1.28,"o":1.55,"os":"Aldi","sp":0.1742},{"k":"onions","l":"Yellow / Sweet Onions","u":"lb","c":"Vegetables","s":0.74,"o":0.8833,"os":"Aldi","sp":0.1622},{"k":"cheddar-cheese","l":"Cheddar Cheese","u":"oz","c":"Dairy & Cheese","s":0.1763,"o":0.21,"os":"Walmart","sp":0.1605},{"k":"strawberries","l":"Strawberries","u":"oz","c":"Fruit","s":0.1241,"o":0.1475,"os":"Walmart","sp":0.1586},{"k":"sun-dried-tomatoes","l":"Sun-Dried Tomatoes","u":"oz","c":"Beans & Canned","s":0.42,"o":0.499,"os":"Hy-Vee","sp":0.1583},{"k":"salsa","l":"Salsa","u":"oz","c":"Sauces & Condiments","s":0.1,"o":0.1188,"os":"Aldi","sp":0.1582},{"k":"sugar","l":"Sugar","u":"oz","c":"Spices & Baking","s":0.0411,"o":0.0488,"os":"Hy-Vee","sp":0.1578},{"k":"red-bell-pepper","l":"Red Bell Pepper","u":"each","c":"Produce","s":0.83,"o":0.98,"os":"Walmart","sp":0.1531},{"k":"diced-tomatoes","l":"Diced Tomatoes","u":"oz","c":"Beans & Canned","s":0.0559,"o":0.066,"os":"Walmart","sp":0.153},{"k":"ginger","l":"Ginger","u":"lb","c":"Produce","s":3.41,"o":3.97,"os":"Walmart","sp":0.1411},{"k":"half-and-half","l":"Half and Half","u":"floz","c":"Dairy & Cheese","s":0.0675,"o":0.078,"os":"Baker's","sp":0.1346},{"k":"93-7-ground-beef","l":"93/7 Ground Beef","u":"lb","c":"Meat & Poultry","s":6.17,"o":6.97,"os":"Walmart","sp":0.1148},{"k":"ground-beef-8020","l":"80/20 Ground Beef","u":"lb","c":"Meat & Poultry","s":5.56,"o":6.28,"os":"Walmart","sp":0.1146},{"k":"tomato-sauce","l":"Tomato Sauce","u":"oz","c":"Beans & Canned","s":0.05,"o":0.056,"os":"Walmart","sp":0.1071},{"k":"parmesan-cheese","l":"Parmesan Cheese, Grated","u":"oz","c":"Cheese & Dairy","s":0.31,"o":0.343,"os":"Walmart","sp":0.0962},{"k":"carrots","l":"Carrots","u":"lb","c":"Produce","s":0.87,"o":0.96,"os":"Walmart","sp":0.0937},{"k":"olives","l":"Olives","u":"oz","c":"Sauces & Condiments","s":0.21,"o":0.23,"os":"Aldi","sp":0.087},{"k":"butter","l":"Butter","u":"lb","c":"Dairy & Eggs","s":2.74,"o":2.99,"os":"Baker's","sp":0.0836},{"k":"bread-crumbs","l":"Bread Crumbs","u":"oz","c":"Spices & Baking","s":0.0744,"o":0.081,"os":"Walmart","sp":0.0815},{"k":"hot-sauce","l":"Hot Sauce","u":"floz","c":"Sauces & Condiments","s":0.12,"o":0.13,"os":"Baker's","sp":0.0769},{"k":"coconut-milk","l":"Coconut Milk (Canned)","u":"floz","c":"Beans & Canned","s":0.1369,"o":0.147,"os":"Walmart","sp":0.0687},{"k":"coffee","l":"Coffee (ground/beans)","u":"oz","c":"Pantry & Beverages","s":0.411,"o":0.44,"os":"Walmart","sp":0.0659},{"k":"pork-chops","l":"Pork Chops","u":"lb","c":"Meat & Poultry","s":2.52,"o":2.69,"os":"Aldi","sp":0.0632},{"k":"beef-chuck-roast","l":"Beef Chuck Roast","u":"lb","c":"Meat & Poultry","s":7.47,"o":7.97,"os":"Walmart","sp":0.0627},{"k":"orange-juice","l":"Orange Juice","u":"floz","c":"Pantry & Beverages","s":0.0648,"o":0.0687,"os":"Baker's","sp":0.0568},{"k":"93-7-ground-turkey","l":"93/7 Ground Turkey","u":"lb","c":"Meat & Poultry","s":4.33,"o":4.55,"os":"Walmart","sp":0.0484},{"k":"ground-cinnamon","l":"Ground Cinnamon","u":"oz","c":"Spices & Baking","s":0.4433,"o":0.4599,"os":"Aldi","sp":0.0361},{"k":"green-bell-pepper","l":"Green Bell Pepper","u":"each","c":"Spices & Baking","s":0.83,"o":0.86,"os":"Walmart","sp":0.0349},{"k":"ground-ginger","l":"Ground Ginger","u":"oz","c":"Spices & Baking","s":0.7971,"o":0.809,"os":"Walmart","sp":0.0147},{"k":"crushed-tomatoes","l":"Crushed Tomatoes","u":"oz","c":"Beans & Canned","s":0.0536,"o":0.0543,"os":"Walmart","sp":0.0129},{"k":"bacon","l":"Bacon","u":"lb","c":"Meat & Poultry","s":3.96,"o":3.995,"os":"Baker's","sp":0.0088},{"k":"pork-loin","l":"Pork Loin","u":"lb","c":"Meat & Poultry","s":1.98,"o":1.99,"os":"Baker's","sp":0.005},{"k":"hickory-smoked-bacon","l":"Hickory Smoked Bacon","u":"lb","c":"Meat & Poultry","s":3.96,"o":3.96,"os":"Walmart","sp":0},{"k":"chicken-broth","l":"Chicken Broth","u":"floz","c":"Meat & Poultry","s":0.04,"o":0.04,"os":"Walmart","sp":0},{"k":"peanut-butter","l":"Peanut Butter","u":"oz","c":"Pantry & Beverages","s":0.1,"o":0.0995,"os":"Walmart","sp":-0.005},{"k":"italian-seasoning","l":"Italian Seasoning","u":"oz","c":"Spices & Baking","s":1.15,"o":1.14,"os":"Walmart","sp":-0.0088},{"k":"shredded-cheese","l":"Shredded / Block Cheese","u":"oz","c":"Dairy & Eggs","s":0.19,"o":0.1862,"os":"Baker's","sp":-0.0204},{"k":"bananas","l":"Bananas","u":"lb","c":"Fruit","s":0.49,"o":0.48,"os":"Aldi","sp":-0.0208},{"k":"dried-oregano","l":"Dried Oregano","u":"oz","c":"Spices & Baking","s":1.0873,"o":1.064,"os":"Hy-Vee","sp":-0.0219},{"k":"potato","l":"Potato","u":"lb","c":"Produce","s":0.45,"o":0.44,"os":"Aldi","sp":-0.0227},{"k":"frozen-broccoli-florets","l":"Frozen Broccoli Florets","u":"oz","c":"Produce","s":0.0994,"o":0.097,"os":"Walmart","sp":-0.0247},{"k":"ground-cumin","l":"Ground Cumin","u":"oz","c":"Spices & Baking","s":0.56,"o":0.545,"os":"Aldi","sp":-0.0275},{"k":"paprika","l":"Paprika","u":"oz","c":"Spices & Baking","s":0.45,"o":0.432,"os":"Walmart","sp":-0.0417},{"k":"sour-cream","l":"Sour Cream","u":"oz","c":"Dairy & Eggs","s":0.12,"o":0.115,"os":"Walmart","sp":-0.0435},{"k":"russet-potatoes","l":"Russet Potatoes","u":"lb","c":"Vegetables","s":0.46,"o":0.439,"os":"Aldi","sp":-0.0478},{"k":"vegetable-oil","l":"Vegetable Oil","u":"floz","c":"Oils","s":0.0723,"o":0.068,"os":"Walmart","sp":-0.0632},{"k":"soy-sauce","l":"Soy Sauce","u":"oz","c":"Sauces & Condiments","s":0.12,"o":0.112,"os":"Walmart","sp":-0.0714},{"k":"cashews","l":"Cashews","u":"oz","c":"Spices & Baking","s":0.42,"o":0.39,"os":"Aldi","sp":-0.0769},{"k":"salt","l":"Salt","u":"oz","c":"Spices & Baking","s":0.0372,"o":0.0342,"os":"Aldi","sp":-0.0877},{"k":"provolone-cheese","l":"Provolone Cheese","u":"oz","c":"Cheese & Dairy","s":0.23,"o":0.209,"os":"Walmart","sp":-0.1005},{"k":"cayenne-pepper","l":"Cayenne Pepper","u":"oz","c":"Spices & Baking","s":0.4738,"o":0.4167,"os":"Hy-Vee","sp":-0.137},{"k":"penne-pasta","l":"Penne Pasta","u":"oz","c":"Pasta, Rice & Grains","s":0.0888,"o":0.078,"os":"Walmart","sp":-0.1385},{"k":"cottage-cheese","l":"Cottage Cheese","u":"oz","c":"Dairy & Eggs","s":0.1369,"o":0.1196,"os":"Walmart","sp":-0.1446},{"k":"swiss-cheese","l":"Swiss Cheese","u":"oz","c":"Dairy & Cheese","s":0.2444,"o":0.209,"os":"Walmart","sp":-0.1694},{"k":"hot-honey","l":"Hot Honey","u":"oz","c":"Sauces & Condiments","s":0.48,"o":0.3992,"os":"Aldi","sp":-0.2024},{"k":"kidney-beans","l":"Kidney Beans","u":"oz","c":"Beans & Canned","s":0.0684,"o":0.055,"os":"Walmart","sp":-0.2436},{"k":"chickpeas","l":"Chickpeas","u":"oz","c":"Beans & Canned","s":0.0684,"o":0.055,"os":"Walmart","sp":-0.2436},{"k":"milk","l":"Milk (gallon)","u":"gallon","c":"Dairy & Eggs","s":3.72,"o":2.99,"os":"Hy-Vee","sp":-0.2441},{"k":"boneless-skinless-chicken-thigh","l":"Boneless Skinless Chicken Thigh","u":"lb","c":"Meat & Poultry","s":2.48,"o":1.99,"os":"Hy-Vee","sp":-0.2462},{"k":"chicken-breast","l":"Boneless Skinless Chicken Breast","u":"lb","c":"Meat & Poultry","s":2.88,"o":2.29,"os":"Baker's","sp":-0.2576},{"k":"teriyaki-sauce","l":"Teriyaki Sauce","u":"floz","c":"Sauces & Condiments","s":0.21,"o":0.165,"os":"Walmart","sp":-0.2727},{"k":"onion-powder","l":"Onion Powder","u":"oz","c":"Spices & Baking","s":0.43,"o":0.332,"os":"Walmart","sp":-0.2952},{"k":"yogurt","l":"Yogurt","u":"oz","c":"Dairy & Eggs","s":0.1098,"o":0.0825,"os":"Walmart","sp":-0.3309},{"k":"canned-sweet-corn","l":"Canned Sweet Corn","u":"each","c":"Beans & Canned","s":1.05,"o":0.78,"os":"Walmart","sp":-0.3462},{"k":"grapes","l":"Grapes","u":"lb","c":"Fruit","s":2.29,"o":1.69,"os":"Aldi","sp":-0.355},{"k":"apples","l":"Apples","u":"lb","c":"Fruit","s":1.49,"o":1.08,"os":"Walmart","sp":-0.3796},{"k":"peaches","l":"Peaches","u":"lb","c":"Fruit","s":2.47,"o":1.79,"os":"Baker's","sp":-0.3799},{"k":"white-vinegar","l":"White Vinegar","u":"oz","c":"Sauces & Condiments","s":0.047,"o":0.034,"os":"Family Fare","sp":-0.3824},{"k":"taco-seasoning","l":"Taco Seasoning Packet","u":"each","c":"Spices & Baking","s":0.65,"o":0.47,"os":"Walmart","sp":-0.383},{"k":"garlic-powder","l":"Garlic Powder","u":"oz","c":"Spices & Baking","s":0.44,"o":0.318,"os":"Walmart","sp":-0.3836},{"k":"chili-powder","l":"Chili Powder","u":"oz","c":"Spices & Baking","s":0.5,"o":0.36,"os":"Walmart","sp":-0.3889},{"k":"dried-parsley","l":"Dried Parsley","u":"oz","c":"Spices & Baking","s":2.0125,"o":1.44,"os":"Walmart","sp":-0.3976},{"k":"tomatillos","l":"Tomatillos","u":"lb","c":"Produce","s":2.88,"o":1.99,"os":"Family Fare","sp":-0.4472},{"k":"bread","l":"Bread (loaf)","u":"each","c":"Pantry & Beverages","s":1.76,"o":1.19,"os":"Baker's","sp":-0.479},{"k":"pineapple-chunks","l":"Pineapple Chunks","u":"oz","c":"Beans & Canned","s":0.12,"o":0.081,"os":"Hy-Vee","sp":-0.4815},{"k":"sriracha","l":"Sriracha","u":"floz","c":"Sauces & Condiments","s":0.3207,"o":0.2139,"os":"Baker's","sp":-0.4993},{"k":"1-3-fat-cream-cheese","l":"1/3 Fat Cream Cheese","u":"oz","c":"Cheese & Dairy","s":0.2275,"o":0.1488,"os":"Aldi","sp":-0.5289},{"k":"sweet-corn","l":"Sweet Corn (ear)","u":"each","c":"Vegetables","s":0.62,"o":0.4,"os":"Baker's","sp":-0.55},{"k":"eggs","l":"Large Eggs (dozen)","u":"dozen","c":"Dairy & Eggs","s":2.31,"o":1.47,"os":"Walmart","sp":-0.5714},{"k":"apple","l":"Apple","u":"each","c":"Produce","s":0.62,"o":0.39,"os":"Walmart","sp":-0.5897},{"k":"cornstarch","l":"Cornstarch","u":"oz","c":"Spices & Baking","s":0.2,"o":0.12,"os":"Walmart","sp":-0.6667},{"k":"cucumber","l":"Cucumber","u":"each","c":"Produce","s":1.09,"o":0.65,"os":"Aldi","sp":-0.6769},{"k":"ketchup","l":"Ketchup","u":"oz","c":"Sauces & Condiments","s":0.08,"o":0.047,"os":"Walmart","sp":-0.7021},{"k":"ground-turkey","l":"Ground Turkey","u":"lb","c":"Meat & Poultry","s":4.55,"o":2.6633,"os":"Aldi","sp":-0.7084},{"k":"light-sour-cream","l":"Light Sour Cream","u":"oz","c":"Cheese & Dairy","s":0.18,"o":0.1044,"os":"Baker's","sp":-0.7241},{"k":"greek-yogurt","l":"Greek Yogurt","u":"oz","c":"Cheese & Dairy","s":0.1556,"o":0.0872,"os":"Aldi","sp":-0.7844},{"k":"avocados","l":"Avocados","u":"each","c":"Fruit","s":1.07,"o":0.59,"os":"Aldi","sp":-0.8136},{"k":"blueberries","l":"Blueberries","u":"oz","c":"Fruit","s":0.4719,"o":0.2578,"os":"Walmart","sp":-0.8305},{"k":"frozen-green-peas","l":"Frozen Green Peas","u":"oz","c":"Produce","s":0.1442,"o":0.078,"os":"Walmart","sp":-0.8487},{"k":"watermelon","l":"Whole Watermelon","u":"each","c":"Fruit","s":6.97,"o":2.99,"os":"Baker's","sp":-1.3311},{"k":"apple-cider-vinegar","l":"Apple Cider Vinegar","u":"floz","c":"Sauces & Condiments","s":0.1327,"o":0.052,"os":"Walmart","sp":-1.5519},{"k":"bay-leaves","l":"Bay Leaves","u":"oz","c":"Spices & Baking","s":4.27,"o":1.25,"os":"Walmart","sp":-2.416},{"k":"lemon-juice","l":"Lemon Juice","u":"floz","c":"Beverages","s":0.135,"o":0.035,"os":"Walmart","sp":-2.8571},{"k":"zero-sugar-soda-2l","l":"Zero-Sugar Soda (2 L)","u":"floz","c":"Sauces & Condiments","s":0.04,"o":0.01,"os":"Baker's","sp":-3}]};
+(function(){
+  var root = document.getElementById('tcsc');
+  if (!root || typeof SC === 'undefined') return;
+  var KEY = 'tcsc-v1';
+  var SHOW_N = 12;
+  var GROUPS = [
+    {t:'Meat & Poultry', re:/meat|poultry|seafood/i},
+    {t:'Dairy & Eggs',   re:/dairy|cheese|egg/i},
+    {t:'Produce',        re:/produce|fruit|veg/i},
+    {t:'Pantry & more',  re:/./}
+  ];
+  function groupOf(c){ for (var g = 0; g < GROUPS.length; g++) if (GROUPS[g].re.test(c)) return g; return GROUPS.length - 1; }
+  var byKey = {};
+  for (var i = 0; i < SC.items.length; i++) byKey[SC.items[i].k] = SC.items[i];
+
+  var S;
+  try { S = JSON.parse(localStorage.getItem(KEY)) || null; } catch(e){ S = null; }
+  if (!S || !S.have) S = { have: [], spend: 200 };
+  var haveSet = {};
+  for (i = 0; i < S.have.length; i++) if (byKey[S.have[i]]) haveSet[S.have[i]] = true;
+  // cross-tool seed: first visit with nothing tapped, but a My Staples list exists on this
+  // device. Start the basket with the staples we also track at Sam's. One-time convenience;
+  // the user's own taps always win after that.
+  var seededFromStaples = false;
+  try {
+    if (!S.have.length) {
+      var stRaw = JSON.parse(localStorage.getItem('tcst-v1'));
+      if (stRaw && stRaw.have && stRaw.have.length) {
+        for (i = 0; i < stRaw.have.length; i++) {
+          if (byKey[stRaw.have[i]]) { haveSet[stRaw.have[i]] = true; seededFromStaples = true; }
+        }
+      }
+    }
+  } catch(e){}
+  var expanded = {};
+
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function money(x){ return '$' + Math.round(x).toLocaleString('en-US'); }
+  function money2(x){ return '$' + (x < 1 ? (Math.round(x*1000)/1000).toFixed(3) : (Math.round(x*100)/100).toFixed(2)); }
+  function num(x){ var n = parseFloat(String(x).replace(/[^0-9.]/g,'')); return isNaN(n) ? 0 : n; }
+  function pct(x){ return (Math.round(x*1000)/10) + '%'; }
+
+  var saveT = null;
+  function save(){ clearTimeout(saveT); saveT = setTimeout(function(){ try {
+    S.have = []; for (var k in haveSet) if (haveSet[k]) S.have.push(k);
+    S.spend = num(document.getElementById('sc-spend').value);
+    localStorage.setItem(KEY, JSON.stringify(S));
+    var el = document.getElementById('sc-saved');
+    el.textContent = 'Saved on this device just now.';
+    setTimeout(function(){ if (el.textContent === 'Saved on this device just now.') el.textContent = ''; }, 2200);
+  } catch(e){} }, 400); }
+
+  function chipHtml(it){
+    var on = haveSet[it.k];
+    var cls = 'sc-chip' + (on ? ' on' + (it.sp > 0 ? ' w' : (it.sp < 0 ? ' lo' : '')) : '');
+    var tag = '';
+    if (on && it.sp !== 0) tag = '<em>' + (it.sp > 0 ? '+' : '') + Math.round(it.sp * 100) + '%</em>';
+    return '<button type="button" class="'+cls+'" data-k="'+esc(it.k)+'" aria-pressed="'+(on?'true':'false')+'">'+esc(it.l)+tag+'</button>';
+  }
+
+  function renderCats(){
+    var q = document.getElementById('sc-search').value.trim().toLowerCase();
+    var h = '';
+    for (var g = 0; g < GROUPS.length; g++){
+      var items = [];
+      for (var i = 0; i < SC.items.length; i++){ var it = SC.items[i];
+        if (groupOf(it.c) !== g) continue;
+        if (q && it.l.toLowerCase().indexOf(q) < 0) continue;
+        items.push(it);
+      }
+      if (!items.length) continue;
+      var lim = (q || expanded[g]) ? items.length : SHOW_N;
+      var shown = [], hid = 0;
+      for (i = 0; i < items.length; i++){
+        if (i < lim || haveSet[items[i].k]) shown.push(items[i]); else hid++;
+      }
+      h += '<div class="sc-cat"><p class="sc-cat-h">'+GROUPS[g].t+'</p><div class="sc-chips">';
+      for (i = 0; i < shown.length; i++) h += chipHtml(shown[i]);
+      if (hid > 0) h += '<button type="button" class="sc-more" data-g="'+g+'">+ '+hid+' more</button>';
+      h += '</div></div>';
+    }
+    document.getElementById('sc-cats').innerHTML = h || '<p class="tb-sub">Nothing matches that search.</p>';
+    var n = 0, wn = 0;
+    for (var k in haveSet) if (haveSet[k]){ n++; if (byKey[k].sp > 0) wn++; }
+    document.getElementById('sc-count').textContent = n ? (n + ' item' + (n>1?'s':'') + ' tapped. Samâ€™s wins on ' + wn + ' of them.') : 'Nothing tapped yet';
+  }
+
+  function calc(){
+    var out = document.getElementById('sc-out');
+    var picked = [];
+    for (var k in haveSet) if (haveSet[k]) picked.push(byKey[k]);
+    if (!picked.length){ out.style.display = 'none'; return; }
+    out.style.display = '';
+    var spend = num(document.getElementById('sc-spend').value);
+
+    // blended spread: equal-weight average across tapped items, losses included
+    var blended = 0;
+    for (var i = 0; i < picked.length; i++) blended += picked[i].sp;
+    blended = blended / picked.length;
+
+    var gross = Math.max(0.0, spend * 12 * blended);   // annual savings before the fee
+    var net = gross - SC.fee;
+    var netPlus = gross - SC.feePlus;
+    var beSpend = blended > 0 ? (SC.fee / (12 * blended)) : 0;      // monthly spend to break even on $50
+    var beMonths = (blended > 0 && spend > 0) ? (SC.fee / (spend * blended)) : 0;
+
+    var vEl = document.getElementById('sc-verdict'), sEl = document.getElementById('sc-vsub');
+    vEl.className = 'tb-r-big';
+    if (blended <= 0 || net < 0){
+      vEl.classList.add('bad');
+      if (blended <= 0){
+        vEl.textContent = 'Skip it. The weekly ads beat Samâ€™s for your basket.';
+        sEl.textContent = 'Across the items you tapped, Samâ€™s runs an average of ' + pct(Math.abs(blended)) + ' above the best regular storeâ€™s price right now. There are no savings to put against the fee, so the membership is a straight cost for this basket.';
+      } else {
+        vEl.textContent = 'Skip it. Not at ' + money(spend) + ' a month.';
+        sEl.textContent = 'Samâ€™s does save your basket about ' + pct(blended) + ' per dollar, roughly ' + money(gross) + ' a year, but that does not cover the $' + SC.fee + ' fee. You would need to spend about ' + money(beSpend) + ' a month on these items just to break even.';
+      }
+    } else if (net < SC.fee){
+      vEl.classList.add('good');
+      vEl.textContent = 'Close call: about ' + money(net) + ' a year ahead.';
+      sEl.textContent = 'Samâ€™s saves your basket about ' + pct(blended) + ' per dollar. After the $' + SC.fee + ' fee you keep roughly ' + money(net) + ' a year. Real, but thin. One bad month of wasted bulk produce could eat it.';
+    } else {
+      vEl.classList.add('good');
+      vEl.textContent = 'Worth it: about ' + money(net) + ' a year ahead.';
+      sEl.textContent = 'Samâ€™s saves your basket about ' + pct(blended) + ' per dollar. Even after the $' + SC.fee + ' fee you keep roughly ' + money(net) + ' a year. The fee pays for itself in about ' + (Math.round(beMonths*10)/10) + ' months of shopping.';
+    }
+
+    var st = '';
+    st += '<div class="tb-stat"><b>' + (gross > 0 ? money(gross) : '$0') + '</b><span>saved per year, before the fee</span></div>';
+    st += '<div class="tb-stat"><b>' + money(net) + '</b><span>net per year vs the $50 Club fee</span></div>';
+    st += '<div class="tb-stat"><b>' + money(netPlus) + '</b><span>net per year vs the $110 Plus fee</span></div>';
+    if (blended > 0){
+      st += '<div class="tb-stat"><b>' + money(beSpend) + '/mo</b><span>spend needed to break even on $50</span></div>';
+      if (beMonths > 0) st += '<div class="tb-stat"><b>' + (Math.round(beMonths*10)/10) + ' months</b><span>of shopping to cover the $50 fee</span></div>';
+    }
+    document.getElementById('sc-stats').innerHTML = st;
+
+    var wins = [], losses = [];
+    for (i = 0; i < picked.length; i++){ if (picked[i].sp > 0) wins.push(picked[i]); else if (picked[i].sp < 0) losses.push(picked[i]); }
+    wins.sort(function(a,b){ return b.sp - a.sp; });
+    losses.sort(function(a,b){ return a.sp - b.sp; });
+    function lines(arr, winSide){
+      var h = '';
+      for (var j = 0; j < arr.length; j++){ var it = arr[j];
+        h += '<div class="sc-line"><span>'+esc(it.l)+'</span><span>Samâ€™s <b class="'+(winSide?'g':'r')+'">'+money2(it.s)+'/'+esc(it.u)+'</b> vs '+money2(it.o)+'/'+esc(it.u)+' at '+esc(it.os)+'</span></div>';
+      }
+      return h;
+    }
+    document.getElementById('sc-wins').innerHTML = wins.length ? '<p class="sc-rec-h win">Your basketâ€™s Samâ€™s winners ('+wins.length+')</p>' + lines(wins, true) : '<p class="sc-rec-h loss">Samâ€™s does not win on a single item you tapped.</p>';
+    document.getElementById('sc-losses').innerHTML = losses.length ? '<p class="sc-rec-h loss">Your basketâ€™s losers: where another store beats Samâ€™s ('+losses.length+')</p>' + lines(losses, false) : '';
+
+    document.getElementById('sc-math').innerHTML = '<b>How we got that number, no hand-waving:</b> for each item you tapped, we compare Samâ€™s per-unit price to the cheapest per-unit price at any non-membership Omaha store we track (Walmart, Bakerâ€™s, Hy-Vee, Family Fare, Aldi). We average those spreads with every item counting equally, losers included. Annual savings = your ' + money(spend) + '/month times 12 times that blended ' + pct(blended) + ' spread' + (blended > 0 ? '' : ' (negative, so savings are clamped to $0)') + ', then we subtract the $' + SC.fee + ' membership. We do not weight by how much of each item you buy, because you did not tell us, and we would rather be simple and honest than precise and made up.';
+  }
+
+  function renderAll(){ renderCats(); calc(); }
+
+  root.addEventListener('click', function(e){
+    var chip = e.target.closest('.sc-chip');
+    if (chip){ var k = chip.getAttribute('data-k'); haveSet[k] = !haveSet[k]; if (!haveSet[k]) delete haveSet[k]; renderAll(); save(); return; }
+    var more = e.target.closest('.sc-more');
+    if (more){ expanded[more.getAttribute('data-g')] = true; renderCats(); return; }
+    if (e.target.id === 'sc-clearsel'){ haveSet = {}; renderAll(); save(); return; }
+    if (e.target.id === 'sc-erase'){
+      if (confirm('Erase your saved picks and spend from this device?')){
+        try { localStorage.removeItem(KEY); } catch(err){}
+        haveSet = {}; S = { have: [], spend: 200 };
+        document.getElementById('sc-spend').value = '200';
+        document.getElementById('sc-search').value = '';
+        renderAll();
+      }
+      return;
+    }
+  });
+  root.addEventListener('input', function(e){
+    if (e.target.id === 'sc-search'){ renderCats(); return; }
+    if (e.target.id === 'sc-spend'){ calc(); save(); }
+  });
+
+  document.getElementById('sc-week').textContent = SC.week;
+  document.getElementById('sc-nitems').textContent = SC.items.length;
+  if (S.spend && S.spend > 0) document.getElementById('sc-spend').value = String(S.spend);
+  renderAll();
+  if (seededFromStaples) {
+    save();
+    // save()'s own "Saved" toast fires at ~400ms and clears at ~2.6s; place this note after it
+    setTimeout(function(){
+      var note = document.getElementById('sc-saved');
+      note.textContent = 'We started with your My Staples list. Tap to adjust; your changes stick.';
+      setTimeout(function(){ if (note.textContent.indexOf('My Staples') >= 0) note.textContent = ''; }, 9000);
+    }, 2900);
+  }
+})();
+</script>
+</div>

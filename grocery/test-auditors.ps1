@@ -1,4 +1,4 @@
-﻿<#
+<#
   test-auditors.ps1 - proves the WATCHERS still work. Complements test-guards.ps1, which breaks a live
   invariant and asserts guards.ps1 exits 2; this one tests the auditors and alert plumbing that guards.ps1
   does not own, using FROZEN FIXTURES instead of mutating live data.
@@ -2308,5 +2308,17 @@ $r = RunPS 'fmt-lib.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'fmt-lib: per-unit display still rolls over at a dollar and still shows a real sub-cent price' }
 else { Bad ('fmt-lib -SelfTest failed (rc=' + $r.rc + ') - the board can print a three-digit cent price or a $0.00 record again: ' + ($r.text -replace "`n", ' ')) }
 
+# ---- (i) THE TWO ACCURACY WATCHERS ADDED 2026-08-01 ---------------------------------------------------
+# basis-outlier: catches a wrong BASIS by arithmetic when nothing in the row declares one - the Aldi
+# multipack shape, where the name, the size and the price are internally consistent and completely wrong.
+# consistency chip-kind: the ad-pill branch is a SKIP, and a skip with no must-fire behind it is how a
+# guard stops being able to see its own bug. Its fixture proves a priced chip with NO link still breaches.
+$r = RunPS 'audit-unit-basis-outlier.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'basis-outlier: still catches a pack price on a single-unit size, and still stays silent on an ordinary premium spread' }
+else { Bad ('audit-unit-basis-outlier -SelfTest failed (rc=' + $r.rc + ') - a wrong-basis cell can reach the board unremarked: ' + ($r.text -replace "`n", ' ')) }
+
+$r = RunPS 'audit-board-consistency.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'board-consistency: a flyer-only ad pill is not a breach, and a priced chip with no link still is' }
+else { Bad ('audit-board-consistency -SelfTest failed (rc=' + $r.rc + ') - the ad-pill skip may now be swallowing genuinely linkless prices: ' + ($r.text -replace "`n", ' ')) }
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2

@@ -1,0 +1,294 @@
+<div id="tcmc">
+<style>
+#tcmc{--navy:#16263f;--gold:#e2a43c;--gold-d:#8a6d1f;--ink:#3a4658;--line:#e2e8f0;--green:#1f7a4d;--red:#b23b2e;--soft:#fbfcfe;
+  max-width:760px;margin:0 auto;font-size:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);}
+#tcmc *{box-sizing:border-box;}
+#tcmc .tb-privacy{display:flex;gap:.7em;align-items:flex-start;background:#fdf8ec;border:1px solid #eee3c8;border-radius:12px;padding:.9em 1.1em;font-size:.92em;line-height:1.5;margin:0 0 1.6em;}
+#tcmc .tb-privacy b{color:var(--navy);}
+#tcmc .tb-lock{flex:0 0 auto;width:1.6em;height:1.6em;border-radius:50%;background:var(--gold);color:var(--navy);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.95em;}
+#tcmc .mc-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.4em 1.4em;margin:0 0 1.2em;box-shadow:0 6px 24px rgba(22,38,63,.06);}
+#tcmc .mc-head{display:flex;align-items:baseline;justify-content:space-between;gap:.8em;flex-wrap:wrap;margin:0 0 .55em;}
+#tcmc .mc-head h2{font-size:1.15em;color:var(--navy);margin:0;}
+#tcmc .mc-go{font-size:.82em;font-weight:700;color:var(--gold-d);text-decoration:none;white-space:nowrap;}
+#tcmc .mc-go:hover{color:var(--navy);}
+#tcmc .mc-big{font-size:1.28em;font-weight:800;color:var(--navy);line-height:1.3;margin:.1em 0 .2em;}
+#tcmc .mc-big b{color:var(--green);}
+#tcmc .mc-big .neg{color:var(--red);}
+#tcmc .mc-line{font-size:.95em;line-height:1.55;margin:.35em 0 0;}
+#tcmc .mc-line b{color:var(--navy);}
+#tcmc .mc-line a{color:var(--navy);font-weight:700;text-decoration:none;border-bottom:2px solid var(--gold);}
+#tcmc .mc-line a:hover{color:var(--gold-d);}
+#tcmc .mc-warn{display:inline-block;background:#fdf8ec;color:var(--gold-d);border:1px solid #ecd9ae;font-size:.78em;font-weight:800;padding:.2em .7em;border-radius:999px;margin:.45em .35em 0 0;}
+#tcmc .mc-warn.urgent{background:var(--red);border-color:var(--red);color:#fff;}
+#tcmc .mc-low{display:inline-block;background:var(--green);color:#fff;font-size:.7em;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:999px;vertical-align:2px;}
+#tcmc .mc-empty{font-size:.95em;line-height:1.55;margin:.2em 0 0;}
+#tcmc .mc-empty a{color:var(--navy);font-weight:800;text-decoration:none;border-bottom:2px solid var(--gold);}
+#tcmc .mc-empty a:hover{color:var(--gold-d);}
+#tcmc .mc-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(8.5em,1fr));gap:.7em;margin:.8em 0 0;}
+#tcmc .mc-stat{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:.7em .6em;text-align:center;}
+#tcmc .mc-stat b{display:block;font-size:1.15em;color:var(--navy);font-variant-numeric:tabular-nums;}
+#tcmc .mc-stat b.pos{color:var(--green);}
+#tcmc .mc-stat b.neg{color:var(--red);}
+#tcmc .mc-stat span{font-size:.78em;color:#68748a;}
+#tcmc .mc-fresh{text-align:center;font-size:.82em;color:#8a94a6;margin:0 0 1.2em;min-height:1.2em;}
+#tcmc .mc-tools{margin:1.6em 0 0;padding:1.1em 1.2em;background:var(--soft);border:1px solid var(--line);border-radius:14px;}
+#tcmc .mc-tools-h{font-size:.8em;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-d);margin:0 0 .5em;}
+#tcmc .mc-tools p{font-size:.88em;line-height:1.9;margin:0;}
+#tcmc .mc-tools a{color:var(--navy);font-weight:700;text-decoration:none;white-space:nowrap;}
+#tcmc .mc-tools a:hover{color:var(--gold-d);border-bottom:2px solid var(--gold);}
+#tcmc .mc-tools .mem{font-size:.85em;color:#8a94a6;font-weight:400;}
+#tcmc .mc-tools .sep{color:#c3ccd8;margin:0 .35em;}
+@media (max-width:560px){ #tcmc .mc-card{padding:1.1em 1em;} #tcmc .mc-big{font-size:1.15em;} }
+</style>
+
+<p style="font-size:1.05em;line-height:1.6;margin:0 0 1.2em;">This page reads what you&rsquo;ve set up in the tools on this device and turns it into a quick morning briefing. Nothing leaves your browser, so what you see here is yours alone.</p>
+<div class="tb-privacy"><span class="tb-lock">&#128274;</span><span><b>Everything on this page lives on this device.</b> Your kitchen list, staples, subscriptions, and budget numbers are read straight from your own browser. We never see them.</span></div>
+
+<p class="mc-fresh" id="mc-fresh"></p>
+<div id="mc-cards"></div>
+
+<div class="mc-tools">
+  <p class="mc-tools-h">All the tools</p>
+  <p>
+    <a href="/whats-for-dinner-tonight/">What&rsquo;s for dinner tonight</a><span class="sep">&middot;</span>
+    <a href="/my-staples/">My staples</a><span class="sep">&middot;</span>
+    <a href="/payday-stretcher/">Payday stretcher</a><span class="sep">&middot;</span>
+    <a href="/money-leak-finder/">Money leak finder</a><span class="sep">&middot;</span>
+    <a href="/cheapest-protein/">Cheapest protein</a><span class="sep">&middot;</span>
+    <a href="/cheap-dinners-right-now/">Cheap dinners right now</a><span class="sep">&middot;</span>
+    <a href="/shop-smart-at-your-store/">Shop smart at your store</a><span class="sep">&middot;</span>
+    <a href="/omaha-grocery-prices/">Omaha grocery prices</a><span class="sep">&middot;</span>
+    <a href="/omaha-price-tracker/">Omaha price tracker</a><span class="sep">&middot;</span>
+    <a href="/free-price-widget/">Free price widget</a><span class="sep">&middot;</span>
+    <a href="/true-cost-calculator/">True cost calculator</a><span class="sep">&middot;</span>
+    <a href="/can-i-afford-this/">Can I afford this</a><span class="sep">&middot;</span>
+    <a href="/need-or-want/">Need or want</a><span class="sep">&middot;</span>
+    <a href="/where-do-you-stand/">Where do you stand</a><span class="sep">&middot;</span>
+    <a href="/budget-tracker/">Budget tracker <span class="mem">(member)</span></a><span class="sep">&middot;</span>
+    <a href="/subscription-tracker/">Subscription tracker <span class="mem">(member)</span></a><span class="sep">&middot;</span>
+    <a href="/savings-goal-tracker/">Savings goal tracker <span class="mem">(member)</span></a><span class="sep">&middot;</span>
+    <a href="/compound-interest-calculator/">Compound interest calculator <span class="mem">(member)</span></a><span class="sep">&middot;</span>
+    <a href="/debt-payoff-date-calculator/">Debt payoff date calculator <span class="mem">(member)</span></a>
+  </p>
+</div>
+
+<script>
+//__DATA__
+(function(){
+  var root = document.getElementById('tcmc');
+  if (!root || typeof ST === 'undefined' || typeof DIN === 'undefined') return;
+  // dinner means dinner: 550+ calories per serving, never the lunch-sized bowls (matches /whats-for-dinner-tonight/)
+  var RECIPES = DIN.rec.filter(function(r){ return r.cal >= 550; });
+  var FEED_URL = 'https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json';
+  var weekOf = ST.week;
+  var feedIng = null, feedRec = null;
+
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function money2(x){ return '$' + (Math.round(x*100)/100).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function money0(x){ return '$' + Math.round(x).toLocaleString('en-US'); }
+  function num(x){ var n = parseFloat(String(x).replace(/[^0-9.\-]/g,'')); return isNaN(n) ? 0 : n; }
+  function readLS(key){ try { return JSON.parse(localStorage.getItem(key)) || null; } catch(e){ return null; } }
+
+  var byKey = {};
+  for (var bi = 0; bi < ST.items.length; bi++) byKey[ST.items[bi].k] = ST.items[bi];
+
+  // merge live feed prices into ST items (same rule as the staples tool)
+  function applyFeed(f){
+    if (!f) return;
+    if (f.ingredients){
+      feedIng = f.ingredients;
+      for (var i = 0; i < ST.items.length; i++){ var it = ST.items[i]; var g = f.ingredients[it.k];
+        if (g && Number(g.cheapest) > 0 && g.unit === it.u){ it.f = Number(g.cheapest); it.fs = String(g.store); it.se = g.sale_end ? String(g.sale_end) : null; }
+      }
+    }
+    if (f.recipes) feedRec = f.recipes;
+    if (f.week_of) weekOf = f.week_of;
+  }
+
+  function liveCost(r){
+    if (feedRec && feedRec[r.s] && feedRec[r.s].per_serving) return feedRec[r.s].per_serving;
+    return r.c;
+  }
+
+  function isLow(it){ return it.rec !== null && it.f <= it.rec + 0.0001; }
+
+  function saleDays(it){
+    if (!it.se) return null;
+    var end = new Date(it.se + 'T23:59:59');
+    var now = new Date();
+    if (isNaN(end.getTime()) || end < now) return null;
+    return Math.floor((end - now) / 86400000);
+  }
+
+  function card(title, url, body){
+    return '<div class="mc-card"><div class="mc-head"><h2>' + title + '</h2><a class="mc-go" href="' + url + '">open the tool &rarr;</a></div>' + body + '</div>';
+  }
+
+  // ---- Card 1: Tonight's dinner (tcdin-v1) ----
+  function dinnerCard(){
+    var S = readLS('tcdin-v1');
+    var url = '/whats-for-dinner-tonight/?ref=mycrew';
+    if (!S || !S.have || !S.have.length){
+      return card('Tonight&rsquo;s dinner', url,
+        '<p class="mc-empty">Tap what&rsquo;s in your kitchen once and this fills in every morning with what you can cook tonight. <a href="' + url + '">Set up your kitchen list</a></p>');
+    }
+    var haveSet = {};
+    for (var i = 0; i < S.have.length; i++) haveSet[S.have[i]] = true;
+    var st = S.st !== false;
+    var ready = [], closest = null;
+    for (var r = 0; r < RECIPES.length; r++){ var rec = RECIPES[r];
+      var got = 0, tot = 0, need = [];
+      for (var j = 0; j < rec.i.length; j++){ var g = DIN.ing[rec.i[j]];
+        if (g.c === 'T' && st) continue;
+        tot++;
+        if (haveSet[g.n]) got++; else need.push(g);
+      }
+      if (tot > 0 && !need.length) ready.push(rec);
+      else if (got >= 1){
+        if (!closest || need.length < closest.need.length || (need.length === closest.need.length && got > closest.got)) closest = { rec: rec, got: got, tot: tot, need: need };
+      }
+    }
+    var h = '';
+    if (ready.length){
+      ready.sort(function(a,b){ return liveCost(a) - liveCost(b); });
+      var ch = ready[0];
+      h += '<p class="mc-big">You can make <b>' + ready.length + ' dinner' + (ready.length > 1 ? 's' : '') + '</b> tonight with what you have.</p>';
+      h += '<p class="mc-line">Cheapest one: <a href="/' + esc(ch.s) + '/?ref=mycrew">' + esc(ch.n) + '</a> at <b>' + money2(liveCost(ch)) + ' a serving</b>. ' + ch.cal + ' cal and ' + ch.p + 'g protein per serving.</p>';
+    } else if (closest){
+      var names = [];
+      for (var k = 0; k < closest.need.length && k < 3; k++) names.push(closest.need[k].n);
+      var missTxt = esc(names.join(', '));
+      if (closest.need.length > 3) missTxt += ' and ' + (closest.need.length - 3) + ' more';
+      h += '<p class="mc-big">Nothing is fully ready yet, but you&rsquo;re close.</p>';
+      h += '<p class="mc-line">Closest match: <a href="/' + esc(closest.rec.s) + '/?ref=mycrew">' + esc(closest.rec.n) + '</a>. You have ' + closest.got + ' of ' + closest.tot + ' ingredients; still missing <b>' + missTxt + '</b>.</p>';
+    } else {
+      h += '<p class="mc-empty">Your kitchen list is saved, but nothing matches yet. Tap a protein or a base like rice and this fills right up. <a href="' + url + '">Update your kitchen list</a></p>';
+    }
+    return card('Tonight&rsquo;s dinner', url, h);
+  }
+
+  // ---- Card 2: Your staples (tcst-v1) ----
+  function staplesCard(){
+    var S = readLS('tcst-v1');
+    var url = '/my-staples/?ref=mycrew';
+    if (!S || !S.have || !S.have.length){
+      return card('Your staples', url,
+        '<p class="mc-empty">Pick the fifteen things you buy every week, once, and this shows you which are at their tracked lows each morning. <a href="' + url + '">Pick your staples</a></p>');
+    }
+    var sel = [];
+    for (var i = 0; i < S.have.length; i++) if (byKey[S.have[i]]) sel.push(byKey[S.have[i]]);
+    if (!sel.length){
+      return card('Your staples', url,
+        '<p class="mc-empty">Your saved list did not match anything we track this week. <a href="' + url + '">Rebuild your staples list</a></p>');
+    }
+    var total = 0, lows = 0, ending = [];
+    for (i = 0; i < sel.length; i++){ var it = sel[i];
+      total += it.f;
+      if (isLow(it)) lows++;
+      var d = saleDays(it);
+      if (d !== null && d <= 2) ending.push({ it: it, d: d });
+    }
+    var h = '<p class="mc-big"><b>' + lows + '</b> of your ' + sel.length + ' staple' + (sel.length > 1 ? 's are' : ' is') + ' at ' + (lows === 1 ? 'its' : 'their') + ' tracked low' + (lows === 1 ? '' : 's') + ' this week.</p>';
+    h += '<p class="mc-line">One of each at the cheapest stores comes to <b>' + money2(total) + '</b>.</p>';
+    if (ending.length){
+      var w = '';
+      for (i = 0; i < ending.length; i++){ var e = ending[i];
+        var when = e.d <= 0 ? 'ends today' : (e.d === 1 ? 'ends tomorrow' : 'ends in 2 days');
+        w += '<span class="mc-warn' + (e.d <= 1 ? ' urgent' : '') + '">' + esc(e.it.l) + ' sale ' + when + '</span> ';
+      }
+      h += '<p class="mc-line">' + w + '</p>';
+    }
+    return card('Your staples', url, h);
+  }
+
+  // ---- Card 3: Subscriptions (tcsub-v1) ----
+  function subsCard(){
+    var S = readLS('tcsub-v1');
+    var url = '/subscription-tracker/?ref=mycrew';
+    var CY = { w: 52/12, m: 1, q: 1/3, y: 1/12 };
+    var items = [];
+    if (S && S.subs){
+      for (var i = 0; i < S.subs.length; i++){ var it = S.subs[i];
+        var per = CY[it.cy] !== undefined ? CY[it.cy] : 1;
+        var pm = num(it.c) * per;
+        if ((String(it.n).replace(/^\s+|\s+$/g,'') !== '' || num(it.c) > 0) && pm > 0) items.push({ pm: pm, s: it.s });
+      }
+    }
+    if (!items.length){
+      return card('Subscriptions', url,
+        '<p class="mc-empty">List your subscriptions once and this keeps the yearly total staring back at you. That is usually all it takes. <a href="' + url + '">Track your subscriptions</a></p>');
+    }
+    var totM = 0, cutM = 0, cutN = 0;
+    for (i = 0; i < items.length; i++){ totM += items[i].pm; if (items[i].s === 'cut'){ cutM += items[i].pm; cutN++; } }
+    var h = '<p class="mc-big">Your ' + items.length + ' subscription' + (items.length > 1 ? 's' : '') + ' cost <b>' + money2(totM) + ' a month</b>, ' + money0(totM * 12) + ' a year.</p>';
+    if (cutN > 0) h += '<p class="mc-line">Canceling the ' + cutN + ' you marked to cut keeps <b>' + money0(cutM * 12) + ' a year</b> in your pocket. Worth a phone call.</p>';
+    return card('Subscriptions', url, h);
+  }
+
+  // ---- Card 4: Budget (tcbt-v1) ----
+  function budgetCard(){
+    var S = readLS('tcbt-v1');
+    var url = '/budget-tracker/?ref=mycrew';
+    function sumV(list){
+      if (!list || !list.length) return 0;
+      var t = 0;
+      for (var i = 0; i < list.length; i++) if (list[i] && list[i].v !== undefined) t += num(list[i].v);
+      return t;
+    }
+    var ok = S && S.income && S.income.length !== undefined && S.needs && S.wants;
+    if (!ok){
+      return card('Budget', url,
+        '<p class="mc-empty">Put your month on one page, money in, money out, and the gap between them. It takes about five minutes. <a href="' + url + '">Build your budget</a></p>');
+    }
+    var inc = sumV(S.income), needs = sumV(S.needs), wants = sumV(S.wants);
+    if (inc === 0 && needs + wants === 0){
+      return card('Budget', url,
+        '<p class="mc-empty">Your budget is set up but empty. Drop in real numbers and your monthly gap shows up here. <a href="' + url + '">Fill in your budget</a></p>');
+    }
+    var gap = inc - needs - wants;
+    var h = '<p class="mc-big">Your monthly gap: ' + (gap >= 0 ? '<b>' : '<span class="neg">-') + money0(Math.abs(gap)) + (gap >= 0 ? '</b>' : '</span>') + '</p>';
+    if (gap > 0) h += '<p class="mc-line">' + money0(gap) + ' left over each month after needs and wants. Give it a job before it wanders off.</p>';
+    else if (gap < 0) h += '<p class="mc-line">' + money0(Math.abs(gap)) + ' more goes out than comes in each month. The Wants list is the place to look first.</p>';
+    else h += '<p class="mc-line">You are breaking exactly even. The next job is building a little breathing room.</p>';
+    h += '<div class="mc-stats"><div class="mc-stat"><b>' + money0(inc) + '</b><span>coming in</span></div><div class="mc-stat"><b>' + money0(needs + wants) + '</b><span>going out</span></div><div class="mc-stat"><b class="' + (gap >= 0 ? 'pos' : 'neg') + '">' + (gap < 0 ? '-' : '') + money0(Math.abs(gap)) + '</b><span>the gap</span></div></div>';
+    return card('Budget', url, h);
+  }
+
+  // ---- Card 5: This week in Omaha (feed + baked data, always renders) ----
+  function omahaCard(){
+    var url = '/omaha-grocery-prices/?ref=mycrew';
+    var lows = 0, tracked = 0;
+    for (var i = 0; i < ST.items.length; i++){ var it = ST.items[i];
+      if (it.rec === null) continue;
+      tracked++;
+      if (isLow(it)) lows++;
+    }
+    var cheap = null;
+    for (i = 0; i < RECIPES.length; i++){ var r = RECIPES[i];
+      if (!cheap || liveCost(r) < liveCost(cheap)) cheap = r;
+    }
+    var h = '<p class="mc-big"><b>' + lows + '</b> of the ' + tracked + ' items we track long-term are at record lows this week.</p>';
+    if (cheap) h += '<p class="mc-line">Cheapest dinner in town: <a href="/' + esc(cheap.s) + '/?ref=mycrew">' + esc(cheap.n) + '</a> at <b>' + money2(liveCost(cheap)) + ' a serving</b>. More like it on <a href="/cheap-dinners-right-now/?ref=mycrew">cheap dinners right now</a>.</p>';
+    h += '<p class="mc-line"><a href="' + url + '">See the full price board</a> for every item across six Omaha stores.</p>';
+    return card('This week in Omaha', url, h);
+  }
+
+  function renderAll(){
+    document.getElementById('mc-cards').innerHTML =
+      dinnerCard() + staplesCard() + subsCard() + budgetCard() + omahaCard();
+  }
+
+  renderAll();
+
+  try {
+    fetch(FEED_URL).then(function(r){ return r.json(); }).then(function(f){
+      applyFeed(f);
+      document.getElementById('mc-fresh').textContent = 'Prices checked for the week of ' + weekOf + '.';
+      renderAll();
+    }).catch(function(){
+      document.getElementById('mc-fresh').textContent = 'Showing our most recent saved prices (week of ' + weekOf + ').';
+    });
+  } catch(e){}
+})();
+</script>
+</div>

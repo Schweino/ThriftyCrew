@@ -20,12 +20,46 @@
 # tolerance). Any no-link chip = breach -> check-ad-cycles auto-repairs Family Fare headlessly and alerts ONCE
 # per distinct set (sig-deduped) for browser stores until their next re-pull fixes the stored price. The
 # temporary 45 headroom for the Fareway launch is obsolete (all Fareway links resolved same-day).
-param([double]$Tol = 0.30, [int]$MaxNoLink = 0, [string]$OutDir = "", [string]$Embed = "")
+param([double]$Tol = 0.30, [int]$MaxNoLink = 0, [string]$OutDir = "", [string]$Embed = "", [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 if (-not $Embed)  { $Embed  = Join-Path $OutDir 'deals-page-embed.html' }
 
+
+# What kind of "See item" does this chip body carry? ONE definition, used by both loops below and by the
+# self-test, so the fixture exercises the same code the audit runs.
+#   see    - an exact product link
+#   none   - a "Doesn't carry" cell (no price, so nothing to verify)
+#   adpill - a flyer-only sale cell linked to the store's weekly ad. DELIBERATE: a vision-read flyer jpg
+#            has no product page, and searching the store for a plausible match instead is the
+#            two-pipelines bug this estate banned. Not a breach.
+#   bare   - a priced chip with no link of any kind. THE BUG. Always a breach.
+function Get-ChipLinkKind([string]$Body) {
+  if ($Body -match 'pg-see') { return 'see' }
+  if ($Body -match 'pg-none') { return 'none' }
+  if ($Body -match 'pg-adonly') { return 'adpill' }
+  return 'bare'
+}
+
+if ($SelfTest) {
+  # FROZEN FIXTURES (guard-fixture rule): the founding case of the 2026-08-01 change plus the bug it must
+  # never hide. Hand-written, never regenerated from a live board.
+  $cases = @(
+    @{ body = "<span class='pg-price'>`$1.99</span><a class='pg-see' href='/x'>See item</a>"; want='see';    why='an exact product link is a link' },
+    @{ body = "<span class='pg-store'>Fareway</span><span class='pg-none'>Doesn&rsquo;t carry</span><a class='pg-see pg-see-none' href='/suggest-an-item/'>See it?</a>"; want='see'; why='a not-carried cell carries the suggest link' },
+    @{ body = "<span class='pg-price'>`$4.99</span><a class='pg-adonly' href='https://hy-vee.com/weekly-ad'>Weekly ad</a>"; want='adpill'; why='CLEAN TWIN: a flyer-only sale cell is linked by design and must NOT count as a breach' },
+    @{ body = "<span class='pg-store'>Aldi</span><span class='pg-none'>Doesn&rsquo;t carry</span>"; want='none'; why='a bare not-carried cell has no price to verify' },
+    @{ body = "<span class='pg-price'>`$3.19</span><span class='pg-meta'>everyday</span>"; want='bare'; why='MUST-FIRE: a PRICED chip with no link at all is the invariant Brad set, and the ad-pill branch must never swallow it' }
+  )
+  $bad = 0
+  foreach ($c in $cases) {
+    $got = Get-ChipLinkKind $c.body
+    if ($got -ne $c.want) { Write-Output ("  X " + $c.why + "  got '" + $got + "' want '" + $c.want + "'"); $bad++ }
+  }
+  if ($bad -eq 0) { Write-Output ('audit-board-consistency SELF-TEST PASS (' + $cases.Count + ' frozen chip shapes)'); exit 0 }
+  Write-Output ("audit-board-consistency SELF-TEST FAIL ($bad)"); exit 2
+}
 . (Join-Path $PSScriptRoot 'pu-lib.ps1')
 # 2026-07-26 consolidation: LinkPU now DELEGATES to pu-lib's Get-LinkPerUnit (the single per-unit
 # implementation; identical params; test-pu-lib.ps1 proves it matches everywhere and resolves more).
@@ -71,6 +105,7 @@ foreach ($it in $all) { $id=[string]$it.id; $unit=[string]$it.unit
 # way to verify it. HARD INVARIANT (Brad: a displayed price MUST have a matching link). We record the exact
 # {id,store} of each so the automation can name them and the URL step can resolve them - not just a count.
 $noLinkList = New-Object System.Collections.Generic.List[object]
+$adPillList = New-Object System.Collections.Generic.List[object]   # flyer-only sale cells: linked to the weekly ad by design, never a breach
 # CHIPS NOW LIVE IN THE FEED (2026-07-16). .pg-stores is filled client-side from public/board.json, so the
 # embed contains NO pg-chip markup at all. Auditing the embed would find zero chips and cheerfully report a
 # perfect score - a blind guard is worse than no guard. So read the SAME rendered chip html from the feed: it
@@ -91,7 +126,19 @@ if (Test-Path $boardFeed) {
     foreach ($ch in $chips) {
       $cstore = $ch.Groups[1].Value -replace '&#39;',"'"
       $body = $ch.Groups[2].Value
-      if ($body -notmatch 'pg-see' -and $body -notmatch 'pg-none') { $noLinkList.Add([pscustomobject]@{ id=$rid; store=$cstore }) }
+      $kind = Get-ChipLinkKind $body
+      if ($kind -ne 'see' -and $kind -ne 'none') {
+        # A FLYER-ONLY SALE CELL IS NOT A MISSING LINK. Its "See item" is a weekly-ad pill (pg-adonly),
+        # which SeeLink emits deliberately: a vision-read flyer jpg has no product page to link to, and
+        # searching the store for a plausible match instead is the two-pipelines bug this estate banned
+        # (the board once published Hy-Vee Almondmilk while its link opened Blue Diamond Almond Breeze).
+        # Counting these as breaches made the daily "board-link price drift" alert fire on cells that can
+        # never be fixed, and advise a re-pull that can never work. Measured 2026-08-01: all 21 so-called
+        # no-link chips carried an ad pill and ZERO were genuinely bare. Tracked separately so the number
+        # is still visible - it is a coverage fact, not a defect.
+        if ($kind -eq 'adpill') { $adPillList.Add([pscustomobject]@{ id=$rid; store=$cstore }) }
+        else { $noLinkList.Add([pscustomobject]@{ id=$rid; store=$cstore }) }
+      }
     }
   }
 } elseif (Test-Path $Embed) {
@@ -104,14 +151,26 @@ if (Test-Path $boardFeed) {
     foreach ($ch in $chips) {
       $cstore = $ch.Groups[1].Value -replace '&#39;',"'"
       $body = $ch.Groups[2].Value
-      if ($body -notmatch 'pg-see' -and $body -notmatch 'pg-none') { $noLinkList.Add([pscustomobject]@{ id=$rid; store=$cstore }) }
+      $kind = Get-ChipLinkKind $body
+      if ($kind -ne 'see' -and $kind -ne 'none') {
+        # A FLYER-ONLY SALE CELL IS NOT A MISSING LINK. Its "See item" is a weekly-ad pill (pg-adonly),
+        # which SeeLink emits deliberately: a vision-read flyer jpg has no product page to link to, and
+        # searching the store for a plausible match instead is the two-pipelines bug this estate banned
+        # (the board once published Hy-Vee Almondmilk while its link opened Blue Diamond Almond Breeze).
+        # Counting these as breaches made the daily "board-link price drift" alert fire on cells that can
+        # never be fixed, and advise a re-pull that can never work. Measured 2026-08-01: all 21 so-called
+        # no-link chips carried an ad pill and ZERO were genuinely bare. Tracked separately so the number
+        # is still visible - it is a coverage fact, not a defect.
+        if ($kind -eq 'adpill') { $adPillList.Add([pscustomobject]@{ id=$rid; store=$cstore }) }
+        else { $noLinkList.Add([pscustomobject]@{ id=$rid; store=$cstore }) }
+      }
     }
   }
 }
 $noLink = $noLinkList.Count
 $byStore = $noLinkList | Group-Object store | ForEach-Object { [pscustomobject]@{ store=$_.Name; count=$_.Count } } | Sort-Object count -Descending
 
-$report = [ordered]@{ generated=(Get-Date -Format 'yyyy-MM-dd HH:mm'); tol=$Tol; chips_examined=$chipsSeen; no_link_count=$noLink; max_no_link=$MaxNoLink; no_link_by_store=$byStore; no_link=$noLinkList; mismatch_count=$mismatch.Count; mismatch=$mismatch }
+$report = [ordered]@{ generated=(Get-Date -Format 'yyyy-MM-dd HH:mm'); tol=$Tol; chips_examined=$chipsSeen; no_link_count=$noLink; max_no_link=$MaxNoLink; no_link_by_store=$byStore; no_link=$noLinkList; ad_pill_count=$adPillList.Count; ad_pill=$adPillList; mismatch_count=$mismatch.Count; mismatch=$mismatch }
 $report | ConvertTo-Json -Depth 6 | Set-Content (Join-Path $OutDir 'consistency-report.json') -Encoding UTF8
 
 # ZERO CHIPS EXAMINED IS NOT A CLEAN BOARD. Every no-link finding comes from one regex against the rendered
@@ -129,7 +188,7 @@ if ($chipsSeen -eq 0) {
 # signal worth an alert. The mismatch backlog is reported for repair but is NOT live-harmful (all hidden).
 $breach = ($noLink -gt $MaxNoLink)
 $sev = if ($breach) { 'BREACH' } else { 'OK' }
-Write-Output ("consistency: $sev  no-link=$noLink (max $MaxNoLink)  mismatch-backlog=$($mismatch.Count)  chips-examined=$chipsSeen")
+Write-Output ("consistency: $sev  no-link=$noLink (max $MaxNoLink)  ad-pill=$($adPillList.Count) (flyer-only, linked to the weekly ad by design)  mismatch-backlog=$($mismatch.Count)  chips-examined=$chipsSeen")
 if ($breach) { exit 2 } else { exit 0 }
 
 

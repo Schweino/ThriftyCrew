@@ -1376,8 +1376,7 @@
                         "cheese\\s+chunk",
                         "block\\s+cheese",
                         "(cheddar|mozzarella|colby|monterey|jack)\\s+cheese",
-                        "cheese[^,]*(cheddar|mozzarella|colby)",
-                        "cheese,\\s+shredded"
+                        "cheese[^,]*(cheddar|mozzarella|colby)"
                     ],
         "exclude":  [
                         "cottage",

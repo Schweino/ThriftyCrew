@@ -1,0 +1,262 @@
+<div id="tcdp">
+<style>
+#tcdp{--navy:#16263f;--gold:#e2a43c;--gold-d:#8a6d1f;--ink:#3a4658;--line:#e2e8f0;--green:#1f7a4d;--red:#b23b2e;--soft:#fbfcfe;
+  max-width:760px;margin:0 auto;font-size:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);}
+#tcdp *{box-sizing:border-box;}
+#tcdp .tb-privacy{display:flex;gap:.7em;align-items:flex-start;background:#fdf8ec;border:1px solid #eee3c8;border-radius:12px;padding:.9em 1.1em;font-size:.92em;line-height:1.5;margin:0 0 1.6em;}
+#tcdp .tb-privacy b{color:var(--navy);}
+#tcdp .tb-lock{flex:0 0 auto;width:1.6em;height:1.6em;border-radius:50%;background:var(--gold);color:var(--navy);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.95em;}
+#tcdp .tb-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.6em 1.4em;margin:0 0 1.5em;box-shadow:0 6px 24px rgba(22,38,63,.06);}
+#tcdp h2{font-size:1.3em;color:var(--navy);margin:0 0 .3em;}
+#tcdp .tb-sub{font-size:.95em;margin:.2em 0 1.1em;line-height:1.5;}
+#tcdp .tb-row{display:flex;gap:.6em;align-items:center;margin:0 0 .55em;flex-wrap:nowrap;}
+#tcdp .tb-row input{padding:.72em .8em;font-size:1em;color:var(--navy);background:#fff;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;min-width:0;}
+#tcdp .tb-row input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(226,164,60,.22);}
+#tcdp .tb-name{flex:1 1 auto;}
+#tcdp .tb-money{position:relative;flex:0 0 7.6em;}
+#tcdp .tb-money span{position:absolute;left:.7em;top:50%;transform:translateY(-50%);color:#8a94a6;pointer-events:none;}
+#tcdp .tb-money input{width:100%;padding-left:1.7em;text-align:right;}
+#tcdp .tb-pct{flex:0 0 5.6em;position:relative;}
+#tcdp .tb-pct input{width:100%;padding-right:1.8em;text-align:right;}
+#tcdp .tb-pct span{position:absolute;right:.7em;top:50%;transform:translateY(-50%);color:#8a94a6;pointer-events:none;}
+#tcdp .tb-del{flex:0 0 auto;width:2.2em;height:2.2em;border:none;border-radius:8px;background:#f1f4f8;color:#8a94a6;font-size:1.05em;font-weight:700;cursor:pointer;line-height:1;}
+#tcdp .tb-del:hover{background:#fbeceb;color:var(--red);}
+#tcdp .tb-add{display:inline-block;margin:.2em 0 0;padding:.55em 1.1em;border:1.5px dashed #cbd5e1;border-radius:10px;background:#fff;color:var(--navy);font-weight:700;font-size:.92em;cursor:pointer;}
+#tcdp .tb-add:hover{border-color:var(--gold);color:var(--gold-d);}
+#tcdp .tb-cols{font-size:.72em;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#8a94a6;display:flex;gap:.6em;margin:0 0 .3em;}
+#tcdp .tb-cols span:nth-child(1){flex:1 1 auto;}
+#tcdp .tb-cols span:nth-child(2){flex:0 0 7.6em;}
+#tcdp .tb-cols span:nth-child(3){flex:0 0 5.6em;}
+#tcdp .tb-cols span:nth-child(4){flex:0 0 7.6em;}
+#tcdp .tb-cols span:nth-child(5){flex:0 0 2.2em;}
+#tcdp .tb-extra{display:flex;align-items:center;gap:.8em;flex-wrap:wrap;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:.9em 1em;margin:1em 0 0;}
+#tcdp .tb-extra label{font-weight:700;color:var(--navy);font-size:.95em;}
+#tcdp .tb-toggle{display:flex;gap:.5em;margin:1.2em 0 0;}
+#tcdp .tb-toggle button{flex:1 1 auto;padding:.65em .5em;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);font-weight:700;font-size:.9em;cursor:pointer;line-height:1.3;}
+#tcdp .tb-toggle button.on{background:var(--navy);border-color:var(--navy);color:#fff;}
+#tcdp .tb-result{text-align:center;padding:.6em 0 .2em;}
+#tcdp .tb-r-label{font-size:.85em;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-d);}
+#tcdp .tb-r-big{font-size:2.2em;font-weight:800;color:var(--green);letter-spacing:-.02em;line-height:1.2;}
+#tcdp .tb-r-big.bad{color:var(--red);font-size:1.3em;}
+#tcdp .tb-r-sub{font-size:1em;margin:.4em auto 0;max-width:34em;line-height:1.55;}
+#tcdp .tb-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(10em,1fr));gap:.8em;margin:1.2em 0 0;}
+#tcdp .tb-stat{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:.8em;text-align:center;}
+#tcdp .tb-stat b{display:block;font-size:1.25em;color:var(--navy);}
+#tcdp .tb-stat span{font-size:.8em;color:#68748a;}
+#tcdp .tb-order{margin:1.2em 0 0;}
+#tcdp .tb-order-h{font-size:.85em;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-d);margin:0 0 .5em;}
+#tcdp .tb-order ol{list-style:none;margin:0;padding:0;}
+#tcdp .tb-order li{display:flex;align-items:center;gap:.7em;background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:.6em .8em;margin:0 0 .5em;font-size:.95em;}
+#tcdp .tb-onum{flex:0 0 auto;width:1.7em;height:1.7em;border-radius:50%;background:var(--navy);color:var(--gold);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.85em;}
+#tcdp .tb-oname{flex:1 1 auto;color:var(--navy);font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;}
+#tcdp .tb-odate{flex:0 0 auto;font-size:.85em;color:#68748a;white-space:nowrap;}
+#tcdp .tb-chart{margin:1.3em 0 0;}
+#tcdp .tb-chart-h{font-size:.85em;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-d);margin:0 0 .5em;}
+#tcdp .tb-cbar{display:flex;align-items:center;gap:.6em;margin:0 0 .35em;font-size:.82em;}
+#tcdp .tb-cbar span{flex:0 0 5.5em;text-align:right;color:#68748a;font-variant-numeric:tabular-nums;}
+#tcdp .tb-cbar i{height:.9em;background:var(--navy);border-radius:99px;display:block;min-width:2px;}
+#tcdp .tb-cbar b{font-size:.9em;color:var(--navy);font-variant-numeric:tabular-nums;white-space:nowrap;}
+#tcdp .tb-actions{display:flex;gap:.8em;flex-wrap:wrap;justify-content:center;margin:1.6em 0 .4em;}
+#tcdp .tb-btn{padding:.9em 1.7em;border:none;border-radius:10px;font-size:1em;font-weight:800;cursor:pointer;font-family:inherit;}
+#tcdp .tb-btn-gold{background:var(--gold);color:var(--navy);}
+#tcdp .tb-btn-ghost{background:#fff;color:var(--red);border:1.5px solid #f2c9c5;}
+#tcdp .tb-hint{font-size:.85em;color:#68748a;line-height:1.5;margin:.6em 0 0;}
+#tcdp .tb-saved{text-align:center;font-size:.85em;color:#8a94a6;margin:.4em 0 0;min-height:1.3em;}
+@media (max-width:560px){
+  #tcdp .tb-card{padding:1.2em 1em;}
+  #tcdp .tb-money{flex:0 0 6.2em;}
+  #tcdp .tb-pct{flex:0 0 4.6em;}
+  #tcdp .tb-cols span:nth-child(2){flex:0 0 6.2em;}
+  #tcdp .tb-cols span:nth-child(3){flex:0 0 4.6em;}
+  #tcdp .tb-cols span:nth-child(4){display:none;}
+  #tcdp .tb-min{display:none;}
+  #tcdp .tb-odate{display:none;}
+}
+</style>
+
+<p style="font-size:1.05em;line-height:1.6;margin:0 0 1.2em;">List your debts once. This tool pays them off month by month (on paper) and hands you the exact month you&rsquo;re done, what the interest will cost, and the order to attack. Change one number and watch the date move.</p>
+<div class="tb-privacy"><span class="tb-lock">&#128274;</span><span><b>Your numbers stay on this device.</b> They save automatically in your browser and never leave it. Hit &ldquo;Erase my numbers&rdquo; anytime.</span></div>
+
+<div class="tb-card">
+  <h2>Your debts</h2>
+  <p class="tb-sub">Balance, interest rate, and the minimum payment from each statement. Close counts.</p>
+  <div class="tb-cols"><span>Debt</span><span>Balance</span><span>Rate</span><span class="tb-min">Min./mo</span><span></span></div>
+  <div id="dp-rows"></div>
+  <button class="tb-add" id="dp-add" type="button">+ Add a debt</button>
+  <div class="tb-extra">
+    <label for="dp-extra">Extra I can throw at debt each month:</label>
+    <span class="tb-money" style="flex:0 0 8em"><span>$</span><input type="text" inputmode="decimal" id="dp-extra" placeholder="0" maxlength="8" style="width:100%;padding-left:1.7em;text-align:right"></span>
+  </div>
+  <div class="tb-toggle">
+    <button type="button" id="dp-mode-av" class="on">Avalanche<br><span style="font-weight:400;font-size:.85em">highest interest first, least interest paid</span></button>
+    <button type="button" id="dp-mode-sn">Snowball<br><span style="font-weight:400;font-size:.85em">smallest balance first, fastest first win</span></button>
+  </div>
+</div>
+
+<div class="tb-card" id="dp-out" style="display:none">
+  <div class="tb-result">
+    <p class="tb-r-label">Your debt-free date</p>
+    <p class="tb-r-big" id="dp-date"></p>
+    <p class="tb-r-sub" id="dp-sub"></p>
+  </div>
+  <div class="tb-stats">
+    <div class="tb-stat"><b id="dp-months"></b><span>months to freedom</span></div>
+    <div class="tb-stat"><b id="dp-interest"></b><span>total interest you&rsquo;ll pay</span></div>
+    <div class="tb-stat"><b id="dp-paid"></b><span>total you&rsquo;ll pay back</span></div>
+  </div>
+  <div class="tb-order"><p class="tb-order-h">The order they fall</p><ol id="dp-order"></ol></div>
+  <div class="tb-chart"><p class="tb-chart-h">Your balance, falling to zero</p><div id="dp-chart"></div></div>
+  <p class="tb-hint" id="dp-compare"></p>
+</div>
+
+<div class="tb-actions">
+  <button class="tb-btn tb-btn-gold" id="dp-print" type="button">Print my plan</button>
+  <button class="tb-btn tb-btn-ghost" id="dp-clear" type="button">Erase my numbers</button>
+</div>
+<p class="tb-saved" id="dp-saved"></p>
+
+<script>
+(function(){
+  var root = document.getElementById('tcdp');
+  if (!root) return;
+  var KEY = 'tcdp-v1';
+  var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var SEED = { debts: [{n:'',b:'',r:'',m:''},{n:'',b:'',r:'',m:''}], extra: '', mode: 'av' };
+  var S;
+  try { S = JSON.parse(localStorage.getItem(KEY)) || null; } catch(e){ S = null; }
+  if (!S || !S.debts) S = JSON.parse(JSON.stringify(SEED));
+
+  function num(x){ var n = parseFloat(String(x).replace(/[^0-9.\-]/g,'')); return isNaN(n) ? 0 : n; }
+  function money(x){ return '$' + Math.round(x).toLocaleString('en-US'); }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function mLabel(offset){ var d = new Date(); d.setMonth(d.getMonth() + offset); return MONTHS[d.getMonth()] + ' ' + d.getFullYear(); }
+
+  var saveT = null;
+  function save(){ clearTimeout(saveT); saveT = setTimeout(function(){ try { localStorage.setItem(KEY, JSON.stringify(S)); var el = document.getElementById('dp-saved'); el.textContent = 'Saved on this device just now.'; setTimeout(function(){ el.textContent = ''; }, 2200); } catch(e){} }, 400); }
+
+  function renderRows(){
+    var h = '';
+    for (var i = 0; i < S.debts.length; i++){ var it = S.debts[i];
+      h += '<div class="tb-row" data-i="'+i+'">' +
+        '<input class="tb-name" type="text" value="'+esc(it.n)+'" placeholder="Debt name (card, loan...)" data-f="n" maxlength="60">' +
+        '<span class="tb-money"><span>$</span><input type="text" inputmode="decimal" value="'+esc(it.b)+'" placeholder="0" data-f="b" maxlength="10"></span>' +
+        '<span class="tb-pct"><input type="text" inputmode="decimal" value="'+esc(it.r)+'" placeholder="0" data-f="r" maxlength="5"><span>%</span></span>' +
+        '<span class="tb-money tb-min"><span>$</span><input type="text" inputmode="decimal" value="'+esc(it.m)+'" placeholder="0" data-f="m" maxlength="8"></span>' +
+        '<button class="tb-del" type="button" aria-label="Remove this debt">&times;</button></div>';
+    }
+    document.getElementById('dp-rows').innerHTML = h;
+    document.getElementById('dp-extra').value = S.extra;
+    document.getElementById('dp-mode-av').className = S.mode === 'sn' ? '' : 'on';
+    document.getElementById('dp-mode-sn').className = S.mode === 'sn' ? 'on' : '';
+  }
+
+  function simulate(mode, extra){
+    var debts = [];
+    for (var i = 0; i < S.debts.length; i++){ var it = S.debts[i];
+      if (num(it.b) > 0) debts.push({ n: it.n || ('Debt ' + (debts.length+1)), bal: num(it.b), r: num(it.r)/100/12, min: num(it.m) }); }
+    if (!debts.length) return null;
+    var order = debts.slice().sort(mode === 'sn' ? function(a,b){ return a.bal - b.bal; } : function(a,b){ return b.r - a.r; });
+    var budget = extra; for (i = 0; i < debts.length; i++) budget += debts[i].min;
+    var month = 0, totInt = 0, totPaid = 0, startBal = 0, series = [];
+    for (i = 0; i < debts.length; i++){ startBal += debts[i].bal; debts[i].done = 0; }
+    series.push(startBal);
+    while (month < 1200){
+      var remaining = 0, j;
+      for (j = 0; j < debts.length; j++) if (debts[j].bal > 0.005) remaining++;
+      if (!remaining) break;
+      month++;
+      var before = 0;
+      for (j = 0; j < debts.length; j++){ if (debts[j].bal > 0.005){ var intr = debts[j].bal * debts[j].r; debts[j].bal += intr; totInt += intr; } before += Math.max(0, debts[j].bal); }
+      var pool = budget;
+      for (j = 0; j < debts.length; j++){ var d = debts[j]; if (d.bal > 0.005){ var pay = Math.min(d.min, d.bal, pool); d.bal -= pay; pool -= pay; totPaid += pay; if (d.bal <= 0.005 && !d.done) d.done = month; } }
+      for (var k = 0; k < order.length && pool > 0.005; k++){ var t = order[k]; if (t.bal > 0.005){ var pay2 = Math.min(t.bal, pool); t.bal -= pay2; pool -= pay2; totPaid += pay2; if (t.bal <= 0.005 && !t.done) t.done = month; } }
+      var after = 0; for (j = 0; j < debts.length; j++) after += Math.max(0, debts[j].bal);
+      if (month % 12 === 0) series.push(after);
+      if (after >= before && month > 1) return { fail: true };
+    }
+    if (month >= 1200) return { fail: true };
+    series.push(0);
+    order.sort(function(a,b){ return a.done - b.done; });
+    return { months: month, interest: totInt, paid: totPaid, order: order, series: series, start: startBal };
+  }
+
+  function calc(){
+    var extra = num(document.getElementById('dp-extra').value);
+    var res = simulate(S.mode, extra);
+    var out = document.getElementById('dp-out');
+    if (!res){ out.style.display = 'none'; return; }
+    out.style.display = '';
+    var dEl = document.getElementById('dp-date'), sEl = document.getElementById('dp-sub');
+    if (res.fail){
+      dEl.textContent = 'Not yet reachable';
+      dEl.className = 'tb-r-big bad';
+      sEl.textContent = 'Right now the payments do not keep up with the interest, so the balance grows instead of shrinking. Add anything extra, even $10 a month, and this flips fast.';
+      document.getElementById('dp-months').textContent = '-';
+      document.getElementById('dp-interest').textContent = '-';
+      document.getElementById('dp-paid').textContent = '-';
+      document.getElementById('dp-order').innerHTML = '';
+      document.getElementById('dp-chart').innerHTML = '';
+      document.getElementById('dp-compare').textContent = '';
+      return;
+    }
+    dEl.textContent = mLabel(res.months);
+    dEl.className = 'tb-r-big';
+    var yrs = Math.floor(res.months/12), mos = res.months % 12;
+    sEl.textContent = 'Stay the course and you make the last payment in ' + mLabel(res.months) + '. That is ' + (yrs ? yrs + ' year' + (yrs>1?'s':'') + (mos ? ' and ' : '') : '') + (mos ? mos + ' month' + (mos>1?'s':'') : '') + ' from now.';
+    document.getElementById('dp-months').textContent = res.months;
+    document.getElementById('dp-interest').textContent = money(res.interest);
+    document.getElementById('dp-paid').textContent = money(res.paid);
+    var oh = '';
+    for (var i = 0; i < res.order.length; i++) oh += '<li><span class="tb-onum">'+(i+1)+'</span><span class="tb-oname">'+esc(res.order[i].n)+'</span><span class="tb-odate">gone by '+mLabel(res.order[i].done)+'</span></li>';
+    document.getElementById('dp-order').innerHTML = oh;
+    var ch = '', max = res.start || 1;
+    for (i = 0; i < res.series.length; i++){
+      var label = i === 0 ? 'Today' : (i === res.series.length - 1 ? 'Done' : 'Year ' + i);
+      ch += '<div class="tb-cbar"><span>'+label+'</span><i style="width:'+Math.max(0.5, res.series[i]/max*70)+'%"></i><b>'+money(res.series[i])+'</b></div>';
+    }
+    document.getElementById('dp-chart').innerHTML = ch;
+    var cmp = document.getElementById('dp-compare');
+    var alt = simulate(S.mode, extra + 50);
+    if (alt && !alt.fail && res.months > alt.months){
+      cmp.textContent = 'Worth knowing: just $50 more a month makes you debt-free ' + (res.months - alt.months) + ' month' + (res.months - alt.months > 1 ? 's' : '') + ' sooner and saves ' + money(res.interest - alt.interest) + ' in interest.';
+    } else cmp.textContent = '';
+  }
+
+  root.addEventListener('input', function(e){
+    var row = e.target.closest('.tb-row');
+    if (row){ var i = Number(row.getAttribute('data-i')), f = e.target.getAttribute('data-f');
+      if (S.debts[i] && f){ S.debts[i][f] = e.target.value; calc(); save(); } return; }
+    if (e.target.id === 'dp-extra'){ S.extra = e.target.value; calc(); save(); }
+  });
+  root.addEventListener('click', function(e){
+    if (e.target.closest('#dp-add')){ S.debts.push({n:'',b:'',r:'',m:''}); renderRows(); calc(); save(); return; }
+    var del = e.target.closest('.tb-del');
+    if (del){ var i = Number(del.closest('.tb-row').getAttribute('data-i')); S.debts.splice(i,1); if (!S.debts.length) S.debts.push({n:'',b:'',r:'',m:''}); renderRows(); calc(); save(); return; }
+    if (e.target.closest('#dp-mode-av')){ S.mode = 'av'; renderRows(); calc(); save(); return; }
+    if (e.target.closest('#dp-mode-sn')){ S.mode = 'sn'; renderRows(); calc(); save(); return; }
+    if (e.target.id === 'dp-clear'){ if (confirm('Erase everything you typed into this tool on this device?')){ try { localStorage.removeItem(KEY); } catch(err){} S = JSON.parse(JSON.stringify(SEED)); renderRows(); calc(); } return; }
+    if (e.target.id === 'dp-print'){ doPrint(); }
+  });
+
+  function doPrint(){
+    var res = simulate(S.mode, num(S.extra));
+    if (!res || res.fail){ alert('Enter your debts first, then print the plan.'); return; }
+    var rows = '';
+    for (var i = 0; i < res.order.length; i++) rows += '<tr><td>'+(i+1)+'. '+esc(res.order[i].n)+'</td><td class="r">gone by '+mLabel(res.order[i].done)+'</td></tr>';
+    var w = window.open('', '_blank');
+    if (!w){ alert('Your browser blocked the print window. Allow pop-ups for this site and try again.'); return; }
+    w.document.write('<html><head><title>My Debt Payoff Plan - Thrifty Crew</title><style>body{font-family:Georgia,serif;color:#16263f;max-width:640px;margin:2em auto;padding:0 1em;}h1{font-size:1.5em;border-bottom:2px solid #e2a43c;padding-bottom:.3em;}table{width:100%;border-collapse:collapse;font-size:.95em;}td{padding:.3em 0;border-bottom:1px dotted #ccc;}td.r{text-align:right;}.big{font-size:1.3em;font-weight:bold;margin:.8em 0;padding:.6em .8em;background:#f6f1e7;border-radius:8px;}.foot{margin-top:2em;font-size:.8em;color:#777;}</style></head><body>' +
+      '<h1>My Debt Payoff Plan</h1>' +
+      '<p class="big">Debt-free date: ' + mLabel(res.months) + '</p>' +
+      '<p>' + res.months + ' months. Total interest along the way: ' + money(res.interest) + '. Method: ' + (S.mode === 'sn' ? 'snowball (smallest balance first)' : 'avalanche (highest interest first)') + '.</p>' +
+      '<h2 style="font-size:1.05em">The order they fall</h2><table>' + rows + '</table>' +
+      '<p class="foot">Printed from the Thrifty Crew debt payoff calculator. Your numbers live on your device, not on our servers. thriftycrew.com</p>' +
+      '</body></html>');
+    w.document.close();
+    setTimeout(function(){ w.print(); }, 350);
+  }
+
+  renderRows(); calc();
+})();
+</script>
+</div>
