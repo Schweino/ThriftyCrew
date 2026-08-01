@@ -2320,5 +2320,14 @@ else { Bad ('audit-unit-basis-outlier -SelfTest failed (rc=' + $r.rc + ') - a wr
 $r = RunPS 'audit-board-consistency.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'board-consistency: a flyer-only ad pill is not a breach, and a priced chip with no link still is' }
 else { Bad ('audit-board-consistency -SelfTest failed (rc=' + $r.rc + ') - the ad-pill skip may now be swallowing genuinely linkless prices: ' + ($r.text -replace "`n", ' ')) }
+# ---- (j) THE SEMANTIC SIDECAR'S ESTATE-SIDE PLUMBING (2026-08-01) --------------------------------------
+# The GPU sweep itself is not run here (it needs a card, and a watcher that needs hardware is a watcher
+# that goes BLIND on the cloud runner). What IS asserted daily is the part that decides whether a finding
+# reaches a human: a fresh finding must be actionable, an ALREADY-ADJUDICATED cell must not be re-reported
+# as new, and a malformed finding must be rejected. If that filter inverts, the advisory feed either spams
+# the arrivals desk with settled rulings or silently swallows real ones.
+$r = RunPS 'audit-semantic-identity.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'semantic-identity: the actionable filter still admits fresh findings and still suppresses settled rulings' }
+else { Bad ('audit-semantic-identity -SelfTest failed (rc=' + $r.rc + ') - the semantic advisory feed may be re-reporting adjudicated cells or dropping real ones: ' + ($r.text -replace "`n", ' ')) }
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2

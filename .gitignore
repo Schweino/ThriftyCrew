@@ -26,6 +26,7 @@
 /sidecar/data/
 /sidecar/out/*
 !/sidecar/out/backtest-report.md
+!/sidecar/out/phase2-report.md
 /sidecar/**/__pycache__/
 # The member-tool SOURCES and the build scripts that publish them. Same hole as lib\ and the interstitial:
 # these run on the live site, several are the only copy in existence, and none of them were versioned

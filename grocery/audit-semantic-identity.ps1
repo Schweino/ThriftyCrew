@@ -1,0 +1,234 @@
+<#
+  audit-semantic-identity.ps1 - the estate's front end to the local GPU semantic sidecar.
+
+  WHY THIS EXISTS
+  ---------------
+  The measured #1 defect class is IDENTITY: the wrong product wearing a commodity's crown. Price
+  verification cannot catch it (all four wrong products in the 2026-07-30 audit were top-of-ladder
+  price-verified), and guard 5 cannot catch its mirror (a right product NO rule can see: "Cloves,
+  Ground" was invisible while a $45 jar won the cell unopposed on 2026-08-01).
+
+  Both are semantic questions. This script asks them of a local model and turns the answers into two
+  advisory reports:
+
+    IDENTITY  - shipped board cells that read as a poor instance of their commodity  -> arrivals desk
+    COVERAGE  - products no rule matches that read as a real instance of one         -> rule worklist
+
+  WHAT IT IS NOT
+  --------------
+  ADVISORY. It never changes a price, a crown, a rule or a link. It writes findings. A human or a
+  frontier agent adjudicates through the existing paths (add-known-wrong for a wrong product, a
+  commodities.json edit + crown-diff + tile-integrity for a coverage gap). That boundary is why it is
+  safe to run unattended.
+
+  BLIND, NEVER BLOCK
+  ------------------
+  If the sidecar is down, the GPU is busy, or Python is missing, this exits 3 (could-not-evaluate) and
+  says so. It must NEVER stop a publish: the board cannot depend on a GPU box being healthy. Exit 3 is
+  the same convention guards.ps1 uses for delegated audits, and OkUnlessBlind already knows how to read
+  "0 findings" differently from "did not run" - which is the whole point of the zero-rows rule.
+
+  REGEX STAYS HERE
+  ----------------
+  This script decides which products exist and which rules match them, using the SAME engine semantics
+  (first-match-wins include, then exclude). Python never re-implements that. Two copies of a matching
+  rule is this estate's most reliable bug.
+
+  Usage
+    .\audit-semantic-identity.ps1              prepare + sweep + report
+    .\audit-semantic-identity.ps1 -PrepareOnly write the corpus, skip the GPU
+    .\audit-semantic-identity.ps1 -SelfTest    frozen fixtures, no GPU, no data files
+  Exit: 0 = ran (findings are advisory, never a failure)  2 = self-test regression  3 = BLIND
+#>
+# -Python exists so the BLIND path is TESTABLE. A failure mode nobody can exercise on demand is a
+# failure mode nobody has actually verified, and "it degrades gracefully" is the easiest claim in
+# software to believe and never check.
+param([switch]$PrepareOnly, [switch]$SelfTest, [int]$MaxReport = 25, [string]$Python = '', [switch]$IncludeIdentity)
+$ErrorActionPreference = 'Stop'
+$root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+$OutDir  = Join-Path $root 'out'
+$sidecar = Join-Path (Split-Path $root -Parent) 'sidecar'
+$py      = if ($Python) { $Python } else { Join-Path $sidecar '.venv\Scripts\python.exe' }
+$sdData  = Join-Path $sidecar 'data'
+
+# ---------------------------------------------------------------- the one classifier, fixtured below
+# A finding is only worth a human's attention if it is ACTIONABLE. Two things make it not actionable:
+# a store cell we already adjudicated (it is in known-wrong, the ruling stands), and a product whose
+# commodity is not one we track. Filtering here rather than in Python keeps the estate's rulings in the
+# estate's language.
+function Test-Actionable {
+  param([string]$Kind, [string]$Id, [string]$Store, [string]$Product, [hashtable]$Blocks)
+  if (-not $Id -or -not $Product) { return $false }
+  # already ruled on: the blocklist IS the answer, so re-reporting it is noise
+  if ($Blocks -and (Test-KnownWrong -Blocks $Blocks -CommodityId $Id -Store $Store -ProductName $Product)) { return $false }
+  return $true
+}
+
+if ($SelfTest) {
+  # FROZEN FIXTURES (guard-fixture rule). No GPU, no network, no data files - so this runs in
+  # test-auditors every day and proves the plumbing still discriminates.
+  . (Join-Path $root 'known-wrong-lib.ps1')
+  $blocks = @{ 'coconut-oil|Bakers' = @{} }
+  $blocks = Get-KnownWrongBlocks -Path (Join-Path $root 'known-wrong.json')
+  $bad = 0
+  # MUST-FIRE: an ordinary finding is actionable
+  if (-not (Test-Actionable -Kind 'coverage' -Id 'ground-cloves' -Store 'Family Fare' -Product 'Our Family Cloves, Ground 2 Oz' -Blocks $blocks)) {
+    Write-Output '  X MUST-FIRE: a fresh coverage finding must be actionable'; $bad++
+  }
+  # CLEAN TWIN: something already adjudicated must NOT be re-reported
+  if (Test-Actionable -Kind 'identity' -Id 'coconut-oil' -Store "Baker's" -Product "Dr Teal's Foaming Bath with Pure Epsom Salt, Nourish & Protect with Coconut Oil" -Blocks $blocks) {
+    Write-Output '  X CLEAN TWIN: an already-adjudicated cell must not be re-reported as a new finding'; $bad++
+  }
+  # MUST-FIRE: a malformed finding is never actionable
+  if (Test-Actionable -Kind 'identity' -Id '' -Store 'Aldi' -Product 'x' -Blocks $blocks) {
+    Write-Output '  X MUST-FIRE: a finding with no commodity id must be rejected'; $bad++
+  }
+  if ($bad -eq 0) { Write-Output 'audit-semantic-identity SELF-TEST PASS (3 frozen cases)'; exit 0 }
+  Write-Output ("audit-semantic-identity SELF-TEST FAIL ($bad)"); exit 2
+}
+
+. (Join-Path $root 'known-wrong-lib.ps1')
+
+# ---------------------------------------------------------------- prepare the corpus (regex lives here)
+Write-Output 'preparing corpus (engine regex semantics: first-match-wins include, then exclude)'
+if (-not (Test-Path $sdData)) { New-Item -ItemType Directory -Force $sdData | Out-Null }
+$coms = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
+$cmpF = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
+if (-not $cmpF) { Write-Output 'BLIND: no comparison board to audit'; exit 3 }
+$cmp = Get-Content $cmpF.FullName -Raw | ConvertFrom-Json
+
+# board pairs = what we currently ship and therefore stand behind in public
+$pairs = New-Object System.Collections.Generic.List[object]
+foreach ($r in $cmp.comparison) {
+  foreach ($s in $r.stores) {
+    if ($s.item) { $pairs.Add([pscustomobject]@{ id = [string]$r.id; commodity = [string]$r.commodity; store = [string]$s.store; product = [string]$s.item }) }
+  }
+}
+($pairs.ToArray() | ConvertTo-Json -Depth 4) | Set-Content (Join-Path $sdData 'board-pairs.json') -Encoding UTF8
+
+# commodity definitions in natural language: label + what the board has ACCEPTED as one. Never the
+# regex - feeding the model the patterns would relaunder the same blind spot in vector form.
+$exemplars = @{}
+foreach ($p in $pairs) { if (-not $exemplars.ContainsKey($p.id)) { $exemplars[$p.id] = New-Object System.Collections.Generic.List[string] }; if ($exemplars[$p.id].Count -lt 6) { $exemplars[$p.id].Add($p.product) } }
+$defs = New-Object System.Collections.Generic.List[object]
+foreach ($c in $coms) {
+  $cid = [string]$c.id
+  $defs.Add([pscustomobject]@{ id = $cid; label = [string]$c.label; unit = [string]$c.unit
+    exemplars = $(if ($exemplars.ContainsKey($cid)) { @($exemplars[$cid]) } else { @() }) })
+}
+($defs.ToArray() | ConvertTo-Json -Depth 5) | Set-Content (Join-Path $sdData 'commodity-defs.json') -Encoding UTF8
+
+# every product in every feed, with the CURRENT rules' verdict
+$rx = New-Object System.Collections.Generic.List[object]
+$exc = @{}
+foreach ($c in $coms) {
+  foreach ($p in @($c.include)) { if ($p) { $rx.Add([pscustomobject]@{ id = [string]$c.id; r = [regex]::new([string]$p, 'IgnoreCase,Compiled') }) } }
+  $l = New-Object System.Collections.Generic.List[object]
+  foreach ($p in @($c.exclude)) { if ($p) { $l.Add([regex]::new([string]$p, 'IgnoreCase,Compiled')) } }
+  $exc[[string]$c.id] = $l
+}
+$seen = @{}
+$corpus = New-Object System.Collections.Generic.List[object]
+foreach ($f in (Get-ChildItem (Join-Path $OutDir 'regular\*-regular-*.json') -ErrorAction SilentlyContinue)) {
+  try { $d = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { continue }
+  $st = [string]$d.store
+  foreach ($x in @($d.deals)) {
+    $n = [string]$x.item; if (-not $n) { continue }
+    $k = $st + '|' + $n; if ($seen.ContainsKey($k)) { continue }; $seen[$k] = $true
+    $hit = ''
+    foreach ($e in $rx) {
+      if ($e.r.IsMatch($n)) {
+        $bad = $false
+        foreach ($xp in $exc[$e.id]) { if ($xp.IsMatch($n)) { $bad = $true; break } }
+        if (-not $bad) { $hit = $e.id; break }
+      }
+    }
+    $corpus.Add([pscustomobject]@{ store = $st; product = $n; rule_match = $hit })
+  }
+}
+($corpus.ToArray() | ConvertTo-Json -Depth 3 -Compress) | Set-Content (Join-Path $sdData 'corpus-current.json') -Encoding UTF8
+$invisible = @($corpus | Where-Object { -not $_.rule_match }).Count
+Write-Output ("corpus: {0} product rows, {1} shipped board pairs, {2} match no rule" -f $corpus.Count, $pairs.Count, $invisible)
+if ($PrepareOnly) { exit 0 }
+
+# ---------------------------------------------------------------- run the GPU sweep (BLIND if it cannot)
+if (-not (Test-Path $py)) { Write-Output "BLIND: no sidecar python at $py - the semantic check did not run. This is never a publish blocker."; exit 3 }
+$sweep = Join-Path $sidecar 'sweep.py'
+if (-not (Test-Path $sweep)) { Write-Output 'BLIND: sidecar sweep.py missing'; exit 3 }
+Write-Output 'running the GPU sweep'
+# EAP=Stop + a native command writing to stderr is fatal in PowerShell, and Python writes plenty of
+# benign stderr: SyntaxWarnings, HuggingFace rate-limit notices, tqdm bars. The FIRST run of this audit
+# died on a Python SyntaxWarning and reported a hard failure for a cosmetic warning. That is the
+# logger-kills-pipeline trap wearing a different hat. Drop to Continue around the external call ONLY,
+# and judge the run by its exit code and its output file, which are the things that actually mean
+# something. A crashed sweep must read as BLIND, never as a board problem.
+$prevEap = $ErrorActionPreference
+$ErrorActionPreference = 'Continue'
+$swOut = & $py $sweep 2>&1 | ForEach-Object { [string]$_ }
+$rc = $LASTEXITCODE
+$ErrorActionPreference = $prevEap
+$findF = Join-Path $sidecar 'out\semantic-findings.json'
+if ($rc -ne 0 -or -not (Test-Path $findF)) {
+  Write-Output ("BLIND: the sweep did not complete (exit $rc). The board is unaffected. Tail: " + (($swOut | Select-Object -Last 3) -join ' | '))
+  exit 3
+}
+$find = Get-Content $findF -Raw | ConvertFrom-Json
+# freshness: a findings file older than the board it claims to describe is a stale answer wearing a
+# fresh label - the same trap as a stamp file older than the job that writes it.
+try {
+  if (([datetime]$find.generated) -lt (Get-Item $cmpF.FullName).LastWriteTime.AddHours(-24)) {
+    Write-Output 'BLIND: findings file is older than the board it describes'; exit 3
+  }
+} catch {}
+
+# ---------------------------------------------------------------- filter to what a human can act on
+$blocks = Get-KnownWrongBlocks -Path (Join-Path $root 'known-wrong.json')
+$idRows = @(@($find.identity) | Where-Object { Test-Actionable -Kind 'identity' -Id ([string]$_.id) -Store ([string]$_.store) -Product ([string]$_.product) -Blocks $blocks })
+$cvRows = @(@($find.coverage) | Where-Object { Test-Actionable -Kind 'coverage' -Id ([string]$_.id) -Store ([string]$_.store) -Product ([string]$_.product) -Blocks $blocks })
+
+Write-Output ''
+Write-Output ("semantic-identity: examined {0} shipped pair(s) and {1} rule-invisible product(s) in {2}s on {3}" -f $find.examined.board_pairs, $find.examined.rule_invisible, $find.elapsed_sec, $find.device)
+# THE IDENTITY LANE IS OFF BY DEFAULT, and that is a measured decision, not caution.
+# Phase 1 scored it at AUC 0.985, but that was against negatives which are DRAMATICALLY wrong: bath soap
+# as coconut oil, dog food as salmon. Those are easy. Run against the whole live board it flags 173 pairs
+# and every one inspected is CORRECT - "Wimmer's Wieners" for Hot Dogs, "Kroger Olive Oil Mayo" for
+# Mayonnaise, "Yellow Bananas" for Bananas, "Dole Classic Romaine" for Lettuce. Even the six that BOTH
+# the bi-encoder and the cross-encoder call weak are right.
+# The models cannot separate a genuinely wrong product from a correctly-matched one that is tersely or
+# synonymously named, and shipping it anyway would hand the arrivals desk 173 rows of noise a day. A
+# guard nobody reads is worse than no guard - the exact lesson from the link-drift alert fixed this
+# morning. It stays available behind -IncludeIdentity for evaluation, and it needs the fine-tune on our
+# own ~6,000 adjudicated pairs before it earns a place in the nightly chain.
+if ($IncludeIdentity) {
+  Write-Output ("  IDENTITY (EXPERIMENTAL, not wired in)         : {0} actionable (of {1} raw)" -f $idRows.Count, @($find.identity).Count)
+  foreach ($r in ($idRows | Select-Object -First $MaxReport)) {
+    Write-Output ("    {0,-24} {1,-13} score={2,-9} cos={3,-8} {4}" -f $r.commodity, $r.store, $r.score, $r.cos, ([string]$r.product).Substring(0, [math]::Min(52, ([string]$r.product).Length)))
+  }
+  if ($idRows.Count -gt $MaxReport) { Write-Output ("    ... and {0} more (nothing truncated silently; see the findings file)" -f ($idRows.Count - $MaxReport)) }
+} else {
+  Write-Output ("  IDENTITY: {0} raw signal(s), SUPPRESSED - the lane is not accurate enough to ship (-IncludeIdentity to inspect). See the note in this script." -f @($find.identity).Count)
+  $idRows = @()
+}
+# GROUPED BY COMMODITY, because that is the unit of work. A coverage gap is fixed by editing ONE
+# commodity's rule, and 12 rows all saying "Arm & Hammer detergent is invisible" is one job, not twelve.
+# Ungrouped, the count reads like a crisis; grouped, it reads like a worklist.
+$cvGroups = @($cvRows | Group-Object id | Sort-Object { -(@($_.Group).Count) })
+Write-Output ("  COVERAGE (real products no rule can see)      : {0} product(s) across {1} commodit(y/ies)" -f $cvRows.Count, $cvGroups.Count)
+foreach ($g in ($cvGroups | Select-Object -First $MaxReport)) {
+  $top = @($g.Group | Sort-Object { -[double]$_.score })[0]
+  Write-Output ("    {0,-26} {1,2} product(s), best {2,-9} e.g. [{3}] {4}" -f $top.commodity, @($g.Group).Count, $top.score, $top.store, ([string]$top.product).Substring(0, [math]::Min(46, ([string]$top.product).Length)))
+}
+if ($cvGroups.Count -gt $MaxReport) { Write-Output ("    ... and {0} more commodit(y/ies) (nothing truncated silently; see the findings file)" -f ($cvGroups.Count - $MaxReport)) }
+
+$report = [ordered]@{
+  generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); board = $cmpF.Name
+  sidecar_generated = [string]$find.generated; device = [string]$find.device
+  thresholds = $find.thresholds; examined = $find.examined
+  identity_count = $idRows.Count; coverage_count = $cvRows.Count
+  identity = $idRows; coverage = $cvRows
+}
+$rp = Join-Path $OutDir 'semantic-findings.json'
+($report | ConvertTo-Json -Depth 6) | Set-Content $rp -Encoding UTF8
+Write-Output ''
+Write-Output ("  -> $rp   ADVISORY ONLY: nothing here changes a price, a crown, a rule or a link.")
+exit 0
