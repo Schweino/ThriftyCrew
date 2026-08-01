@@ -122,12 +122,28 @@ about regex and structurally cannot see a product whose name shares no vocabular
 
 ## Section 2: UNBLOCKED 2026-08-01 (was freeze-gated; the freeze was lifted at Brad's word)
 
-**F1. Discovery depth**: `discover-hyvee.ps1` + prime-batch-headless pageSize 40->90 + cycle wiring.
-The dominant defect class is ABSENT catalogue (Hy-Vee misses 89.3%). **The aisle-test prerequisite is now
-MET (item 2), so this is unblocked.** CORRECTION to the earlier note that it was "built and verified":
-`discover-hyvee.ps1` does NOT exist in the repo - a file search on 2026-08-01 found no `discover-*.ps1`
-at all. It needs building, not applying. Budget it as a real piece of work, and run the aisle test over
-its candidate flips before any of them reach a board.
+**F1. BUILT 2026-08-01 - `discover-hyvee.ps1` ships as a DOCKET producer.** Bounded rotating search pass
+(persisted cursor), rule-filtered, keeping only net-new candidates that beat the held per-unit by a margin.
+
+**The plan's premise was wrong on the safety story and this is the correction.** It said to "run the aisle
+test over its candidate flips" - that is IMPOSSIBLE for Hy-Vee, and it was measured, not assumed:
+Hy-Vee search results carry no category/department (`analytics` is empty); the response DOES expose a
+CATEGORY facet (for "baking soda": BAKING_SODA 3, **CAT_LITTER 1**, FACE_WASHES_AND_SCRUBS) but passing it
+back as a `searchFilters` constraint is **SILENTLY IGNORED** - three request shapes, all returned the
+identical unfiltered results with the cat litter still in them. A filter that looks applied and is not is
+worse than none. So Hy-Vee depth cannot be gated the way Family Fare's can, and discovery therefore stops
+at a review docket instead of writing the feed.
+
+**First live run validated both halves.** 6 terms, 281 products, 14 candidates. REAL: That's Smart! peanut
+butter 40 oz **-33.4%**, ketchup **-29%**, Hy-Vee EVOO 68 fl oz **-14.2%**, Hy-Vee no-salt black beans
+**-11.1%** - all unreachable by the refresh-only puller. WRONG: a Hendrickson's Sweet Vinegar & Olive Oil
+DRESSING and Pasta Roni Garlic & Olive Oil VERMICELLI, both matching the include and both beating the held
+price. ~14% wrong, matching the FF browse-test rate.
+
+**STILL OPEN on F1:** (a) an ADJUDICATION PATH for the docket - the arrivals desk is the obvious home, and
+until it exists discovery pays nothing; (b) cycle wiring, which must wait on (a); (c) the
+prime-batch-headless pageSize 40->90 bump, which is cheap but only helps terms with >40 results (measured:
+"baking soda" returns 10 in total, so it is not the lever the plan assumed).
 **F2. DONE 2026-08-01 - everyday-mismatch audits both boards.** 2,656 -> 2,971 cells checked; 95
 previously-invisible mismatches surfaced on the recipe board; the main-board answer is unchanged at 6.
 The stated reason ("16 of 19 pins outside its view") was STALE - pins collapsed 19 -> 1 once
