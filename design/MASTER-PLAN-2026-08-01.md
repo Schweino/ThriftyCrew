@@ -119,8 +119,23 @@ MET (item 2), so this is unblocked.** CORRECTION to the earlier note that it was
 `discover-hyvee.ps1` does NOT exist in the repo - a file search on 2026-08-01 found no `discover-*.ps1`
 at all. It needs building, not applying. Budget it as a real piece of work, and run the aisle test over
 its candidate flips before any of them reach a board.
-**F2. everyday-mismatch reads BOTH boards** (16 of 19 pins sit outside its view today).
-**F3. ff-carry window contention + the freezer-pops term.**
+**F2. DONE 2026-08-01 - everyday-mismatch audits both boards.** 2,656 -> 2,971 cells checked; 95
+previously-invisible mismatches surfaced on the recipe board; the main-board answer is unchanged at 6.
+The stated reason ("16 of 19 pins outside its view") was STALE - pins collapsed 19 -> 1 once
+generate-board-overrides stopped minting a pin a same-day pull confirms. The real reason: all 80
+recipe-board rows are off the main board, all 80 carry a link, and they price recipe cards and the feed.
+**Those 95 findings are now an open backlog** - they belong with F5.
+
+**F3. HALF DONE, half re-scoped.**
+- The **window contention** half is ALREADY SHIPPED (verified in source, not assumed): `Has-FeedCoverage`
+  in `audit-ff-carry.ps1` applies the rule - a term whose commodity has a priced row in this same pull is
+  not a victim - with the 24 -> 9 measurement recorded inline.
+- The **freezer-pops term** is NOT a term edit. `commodity-search.json` holds ONE string per commodity and
+  the FF puller flattens with `[string]$_.Value`, so an array value silently becomes a single joined
+  search instead of two. **23 scripts read that file.** Multi-term support is a 23-consumer shape change
+  that also spends FF budget slots every rotation, and the budget is the binding constraint (~85 of 526
+  terms bought per run). It is the right fix for a systemic problem - 210 of 429 commodities have an FF
+  product name that does not contain our search term at all - but it is a design change, not a one-liner.
 **F4. Baseline tolerance narrowing** from the week's accumulated ledger data (the freeze week's whole
 point was to let that ledger accumulate).
 **F5. The 9-row consistency mismatch backlog** (stored links whose price drifted >30%): re-point or

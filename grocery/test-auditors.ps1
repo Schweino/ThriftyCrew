@@ -849,6 +849,23 @@ if ($aemSrc -match 'price\s*=\s*\[double\]\$e\.price') { Bad 'audit-everyday-mis
 else { Ok 'audit-everyday-mismatch records the already-parsed price (it can survive its own findings)' }
 if ($aemSrc -notmatch 'price\s*=\s*\$sp;') { Bad 'audit-everyday-mismatch no longer records $sp - check it is not re-parsing the raw string somewhere else' }
 else { Ok 'audit-everyday-mismatch reuses $sp, the price it already parsed safely' }
+# BOTH BOARDS (2026-08-01). It read only comparison-*.json, so every RECIPE-board cell was outside the one
+# check that asks "does the price we publish match the product the link opens" - measured that day, all 80
+# recipe-board rows are absent from the main board and all 80 carry a link, and turning it on surfaced 95
+# mismatches that had never been visible. This fixture RUNS the audit against a synthetic OutDir where the
+# ONLY mismatch lives on the recipe board, so a regression that quietly drops the second board fails here
+# instead of going quiet on 315 real cells.
+$aemFx = Join-Path ([System.IO.Path]::GetTempPath()) ('aem-fx-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+New-Item -ItemType Directory -Force -Path $aemFx | Out-Null
+'{"comparison":[{"id":"clean-thing","commodity":"Clean","unit":"oz","stores":[{"store":"Walmart","per_unit":0.10,"type":"everyday","item":"Clean Thing"}]}]}' | Set-Content (Join-Path $aemFx 'comparison-2026-01-01.json') -Encoding UTF8
+'{"comparison":[{"id":"recipe-only-thing","commodity":"RecipeOnly","unit":"oz","stores":[{"store":"Walmart","per_unit":0.10,"type":"everyday"}]}]}' | Set-Content (Join-Path $aemFx 'recipe-board.json') -Encoding UTF8
+'{"items":{"clean-thing":{"Walmart":{"url":"u","price":"$1.00","size":"10 oz","name":"Clean Thing"}},"recipe-only-thing":{"Walmart":{"url":"u","price":"$9.00","size":"10 oz","name":"Recipe Only Thing"}}}}' | Set-Content (Join-Path $aemFx 'product-urls.json') -Encoding UTF8
+$aemR = RunPS 'audit-everyday-mismatch.ps1' @('-OutDir', $aemFx)
+if ($aemR.text -match 'recipe-only-thing') { Ok 'audit-everyday-mismatch still reads the RECIPE board (a recipe-only mismatch is found)' }
+else { Bad 'audit-everyday-mismatch did NOT find the recipe-board-only mismatch - the second board has been dropped and 315 live cells are unaudited again' }
+if ($aemR.text -match 'recipe=') { Ok 'audit-everyday-mismatch still reports its per-board checked counts' }
+else { Bad 'audit-everyday-mismatch stopped reporting per-board counts - a silently empty second board would look identical to a healthy one' }
+Remove-Item $aemFx -Recurse -Force -ErrorAction SilentlyContinue
 # (k1a) A GUARD THAT CANNOT FINISH, AND A CALLER THAT CANNOT NOTICE (2026-07-30). audit-ff-carry.ps1 wrapped a
 # System.Collections.Generic.List[object] in @( ) to build its report - which throws "ArgumentException:
 # Argument types do not match" in Windows PowerShell 5.1 (it is fine around a List[string], and fine around the

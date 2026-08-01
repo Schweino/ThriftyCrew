@@ -27,6 +27,21 @@ if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 # which is why it had no must-fire fixture: there was no way to feed it anything but the live board.
 $cmpF = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -EA SilentlyContinue | Sort-Object Name -Desc | Select-Object -First 1
 if (-not $cmpF) { Write-Output 'everyday-mismatch: COULD NOT EVALUATE - no comparison-*.json to read the board from'; exit 3 }
+# BOTH BOARDS (2026-08-01). This read only the main comparison, so the RECIPE board was never audited:
+# measured that day, all 80 of its rows are absent from the main board and all 80 carry a stored link, so
+# 80 auditable cells sat permanently outside the one check that asks "does the price we publish match the
+# product the link opens". They are not cosmetic - they price recipe cards and the public feed.
+# (The plan justified this as "16 of 19 pins sit outside its view". That number is STALE: pins collapsed
+# from 19 to 1 once generate-board-overrides stopped minting a pin when a same-day pull confirms the
+# board. The pin argument is gone; the 80 unaudited cells are the real reason, and they are why this
+# still shipped.)
+$boards = @([pscustomobject]@{ name = $cmpF.Name; src = 'main'; data = (Get-Content $cmpF.FullName -Raw | ConvertFrom-Json) })
+$rbF = Join-Path $OutDir 'recipe-board.json'
+if (Test-Path $rbF) {
+  $boards += [pscustomobject]@{ name = 'recipe-board.json'; src = 'recipe'; data = (Get-Content $rbF -Raw | ConvertFrom-Json) }
+} else {
+  Write-Output 'everyday-mismatch: NOTE - no recipe-board.json in this OutDir; auditing the main board only'
+}
 # -OutDir WINS. Production has product-urls.json at $root and nothing at out\, so this falls through to the
 # real file exactly as before. A fixture directory that ships its own copy overrides it - which is the whole
 # point, and the reason this order is not the other way round: $root's copy always exists, so checking it
@@ -34,7 +49,6 @@ if (-not $cmpF) { Write-Output 'everyday-mismatch: COULD NOT EVALUATE - no compa
 $puF = Join-Path $OutDir 'product-urls.json'
 if (-not (Test-Path $puF)) { $puF = Join-Path $root 'product-urls.json' }
 if (-not (Test-Path $puF)) { Write-Output 'everyday-mismatch: COULD NOT EVALUATE - no product-urls.json to compare the board against'; exit 3 }
-$cmp = Get-Content $cmpF.FullName -Raw | ConvertFrom-Json
 $pu  = (Get-Content $puF -Raw | ConvertFrom-Json).items
 
 # A multipack's total is packs x unit-size, and the pack count often lives in the NAME
@@ -49,13 +63,20 @@ $pu  = (Get-Content $puF -Raw | ConvertFrom-Json).items
 
 $bugs = New-Object System.Collections.ArrayList
 $checked = 0; $saleSkipped = 0; $noLink = 0; $uncomputable = 0; $noBoardPu = 0
+$perBoard = @{}
+$seen = @{}   # id|store already judged on an earlier board - do not double-count or double-report
 
-foreach ($row in $cmp.comparison) {
+foreach ($b in $boards) {
+ $bSrc = [string]$b.src
+ if (-not $perBoard.ContainsKey($bSrc)) { $perBoard[$bSrc] = 0 }
+ foreach ($row in $b.data.comparison) {
   $id = [string]$row.id
   $link = $pu.$id
   if (-not $link) { continue }
   foreach ($s in $row.stores) {
     $store = [string]$s.store
+    $key = $id + '|' + $store
+    if ($seen.ContainsKey($key)) { continue }   # same cell on both boards: judge it once
     $e = $link.$store
     if (-not $e -or -not $e.price) { $noLink++; continue }
     if (([string]$s.type) -ne 'everyday') { $saleSkipped++; continue }   # a sale legitimately differs from the shelf price
@@ -67,7 +88,7 @@ foreach ($row in $cmp.comparison) {
     # all would drain every cell out of $checked and still print a confident "MISMATCHES: 0". Every path out
     # of an eligible cell is now counted, which is what makes the blind test below trustworthy.
     if ($boardPu -le 0) { $noBoardPu++; continue }
-    $checked++
+    $checked++; $seen[$key] = $true; $perBoard[$bSrc]++
     $diff = [math]::Abs($linkPu - $boardPu) / $boardPu
     # HALF-CENT RULE. Some links record the STORE'S OWN unit price in the size field ("$0.06/oz"), already
     # rounded to the cent. On a cheap item that rounding is huge in percentage terms and nothing else: a can
@@ -85,12 +106,15 @@ foreach ($row in $cmp.comparison) {
         # already parsed safely at the top of this iteration, so there is nothing to re-derive here.
         price=$sp; size=[string]$e.size
         boardItem=[string]$s.item; linkItem=[string]$e.name
+        board_src=$bSrc
       })
     }
   }
+ }
 }
 
 Write-Output ("everyday cells with a link, checked : $checked")
+Write-Output ("  by board                          : " + (($perBoard.Keys | Sort-Object | ForEach-Object { "$_=$($perBoard[$_])" }) -join '  '))
 Write-Output ("sale cells skipped (expected diff)  : $saleSkipped")
 Write-Output ("uncomputable size                   : $uncomputable")
 Write-Output ("board published no per-unit         : $noBoardPu")
