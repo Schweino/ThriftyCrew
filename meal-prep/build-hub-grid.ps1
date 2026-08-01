@@ -27,7 +27,10 @@
 # so the two navy panels are always separated by white. Test-TcNavyAdjacency re-checks it before write.
 param([switch]$Validate,[switch]$Publish)
 $ErrorActionPreference='Stop'
-$root='C:\Codex\income\meal-prep'
+# $PSScriptRoot, not a hard-coded path (2026-08-01): the rotation chain now calls this script wherever
+# check-ad-cycles runs, and the cloud runner's checkout is not C:\Codex. A hard-coded root here meant a
+# cloud-side rotation flip could never refresh the hub and would log INCOMPLETE on every flip.
+$root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\income\meal-prep' }
 # stable local work dir (was hardcoded to a long-gone session scratchpad - ratchet-class bug)
 $scratch=Join-Path $env:TEMP 'tc-hub-work'
 New-Item -ItemType Directory -Force $scratch | Out-Null
@@ -561,7 +564,9 @@ $jwt=New-GhostJWT
 $g=Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/pages/slug/meal-prep-recipes/?formats=html&fields=id,html,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}
 $page=$g.pages[0]; $html=[string]$page.html
 $orig=$html
-$html | Set-Content (Join-Path 'C:\Codex\income\site-backups' ('meal-prep-recipes-BEFORE-elite-' + (Get-Date -Format 'yyyy-MM-dd') + '.html')) -Encoding UTF8
+$bakDir = Join-Path (Split-Path $root -Parent) 'site-backups'
+New-Item -ItemType Directory -Force $bakDir | Out-Null
+$html | Set-Content (Join-Path $bakDir ('meal-prep-recipes-BEFORE-elite-' + (Get-Date -Format 'yyyy-MM-dd') + '.html')) -Encoding UTF8
 
 # Replace a managed block, or insert it fresh at $anchor when this is the first run.
 function Splice-Block([string]$doc,[string]$name,[string]$block,[string]$anchor){

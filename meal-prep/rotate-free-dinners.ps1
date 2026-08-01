@@ -148,9 +148,30 @@ if ($visChanges.Count) { $nvis = Set-RecipeVisibility -DbPath (Join-Path $root '
 [pscustomobject]@{
   week_of = $boardWeek; updated = (Get-Date).ToString('s')
   note = 'This week free because they are the cheapest dinners per protein on the live Omaha board. They revert to members-only when prices re-rank.'
-  free = $target
+  # CONFIRMED truth, not intent (same rule as the state file, 2026-08-01). The hub's client-side badge
+  # refresh is remove-only and trusts this feed, so publishing $target could keep a gold FREE badge on a
+  # recipe whose flip FAILED and is still paid - the exact ribbon-over-a-paywall sin. Ghost-confirmed only.
+  free = $stateFree
 } | ConvertTo-Json -Depth 4 | Set-Content (Join-Path $pubDir 'free-dinners.json') -Encoding UTF8
 Write-Output ("rotation: $flips flip(s), $errors error(s); state + recipes-db + public/free-dinners.json written")
+
+# REPUBLISH THE HUB WHEN THE SET CHANGED (2026-08-01). The hub bakes FREE badges into static HTML at
+# build time, and until now NOTHING rebuilt it when the rotation flipped - so every flip left the page
+# one rotation stale (found live: slow-cooker-kalua-pork-bowls still badged hours after rotating out;
+# the client-side remove-only refresh hid it from JS visitors, but no-JS visitors and search caches saw
+# a FREE badge on a paid post). The build verifies visibility per slug against Ghost, so this republish
+# is also the badge truth check. Only on a real change, so quiet days stay quiet.
+if ($flips -gt 0 -and $errors -eq 0) {
+  Write-Output 'set changed - republishing the hub so its baked badges match the new rotation'
+  try {
+    & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-hub-grid.ps1') -Publish *>&1 |
+      Select-Object -Last 2 | ForEach-Object { Write-Output ("  hub: " + $_) }
+    if ($LASTEXITCODE -ne 0) { throw "build-hub-grid exited $LASTEXITCODE" }
+  } catch {
+    Write-Output ("rotation INCOMPLETE: flips applied but the hub republish failed (" + $_.Exception.Message + ") - the hub's baked FREE badges are one rotation stale until it publishes. Re-run build-hub-grid.ps1 -Publish.")
+    exit 1
+  }
+}
 if ($errors -gt 0) {
   # say it plainly and exit non-zero: a partially-applied rotation means the site is promising something
   # Ghost is not serving, and the state now differs from the target so the next run WILL retry.

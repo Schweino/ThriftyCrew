@@ -1,13 +1,13 @@
 ﻿{
     "no_taxonomy_rows":  0,
-    "judged":  3884,
+    "judged":  3960,
     "unknown_departments":  [
 
                             ],
     "sources":  [
-                    "Family Fare: canonical_url from 17 file(s) within 30d -\u003e 4385 product(s) with a department (newest family-fare-regular-2026-08-01.json)",
-                    "Hy-Vee: row field store_department in hyvee-regular-2026-07-31.json -\u003e 864 product(s) with a department",
-                    "Baker\u0027s: row field store_category in bakers-regular-2026-08-01.json -\u003e 6389 product(s) with a department"
+                    "Family Fare: canonical_url from 17 file(s) within 30d -\u003e 4472 product(s) with a department (newest family-fare-regular-2026-08-01.json)",
+                    "Hy-Vee: row field store_department in hyvee-regular-2026-08-01.json -\u003e 859 product(s) with a department",
+                    "Baker\u0027s: row field store_category in bakers-regular-2026-08-01.json -\u003e 6382 product(s) with a department"
                 ],
     "note":  "The store said one thing about this product and our include regex said another. A LIVE CELL entry is on the board right now. A candidate entry has not won a cell but proves the rule matches the wrong product. This is a REVIEW QUEUE, not a gate - see the header.",
     "date":  "2026-08-01",

@@ -5,38 +5,38 @@
     "refused":  [
                     {
                         "id":  "caesar-salad-kit",
-                        "why":  "match found but its size \"1 bag\" gives no per-unit in oz"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "cherry-tomatoes",
-                        "why":  "match found but its size \"1 pt\" gives no per-unit in oz"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "ground-coriander",
-                        "why":  "no confident match (best 0)"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "donuts",
-                        "why":  "match found but its size \"10 oz\" gives no per-unit in each"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "hamburger-buns",
-                        "why":  "match found but its size \"16 oz\" gives no per-unit in each"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "orange-juice",
-                        "why":  "match found but its size \"0.5 gll\" gives no per-unit in floz"
+                        "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "queso",
-                        "why":  "match found but its size \"23\" gives no per-unit in oz"
+                        "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "tomatillos",
-                        "why":  "match found but per-unit disagrees: board $1.99 vs link $2.49 (20.1%)"
+                        "why":  "not attempted - circuit breaker tripped"
                     }
                 ],
     "worked":  8,
-    "generated":  "2026-08-01 06:14",
-    "board":  "comparison-2026-07-31.json"
+    "generated":  "2026-08-01 09:03",
+    "board":  "comparison-2026-08-01.json"
 }

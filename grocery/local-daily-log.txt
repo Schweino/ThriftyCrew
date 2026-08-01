@@ -1,32 +1,11 @@
-﻿[2026-07-30T08:34:31] log re-created by triage: the previous file was held by an exclusive handle from 2026-07-25T08:30:03 and the daily wrapper could not append to it for five days (old copy kept as local-daily-log.stuck-since-2026-07-25.txt).
-[2026-07-30T08:34:31] write test
-[2026-07-30T09:21:51] check-ad-cycles exit 0
-[2026-07-30T09:21:53] rebase[1]: Created autostash: e1eaab06
-[2026-07-30T09:21:53] rebase[1]: Current branch main is up to date.
-[2026-07-30T09:21:53] rebase[1]: Applying autostash resulted in conflicts.
-[2026-07-30T09:21:53] rebase[1]: Your changes are safe in the stash.
-[2026-07-30T09:21:53] rebase[1]: You can run "git stash pop" or "git stash drop" at any time.
-[2026-07-30T09:21:56] push[1]: To https://github.com/Schweino/SimpleMoneyPlaybook.git
-[2026-07-30T09:21:56] push[1]:    afa1efec..edcc6816  HEAD -> main
-[2026-07-30T09:21:56] pushed on attempt 1
-[2026-07-30T09:21:56] feed fresh: week 2026-07-30, 513 recipes, 572 ingredients
-[2026-07-30T09:21:56] done
-[2026-07-31T08:30:03] cloud-runs: check-cloud-runs: daily.yml ok (completed/success)
-[2026-07-31T08:30:03] cloud-runs: check-cloud-runs: heartbeat.yml ok (completed/success)
-[2026-07-31T08:30:03] weekly-lock: weekly-run lock: none - no weekly refresh is holding the tree.
-[2026-07-31T08:30:03] start: syncing repo
-[2026-07-31T08:30:04] pull: From https://github.com/Schweino/SimpleMoneyPlaybook
-[2026-07-31T08:30:04] pull:  * branch              main       -> FETCH_HEAD
-[2026-07-31T08:30:04] pull: Already up to date.
-[2026-07-31T08:30:04] running check-ad-cycles
-[2026-07-31T09:16:41] check-ad-cycles exit 0
-[2026-07-31T09:16:44] rebase[1]: Created autostash: f5e7c231
-[2026-07-31T09:16:44] rebase[1]: Current branch main is up to date.
-[2026-07-31T09:16:44] rebase[1]: Applying autostash resulted in conflicts.
-[2026-07-31T09:16:44] rebase[1]: Your changes are safe in the stash.
-[2026-07-31T09:16:44] rebase[1]: You can run "git stash pop" or "git stash drop" at any time.
-[2026-07-31T09:16:47] push[1]: To https://github.com/Schweino/SimpleMoneyPlaybook.git
-[2026-07-31T09:16:47] push[1]:    4ada142f..d10d9ec8  HEAD -> main
-[2026-07-31T09:16:47] pushed on attempt 1
-[2026-07-31T09:16:47] feed fresh: week 2026-07-31, 513 recipes, 572 ingredients
-[2026-07-31T09:16:47] done
+[2026-08-01T08:30:02] out-retention: archived 0, purged 0
+[2026-08-01T08:30:34] ghost-export: ghost-export: 1485 posts + 19 pages -> ghost-export-2026-08.zip (18.4 MB zipped, parse-verified before compress)
+[2026-08-01T08:30:35] cloud-runs: check-cloud-runs: daily.yml ok (completed/success)
+[2026-08-01T08:30:35] cloud-runs: check-cloud-runs: heartbeat.yml ok (completed/success)
+[2026-08-01T08:30:35] weekly-lock: weekly-run lock: none - no weekly refresh is holding the tree.
+[2026-08-01T08:30:35] start: syncing repo
+[2026-08-01T08:30:36] pull: From https://github.com/Schweino/SimpleMoneyPlaybook
+[2026-08-01T08:30:36] pull:  * branch              main       -> FETCH_HEAD
+[2026-08-01T08:30:36] pull: Already up to date.
+[2026-08-01T08:30:36] running check-ad-cycles
+[2026-08-01T09:12:50] check-ad-cycles exit 0

@@ -222,9 +222,9 @@
                                         "Baker\u0027s":  {
                                                              "url":  "https://www.bakersplus.com/p/glade-soft-mist-odor-fighting-aerosol-air-freshener-hawaiian-breeze-7-3oz-1-count/0019798100477",
                                                              "name":  "Glade Soft Mist Odor Fighting Aerosol Air Freshener, Hawaiian Breeze, 7.3oz, 1 count",
-                                                             "price":  "$1.79",
+                                                             "price":  1.79,
                                                              "size":  "7.3 oz",
-                                                             "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                             "verified":  "2026-08-01"
                                                          }
                                     },
                   "alfredo-sauce":  {
@@ -328,9 +328,9 @@
                                               "Baker\u0027s":  {
                                                                    "url":  "https://www.bakersplus.com/p/kroger-mercado-lavender-scented-multi-purpose-cleaner/0001111015698",
                                                                    "name":  "Kroger Mercado Lavender Scented Multi-Purpose Cleaner",
-                                                                   "price":  "$3.99",
+                                                                   "price":  3.99,
                                                                    "size":  "56 fl oz",
-                                                                   "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                                   "verified":  "2026-08-01"
                                                                }
                                           },
                   "all-purpose-flour":  {
@@ -422,9 +422,9 @@
                                       "Baker\u0027s":  {
                                                            "url":  "https://www.bakersplus.com/p/simple-truth-plant-based-non-dairy-unsweetened-almondmilk-half-gallon/0001111013267",
                                                            "name":  "Simple Truth Plant Based Non Dairy Unsweetened Almondmilk Half Gallon",
-                                                           "price":  "$2.79",
+                                                           "price":  2.79,
                                                            "size":  "1/2 gal",
-                                                           "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                           "verified":  "2026-08-01"
                                                        }
                                   },
                   "almonds":  {
@@ -476,9 +476,9 @@
                                   "Baker\u0027s":  {
                                                        "url":  "https://www.bakersplus.com/p/blue-diamond-mike-s-hot-honey-almonds/0004157015776",
                                                        "name":  "Blue Diamond Mike\u0027s Hot Honey Almonds",
-                                                       "price":  "$4.00",
+                                                       "price":  4,
                                                        "size":  "6oz",
-                                                       "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                       "verified":  "2026-08-01"
                                                    }
                               },
                   "aluminum-foil":  {
@@ -1308,9 +1308,9 @@
                                      "Baker\u0027s":  {
                                                           "url":  "https://www.bakersplus.com/p/comforts-clean-scent-baby-wipes/0004126002097",
                                                           "name":  "Comforts Clean Scent Baby Wipes",
-                                                          "price":  "$2.29",
+                                                          "price":  2.29,
                                                           "size":  "72 ct",
-                                                          "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                          "verified":  "2026-08-01"
                                                       }
                                  },
                   "bacon":  {
@@ -1894,9 +1894,9 @@
                                     "Baker\u0027s":  {
                                                          "url":  "https://www.bakersplus.com/p/kraft-original-slow-simmered-bbq-sauce/0002100005228",
                                                          "name":  "Kraft Original Slow-Simmered BBQ Sauce",
-                                                         "price":  "$1.99",
+                                                         "price":  1.99,
                                                          "size":  "18 oz",
-                                                         "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                         "verified":  "2026-08-01"
                                                      }
                                 },
                   "beef-broth":  {
@@ -2242,9 +2242,9 @@
                                        "Baker\u0027s":  {
                                                             "url":  "https://www.bakersplus.com/p/kroger-large-pitted-ripe-black-olives/0001111082202",
                                                             "name":  "Kroger Large Pitted Ripe Black Olives",
-                                                            "price":  "$1.99",
+                                                            "price":  1.99,
                                                             "size":  "6 oz",
-                                                            "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                            "verified":  "2026-08-01"
                                                         }
                                    },
                   "black-pepper":  {
@@ -2476,9 +2476,9 @@
                                     "Baker\u0027s":  {
                                                          "url":  "https://www.bakersplus.com/p/suave-essentials-cocoa-butter-shea-body-wash/0038371100447",
                                                          "name":  "Suave Essentials Cocoa Butter \u0026 Shea Body Wash",
-                                                         "price":  "$3.29",
+                                                         "price":  3.29,
                                                          "size":  "18 fl oz",
-                                                         "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                         "verified":  "2026-08-01"
                                                      }
                                 },
                   "bok-choy":  {
@@ -2571,7 +2571,14 @@
                                                            "size":  "16 fl oz",
                                                            "name":  "KC Masterpiece Classic Steakhouse Marinade, 16 fl oz Bottle",
                                                            "board_pu":  0.1856
-                                                       }
+                                                       },
+                                           "Family Fare":  {
+                                                               "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/marinades/steak_chop_30_minute_marinade/p/7081439",
+                                                               "name":  "Steak + Chop 30 Minute Marinade",
+                                                               "price":  "$2.79",
+                                                               "size":  "12.25 fl oz",
+                                                               "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                           }
                                        },
                   "bottled-water":  {
                                         "commodity":  "bottled-water",
@@ -2877,9 +2884,9 @@
                                                "Baker\u0027s":  {
                                                                     "url":  "https://www.bakersplus.com/p/jimmy-dean-sausage-egg-cheese-croissant-frozen-breakfast-sandwiches/0007790050308",
                                                                     "name":  "Jimmy Dean Sausage Egg \u0026 Cheese Croissant Frozen Breakfast Sandwiches",
-                                                                    "price":  "$10.99",
+                                                                    "price":  10.99,
                                                                     "size":  "8 ct",
-                                                                    "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                                    "verified":  "2026-08-01"
                                                                 }
                                            },
                   "breakfast-sausage":  {
@@ -3328,9 +3335,9 @@
                                  "Baker\u0027s":  {
                                                       "url":  "https://www.bakersplus.com/p/green-giant-butter-with-salt-pepper-corn-cob-bites/0019056968405",
                                                       "name":  "Green Giant Butter with Salt \u0026 Pepper Corn Cob Bites",
-                                                      "price":  "$3.49",
+                                                      "price":  3.49,
                                                       "size":  "16 oz",
-                                                      "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                      "verified":  "2026-08-01"
                                                   },
                                  "Family Fare":  {
                                                      "url":  "https://www.shopfamilyfare.com/shop/dairy/butter_margarine/butter/land_o_lakes_butter_unsalted_4_ea/p/8136",
@@ -3788,7 +3795,14 @@
                                                        "price":  "$3.98",
                                                        "size":  "25 oz",
                                                        "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
-                                                   }
+                                                   },
+                                       "Family Fare":  {
+                                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/chili/hormel_chili_with_beans_25_oz/p/121474",
+                                                           "name":  "Hormel Chili, With Beans 25 Oz",
+                                                           "price":  "$4.59",
+                                                           "size":  "25 oz",
+                                                           "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                       }
                                    },
                   "canned-corn":  {
                                       "commodity":  "canned-corn",
@@ -4097,9 +4111,9 @@
                                          "Baker\u0027s":  {
                                                               "url":  "https://www.bakersplus.com/p/kroger-canned-yellow-cling-sliced-peaches-in-heavy-syrup/0001111002936",
                                                               "name":  "Kroger Canned Yellow Cling Sliced Peaches in Heavy Syrup",
-                                                              "price":  "$3.29",
+                                                              "price":  3.29,
                                                               "size":  "29 oz",
-                                                              "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                              "verified":  "2026-08-01"
                                                           }
                                      },
                   "canned-pears":  {
@@ -4363,14 +4377,6 @@
                                                      "name":  "Northern Catch Pink Salmon",
                                                      "board_pu":  0.2298
                                                  },
-                                        "Baker\u0027s":  {
-                                                             "url":  "https://www.bakersplus.com/p/chicken-of-the-sea-wild-caught-alaskan-pink-salmon-traditional-style/0004800001475",
-                                                             "name":  "Chicken of the Sea Wild Caught Alaskan Pink Salmon, Traditional Style",
-                                                             "price":  4.49,
-                                                             "size":  "14.75 oz",
-                                                             "verified":  "2026-08-01",
-                                                             "board_pu":  0.3044
-                                                         },
                                         "Family Fare":  {
                                                             "url":  "https://www.shopfamilyfare.com/shop/meat/seafood_fish/canned/deming_s_pink_salmon_wild_caught_alaskan_14_75_oz/p/570835",
                                                             "name":  "Deming\u0027s Pink Salmon, Wild Caught Alaskan 14.75 Oz",
@@ -4398,7 +4404,14 @@
                                                         "price":  "$6.68",
                                                         "size":  "29.5 oz",
                                                         "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                                    }
+                                                    },
+                                        "Baker\u0027s":  {
+                                                             "url":  "https://www.bakersplus.com/p/kroger-wild-caught-canned-alaskan-pink-salmon/0001111083301",
+                                                             "name":  "Kroger Wild Caught Canned Alaskan Pink Salmon",
+                                                             "price":  "$3.99",
+                                                             "size":  "14.75 oz",
+                                                             "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                         }
                                     },
                   "canned-sweet-corn":  {
                                             "commodity":  "Canned Sweet Corn",
@@ -4837,9 +4850,9 @@
                                    "Baker\u0027s":  {
                                                         "url":  "https://www.bakersplus.com/p/purina-friskies-surfin-turfin-favorites-adult-dry-cat-food-poultry-beef-fish-flavors/0005000057579",
                                                         "name":  "Purina Friskies Surfin\u0027 \u0026 Turfin\u0027 Favorites Adult Dry Cat Food Poultry Beef \u0026 Fish Flavors",
-                                                        "price":  "$17.49",
+                                                        "price":  17.49,
                                                         "size":  "16 lb",
-                                                        "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                        "verified":  "2026-08-01"
                                                     }
                                },
                   "cat-litter":  {
@@ -4889,9 +4902,9 @@
                                      "Baker\u0027s":  {
                                                           "url":  "https://www.bakersplus.com/p/purina-tidy-cats-non-clumping-cat-litter-24-7-performance/0007023010720",
                                                           "name":  "Purina Tidy Cats Non-Clumping Cat Litter 24/7 Performance",
-                                                          "price":  "$7.29",
+                                                          "price":  7.29,
                                                           "size":  "20 lb",
-                                                          "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                          "verified":  "2026-08-01"
                                                       }
                                  },
                   "cauliflower":  {
@@ -5553,9 +5566,9 @@
                                         "Baker\u0027s":  {
                                                              "url":  "https://www.bakersplus.com/p/kroger-99-fat-free-chicken-broth/0001111004969",
                                                              "name":  "Kroger 99% Fat Free Chicken Broth",
-                                                             "price":  "$1.59",
+                                                             "price":  1.59,
                                                              "size":  "32 oz",
-                                                             "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                             "verified":  "2026-08-01"
                                                          }
                                     },
                   "chicken-livers":  {
@@ -5868,7 +5881,14 @@
                                                       "size":  "15.6 oz",
                                                       "name":  "Great Value Chili Beans, 15.5 oz",
                                                       "board_pu":  0.0551
-                                                  }
+                                                  },
+                                      "Family Fare":  {
+                                                          "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/brooks_chili_beans_hot_40_oz/p/542612",
+                                                          "name":  "Brooks Chili Beans, Hot 40 Oz",
+                                                          "price":  "$3.19",
+                                                          "size":  "40 oz",
+                                                          "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                      }
                                   },
                   "chili-crisp":  {
                                       "commodity":  "Chili Crisp / Chili Oil",
@@ -6120,10 +6140,10 @@
                                          "Hy-Vee":  {
                                                         "url":  "https://www.hy-vee.com/aisles-online/p/55167/hiland-premium-chocolate-milk-pint-16-fl-oz",
                                                         "name":  "Hiland Premium Chocolate Milk, Pint, 16 Fl Oz",
-                                                        "price":  1.25,
+                                                        "board_pu":  0.0781,
+                                                        "price":  1.79,
                                                         "size":  "16 fl oz",
-                                                        "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)",
-                                                        "board_pu":  0.0781
+                                                        "verified":  "2026-08-01 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                     },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/13592921663",
@@ -6322,13 +6342,6 @@
                                                               "verified":  "2026-08-01",
                                                               "board_pu":  0.1658
                                                           },
-                                         "Family Fare":  {
-                                                             "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/cocktail_tarter_sauce/louisiana_fish_fry_products_cocktail_sauce_12_oz/p/230535",
-                                                             "name":  "Louisiana Fish Fry Products Cocktail Sauce 12 Oz",
-                                                             "price":  "$3.79",
-                                                             "size":  "12 oz",
-                                                             "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                                         },
                                          "Fareway":  {
                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/21026929-fareway-cocktail-sauce-12-oz",
                                                          "price":  2.49,
@@ -6357,7 +6370,14 @@
                                                          "size":  "12 oz",
                                                          "name":  "Red Gold Made with Real Sugar Cocktail Sauce, 12 oz Bottle",
                                                          "board_pu":  0.165
-                                                     }
+                                                     },
+                                         "Family Fare":  {
+                                                             "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/cocktail_tarter_sauce/our_family_cocktail_sauce_12_oz/p/6787065",
+                                                             "name":  "Our Family Cocktail Sauce 12 Oz",
+                                                             "price":  "$2.79",
+                                                             "size":  "12 oz",
+                                                             "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                         }
                                      },
                   "cocoa-powder":  {
                                        "commodity":  "cocoa-powder",
@@ -6680,9 +6700,9 @@
                                          "Baker\u0027s":  {
                                                               "url":  "https://www.bakersplus.com/p/kroger-caramel-vanilla-coffee-creamer/0001111015110",
                                                               "name":  "Kroger Caramel Vanilla Coffee Creamer",
-                                                              "price":  "$2.99",
+                                                              "price":  2.99,
                                                               "size":  "32 fl oz",
-                                                              "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                              "verified":  "2026-08-01"
                                                           },
                                          "Fareway":  {
                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/43008-coffee-mate-vanilla-caramel-liquid-coffee-creamer-32-fl-oz",
@@ -7044,7 +7064,7 @@
                                                           "name":  "Kroger Cupz Corn Chips",
                                                           "price":  1.99,
                                                           "size":  "9.75 oz",
-                                                          "verified":  "2026-07-31",
+                                                          "verified":  "2026-08-01",
                                                           "board_pu":  0.2041
                                                       },
                                      "Family Fare":  {
@@ -7206,7 +7226,14 @@
                                                           "price":  "$6.99",
                                                           "size":  "25 oz",
                                                           "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
-                                                      }
+                                                      },
+                                           "Family Fare":  {
+                                                               "url":  "https://www.shopfamilyfare.com/shop/meat/beef/canned/our_family_corned_beef_hash/p/1564405684716836407",
+                                                               "name":  "Our Family Corned Beef Hash",
+                                                               "price":  "$3.29",
+                                                               "size":  "15 oz",
+                                                               "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                           }
                                        },
                   "corn-muffin-mix":  {
                                           "commodity":  "Corn Muffin Mix",
@@ -7765,9 +7792,9 @@
                                      "Baker\u0027s":  {
                                                           "url":  "https://www.bakersplus.com/p/private-selection-butter-mini-croissants/0001111015653",
                                                           "name":  "Private Selection Butter Mini Croissants",
-                                                          "price":  "$5.99",
+                                                          "price":  5.99,
                                                           "size":  "8 pk 1.5 oz",
-                                                          "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                          "verified":  "2026-08-01"
                                                       }
                                  },
                   "crushed-tomatoes":  {
@@ -8064,9 +8091,9 @@
                                     "Baker\u0027s":  {
                                                          "url":  "https://www.bakersplus.com/p/speed-stick-power-antiperspirant-deodorant-for-men-72-hr-sweat-odor-protection-fresh-scent/0002220000490",
                                                          "name":  "Speed Stick Power Antiperspirant Deodorant for Men 72 HR Sweat \u0026 Odor Protection Fresh Scent",
-                                                         "price":  "$2.79",
+                                                         "price":  2.79,
                                                          "size":  "3 oz",
-                                                         "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                         "verified":  "2026-08-01"
                                                      }
                                 },
                   "diapers":  {
@@ -8380,9 +8407,9 @@
                                     "Baker\u0027s":  {
                                                          "url":  "https://www.bakersplus.com/p/ajax-ultra-liquid-dish-soap-orange-scent-triple-action/0003500049874",
                                                          "name":  "Ajax Ultra Liquid Dish Soap Orange Scent Triple Action",
-                                                         "price":  "$5.99",
+                                                         "price":  5.99,
                                                          "size":  "90 fl oz",
-                                                         "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                         "verified":  "2026-08-01"
                                                      }
                                 },
                   "dishwasher-detergent":  {
@@ -9261,13 +9288,6 @@
                                                                "size":  "28 oz",
                                                                "verified":  "2026-08-01"
                                                            },
-                                          "Family Fare":  {
-                                                              "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mexican_sauces/old_el_paso_red_mild_enchilada_sauce_10_oz/p/32461",
-                                                              "price":  3.39,
-                                                              "size":  "10 oz",
-                                                              "name":  "Old El Paso Red Mild Enchilada Sauce 10 Oz",
-                                                              "recipe_pu":  0.339
-                                                          },
                                           "Fareway":  {
                                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20547451-fareway-enchilada-sauce-red-mild-10-oz",
                                                           "price":  1.58,
@@ -9287,7 +9307,14 @@
                                                           "price":  "$2.16",
                                                           "size":  "28.052 oz",
                                                           "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                                      }
+                                                      },
+                                          "Family Fare":  {
+                                                              "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mexican_sauces/our_family_enchilada_sauce_red_mild_10_oz/p/7081295",
+                                                              "name":  "Our Family Enchilada Sauce, Red, Mild 10 Oz",
+                                                              "price":  "$1.59",
+                                                              "size":  "10 oz",
+                                                              "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                          }
                                       },
                   "energy-drinks":  {
                                         "commodity":  "energy-drinks",
@@ -9330,9 +9357,9 @@
                                         "Baker\u0027s":  {
                                                              "url":  "https://www.bakersplus.com/p/v8-energy-passionfruit-orange-guava-juice-energy-drink-8-fl-oz-can-6-pack/0005100029305",
                                                              "name":  "V8 +Energy Passionfruit Orange Guava Juice Energy Drink 8 fl oz Can 6 Pack",
-                                                             "price":  "$4.99",
+                                                             "price":  4.99,
                                                              "size":  "6 pk 8 fl oz",
-                                                             "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                             "verified":  "2026-08-01"
                                                          },
                                         "Family Fare":  {
                                                             "url":  "https://www.shopfamilyfare.com/shop/beverages/soda_other_carbonated_beverages/sport_energy/rockstar_fruit_punch_energy_drink_16_fl_oz/p/1564405684710272119",
@@ -10832,10 +10859,11 @@
                                                      },
                                          "Hy-Vee":  {
                                                         "url":  "https://www.hy-vee.com/aisles-online/p/3785089/healthy-choice-cafe-steamers-turkey-sausage-lasagna-bowl-frozen-meal-10-oz-bowl",
-                                                        "price":  2.98,
-                                                        "size":  "10 oz",
                                                         "name":  "Healthy Choice Cafe Steamers Turkey Sausage Lasagna Bowl, Frozen Meal, 10 oz. Bowl",
-                                                        "board_pu":  0.298
+                                                        "board_pu":  0.298,
+                                                        "price":  2.84,
+                                                        "size":  "10 oz",
+                                                        "verified":  "2026-08-01 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                     },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/13888170140",
@@ -11079,9 +11107,9 @@
                                          "Baker\u0027s":  {
                                                               "url":  "https://www.bakersplus.com/p/kroger-buttermilk-waffles/0001111078990",
                                                               "name":  "Kroger Buttermilk Waffles",
-                                                              "price":  "$4.29",
+                                                              "price":  4.29,
                                                               "size":  "24 pk 1.23 oz",
-                                                              "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                              "verified":  "2026-08-01"
                                                           }
                                      },
                   "fruit-cocktail":  {
@@ -11249,9 +11277,9 @@
                                        "Baker\u0027s":  {
                                                             "url":  "https://www.bakersplus.com/p/bluey-fruit-flavored-snacks-family-pack/0001600022035",
                                                             "name":  "Bluey Fruit Flavored Snacks Family Pack",
-                                                            "price":  "$7.99",
+                                                            "price":  7.99,
                                                             "size":  "40 pk 0.8 oz",
-                                                            "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                            "verified":  "2026-08-01"
                                                         }
                                    },
                   "furniture-polish":  {
@@ -11287,9 +11315,9 @@
                                            "Baker\u0027s":  {
                                                                 "url":  "https://www.bakersplus.com/p/kroger-lemon-scent-furniture-polish/0001111012611",
                                                                 "name":  "Kroger Lemon Scent Furniture Polish",
-                                                                "price":  "$5.49",
+                                                                "price":  5.49,
                                                                 "size":  "9.7 oz",
-                                                                "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                                "verified":  "2026-08-01"
                                                             }
                                        },
                   "garam-masala":  {
@@ -11994,9 +12022,9 @@
                                  "Baker\u0027s":  {
                                                       "url":  "https://www.bakersplus.com/p/kroger-fresh-california-seedless-green-grapes/0001111061375",
                                                       "name":  "Kroger Fresh California Seedless Green Grapes",
-                                                      "price":  "$4.99",
+                                                      "price":  4.99,
                                                       "size":  "3 lb",
-                                                      "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                      "verified":  "2026-08-01"
                                                   }
                              },
                   "greek-yogurt":  {
@@ -12341,9 +12369,9 @@
                                           "Baker\u0027s":  {
                                                                "url":  "https://www.bakersplus.com/p/tampico-allspice-ground/0007654940044",
                                                                "name":  "Tampico Allspice Ground",
-                                                               "price":  "$1.49",
+                                                               "price":  1.49,
                                                                "size":  "0.75 oz",
-                                                               "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                               "verified":  "2026-08-01"
                                                            },
                                           "Fareway":  {
                                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/21762879-simply-organic-allspice-2-57-oz",
@@ -12605,11 +12633,11 @@
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/3972710/lawry-s-ground-cumin",
                                                       "name":  "Lawry\u0027s Ground Cumin",
-                                                      "price":  2.49,
-                                                      "size":  "2 oz",
-                                                      "verified":  "2026-07-16 DERIVED from the price row (same record the board priced)",
                                                       "board_pu":  1.245,
-                                                      "recipe_pu":  1.245
+                                                      "recipe_pu":  1.245,
+                                                      "price":  1.41,
+                                                      "size":  "2 oz",
+                                                      "verified":  "2026-08-01 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/13591273997",
@@ -13571,7 +13599,14 @@
                                                       "size":  "9.5 oz",
                                                       "name":  "Inglehoffer Creamy Style Prepared Horseradish, 9.5 oz - Alle",
                                                       "board_pu":  0.2989
-                                                  }
+                                                  },
+                                      "Family Fare":  {
+                                                          "url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/chip_dips/silver_spring_horseradish_prepared_coarse_cut_8_oz/p/2004543",
+                                                          "name":  "Silver Spring Horseradish, Prepared, Coarse Cut 8 Oz",
+                                                          "price":  "$3.99",
+                                                          "size":  "8 oz",
+                                                          "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                      }
                                   },
                   "horseradish-sauce":  {
                                             "commodity":  "Horseradish Sauce (creamy)",
@@ -14040,9 +14075,9 @@
                                    "Baker\u0027s":  {
                                                         "url":  "https://www.bakersplus.com/p/kroger-zero-sugar-decaffeinated-sweet-tea/0001111013438",
                                                         "name":  "Kroger Zero Sugar Decaffeinated Sweet Tea",
-                                                        "price":  "$3.29",
+                                                        "price":  3.29,
                                                         "size":  "1 gal",
-                                                        "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                        "verified":  "2026-08-01"
                                                     }
                                },
                   "insect-spray":  {
@@ -14275,9 +14310,9 @@
                                           "Baker\u0027s":  {
                                                                "url":  "https://www.bakersplus.com/p/kroger-sweet-italian-sausage/0001111097281",
                                                                "name":  "Kroger Sweet Italian Sausage",
-                                                               "price":  "$3.99",
+                                                               "price":  3.99,
                                                                "size":  "5 pk 3.6 oz",
-                                                               "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                               "verified":  "2026-08-01"
                                                            }
                                       },
                   "italian-seasoning":  {
@@ -15776,9 +15811,9 @@
                                      "Baker\u0027s":  {
                                                           "url":  "https://www.bakersplus.com/p/kroger-olive-oil-mayo/0001111001968",
                                                           "name":  "Kroger Olive Oil Mayo",
-                                                          "price":  "$3.99",
+                                                          "price":  3.99,
                                                           "size":  "30 fl oz",
-                                                          "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                          "verified":  "2026-08-01"
                                                       }
                                  },
                   "medjool-dates":  {
@@ -16106,9 +16141,9 @@
                                      "Baker\u0027s":  {
                                                           "url":  "https://www.bakersplus.com/p/kroger-unsalted-mixed-nuts-with-peanuts/0001111000136",
                                                           "name":  "Kroger Unsalted Mixed Nuts with Peanuts",
-                                                          "price":  "$5.99",
+                                                          "price":  5.99,
                                                           "size":  "14 oz",
-                                                          "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                          "verified":  "2026-08-01"
                                                       }
                                  },
                   "mouthwash":  {
@@ -16553,9 +16588,9 @@
                                     "Baker\u0027s":  {
                                                          "url":  "https://www.bakersplus.com/p/bertolli-extra-virgin-olive-oil-rich-taste/0004179000225",
                                                          "name":  "Bertolli Extra Virgin Olive Oil, Rich Taste",
-                                                         "price":  "$17.29",
+                                                         "price":  17.29,
                                                          "size":  "50.7 fl oz",
-                                                         "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                         "verified":  "2026-08-01"
                                                      }
                                 },
                   "olives":  {
@@ -16704,9 +16739,9 @@
                                  "Baker\u0027s":  {
                                                       "url":  "https://www.bakersplus.com/p/jumbo-sweet-onions/0000000004166",
                                                       "name":  "Jumbo Sweet Onions",
-                                                      "price":  "$1.29",
+                                                      "price":  1.29,
                                                       "size":  "lb",
-                                                      "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                      "verified":  "2026-08-01"
                                                   }
                              },
                   "onion-soup-mix":  {
@@ -17376,9 +17411,9 @@
                                 "Baker\u0027s":  {
                                                      "url":  "https://www.bakersplus.com/p/kroger-thin-spaghetti/0001111085020",
                                                      "name":  "Kroger Thin Spaghetti",
-                                                     "price":  "$1.25",
+                                                     "price":  1.25,
                                                      "size":  "16 oz",
-                                                     "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                     "verified":  "2026-08-01"
                                                  }
                             },
                   "pasta-sauce":  {
@@ -17580,9 +17615,9 @@
                                   "Baker\u0027s":  {
                                                        "url":  "https://www.bakersplus.com/p/kroger-dry-roasted-unsalted-peanuts/0001111014825",
                                                        "name":  "Kroger Dry Roasted Unsalted Peanuts",
-                                                       "price":  "$2.69",
+                                                       "price":  2.69,
                                                        "size":  "16 oz",
-                                                       "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                       "verified":  "2026-08-01"
                                                    }
                               },
                   "pears":  {
@@ -17802,7 +17837,14 @@
                                                         "size":  "22 oz",
                                                         "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
                                                         "board_pu":  0.39
-                                                    }
+                                                    },
+                                "Family Fare":  {
+                                                    "url":  "https://www.shopfamilyfare.com/shop/deli/salads/rana_basil_pesto_7_oz/p/59692",
+                                                    "name":  "Rana Basil Pesto 7 Oz",
+                                                    "price":  "$6.09",
+                                                    "size":  "7 oz",
+                                                    "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                }
                             },
                   "pickled-jalapenos":  {
                                             "commodity":  "Pickled Jalapenos (sliced)",
@@ -17853,9 +17895,9 @@
                                             "Baker\u0027s":  {
                                                                  "url":  "https://www.bakersplus.com/p/la-costena-sliced-jalapeno-peppers/0007639700228",
                                                                  "name":  "La Costena Sliced Jalapeno Peppers",
-                                                                 "price":  "$3.19",
+                                                                 "price":  3.19,
                                                                  "size":  "28 oz",
-                                                                 "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                                 "verified":  "2026-08-01"
                                                              }
                                         },
                   "pickles":  {
@@ -18682,9 +18724,9 @@
                                        "Baker\u0027s":  {
                                                             "url":  "https://www.bakersplus.com/p/kroger-original-wavy-potato-chips-party-size/0001111008893",
                                                             "name":  "Kroger Original Wavy Potato Chips Party Size",
-                                                            "price":  "$2.50",
+                                                            "price":  2.5,
                                                             "size":  "13 oz",
-                                                            "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                            "verified":  "2026-08-01"
                                                         }
                                    },
                   "potato-gnocchi":  {
@@ -19044,9 +19086,9 @@
                                        "Baker\u0027s":  {
                                                             "url":  "https://www.bakersplus.com/p/kozy-shack-chocolate-pudding-snack-cups-gluten-free-dessert/0007349120300",
                                                             "name":  "Kozy Shack Chocolate Pudding Snack Cups, Gluten Free Dessert",
-                                                            "price":  "$4.49",
+                                                            "price":  4.49,
                                                             "size":  "6 pk 4 oz",
-                                                            "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                            "verified":  "2026-08-01"
                                                         }
                                    },
                   "queso":  {
@@ -19215,9 +19257,9 @@
                                 "Baker\u0027s":  {
                                                      "url":  "https://www.bakersplus.com/p/maruchan-souper-6-ramen-noodle-soup-roast-chicken/0004178900657",
                                                      "name":  "Maruchan Souper 6 Ramen Noodle Soup, Roast Chicken",
-                                                     "price":  "$1.67",
+                                                     "price":  1.67,
                                                      "size":  "6 ct",
-                                                     "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                     "verified":  "2026-08-01"
                                                  },
                                 "Fareway":  {
                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16697906-maruchan-beef-flavor-ramen-noodle-soup-85-0-g",
@@ -19275,9 +19317,9 @@
                                          "Baker\u0027s":  {
                                                               "url":  "https://www.bakersplus.com/p/kroger-buttermilk-ranch-salad-dressing/0001111003632",
                                                               "name":  "Kroger Buttermilk Ranch Salad Dressing",
-                                                              "price":  "$2.79",
+                                                              "price":  2.79,
                                                               "size":  "16 fl oz",
-                                                              "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                              "verified":  "2026-08-01"
                                                           }
                                      },
                   "ranch-seasoning-mix":  {
@@ -19421,9 +19463,9 @@
                                  "Baker\u0027s":  {
                                                       "url":  "https://www.bakersplus.com/p/kroger-disposable-twin-blade-fixed-razors-for-men-big-deal-/0004126002006",
                                                       "name":  "Kroger Disposable Twin Blade Fixed Razors for Men BIG DEAL!",
-                                                      "price":  "$4.49",
+                                                      "price":  4.49,
                                                       "size":  "20 ct",
-                                                      "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                      "verified":  "2026-08-01"
                                                   }
                              },
                   "red-bell-pepper":  {
@@ -19786,9 +19828,9 @@
                                         "Baker\u0027s":  {
                                                              "url":  "https://www.bakersplus.com/p/kroger-traditional-refried-beans/0001111086503",
                                                              "name":  "Kroger Traditional Refried Beans",
-                                                             "price":  "$1.19",
+                                                             "price":  1.19,
                                                              "size":  "16 oz",
-                                                             "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                             "verified":  "2026-08-01"
                                                          }
                                     },
                   "refrigerated-biscuits":  {
@@ -20767,7 +20809,14 @@
                                                      "price":  "$2.42",
                                                      "size":  "32 oz",
                                                      "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                                 }
+                                                 },
+                                     "Family Fare":  {
+                                                         "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/pickled_vegetables_fruits/our_family_old_fashioned_shredded_sauerkraut_14_4_oz/p/6786985",
+                                                         "name":  "Our Family Old Fashioned Shredded Sauerkraut 14.4 Oz",
+                                                         "price":  "$1.69",
+                                                         "size":  "14.4 oz",
+                                                         "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                     }
                                  },
                   "sazon-seasoning":  {
                                           "commodity":  "Sazon Seasoning",
@@ -21076,9 +21125,9 @@
                                          "Baker\u0027s":  {
                                                               "url":  "https://www.bakersplus.com/p/scrubbing-bubbles-bathroom-grime-fighter-disinfectant-cleaner-citrus-scent-32oz/0002570070755",
                                                               "name":  "Scrubbing Bubbles Bathroom Grime Fighter Disinfectant Cleaner, Citrus Scent, 32oz",
-                                                              "price":  "$4.99",
+                                                              "price":  4.99,
                                                               "size":  "1 pk 32 fl oz",
-                                                              "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                              "verified":  "2026-08-01"
                                                           }
                                      },
                   "shredded-carrots":  {
@@ -21210,9 +21259,9 @@
                                  "Baker\u0027s":  {
                                                       "url":  "https://www.bakersplus.com/p/shrimp-raw-white-x-large-21-25-count-farm-raised-previously-frozen-/0026947900000",
                                                       "name":  "Shrimp Raw White X Large 21/25 Count (Farm Raised Previously Frozen)",
-                                                      "price":  "$7.99",
+                                                      "price":  7.99,
                                                       "size":  "lb",
-                                                      "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                      "verified":  "2026-08-01"
                                                   },
                                  "Fareway":  {
                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20743090-51-60-count-cooked-supreme-shrimp-12-oz",
@@ -21358,7 +21407,14 @@
                                                            "price":  "$1.48",
                                                            "size":  "16 oz",
                                                            "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                                       }
+                                                       },
+                                           "Family Fare":  {
+                                                               "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/other_sauce/manwich_sloppy_joe_sauce_bold_16_oz/p/178158",
+                                                               "name":  "Manwich Sloppy Joe Sauce, Bold 16 Oz",
+                                                               "price":  "$1.69",
+                                                               "size":  "16 oz",
+                                                               "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                           }
                                        },
                   "smoked-paprika":  {
                                          "commodity":  "Smoked Paprika",
@@ -21682,9 +21738,9 @@
                                           "Baker\u0027s":  {
                                                                "url":  "https://www.bakersplus.com/p/kroger-zero-sugar-lemon-lime-sparkling-water/0001111014840",
                                                                "name":  "Kroger Zero Sugar Lemon Lime Sparkling Water",
-                                                               "price":  "$1.00",
+                                                               "price":  1,
                                                                "size":  "33.8 fl oz",
-                                                               "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                               "verified":  "2026-08-01"
                                                            },
                                           "Family Fare":  {
                                                               "url":  "https://www.shopfamilyfare.com/shop/beverages/soda_other_carbonated_beverages/water/sparkling_ice_zero_sugar_strawberry_watermelon_sparkling_water_17_fl_oz/p/9276",
@@ -21824,9 +21880,9 @@
                                         "Baker\u0027s":  {
                                                              "url":  "https://www.bakersplus.com/p/gatorade-frost-blue-glacier-freeze-sports-drink-mini-multipack-bottles/0005200012251",
                                                              "name":  "Gatorade Frost Blue Glacier Freeze Sports Drink Mini Multipack Bottles",
-                                                             "price":  "$7.99",
+                                                             "price":  7.99,
                                                              "size":  "12 pk 12 fl oz",
-                                                             "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                             "verified":  "2026-08-01"
                                                          }
                                     },
                   "spring-mix":  {
@@ -22001,7 +22057,14 @@
                                                       "size":  "15 oz",
                                                       "name":  "A.1. Original Sauce, 15 oz. Bottle",
                                                       "verified":  "2026-07-31 price-pull self-capture"
-                                                  }
+                                                  },
+                                      "Family Fare":  {
+                                                          "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/marinades/finest_reserve_steak_sauce_carolina_smokehouse_13_5_oz/p/1564405684714975821",
+                                                          "name":  "Finest Reserve Steak Sauce, Carolina Smokehouse 13.5 Oz",
+                                                          "price":  "$4.49",
+                                                          "size":  "13.5 oz",
+                                                          "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                      }
                                   },
                   "storage-bags":  {
                                        "commodity":  "storage-bags",
@@ -22649,7 +22712,14 @@
                                                              "price":  "$4.98",
                                                              "size":  "25 oz",
                                                              "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
-                                                         }
+                                                         },
+                                     "Family Fare":  {
+                                                         "url":  "https://www.shopfamilyfare.com/shop/pantry/tacos_more/our_family_taco_sauce_medium_16_oz/p/1564405684702622204",
+                                                         "name":  "Our Family Taco Sauce, Medium 16 Oz",
+                                                         "price":  "$3.59",
+                                                         "size":  "16 oz",
+                                                         "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                     }
                                  },
                   "taco-seasoning":  {
                                          "commodity":  "Taco Seasoning (packet)",
@@ -22798,13 +22868,6 @@
                                                             "verified":  "2026-08-01",
                                                             "board_pu":  0.2078
                                                         },
-                                       "Family Fare":  {
-                                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/cocktail_tarter_sauce/louisiana_fish_fry_products_tartar_sauce_10_5_oz/p/528127",
-                                                           "name":  "Louisiana Fish Fry Products Tartar Sauce 10.5 Oz",
-                                                           "price":  "$4.39",
-                                                           "size":  "10.5 oz",
-                                                           "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
-                                                       },
                                        "Fareway":  {
                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387904-tartar-sauce",
                                                        "price":  2.48,
@@ -22825,7 +22888,14 @@
                                                        "size":  "12 fl oz",
                                                        "name":  "Great Value Tartar Sauce, 12 fl oz",
                                                        "board_pu":  0.1267
-                                                   }
+                                                   },
+                                       "Family Fare":  {
+                                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/cocktail_tarter_sauce/our_family_tartar_sauce_12_fl_oz/p/6787044",
+                                                           "name":  "Our Family Tartar Sauce 12 Fl Oz",
+                                                           "price":  "$2.79",
+                                                           "size":  "12 fl oz",
+                                                           "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                       }
                                    },
                   "tater-tots":  {
                                      "commodity":  "tater-tots",
@@ -23666,9 +23736,9 @@
                                                         "url":  "https://www.hy-vee.com/aisles-online/p/909300/hy-vee-white-corn-restaurant-style-tortilla-chips",
                                                         "name":  "Hy-Vee White Corn Restaurant Style Tortilla Chips",
                                                         "board_pu":  0.2069,
-                                                        "price":  2.69,
+                                                        "price":  1.99,
                                                         "size":  "13 oz",
-                                                        "verified":  "2026-07-20 Hy-Vee GraphQL (storeId 1465, current shelf price)"
+                                                        "verified":  "2026-08-01 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                     },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/13623260074",
@@ -23688,9 +23758,9 @@
                                          "Baker\u0027s":  {
                                                               "url":  "https://www.bakersplus.com/p/kroger-white-corn-rounds-tortilla-chips/0001111010585",
                                                               "name":  "Kroger White Corn Rounds Tortilla Chips",
-                                                              "price":  "$2.69",
+                                                              "price":  2.69,
                                                               "size":  "18 oz",
-                                                              "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                              "verified":  "2026-08-01"
                                                           }
                                      },
                   "tortillas":  {
@@ -23897,9 +23967,9 @@
                                         "Baker\u0027s":  {
                                                              "url":  "https://www.bakersplus.com/p/butterball-cajun-style-boneless-turkey-breast-roast/0002265500062",
                                                              "name":  "Butterball Cajun Style Boneless Turkey Breast Roast",
-                                                             "price":  "$14.99",
+                                                             "price":  14.99,
                                                              "size":  "3 lb",
-                                                             "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                             "verified":  "2026-08-01"
                                                          }
                                     },
                   "turkey-lunchmeat":  {
@@ -24193,9 +24263,9 @@
                                          "Baker\u0027s":  {
                                                               "url":  "https://www.bakersplus.com/p/campbell-s-chunky-old-fashioned-vegetable-beef-soup-18-8-oz-can/0005100000549",
                                                               "name":  "Campbell\u0027s Chunky Old Fashioned Vegetable Beef Soup 18.8 Oz Can",
-                                                              "price":  "$2.99",
+                                                              "price":  2.99,
                                                               "size":  "18.8 oz",
-                                                              "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                              "verified":  "2026-08-01"
                                                           }
                                      },
                   "walnuts":  {
