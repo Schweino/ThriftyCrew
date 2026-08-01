@@ -57,10 +57,28 @@ $sdData  = Join-Path $sidecar 'data'
 # commodity is not one we track. Filtering here rather than in Python keeps the estate's rulings in the
 # estate's language.
 function Test-Actionable {
-  param([string]$Kind, [string]$Id, [string]$Store, [string]$Product, [hashtable]$Blocks)
+  param([string]$Kind, [string]$Id, [string]$Store, [string]$Product, [hashtable]$Blocks, [hashtable]$BoardItems)
   if (-not $Id -or -not $Product) { return $false }
   # already ruled on: the blocklist IS the answer, so re-reporting it is noise
   if ($Blocks -and (Test-KnownWrong -Blocks $Blocks -CommodityId $Id -Store $Store -ProductName $Product)) { return $false }
+  # TRUNCATION ARTEFACT (2026-08-01). A coverage finding claims "no rule matches this product". The corpus
+  # it is drawn from carries names TRUNCATED AT EXACTLY 60 CHARACTERS (a historical capture cap, documented
+  # in guards.ps1 invariant 5), and the truncation removes the end of a grocery name - which is where the
+  # commodity word lives. So the rule that "does not match" often matches the FULL name perfectly.
+  # `walnuts` is the founding case and it blocked its own adjudication for days: the corpus row reads
+  # "Fisher Chef's Naturals Gluten Free, No Preservatives, Non-GM" while the board prices that very product
+  # at $0.5712 under the full name "...Non-GMO Chopped Walnuts, 32 oz Bag". Nothing was invisible.
+  # The test is deliberately narrow - truncated to exactly the cap AND a prefix of a product the board
+  # already prices for this same commodity and store - so a genuinely invisible product is never suppressed
+  # just because something else is priced there.
+  if ($Kind -eq 'coverage' -and $BoardItems -and $Product.Length -eq 60) {
+    $k = ($Id + '|' + $Store)
+    if ($BoardItems.ContainsKey($k)) {
+      foreach ($nm in @($BoardItems[$k])) {
+        if ($nm -and $nm.Length -gt 60 -and $nm.StartsWith($Product, [StringComparison]::OrdinalIgnoreCase)) { return $false }
+      }
+    }
+  }
   return $true
 }
 
@@ -83,7 +101,27 @@ if ($SelfTest) {
   if (Test-Actionable -Kind 'identity' -Id '' -Store 'Aldi' -Product 'x' -Blocks $blocks) {
     Write-Output '  X MUST-FIRE: a finding with no commodity id must be rejected'; $bad++
   }
-  if ($bad -eq 0) { Write-Output 'audit-semantic-identity SELF-TEST PASS (3 frozen cases)'; exit 0 }
+  # TRUNCATION ARTEFACT - the walnuts case, frozen. The corpus name is cut at exactly 60 characters and the
+  # board already prices that same product under its full name, so "no rule matches it" is false: the rule
+  # matches the full name and did. This one finding blocked its own adjudication for days.
+  $wTrunc = "Fisher Chef's Naturals Gluten Free, No Preservatives, Non-GM"
+  $wFull  = "Fisher Chef's Naturals Gluten Free, No Preservatives, Non-GMO Chopped Walnuts, 32 oz Bag"
+  $wBoard = @{ 'walnuts|Walmart' = @($wFull) }
+  if (Test-Actionable -Kind 'coverage' -Id 'walnuts' -Store 'Walmart' -Product $wTrunc -Blocks $blocks -BoardItems $wBoard) {
+    Write-Output '  X MUST-FIRE: a 60-char-truncated corpus name whose full product is already priced is an artefact, not a coverage gap'; $bad++
+  }
+  # CLEAN TWIN 1: same truncated name, but the board prices something ELSE for that commodity/store. This
+  # product really may be invisible, so it must STAY actionable - the test must not suppress a genuine gap
+  # just because the cell is filled.
+  if (-not (Test-Actionable -Kind 'coverage' -Id 'walnuts' -Store 'Walmart' -Product $wTrunc -Blocks $blocks -BoardItems @{ 'walnuts|Walmart' = @('Great Value Walnut Halves, 16 oz Bag') })) {
+    Write-Output '  X CLEAN TWIN: a truncated name that is NOT a prefix of the priced product is a real gap and must stay actionable'; $bad++
+  }
+  # CLEAN TWIN 2: a SHORT name that happens to prefix the board item is not a truncation - only names cut
+  # at exactly the 60-char cap qualify, or every terse product name would be suppressed.
+  if (-not (Test-Actionable -Kind 'coverage' -Id 'walnuts' -Store 'Walmart' -Product 'Fisher' -Blocks $blocks -BoardItems $wBoard)) {
+    Write-Output '  X CLEAN TWIN: a short name is not a truncation artefact and must stay actionable'; $bad++
+  }
+  if ($bad -eq 0) { Write-Output 'audit-semantic-identity SELF-TEST PASS (6 frozen cases)'; exit 0 }
   Write-Output ("audit-semantic-identity SELF-TEST FAIL ($bad)"); exit 2
 }
 
@@ -183,8 +221,29 @@ try {
 
 # ---------------------------------------------------------------- filter to what a human can act on
 $blocks = Get-KnownWrongBlocks -Path (Join-Path $root 'known-wrong.json')
-$idRows = @(@($find.identity) | Where-Object { Test-Actionable -Kind 'identity' -Id ([string]$_.id) -Store ([string]$_.store) -Product ([string]$_.product) -Blocks $blocks })
-$cvRows = @(@($find.coverage) | Where-Object { Test-Actionable -Kind 'coverage' -Id ([string]$_.id) -Store ([string]$_.store) -Product ([string]$_.product) -Blocks $blocks })
+# what the board already prices, keyed commodity|store, so the truncation test above has something to
+# compare a cut-off corpus name against. Read from BOTH boards - anything reading only comparison-*.json
+# is blind to 80 live recipe-board cells.
+$boardItems = @{}
+foreach ($bf in @(@(Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -EA SilentlyContinue | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1) + @(Get-Item (Join-Path $OutDir 'recipe-board.json') -EA SilentlyContinue))) {
+  if (-not $bf) { continue }
+  try {
+    $bj = ((Get-Content $bf.FullName -Raw -Encoding UTF8) + '').Trim() | ConvertFrom-Json
+    foreach ($r in @($bj.comparison)) {
+      foreach ($s in @($r.stores)) {
+        $nm = [string]$s.item
+        if (-not $nm) { continue }
+        $k = ([string]$r.id + '|' + [string]$s.store)
+        if (-not $boardItems.ContainsKey($k)) { $boardItems[$k] = New-Object 'System.Collections.Generic.List[string]' }
+        $boardItems[$k].Add($nm)
+      }
+    }
+  } catch {}
+}
+$idRows = @(@($find.identity) | Where-Object { Test-Actionable -Kind 'identity' -Id ([string]$_.id) -Store ([string]$_.store) -Product ([string]$_.product) -Blocks $blocks -BoardItems $boardItems })
+$cvRows = @(@($find.coverage) | Where-Object { Test-Actionable -Kind 'coverage' -Id ([string]$_.id) -Store ([string]$_.store) -Product ([string]$_.product) -Blocks $blocks -BoardItems $boardItems })
+$cvTrunc = @($find.coverage).Count - $cvRows.Count - @(@($find.coverage) | Where-Object { $blocks -and (Test-KnownWrong -Blocks $blocks -CommodityId ([string]$_.id) -Store ([string]$_.store) -ProductName ([string]$_.product)) }).Count
+if ($cvTrunc -gt 0) { Write-Output ("semantic-identity: {0} coverage finding(s) suppressed as TRUNCATION ARTEFACTS - the corpus name is cut at the 60-char cap and the board already prices that exact product under its full name" -f $cvTrunc) }
 
 Write-Output ''
 Write-Output ("semantic-identity: examined {0} shipped pair(s) and {1} rule-invisible product(s) in {2}s on {3}" -f $find.examined.board_pairs, $find.examined.rule_invisible, $find.elapsed_sec, $find.device)
