@@ -315,9 +315,28 @@ if ($tileRc -ne 0) {
   if ($mine.Count -gt 0) {
     # try the sanctioned repair for our own cells before blaming the widening
     Write-Output '  attempting headless link repair on the batch cells...'
+    # DERIVE FIRST, SEARCH SECOND (2026-08-01). The three resolvers below all SEARCH the store for the
+    # product again - which is the right tool when a cell has no link, and the wrong one here. A rule edit
+    # changes WHICH PRODUCT a cell prices, so the stored link is now describing the previous product; the
+    # row the board just priced already carries the identity, and deriving the link from it is exact where
+    # a search is a guess. Missing this step reverted a correct batch: excluding a sunflower/olive BLEND
+    # from olive-oil moved the Family Fare cell to a real olive oil, the stale link still opened the blend,
+    # and all three searches left it PRICE-MISMATCH. Scoped per store, never global - a global -Apply once
+    # re-pointed ~40 Fareway links onto pack prices while fixing the Sam's links it was run for.
+    foreach ($st in @($mine | ForEach-Object { [string]$_.store } | Sort-Object -Unique)) {
+      if (-not $st) { continue }
+      Write-Output ("    deriving " + $st + " links from the rows the board just priced...")
+      & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'derive-links-from-prices.ps1') -Store $st -Apply *>&1 | Out-Null
+    }
     & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'resolve-worklist.ps1') *>&1 | Out-Null
     & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'resolve-ff-boardmatch.ps1') *>&1 | Out-Null
-    & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'resolve-hyvee-links.ps1') *>&1 | Out-Null
+    # SCOPED to the batch's own commodities. Called in bulk, this rewrote every Hy-Vee link on the board as
+    # a side effect of a one-commodity exclude, and re-introduced the poultry-seasoning price divergence -
+    # failing the publish on a row the batch had never touched. In-process with splatting, because an array
+    # argument does not survive `powershell -File`; it arrives flattened into positional junk.
+    # Splatting needs a hashtable VARIABLE - `& script @{...}` passes the literal as a positional argument.
+    $hvArgs = @{ Ids = @($TouchedIds) }
+    & (Join-Path $root 'resolve-hyvee-links.ps1') @hvArgs *>&1 | Out-Null
     & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'merge-product-urls.ps1') *>&1 | Out-Null
     & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-deals-page.ps1') *>&1 | Out-Null
     & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-tile-integrity.ps1') *>&1 | Out-Null

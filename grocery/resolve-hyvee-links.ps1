@@ -16,7 +16,7 @@
   price we later fetch would be a real price attached to the wrong quantity, which is the most dangerous kind
   of wrong: internally consistent and completely false.
 #>
-param([switch]$WhatIf, [int]$StoreId = 1465)
+param([switch]$WhatIf, [int]$StoreId = 1465, [string[]]$Ids = @())
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 . (Join-Path $root 'pu-lib.ps1')
@@ -100,6 +100,11 @@ foreach ($it in $board) {
   $cell = $it.stores | Where-Object { $_.store -eq 'Hy-Vee' } | Select-Object -First 1
   if (-not $cell) { continue }
   $nm = ([string]$cell.item).Trim()
+  # -Ids scopes the run to named commodities. A caller repairing the cells IT just changed must not rewrite
+  # every Hy-Vee link on the board as a side effect: apply-coverage-batch's repair chain called this in bulk,
+  # and that is how a one-commodity exclude re-introduced the poultry-seasoning divergence and failed the
+  # publish on a row it had never touched. A repair should reach exactly as far as the thing it repairs.
+  if ($Ids.Count -and ($Ids -notcontains [string]$it.id)) { continue }
   if (-not ($unver.ContainsKey($nm) -or $noLinkIds.ContainsKey([string]$it.id) -or $driftIds.ContainsKey([string]$it.id))) { continue }
   if ($seenT.ContainsKey([string]$it.id)) { continue }; $seenT[[string]$it.id] = $true
   # read our size/price from the regular row THE BOARD ACTUALLY PRICED.
@@ -201,7 +206,23 @@ foreach ($t in $targets) {
   $slug = ((Norm $best.description) -replace ' ','-')
   if ($slug.Length -gt 80) { $slug = $slug.Substring(0,80).TrimEnd('-') }
   $url = 'https://www.hy-vee.com/aisles-online/p/' + [string]$best.id + '/' + $slug
-  $price = [double]$best.pricing.tagPriceValue
+
+  # THE STORED PRICE MUST BE THE ONE THE BOARD PRICED, NOT A SECOND FETCH (2026-08-01).
+  # This used to store the SEARCH endpoint's pricing.tagPriceValue, and that is the same trap
+  # pull-regular-hyvee.ps1's header is written about: Hy-Vee publishes several different prices for one
+  # product and only Omaha #01's storeProducts.price is the one it charges. Measured on poultry-seasoning -
+  # the row that re-introduced the consistency divergence three separate times and was written off as an
+  # unexplained "quality problem": the resolver found the RIGHT product (Morton & Bassett, 2.1 oz, the same
+  # name and size the board holds) and stamped $9.99 beside it, while the feed the board priced says $5.81.
+  # 5.81/2.1 = $2.7667/oz against 9.99/2.1 = $4.7571/oz, and guard 1's factor check hard-failed the publish
+  # at 1.72x. Nothing was wrong with the MATCH; the price came from the wrong endpoint.
+  # It survived because gate 4 accepts a candidate on price agreement OR an overwhelming name match, so an
+  # identical name lets a disagreeing price straight through unchecked.
+  # A link and its price are ONE record (derive-links-from-prices.ps1 is built on exactly this), so store
+  # the price of the row the board actually published. Fall back to the search price only when we hold none
+  # - and say so in `verified`, because that number is then unverified by construction.
+  $price = if ($ourPrice -gt 0) { $ourPrice } else { [double]$best.pricing.tagPriceValue }
+  $priceSrc = if ($ourPrice -gt 0) { 'price from the row the board priced' } else { 'price from the search API - WE HOLD NONE, so it is unverified' }
 
   Write-Output ('  + {0,-22} id={1,-9} ${2,-8} {3,-12} {4}  (name match {5}%)' -f $t.id, [string]$best.id, $price, ([string]$best.unitOfMeasure), [string]$best.description, [math]::Round($bestScore*100))
 
@@ -212,7 +233,7 @@ foreach ($t in $targets) {
       price    = $price
       size     = $ourSize                       # keep OUR validated size, not Hy-Vee's
       name     = $t.name                        # keep the board's product name so matching stays stable
-      verified = ((Get-Date -Format 'yyyy-MM-dd') + ' Hy-Vee search API (storeId ' + $StoreId + ')')
+      verified = ((Get-Date -Format 'yyyy-MM-dd') + ' Hy-Vee search API (storeId ' + $StoreId + '), ' + $priceSrc)
     }
     $doc.items.($t.id) | Add-Member -NotePropertyName 'Hy-Vee' -NotePropertyValue $entry -Force
   }

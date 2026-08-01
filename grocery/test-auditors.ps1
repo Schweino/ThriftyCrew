@@ -1675,6 +1675,27 @@ if ($LASTEXITCODE -eq 1 -and $acbBadRx -match 'not a valid regex' -and $acbBadRx
 $acbBadId = & powershell -NoProfile -ExecutionPolicy Bypass -Command "& { `$ErrorActionPreference='Continue'; & '$(Join-Path $root 'apply-coverage-batch.ps1')' -Excludes @{ 'no-such-commodity-xyz' = @('foo') } 2>&1 | Out-String; exit `$LASTEXITCODE }"
 if ($LASTEXITCODE -eq 1 -and $acbBadId -match 'can never fire') { Ok 'rule-batch gate rejects a batch on a commodity id that does not exist' }
 else { Bad ('apply-coverage-batch accepted a non-existent commodity id: ' + $acbBadId) }
+# MUST FIRE: the batch's link repair must not reach past the commodities it edited. Called in bulk,
+# resolve-hyvee-links rewrote every Hy-Vee link on the board as a side effect of a ONE-commodity exclude and
+# re-introduced the poultry-seasoning divergence, failing the publish on a row the batch never touched.
+$acbSrcHv = [regex]::Match($acbSrc, "resolve-hyvee-links\.ps1'\)\s*@hvArgs")
+if ($acbSrcHv.Success -and $acbSrc -match '\$hvArgs = @\{ Ids = @\(\$TouchedIds\) \}') { Ok 'rule-batch link repair calls resolve-hyvee-links SCOPED to the batch, not in bulk' }
+else { Bad 'apply-coverage-batch runs a BULK resolve-hyvee-links in its repair chain again - a one-commodity edit will rewrite every Hy-Vee link' }
+
+# ---------------------------------------------------------------- N6. Hy-Vee link price provenance
+# MUST FIRE: the link's stored price must be the one the BOARD priced, never the search endpoint's.
+# Hy-Vee publishes several prices per product and only Omaha #01's is the one it charges - the whole reason
+# pull-regular-hyvee exists - and resolve-hyvee-links was stamping the SEARCH API's tagPriceValue beside the
+# link. Measured on poultry-seasoning, the row that re-introduced the consistency divergence THREE times and
+# was written off as an unexplained "quality problem": right product (Morton & Bassett, 2.1 oz, same name and
+# size the board holds), stamped $9.99 while the feed the board priced says $5.81. 9.99/2.1 = $4.7571/oz vs
+# 5.81/2.1 = $2.7667/oz, and guard 1 hard-failed the publish at 1.72x. Nothing was wrong with the MATCH.
+# It survived because the match gate accepts price agreement OR an overwhelming name match, so an identical
+# name lets a disagreeing price straight through unchecked.
+$rhvSrc = Get-Content (Join-Path $root 'resolve-hyvee-links.ps1') -Raw
+if ($rhvSrc -match '\$price = if \(\$ourPrice -gt 0\) \{ \$ourPrice \}' -and $rhvSrc -notmatch '(?m)^\s*\$price = \[double\]\$best\.pricing\.tagPriceValue\s*$') {
+  Ok 'resolve-hyvee-links stores the price the BOARD priced, not the search endpoint''s (the poultry-seasoning root cause)'
+} else { Bad 'resolve-hyvee-links is stamping the search API price beside a link again - that is the wrong one of Hy-Vee''s several prices and it hard-fails the factor guard' }
 
 # ---------------------------------------------------------------- (u) store-taxonomy: the second opinion
 # The ONLY watcher that does not inherit the include regex's premise. Its founding bug is the class that
