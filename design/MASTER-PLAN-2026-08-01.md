@@ -98,6 +98,15 @@ Result: 7.8% of rule-matched FF rows blocked, ~8 in 10 true pollution. BLIND INV
 evidence = no flip). Known limit: department-level only, so it cannot separate coffee from creamer when
 the store shelves both in `beverages`.
 
+**2c. THE AISLE TEST PAID IMMEDIATELY, on a use it was not built for.** Pointed at the LIVE board rather
+than at candidate flips, it read 406 Family Fare cells and found FIVE wrong products - **two holding the
+cheapest-price crown**: Arm & Hammer Baking Soda Clumping **CAT LITTER** as `baking-soda` ($0.0375/oz) and
+Pineapple Teriyaki **BRATS** as `pineapple` ($1.3725/ea). Neither is a pricing error - both prices are
+real - which is exactly why no price guard could see them. Also caught `sun-dried-tomatoes` matching a
+Gilbert's chicken sausage through the include I had added the SAME MORNING in coverage batch 3. Fixed with
+9 excludes; crowns moved to real products; the three that reached a board are in `known-wrong.json`. It now
+runs DAILY in check-ad-cycles (`-LiveBoard`, advisory, BLIND-not-block, signature-deduped).
+
 **2b. FINDING that fell out of it, worth its own work:** `fruit` commodities are only 34% produce - 26%
 pantry, 24% BEVERAGES, 7% HEALTH_BEAUTY. A quarter of everything the fruit rules match is a drink. Those
 wrong matches lose on price today, which is precisely the accidental-relevance-filter effect. `snacks`
