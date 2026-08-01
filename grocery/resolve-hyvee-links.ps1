@@ -78,7 +78,20 @@ $doc = Get-Content $puF -Raw | ConvertFrom-Json
 # sat at 25 linkless Hy-Vee chips.
 $noLinkIds = @{}
 $crF = Join-Path $root 'out\consistency-report.json'
-if (Test-Path $crF) { foreach ($nl in @((Get-Content $crF -Raw | ConvertFrom-Json).no_link)) { if (([string]$nl.store) -eq 'Hy-Vee') { $noLinkIds[[string]$nl.id] = $true } } }
+$driftIds = @{}
+if (Test-Path $crF) {
+  $crDoc = ConvertFrom-Json (Get-Content $crF -Raw)
+  foreach ($nl in @($crDoc.no_link)) { if (([string]$nl.store) -eq 'Hy-Vee') { $noLinkIds[[string]$nl.id] = $true } }
+  # THE DRIFTED-LINK QUEUE (2026-08-01, F5). The two sources above cannot reach a cell whose link is
+  # PRESENT but WRONG: $unver is keyed by name off the Hy-Vee feed, and no_link only lists cells rendering
+  # NO link at all. So a cell whose stored link merely drifted onto a different product sat unhealable
+  # forever - that is the entire consistency mismatch backlog, and every one of its rows is a RECIPE-BOARD
+  # cell. Withdrawing those links by hand did not help either: withdrawal re-enters a cell into a worklist
+  # this resolver never consulted. The consistency report's `mismatch` list DOES see both boards, so it is
+  # the queue the backlog was always supposed to drain into.
+  foreach ($mm in @($crDoc.mismatch)) { if (([string]$mm.store) -eq 'Hy-Vee') { $driftIds[[string]$mm.id] = $true } }
+  if ($driftIds.Count) { Write-Output ("drifted-link queue: {0} Hy-Vee cell(s) whose stored link no longer matches the board" -f $driftIds.Count) }
+}
 
 # every Hy-Vee board cell that is unverified OR renders no link, resolved once (by id)
 $targets = New-Object System.Collections.ArrayList
@@ -87,7 +100,7 @@ foreach ($it in $board) {
   $cell = $it.stores | Where-Object { $_.store -eq 'Hy-Vee' } | Select-Object -First 1
   if (-not $cell) { continue }
   $nm = ([string]$cell.item).Trim()
-  if (-not ($unver.ContainsKey($nm) -or $noLinkIds.ContainsKey([string]$it.id))) { continue }
+  if (-not ($unver.ContainsKey($nm) -or $noLinkIds.ContainsKey([string]$it.id) -or $driftIds.ContainsKey([string]$it.id))) { continue }
   if ($seenT.ContainsKey([string]$it.id)) { continue }; $seenT[[string]$it.id] = $true
   # read our size/price from the regular row THE BOARD ACTUALLY PRICED.
   # $rowByName/$unver are keyed by NAME, and Hy-Vee sells the same name in more than one size - "Spice World

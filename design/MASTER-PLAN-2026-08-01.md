@@ -173,11 +173,23 @@ recipe-board Hy-Vee cell was structurally unhealable. Proven, not theorised: wit
 links (the documented withdraw-then-resolve loop, which works on main-board cells) brought back ZERO of
 the four Hy-Vee ones.
 
-**LANDED:** `resolve-hyvee-links` now resolves against both boards (572 rows, was 492).
-**STILL OPEN, and it is the part that actually drains the backlog:** the resolver's CANDIDATE list is
-still main-board-only. It is built from `not_reverified` rows plus the consistency report's `no_link`
-list, and both are derived from the main board - so widening the board it matches against does not put a
-recipe-board cell into the queue in the first place. That is the remaining fix.
+**LANDED (both halves):** `resolve-hyvee-links` resolves against both boards (572 rows, was 492) AND now
+takes a third candidate source - the consistency report's `mismatch` list, which is the only one of the
+three that can see a cell whose link is PRESENT but WRONG. That is the queue the backlog was always meant
+to drain into.
+
+**RESULT, stated honestly: 1 of 4 drained.** parmesan-cheese re-pointed to the correct Hy-Vee Grated
+Parmesan 3 oz. **The other three cannot be healed by this resolver at all**, and it is a data shape, not a
+queue: `recipe-board.json` store rows carry only `{store, per_unit, type, bulk}` - **no `item`, no `size`**
+- so the resolver logs `no size match (ours: / )` and correctly REFUSES rather than guess (that refusal is
+the founding minced-garlic fix: board published 32 oz while the link opened 4.5 oz).
+
+**NOW THE REAL REMAINING FIX:** give recipe-board rows product identity (`item` + `size`), in whatever
+builds that board. Until then those cells are structurally unlinkable no matter how good the queue is.
+
+**SEPARATE ISSUE SPOTTED TWICE TODAY:** a full `resolve-hyvee-links` run re-introduces the
+poultry-seasoning/Hy-Vee divergence (board 2.7667 vs link 4.7571) and grows the backlog. Its output was
+discarded both times. The resolver has a quality problem on that row independent of the queue.
 
 The withdrawals were REVERTED and `product-urls.json` restored to its committed state: 7 cells with a
 tracked drifted link beat 7 cells with no exact link plus a red coverage ratchet. Board verified green.
