@@ -10,7 +10,7 @@
   cross-store per-unit TODAY vs its cheapest 7 days ago, largest percentage falls first. Only real,
   currently-verified prices - the same rule as everything else on the board.
 
-  OUTPUT: public\share\omaha-drops.png (1200x630). GDI+ (same proven stack as the TikTok renderer).
+  OUTPUT: public\share\omaha-drops.png (1200x630). GDI+ (same proven stack as the brand touch-icon renderer).
 #>
 param([string]$OutPath = "")
 $ErrorActionPreference = 'Stop'
