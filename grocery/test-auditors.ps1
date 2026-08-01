@@ -1645,6 +1645,37 @@ if ((Test-MpClassify 'Family Fare' $mpBad '50.5 oz' @()) -eq 'reject' -and $mpFi
   Ok 'multipack repair and guard 5 agree: the rejected row repairs, and the repaired row passes'
 } else { Bad ('the repair and the guard have drifted apart - repaired size was [' + $mpFix + ']') }
 
+# ---------------------------------------------------------------- N5. rule-batch gate (apply-coverage-batch)
+# MUST FIRE, and it is a source scan because the bug is an ORDERING one that a unit test cannot see.
+# The theft baseline used to be whatever comparison-<date>.json happened to be on disk. Store pulls run on
+# their own schedules, so any feed refreshed since that file was written appears as a moved cell the moment
+# compare-deals runs again - and verify-no-regression blames the batch. MEASURED 2026-08-01: with the rule
+# edit fully REVERTED and nothing changed at all, the check still reported 6 moved Family Fare cells
+# (coffee-creamer, english-muffins, ground-cinnamon, honey, hot-dogs, pepperoni) and 3 gained ones, purely
+# because a Family Fare pull had landed after the board file was written. A one-word exclude on dried-thyme
+# cannot move pepperoni. It is invisible at crown level too - none of the six held a crown - so a crown diff
+# reports "0 changed" and looks clean. Any batch run in that window was auto-reverted on merit it never
+# lacked, which is the same shape as the visibility gate that had to be rebuilt twice.
+$acbSrc = Get-Content (Join-Path $root 'apply-coverage-batch.ps1') -Raw
+$acbRebuildAt = $acbSrc.IndexOf('rebuilding the board under the CURRENT rules')
+$acbFreezeAt  = $acbSrc.IndexOf('$baseCmp = Join-Path $OutDir ''_baseline-batch.json''')
+if ($acbRebuildAt -gt 0 -and $acbFreezeAt -gt $acbRebuildAt) { Ok 'rule-batch gate rebuilds the board BEFORE freezing its theft baseline (a stale baseline reverts correct work)' }
+else { Bad 'apply-coverage-batch freezes a theft baseline it did not just rebuild - an unrelated feed refresh will be blamed on the batch and revert it' }
+# MUST FIRE: an empty batch would run every gate and prove nothing.
+$r = RunPS 'apply-coverage-batch.ps1' @()
+if ($r.rc -eq 1 -and $r.text -match 'empty batch would run every gate') { Ok 'rule-batch gate refuses an empty batch instead of reporting a clean run over nothing' }
+else { Bad ('apply-coverage-batch accepted an empty batch (rc=' + $r.rc + '): ' + $r.text) }
+# MUST FIRE, cheaply and BEFORE the expensive baseline rebuild: a pattern that does not compile matches
+# nothing, so the batch would read as "bought nothing" rather than "was never a rule". Same family as a
+# typo'd commodity id, which is checked beside it.
+$acbBadRx = & powershell -NoProfile -ExecutionPolicy Bypass -Command "& { `$ErrorActionPreference='Continue'; & '$(Join-Path $root 'apply-coverage-batch.ps1')' -Excludes @{ 'dried-thyme' = @('local(\s+roots') } 2>&1 | Out-String; exit `$LASTEXITCODE }"
+if ($LASTEXITCODE -eq 1 -and $acbBadRx -match 'not a valid regex' -and $acbBadRx -notmatch 'rebuilding the board') {
+  Ok 'rule-batch gate rejects an uncompilable pattern BEFORE it spends a compare-deals on it'
+} else { Bad ('apply-coverage-batch let an uncompilable pattern through, or only caught it after the baseline rebuild: ' + $acbBadRx) }
+$acbBadId = & powershell -NoProfile -ExecutionPolicy Bypass -Command "& { `$ErrorActionPreference='Continue'; & '$(Join-Path $root 'apply-coverage-batch.ps1')' -Excludes @{ 'no-such-commodity-xyz' = @('foo') } 2>&1 | Out-String; exit `$LASTEXITCODE }"
+if ($LASTEXITCODE -eq 1 -and $acbBadId -match 'can never fire') { Ok 'rule-batch gate rejects a batch on a commodity id that does not exist' }
+else { Bad ('apply-coverage-batch accepted a non-existent commodity id: ' + $acbBadId) }
+
 # ---------------------------------------------------------------- (u) store-taxonomy: the second opinion
 # The ONLY watcher that does not inherit the include regex's premise. Its founding bug is the class that
 # produced 47 of the 99 wrong numbers in 22 days: Family Fare's own catalogue files "Blue Buffalo Natural

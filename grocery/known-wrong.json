@@ -590,6 +590,21 @@
                         "ruled_on":  "2026-08-01",
                         "ruled_by":  "aisle-test-live-2026-08-01",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "dried-thyme|FamilyFare|local-roots-organic-thyme",
+                        "commodity":  "dried-thyme",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Local Roots Organic Thyme"
+                                  ],
+                        "product_id":  "1764405684715974017",
+                        "verdict":  "wrong-product",
+                        "evidence":  "FRESH thyme priced as the DRIED commodity. The store\u0027s own shelf path says so: canonical_url is fresh_fruits_vegetables/fresh_spices_herbs/local_roots_organic_thyme. It held the Family Fare dried-thyme cell at 5.98/oz, the most expensive on the row, and dried-thyme\u0027s excludes (fresh, bunch, sprigs, clamshell) share no word with the name. Fixed by an exclude on the Local Roots brand, which is correct for fresh-basil and fresh-mint and wrong only here.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "plan-run-2026-08-01",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

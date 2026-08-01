@@ -1,4 +1,4 @@
-<#
+﻿<#
   apply-coverage-batch.ps1 - add include patterns for a batch of coverage gaps, then GATE them.
 
   THE PROCEDURE THIS ENFORCES (learned the hard way on 2026-08-01)
@@ -20,14 +20,34 @@
     8. guards              - every hard invariant
   Any failure leaves the batch REVERTED and the board untouched.
 
+  NARROWING GETS THE SAME GATES (2026-08-01). Until now this script only ADDED include patterns, so the
+  estate had a gated path for widening a rule and NO gated path for narrowing one - and a "quick exclude"
+  is just as capable of costing a cell, stealing a product from a neighbouring commodity, or orphaning a
+  stored link. That asymmetry is how an unreviewed one-liner ships. -Excludes runs the identical chain with
+  three gates INVERTED, because an exclude's whole purpose is the opposite of an include's:
+    - losing cells is EXPECTED, not a revert (gate 2)
+    - the visibility question flips to SUPPRESSION: an exclude that removes nothing bought nothing (2b)
+    - the theft check still applies unchanged - an exclude must not disturb any commodity it does not own
+  A batch may carry both; each pattern is judged by its own kind.
+
   Usage:
     .\apply-coverage-batch.ps1 -Patterns @{ 'sun-dried-tomatoes' = @('sun.?dried.{0,30}tomato') }
+    .\apply-coverage-batch.ps1 -Excludes @{ 'dried-thyme' = @('local\s+roots') }
     .\apply-coverage-batch.ps1 -Patterns $p -WhatIfOnly     measure without keeping
 #>
 param(
-  [Parameter(Mandatory=$true)][hashtable]$Patterns,
+  [hashtable]$Patterns = @{},
+  [hashtable]$Excludes = @{},
   [switch]$WhatIfOnly
 )
+if (@($Patterns.Keys).Count -eq 0 -and @($Excludes.Keys).Count -eq 0) {
+  Write-Output 'apply-coverage-batch: pass -Patterns (includes) and/or -Excludes. An empty batch would run every gate and prove nothing.'
+  exit 1
+}
+# Every gate below reasons about "the commodities this batch touched". Keep ONE list, built once: the
+# theft check exempts exactly these ids, and an id missing from it would be judged as a victim of its own
+# batch. $TouchedIds is that list.
+$TouchedIds = @(@($Patterns.Keys) + @($Excludes.Keys) | Sort-Object -Unique)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $OutDir = Join-Path $root 'out'
@@ -40,9 +60,52 @@ function Snapshot {
 }
 
 $comFile = Join-Path $root 'commodities.json'
+
+# ---- VALIDATE THE BATCH BEFORE DOING ANY WORK. Every check below is cheap and every failure is fatal, so
+# they run before the baseline rebuild rather than after it. A pattern that does not COMPILE would
+# otherwise silently match nothing and the batch would read as "bought nothing" - a rule that was never a
+# rule, reported as a rule that did not pay. A typo'd commodity id is the same class as the permanently
+# unfirable known-wrong entry: it can never fire, and nothing downstream would say so.
+$comsCheck = Get-Content $comFile -Raw | ConvertFrom-Json
+$idsKnown = @{}; foreach ($c in $comsCheck) { if ($c -and $c.id) { $idsKnown[[string]$c.id] = $true } }
+foreach ($id in $TouchedIds) {
+  if (-not $idsKnown.ContainsKey([string]$id)) {
+    Write-Output ("apply-coverage-batch: '" + $id + "' is not a commodity id in commodities.json. A batch on a non-existent commodity can never fire.")
+    exit 1
+  }
+}
+foreach ($id in $Excludes.Keys) {
+  foreach ($p in @($Excludes[$id])) {
+    try { [void][regex]::new([string]$p, 'IgnoreCase') }
+    catch { Write-Output ("apply-coverage-batch: exclude pattern for '" + $id + "' is not a valid regex and would silently match nothing: " + $p); exit 1 }
+  }
+}
+foreach ($id in $Patterns.Keys) {
+  foreach ($p in @($Patterns[$id])) {
+    try { [void][regex]::new([string]$p, 'IgnoreCase') }
+    catch { Write-Output ("apply-coverage-batch: include pattern for '" + $id + "' is not a valid regex and would silently match nothing: " + $p); exit 1 }
+  }
+}
+
 $bak = Join-Path $OutDir ('_commodities-batchbak-' + (Get-Date -Format 'HHmmss') + '.json')
 Copy-Item $comFile $bak -Force
-# freeze the pre-edit board so the theft check has a fixed baseline (compare-deals overwrites the live one)
+
+# ---- REBUILD THE BASELINE FIRST. This is not a nicety; without it the theft gate reverts correct work.
+# The baseline used to be whatever comparison-<date>.json happened to be on disk. But that file was written
+# at some earlier moment today, and store pulls run on their OWN schedules - so any feed refreshed since
+# then shows up as a cell that "moved" the instant compare-deals runs again, and verify-no-regression
+# attributes every one of them to the batch. Measured 2026-08-01: with the rule edit fully REVERTED and
+# nothing changed at all, the check still reported 6 moved Family Fare cells (coffee-creamer,
+# english-muffins, ground-cinnamon, honey, hot-dogs, pepperoni) and 3 gained ones - purely because a
+# Family Fare pull had landed after the board file was written. A one-word exclude on dried-thyme cannot
+# move pepperoni, and any batch run in that window would have been auto-reverted on merit it never lacked.
+# It is also invisible at crown level - none of those six held a crown - so a crown diff says "0 changed"
+# and looks perfectly clean, which is the same shape as the cheese collision this script was built for.
+# So: recompute the board under the OLD rules first, then freeze THAT. Every later difference is then
+# attributable to the edit and to nothing else. One extra compare-deals per batch is the whole cost.
+Write-Output 'rebuilding the board under the CURRENT rules so the baseline cannot carry an unrelated feed refresh...'
+& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'compare-deals.ps1') *>&1 | Out-Null
+if ($LASTEXITCODE -ne 0) { Write-Output ("apply-coverage-batch: baseline compare-deals exited $LASTEXITCODE - refusing to run a batch whose baseline cannot be trusted"); exit 2 }
 $baseCmp = Join-Path $OutDir '_baseline-batch.json'
 Copy-Item (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1).FullName $baseCmp -Force
 $before = Snapshot
@@ -50,7 +113,7 @@ Write-Output ("before: {0} commodities on the board" -f $before.Count)
 
 # ---- edit
 $coms = Get-Content $comFile -Raw | ConvertFrom-Json
-$added = 0
+$added = 0; $addedEx = 0
 foreach ($id in $Patterns.Keys) {
   $c = @($coms | Where-Object { $_.id -eq $id })[0]
   if (-not $c) { throw "commodity '$id' not found" }
@@ -58,8 +121,15 @@ foreach ($id in $Patterns.Keys) {
     if (@($c.include) -notcontains $p) { $c.include = @($c.include) + $p; $added++ }
   }
 }
+foreach ($id in $Excludes.Keys) {
+  $c = @($coms | Where-Object { $_.id -eq $id })[0]
+  if (-not $c) { throw "commodity '$id' not found" }
+  foreach ($p in @($Excludes[$id])) {
+    if (@($c.exclude) -notcontains $p) { $c.exclude = @($c.exclude) + $p; $addedEx++ }
+  }
+}
 ($coms | ConvertTo-Json -Depth 12) | Set-Content $comFile -Encoding UTF8
-Write-Output ("added {0} include pattern(s) across {1} commodit(y/ies)" -f $added, $Patterns.Keys.Count)
+Write-Output ("added {0} include pattern(s) across {1} commodit(y/ies), {2} exclude pattern(s) across {3}" -f $added, @($Patterns.Keys).Count, $addedEx, @($Excludes.Keys).Count)
 
 function Revert([string]$why) {
   Copy-Item $bak $comFile -Force
@@ -92,7 +162,7 @@ $crownChanges | ForEach-Object { Write-Output ("    " + $_) }
 # gate threw it away). Most coverage findings are exactly that shape: a better CANDIDATE at a store that
 # is already represented. So a batch earns its keep by adding a cell OR by lowering a real price.
 $gained = 0; $lost = 0; $cheaper = 0; $detail = @()
-foreach ($id in $Patterns.Keys) {
+foreach ($id in $TouchedIds) {
   $b = if ($before.ContainsKey($id)) { $before[$id].cells } else { 0 }
   $a = if ($after.ContainsKey($id)) { $after[$id].cells } else { 0 }
   $bp = if ($before.ContainsKey($id)) { $before[$id].price } else { 0 }
@@ -104,7 +174,18 @@ foreach ($id in $Patterns.Keys) {
 }
 $detail | ForEach-Object { Write-Output $_ }
 Write-Output ("value: +{0} cell(s), -{1} cell(s), {2} commodit(y/ies) got a cheaper real price" -f $gained, $lost, $cheaper)
-if ($lost -gt 0) { Revert "the batch REMOVED $lost cell(s); a widening must never cost coverage" }
+# A WIDENING must never cost coverage. A NARROWING is supposed to: removing a wrong product is the point,
+# and the cell it vacates should fall through to that store's next-best REAL row. So the loss is only a
+# revert when an INCLUDE-only commodity lost cells - judged per commodity, not per batch, so a mixed batch
+# cannot let an include hide behind an exclude's expected loss.
+$lostByInclude = 0
+foreach ($id in $TouchedIds) {
+  if ($Excludes.ContainsKey($id)) { continue }
+  $b = if ($before.ContainsKey($id)) { $before[$id].cells } else { 0 }
+  $a = if ($after.ContainsKey($id)) { $after[$id].cells } else { 0 }
+  if ($a -lt $b) { $lostByInclude += ($b - $a) }
+}
+if ($lostByInclude -gt 0) { Revert "the batch REMOVED $lostByInclude cell(s) at a commodity it only WIDENED; a widening must never cost coverage" }
 
 # ---- gate 2b: VISIBILITY. This is the measurement the first two versions of this gate got wrong.
 # Board effects are weekly: a correct new pattern often changes nothing today simply because the product it
@@ -136,6 +217,37 @@ if (Test-Path $corpusFile) {
     }
     $revealed[$id] = $n
   }
+  # SUPPRESSION - gate 2b for an exclude. The mirror question: does this pattern actually remove rows the
+  # commodity currently matches? An exclude that suppresses nothing bought nothing and is pure risk, exactly
+  # like an include that reveals nothing. Measured against the SAME corpus, on rows the commodity's own
+  # include still admits, so it counts real losses rather than hypothetical ones.
+  # It also PRINTS what it suppressed. Nothing automated can tell you a suppressed row was actually wrong
+  # for the commodity - the same limit gate 2b states for widenings - so the rows go on screen for a human.
+  $suppressed = @{}
+  foreach ($id in $Excludes.Keys) {
+    $cdef = @($comsNow | Where-Object { $_.id -eq $id })[0]
+    $inRx = @(); foreach ($ip in @($cdef.include)) { if ($ip) { $inRx += [regex]::new([string]$ip, 'IgnoreCase,Compiled') } }
+    $names = New-Object 'System.Collections.Generic.List[string]'
+    foreach ($p in @($Excludes[$id])) {
+      $r = [regex]::new([string]$p, 'IgnoreCase,Compiled')
+      foreach ($row in $corp) {
+        $nm = [string]$row.product
+        if (-not $r.IsMatch($nm)) { continue }
+        $adm = $false; foreach ($i in $inRx) { if ($i.IsMatch($nm)) { $adm = $true; break } }
+        if ($adm -and -not $names.Contains($nm)) { $names.Add($nm) }
+      }
+    }
+    $suppressed[$id] = $names
+    Write-Output ("    {0,-24} suppresses {1} row(s) its include still admits" -f $id, $names.Count)
+    foreach ($nm in ($names | Select-Object -First 12)) { Write-Output ("        - " + $nm) }
+    if ($names.Count -gt 12) { Write-Output ("        ... and " + ($names.Count - 12) + " more (READ THEM: nothing here can tell you a suppressed row was really wrong)") }
+  }
+  $deadEx = @($Excludes.Keys | Where-Object { @($suppressed[$_]).Count -eq 0 })
+  if ($deadEx.Count -eq @($Excludes.Keys).Count -and @($Excludes.Keys).Count -gt 0 -and @($Patterns.Keys).Count -eq 0) {
+    Revert 'no exclude in the batch suppressed a single row its commodity actually matches - it bought nothing'
+  }
+  if ($deadEx.Count -gt 0) { Write-Output ("    NOTE: {0} exclude(s) suppressed nothing and should be dropped: {1}" -f $deadEx.Count, ($deadEx -join ', ')) }
+
   $dead = @($Patterns.Keys | Where-Object { $revealed[$_] -eq 0 })
   foreach ($id in ($Patterns.Keys | Sort-Object)) {
     $flag = ''
@@ -148,7 +260,7 @@ if (Test-Path $corpusFile) {
     if ($revealed[$id] -ge 15) { $flag = '   <-- REVIEW: reads like an aisle, not a product. Check the revealed rows before shipping.' }
     Write-Output ("    {0,-24} reveals {1} previously-invisible row(s){2}" -f $id, $revealed[$id], $flag)
   }
-  if ($dead.Count -eq @($Patterns.Keys).Count) { Revert 'no pattern in the batch revealed a single invisible row - it bought nothing' }
+  if (@($Patterns.Keys).Count -gt 0 -and $dead.Count -eq @($Patterns.Keys).Count) { Revert 'no pattern in the batch revealed a single invisible row - it bought nothing' }
   if ($dead.Count -gt 0) { Write-Output ("    NOTE: {0} pattern(s) revealed nothing and should be dropped: {1}" -f $dead.Count, ($dead -join ', ')) }
 } else {
   # BLIND, not block: no corpus means we cannot measure visibility, so fall back to the board-effect test
@@ -165,7 +277,7 @@ if (Test-Path $corpusFile) {
 # NOTE: invoked IN-PROCESS, not through `powershell -File`. An array argument does not survive -File - it
 # arrives flattened into positional junk ("A positional parameter cannot be found"), the same trap that bit
 # withdraw-stale-link. Splatting a hashtable to the call operator keeps -IgnoreIds an actual array.
-$vnrArgs = @{ Baseline = $baseCmp; IgnoreIds = @($Patterns.Keys) }
+$vnrArgs = @{ Baseline = $baseCmp; IgnoreIds = @($TouchedIds) }
 $vnrOut = & (Join-Path $root 'verify-no-regression.ps1') @vnrArgs 2>&1
 if ($LASTEXITCODE -ne 0) {
   $vnrOut | Select-String -Pattern 'LOST|MOVED|was:|now:' | ForEach-Object { Write-Output ("    " + $_) }
@@ -196,7 +308,7 @@ if ($tileRc -ne 0) {
   if (Test-Path $tf) {
     foreach ($rw in @((Get-Content $tf -Raw | ConvertFrom-Json).rows)) {
       if ([string]$rw.fault -eq 'NO-LINK') { continue }
-      if ($Patterns.Keys -contains [string]$rw.id) { $mine += $rw } else { $theirs += $rw }
+      if ($TouchedIds -contains [string]$rw.id) { $mine += $rw } else { $theirs += $rw }
     }
   }
   Write-Output ("tile-integrity failed: {0} hard fault(s) on BATCH commodities, {1} pre-existing elsewhere" -f $mine.Count, $theirs.Count)
@@ -212,7 +324,7 @@ if ($tileRc -ne 0) {
     $still = @()
     if (Test-Path $tf) {
       foreach ($rw in @((Get-Content $tf -Raw | ConvertFrom-Json).rows)) {
-        if ([string]$rw.fault -ne 'NO-LINK' -and $Patterns.Keys -contains [string]$rw.id) { $still += $rw }
+        if ([string]$rw.fault -ne 'NO-LINK' -and $TouchedIds -contains [string]$rw.id) { $still += $rw }
       }
     }
     if ($still.Count -gt 0) {
