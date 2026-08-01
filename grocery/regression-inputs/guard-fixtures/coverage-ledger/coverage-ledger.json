@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "updated": "2026-01-02 00:00",
+  "_fixture": "FROZEN FIXTURE - MUST FIRE. Three F4 defects in one ledger. 'dead-ratchet-check' is paired with a baseline tolerance of 1.0 AND NO RECORDED REASON, which puts its regression floor at ZERO - and since BLIND already claims everything at or below zero, its REGRESSED verdict is structurally unfirable: it could drop to 1 examined row and still report ok. That is the ACCIDENT case. It is deliberately distinct from a DECLARED exemption: audit-ff-carry also runs at 1.0, correctly, because its denominator is INVERSE (it counts EMPTY FF terms, so it falls when the pull improves) and it carries a written reason - a ratchet there would fire at whoever fixed the thing it watches. 'shrunk-check' examines far less than its baseline, proving -Accept does NOT silently lower a high-water mark: doing that on one capped run would have moved audit-ff-carry's floor from 464 to 40 and baked in a 91% coverage loss forever. 'unjustified-check' overrides the default tolerance with no reason, which is how a threshold drifts loose with nobody able to say whether it was ever measured. NEVER regenerate from the live ledger.",
+  "checks": {
+    "dead-ratchet-check": { "eligible": 500, "examined": 500, "skipped": 0, "blind": false, "as_of": "2026-01-02 00:00", "detail": "a check whose tolerance makes its own ratchet unfirable, with nothing recording that as deliberate" },
+    "shrunk-check": { "eligible": 1000, "examined": 40, "skipped": 960, "blind": false, "as_of": "2026-01-02 00:00", "detail": "a check that examined far less than its baseline this run" },
+    "unjustified-check": { "eligible": 900, "examined": 900, "skipped": 0, "blind": false, "as_of": "2026-01-02 00:00", "detail": "a check whose tolerance override carries no reason" }
+  }
+}

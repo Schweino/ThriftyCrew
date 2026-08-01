@@ -1721,6 +1721,38 @@ $acbSrcHv = [regex]::Match($acbSrc, "resolve-hyvee-links\.ps1'\)\s*@hvArgs")
 if ($acbSrcHv.Success -and $acbSrc -match '\$hvArgs = @\{ Ids = @\(\$TouchedIds\) \}') { Ok 'rule-batch link repair calls resolve-hyvee-links SCOPED to the batch, not in bulk' }
 else { Bad 'apply-coverage-batch runs a BULK resolve-hyvee-links in its repair chain again - a one-commodity edit will rewrite every Hy-Vee link' }
 
+# ---------------------------------------------------------------- N7. the coverage ratchet's own config
+# F4 asked for tolerances narrowed "from the week's accumulated ledger data" and there WAS none - the ledger
+# is a single overwritten snapshot, so every tolerance had been hand-seeded from one green run with no
+# reason recorded. These pin the three defects that turned up while looking.
+$fxCl = Join-Path $env:TEMP ('taudit-cl-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+New-Item -ItemType Directory -Path $fxCl -Force | Out-Null
+Copy-Item (Join-Path $fix 'coverage-ledger\coverage-ledger.json') $fxCl -Force
+$clBase = Join-Path $fxCl 'coverage-baseline.json'
+Copy-Item (Join-Path $fix 'coverage-ledger\coverage-baseline.json') $clBase -Force
+$r = RunPS 'audit-coverage-ledger.ps1' @('-OutDir', $fxCl, '-BaselineFile', $clBase, '-Phase', 'all')
+# MUST FIRE: a tolerance of 1.0 puts the regression floor at 0, and BLIND already owns everything <= 0, so
+# REGRESSED can never fire. Two live checks shipped in that state - the gates-that-can-never-arm class.
+if ($r.text -match 'DEAD-RATCHET\s+dead-ratchet-check') { Ok 'coverage ratchet reports a tolerance that makes its own REGRESSED verdict structurally unfirable' }
+else { Bad ('a dead ratchet (tolerance 1.0, floor 0) passed as ok: ' + $r.text) }
+# MUST FIRE: an override with no reason cannot be reviewed or narrowed later, which is exactly why F4 had
+# nothing to narrow FROM.
+if ($r.text -match 'UNJUSTIFIED TOLERANCE: unjustified-check') { Ok 'coverage ratchet reports a tolerance override that records no reason' }
+else { Bad ('an undocumented tolerance override passed silently: ' + $r.text) }
+# MUST FIRE: -Accept must RAISE only. Lowering on one bad run makes the rows it stopped looking at
+# unguarded forever - it would have baked in audit-ff-carry at 40 against a 464 baseline (91% lost).
+$r2 = RunPS 'audit-coverage-ledger.ps1' @('-OutDir', $fxCl, '-BaselineFile', $clBase, '-Phase', 'all', '-Accept')
+$clAfter = ((Get-Content $clBase -Raw) + '').Trim() | ConvertFrom-Json
+if ([int]$clAfter.checks.'shrunk-check'.examined -eq 1000 -and $r2.text -match 'KEPT HIGH') {
+  Ok '-Accept RAISES the coverage ratchet but refuses to lower it, and names the rows it kept high'
+} else { Bad ('-Accept silently lowered a high-water mark - the coverage it stopped watching is now unguarded forever: ' + [string]$clAfter.checks.'shrunk-check'.examined) }
+# ...and -AcceptLower is the explicit way to do it on purpose.
+$r3 = RunPS 'audit-coverage-ledger.ps1' @('-OutDir', $fxCl, '-BaselineFile', $clBase, '-Phase', 'all', '-Accept', '-AcceptLower')
+$clAfter2 = ((Get-Content $clBase -Raw) + '').Trim() | ConvertFrom-Json
+if ([int]$clAfter2.checks.'shrunk-check'.examined -eq 40 -and $r3.text -match 'LOWERED') { Ok '-AcceptLower lowers the ratchet deliberately and says which rows it moved down' }
+else { Bad '-AcceptLower did not lower the baseline, so a real permanent drop can never be accepted' }
+Remove-Item $fxCl -Recurse -Force -ErrorAction SilentlyContinue
+
 # ---------------------------------------------------------------- N6. Hy-Vee link price provenance
 # MUST FIRE: the link's stored price must be the one the BOARD priced, never the search endpoint's.
 # Hy-Vee publishes several prices per product and only Omaha #01's is the one it charges - the whole reason
@@ -2150,7 +2182,7 @@ function CovLedger([hashtable]$rows) {
  "guards/11-bakers-provenance":{"examined":6960,"tolerance":0.25,"max_age_days":2,"phase":"publish"},
  "guards/3-pin-identity":{"examined":16,"tolerance":0.5,"max_age_days":2,"phase":"publish"},
  "guards/4-factor":{"examined":2435,"tolerance":0.1,"max_age_days":2,"phase":"publish"},
- "audit-ff-carry":{"examined":464,"tolerance":1.0,"max_age_days":3,"phase":"cycle"}}}
+ "audit-ff-carry":{"examined":464,"tolerance":1.0,"max_age_days":3,"phase":"cycle","why":"RATCHET DELIBERATELY OFF - inverse denominator. It counts EMPTY FF search terms re-probed, so it FALLS when the pull improves; a ratchet would fire at whoever fixed the thing it watches. The clean twin below pins exactly that. Recorded here because DEAD-RATCHET now separates a declared exemption from an accidental one, and an undeclared 1.0 is an accident."}}}
 '@), $covEnc)
 $covHealthy = @{ 'guards/11-bakers-provenance' = @(6960, 6936); 'guards/3-pin-identity' = @(19, 9); 'guards/4-factor' = @(2435, 2435); 'audit-ff-carry' = @(464, 464) }
 

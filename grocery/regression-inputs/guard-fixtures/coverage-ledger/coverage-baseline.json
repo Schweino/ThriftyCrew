@@ -1,0 +1,25 @@
+{
+    "schema":  1,
+    "set":  "2026-01-02 00:00 (FROZEN FIXTURE - never regenerate)",
+    "readme":  "The baseline half of the F4 fixture. dead-ratchet-check carries tolerance 1.0 on purpose: floor(500 * (1 - 1.0)) = 0, so REGRESSED can never fire for it. shrunk-check has a high-water mark of 1000 against a ledger reading of 40, so an -Accept that lowers baselines would destroy 96% of its guarded coverage. unjustified-check overrides the 0.10 default with 0.40 and deliberately records no reason.",
+    "checks":  {
+                   "dead-ratchet-check":  {
+                                              "examined":  500,
+                                              "tolerance":  1.0,
+                                              "max_age_days":  99999,
+                                              "phase":  "publish"
+                                          },
+                   "shrunk-check":  {
+                                        "examined":  1000,
+                                        "tolerance":  0.10,
+                                        "max_age_days":  99999,
+                                        "phase":  "publish"
+                                    },
+                   "unjustified-check":  {
+                                             "examined":  900,
+                                             "tolerance":  0.40,
+                                             "max_age_days":  99999,
+                                             "phase":  "publish"
+                                         }
+               }
+}
