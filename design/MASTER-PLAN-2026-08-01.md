@@ -380,8 +380,34 @@ in. Full write-up + the failure mode: the `vlm-flyer-extraction-failed` memory.
 suite's process-spawn overhead. Pure speed, zero user-facing risk. NOT STARTED, and it is last on purpose:
 this plan's own ranking puts speed behind accuracy, conversion and robustness, and the measured pipeline is
 already fast enough that nobody but the machines notices.
-**L4. Recipe cost redesign OPEN**: convert the 113 originals + switch site surfaces/rankings to the
-cheapest basis (MUST ship together), specs/prose re-sync, #124 credit retrofit.
+**L4. DONE 2026-08-02, and this line was stale when the plan was written.** The two big halves - convert
+the 113 originals, switch every site surface to the cheapest basis - both shipped on 2026-07-26, and the
+weekly wiring (compute-v2-perserving before top5-weekly) is already inside check-ad-cycles. What was
+actually left was the durability item, and it was the one that mattered most:
+
+**specs\prose was ONE full spec-guards run from reverting the whole redesign.** spec-guards FULL mode does
+not read prose to CHECK it - it MERGES `specs\prose\prose-<slug>.json` INTO the spec (four prose fields,
+shop_smart, make_it and seven head fields) and validates the result. Correct while the prose file is the
+writer's copy; the redesign inverted that relationship and nothing wrote it back. Measured before the fix:
+**ALL 400 slugs holding both files would be overwritten by one run** - 400 upsell_html, 400
+cost_closing_html, 362 head.description, 325 intro_html - and three would have had their deleted shop_smart
+dollar figures put back. The run that "validates" the catalogue is the run that reverts it. Fixed spec ->
+prose across 513 files (113 created for the originals, which never had one), with `-Check` as the standing
+guard - the SAME script, because a guard that re-implements what it guards drifts from it.
+
+**Then the prose-data-smells worklist got the same treatment.** Five writer agents had hand-found ~11
+content bugs while doing an unrelated job on 97 of 513 recipes. A hand-compiled list is a coincidence, not a
+detector: the same reading applied to every spec found **138** - 81 absurd display units (105 tbsp of
+cilantro), 27 head-vs-costed quantity disagreements, 16 lines reading "0 oz", 4 stale money figures, and
+fajita's 499-vs-541 calories. The three classes decidable from the spec alone are REPAIRED (33 fixes, 23
+recipes, all three now at zero); the other two are baselined and named, because the number is right and the
+UNIT is wrong, which lives in the gpu the serving widget re-scales from.
+**The repair produced a wrong rewrite before each of its four refusals existed** - a two-quantity head line,
+"rice vinegar" matching the RICE line, "wild rice" ending with "rice", and the opposite mistake of stripping
+'ground' off "93/7 ground turkey". All four are frozen fixtures.
+STILL OPEN under L4: the ABSURD-UNIT/ZERO-QTY unit picker (needs a re-cost + full card rebuild), and the
+quantity/identity questions that need a cook rather than a gate (no lemongrass in a lemongrass dish, 308 g
+of garlic in pad thai, fresh basil bucketed as a pantry seasoning).
 **L5. Elite-layer Wave 3 remainder**: OG images, unlock moment, capture after-state, formerly-free
 gate + 404, receipt footer, Shop-This-Recipe board side + winning-store feed field.
 **L6. DONE 2026-08-01.** The 4 R10 canon rules are promoted into `canon-rules-standing.json` (patis ->
