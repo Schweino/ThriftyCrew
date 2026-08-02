@@ -476,13 +476,39 @@ PRICE rather than a date, and it is why `audit-asof-evidence.ps1` now exists as 
   the morning pull had spent the budget), so the documented no-browser remedy applied.
 
 **STILL OPEN, and honestly why:**
-- **L1 identity-lane fine-tune** - a real ML task (build a HARD negative set from ~6,000 adjudicated pairs,
-  train, re-evaluate). It is not a session-tail item, and the lane correctly stays off until it beats the
-  new eval. Nothing about it is blocked; it just needs its own run.
+- **L1 DONE 2026-08-02 - and the fine-tune is NOT the next move.** The first job was the EVAL, because
+  Phase 2 already recorded why Phase 1's AUC 0.985 was misleading: all 25 of its negatives are dramatically
+  wrong (bath soap as coconut oil), so it never asked whether the model can tell a wiener from a hot dog -
+  which is why the lane flagged 173 board pairs and every one was CORRECT.
+  `export-identity-eval.ps1` + `sidecar\hardeval.py` build a GOLD set of 45 pairs from the 63 adjudicated
+  `known-wrong.json` rulings, with the subtle shapes the old set lacked (sandwich cookies into FROSTING on
+  the words "Butter Cream Icing", an RTD oat latte into COFFEE). Same scorer on both sets:
+  **Phase 1's negatives 0.9160, GOLD 0.8641, GOLD calibrated per commodity 0.9093.**
+  **AUC is not the deciding number.** Catch 22 of 43 GOLD and **133 of 2,754 accepted pairs are also
+  flagged (4.8%)** - about 8 advisory rows a day against the board's 168 new pairs, at HALF recall.
+  Affordable, so whether to flip it on is Brad's call about reviewer time; the lane stays OFF because it
+  did not clearly beat the harder eval, which is the gate this plan set.
+  **THE MISSES SPLIT IN TWO AND ONLY ONE IS LEARNABLE.** CARRIER errors (Parmesan Garlic Pita Chips as
+  parmesan) are learnable from names. SPECIFICATION errors are not: Roast Beef Hash against
+  corned-beef-hash (0.869), 96% lean against ground-beef-93-7 (0.791), Pork Half Loin against
+  pork-tenderloin. Nothing in the NAME says which grade a commodity wants - that lives in the commodity's
+  definition - so a name-based fine-tune buys the carrier half and cannot touch the specification half,
+  and the specification half is where the money is. Next mechanism: a grade/cut check, not a better
+  embedding. Report: `sidecar\out\hardeval-report.md` (tracked).
 - **L4 recipe cost redesign** and **L5 elite-layer Wave 3** - both are large surface changes, and L5
   overlaps D3, which explicitly wants Brad's eyes on the de-Ghost frame and the Portal pass BEFORE build.
 - **L6 R300 leftovers** - proxy item_ids, the cassoulet title call, canon-rule promotion.
-- **L3** - deliberately last, see above.
+- **L3 CLOSED 2026-08-02 as measured-and-declined.** Full write-up: `design\L3-speed-measured-2026-08-02.md`.
+  The daily run is 41.8 minutes and **39.1 of them are eleven gaps**; the top three are 734 s of Hy-Vee
+  GraphQL, 588 s of the Baker's Kroger pull and 429 s of the board publish. **All three are waiting on
+  somebody else's server** - 70% of the run - and no cache or runner touches them.
+  What the two proposed optimisations are worth, measured: one full pass over the five largest JSON files
+  is **0.54 s** (the 4.7 s this item was written from must have been cumulative or stale), and
+  `test-auditors` spends **≈11 s of its 106.8 s on 114 process spawns at 96 ms each**. Together, executed
+  perfectly, **about 16 seconds** - against a run that is network-bound. Consolidating the spawns would
+  also trade away the process isolation that keeps one dead watcher from killing the suite, which this
+  estate has already been bitten by. If speed ever becomes the constraint, start at the Hy-Vee and Baker's
+  pulls with concurrency, not at the JSON reader.
 - **Section 3 D2/D3/D4/D5** - these are decisions, not work. D4 in particular is Brad in the Ads UI.
 - **The Fareway `as_of` residual**, self-healing: rows carried out of files built before 2026-08-02 can
   still inherit a laundered date, and repair-asof-evidence corrects them on every build. It reached zero
