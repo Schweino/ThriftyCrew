@@ -99,6 +99,57 @@ $r = RunPS 'audit-pack-basis.ps1' @('-CompareFile', (Join-Path $fix 'packbasis-l
 if ($r.text -match 'ok - no multipack cell') { Ok 'pack-basis SILENT on legitimate bulk multipacks' }
 else { Bad ('pack-basis false-positived on real bulk: ' + $r.text) }
 
+# ---------------------------------------------------------------- 2b. pack-basis BLOCKS the decidable case
+# 2026-08-02: the audit above named the Pledge row at 09:03 and the board published the wrong crown at 09:11
+# anyway, because an advisory report is not in the publish path. The decidable subset now exits 2 and
+# guards.ps1 delegates to it. What makes it decidable is arithmetic, not text: stated-size / count
+# reproduces the single-unit size other stores actually sell (29/3 = 9.67 against 9.7 oz cans at four
+# stores), so the printed number can only have been the pack TOTAL.
+# The exit code is the assertion. A run that merely PRINTS the words while exiting 0 would leave the board
+# publishable, which is the exact failure this test exists to prevent, so rc is checked separately from text.
+$r = RunPS 'audit-pack-basis.ps1' @('-CompareFile', (Join-Path $fix 'packbasis-board.json'), '-ReportDir', $fixRep)
+if ($r.rc -eq 2 -and $r.text -match 'CONFIRMED PACK TOTAL' -and $r.text -match 'furniture-polish') { Ok 'pack-basis BLOCKS (exit 2) on the peer-size fingerprint of a pack total' }
+else { Bad ("pack-basis did not block its own founding bug (rc=$($r.rc)): " + $r.text) }
+# THE CLEAN TWIN, and the one that matters most: same count-first grammar, opposite meaning. Member's Mark
+# hummus singles really are 2.5 oz EACH, so 16 x 2.5 = 40 oz is correct and the cell is right. The
+# fingerprint must stay silent because 2.5/16 = 0.156 oz is a size nobody sells (peers are 8, 10, 17 oz).
+# The row still shows up as an ADVISORY finding - that is intended - but it must not fail the publish.
+$r = RunPS 'audit-pack-basis.ps1' @('-CompareFile', (Join-Path $fix 'packbasis-hummus-clean-board.json'), '-ReportDir', $fixRep)
+if ($r.rc -eq 0 -and $r.text -match 'hummus' -and $r.text -notmatch 'CONFIRMED PACK TOTAL') { Ok 'pack-basis fingerprint stays SILENT on a real per-item pack (hummus clean twin, still advisory)' }
+else { Bad ("pack-basis fingerprint condemned a CORRECT per-item pack (rc=$($r.rc)): " + $r.text) }
+
+# ---------------------------------------------------------------- 2c. coverage-gaps says WHY, not just WHAT
+# 2026-08-02: audit-coverage-gaps validated candidates against include/exclude regexes only, while the engine
+# also requires a basis it can express in the commodity's unit and the sanity band. So the daily alert's
+# headline - "usually a too-strict include" - was FALSE for 29 of its 36 gaps: the top candidate matched and
+# routed correctly, and the store was absent for a reason the audit never checked. A page that is 80 percent
+# noise is how the real find in the same list (salt eating a berbere jar) gets skimmed past.
+# Four frozen fixtures, one per reason, driven entirely off the fixture dir so no live file can move under
+# them. The berbere fixture uses PRE-FIX rules on purpose: it must keep proving the classifier can SEE a
+# first-match hijack after today's release exclude has made this particular one go away.
+$cgFix = Join-Path $fix 'coverage-classify'
+$cgArgs = @('-OutDir', $cgFix, '-ReportDir', $fixRep,
+            '-CompareFile',    (Join-Path $cgFix 'comparison-fixture.json'),
+            '-CandidatesFile', (Join-Path $cgFix 'candidates-fixture.json'),
+            '-AllowFile',      (Join-Path $cgFix 'allowlist.json'))
+$r = RunPS 'audit-coverage-gaps.ps1' ($cgArgs + @('-CommoditiesFile', (Join-Path $cgFix 'commodities.json')))
+if ($r.text -match 'pork-chops\s+Hy-Vee\s+\[RULE-INVISIBLE\]')                { Ok 'coverage-gaps classifies the founding pork-chops bug as RULE-INVISIBLE' }
+else { Bad ('coverage-gaps lost the RULE-INVISIBLE class: ' + $r.text) }
+if ($r.text -match 'berbere-seasoning\s+Walmart\s+\[CLAIMED-BY\]' -and $r.text -match "gave this name to 'salt'") { Ok 'coverage-gaps classifies a first-match hijack as CLAIMED-BY and names the thief' }
+else { Bad ('coverage-gaps cannot see a first-match hijack: ' + $r.text) }
+if ($r.text -match 'lemons\s+Walmart\s+\[BASIS-NULL\]')                       { Ok "coverage-gaps classifies a bagged-per-lb row on an each commodity as BASIS-NULL" }
+else { Bad ('coverage-gaps lost the BASIS-NULL class: ' + $r.text) }
+if ($r.text -match 'frozen-waffles\s+' + [regex]::Escape("Sam's Club") + '\s+\[BAND-DROPPED\]') { Ok 'coverage-gaps classifies a band-rejected real price as BAND-DROPPED' }
+else { Bad ('coverage-gaps lost the BAND-DROPPED class: ' + $r.text) }
+# The whole point of the classification is WHICH ONES PAGE. Two actionable, and exit 2 because of them.
+if ($r.rc -eq 2 -and $r.text -match '2 actionable, 2 explained') { Ok 'coverage-gaps pages on RULE-INVISIBLE + CLAIMED-BY and counts the rest as explained' }
+else { Bad ("coverage-gaps paged on the wrong set (rc=$($r.rc)): " + $r.text) }
+# ...and MUST NOT page when every gap is one the engine already explains. This is the assertion that would
+# fail if someone "simplified" the classifier back into exit-2-on-any-gap.
+$r = RunPS 'audit-coverage-gaps.ps1' ($cgArgs + @('-CommoditiesFile', (Join-Path $cgFix 'commodities-quiet.json')))
+if ($r.rc -eq 0 -and $r.text -match 'no ACTIONABLE gap' -and $r.text -match 'BASIS-NULL' -and $r.text -match 'BAND-DROPPED') { Ok 'coverage-gaps stays QUIET (exit 0) when every gap is basis/band, while still reporting them' }
+else { Bad ("coverage-gaps paged on gaps the engine itself explains (rc=$($r.rc)): " + $r.text) }
+
 # ---------------------------------------------------------------- 3. triage-due must FAIL CLOSED
 # Run a COPY of the guard in a temp dir so the live queue is never touched ($PSScriptRoot decides its paths).
 $tmp = Join-Path $env:TEMP ('triage-fixture-' + [guid]::NewGuid().ToString('N').Substring(0,8))

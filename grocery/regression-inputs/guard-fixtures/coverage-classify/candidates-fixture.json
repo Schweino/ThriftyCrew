@@ -1,0 +1,57 @@
+{
+    "week_of":  "2026-08-02",
+    "generated":  "FIXTURE - frozen on purpose, do not regenerate. This is the ENGINE'S OWN verdict file, transcribed verbatim from the real candidates-2026-08-02.json rows: the engine writes basis='UNPRICED' when Get-UnitPrice returned null and basis='OUT-OF-BAND' when Test-Band refused the number. The classifier reads exactly these two strings, which is why the audit can report the engine's reasons without keeping a second copy of the engine's math. NOTE what is deliberately ABSENT: 'Pork Loin TOP Loin Chops' appears under NO commodity, which is what makes it RULE-INVISIBLE, and the berbere jar appears under salt rather than berbere-seasoning, which is what makes it CLAIMED-BY.",
+    "commodities":  [
+                        {
+                            "id":  "lemons",
+                            "label":  "FIXTURE Lemons",
+                            "unit":  "each",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Walmart",
+                                                   "name":  "Fresh Lemons, 2 lb Bag",
+                                                   "price_text":  "$4.02",
+                                                   "size_text":  "2 lb",
+                                                   "regular":  null,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED",
+                                                   "price_type":  "everyday"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "frozen-waffles",
+                            "label":  "FIXTURE Frozen Waffles",
+                            "unit":  "each",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Sam's Club",
+                                                   "name":  "Eggo Homestyle Waffles, Frozen Breakfast, 72 ct.",
+                                                   "price_text":  "$9.87",
+                                                   "size_text":  "72 ct",
+                                                   "regular":  null,
+                                                   "unit_price":  null,
+                                                   "basis":  "OUT-OF-BAND",
+                                                   "price_type":  "everyday"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "salt",
+                            "label":  "FIXTURE Salt",
+                            "unit":  "oz",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Walmart",
+                                                   "name":  "Spice Hut - Ethiopian BerBere, Organic, with Salt, - Vegan, Gluten-Free - 4oz Glass Jar",
+                                                   "price_text":  "$12.99",
+                                                   "size_text":  "4 oz",
+                                                   "regular":  null,
+                                                   "unit_price":  3.2475,
+                                                   "basis":  "size 4 oz",
+                                                   "price_type":  "everyday"
+                                               }
+                                           ]
+                        }
+                    ]
+}

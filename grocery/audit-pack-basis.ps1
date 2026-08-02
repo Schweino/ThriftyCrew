@@ -20,7 +20,16 @@
   Advisory by design (exit 0 with findings, 2 only on -Strict): it names cells for a human decision instead
   of silently dropping a price.
 
+  EXCEPT for the one subset that is DECIDABLE, which blocks (2026-08-02). Advisory was not enough: this
+  audit named the Pledge row at 09:03 and the board published the wrong crown anyway, because nothing in
+  the publish path reads a report. When stated-size / count reproduces the single-unit size a peer store
+  actually sells (29/3 = 9.67 against four stores' 9.7 oz cans), the printed number was the pack TOTAL and
+  the multiplied basis is wrong by a factor of the count - provable arithmetic, not a judgement call. Those
+  findings now exit 2 and guards.ps1 delegates to this audit, so the board cannot ship over one. The
+  genuinely ambiguous rest stays advisory exactly as before.
+
   Usage: audit-pack-basis.ps1 [-CompareFile <path>] [-Strict]
+  Exit:  0 ok / advisory findings only, 2 at least one CONFIRMED pack-total (or -Strict with any finding)
 #>
 # -ReportDir: where pack-basis-audit.json is written. Defaults to out\, which is the live daily behaviour and
 # is unchanged. It exists so a FIXTURE run can park its report beside its fixture instead of overwriting the
@@ -40,7 +49,12 @@ $doc = Get-Content $CompareFile -Raw | ConvertFrom-Json
 $OUTLIER = 0.35
 # how close a peer's package size has to be to count as corroborating an each-size reading
 $SIZE_TOL = 0.15
+# how close stated-size/count has to land to a peer's single-unit size to PROVE the stated size was the
+# pack total. Tighter than $SIZE_TOL on purpose: corroboration only has to be plausible, but this one
+# hard-fails a publish, so it has to be an arithmetic identity rather than a resemblance.
+$FP_TOL = 0.05
 $findings = @()
+$confirmedCount = 0
 
 function ToUnit([double]$num, [string]$token, [string]$unit) {
   $t = $token.ToLower().Trim().TrimEnd('.')
@@ -90,10 +104,38 @@ foreach ($r in $doc.comparison) {
     # CORROBORATION. The published reading says each unit in this pack is $each big. If any other store
     # sells a package about that size, the market confirms the reading and this is real bulk, not a bug.
     $each = ToUnit ([double]$m.Groups[2].Value) $m.Groups[3].Value ([string]$r.unit)
+    $peerSizes = @($ranked | Where-Object { $_.store -ne $s.store } | ForEach-Object { RowSize ([string]$_.size) ([string]$r.unit) } | Where-Object { $_ -ne $null -and $_ -gt 0 })
     if ($each -ne $null -and $each -gt 0) {
-      $peerSizes = @($ranked | Where-Object { $_.store -ne $s.store } | ForEach-Object { RowSize ([string]$_.size) ([string]$r.unit) } | Where-Object { $_ -ne $null -and $_ -gt 0 })
       $confirmed = @($peerSizes | Where-Object { [math]::Abs($_ - $each) / $each -le $SIZE_TOL })
       if ($confirmed.Count -gt 0) { continue }   # another store sells that each-size: the multiply is right
+    }
+    # THE ARITHMETIC FINGERPRINT OF A PACK TOTAL (2026-08-02, promoted to BLOCKING).
+    #
+    # Everything above is a suspicion: it says the multiply created an outlier and nothing corroborates the
+    # each-size it assumes. That is enough to name a cell for a human, which is why this audit shipped
+    # advisory. It is NOT enough to refuse a publish, because the count-first idiom is genuinely ambiguous -
+    # Sam's writes "6 ct., 3.5 oz." meaning 3.5 oz PER TABLET and "3 ct., 29 oz." meaning 29 oz TOTAL with
+    # the same grammar.
+    #
+    # There is exactly one locally decidable case, and it is arithmetic rather than text. If the printed
+    # number is the pack TOTAL, then total/count is the SINGLE-UNIT size, and a single-unit size is the
+    # thing other stores sell. Sam's Pledge: 29/3 = 9.67, and Family Fare, Hy-Vee, Baker's and Walmart all
+    # sell the 9.7 oz can - 0.34 percent apart. The multiplied 87 oz can then only be wrong, so the wrong
+    # crown ($0.1439/oz against a true $0.4317) is provable without asking anyone.
+    #
+    # This does NOT fire on a true per-item pack. There the printed number IS the per-item size, so the peer
+    # match lands on $each and the corroboration branch above already returned. total/count is a size nobody
+    # sells: the Member's Mark hummus 16 ct / 2.5 oz singles give 2.5/16 = 0.156 oz against peers at 8, 10
+    # and 17 oz, so the fingerprint stays silent and that finding stays advisory. Both cases are frozen in
+    # test-auditors.ps1 as the must-fire and the clean twin.
+    $fpConfirmed = $false; $fpEach = $null; $fpPeer = $null
+    if ($each -ne $null -and $each -gt 0 -and $cnt -gt 0) {
+      $derived = $each / $cnt
+      if ($derived -gt 0) {
+        foreach ($ps in $peerSizes) {
+          if ([math]::Abs($ps - $derived) / $derived -le $FP_TOL) { $fpConfirmed = $true; $fpEach = $derived; $fpPeer = $ps; break }
+        }
+      }
     }
     # published reading is a big outlier, the pack-total reading is not, and nothing on the market sells
     # the each-size the multiply assumes -> the multiply is what created the outlier
@@ -103,13 +145,17 @@ foreach ($r in $doc.comparison) {
         unit = [string]$r.unit; published = [math]::Round($published,4)
         as_pack_total = [math]::Round($asTotal,4); peer_cheapest = [math]::Round($peer,4)
         count = $cnt; size = $size; ad = [string]$s.ad; item = [string]$s.item
+        fingerprint = $(if ($fpConfirmed) { 'CONFIRMED-PACK-TOTAL' } else { 'undecidable' })
+        each_derived = $(if ($fpConfirmed) { [math]::Round($fpEach,4) } else { $null })
+        peer_single_unit = $(if ($fpConfirmed) { [math]::Round($fpPeer,4) } else { $null })
       }
+      if ($fpConfirmed) { $confirmedCount++ }
     }
   }
 }
 
 $rep = Join-Path $(if ($ReportDir) { $ReportDir } else { $OutDir }) 'pack-basis-audit.json'
-([pscustomobject]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); compare_file = (Split-Path $CompareFile -Leaf); finding_count = $findings.Count; findings = $findings } |
+([pscustomobject]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); compare_file = (Split-Path $CompareFile -Leaf); finding_count = $findings.Count; confirmed_count = $confirmedCount; findings = $findings } |
   ConvertTo-Json -Depth 5) | Set-Content $rep -Encoding UTF8
 
 if ($findings.Count -eq 0) { Write-Output 'pack-basis: ok - no multipack cell owes its cheapest-in-Omaha rank to the count multiply'; exit 0 }
@@ -117,7 +163,15 @@ Write-Output ("pack-basis: " + $findings.Count + " cell(s) are cheapest ONLY bec
 foreach ($f in $findings) {
   Write-Output ("  {0,-24} {1,-12} published {2}/{3} vs {4} as a pack total (peer {5}) | size '{6}' | {7}" -f `
     $f.id, $f.store, $f.published, $f.unit, $f.as_pack_total, $f.peer_cheapest, $f.size, $f.item)
+  if ($f.fingerprint -eq 'CONFIRMED-PACK-TOTAL') {
+    Write-Output ("      CONFIRMED PACK TOTAL: {0} / {1} = {2} {3}, which is the single-unit size a peer store actually sells ({4} {3}). The multiplied basis is provably wrong." -f `
+      $f.size, $f.count, $f.each_derived, $f.unit, $f.peer_single_unit)
+  }
 }
 Write-Output ("  report: " + $rep)
+if ($confirmedCount -gt 0) {
+  Write-Output ("PACK-BASIS BLOCKED: " + $confirmedCount + " cell(s) carry the arithmetic fingerprint of a pack TOTAL read as an each-size. That is not a judgement call, it is stated-size/count reproducing a size other stores sell, so the published per-unit is wrong by a factor of the count. Correct the size at capture, or rule the row wrong with add-known-wrong.ps1, then rebuild. Do NOT publish over this.")
+  exit 2
+}
 if ($Strict) { exit 2 }
 exit 0

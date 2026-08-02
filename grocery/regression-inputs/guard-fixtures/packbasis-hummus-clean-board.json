@@ -1,0 +1,75 @@
+{
+    "week_of":  "2026-08-02",
+    "generated":  "FIXTURE - frozen on purpose, do not regenerate. Transcribed from the REAL comparison-2026-08-02.json hummus cell and the REAL Sam's row 'Member's Mark Classic Hummus Singles 2.5 oz., 16 ct.' ($5.58, published 0.1395/oz). This is the CLEAN TWIN of packbasis-board.json: same count-first grammar, opposite meaning. The printed 2.5 oz is PER SINGLE, so 16 x 2.5 = 40 oz is correct and the published price is right. The pack-total reading the auditor also computes (2.232/oz) is the FALSE one here. The fingerprint must stay silent: 2.5/16 = 0.15625 oz is a size nobody sells, while the peer tubs are 8, 10 and 17 oz. If this board ever exits 2, the blocking fingerprint has become able to condemn a correct pack.",
+    "comparison":  [
+                       {
+                           "commodity":  "Hummus",
+                           "id":  "hummus",
+                           "unit":  "oz",
+                           "cheapest_store":  "Sam's Club",
+                           "cheapest_price":  0.1395,
+                           "stores":  [
+                                          {
+                                              "store":  "Sam's Club",
+                                              "per_unit":  0.1395,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "member_label":  "membership",
+                                              "item":  "Member's Mark Classic Hummus Singles 2.5 oz., 16 ct.",
+                                              "ad":  "$5.58",
+                                              "size":  "16 ct 2.5 oz",
+                                              "basis":  "size 40 oz",
+                                              "note":  "",
+                                              "source_ad":  "FIXTURE"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.259,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Park Street Deli Garlic Topped Hummus 10 OZ",
+                                              "ad":  "$2.59",
+                                              "size":  "10 oz",
+                                              "basis":  "size 10 oz",
+                                              "note":  "",
+                                              "source_ad":  "FIXTURE"
+                                          },
+                                          {
+                                              "store":  "Baker's",
+                                              "per_unit":  0.2941,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Simple Truth Organic Original Hummus BIG DEAL!",
+                                              "ad":  "$5.00",
+                                              "size":  "17 oz",
+                                              "basis":  "size 17 oz",
+                                              "note":  "",
+                                              "source_ad":  "FIXTURE"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.3125,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Hy-Vee Roasted Red Pepper Hummus",
+                                              "ad":  "$2.50",
+                                              "size":  "8 oz",
+                                              "basis":  "size 8 oz",
+                                              "note":  "",
+                                              "source_ad":  "FIXTURE"
+                                          }
+                                      ]
+                       }
+                   ]
+}

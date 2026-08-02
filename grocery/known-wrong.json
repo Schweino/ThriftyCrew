@@ -650,6 +650,321 @@
                         "ruled_on":  "2026-08-01",
                         "ruled_by":  "plan-run-2026-08-01",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "furniture-polish|SamsClub|pledge-furniture-enhancing-polish-spray-lemon-3c",
+                        "commodity":  "furniture-polish",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Pledge Furniture Enhancing Polish Spray, Lemon, 3ct., 29 oz."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Real price, WRONG BASIS. Sam\u0027s own unit price on this row is $4.17/ea, i.e. 12.52/3 - the pack holds 3 EACHES and the \u002729 oz\u0027 is the pack TOTAL, so 29/3 = 9.67 oz per can, matching the 9.7 oz single cans at Family Fare, Hy-Vee, Baker\u0027s and Walmart (9.689) to within 0.4 percent. The engine\u0027s count-first branch multiplied 3 x 29 = 87 oz and published 0.1439/oz instead of the true 0.4317/oz. Blocked until a size-verified recapture exists; true furniture-polish crown is Fareway Behold $2.99 / 12.5 oz = 0.2392/oz.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "all-purpose-cleaner|SamsClub|pledge-multisurface-cleaner-rainshower-3-ct-29-o",
+                        "commodity":  "all-purpose-cleaner",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Pledge Multisurface Cleaner, Rainshower, 3 ct., 29 oz."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Real price, WRONG BASIS. Sam\u0027s own unit price on this row is $4.17/ea, i.e. 12.52/3 - the pack holds 3 EACHES and the \u002729 oz\u0027 is the pack TOTAL, so 29/3 = 9.67 oz per can, matching the 9.7 oz single cans at Family Fare, Hy-Vee, Baker\u0027s and Walmart (9.689) to within 0.4 percent. The engine\u0027s count-first branch multiplied 3 x 29 = 87 oz and published 0.1439/oz instead of the true 0.4317/oz. Blocked until a size-verified recapture exists; true furniture-polish crown is Fareway Behold $2.99 / 12.5 oz = 0.2392/oz.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "laundry-detergent|FamilyFare|arm-hammer-stain-fighters-fresh-scent-detergent",
+                        "commodity":  "laundry-detergent",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Arm \u0026 Hammer Stain Fighters Fresh Scent Detergent 32.5 Fl Oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. Arm \u0026 Hammer STAIN FIGHTERS is A\u0026H\u0027s budget line, not the Plus OxiClean product this commodity is defined as. Admitting it would compare two different products under one cell. Verified against the laundry-detergent definition (A\u0026H Plus OxiClean).",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "laundry-detergent|Bakers|arm-hammer-clean-burst-scent-liquid-laundry-dete",
+                        "commodity":  "laundry-detergent",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "ARM \u0026 HAMMER Clean Burst Scent Liquid Laundry Detergent"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. A\u0026H CLEAN BURST liquid is a non-OxiClean A\u0026H line. The commodity is A\u0026H Plus OxiClean; a different formula at a different price point is not the same shelf item.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "laundry-detergent|Bakers|arm-hammer-sensitive-skin-plus-fresh-scent-liqui",
+                        "commodity":  "laundry-detergent",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "ARM \u0026 HAMMER Sensitive Skin Plus Fresh Scent Liquid Laundry Detergent"
+                                  ],
+                        "product_id":  "0003320000281",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. A\u0026H SENSITIVE SKIN PLUS is a non-OxiClean A\u0026H line. The commodity is A\u0026H Plus OxiClean; a different formula is not the same shelf item.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "laundry-detergent|Bakers|arm-hammer-baking-soda-fresh-sparkling-fresh-sce",
+                        "commodity":  "laundry-detergent",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "ARM \u0026 HAMMER Baking Soda Fresh Sparkling Fresh Scent Liquid Laundry Detergent"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. A\u0026H BAKING SODA FRESH / Sparkling Fresh liquid is a non-OxiClean A\u0026H line. The commodity is A\u0026H Plus OxiClean.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "laundry-detergent|FamilyFare|arm-hammer-liquid-laundry-clean-burst",
+                        "commodity":  "laundry-detergent",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Arm \u0026 Hammer Liquid Laundry Clean Burst"
+                                  ],
+                        "product_id":  "1764405684716097530",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. A\u0026H Liquid Laundry CLEAN BURST is a non-OxiClean A\u0026H line. The commodity is A\u0026H Plus OxiClean.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "laundry-detergent|Bakers|arm-hammer-plus-oxiclean-fresh-scent-powder-laun",
+                        "commodity":  "laundry-detergent",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "ARM \u0026 HAMMER Plus OxiClean Fresh Scent Powder Laundry Detergent"
+                                  ],
+                        "product_id":  "0003320006510",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. This is the Plus OxiClean POWDER. The commodity\u0027s form exclude keeps powder out on purpose so a per-oz powder price is never compared against a per-floz liquid. Exclude verified doing its intended job on this finding.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "laundry-detergent|Walmart|arm-hammer-plus-oxiclean-5-in-1-laundry-detergen",
+                        "commodity":  "laundry-detergent",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "ARM \u0026 HAMMER Plus OxiClean 5-in-1 Laundry Detergent Paks, Fresh Scent, 42 Count"
+                                  ],
+                        "product_id":  "147545592",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. Plus OxiClean 5-in-1 laundry PAKS. A separate laundry-pods commodity already exists; pods and liquid are not price-comparable per unit. Routing it here would double-count the product.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-93-7|Walmart|marketside-organic-grass-fed-ground-beef-93-lean",
+                        "commodity":  "ground-beef-93-7",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Marketside Organic Grass-Fed Ground Beef, 93% Lean/7% Fat, 1 lb"
+                                  ],
+                        "product_id":  "133893542",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. Marketside ORGANIC grass-fed 93/7. The \u0027organic\u0027 exclude is the board\u0027s price-comparability policy: organic carries a structural premium and would make the conventional-vs-conventional comparison dishonest. Exclude verified doing its intended job.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-93-7|Aldi|simply-nature-93-07-lean-organic-grass-fed-groun",
+                        "commodity":  "ground-beef-93-7",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Simply Nature 93 07 Lean Organic Grass Fed Ground Beef 1 LB"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. Simply Nature ORGANIC grass-fed 93/7. Same price-comparability policy as the Marketside organic row: the \u0027organic\u0027 exclude is deliberate, not a defect.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-8020|Bakers|kroger-80-20-ground-beef-patties",
+                        "commodity":  "ground-beef-8020",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Kroger 80/20 Ground Beef Patties"
+                                  ],
+                        "product_id":  "0001111063987",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. Kroger 80/20 PATTIES are a formed product, not bulk ground beef. The \u0027patties\u0027 exclude is deliberate: a formed patty carries a processing premium over the same lean bulk chub.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pork-tenderloin|Walmart|smithfield-steakhouse-fresh-seasoned-pork-tender",
+                        "commodity":  "pork-tenderloin",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Smithfield Steakhouse Fresh Seasoned Pork Tenderloin, 0.5Ã¢â‚¬â€œ1.9 lb, 20 Grams of Protein per 4 oz Serving"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. Smithfield Steakhouse SEASONED pork tenderloin (two name spellings of one product; one is the mojibake twin of the en-dash form). The \u0027seasoned\u0027 exclude is deliberate: a marinated tenderloin carries added weight and a premium over plain. Both spellings ruled so the sweep stops re-finding the pair.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "frozen-fries|Bakers|kroger-seasoned-crispy-frozen-french-fries",
+                        "commodity":  "frozen-fries",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Kroger Seasoned Crispy Frozen French Fries"
+                                  ],
+                        "product_id":  "0001111005578",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. Kroger SEASONED crispy fries. The plain-fries policy exclude is deliberate, and Baker\u0027s frozen-fries cell is already covered by a plain product, so nothing is lost by ruling this variant.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "almond-milk|Bakers|simple-truth-dairy-free-chocolate-almond-milk-ha",
+                        "commodity":  "almond-milk",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Simple Truth Dairy Free Chocolate Almond Milk Half Gallon"
+                                  ],
+                        "product_id":  "0001111013266",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. Simple Truth CHOCOLATE almond milk is a flavor variant, not the plain almond milk this commodity prices. Flavored dairy alternatives carry a premium and are not price-comparable.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cranberry-juice|FamilyFare|ocean-spray-juice-drink-cranberry-zero-sugar-64",
+                        "commodity":  "cranberry-juice",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Ocean Spray Juice Drink, Cranberry, Zero Sugar 64 Fl Oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. Ocean Spray Zero Sugar and Mixed Berry Zero Sugar JUICE DRINKS, not 100 percent cranberry juice. The cranberry-juice cell already carries all 7 stores, so nothing is lost; admitting a sweetened juice drink would compare a different product.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "iced-tea|Bakers|kroger-unsweetened-tea",
+                        "commodity":  "iced-tea",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Kroger Unsweetened Tea"
+                                  ],
+                        "product_id":  "0001111015525",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. Kroger Unsweetened Tea 1 gal $3.29 is a real bottled tea, but the only token that would admit it is a bare \u0027unsweetened tea\u0027, which risks colliding with tea-bag products. Baker\u0027s already holds the iced-tea crown, so a ruling is the right trade rather than a risky widen. Revisit if Baker\u0027s loses that cell.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "laundry-detergent|Bakers|arm-hammer-clean-burst-liquid-laundry-detergent",
+                        "commodity":  "laundry-detergent",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "ARM \u0026 HAMMER Clean Burst Liquid Laundry Detergent"
+                                  ],
+                        "product_id":  "0003320000427",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. A\u0026H CLEAN BURST liquid is a non-OxiClean A\u0026H line. Sibling ruling covers the \u0027Clean Burst Scent\u0027 title; Baker\u0027s also lists it without \u0027Scent\u0027, which normalizes to a different core.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "laundry-detergent|Bakers|arm-hammer-baking-soda-fresh-liquid-laundry-dete",
+                        "commodity":  "laundry-detergent",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "ARM \u0026 HAMMER Baking Soda Fresh Liquid Laundry Detergent Sparkling Fresh Scent"
+                                  ],
+                        "product_id":  "0003320097734",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. A\u0026H BAKING SODA FRESH liquid is a non-OxiClean A\u0026H line. Baker\u0027s lists the same product with the scent words in two different orders, which normalize to two different cores, so both titles need a ruling.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cranberry-juice|FamilyFare|ocean-spray-juice-drink-cranberry-mixed-berry-ze",
+                        "commodity":  "cranberry-juice",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Ocean Spray Juice Drink, Cranberry Mixed Berry, Zero Sugar 64 Fl Oz"
+                                  ],
+                        "product_id":  "1564405684714861529",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. Ocean Spray Cranberry MIXED BERRY Zero Sugar is a sweetened juice DRINK, not 100 percent cranberry juice. The cranberry-juice cell already carries all 7 stores. Sibling ruling covers the plain Zero Sugar title.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "laundry-detergent|FamilyFare|arm-hammer-stain-fighters-fresh-scent-detergent-100-5",
+                        "commodity":  "laundry-detergent",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Arm \u0026 Hammer Stain Fighters Fresh Scent Detergent 100.5 Fl Oz"
+                                  ],
+                        "product_id":  "1564405684713746267",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. Arm \u0026 Hammer STAIN FIGHTERS is A\u0026H\u0027s budget line, not the Plus OxiClean product this commodity is defined as. Sibling ruling covers the 32.5 fl oz size; this is the 100.5 fl oz size, a separate title whose 48-char key slug collides with it.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

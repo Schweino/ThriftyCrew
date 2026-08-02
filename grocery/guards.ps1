@@ -274,6 +274,18 @@ foreach ($g in @(
     # is not a gate that can never arm. Exit 3 (blind - missing/empty/unevaluable list, or a board with no
     # named priced cells) surfaces here as a WARN naming what went unproven, never as a silent pass.
     @{ f='audit-known-wrong.ps1';       n='no product a reasoner already ruled wrong is priced on the board (known-wrong blocklist)' },
+    # pack-total read as an each-size (2026-08-02) - the DECIDABLE subset only. audit-pack-basis has run
+    # daily since 2026-07-28 and it named the Sam's Pledge row correctly at 09:03 this morning; the board
+    # then published furniture-polish at $0.1439/oz against a true $0.4317 anyway, because an advisory
+    # report is not in the publish path. Nothing in this estate reads a paragraph, which is the same lesson
+    # the known-wrong blocklist above was built from.
+    # It stays advisory for the ambiguous majority and blocks ONLY on the arithmetic fingerprint: when
+    # stated-size divided by the pack count reproduces the single-unit size another store actually sells,
+    # the printed number was the pack TOTAL and the multiplied basis is wrong by a factor of the count.
+    # Sam's Pledge "3 ct., 29 oz.": 29/3 = 9.67 against four stores' 9.7 oz cans. Sam's "6 ct., 3.5 oz."
+    # tablets and the Member's Mark hummus 16 ct / 2.5 oz singles do NOT produce that identity and stay
+    # advisory, so this cannot condemn a correct pack. Both cases are frozen fixtures in test-auditors.ps1.
+    @{ f='audit-pack-basis.ps1';        n='no cell is cheapest because a pack TOTAL was multiplied by its own count (peer-size fingerprint)' },
     # as_of evidence (2026-08-02) - "no published price may claim a date newer than the capture it came
     # from". build-fareway-regular merged every extract on disk and stamped them all with the BUILD date, so
     # 431 of 577 live rows wore a date newer than the capture that produced them. That is worse than a

@@ -1,0 +1,340 @@
+﻿{
+    "generated":  "2026-08-02T09:34:52",
+    "plan":  "plan-2026-08-02-2.json",
+    "measured_as":  "routing",
+    "ruleset_edits":  [
+                          "limes.exclude += \\bdressing\\b , \\bmarinade\\b",
+                          "cilantro.exclude += \\bdressing\\b , \\bmarinade\\b",
+                          "avocados.exclude += \\bdressing\\b",
+                          "peaches.exclude += \\bhalves\\b , \\bjuice\\b",
+                          "canned-peaches.include += peach\\s+halves",
+                          "cookies.exclude += \\bprotein\\s+bars?\\b , \\bparchment\\b",
+                          "onions.exclude += \\bbuns?\\b , \\bwith\\s+onions?\\b",
+                          "salt.exclude += \\bberbere\\b",
+                          "oranges.exclude += \\bgarden\\s+seeds?\\b",
+                          "strawberries.exclude += \\bfruit\\s+blend\\b",
+                          "garlic.exclude += \\bbaguette\\b , \\bgreen\\s+beans\\b",
+                          "cranberry-sauce.include += \\bsauce,\\s*cranberry\\b",
+                          "canned-pumpkin.exclude: \\bpie\\b -\u003e \\bpie\\s+(filling|mix)\\b",
+                          "frozen-lasagna.exclude: oven[\\s-]?ready -\u003e ^(?!.*\\bfrozen\\b).*oven[\\s-]?ready",
+                          "laundry-detergent.include += \\blndry\\s+dtrgnt\\b.*\\bpls\\s+o\\b",
+                          "watermelon.exclude += \\bhalf\\b , \\bgarden\\s+seeds?\\b",
+                          "fresh-ginger.exclude += \\bmarinade\\b",
+                          "cantaloupe.exclude += \\bgarden\\s+seeds?\\b",
+                          "honeydew.exclude += \\bgarden\\s+seeds?\\b",
+                          "blueberries.exclude += \\bfruit\\s+blend\\b",
+                          "mangoes.exclude += \\bfruit\\s+blend\\b"
+                      ],
+    "corpus":  [
+                   "aldi-regular-2026-08-01.json rows=1675 mtime=2026-08-01 19:40:16",
+                   "bakers-regular-2026-08-02.json rows=6945 mtime=2026-08-02 08:54:32",
+                   "family-fare-regular-2026-08-02.json rows=4655 mtime=2026-08-02 08:32:31",
+                   "fareway-regular-2026-08-01.json rows=576 mtime=2026-08-02 06:55:36",
+                   "hyvee-regular-2026-08-02.json rows=1538 mtime=2026-08-02 08:44:45",
+                   "sams-regular-2026-08-01.json rows=60 mtime=2026-08-02 07:18:45",
+                   "sams-regular-2026-07-14.json rows=60 mtime=2026-07-31 06:43:51",
+                   "walmart-regular-2026-08-01.json rows=4881 mtime=2026-08-01 20:43:37",
+                   "sams-deals-2026-07-29.json rows=2475 mtime=2026-07-30 05:03:43",
+                   "sams-deals-2026-08-01.json rows=40 mtime=2026-08-01 19:03:20",
+                   "fareway-shop-2026-08-01.json rows=211 mtime=2026-08-01 19:56:59",
+                   "comparison-2026-08-02.json rows=2817 mtime=2026-08-02 08:56:28",
+                   "recipe-board-everyday.json rows=756 mtime=2026-08-02 08:27:09"
+               ],
+    "corpus_unique_names":  22341,
+    "changed_count":  51,
+    "changes":  [
+                    {
+                        "name":  "Sweet Harvest Peaches IN 100 Juice 15 OZ",
+                        "before":  "peaches",
+                        "after":  "canned-peaches"
+                    },
+                    {
+                        "name":  "Lunch Buddies Diced Peaches IN Juice Bowls 4 OZ",
+                        "before":  "peaches",
+                        "after":  "canned-peaches"
+                    },
+                    {
+                        "name":  "Gourmet Peaches IN Passion Fruit Juice 195 OZ",
+                        "before":  "peaches",
+                        "after":  "canned-peaches"
+                    },
+                    {
+                        "name":  "Gourmet Peaches IN Pineapple Juice With Coconut Flavor 195 OZ",
+                        "before":  "peaches",
+                        "after":  "canned-peaches"
+                    },
+                    {
+                        "name":  "Tuscan Garden Avocado Ranch Dressing 20 FL OZ",
+                        "before":  "avocados",
+                        "after":  "ranch-dressing"
+                    },
+                    {
+                        "name":  "Little Salad Bar Avocado Ranch Dressing 11 OZ",
+                        "before":  "avocados",
+                        "after":  "ranch-dressing"
+                    },
+                    {
+                        "name":  "Elevation Cookies N Cream Protein Bar 4 CT",
+                        "before":  "cookies",
+                        "after":  "protein-bars"
+                    },
+                    {
+                        "name":  "Chick-Fil-A Avocado Lime Ranch Salad Dressing",
+                        "before":  "avocados",
+                        "after":  "ranch-dressing"
+                    },
+                    {
+                        "name":  "Marzetti Avocado Ranch Dressing",
+                        "before":  "avocados",
+                        "after":  "ranch-dressing"
+                    },
+                    {
+                        "name":  "Private Selection Peach Halves with Almonds",
+                        "before":  "peaches",
+                        "after":  "canned-peaches"
+                    },
+                    {
+                        "name":  "Chick-Fil-A Avocado Lime Ranch Dressing",
+                        "before":  "avocados",
+                        "after":  "ranch-dressing"
+                    },
+                    {
+                        "name":  "Primal Kitchen Cilantro Lime Salad Dressing \u0026 Marinade",
+                        "before":  "limes",
+                        "after":  null
+                    },
+                    {
+                        "name":  "Barebells Cookies \u0026 Caramel Protein Bars",
+                        "before":  "cookies",
+                        "after":  "protein-bars"
+                    },
+                    {
+                        "name":  "Barebells Cookies and Cream Protein Bar",
+                        "before":  "cookies",
+                        "after":  "protein-bars"
+                    },
+                    {
+                        "name":  "Quest Cookies \u0026 Cream Protein Bar",
+                        "before":  "cookies",
+                        "after":  "protein-bars"
+                    },
+                    {
+                        "name":  "Ocean Spray Sauce, Cranberry, Jellied 14 Oz",
+                        "before":  null,
+                        "after":  "cranberry-sauce"
+                    },
+                    {
+                        "name":  "Ocean Spray Sauce, Cranberry, Whole Berry 14 Oz",
+                        "before":  null,
+                        "after":  "cranberry-sauce"
+                    },
+                    {
+                        "name":  "Del Monte Green Beans, French Style, With Onion, Red Pepper \u0026 Garlic 14.5 Oz",
+                        "before":  "onions",
+                        "after":  "canned-green-beans"
+                    },
+                    {
+                        "name":  "Taylor Farms Southwest Chopped Kit With Creamy Cilantro Dressing 12.6 Oz",
+                        "before":  "cilantro",
+                        "after":  null
+                    },
+                    {
+                        "name":  "Hidden Valley Cilantro Lime Ranch Condiment \u0026 Dressing 16 Fl Oz",
+                        "before":  "limes",
+                        "after":  "ranch-dressing"
+                    },
+                    {
+                        "name":  "Finest Reserve Artisan Cheese \u0026 Garlic Half Baguette 11 Oz",
+                        "before":  "garlic",
+                        "after":  "french-bread"
+                    },
+                    {
+                        "name":  "Arm \u0026 Hammer Lndry Dtrgnt Fresh Scent Pls O",
+                        "before":  null,
+                        "after":  "laundry-detergent"
+                    },
+                    {
+                        "name":  "Bush\u0027s Best Pinto Beans, In A Hearty Stock Seasoned With Onions, Slow Cooked N\u0027 Savory 15 Oz",
+                        "before":  "onions",
+                        "after":  "canned-pinto-beans"
+                    },
+                    {
+                        "name":  "Atkins Cookie Fusion High Protein Bar 4 Ea",
+                        "before":  "cookies",
+                        "after":  "protein-bars"
+                    },
+                    {
+                        "name":  "Built Puff Cookies \u0027N Cream Protein Bars 4 Ea",
+                        "before":  "cookies",
+                        "after":  "protein-bars"
+                    },
+                    {
+                        "name":  "Barebells Cookies \u0026 Caramel Protein Bar 1.94 Oz",
+                        "before":  "cookies",
+                        "after":  "protein-bars"
+                    },
+                    {
+                        "name":  "Barebells Cookies \u0026 Cream Protein Bar 1.94 Oz",
+                        "before":  "cookies",
+                        "after":  "protein-bars"
+                    },
+                    {
+                        "name":  "Built Puff Cookies \u0027N Cream Protein Bar 1.41 Oz",
+                        "before":  "cookies",
+                        "after":  "protein-bars"
+                    },
+                    {
+                        "name":  "Dole Peach Slices, in 100% Fruit Juice",
+                        "before":  "peaches",
+                        "after":  "canned-peaches"
+                    },
+                    {
+                        "name":  "Pepperidge Farm Onion with Poppy Seeds Hamburger Buns",
+                        "before":  "onions",
+                        "after":  "hamburger-buns"
+                    },
+                    {
+                        "name":  "Half Seedless Watermelon",
+                        "before":  "watermelon",
+                        "after":  null
+                    },
+                    {
+                        "name":  "Stubb\u0027s Chiles, Lime \u0026 Ginger Pork Marinade",
+                        "before":  "limes",
+                        "after":  "bottled-marinade"
+                    },
+                    {
+                        "name":  "Cantaloupe Melon Garden Seeds - Burpee Hybrid - 100 Seeds - Non-GMO, Vegetable Gardening Seeds - Fruit",
+                        "before":  "cantaloupe",
+                        "after":  null
+                    },
+                    {
+                        "name":  "Honeydew Melon Garden Seeds - Green Flesh - 5 Gram Packet ~176 Seeds - Non-GMO, Heirloom Vegetable Gardening Seed - Honey Dew Fruit",
+                        "before":  "honeydew",
+                        "after":  null
+                    },
+                    {
+                        "name":  "Honeydew Melon Garden Seeds - Orange Flesh - 1 Oz - Non-GMO, Heirloom Vegetable Gardening Seed - Honey Dew Fruit",
+                        "before":  "oranges",
+                        "after":  null
+                    },
+                    {
+                        "name":  "Reynolds Kitchens Cookie Baking Sheets, Pre-Cut Parchment Paper Sheets, 12 in x 16 in, 25 Count",
+                        "before":  "cookies",
+                        "after":  "parchment-paper"
+                    },
+                    {
+                        "name":  "Spice Hut - Ethiopian BerBere, Organic, with Salt, - Vegan, Gluten-Free - 4oz Glass Jar",
+                        "before":  "salt",
+                        "after":  "berbere-seasoning"
+                    },
+                    {
+                        "name":  "Great Value Sweet Hawaiian Onion Hamburger Buns, 12 oz, 8 Count",
+                        "before":  "onions",
+                        "after":  "hamburger-buns"
+                    },
+                    {
+                        "name":  "Pepperidge Farm Onion with Poppy Seeds Hamburger Buns, 8-Pack Bag",
+                        "before":  "onions",
+                        "after":  "hamburger-buns"
+                    },
+                    {
+                        "name":  "Hidden Valley Avocado Ranch Salad Dressing \u0026 Condiment, 16 fl oz Squeeze Bottle",
+                        "before":  "avocados",
+                        "after":  "ranch-dressing"
+                    },
+                    {
+                        "name":  "Chick-Fil-A Avocado Lime Ranch Salad Dressing, Refrigerated, 12 oz Bottle",
+                        "before":  "avocados",
+                        "after":  "ranch-dressing"
+                    },
+                    {
+                        "name":  "Stouffers Classic Lasagna with Meat and Sauce, Large Size, Oven Ready, Frozen Dinners 19 oz",
+                        "before":  null,
+                        "after":  "frozen-lasagna"
+                    },
+                    {
+                        "name":  "Stouffers Meat Lovers Lasagna, Family Size, Oven Ready Lasagna, Frozen Dinners 34 oz",
+                        "before":  null,
+                        "after":  "frozen-lasagna"
+                    },
+                    {
+                        "name":  "Barebells Protein Bars with 20g High Protein, 1.9oz Bars, Cookies \u0026 Caramel - 4 Count",
+                        "before":  "cookies",
+                        "after":  "protein-bars"
+                    },
+                    {
+                        "name":  "Libby\u0027s 100% Pure Pumpkin Puree, All Natural Gluten Free Canned Pumpkin for Baking Pumpkin Pie Dessert, 15 oz Can",
+                        "before":  null,
+                        "after":  "canned-pumpkin"
+                    },
+                    {
+                        "name":  "Libby\u0027s 100% Pure Pumpkin Puree, All Natural Gluten Free Canned Pumpkin for Baking Pumpkin Pie Dessert, 29 oz Can",
+                        "before":  null,
+                        "after":  "canned-pumpkin"
+                    },
+                    {
+                        "name":  "Marketside Fresh Cut Trio Fruit Blend Bowl with Blueberries, Strawberries, and Mango, 24 oz",
+                        "before":  "strawberries",
+                        "after":  null
+                    },
+                    {
+                        "name":  "Tropicana 100% Pineapple Peach Mango Juice 10 fl oz",
+                        "before":  "peaches",
+                        "after":  null
+                    },
+                    {
+                        "name":  "Summer Is Inside Organic Diced Peaches in Fruit Juice, 4 oz., 24 pk.",
+                        "before":  "peaches",
+                        "after":  "canned-peaches"
+                    },
+                    {
+                        "name":  "Member\u0027s Mark Yellow Clingstone Peach Halves in Light Syrup, 60 oz.",
+                        "before":  null,
+                        "after":  "canned-peaches"
+                    },
+                    {
+                        "name":  "KiZE Life Changing Protein Bars, Chocolate Chip Cookie, 12 ct.",
+                        "before":  "cookies",
+                        "after":  "protein-bars"
+                    }
+                ],
+    "live_board_rows_among_changes":  [
+
+                                      ],
+    "array_indexes":  {
+                          "limes":  41,
+                          "cilantro":  120,
+                          "avocados":  17,
+                          "peaches":  24,
+                          "canned-peaches":  209,
+                          "almonds":  213,
+                          "cookies":  220,
+                          "protein-bars":  223,
+                          "onions":  19,
+                          "salt":  79,
+                          "oranges":  39,
+                          "strawberries":  15,
+                          "blueberries":  16,
+                          "garlic":  49,
+                          "cranberry-sauce":  339,
+                          "canned-pumpkin":  340,
+                          "frozen-lasagna":  252,
+                          "lasagna-noodles":  201,
+                          "laundry-detergent":  29,
+                          "watermelon":  23,
+                          "cantaloupe":  103,
+                          "honeydew":  104,
+                          "mangoes":  101,
+                          "fresh-ginger":  121,
+                          "bottled-marinade":  371,
+                          "ranch-dressing":  77,
+                          "hamburger-buns":  54,
+                          "berbere-seasoning":  393,
+                          "french-bread":  161,
+                          "garlic-bread":  257,
+                          "parchment-paper":  269,
+                          "canned-green-beans":  190,
+                          "canned-pinto-beans":  186
+                      }
+}

@@ -1,21 +1,9 @@
 ﻿{
-    "generated":  "2026-08-02 09:03",
+    "generated":  "2026-08-02 10:38",
     "compare_file":  "comparison-2026-08-02.json",
-    "finding_count":  2,
+    "finding_count":  1,
+    "confirmed_count":  0,
     "findings":  [
-                     {
-                         "id":  "furniture-polish",
-                         "commodity":  "Furniture Polish / Dusting Spray",
-                         "store":  "Sam\u0027s Club",
-                         "unit":  "oz",
-                         "published":  0.1439,
-                         "as_pack_total":  0.4317,
-                         "peer_cheapest":  0.2392,
-                         "count":  3,
-                         "size":  "3 ct 29 oz",
-                         "ad":  "$12.52",
-                         "item":  "Pledge Furniture Enhancing Polish Spray, Lemon, 3ct., 29 oz."
-                     },
                      {
                          "id":  "hummus",
                          "commodity":  "Hummus",
@@ -27,7 +15,10 @@
                          "count":  16,
                          "size":  "16 ct 2.5 oz",
                          "ad":  "$5.58",
-                         "item":  "Member\u0027s Mark Classic Hummus Singles 2.5 oz., 16 ct."
+                         "item":  "Member\u0027s Mark Classic Hummus Singles 2.5 oz., 16 ct.",
+                         "fingerprint":  "undecidable",
+                         "each_derived":  null,
+                         "peer_single_unit":  null
                      }
                  ]
 }

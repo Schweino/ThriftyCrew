@@ -1,0 +1,57 @@
+[
+    {
+        "id":  "salt",
+        "label":  "FIXTURE Salt",
+        "unit":  "oz",
+        "include":  [
+                        "\\bsalt\\b"
+                    ],
+        "exclude":  [
+                    ]
+    },
+    {
+        "id":  "lemons",
+        "label":  "FIXTURE Lemons",
+        "unit":  "each",
+        "include":  [
+                        "\\blemons?\\b"
+                    ],
+        "exclude":  [
+                    ]
+    },
+    {
+        "id":  "frozen-waffles",
+        "label":  "FIXTURE Frozen Waffles",
+        "unit":  "each",
+        "band_min":  0.15,
+        "band_max":  0.8,
+        "relax_global":  [
+                             "\\bfrozen\\b"
+                         ],
+        "include":  [
+                        "\\bwaffles?\\b"
+                    ],
+        "exclude":  [
+                    ]
+    },
+    {
+        "id":  "pork-chops",
+        "label":  "FIXTURE Pork Chops",
+        "unit":  "lb",
+        "include":  [
+                        "pork\\s+chops?"
+                    ],
+        "exclude":  [
+                    ]
+    },
+    {
+        "id":  "berbere-seasoning",
+        "label":  "FIXTURE Berbere Seasoning",
+        "unit":  "oz",
+        "include":  [
+                        "\\bberbere\\b"
+                    ],
+        "exclude":  [
+                    ]
+    }
+]

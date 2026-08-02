@@ -1,0 +1,47 @@
+{
+    "week_of":  "2026-08-02",
+    "generated":  "FIXTURE - frozen on purpose, do not regenerate. Each commodity carries ONE store that is NOT the store the ads file supplies, so all four (commodity, store) pairs read as absent and reach the classifier.",
+    "comparison":  [
+                       {
+                           "commodity":  "FIXTURE Salt",
+                           "id":  "salt",
+                           "unit":  "oz",
+                           "cheapest_store":  "Aldi",
+                           "cheapest_price":  0.04,
+                           "stores":  [ { "store":  "Aldi", "per_unit":  0.04, "item":  "Stonemill Iodized Salt 26 Oz", "ad":  "$1.04", "size":  "26 oz", "basis":  "size 26 oz" },
+                                        { "store":  "Walmart", "per_unit":  0.0538, "item":  "Great Value Iodized Salt, 26 oz", "ad":  "$1.40", "size":  "26 oz", "basis":  "size 26 oz" } ]
+                       },
+                       {
+                           "commodity":  "FIXTURE Lemons",
+                           "id":  "lemons",
+                           "unit":  "each",
+                           "cheapest_store":  "Baker's",
+                           "cheapest_price":  0.85,
+                           "stores":  [ { "store":  "Baker's", "per_unit":  0.85, "item":  "Fresh Large Lemon - Each", "ad":  "$0.85", "size":  "1 ct", "basis":  "per-each" } ]
+                       },
+                       {
+                           "commodity":  "FIXTURE Frozen Waffles",
+                           "id":  "frozen-waffles",
+                           "unit":  "each",
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.1725,
+                           "stores":  [ { "store":  "Walmart", "per_unit":  0.1725, "item":  "Great Value Buttermilk Waffles, 29.6 oz, 24 Count (Frozen)", "ad":  "$4.14", "size":  "29.6 oz", "basis":  "24 ct" } ]
+                       },
+                       {
+                           "commodity":  "FIXTURE Pork Chops",
+                           "id":  "pork-chops",
+                           "unit":  "lb",
+                           "cheapest_store":  "Aldi",
+                           "cheapest_price":  2.49,
+                           "stores":  [ { "store":  "Aldi", "per_unit":  2.49, "item":  "Fresh Bone-In Pork Chops Per LB", "ad":  "$2.49", "size":  "1 lb", "basis":  "per-lb" } ]
+                       },
+                       {
+                           "commodity":  "FIXTURE Berbere Seasoning",
+                           "id":  "berbere-seasoning",
+                           "unit":  "oz",
+                           "cheapest_store":  "Aldi",
+                           "cheapest_price":  1.2,
+                           "stores":  [ { "store":  "Aldi", "per_unit":  1.2, "item":  "Stonemill Berbere Blend 2 Oz", "ad":  "$2.40", "size":  "2 oz", "basis":  "size 2 oz" } ]
+                       }
+                   ]
+}

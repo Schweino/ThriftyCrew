@@ -1949,7 +1949,8 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bfruit\\s+blend\\b"
                     ]
     },
     {
@@ -2131,7 +2132,8 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bfruit\\s+blend\\b"
                     ]
     },
     {
@@ -2309,7 +2311,8 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bdressing\\b"
                     ]
     },
     {
@@ -2662,7 +2665,9 @@
                         "\\bgranulated\\b",
                         "\\bdiced\\b",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bbuns?\\b",
+                        "\\bwith\\s+onions?\\b"
                     ]
     },
     {
@@ -3379,7 +3384,9 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bgarden\\s+seeds?\\b",
+                        "\\bhalf\\b"
                     ]
     },
     {
@@ -3563,7 +3570,9 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bhalves\\b",
+                        "\\bjuice\\b"
                     ]
     },
     {
@@ -3989,7 +3998,8 @@
         "include":  [
                         "arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer.{0,60}(?:oxi\\s*-?\\s*clean|odor\\s*blasters?)",
                         "(?:oxi\\s*-?\\s*clean|odor\\s*blasters?).{0,60}arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer",
-                        "arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer.{0,60}odor\\s*bl(?:asters?|st)\\b"
+                        "arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer.{0,60}odor\\s*bl(?:asters?|st)\\b",
+                        "\\blndry\\s+dtrgnt\\b.*\\bpls\\s+o\\b"
                     ],
         "exclude":  [
                         "\\bpods?\\b",
@@ -5270,7 +5280,8 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bgarden\\s+seeds?\\b"
                     ]
     },
     {
@@ -5650,7 +5661,9 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bdressing\\b",
+                        "\\bmarinade\\b"
                     ]
     },
     {
@@ -7091,7 +7104,9 @@
                         "\\bdressing\\b",
                         "\\bgranulated\\b",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bbaguette\\b",
+                        "\\bgreen\\s+beans\\b"
                     ]
     },
     {
@@ -10419,7 +10434,8 @@
                         "heart\\s+chews?",
                         "\\bheart\\s+health\\b",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bberbere\\b"
                     ]
     },
     {
@@ -11987,7 +12003,8 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bfruit\\s+blend\\b"
                     ]
     },
     {
@@ -12331,7 +12348,8 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bgarden\\s+seeds?\\b"
                     ]
     },
     {
@@ -12502,7 +12520,8 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bgarden\\s+seeds?\\b"
                     ]
     },
     {
@@ -15326,7 +15345,9 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bdressing\\b",
+                        "\\bmarinade\\b"
                     ]
     },
     {
@@ -15508,7 +15529,8 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bmarinade\\b"
                     ]
     },
     {
@@ -18867,7 +18889,7 @@
         "label":  "Feta Cheese",
         "unit":  "oz",
         "band_min":  0.25,
-        "band_max":  1.2,
+        "band_max":  1.3,
         "include":  [
                         "\\bfeta\\b"
                     ],
@@ -24598,7 +24620,8 @@
                         "canned\\s+peaches",
                         "sliced\\s+peaches",
                         "peach\\s+slices",
-                        "peaches\\s+in\\s+(?:heavy\\s+|light\\s+)?syrup"
+                        "peaches\\s+in\\s+(?:heavy\\s+|light\\s+)?syrup",
+                        "peach\\s+halves"
                     ],
         "exclude":  [
                         "fresh",
@@ -25792,7 +25815,9 @@
                         "\\bheart\\s+health\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bprotein\\s+bars?\\b",
+                        "\\bparchment\\b"
                     ]
     },
     {
@@ -28178,7 +28203,7 @@
         "id":  "frozen-waffles",
         "label":  "Frozen Waffles",
         "unit":  "each",
-        "band_min":  0.15,
+        "band_min":  0.12,
         "band_max":  0.8,
         "relax_global":  [
                              "\\bfrozen\\b"
@@ -28905,7 +28930,7 @@
                         "\\bdry\\b",
                         "\\bboxed\\b",
                         "\\bnoodles?\\b",
-                        "oven[\\s-]?ready",
+                        "^(?!.*\\bfrozen\\b).*oven[\\s-]?ready",
                         "no[\\s-]?boil",
                         "\\bpasta\\b",
                         "beech\\s*nut",
@@ -30167,7 +30192,7 @@
         "id":  "hand-sanitizer",
         "label":  "Hand Sanitizer",
         "unit":  "floz",
-        "band_min":  0.1,
+        "band_min":  0.08,
         "band_max":  1,
         "include":  [
                         "hand\\s+sanitizer"
@@ -33699,7 +33724,8 @@
         "include":  [
                         "cranberry\\s+sauce",
                         "jellied\\s+cranberr(?:y|ies)",
-                        "whole\\s+berry\\s+cranberr(?:y|ies)"
+                        "whole\\s+berry\\s+cranberr(?:y|ies)",
+                        "\\bsauce,\\s*cranberry\\b"
                     ],
         "exclude":  [
                         "\\bjuice\\b",
@@ -33804,7 +33830,7 @@
                         "canned\\s+pumpkin"
                     ],
         "exclude":  [
-                        "\\bpie\\b",
+                        "\\bpie\\s+(filling|mix)\\b",
                         "\\bmix\\b",
                         "\\bfilling\\b",
                         "spice",

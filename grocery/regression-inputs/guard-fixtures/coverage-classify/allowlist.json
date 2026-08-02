@@ -1,0 +1,5 @@
+{
+    "generated":  "FIXTURE - frozen on purpose, do not regenerate. Deliberately EMPTY. The live allowlist is keyed commodity|store, so pointing this audit's fixture run at the live file would let a real allowlist entry added later delete a fixture gap and turn the whole test green by finding nothing.",
+    "allow":  [
+              ]
+}
