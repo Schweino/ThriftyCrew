@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Poppy Seed Chicken and Rice Casserole",
     "slug":  "poppy-seed-chicken-and-rice-casserole",
     "cuisine":  "American Southern",
@@ -18,7 +18,21 @@
                  "cost_ps":  "2.65"
              },
     "intro_html":  "Poppy seed chicken is Southern potluck royalty: tender chicken folded into a rich, buttery cream sauce flecked with poppy seeds, baked over rice under a crunchy buttered cracker topping until bubbling. Pure comfort, zero pretension. Each serving brings \u003cstrong\u003e25 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.65\u003c/strong\u003e a serving (at everyday cost).",
-    "ingredients_display": ["\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1.25 cups (265 g)","\u003cstrong\u003eButter Crackers (Great Value):\u003c/strong\u003e 2.25 cups (140 g)","\u003cstrong\u003ePoppy Seeds (Great Value):\u003c/strong\u003e 4.75 tbsp (39 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.4 (268 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.25 tbsp (20 g)","\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 9 tbsp (73 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.75 lb (840 g)","\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 2.25 cups (555 g)","\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 14 oz (397 g)","\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 2.25 lb (1029 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tbsp (5 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"],
+    "ingredients_display":  [
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1.25 cups (265 g)",
+                                "\u003cstrong\u003eButter Crackers (Great Value):\u003c/strong\u003e 2.25 cups (140 g)",
+                                "\u003cstrong\u003ePoppy Seeds (Great Value):\u003c/strong\u003e 4.75 tbsp (39 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.4 (268 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.25 tbsp (20 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 9 tbsp (73 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.75 lb (840 g)",
+                                "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 2.25 cups (555 g)",
+                                "\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 14 oz (397 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 2.25 lb (1029 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tbsp (5 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Butter, 1.25 cups: ~$1.70. \u003cstrong\u003eBuy 1 lb box: $2.92.\u003c/strong\u003e",
@@ -168,9 +182,9 @@
                  "totalTime":  "PT65M",
                  "costPerServing":  2.65,
                  "recipeIngredient":  [
-                                          "2.5 lb boneless skinless chicken breast",
+                                          "2.25 lb boneless skinless chicken breast",
                                           "3.75 cups dry rice",
-                                          "1.75 cups butter",
+                                          "1.25 cups butter",
                                           "2.25 cups butter crackers",
                                           "2.25 cups heavy cream",
                                           "14 oz reduced fat cream cheese",

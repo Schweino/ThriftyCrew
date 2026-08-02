@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Filipino Pork Giniling (Filipino Picadillo)",
     "slug":  "filipino-pork-giniling",
     "cuisine":  "Filipino",
@@ -19,7 +19,24 @@
                  "cost_ps":  "3.10"
              },
     "intro_html":  "Giniling is the Filipino cousin of picadillo: savory ground pork simmered in a soy and tomato sauce with potatoes, carrots, sweet golden raisins, and a boiled egg on top. Every bowl lands \u003cstrong\u003e32 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.10\u003c/strong\u003e (at everyday cost). Sweet, salty, and filling in a way that makes the price tag feel like a typo.",
-    "ingredients_display": ["\u003cstrong\u003eGround Pork:\u003c/strong\u003e 3.75 lb (1667 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.3 (368 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.75 tbsp (74 g)","\u003cstrong\u003eCrushed Tomatoes (generic):\u003c/strong\u003e 1.5 cans (1186 g)","\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 7.5 tbsp (118 g)","\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.5 cups (137 g)","\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 1.5 tbsp (29 g)","\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 4.4 (937 g)","\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 2.4 (149 g)","\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3.7 (441 g)","\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 1.25 cups (164 g)","\u003cstrong\u003eGolden Raisins (generic):\u003c/strong\u003e 13 tbsp (118 g)","\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 12 large eggs (612 g)","\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 6.25 tbsp (86 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
+    "ingredients_display":  [
+                                "\u003cstrong\u003eGround Pork:\u003c/strong\u003e 3.75 lb (1667 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.3 (368 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.75 tbsp (74 g)",
+                                "\u003cstrong\u003eCrushed Tomatoes (generic):\u003c/strong\u003e 1.5 cans (1186 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 7.5 tbsp (118 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.5 cups (137 g)",
+                                "\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 1.5 tbsp (29 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 4.4 (937 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 2.4 (149 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3.7 (441 g)",
+                                "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 1.25 cups (164 g)",
+                                "\u003cstrong\u003eGolden Raisins (generic):\u003c/strong\u003e 13 tbsp (118 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 12 large eggs (612 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 6.25 tbsp (86 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
+                            ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Ground Pork, 3.75 lb: ~$12.53. \u003cstrong\u003eBuy 4 lbs: $13.64.\u003c/strong\u003e",
@@ -40,7 +57,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $30.46 across 14 servings, roughly $2.18 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $11.94 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.40. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.10 a bowl\u003c/strong\u003e (at everyday cost) for a plate a Filipino restaurant would happily charge you $12 for. The fish sauce bottle looks like a splurge at checkout, but it seasons this whole batch for 28 cents.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.10 a bowl\u003c/strong\u003e (at everyday cost) for a plate a Filipino restaurant would happily charge you $12 for. The fish sauce bottle looks like a splurge at checkout.",
     "shop_smart":  [
                        "Ground pork usually runs cheaper per pound than ground beef. The 4 lb pack drops the unit price further, and this recipe uses 3.75 lb of it, so almost nothing goes to waste.",
                        "Potatoes are the stretcher here. About 91 cents of spuds adds two pounds of food to the pot without watering down the flavor.",

@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Thai Peanut Pork Tenderloin Rice Bowl",
     "slug":  "thai-peanut-pork-tenderloin-rice-bowl",
     "cuisine":  "Thai-inspired",
@@ -19,7 +19,21 @@
                  "cost_ps":  "3.36"
              },
     "intro_html":  "Seared pork tenderloin over lime-cilantro rice with a sweet, creamy peanut sauce spooned over the top. Peanut butter whisked into coconut milk with lime and brown sugar is the whole trick. Each bowl brings \u003cstrong\u003e29 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.36\u003c/strong\u003e (at everyday cost), which is less than the fancy coffee you had this morning.",
-    "ingredients_display": ["\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 2.5 lb (1164 g)","\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 1.4 cans (580 g)","\u003cstrong\u003ePeanut Butter (generic):\u003c/strong\u003e 1.25 cups (331 g)","\u003cstrong\u003eLime Juice:\u003c/strong\u003e 0.75 cups (173 g)","\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 7.75 tbsp (104 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 tbsp (26 g)","\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 1.75 tbsp (9 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.5 cups dry (852 g)","\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 6 tbsp (6 g)","\u003cstrong\u003eFrozen Chopped Spinach (generic):\u003c/strong\u003e 0.25 cups (26 g)","\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1.75 tbsp (23 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (22 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 2.5 lb (1164 g)",
+                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 1.4 cans (580 g)",
+                                "\u003cstrong\u003ePeanut Butter (generic):\u003c/strong\u003e 1.25 cups (331 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 0.75 cups (173 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 7.75 tbsp (104 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 tbsp (26 g)",
+                                "\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 1.75 tbsp (9 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.5 cups dry (852 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 6 tbsp (6 g)",
+                                "\u003cstrong\u003eFrozen Chopped Spinach (generic):\u003c/strong\u003e 0.25 cups (26 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1.75 tbsp (23 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (22 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
+                            ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Pork Tenderloin, 2.5 lb: ~$10.19. \u003cstrong\u003eBuy 3 lbs: $11.91.\u003c/strong\u003e",
@@ -166,7 +180,7 @@
                  "totalTime":  "PT50M",
                  "costPerServing":  3.36,
                  "recipeIngredient":  [
-                                          "3 lb pork tenderloin",
+                                          "2.5 lb pork tenderloin",
                                           "4.5 cups dry rice",
                                           "1.4 cans coconut milk",
                                           "1.25 cups peanut butter",

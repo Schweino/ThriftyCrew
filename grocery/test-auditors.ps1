@@ -1911,6 +1911,68 @@ else { Bad 'ff-carry blindness is no longer keyed on $emptyTerms.Count - $suppre
 if ($cacSrc -match '\$fcRc -eq 3') { Ok 'check-ad-cycles reports an ff-carry could-not-evaluate separately from a crash' }
 else { Bad 'check-ad-cycles has no $fcRc -eq 3 branch - a blind-but-healthy ff-carry is logged as "DID NOT RUN ... see stderr" and points the reader at an empty stderr' }
 
+# ------------------------------------------- (u3) ff-pull: the alert that could never be false, and the write that could
+# 2026-08-02 (triage plan item 2026-08-02-91d877). pull-regular-familyfare.ps1 HAS had a -SelfTest since
+# 2026-07-31 and NOTHING in this harness ran it, so its fixtures were frozen evidence nobody looked at daily.
+# They now guard two things, and both were real:
+#   - the expiry alert arm. `expired > 0` was re-keyed to MEASURED term starvation because the merged catalog
+#     is a name-keyed UNION of top-25 search responses: renames, ranking drift, delistings and the multi-buy
+#     skip retire NAMES while Family Fare still sells the PRODUCT, so a trickle of 14-day expiries is the
+#     healthy steady state and the old arm could never stay false. It paged on 2026-08-02 over 55 rows that
+#     cost the board zero crowns and zero commodities. That exact false page is now the CLEAN TWIN.
+#   - the merged write. At 2026-08-02T07:06:41 a bare Set-Content under EAP=Stop hit a file lock AFTER the
+#     cursor had advanced #458 -> #35, so 686 rows across ~104 terms were discarded while the cursor skipped
+#     the terms that bought them. The write is atomic and retried now, and the cursor only commits behind it.
+# Checked STRUCTURALLY before invoking, because an invocation alone cannot tell "fixtures passed" from
+# "fixtures were skipped" - and because under -File an undeclared -SelfTest lands in $args and would run a
+# REAL Freshop pull, spending a scheduled sweep's request budget from inside the test harness.
+$ffpS = Get-Content (Join-Path $root 'pull-regular-familyfare.ps1') -Raw
+if ($ffpS -match '\[switch\]\$SelfTest') { Ok 'pull-regular-familyfare declares [switch]$SelfTest (its fixture block is reachable, and -SelfTest cannot fall through to a live pull)' }
+else { Bad 'pull-regular-familyfare has no [switch]$SelfTest on param() - -SelfTest would land in $args and run a REAL Freshop pull, burning a scheduled sweep budget and looking like a passing test' }
+$ffpSelfIdx = $ffpS.IndexOf('if ($SelfTest) {')
+$ffpNetIdx  = $ffpS.IndexOf('$tok = Get-FreshToken')
+if ($ffpSelfIdx -ge 0 -and $ffpNetIdx -gt $ffpSelfIdx) { Ok 'pull-regular-familyfare runs its fixtures ABOVE every network call (a -SelfTest run cannot touch Freshop)' }
+else { Bad 'pull-regular-familyfare -SelfTest block is no longer above its first Freshop call - running the fixtures now spends live request budget' }
+$r = RunPS 'pull-regular-familyfare.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS' -and $r.text -match 'MUST-FIRE' -and $r.text -match 'CLEAN-TWIN') { Ok 'ff-pull -SelfTest passes with its must-fire and clean-twin fixtures armed' }
+else { Bad ('ff-pull -SelfTest failed or lost its fixtures: rc=' + $r.rc + ' ' + ((($r.text -split "`n") | Select-Object -Last 3) -join ' | ')) }
+# The individual fixtures, named, so a silent deletion of any ONE of them is a failure rather than a shorter
+# pass. These are the frozen founding cases; never regenerate them from a live pull.
+if ($r.text -match "today's real false page stays SILENT") { Ok "the 2026-08-02 false page (4655/4706, 55 churn expiries, 0 crowns moved) is frozen as the clean twin" }
+else { Bad 'ff-pull lost the 2026-08-02 false-page clean twin - the alert is free to page on ordinary name-churn again' }
+if ($r.text -match 'FIRES on starvation') { Ok 'the starvation must-fire is armed (a term that has bought nothing inside the carry window still pages)' }
+else { Bad 'ff-pull lost its starvation must-fire - the re-keyed arm can no longer be shown to fire at all, which is how a re-key becomes a mute' }
+if ($r.text -match 'FIRES on mass expiry') { Ok 'the mass-expiry safety net is armed (>2% of the catalog in one run pages whatever the class)' }
+else { Bad 'ff-pull lost the mass-expiry safety net fixture - a classifier bug could now swallow an unbounded expiry event' }
+if ($r.text -match 'must NOT advance the cursor') { Ok 'the cursor-commit must-fire is armed (the 686-row / terms #458..#34 loss cannot silently return)' }
+else { Bad 'ff-pull lost the cursor-commit must-fire - a failed merged write is free to advance the cursor past terms it never saved' }
+if ($r.text -match 'leaves the prior catalog byte-identical') { Ok 'the atomic-write must-fire is armed (a locked target returns false and cannot corrupt or clobber the last good catalog)' }
+else { Bad 'ff-pull lost the atomic-write must-fire - the file-lock class that discarded a whole window is unguarded' }
+# The two REAL freeze detectors must survive the re-key VERBATIM. This is the anti-softening pin: the point of
+# the 2026-08-02 change was to stop paging on churn, and the cheapest way to "stop paging" would have been to
+# blunt these. They are the only arms that catch a genuinely frozen store.
+if ($ffpS -match '\$recentVerified -lt 500') { Ok 'the recentVerified < 500 freeze detector survives verbatim' }
+else { Bad 'the recentVerified < 500 arm has been changed or removed - that is the detector for a sweep that has stopped buying terms entirely, and it must not be softened to quieten an alert' }
+if ($ffpS -match '\$mergedCount -lt \(\$prevMax \* 0\.80\)') { Ok 'the 20%-shrink freeze detector survives verbatim' }
+else { Bad 'the 20%-shrink arm has been changed or removed - that is the detector for the original Family Fare freeze (1909 vs 3974) and it must not be softened' }
+if ($ffpS -match '\$MaxCarryDays = 14') { Ok 'the 14-day carry policy is unchanged (expiry was re-classified, not made quieter by extending the window)' }
+else { Bad 'MaxCarryDays is no longer 14 - extending the carry is the wrong way to make expiry alerts quiet; it just serves older prices' }
+# SOURCE CHECKS for the parts a fixture cannot reach without a live Freshop response. Same reasoning as the
+# ff-carry zero-probe checks above: the behaviour needs a real search response, which must never be faked by
+# hitting the live API from a test. What CAN be pinned is that the provenance actually gets written.
+$ffpIngestAll  = ([regex]::Matches($ffpS, 'Ingest-Items \$items')).Count
+$ffpIngestTerm = ([regex]::Matches($ffpS, 'Ingest-Items \$items \$term')).Count
+if ($ffpS -match 'function Ingest-Items\(\$items, \$term\)' -and $ffpIngestAll -gt 0 -and $ffpIngestAll -eq $ffpIngestTerm) { Ok ("Ingest-Items takes the search term that produced the response, and all $ffpIngestAll call site(s) pass it (row provenance is captured at ingest)") }
+else { Bad ("Ingest-Items no longer receives its search term at every call site ($ffpIngestTerm of $ffpIngestAll) - those rows lose found_by_term, and their future expiries fall back to the unclassifiable 'unknown' class that never pages") }
+if ($ffpS -match "\`$row\['found_by_term'\] = \[string\]\`$term") { Ok 'fresh rows are stamped with found_by_term' }
+else { Bad 'fresh rows are no longer stamped with found_by_term - the expiry classifier has nothing to classify' }
+if ($ffpS -match "'product_id', 'found_by_term'") { Ok 'Norm-Row preserves found_by_term on carried rows (the normalizer-drops-the-contract-field class)' }
+else { Bad 'Norm-Row no longer preserves found_by_term - carried rows forget which term found them one line after ingest wrote it, exactly like the guard-10 current_price drop' }
+if ($ffpS -match 'Attempts = 5' -and $ffpS -match 'BackoffSec = 2') { Ok 'the atomic write keeps its production retry budget (5 attempts / 2s backoff)' }
+else { Bad 'Write-FfJsonAtomic no longer defaults to 5 attempts / 2s - the fixture passes 0 backoff for speed, so the live retry budget is only pinned here' }
+if ($ffpS -match '\$commitIdx = Get-FfCursorCommit \$nextIdx \$mergedOk') { Ok 'the cursor write is gated on the merged catalog having landed' }
+else { Bad 'the cursor write is no longer behind Get-FfCursorCommit - a failed merged write can advance the cursor again, which is exactly how 686 rows were discarded on 2026-08-02' }
+
 # ---------------------------------------------------------------- (v) everyday-mismatch: the orphan, now wired
 # 2026-07-31. audit-everyday-mismatch.ps1 is the only check that asks whether the number we PUBLISHED agrees
 # with the product page we LINKED to. It worked, it found real defects, and NOTHING invoked it - not
@@ -2860,6 +2922,23 @@ else {
   }
   if ($missing.Count -eq 0) { Ok 'prose-sync covers every field spec-guards merges (no field can revert unwatched)' }
   else { Bad ('spec-guards merges field(s) that sync-prose-from-spec does not copy, so those fields revert on every full run and the drift check cannot see it: ' + ($missing -join ', ')) }
+
+  # ------------------------------------------------------- spec self-contradictions (2026-08-02, L4)
+  # A recipe spec that states the same fact twice and disagrees with itself is wrong no matter what the
+  # source recipe says - and one of the two numbers is on a live card. Five writer agents found a handful
+  # of these by hand while doing an unrelated job on 97 of 513 recipes; the same reading applied to every
+  # spec found 138. A hand-compiled worklist is a coincidence, not a detector.
+  $asc = Join-Path $mpPipe 'audit-spec-contradictions.ps1'
+  $rsc = Join-Path $mpPipe 'repair-spec-contradictions.ps1'
+  $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $asc -SelfTest 2>&1 | Out-String
+  if ($r -match 'SELF-TEST PASS') { Ok 'spec-contradictions: all five classes still fire on the frozen live cases, and a self-consistent spec still produces nothing' }
+  else { Bad ('audit-spec-contradictions -SelfTest failed: ' + ($r -replace "`n", ' ')) }
+  $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $rsc -SelfTest 2>&1 | Out-String
+  if ($r -match 'SELF-TEST PASS') { Ok 'contradiction repair: still refuses a two-quantity head line, "rice vinegar", and "wild rice" - and still matches "93/7 ground turkey" to its own line' }
+  else { Bad ('repair-spec-contradictions -SelfTest failed - a head ingredient line can be rewritten to the WRONG ingredient''s amount: ' + ($r -replace "`n", ' ')) }
+  $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $asc -Quiet 2>&1 | Out-String
+  if ($LASTEXITCODE -eq 0) { Ok 'no recipe spec contradicts itself worse than the recorded baseline (stat-vs-prose, stale money, head quantities all at ZERO)' }
+  else { Bad ('a spec-contradiction class got WORSE: ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL' }) -join ' ')) }
 }
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2

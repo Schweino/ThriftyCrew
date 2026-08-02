@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Thai Coconut Curry Turkey Meatballs",
     "slug":  "thai-coconut-curry-turkey-meatballs",
     "cuisine":  "Thai",
@@ -18,7 +18,27 @@
                  "cost_ps":  "4.18"
              },
     "intro_html":  "Tender turkey meatballs simmered in a creamy coconut red curry sauce over rice, this is the meal prep that makes coworkers ask questions. Each bowl delivers \u003cstrong\u003e37 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.18\u003c/strong\u003e (at everyday cost), with coconut milk, lime, and ginger doing the flavor work lean turkey cannot do alone.",
-    "ingredients_display": ["\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 4.75 lb (2117 g)","\u003cstrong\u003eCurry Powder (generic):\u003c/strong\u003e 0.75 tbsp (5 g)","\u003cstrong\u003eDried Basil (Great Value):\u003c/strong\u003e 1.75 tbsp (5 g)","\u003cstrong\u003eGround Ginger (Great Value):\u003c/strong\u003e 0 oz (1 g)","\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 0.5 tbsp (4 g)","\u003cstrong\u003eBread Crumbs (generic):\u003c/strong\u003e 1.75 cups (189 g)","\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 2 large eggs (117 g)","\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 4.75 tbsp (65 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (257 g)","\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2.3 (280 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.75 tbsp (23 g)","\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 4.75 tbsp (28 g)","\u003cstrong\u003eRed Curry Paste (Thai Kitchen):\u003c/strong\u003e 7 tbsp (105 g)","\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 2.3 cans (926 g)","\u003cstrong\u003eFresh Basil:\u003c/strong\u003e 12.75 tbsp (19 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.75 tbsp (14 g)","\u003cstrong\u003eLime Juice:\u003c/strong\u003e 0.5 cups (140 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"],
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 4.75 lb (2117 g)",
+                                "\u003cstrong\u003eCurry Powder (generic):\u003c/strong\u003e 0.75 tbsp (5 g)",
+                                "\u003cstrong\u003eDried Basil (Great Value):\u003c/strong\u003e 1.75 tbsp (5 g)",
+                                "\u003cstrong\u003eGround Ginger (Great Value):\u003c/strong\u003e 0 oz (1 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eBread Crumbs (generic):\u003c/strong\u003e 1.75 cups (189 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 2 large eggs (117 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 4.75 tbsp (65 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (257 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2.3 (280 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.75 tbsp (23 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 4.75 tbsp (28 g)",
+                                "\u003cstrong\u003eRed Curry Paste (Thai Kitchen):\u003c/strong\u003e 7 tbsp (105 g)",
+                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 2.3 cans (926 g)",
+                                "\u003cstrong\u003eFresh Basil:\u003c/strong\u003e 12.75 tbsp (19 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.75 tbsp (14 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 0.5 cups (140 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Turkey, 4.75 lb: ~$25.48. \u003cstrong\u003eBuy 5 lbs: $27.30.\u003c/strong\u003e",
@@ -218,7 +238,7 @@
                                           "2.75 tbsp garlic",
                                           "4.75 tbsp fresh ginger",
                                           "0.5 cup lime juice",
-                                          "4.25 cups dry rice",
+                                          "3.75 cups dry rice",
                                           "4.75 tbsp vegetable oil"
                                       ],
                  "steps":  [
