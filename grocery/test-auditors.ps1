@@ -3090,6 +3090,61 @@ else {
       Ok 'serving scaler still scales only the leading quantity and understands fractions (the JS matches its PowerShell twin)'
     } else { Bad 'tpl2-scaler-prefix.html no longer carries the fraction-aware scaleBuy - changing the servings will render "2/4 tsp" again' }
   }
+
+  # ------------------------------------------- the gates that stop this recurring (2026-08-02)
+  # The retrospective on the whole day: the pipeline derives TWO artifacts from one source - the ingredient
+  # mapper's costed list and the writer's steps - and NOTHING EVER COMPARED THEM. That is a defect
+  # generator, not an agent being careless, and better instructions would not have caught it. So the
+  # invariants moved into spec-guards, the gate every new recipe must pass before it can publish.
+  $rcl = Join-Path $mpPipe 'recipe-coherence-lib.ps1'
+  $sg = Join-Path $mpPipe 'spec-guards.ps1'
+  if (-not (Test-Path $rcl)) { Bad 'recipe-coherence-lib.ps1 is missing - nothing stops a new recipe shipping with ingredients no step uses' }
+  else {
+    . $rcl
+    # MUST FIRE: the founding case. Rice vinegar bought, never mentioned in a step.
+    $bad = [pscustomobject]@{
+      make_it = @('Weigh your empty mixing pot.', 'Add the chicken, hoisin, soy sauce and garlic to the slow cooker.', 'Cook on low for 6 hours.')
+      head = [pscustomobject]@{ steps = @('Combine and cook.') }
+      scaler = [pscustomobject]@{ ing = @(
+        [pscustomobject]@{ item = 'Boneless Skinless Chicken Breast' },
+        [pscustomobject]@{ item = 'Hoisin Sauce' },
+        [pscustomobject]@{ item = 'Rice Vinegar' },
+        [pscustomobject]@{ item = '93/7 Ground Beef' }
+      ) }
+    }
+    $un = @(Get-RcUnusedIngredients $bad)
+    if (($un -contains 'Rice Vinegar') -and ($un -contains '93/7 Ground Beef') -and $un.Count -eq 2) {
+      Ok 'unused-ingredient gate: still catches a bought-but-never-cooked ingredient, and still credits "shred the chicken" for the chicken breast'
+    } else { Bad ('the unused-ingredient gate has drifted - flagged [' + ($un -join ', ') + '] (want exactly Rice Vinegar + 93/7 Ground Beef)') }
+
+    # CLEAN TWIN: a step that names the food loosely must NOT be accused. "brown the beef" uses "93/7
+    # Ground Beef"; a gate that demands the step echo "93/7" or "ground" flags every correct recipe.
+    $good = [pscustomobject]@{
+      make_it = @('Brown the beef and drain it.', 'Stir in the hoisin and the vinegar.', 'Shred the chicken into the sauce.')
+      head = [pscustomobject]@{ steps = @('Cook.') }
+      scaler = [pscustomobject]@{ ing = @(
+        [pscustomobject]@{ item = '93/7 Ground Beef' },
+        [pscustomobject]@{ item = 'Hoisin Sauce' },
+        [pscustomobject]@{ item = 'Rice Vinegar' },
+        [pscustomobject]@{ item = 'Boneless Skinless Chicken Breast' }
+      ) }
+    }
+    if (@(Get-RcUnusedIngredients $good).Count -eq 0) { Ok 'unused-ingredient gate CLEAN TWIN: loose but genuine step wording is never accused' }
+    else { Bad ('the gate cries wolf on correct recipes: ' + ((Get-RcUnusedIngredients $good) -join ', ')) }
+
+    # MUST FIRE: presence is not a value. This is the exact shape that let 113 recipes publish uncredited.
+    $empty = [pscustomobject]@{ name = 'X'; slug = 'x'; source_url = ''; source_site = ''; credit_html = ''
+      intro_html = 'i'; portion_html = 'p'; cost_closing_html = 'c'; upsell_html = 'u'
+      head = [pscustomobject]@{ description = 'd'; keywords = 'k'; prepTime = 'PT1M'; cookTime = 'PT2M'; totalTime = 'PT3M' } }
+    $ef = @(Get-RcEmptyRequired $empty)
+    if (($ef -contains 'source_url') -and ($ef -contains 'credit_html')) { Ok 'empty-required gate: an EMPTY source_url no longer passes for a present one (the 113-uncredited-recipes hole)' }
+    else { Bad ('the empty-required gate missed an empty source_url/credit_html: ' + ($ef -join ', ')) }
+
+    $sgSrc = Get-Content $sg -Raw
+    if (($sgSrc -match 'Get-RcUnusedIngredients') -and ($sgSrc -match 'Get-RcEmptyRequired')) {
+      Ok 'spec-guards ENFORCES both gates, so a new recipe cannot publish with ingredients no step uses or an empty credit'
+    } else { Bad 'spec-guards no longer calls the coherence gates - the checks exist but nothing runs them before publish' }
+  }
 }
 
 # ---------------------------------------------------------------- identity eval set (2026-08-02, L1)

@@ -1,4 +1,4 @@
-# spec-guards.ps1 (pipeline, run-agnostic - promoted 2026-07-27 from archive\r300; every guard
+﻿# spec-guards.ps1 (pipeline, run-agnostic - promoted 2026-07-27 from archive\r300; every guard
 # UNCHANGED, hardcoded r300 paths became parameters defaulting under -RunDir).
 #
 # spec-guards.ps1 (R300) - Validates spec files and enforces EVERY invariant before any card build.
@@ -47,7 +47,8 @@ if(-not $RecipesDbFile){ $RecipesDbFile = Join-Path $mp 'recipes-db.json' }
 if(-not $RunSlugsFile){  $RunSlugsFile  = Join-Path $RunDir 'run-slugs.txt' }
 if(-not $OutDir){        $OutDir        = $RunDir }
 if(-not $ManifestFile){  $ManifestFile  = Join-Path $here 'v2-perserving.json' }
-. (Join-Path $here 'guard-lib.ps1')   # shared, reusable guard predicates (prose-ingredient drift, stale superlative)
+. (Join-Path $here 'guard-lib.ps1')              # shared, reusable guard predicates (prose-ingredient drift, stale superlative)
+. (Join-Path $here 'recipe-coherence-lib.ps1')   # the ingredient/step coherence + non-empty-field gates
 # everyday_ps per slug (2026-07-26 cost redesign): stat.cost_ps / head.costPerServing may legitimately
 # carry the manifest's everyday whole-package basis instead of cost_batch/14 (see basis check below)
 $manPs=@{}
@@ -103,6 +104,17 @@ foreach($sf in $specs){
   if($liveSlugs.ContainsKey($slug) -and -not $runSlugs.ContainsKey($slug)){ Fail $slug 'slug collides with a LIVE recipe' }
   foreach($k in @('name','slug','cuisine','protein','servings','visibility','source_url','source_site','stat','ingredients_display','cost_lines','credit_html','scaler','head','ingredients_grams')){
     if($spec.PSObject.Properties.Name -notcontains $k){ Fail $slug ("missing field: $k") }
+  }
+  # ---- PRESENCE IS NOT A VALUE (2026-08-02). The loop above asks only whether the KEY exists. All 113
+  # original recipes carried source_url, source_site and credit_html as EMPTY STRINGS, passed this check,
+  # and published with no attribution at all until a reader asked where a recipe came from.
+  foreach($ef in (Get-RcEmptyRequired $spec)){ Fail $slug ("required field is present but EMPTY: $ef") }
+  # ---- THE GENERAL TSO GATE. An ingredient the shopper is told to BUY must be used by a step. The
+  # pipeline derives the costed list and the steps from one source through two different stages, and until
+  # today nothing compared them: a sweep of 500 recipes found 517 ingredients bought and never used.
+  # Two derived artifacts that are never reconciled is a defect generator, not an agent being careless.
+  foreach($un in (Get-RcUnusedIngredients $spec)){
+    Fail $slug ("'$un' is bought and costed but no step ever uses it - either put it in a step or take it off the ingredient list")
   }
   if($spec.servings -ne 14){ Fail $slug ('servings != 14 (' + $spec.servings + ')') }
   if($spec.visibility -ne 'paid'){ Fail $slug 'visibility != paid' }
@@ -388,3 +400,4 @@ $outFile = if($Skeleton){ 'specs-skeleton-ok.txt' } elseif($WriteReady){ 'specs-
 $ready | Out-File (Join-Path $OutDir $outFile) -Encoding utf8
 Write-Output ("wrote " + $outFile)
 if(-not $Skeleton -and -not $WriteReady){ Write-Output 'specs-ready.txt NOT written (pass -WriteReady after the auditor GO)' }
+
