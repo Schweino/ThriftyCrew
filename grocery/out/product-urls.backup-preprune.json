@@ -318,13 +318,6 @@
                                                              "verified":  "2026-07-16 Hy-Vee search API (storeId 1465)",
                                                              "board_pu":  0.1247
                                                          },
-                                              "Sam\u0027s Club":  {
-                                                                      "url":  "https://www.samsclub.com/ip/13597517906",
-                                                                      "name":  "Fabuloso 2X Concentrated Multi-Purpose Cleaner, Lavender 210 fl. oz.",
-                                                                      "price":  "$10.98",
-                                                                      "size":  "210 fl oz",
-                                                                      "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                                                  },
                                               "Walmart":  {
                                                               "url":  "https://www.walmart.com/ip/5080177347",
                                                               "name":  "Great Value Multi Purpose Cleaner, Lavender Scent, 128 fl oz",
@@ -1111,13 +1104,6 @@
                                },
                   "baby-back-ribs":  {
                                          "commodity":  "baby-back-ribs",
-                                         "Aldi":  {
-                                                      "url":  "https://www.aldi.us/store/aldi/products/28030630-baby-back-pork-ribs-1-each",
-                                                      "name":  "Baby Back Pork Ribs 1 Each",
-                                                      "price":  "$3.29",
-                                                      "size":  "lb",
-                                                      "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                                  },
                                          "Baker\u0027s":  {
                                                               "url":  "https://www.bakersplus.com/p/kroger-natural-pork-baby-back-ribs/0020324300000",
                                                               "price":  4.49,
@@ -1160,7 +1146,14 @@
                                                          "price":  "$12.17",
                                                          "size":  "3.601 lb",
                                                          "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                                     }
+                                                     },
+                                         "Aldi":  {
+                                                      "url":  "https://www.aldi.us/store/aldi/products/19115451-baby-back-pork-ribs-per-lb",
+                                                      "name":  "Baby Back Pork Ribs Per LB",
+                                                      "price":  "$3.29",
+                                                      "size":  "lb",
+                                                      "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                  }
                                      },
                   "baby-food":  {
                                     "commodity":  "baby-food",
@@ -3296,14 +3289,6 @@
                                          },
                   "butter":  {
                                  "commodity":  "Butter",
-                                 "Aldi":  {
-                                              "url":  "https://www.aldi.us/store/aldi/products/18648084-countryside-creamery-butter-quarters-16-oz",
-                                              "price":  2.89,
-                                              "size":  "16 oz",
-                                              "name":  "Countryside Creamery Salted Butter",
-                                              "board_pu":  2.89,
-                                              "recipe_pu":  0.1994
-                                          },
                                  "Baker\u0027s":  {
                                                       "url":  "https://www.bakersplus.com/p/green-giant-butter-with-salt-pepper-corn-cob-bites/0019056968405",
                                                       "name":  "Green Giant Butter with Salt \u0026 Pepper Corn Cob Bites",
@@ -3346,7 +3331,14 @@
                                                  "size":  "32.043 oz",
                                                  "name":  "Great Value Sweet Cream Salted Butter Twin Pack, 16 oz Box, 8 Sticks, Slow Churned, Refrigerated",
                                                  "verified":  "2026-07-30 price-pull self-capture"
-                                             }
+                                             },
+                                 "Aldi":  {
+                                              "url":  "https://www.aldi.us/store/aldi/products/18647812-countryside-creamery-unsalted-butter-16-oz",
+                                              "name":  "Countryside Creamery Unsalted Butter 16 OZ",
+                                              "price":  "$2.89",
+                                              "size":  "16 oz",
+                                              "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                          }
                              },
                   "buttermilk":  {
                                      "commodity":  "buttermilk",
@@ -3472,13 +3464,6 @@
                               },
                   "caesar-dressing":  {
                                           "commodity":  "Caesar Dressing",
-                                          "Aldi":  {
-                                                       "url":  "https://www.aldi.us/store/aldi/products/18649500-tuscan-garden-dressing-and-dip-classic-caesar-16-fl-oz",
-                                                       "price":  1.95,
-                                                       "size":  "16 fl oz",
-                                                       "name":  "Tuscan Garden Classic Caesar Dressing16 fl oz",
-                                                       "board_pu":  0.1219
-                                                   },
                                           "Baker\u0027s":  {
                                                                "url":  "https://www.bakersplus.com/p/kroger-classic-caesar-salad-dressing/0001111004867",
                                                                "name":  "Kroger Classic Caesar Salad Dressing",
@@ -3513,7 +3498,14 @@
                                                           "size":  "8 fl oz",
                                                           "name":  "Kraft Classic Caesar Dressing, 8 fl oz Bottle",
                                                           "board_pu":  0.125
-                                                      }
+                                                      },
+                                          "Aldi":  {
+                                                       "url":  "https://www.aldi.us/store/aldi/products/19274373-simply-nature-organic-caesar-dressing-12-fl-oz",
+                                                       "name":  "Simply Nature Organic Caesar Dressing 12 FL OZ",
+                                                       "price":  "$3.69",
+                                                       "size":  "12 fl oz",
+                                                       "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                   }
                                       },
                   "caesar-salad-kit":  {
                                            "commodity":  "Caesar Salad Kit",
@@ -14235,13 +14227,6 @@
                                               },
                   "italian-dressing":  {
                                            "commodity":  "italian-dressing",
-                                           "Aldi":  {
-                                                        "url":  "https://www.aldi.us/store/aldi/products/21017024-tuscan-garden-italian-salad-dressing-16-fl-oz",
-                                                        "name":  "Tuscan Garden Italian Salad Dressing 16 FL OZ",
-                                                        "price":  "$1.95",
-                                                        "size":  "16 fl oz",
-                                                        "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
-                                                    },
                                            "Baker\u0027s":  {
                                                                 "url":  "https://www.bakersplus.com/p/kroger-zesty-italian-salad-dressing-big-deal-/0001111003356",
                                                                 "name":  "Kroger Zesty Italian Salad Dressing BIG DEAL!",
@@ -14283,7 +14268,14 @@
                                                            "size":  "36 fl oz",
                                                            "name":  "Great Value Zesty Italian Dressing \u0026 Marinade, 36 fl oz",
                                                            "verified":  "2026-07-30 price-pull self-capture"
-                                                       }
+                                                       },
+                                           "Aldi":  {
+                                                        "url":  "https://www.aldi.us/store/aldi/products/20206219-tuscan-garden-italian-salad-dressing-16-oz",
+                                                        "name":  "Tuscan Garden Italian Salad Dressing 16 OZ",
+                                                        "price":  "$1.95",
+                                                        "size":  "16 fl oz",
+                                                        "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                    }
                                        },
                   "italian-sausage":  {
                                           "commodity":  "italian-sausage",
@@ -17921,13 +17913,6 @@
                                         },
                   "pickles":  {
                                   "commodity":  "pickles",
-                                  "Aldi":  {
-                                               "url":  "https://www.aldi.us/store/aldi/products/20846804-great-gherkins-kosher-dill-spears-24-fl-oz",
-                                               "price":  2.49,
-                                               "size":  "24 fl oz",
-                                               "name":  "Great Gherkins Kosher Dill Spears",
-                                               "board_pu":  0.1038
-                                           },
                                   "Baker\u0027s":  {
                                                        "url":  "https://www.bakersplus.com/p/smart-way-dill-pickle-spears/0001111015350",
                                                        "name":  "Smart Way Dill Pickle Spears",
@@ -17970,7 +17955,14 @@
                                                   "size":  "128 fl oz",
                                                   "name":  "Mt. Olive Kosher Dill Spears Fresh Pack Pickles - 128 fl oz jar",
                                                   "verified":  "2026-07-30 price-pull self-capture"
-                                              }
+                                              },
+                                  "Aldi":  {
+                                               "url":  "https://www.aldi.us/store/aldi/products/20220088-great-gherkins-hamburger-dill-pickle-chips-32-fl-oz",
+                                               "name":  "Great Gherkins Hamburger Dill Pickle Chips 32 FL OZ",
+                                               "price":  "$2.69",
+                                               "size":  "32 fl oz",
+                                               "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                           }
                               },
                   "pigeon-peas":  {
                                       "commodity":  "Pigeon Peas / Gandules (canned)",
@@ -18882,13 +18874,6 @@
                                      },
                   "pretzels":  {
                                    "commodity":  "pretzels",
-                                   "Aldi":  {
-                                                "url":  "https://www.aldi.us/store/aldi/products/20251434-clancy-s-pretzel-sticks-16-oz",
-                                                "name":  "Clancy S Pretzel Sticks 16 OZ",
-                                                "price":  "$2.19",
-                                                "size":  "16 oz",
-                                                "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                            },
                                    "Baker\u0027s":  {
                                                         "url":  "https://www.bakersplus.com/p/kroger-pretzel-mini-twists/0001111009142",
                                                         "name":  "Kroger Pretzel Mini Twists",
@@ -18932,7 +18917,14 @@
                                                    "price":  "$2.44",
                                                    "size":  "16 oz",
                                                    "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                               }
+                                               },
+                                   "Aldi":  {
+                                                "url":  "https://www.aldi.us/store/aldi/products/20251435-clancy-s-pretzel-minis-16-oz",
+                                                "name":  "Clancy S Pretzel Minis 16 OZ",
+                                                "price":  "$2.19",
+                                                "size":  "16 oz",
+                                                "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                            }
                                },
                   "protein-bars":  {
                                        "commodity":  "protein-bars",
@@ -19866,13 +19858,6 @@
                                     },
                   "refrigerated-biscuits":  {
                                                 "commodity":  "Refrigerated Biscuit Dough",
-                                                "Aldi":  {
-                                                             "url":  "https://www.aldi.us/store/aldi/products/20681718-bake-house-creations-jumbo-flaky-biscuits-8-ct",
-                                                             "name":  "Bake House Creations Jumbo Flaky Biscuits 8 CT",
-                                                             "price":  "$1.89",
-                                                             "size":  "16 oz",
-                                                             "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                                         },
                                                 "Baker\u0027s":  {
                                                                      "url":  "https://www.bakersplus.com/p/kroger-flaky-buttermilk-jumbo-biscuits/0001111088651",
                                                                      "name":  "Kroger Flaky Buttermilk Jumbo Biscuits",
@@ -19907,7 +19892,14 @@
                                                                 "size":  "16 oz",
                                                                 "name":  "Great Value Jumbo Buttermilk Biscuits, 16 oz, 8 Count",
                                                                 "verified":  "2026-07-30 price-pull self-capture"
-                                                            }
+                                                            },
+                                                "Aldi":  {
+                                                             "url":  "https://www.aldi.us/store/aldi/products/20948452-bake-house-creations-jumbo-flaky-biscuits-16-oz",
+                                                             "name":  "Bake House Creations Jumbo Flaky Biscuits 16 OZ",
+                                                             "price":  "$1.89",
+                                                             "size":  "16 oz",
+                                                             "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                         }
                                             },
                   "relish":  {
                                  "commodity":  "relish",
@@ -21196,13 +21188,6 @@
                                        },
                   "shredded-cheese":  {
                                           "commodity":  "Shredded / Block Cheese",
-                                          "Aldi":  {
-                                                       "url":  "https://www.aldi.us/store/aldi/products/19335038-happy-farms-shredded-mozzarella-cheese-16-oz",
-                                                       "name":  "Happy Farms Shredded Mozzarella Cheese 16 OZ",
-                                                       "price":  "$3.29",
-                                                       "size":  "16 oz",
-                                                       "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                                   },
                                           "Baker\u0027s":  {
                                                                "url":  "https://www.bakersplus.com/p/kroger-colby-jack-shredded-cheese-family-size/0001111015117",
                                                                "name":  "Kroger Colby Jack Shredded Cheese Family Size",
@@ -21245,7 +21230,14 @@
                                                           "price":  "$6.92",
                                                           "size":  "32 oz",
                                                           "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
-                                                      }
+                                                      },
+                                          "Aldi":  {
+                                                       "url":  "https://www.aldi.us/store/aldi/products/19335029-happy-farms-shredded-mild-cheddar-cheese-16-oz",
+                                                       "name":  "Happy Farms Shredded Mild Cheddar Cheese 16 OZ",
+                                                       "price":  "$3.29",
+                                                       "size":  "16 oz",
+                                                       "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                   }
                                       },
                   "shrimp":  {
                                  "commodity":  "shrimp",
