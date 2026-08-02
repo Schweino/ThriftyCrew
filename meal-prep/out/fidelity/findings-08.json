@@ -1,0 +1,138 @@
+[
+  { "slug": "slow-cooker-kung-pao-chicken-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Ginger", "detail": "1 tsp minced ginger is costed but no step mentions it; the source puts ginger in the step-3 sauce mix.", "confidence": "high" },
+  { "slug": "slow-cooker-kung-pao-chicken-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Red Pepper Flakes", "detail": "1/4-1/2 tsp flakes costed but never used in steps; source sauce includes 1/4-1/2 tsp dried chili flakes.", "confidence": "high" },
+  { "slug": "slow-cooker-kung-pao-chicken-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Salt & Black Pepper", "detail": "Both costed; steps never say salt, pepper, or season (source seasons the chicken with them before browning).", "confidence": "medium" },
+
+  { "slug": "slow-cooker-maple-dijon-pork-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Salt & Black Pepper", "detail": "Both costed; steps never say salt, pepper, or season (source step 1 seasons the pork with them).", "confidence": "medium" },
+
+  { "slug": "slow-cooker-mediterranean-chicken-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Dried Oregano", "detail": "1 tsp costed but no step uses it; source adds oregano to the slow cooker in step 3.", "confidence": "high" },
+  { "slug": "slow-cooker-mediterranean-chicken-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Dried Thyme", "detail": "1 tsp costed but no step uses it; source adds thyme to the slow cooker in step 3.", "confidence": "high" },
+  { "slug": "slow-cooker-mediterranean-chicken-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Dried Rosemary", "detail": "1 tsp costed but no step uses it; source adds rosemary to the slow cooker in step 3.", "confidence": "high" },
+  { "slug": "slow-cooker-mediterranean-chicken-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Bay Leaves", "detail": "1 leaf costed but no step uses it; source adds a bay leaf to the slow cooker in step 3.", "confidence": "high" },
+  { "slug": "slow-cooker-mediterranean-chicken-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Salt & Black Pepper", "detail": "Both costed; steps never say salt, pepper, or season (source seasons to taste in step 4).", "confidence": "medium" },
+
+  { "slug": "slow-cooker-mississippi-pork-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Au Jus Gravy Mix", "detail": "A 1-oz packet is costed but steps sprinkle only the ranch mix; source step 2 sprinkles au jus AND ranch over the meat.", "confidence": "high" },
+  { "slug": "slow-cooker-mississippi-pork-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Cornstarch", "detail": "2 tbsp costed but no slurry/thickening step exists; source steps 6-7 thicken the juices with a cornstarch slurry.", "confidence": "high" },
+
+  { "slug": "slow-cooker-mongolian-chicken-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Rice Vinegar", "detail": "2 tbsp costed but the step-1 sauce is only soy/brown sugar/hoisin/sesame oil/garlic; source sauce includes 2 tbsp rice wine vinegar.", "confidence": "high" },
+  { "slug": "slow-cooker-mongolian-chicken-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Ginger", "detail": "1 tsp grated costed but never used in steps; source sauce includes 1 tsp grated ginger.", "confidence": "high" },
+  { "slug": "slow-cooker-mongolian-chicken-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Sriracha", "detail": "1-2 tsp costed but never used in steps; source sauce includes 1-2 tsp Sriracha.", "confidence": "high" },
+
+  { "slug": "slow-cooker-orange-chicken-rice-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Rice Vinegar", "detail": "1 oz costed but the step-2 sauce is only OJ/soy/honey/sesame oil; source sauce includes 1 oz rice vinegar.", "confidence": "high" },
+  { "slug": "slow-cooker-orange-chicken-rice-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Ground Ginger", "detail": "1 tsp costed but never used in steps; source sauce includes 1 tsp ground ginger.", "confidence": "high" },
+  { "slug": "slow-cooker-orange-chicken-rice-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Orange Zest", "detail": "Zest is costed as its own line but never used in steps; source whisks orange zest into the sauce.", "confidence": "high" },
+  { "slug": "slow-cooker-orange-chicken-rice-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Black Pepper", "detail": "1/2 tsp costed; steps never mention pepper or seasoning (source sauce includes 1/2 tsp black pepper).", "confidence": "medium" },
+
+  { "slug": "slow-cooker-pork-birria-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Salsa (Pace)", "detail": "1.25 cups salsa costed but no step ever uses it; it maps to the source's pico de gallo taco topping which our steps dropped.", "confidence": "high" },
+
+  { "slug": "slow-cooker-pork-carnitas-bowl", "class": "UNUSED-PURCHASE", "ingredient": "Dried Oregano", "detail": "1/2 tbsp costed but the rub step names only cumin/chili powder/onion powder/salt/pepper; oregano is not in the source either.", "confidence": "high" },
+  { "slug": "slow-cooker-pork-carnitas-bowl", "class": "UNUSED-PURCHASE", "ingredient": "Ground Cinnamon", "detail": "Costed as '2 small sticks' but never used in any step and absent from the source recipe.", "confidence": "high" },
+
+  { "slug": "slow-cooker-pork-green-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Chicken Broth", "detail": "2 cups costed but never added in steps; source step 1 combines 2 cups stock into the slow cooker base.", "confidence": "high" },
+  { "slug": "slow-cooker-pork-green-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Jalapeno", "detail": "1-2 jalapenos costed but never used; source step 1 adds chopped jalapeno to the base.", "confidence": "high" },
+  { "slug": "slow-cooker-pork-green-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Garlic", "detail": "4 cloves costed but never used; source step 1 adds minced garlic to the base.", "confidence": "high" },
+  { "slug": "slow-cooker-pork-green-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Ground Cumin", "detail": "1 tbsp costed but never used; source step 1 adds all spices including cumin.", "confidence": "high" },
+  { "slug": "slow-cooker-pork-green-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Smoked Paprika", "detail": "1/2 tsp costed but never used; it is part of the source's step-1 spice set.", "confidence": "high" },
+  { "slug": "slow-cooker-pork-green-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Cayenne Pepper", "detail": "1/2 tsp costed but never used; it is part of the source's step-1 spice set.", "confidence": "high" },
+  { "slug": "slow-cooker-pork-green-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Dried Oregano", "detail": "1/4 tsp costed but never used; it is part of the source's step-1 spice set.", "confidence": "high" },
+  { "slug": "slow-cooker-pork-green-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Butter", "detail": "2 tbsp costed but never used; source steps 5-7 make a butter-flour roux to thicken the chili.", "confidence": "high" },
+  { "slug": "slow-cooker-pork-green-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "All-Purpose Flour", "detail": "1/4 cup costed but never used; it is the other half of the source's roux.", "confidence": "high" },
+  { "slug": "slow-cooker-pork-green-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Lime Juice", "detail": "1 lime costed but never used; source step 8 finishes the chili with fresh lime juice.", "confidence": "high" },
+  { "slug": "slow-cooker-pork-green-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Green Chile Sauce", "detail": "The 16-oz jar is never explicitly added (step 2 pours only chiles and salsa verde); step 4's 'stir it through the green chili sauce' reads as the pot's sauce, not the jar.", "confidence": "medium" },
+  { "slug": "slow-cooker-pork-green-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Salt & Black Pepper", "detail": "Both costed; steps never say salt, pepper, or season (source includes both in the step-1 spice set).", "confidence": "medium" },
+
+  { "slug": "slow-cooker-pork-posole-verde-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Garlic", "detail": "1 bulb costed but never used; source step 2 adds minced garlic to the slow cooker.", "confidence": "high" },
+  { "slug": "slow-cooker-pork-posole-verde-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Dried Oregano", "detail": "Mexican oregano costed but never used; source step 1 seasons the pork with it.", "confidence": "high" },
+  { "slug": "slow-cooker-pork-posole-verde-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Ground Cumin", "detail": "Costed but never used; source step 1 seasons the pork with cumin.", "confidence": "high" },
+  { "slug": "slow-cooker-pork-posole-verde-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Chili Powder", "detail": "Costed but never used; source step 1 seasons the pork with chili powder.", "confidence": "high" },
+  { "slug": "slow-cooker-pork-posole-verde-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Orange Juice", "detail": "1/2 cup costed but never used; source step 2 squeezes orange juice into the pot.", "confidence": "high" },
+  { "slug": "slow-cooker-pork-posole-verde-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Lime Juice", "detail": "2 limes costed but never used; source step 2 squeezes lime juice into the pot.", "confidence": "high" },
+  { "slug": "slow-cooker-pork-posole-verde-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Chicken Broth", "detail": "A carton is costed but steps add 'enough water to nearly cover' instead; source uses broth plus stock, never plain water.", "confidence": "high" },
+  { "slug": "slow-cooker-pork-posole-verde-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Salt & Black Pepper", "detail": "Both costed; steps never say salt, pepper, or season (source step 1 seasons the pork with both).", "confidence": "medium" },
+
+  { "slug": "slow-cooker-pork-tinga-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Vegetable Oil", "detail": "1 tbsp costed but our steps have no browning; source step 1 browns the pork in the oil.", "confidence": "high" },
+  { "slug": "slow-cooker-pork-tinga-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Worcestershire Sauce", "detail": "1 tbsp costed but never used; source step 2 stirs Worcestershire into the slow cooker.", "confidence": "high" },
+  { "slug": "slow-cooker-pork-tinga-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Dried Oregano", "detail": "1 tsp costed but never used; source step 2 adds oregano to the slow cooker.", "confidence": "high" },
+  { "slug": "slow-cooker-pork-tinga-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Salt & Black Pepper", "detail": "Both costed 'to taste'; steps never say salt, pepper, or season.", "confidence": "medium" },
+
+  { "slug": "slow-cooker-pulled-pork-bowl", "class": "UNUSED-PURCHASE", "ingredient": "Smoked Paprika", "detail": "2 tsp costed but the seasoning step names only garlic powder, onion powder, salt and pepper; paprika is not in the source either.", "confidence": "high" },
+
+  { "slug": "slow-cooker-ranch-pork-potato-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Salt & Black Pepper", "detail": "Both costed; steps only rub the pork with oil and never season (source step 1 seasons all sides with salt and pepper).", "confidence": "medium" },
+
+  { "slug": "slow-cooker-root-beer-pulled-pork-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Smoked Paprika", "detail": "2 tbsp costed but there is no rub step; source rubs the pork with a smoked-paprika-based dry rub before cooking.", "confidence": "high" },
+  { "slug": "slow-cooker-root-beer-pulled-pork-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Ground Cumin", "detail": "2 tsp costed but never used; cumin is part of the source's dry rub.", "confidence": "high" },
+  { "slug": "slow-cooker-root-beer-pulled-pork-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Cayenne Pepper", "detail": "1/4-1/2 tsp costed but never used; cayenne is part of the source's dry rub.", "confidence": "high" },
+  { "slug": "slow-cooker-root-beer-pulled-pork-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Salt & Black Pepper", "detail": "Both costed; steps never say salt, pepper, or season (both are in the source's dry rub).", "confidence": "medium" },
+
+  { "slug": "slow-cooker-salsa-verde-chicken-bowl", "class": "UNUSED-PURCHASE", "ingredient": "Yellow Onion", "detail": "About 3 onions (330 g) costed but no step mentions onion; the source has no onion at all.", "confidence": "high" },
+  { "slug": "slow-cooker-salsa-verde-chicken-bowl", "class": "UNUSED-PURCHASE", "ingredient": "Green Bell Pepper", "detail": "About 3 peppers (350 g) costed but no step mentions bell pepper; the source has no bell pepper.", "confidence": "high" },
+  { "slug": "slow-cooker-salsa-verde-chicken-bowl", "class": "UNUSED-PURCHASE", "ingredient": "Garlic Powder", "detail": "Costed but never used in any step and absent from the source recipe.", "confidence": "high" },
+  { "slug": "slow-cooker-salsa-verde-chicken-bowl", "class": "UNUSED-PURCHASE", "ingredient": "Black Pepper", "detail": "Costed 'to taste'; steps use salt and cumin but never pepper.", "confidence": "medium" },
+
+  { "slug": "slow-cooker-salsa-verde-pork-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Brown Sugar", "detail": "1/3 cup (150 g) costed but never used; source step 4 blends the brown sugar into the salsa verde sauce.", "confidence": "high" },
+  { "slug": "slow-cooker-salsa-verde-pork-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Salt", "detail": "1/4 tsp kosher salt costed; steps never say salt or season (source blends it into the sauce).", "confidence": "medium" },
+
+  { "slug": "slow-cooker-sweet-and-sour-pork-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Garlic", "detail": "2 crushed cloves costed but the step-2 sauce is only honey/soy/pineapple; source whisks garlic into the sauce.", "confidence": "high" },
+  { "slug": "slow-cooker-sweet-and-sour-pork-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Brown Sugar", "detail": "Costed but never used; source rubs the pork with a brown sugar and ginger mix before cooking.", "confidence": "high" },
+  { "slug": "slow-cooker-sweet-and-sour-pork-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Ground Ginger", "detail": "1 tsp costed but never used; it is the other half of the source's pork rub.", "confidence": "high" },
+  { "slug": "slow-cooker-sweet-and-sour-pork-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Sweet Chili Sauce", "detail": "2 tbsp costed but never used; source whisks sweet chili sauce into the sauce.", "confidence": "high" },
+  { "slug": "slow-cooker-sweet-and-sour-pork-bowls", "class": "UNUSED-PURCHASE", "ingredient": "White Wine Vinegar", "detail": "1 tbsp costed but never used; the vinegar is the 'sour' of the source's sweet and sour sauce.", "confidence": "high" },
+  { "slug": "slow-cooker-sweet-and-sour-pork-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Red Pepper Flakes", "detail": "1 tsp costed but never used; source whisks red pepper flakes into the sauce.", "confidence": "high" },
+
+  { "slug": "slow-cooker-teriyaki-pork-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Pineapple Juice", "detail": "6 oz costed but the step-2 pour is only teriyaki/broth/honey/garlic; source whisks pineapple juice into the slow cooker sauce.", "confidence": "high" },
+  { "slug": "slow-cooker-teriyaki-pork-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Red Pepper Flakes", "detail": "1/2 tsp costed but never used; source seasons the pork with chili flakes before searing.", "confidence": "high" },
+  { "slug": "slow-cooker-teriyaki-pork-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Black Pepper", "detail": "1/4 tsp costed; steps never mention pepper or seasoning (source seasons the pork with it).", "confidence": "medium" },
+
+  { "slug": "slow-cooker-thai-peanut-chicken-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Rice Vinegar", "detail": "2 tbsp costed but the step-1 sauce omits it; source whisks 2 tbsp rice vinegar into the peanut sauce.", "confidence": "high" },
+
+  { "slug": "slow-cooker-turkey-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Vegetable Oil", "detail": "Costed 'for frying' but our steps add the turkey raw with no browning; source browns the turkey and sautes aromatics in oil.", "confidence": "high" },
+  { "slug": "slow-cooker-turkey-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Garlic", "detail": "3 cloves costed but never used; source sautes garlic with the onion in step 2.", "confidence": "high" },
+  { "slug": "slow-cooker-turkey-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Celery", "detail": "3 large stalks (200 g) costed but never used; source cooks celery with the bell peppers in step 3.", "confidence": "high" },
+  { "slug": "slow-cooker-turkey-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Chicken Broth", "detail": "1 cup costed but never added; source adds 1 cup broth with the beans and tomatoes.", "confidence": "high" },
+  { "slug": "slow-cooker-turkey-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Taco Seasoning", "detail": "1 tbsp costed but never used; source adds taco seasoning with the chili powder in step 4.", "confidence": "high" },
+  { "slug": "slow-cooker-turkey-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Salt & Black Pepper", "detail": "Both costed 'to taste'; steps never say salt, pepper, or season.", "confidence": "medium" },
+
+  { "slug": "slow-cooker-turkey-pasta-e-fagioli", "class": "UNUSED-PURCHASE", "ingredient": "Parmesan Cheese", "detail": "7.25 oz costed but no step ever uses it; source serves the soup topped with grated Parmesan.", "confidence": "high" },
+
+  { "slug": "slow-cooker-tuscan-chicken-pasta", "class": "UNUSED-PURCHASE", "ingredient": "Shallots", "detail": "1/2 cup chopped (180 g) costed but never used; source sautes the shallots as the aromatic base in step 2.", "confidence": "high" },
+  { "slug": "slow-cooker-tuscan-chicken-pasta", "class": "UNUSED-PURCHASE", "ingredient": "Garlic", "detail": "2 cloves costed but never used; source sautes garlic with the shallots.", "confidence": "high" },
+  { "slug": "slow-cooker-tuscan-chicken-pasta", "class": "UNUSED-PURCHASE", "ingredient": "Italian Seasoning", "detail": "1 tsp costed but never used; source adds Italian seasoning to the slow cooker in step 4.", "confidence": "high" },
+  { "slug": "slow-cooker-tuscan-chicken-pasta", "class": "UNUSED-PURCHASE", "ingredient": "Cornstarch", "detail": "1 tbsp costed but never used; source whisks cornstarch into the cream to thicken the sauce in step 6.", "confidence": "high" },
+  { "slug": "slow-cooker-tuscan-chicken-pasta", "class": "UNUSED-PURCHASE", "ingredient": "Spinach", "detail": "3 cups fresh spinach costed but never used; source wilts the spinach into the sauce at the end, and it is a defining element of the Tuscan dish.", "confidence": "high" },
+  { "slug": "slow-cooker-tuscan-chicken-pasta", "class": "UNUSED-PURCHASE", "ingredient": "Salt & Black Pepper", "detail": "Both costed; steps never say salt, pepper, or season.", "confidence": "medium" },
+
+  { "slug": "slow-cooker-white-chicken-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Jalapeno", "detail": "1 jalapeno costed but never used; source layers diced jalapeno in the base.", "confidence": "high" },
+  { "slug": "slow-cooker-white-chicken-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Garlic", "detail": "1 bulb costed but never used; source layers 6 minced cloves in the base.", "confidence": "high" },
+  { "slug": "slow-cooker-white-chicken-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Ground Cumin", "detail": "Costed but never used; source adds 2.5 tsp cumin with the base spices.", "confidence": "high" },
+  { "slug": "slow-cooker-white-chicken-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Dried Oregano", "detail": "Costed but never used; source adds 1 tsp oregano with the base spices.", "confidence": "high" },
+  { "slug": "slow-cooker-white-chicken-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Chili Powder", "detail": "Costed but never used; source adds 1 tbsp chili powder with the base spices.", "confidence": "high" },
+  { "slug": "slow-cooker-white-chicken-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Chicken Broth", "detail": "1 carton costed but never added; source pours the broth over everything in step 3 (our steps cook in coconut milk alone).", "confidence": "high" },
+  { "slug": "slow-cooker-white-chicken-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Lime Juice", "detail": "2 limes costed but never used; source finishes the chili with lime juice in step 6.", "confidence": "high" },
+  { "slug": "slow-cooker-white-chicken-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Fresh Cilantro", "detail": "A full bunch is costed but never used; source stirs 1/2 cup chopped cilantro into the chili at the finish.", "confidence": "high" },
+  { "slug": "slow-cooker-white-chicken-chili-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Salt & Black Pepper", "detail": "Both costed; steps never say salt, pepper, or season (source seasons to taste in step 6).", "confidence": "medium" },
+
+  { "slug": "spanish-turkey-albondigas-over-rice", "class": "UNUSED-PURCHASE", "ingredient": "Paprika", "detail": "1.5 tbsp plain paprika is costed as its own line but steps only ever say 'smoked paprika'; the source sauce uses 1 tsp plain paprika.", "confidence": "medium" },
+
+  { "slug": "spicy-vodka-rigatoni-italian-sausage", "class": "MISSING-KEY-INGREDIENT", "ingredient": "Vodka", "detail": "Our title names vodka and the source deglazes with 1/2 cup vodka to build the sauce, but our card neither buys nor mentions any vodka or substitute deglazing liquid.", "confidence": "medium" },
+  { "slug": "spicy-vodka-rigatoni-italian-sausage", "class": "UNUSED-PURCHASE", "ingredient": "Black Pepper", "detail": "1.5 tbsp costed; steps salt the pasta water but never use black pepper or say season.", "confidence": "medium" },
+
+  { "slug": "sudado-de-cerdo-colombian-pork-stew", "class": "STEP-CONTRADICTION", "ingredient": "Rice", "detail": "The final step says 'Cook the rice per the package to serve underneath' but rice is not in the costed ingredient list (source serves over white rice).", "confidence": "high" },
+
+  { "slug": "swedish-meatball-potato-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Eggs", "detail": "1 large egg costed but the meatball mix step uses only beef/crumbs/milk/onion; the egg is the binder in the source's meatball mix.", "confidence": "high" },
+  { "slug": "swedish-meatball-potato-bowls", "class": "UNUSED-PURCHASE", "ingredient": "All-Purpose Flour", "detail": "1/4 cup costed but never used; source makes a butter-flour roux for the gravy (our gravy is broth plus sour cream only).", "confidence": "high" },
+  { "slug": "swedish-meatball-potato-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Butter", "detail": "1 tbsp costed but never used; it is half the fat for the source's roux.", "confidence": "high" },
+  { "slug": "swedish-meatball-potato-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Olive Oil", "detail": "Costed with the note '(sauce)' but never used; it is the other half of the source's roux fat.", "confidence": "high" },
+  { "slug": "swedish-meatball-potato-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Vegetable Oil", "detail": "Costed with the note '(meatballs)' but the browning step never names any oil.", "confidence": "medium" },
+  { "slug": "swedish-meatball-potato-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Brown Sugar", "detail": "Costed as '1 tsp (meatballs) + 1 tsp (sauce)' but neither use appears in any step; source uses it in both places.", "confidence": "high" },
+  { "slug": "swedish-meatball-potato-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Ground Nutmeg", "detail": "1/4 tsp costed but never used; nutmeg is one of the two defining Swedish meatball spices in the source mix.", "confidence": "high" },
+  { "slug": "swedish-meatball-potato-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Ground Allspice", "detail": "1/4 tsp costed but never used; allspice is the other defining Swedish meatball spice in the source mix.", "confidence": "high" },
+  { "slug": "swedish-meatball-potato-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Salt & Black Pepper", "detail": "Both costed; steps never say salt, pepper, or season (both are in the source meatball mix).", "confidence": "medium" },
+
+  { "slug": "szegedin-goulash-pork-sauerkraut", "class": "UNUSED-PURCHASE", "ingredient": "Salt & Black Pepper", "detail": "1.75 tbsp salt and pepper costed; steps never say salt, pepper, or season (source adds both with the caraway in step 3).", "confidence": "medium" },
+
+  { "slug": "taiwanese-braised-beef-noodle-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Black Pepper", "detail": "1/2 tbsp costed; steps adjust only 'the salt' and never mention pepper.", "confidence": "medium" },
+
+  { "slug": "taiwanese-lu-rou-fan-pork-rice-bowls", "class": "UNUSED-PURCHASE", "ingredient": "Salt", "detail": "1 tbsp costed; steps never say salt or season (black pepper is used, salt is not).", "confidence": "medium" },
+
+  { "slug": "taiwanese-three-cup-chicken", "class": "UNUSED-PURCHASE", "ingredient": "Salt & Black Pepper", "detail": "Both costed; steps never say salt, pepper, or season.", "confidence": "medium" }
+]

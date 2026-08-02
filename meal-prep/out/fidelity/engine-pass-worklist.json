@@ -1,0 +1,194 @@
+﻿[
+    {
+        "slug":  "beef-bourguignon-bowls",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Red wine (or acid substitute)",
+        "detail":  "The source braises in 750ml Pinot Noir, the ingredient the dish is named for; our card replaces it with beef broth only, with no acid (vinegar/grape juice) substituted - likely the deliberate site-wide no-alcohol adaptation, but nothing replaces the wine\u0027s role.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "brazilian-galinhada",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Saffron (or turmeric substitute)",
+        "detail":  "Our title promises \u0027Chicken and Saffron Rice\u0027 and the source steeps 5 saffron threads into the rice liquid, but our list and steps have no saffron and no turmeric substitute (our own arroz con pollo card shows turmeric is the available budget stand-in).",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "cape-malay-chicken-curry",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "cardamom",
+        "detail":  "Source (beyondkimchee.com) grinds 15 cardamom pods into the signature Cape Malay spice blend; cardamom appears nowhere in our list or steps.",
+        "confidence":  "high",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "cape-malay-chicken-curry",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "fennel",
+        "detail":  "Source blend includes 2 tsp ground fennel; absent from our card, whose list instead carries 2.5 tbsp Italian Seasoning that appears nowhere in the source recipe.",
+        "confidence":  "medium",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "turkey-meatloaf-with-mashed-potatoes",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Potatoes (mashed)",
+        "detail":  "Our title promises \u0027with Mashed Potatoes\u0027 but no potatoes are bought or cooked anywhere - the steps serve the meatloaf over rice, and the thecozycook source only suggests mashed potatoes as a side.",
+        "confidence":  "medium",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "kafta-bil-sanieh-beef-potato-bake",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Parsley",
+        "detail":  "The source (thematbakh) mixes 1 cup finely chopped parsley into the kafta meat as a structural component; our list and steps have no parsley or any herb in the meat mixture.",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "thai-green-curry-chicken",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Green curry paste",
+        "detail":  "The recipetineats source is built on Thai GREEN curry paste (Maesri), but our list buys Thai Kitchen RED curry paste (10 oz) for a dish titled \u0027Thai Green Curry Chicken\u0027, changing the title-defining flavor.",
+        "confidence":  "medium",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "kerala-beef-ularthiyathu-rice-bowls",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Coconut (slices / coconut oil)",
+        "detail":  "The source (paintthekitchenred) toasts 1/2 cup coconut slices in 1/4 cup coconut oil and cites \u0027fresh coconut\u0027 as a signature of the dish; our version has no coconut in any form.",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "kerala-beef-ularthiyathu-rice-bowls",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Curry leaves",
+        "detail":  "The source uses 22 curry leaves across the pressure-cook and saute stages and names them a defining aromatic of Kerala beef fry; they appear nowhere in our list or steps.",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "thai-pork-drunken-noodles",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Sweet soy sauce (kecap manis) / sugar",
+        "detail":  "The platingsandpairings sauce is 1/4 cup fish sauce + 1/4 cup SWEET soy + rice vinegar; ours subs plain soy and buys no sugar at all, dropping the sauce\u0027s defining sweetness even though the catalog stocks ABC Kecap Manis (used in turkey-nasi-goreng).",
+        "confidence":  "medium",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "malaysian-chicken-rendang-bowls",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Toasted grated coconut (kerisik)",
+        "detail":  "The source (rasamalaysia) finishes with 5 tbsp kerisik, the ingredient that defines rendang against an ordinary coconut curry; our version has no toasted coconut in any form and no substitute beyond the canned coconut milk.",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "spicy-vodka-rigatoni-italian-sausage",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Vodka",
+        "detail":  "Our title names vodka and the source deglazes with 1/2 cup vodka to build the sauce, but our card neither buys nor mentions any vodka or substitute deglazing liquid.",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "vietnamese-lemongrass-pork-noodle-bowls",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Lemongrass",
+        "detail":  "Our own title is \u0027Lemongrass Pork Noodle Bowls (Bun Thit Nuong)\u0027 and the RecipeTin Eats source uses lemongrass-marinated pork, but no lemongrass in any form appears in our list or steps; our marinade is only fish sauce and sugar.",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "vietnamese-lemongrass-pork-noodle-bowls",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Garlic",
+        "detail":  "The source\u0027s nuoc cham contains 5 cloves of finely chopped garlic (and the marinade more), but garlic appears nowhere in our list or steps.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "chicken-mole-rice-bowls",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "mole poblano base (dried chiles + chocolate)",
+        "detail":  "Source (chilipeppermadness.com) finishes the chicken in a mole poblano sauce built on dried chiles (ancho/guajillo/pasilla/mulato) and chocolate; our card sells \u0027Chicken Mole\u0027 but its sauce is only fresh poblano + peanut + chili powder, with no dried chiles or chocolate anywhere.",
+        "confidence":  "medium",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Cilantro and lime (cilantro lime rice)",
+        "detail":  "Our title promises \u0027Cilantro Lime Rice\u0027 and the source\u0027s rice uses lime zest/juice and 1 cup cilantro, but our list and steps contain no cilantro or lime; our rice step substitutes \u0027a squeeze of the pineapple juice\u0027.",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "filipino-beef-pares-rice-bowls",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Star Anise",
+        "detail":  "The source\u0027s pares braising sauce (Kawaling Pinoy) simmers 2 star anise with the soy and brown sugar, the aromatic that distinguishes pares from plain braised beef; it appears nowhere in our list or steps.",
+        "confidence":  "medium",
+        "chunk":  "03"
+    },
+    {
+        "slug":  "cheeseburger-rice-bowls",
+        "class":  "FETCH-FAILED",
+        "ingredient":  "n/a",
+        "detail":  "https://www.budgetbytes.com/cheeseburger-rice/ returns HTTP 404, and a site-restricted search finds no \u0027Cheeseburger Rice\u0027 recipe on budgetbytes.com (nearest match is \u0027One Pot Cheeseburger Pasta\u0027 at /skillet-cheeseburger-pasta/).",
+        "confidence":  "high",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "sichuan-dan-dan-noodles-with-pork",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Sichuan pepper powder",
+        "detail":  "Source (recipetineats) puts 1 tsp Sichuan pepper powder in the dan dan sauce and the dish is titled \u0027Sichuan\u0027; our card has no Sichuan peppercorn anywhere and Lao Gan Ma chili crisp does not supply the numbing element.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "albondigas-en-chipotle-rice-bowls",
+        "class":  "FETCH-FAILED",
+        "ingredient":  "n/a",
+        "detail":  "Source URL https://www.mexicoinmykitchen.com/chipotle-sauce-meatballs-albondigas/ returns HTTP 403 (bot-wall) on repeated fetches; internal list-vs-steps check was clean, source comparison not performed.",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "cambodian-beef-lok-lak-rice-bowls",
+        "class":  "FETCH-FAILED",
+        "ingredient":  "n/a",
+        "detail":  "Source URL https://www.marionskitchen.com/cambodian-pepper-beef-lok-lak/ returns HTTP 403 (bot-wall) on repeated fetches; internal list-vs-steps check was clean, source comparison not performed.",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "ghanaian-shoko-beef-spinach-stew",
+        "class":  "FETCH-FAILED",
+        "ingredient":  "",
+        "detail":  "https://www.196flavors.com/ghana-shoko/ returned HTTP 500 Internal Server Error on three separate attempts, so the source comparison could not be made; the internal steps-vs-list check found no unused purchases or step contradictions.",
+        "confidence":  "high",
+        "chunk":  "03"
+    },
+    {
+        "slug":  "irish-beef-and-guinness-stew",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Guinness stout (440 ml)",
+        "detail":  "The dish is named for it in our own title, and the source calls the 440 ml of Guinness the sauce\u0027s defining flavor, but our list never buys it and our step only says \u0027add a can of stout here if you are using it\u0027.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "chile-relleno-casserole-ground-beef",
+        "class":  "FETCH-FAILED",
+        "ingredient":  "n/a",
+        "detail":  "WebFetch is blocked from www.thespruceeats.com (\u0027Claude Code is unable to fetch from www.thespruceeats.com\u0027), so the source at /chiles-rellenos-casserole-3057402 could not be read; our card\u0027s internal list-vs-steps check found no defect.",
+        "confidence":  "high",
+        "chunk":  "02"
+    }
+]

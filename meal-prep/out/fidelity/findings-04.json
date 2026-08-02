@@ -1,0 +1,282 @@
+[
+  {
+    "slug": "greek-turkey-youvarlakia",
+    "class": "STEP-CONTRADICTION",
+    "ingredient": "Fresh herb (parsley)",
+    "detail": "Final step says 'Scatter the chopped fresh herb over the top' but the list contains no fresh herb (only dried dill); the source garnishes with fresh parsley, which we never buy.",
+    "confidence": "high"
+  },
+  {
+    "slug": "ground-beef-and-broccoli-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Salt (Morton) + Black Pepper (Great Value)",
+    "detail": "Both are costed 'to taste' but no step uses or seasons with them; the source seasons the beef with salt and pepper after browning.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "ground-beef-fried-rice-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Eggs (Great Value): 3 large eggs (500 g)",
+    "detail": "Eggs are in the costed list but no step ever scrambles or adds them, in a fried-rice recipe where egg is a core component.",
+    "confidence": "high"
+  },
+  {
+    "slug": "ground-beef-fried-rice-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Vegetable Oil (Great Value): 2 Tbsp",
+    "detail": "Vegetable oil is costed but the steps never mention any cooking oil at any point.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "ground-beef-fried-rice-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Salt (Morton) + Black Pepper (Great Value)",
+    "detail": "Both are costed 'to taste' but no step uses or seasons with them.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "ground-beef-gyro-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Dried Oregano (Great Value): 1 tsp",
+    "detail": "Bought for the gyro meat (source seasons beef with oregano) but our steps season the beef only with cumin, garlic powder, and onion powder.",
+    "confidence": "high"
+  },
+  {
+    "slug": "ground-beef-gyro-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Dried Thyme (Great Value): 1 tsp",
+    "detail": "Bought for the gyro meat (source uses ground thyme in the beef seasoning) but never referenced in any step.",
+    "confidence": "high"
+  },
+  {
+    "slug": "ground-beef-gyro-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Ground Nutmeg (Great Value): 1/4 tsp",
+    "detail": "Bought for the gyro meat (source uses 1/4 tsp nutmeg in the beef seasoning) but never referenced in any step.",
+    "confidence": "high"
+  },
+  {
+    "slug": "ground-beef-gyro-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Cucumber: 3/4 cup grated (tzatziki) (300 g)",
+    "detail": "The list buys cucumber explicitly labeled '(tzatziki)' but our tzatziki step only whisks 'yogurt with a little garlic'; the source tzatziki is built on grated cucumber.",
+    "confidence": "high"
+  },
+  {
+    "slug": "ground-beef-gyro-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Dried Dill (Great Value): 2 tbsp (tzatziki)",
+    "detail": "Bought and labeled '(tzatziki)' but the tzatziki step uses only yogurt and garlic; the source tzatziki uses 2 tbsp dill.",
+    "confidence": "high"
+  },
+  {
+    "slug": "ground-beef-gyro-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Lemon Juice (ReaLemon): 1/2 tbsp (tzatziki)",
+    "detail": "Bought and labeled '(tzatziki)' but never used in any step; the source tzatziki includes 1/2 tbsp lemon juice.",
+    "confidence": "high"
+  },
+  {
+    "slug": "ground-beef-gyro-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Feta Cheese (Great Value crumbled): 1/4 cup (tzatziki) (113 g)",
+    "detail": "Bought and labeled '(tzatziki)' but no step adds feta anywhere; the source stirs 1/4 cup crumbled feta into the tzatziki.",
+    "confidence": "high"
+  },
+  {
+    "slug": "ground-beef-gyro-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Salt (Morton) + Black Pepper (Great Value)",
+    "detail": "Costed (meat + tzatziki portions) but no step uses or seasons with either.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "ground-beef-stroganoff-pasta",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Garlic: 1 bulb (20 g)",
+    "detail": "Garlic is costed but never appears in the steps; the source adds minced garlic after browning the beef.",
+    "confidence": "high"
+  },
+  {
+    "slug": "ground-beef-stroganoff-pasta",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "All-Purpose Flour (Great Value): 3 tbsp (72 g)",
+    "detail": "Flour is costed but the steps never make the roux; the source cooks 3 tbsp flour in butter to thicken the sauce, so our sauce also loses its thickener.",
+    "confidence": "high"
+  },
+  {
+    "slug": "ground-beef-stroganoff-pasta",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Worcestershire Sauce (Lea & Perrins): 1 tsp",
+    "detail": "Costed but never used in any step; the source stirs Worcestershire into the cream sauce.",
+    "confidence": "high"
+  },
+  {
+    "slug": "ground-beef-stroganoff-pasta",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Salt (Morton) + Black Pepper (Great Value)",
+    "detail": "Both are costed 'to taste' but no step uses or seasons with them.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "ground-beef-teriyaki-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Rice Vinegar (Nakano): 1 tsp",
+    "detail": "Costed but our glaze step whisks only soy/hoisin/honey/broth/sesame oil/garlic/ginger/cornstarch; the source (Mongolian beef) sauce includes 1 tsp rice vinegar. Same defect family as the General Tso card.",
+    "confidence": "high"
+  },
+  {
+    "slug": "ground-beef-teriyaki-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Red Pepper Flakes (Great Value): 1/4 tsp",
+    "detail": "Costed but never used; the source sauce includes 1/4 tsp red pepper flakes.",
+    "confidence": "high"
+  },
+  {
+    "slug": "ground-beef-teriyaki-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Black Pepper (Great Value): 1/4 tsp",
+    "detail": "Costed as a measured sauce quantity but never used; the source sauce includes 1/4 tsp black pepper and no step says 'season'.",
+    "confidence": "high"
+  },
+  {
+    "slug": "ground-beef-teriyaki-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Olive Oil: 1 tbsp",
+    "detail": "Costed but the steps never mention any cooking oil.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "ground-beef-teriyaki-bowls",
+    "class": "STEP-CONTRADICTION",
+    "ingredient": "Yellow Onion",
+    "detail": "Step 1 says 'Brown ... ground beef with the chopped onion' but no onion of any kind is in the costed list (the source has only green-onion garnish).",
+    "confidence": "high"
+  },
+  {
+    "slug": "ground-turkey-enchilada-skillet-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Yellow Onion: 1/2 cup diced (275 g)",
+    "detail": "Costed but never used in the steps; the source sautes the diced onion as the first step.",
+    "confidence": "high"
+  },
+  {
+    "slug": "ground-turkey-enchilada-skillet-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Garlic: 1 clove, crushed",
+    "detail": "Costed but never used; the source sautes crushed garlic with the onion.",
+    "confidence": "high"
+  },
+  {
+    "slug": "ground-turkey-enchilada-skillet-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Ground Cumin: 1/4 tsp",
+    "detail": "Costed but never used; the source seasons the turkey with cumin while it browns.",
+    "confidence": "high"
+  },
+  {
+    "slug": "ground-turkey-enchilada-skillet-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Salt (Morton) + Black Pepper (Great Value)",
+    "detail": "Both costed but no step uses or seasons with them (source seasons the turkey with salt and pepper).",
+    "confidence": "medium"
+  },
+  {
+    "slug": "ground-turkey-lasagna-casserole",
+    "class": "STEP-CONTRADICTION",
+    "ingredient": "Rice",
+    "detail": "Final step says 'cook the rice, and move the rice into your weighed pot' but rice is not in the costed list and does not belong in this pasta casserole (the source has none); looks like a copy-paste stray.",
+    "confidence": "high"
+  },
+  {
+    "slug": "ground-turkey-stir-fry-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Yellow Onion: 1 medium sweet onion, diced (385 g)",
+    "detail": "Costed but never used in the steps; the source sautes the diced onion as the aromatic base of the stir fry.",
+    "confidence": "high"
+  },
+  {
+    "slug": "ground-turkey-stir-fry-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Celery: 2 sticks, finely diced (280 g)",
+    "detail": "Costed but never used; the source sautes celery with the onion for 5 minutes before the turkey goes in.",
+    "confidence": "high"
+  },
+  {
+    "slug": "ground-turkey-stir-fry-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Green Onions: 3, green parts sliced (90 g)",
+    "detail": "Costed but never used in any step; the source finishes the bowls with sliced green onions.",
+    "confidence": "high"
+  },
+  {
+    "slug": "ground-turkey-stir-fry-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Sesame Oil (generic): 2 tsp toasted",
+    "detail": "Costed but never used; the source's teriyaki sauce includes 2 tsp toasted sesame oil.",
+    "confidence": "high"
+  },
+  {
+    "slug": "ground-turkey-stir-fry-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Rice Vinegar (Nakano): 1 tbsp vinegar",
+    "detail": "Costed but never used; the source's teriyaki sauce includes 1 tbsp vinegar. Same defect family as the General Tso card.",
+    "confidence": "high"
+  },
+  {
+    "slug": "ham-and-white-bean-soup",
+    "class": "STEP-CONTRADICTION",
+    "ingredient": "Bay Leaves",
+    "detail": "Steps say 'stir in ... bay leaves' and later 'Pull the bay leaves' but bay leaves are not in the costed list (the source recipe also has none).",
+    "confidence": "high"
+  },
+  {
+    "slug": "ham-fried-rice",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Salt (Morton): 1 tbsp (20 g)",
+    "detail": "Salt is costed but no step uses it or says 'season' (the source recipe uses no added salt either).",
+    "confidence": "medium"
+  },
+  {
+    "slug": "harissa-chicken-rice-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Black Pepper (Great Value): 0.5 tbsp",
+    "detail": "Costed but never used; both the chicken rub and tahini sauce steps season with salt only, matching the source which uses no black pepper.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "honey-garlic-steak-bites-potatoes",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Potato (generic): 10 (2100 g)",
+    "detail": "The card is titled '...and Potatoes' and buys 2.1 kg of potatoes, but no step ever cooks or serves them; the source recipe contains no potatoes at all (they were our addition that never got a step).",
+    "confidence": "high"
+  },
+  {
+    "slug": "hainanese-chicken-rice",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Sesame Oil (generic): 0.25 tbsp",
+    "detail": "Costed but never used; the source's chili sauce includes sesame oil, and our chili-sauce step only blends jalapeno 'with a little of each' of the other two sauces.",
+    "confidence": "high"
+  },
+  {
+    "slug": "hainanese-chicken-rice",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Rice Vinegar (Nakano): 0.5 tbsp",
+    "detail": "Costed but never used; the source's chili sauce includes 1/2 tsp rice vinegar which our sauce steps drop.",
+    "confidence": "high"
+  },
+  {
+    "slug": "hainanese-chicken-rice",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Black Pepper (Great Value): 0.5 tbsp",
+    "detail": "Costed but no step uses it or says 'season'.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "irish-beef-and-guinness-stew",
+    "class": "MISSING-KEY-INGREDIENT",
+    "ingredient": "Guinness stout (440 ml)",
+    "detail": "The dish is named for it in our own title, and the source calls the 440 ml of Guinness the sauce's defining flavor, but our list never buys it and our step only says 'add a can of stout here if you are using it'.",
+    "confidence": "high"
+  }
+]

@@ -1,0 +1,4586 @@
+﻿[
+    {
+        "slug":  "american-goulash-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Celery",
+        "detail":  "We buy \u00271 stick, finely chopped (120 g)\u0027 but no step uses celery; the source (natashaskitchen) sautes it with the onion and carrot in step 2.",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "american-goulash-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Worcestershire Sauce",
+        "detail":  "We buy 1 tbsp Worcestershire but no step uses it; the source stirs it in with the tomatoes and broth in step 3.",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "american-goulash-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Sugar",
+        "detail":  "We buy 1/4 tsp sugar but no step uses it; the source seasons the vegetables with sugar in step 2.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "american-goulash-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Olive Oil",
+        "detail":  "We buy 1 tbsp olive oil but the steps brown the beef with no oil mentioned; the source browns the beef in oil in step 1.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "american-goulash-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "We buy 2 tsp salt but the steps never say salt or season; the source seasons in step 2.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "american-goulash-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "We buy 1/2 tsp pepper but the steps never say pepper or season.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Cilantro and lime (cilantro lime rice)",
+        "detail":  "Our title promises \u0027Cilantro Lime Rice\u0027 and the source\u0027s rice uses lime zest/juice and 1 cup cilantro, but our list and steps contain no cilantro or lime; our rice step substitutes \u0027a squeeze of the pineapple juice\u0027.",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "baked-turkey-kibbeh-casserole",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Fresh Mint",
+        "detail":  "We buy 18.75 tbsp fresh mint but no step uses mint; the filling step instead says to stir in \u0027chopped fresh basil\u0027 (the source kibbeh uses mint/basil in the shell mixture).",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "baked-turkey-kibbeh-casserole",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Fresh basil",
+        "detail":  "Step 5 says \u0027stir in the chopped fresh basil off the heat\u0027 but basil is not in our list; the purchased herb is fresh mint, so the step names the wrong herb.",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "baked-ziti-with-ground-beef",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic Powder",
+        "detail":  "We buy 0.5 tbsp garlic powder but no step uses it; the source (realfoodwholelife) includes it in the beef seasonings in step 3.",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beef-birria-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Rice",
+        "detail":  "We buy 4.25 cups dry rice for \u0027Rice Bowls\u0027 but no step ever cooks or combines the rice; the steps end at shredding the beef into the consomme.",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beef-bourguignon-bowls",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Red wine (or acid substitute)",
+        "detail":  "The source braises in 750ml Pinot Noir, the ingredient the dish is named for; our card replaces it with beef broth only, with no acid (vinegar/grape juice) substituted - likely the deliberate site-wide no-alcohol adaptation, but nothing replaces the wine\u0027s role.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beef-chili-mac",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Olive Oil",
+        "detail":  "We buy 2 tsp olive oil but no step uses it; the source heats the oil before browning the beef.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beef-chili-mac",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "We buy salt \u0027to taste (15 g)\u0027 but the steps never say salt or season; the source seasons in step 2.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beef-chili-mac",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "We buy pepper \u0027to taste (4 g)\u0027 but the steps never say pepper or season.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beef-enchilada-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Corn Tortillas",
+        "detail":  "We buy \u00275, cut into triangles (440 g)\u0027 but no step uses tortillas; the source coats the tortilla triangles in the sauce in step 3 - this is the dish\u0027s enchilada component.",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beef-enchilada-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Yellow Onion",
+        "detail":  "We buy \u00271/2 onion, diced (190 g)\u0027 but no step uses onion; the source browns it with the beef in step 2.",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beef-enchilada-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic Powder",
+        "detail":  "We buy 1/2 tsp garlic powder but no step uses it; the source adds it with the chili powder and cumin in step 2.",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beef-enchilada-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Olive Oil",
+        "detail":  "We buy 1 tbsp olive oil but no step uses it; the source heats it before browning the beef.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beef-enchilada-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "We buy salt \u0027to taste (18 g)\u0027 but the steps never say salt or season; the source seasons the beef in step 2.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beef-enchilada-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "We buy pepper \u0027to taste (4 g)\u0027 but the steps never say pepper or season.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beef-honey-black-pepper-sauce-bowls",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Cornstarch",
+        "detail":  "Step 2 says \u0027toss it with cornstarch and a splash of the soy sauce\u0027 but cornstarch is not in our list (the source uses no cornstarch at all).",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beef-honey-black-pepper-sauce-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "We buy 1 tbsp salt but the steps never say salt or season.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beef-mushroom-stir-fry-rice-plate",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "We buy 0.5 tbsp salt but the steps never say salt or season; the source puts 1/2 tsp salt in the sauce mix.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beef-picadillo-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Capers",
+        "detail":  "We buy \u00272 tablespoons, drained (36 g)\u0027 but no step uses capers; the source adds them to the tomato sauce mixture in step 3 as part of the dish\u0027s signature briny flavor.",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beef-picadillo-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Oregano",
+        "detail":  "We buy a jar of oregano but no step uses it; the source adds it with the cumin in step 3.",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beef-picadillo-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Bay Leaves",
+        "detail":  "We buy 1 bay leaf but no step adds or removes it; the source simmers it in step 3 and removes it in step 5.",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beef-picadillo-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "We buy salt but the steps never say salt or season; the source salts to taste at the end.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beef-picadillo-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "We buy 1/4 tsp pepper but the steps never say pepper or season.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beef-ragu-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Vegetable Oil",
+        "detail":  "We buy 1 tbsp vegetable oil but no step uses it; the source heats oil before browning the beef.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beef-ragu-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Sugar",
+        "detail":  "We buy 1 tsp sugar but no step uses it; the source stirs sugar in as an explicit finishing step.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beef-ragu-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "We buy 1/2 tsp salt but the steps never say salt or season; the source salts the beef while browning.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beef-ragu-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "We buy 1/4 tsp pepper but the steps never say pepper or season.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beef-rendang-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Rice",
+        "detail":  "We buy 4.25 cups dry rice for \u0027Rice Bowls\u0027 but no step ever cooks or combines the rice; the steps end at pulling the rendang off the heat.",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beijing-zha-jiang-mian-pork-noodles",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Bay Leaves",
+        "detail":  "We buy 0.25 oz (9 g) of bay leaves but no step uses them; the source infuses the oil with bay leaves, cinnamon, star anise, and Sichuan peppercorn before cooking the pork.",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beijing-zha-jiang-mian-pork-noodles",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Cinnamon",
+        "detail":  "We buy 0.75 tbsp ground cinnamon but no step uses it; the source\u0027s cinnamon goes into the aromatic oil infusion our steps dropped.",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beijing-zha-jiang-mian-pork-noodles",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Sugar",
+        "detail":  "We buy 0.75 tbsp sugar but no step uses it; the source adds sugar with the bean sauces.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beijing-zha-jiang-mian-pork-noodles",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "We buy 1.5 tbsp black pepper but the steps never say pepper or season.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "beijing-zha-jiang-mian-pork-noodles",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "We buy 0.5 tbsp salt but the steps never say salt or season.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "bigos-polish-hunters-stew",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Mushrooms",
+        "detail":  "Step 2 says \u0027slice the mushrooms\u0027 and step 4 says \u0027add the mushrooms and let them give up their water,\u0027 but no mushrooms are in our list (the source uses dried porcini).",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "brazilian-galinhada",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Saffron (or turmeric substitute)",
+        "detail":  "Our title promises \u0027Chicken and Saffron Rice\u0027 and the source steeps 5 saffron threads into the rice liquid, but our list and steps have no saffron and no turmeric substitute (our own arroz con pollo card shows turmeric is the available budget stand-in).",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "brazilian-galinhada",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Salt and black pepper",
+        "detail":  "Step 2 says \u0027season them with salt, black pepper and the lemon juice\u0027 but neither salt nor black pepper is in our costed list, unlike every sibling card that buys them.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "buffalo-turkey-potato-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic Powder",
+        "detail":  "We buy 1 Tbsp garlic powder but no step uses it; the source stirs it in with the celery salt and pepper in step 3.",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "buffalo-turkey-potato-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Celery Salt",
+        "detail":  "We buy 1 tsp celery salt but no step uses it; the source adds it in step 3 before the buffalo sauce.",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "buffalo-turkey-potato-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "We buy 1 tsp ground pepper but the steps never say pepper or season; the source adds it in step 3.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "cajun-chicken-etouffee-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Diced Tomatoes",
+        "detail":  "We buy 3.4 cans (1389 g) of diced tomatoes but no step uses them; the source adds the canned tomatoes with the Worcestershire and Creole seasoning in step 4 as the sauce\u0027s acidic component.",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "cajun-chicken-etouffee-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "We buy 1 tbsp salt but the steps never say salt or season.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "cajun-chicken-etouffee-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "We buy 0.5 tbsp pepper but the steps never say pepper or season.",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "cantonese-beef-tomato-egg-rice",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Rice",
+        "detail":  "We buy 4.25 cups dry rice for a dish served \u0027over Rice\u0027 but no step ever cooks or combines the rice; the steps end at folding the eggs back in.",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "cantonese-turkey-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "We buy 1 tbsp salt but the steps never say salt or season (the source relies on soy and oyster sauce for salt and lists none).",
+        "confidence":  "medium",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "albondigas-en-chipotle-rice-bowls",
+        "class":  "FETCH-FAILED",
+        "ingredient":  "n/a",
+        "detail":  "Source URL https://www.mexicoinmykitchen.com/chipotle-sauce-meatballs-albondigas/ returns HTTP 403 (bot-wall) on repeated fetches; internal list-vs-steps check was clean, source comparison not performed.",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "cambodian-beef-lok-lak-rice-bowls",
+        "class":  "FETCH-FAILED",
+        "ingredient":  "n/a",
+        "detail":  "Source URL https://www.marionskitchen.com/cambodian-pepper-beef-lok-lak/ returns HTTP 403 (bot-wall) on repeated fetches; internal list-vs-steps check was clean, source comparison not performed.",
+        "confidence":  "high",
+        "chunk":  "01"
+    },
+    {
+        "slug":  "cape-malay-chicken-curry",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "cardamom",
+        "detail":  "Source (beyondkimchee.com) grinds 15 cardamom pods into the signature Cape Malay spice blend; cardamom appears nowhere in our list or steps.",
+        "confidence":  "high",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "cape-malay-chicken-curry",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "fennel",
+        "detail":  "Source blend includes 2 tsp ground fennel; absent from our card, whose list instead carries 2.5 tbsp Italian Seasoning that appears nowhere in the source recipe.",
+        "confidence":  "medium",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "carne-guisada-beef-potato-stew",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Potato",
+        "detail":  "We buy 21.6 potatoes (4609 g) and the dish is titled \u0027Beef and Potato Stew\u0027, but no step ever adds potatoes; the source (isabeleats.com) contains no potatoes, so the steps track the source while the list added an ingredient the cook never uses.",
+        "confidence":  "high",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "carne-guisada-beef-potato-stew",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Rice",
+        "detail":  "Final step says \u0027then cook the rice separately\u0027 but rice is not in our costed ingredient list (source serves with tortillas/Mexican rice as a side suggestion only).",
+        "confidence":  "high",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "cheeseburger-rice-bowls",
+        "class":  "FETCH-FAILED",
+        "ingredient":  "n/a",
+        "detail":  "https://www.budgetbytes.com/cheeseburger-rice/ returns HTTP 404, and a site-restricted search finds no \u0027Cheeseburger Rice\u0027 recipe on budgetbytes.com (nearest match is \u0027One Pot Cheeseburger Pasta\u0027 at /skillet-cheeseburger-pasta/).",
+        "confidence":  "high",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "cheeseburger-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Worcestershire Sauce (Lea \u0026 Perrins)",
+        "detail":  "1 Tbsp (50 g) Worcestershire is in the costed list but the five steps (brown beef, stir in broth/tomatoes/ketchup/dijon/garlic, simmer, rice, cheese) never mention it.",
+        "confidence":  "high",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "cheeseburger-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Olive Oil",
+        "detail":  "1 Tbsp (45 g) olive oil is costed but no step uses any oil; the beef is browned with no fat mentioned.",
+        "confidence":  "medium",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "cheeseburger-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt + Black Pepper",
+        "detail":  "Salt (1 tsp) and black pepper (1/2 tsp) are costed but no step salts, peppers, or says \u0027season\u0027 anywhere.",
+        "confidence":  "medium",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "cheesy-taco-spaghetti",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "jalapenos",
+        "detail":  "Step 4 says \u0027Add the garlic and diced jalapenos\u0027 but no jalapenos are in the costed list; source (ohsweetbasil.com) uses no jalapenos either, so the step likely garbles the Ro-Tel green chilies that ARE bought.",
+        "confidence":  "high",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "cheesy-taco-spaghetti",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "0.5 tbsp black pepper is costed but no step uses pepper or says \u0027season\u0027 (salt is used in the pasta water only).",
+        "confidence":  "medium",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "cheesy-zucchini-beef-rice-skillet",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "4 cloves garlic are costed but no step ever adds garlic; the source (confessionsofafitfoodie.com) contains no garlic at all, so it was added to the list but never wired into the method.",
+        "confidence":  "high",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "cheesy-zucchini-beef-rice-skillet",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Beef Broth",
+        "detail":  "2 cups (720 g) beef broth are costed but never used; step 6 tells the cook to \u0027splash in a quarter cup of water\u0027 instead, and the source uses only water.",
+        "confidence":  "high",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "cheesy-zucchini-beef-rice-skillet",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "olive oil",
+        "detail":  "Step 3 says to heat \u0027a little olive oil\u0027 but the list buys vegetable/canola oil, not olive oil.",
+        "confidence":  "medium",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "cheesy-zucchini-beef-rice-skillet",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "Black pepper \u0027to taste (2 g)\u0027 is costed but no step uses pepper or says \u0027season\u0027 (only a \u0027pinch of salt\u0027 in step 4).",
+        "confidence":  "medium",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "chicken-and-dumplings",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Rice",
+        "detail":  "Final step says \u0027Cook the rice separately and put a scoop in the bottom of each container\u0027 but rice is not in the costed ingredient list.",
+        "confidence":  "high",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "chicken-biryani-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Milk",
+        "detail":  "The list carries \u0027Milk (Fairlife): 0 tbsp (1 g)\u0027 - a vestige of the source\u0027s optional saffron-soaked-in-milk step - and no step ever uses milk.",
+        "confidence":  "medium",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "chicken-biryani-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "0.5 tbsp black pepper is costed but no step uses pepper or says \u0027season\u0027 (the marinade and rice steps use salt only).",
+        "confidence":  "medium",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "chicken-jalfrezi",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "ground coriander",
+        "detail":  "Step 6 toasts \u0027the cumin, coriander, turmeric, paprika, garam masala, and chili powder\u0027 but coriander is not in our costed list, even though it is 1 tsp of the source\u0027s (seasonsandsuppers.ca) core six-spice blend.",
+        "confidence":  "high",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "chicken-jalfrezi",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "0.5 tbsp black pepper is costed but no step uses pepper or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "chicken-lo-mein-noodle-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt + Black Pepper",
+        "detail":  "Salt (1 tbsp) and black pepper (0.5 tbsp) are costed but no step salts the noodle water, seasons the chicken, or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "chicken-mole-rice-bowls",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "mole poblano base (dried chiles + chocolate)",
+        "detail":  "Source (chilipeppermadness.com) finishes the chicken in a mole poblano sauce built on dried chiles (ancho/guajillo/pasilla/mulato) and chocolate; our card sells \u0027Chicken Mole\u0027 but its sauce is only fresh poblano + peanut + chili powder, with no dried chiles or chocolate anywhere.",
+        "confidence":  "medium",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "chicken-sausage-gumbo",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Smoked Turkey Sausage (Butterball)",
+        "detail":  "1.25 lb of sausage is costed and the dish is titled \u0027Chicken and Sausage Gumbo\u0027, but no step ever browns or adds the sausage; the source (africanbites.com) browns it in step 2 and returns it near the end.",
+        "confidence":  "high",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "chicken-sausage-gumbo",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "italian seasoning",
+        "detail":  "Step 5 adds \u0027garlic, thyme, smoked paprika, italian seasoning, bay leaves, salt, and pepper\u0027 but italian seasoning is not in the costed list (and is not in the source either).",
+        "confidence":  "high",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "chile-relleno-casserole-ground-beef",
+        "class":  "FETCH-FAILED",
+        "ingredient":  "n/a",
+        "detail":  "WebFetch is blocked from www.thespruceeats.com (\u0027Claude Code is unable to fetch from www.thespruceeats.com\u0027), so the source at /chiles-rellenos-casserole-3057402 could not be read; our card\u0027s internal list-vs-steps check found no defect.",
+        "confidence":  "high",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "coq-au-vin",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "bay leaves",
+        "detail":  "Step 5 says to \u0027add the thyme and bay leaves\u0027 but bay leaves are not in our costed ingredient list.",
+        "confidence":  "high",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "coq-au-vin",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "flour",
+        "detail":  "Step 8 says to \u0027knead the rest of the butter with flour into a paste\u0027 (the source\u0027s beurre manie thickener) but flour is not in our costed ingredient list.",
+        "confidence":  "high",
+        "chunk":  "02"
+    },
+    {
+        "slug":  "country-pork-meatballs-onion-gravy",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Olive Oil",
+        "detail":  "We buy 5.25 tbsp (71 g) olive oil but our steps bake the meatballs on sheet pans and build the gravy entirely on butter; the source (RecipeTin) uses its 1.5 tbsp oil to pan-brown the meatballs, a step our adaptation removed without removing the purchase.",
+        "confidence":  "high",
+        "chunk":  "03"
+    },
+    {
+        "slug":  "creamy-ground-turkey-shell-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Tomato Sauce",
+        "detail":  "We buy 2.3 cans (992 g) of tomato sauce but our sauce step only whisks in beef broth then heavy cream; the source (Kroll\u0027s Korner step 4) pours in \u0027beef broth and tomato sauce\u0027 together, so our steps silently dropped a core sauce component the shopper paid for.",
+        "confidence":  "high",
+        "chunk":  "03"
+    },
+    {
+        "slug":  "creamy-turkey-rice-mushroom-soup",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Wild Rice",
+        "detail":  "Steps say \u0027Cook the wild rice separately... It takes longer than white rice, so start it first\u0027 and later \u0027Add the cooked wild rice\u0027, but the list buys plain Rice (Member\u0027s Mark) white rice; the wild-rice language survived the budget swap from the source\u0027s wild-rice soup.",
+        "confidence":  "high",
+        "chunk":  "03"
+    },
+    {
+        "slug":  "curry-ground-turkey-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Curry Powder",
+        "detail":  "The dish is named Curry Ground Turkey Bowls and we buy curry powder, but the steps only add \u0027the chili powder and cumin\u0027; the source (Family Food on the Table step 3) blooms curry powder as the lead spice.",
+        "confidence":  "high",
+        "chunk":  "03"
+    },
+    {
+        "slug":  "curry-ground-turkey-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Frozen Peas",
+        "detail":  "We buy 1 cup frozen peas (490 g) but no step ever adds them; the source is literally titled \u0027Curry Ground Turkey with Rice and Peas\u0027 and stirs the peas in with the tomatoes.",
+        "confidence":  "high",
+        "chunk":  "03"
+    },
+    {
+        "slug":  "curry-ground-turkey-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "We buy 2 cloves minced garlic but the steps go straight from onion to spices; the source sautes garlic with the onion in step 1.",
+        "confidence":  "high",
+        "chunk":  "03"
+    },
+    {
+        "slug":  "curry-ground-turkey-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Olive Oil",
+        "detail":  "We buy 1 tsp EVOO but step 1 just says \u0027Brown the ground turkey in a large skillet\u0027 with no oil mention anywhere.",
+        "confidence":  "medium",
+        "chunk":  "03"
+    },
+    {
+        "slug":  "curry-ground-turkey-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "Salt is in the costed list but no step says salt or \u0027season\u0027; this card\u0027s steps are an outlier (5 steps, no weigh-the-pot opener) and look truncated versus the rest of the catalog.",
+        "confidence":  "medium",
+        "chunk":  "03"
+    },
+    {
+        "slug":  "dak-galbi-chicken-cabbage-skillet",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "We buy 1 tbsp (20 g) salt but the marinade step enumerates every other seasoning (gochujang, soy, sugar, garlic, ginger, curry powder, red pepper flakes, black pepper) and no step says salt or \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "03"
+    },
+    {
+        "slug":  "ethiopian-doro-wat-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "We buy 0.5 tbsp black pepper but the only seasoning in our steps is \u0027a big pinch of salt\u0027 in step 2 and no step says \u0027season\u0027; the source (Chili Pepper Madness) seasons with salt and pepper in its flavor-base and chicken steps.",
+        "confidence":  "medium",
+        "chunk":  "03"
+    },
+    {
+        "slug":  "filipino-beef-caldereta",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Broth",
+        "detail":  "Step 4 says to add \u0027the tomato sauce, tomato paste, soy sauce, and the broths\u0027 and step 6 blends livers \u0027with a ladle of the hot broth\u0027, but no broth of any kind is in the costed list (the source uses water plus beef powder).",
+        "confidence":  "high",
+        "chunk":  "03"
+    },
+    {
+        "slug":  "filipino-beef-pares-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "We buy a substantial 3.5 tbsp (63 g) of salt but no step uses it and none says \u0027season\u0027; the source salts its broth with 1 tbsp and seasons the asado and rice to taste.",
+        "confidence":  "medium",
+        "chunk":  "03"
+    },
+    {
+        "slug":  "filipino-beef-pares-rice-bowls",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Star Anise",
+        "detail":  "The source\u0027s pares braising sauce (Kawaling Pinoy) simmers 2 star anise with the soy and brown sugar, the aromatic that distinguishes pares from plain braised beef; it appears nowhere in our list or steps.",
+        "confidence":  "medium",
+        "chunk":  "03"
+    },
+    {
+        "slug":  "filipino-pork-menudo-rice-bowls",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Rice",
+        "detail":  "The dish is \u0027Pork Menudo Rice Bowls\u0027 and the final step says \u0027cook rice separately to serve underneath\u0027, but rice is not in the costed list, unlike every sibling rice-bowl card in this chunk.",
+        "confidence":  "high",
+        "chunk":  "03"
+    },
+    {
+        "slug":  "five-spice-turkey-noodle-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Green Onions",
+        "detail":  "We buy 14.75 tbsp (88 g) of green onions but no step slices or adds them; the source (Jennie-O step 6) garnishes the finished bowls with the green onions.",
+        "confidence":  "high",
+        "chunk":  "03"
+    },
+    {
+        "slug":  "frito-pie-walking-taco-casserole",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "We buy 0.5 tbsp black pepper but the steps season only with taco seasoning and salt and no step says \u0027season\u0027; the source list has no black pepper either, so ours is a purchase with no use anywhere.",
+        "confidence":  "medium",
+        "chunk":  "03"
+    },
+    {
+        "slug":  "greek-beef-and-chickpea-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chickpeas",
+        "detail":  "Chickpeas are in the dish\u0027s name and we buy 5.8 cans (1488 g), yet no step drains, heats, or plates them; the source (Chelsea\u0027s Messy Apron step 1) folds the chickpeas into the browning beef.",
+        "confidence":  "high",
+        "chunk":  "03"
+    },
+    {
+        "slug":  "greek-ground-turkey-lemon-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Sun-Dried Tomatoes",
+        "detail":  "We buy 17.25 tbsp (60 g) of sun-dried tomatoes but step 5 stirs in only the olive oil and olives; the source (Chelsea\u0027s Messy Apron) stirs sun-dried tomatoes in with the olives and lemon off the heat.",
+        "confidence":  "high",
+        "chunk":  "03"
+    },
+    {
+        "slug":  "greek-turkey-moussaka",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Potato",
+        "detail":  "We buy 15.3 potatoes (3268 g), the second-largest line on the card, but the steps layer only eggplant, meat sauce, and bechamel and never boil, slice, or layer a potato; the source (Coley Cooks) states a true moussaka \u0027will only have eggplant and meat topped with a white sauce\u0027.",
+        "confidence":  "high",
+        "chunk":  "03"
+    },
+    {
+        "slug":  "greek-turkey-moussaka",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Rice",
+        "detail":  "The final step says \u0027Cook the rice, move it into your weighed pot, and cut the moussaka into 14 even squares\u0027, but rice is not in the costed list (and the source serves moussaka with no rice at all).",
+        "confidence":  "high",
+        "chunk":  "03"
+    },
+    {
+        "slug":  "ghanaian-shoko-beef-spinach-stew",
+        "class":  "FETCH-FAILED",
+        "ingredient":  "",
+        "detail":  "https://www.196flavors.com/ghana-shoko/ returned HTTP 500 Internal Server Error on three separate attempts, so the source comparison could not be made; the internal steps-vs-list check found no unused purchases or step contradictions.",
+        "confidence":  "high",
+        "chunk":  "03"
+    },
+    {
+        "slug":  "greek-turkey-youvarlakia",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Fresh herb (parsley)",
+        "detail":  "Final step says \u0027Scatter the chopped fresh herb over the top\u0027 but the list contains no fresh herb (only dried dill); the source garnishes with fresh parsley, which we never buy.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-beef-and-broccoli-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt (Morton) + Black Pepper (Great Value)",
+        "detail":  "Both are costed \u0027to taste\u0027 but no step uses or seasons with them; the source seasons the beef with salt and pepper after browning.",
+        "confidence":  "medium",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-beef-fried-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Eggs (Great Value): 3 large eggs (500 g)",
+        "detail":  "Eggs are in the costed list but no step ever scrambles or adds them, in a fried-rice recipe where egg is a core component.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-beef-fried-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Vegetable Oil (Great Value): 2 Tbsp",
+        "detail":  "Vegetable oil is costed but the steps never mention any cooking oil at any point.",
+        "confidence":  "medium",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-beef-fried-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt (Morton) + Black Pepper (Great Value)",
+        "detail":  "Both are costed \u0027to taste\u0027 but no step uses or seasons with them.",
+        "confidence":  "medium",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-beef-gyro-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Oregano (Great Value): 1 tsp",
+        "detail":  "Bought for the gyro meat (source seasons beef with oregano) but our steps season the beef only with cumin, garlic powder, and onion powder.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-beef-gyro-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Thyme (Great Value): 1 tsp",
+        "detail":  "Bought for the gyro meat (source uses ground thyme in the beef seasoning) but never referenced in any step.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-beef-gyro-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Nutmeg (Great Value): 1/4 tsp",
+        "detail":  "Bought for the gyro meat (source uses 1/4 tsp nutmeg in the beef seasoning) but never referenced in any step.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-beef-gyro-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Cucumber: 3/4 cup grated (tzatziki) (300 g)",
+        "detail":  "The list buys cucumber explicitly labeled \u0027(tzatziki)\u0027 but our tzatziki step only whisks \u0027yogurt with a little garlic\u0027; the source tzatziki is built on grated cucumber.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-beef-gyro-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Dill (Great Value): 2 tbsp (tzatziki)",
+        "detail":  "Bought and labeled \u0027(tzatziki)\u0027 but the tzatziki step uses only yogurt and garlic; the source tzatziki uses 2 tbsp dill.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-beef-gyro-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Lemon Juice (ReaLemon): 1/2 tbsp (tzatziki)",
+        "detail":  "Bought and labeled \u0027(tzatziki)\u0027 but never used in any step; the source tzatziki includes 1/2 tbsp lemon juice.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-beef-gyro-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Feta Cheese (Great Value crumbled): 1/4 cup (tzatziki) (113 g)",
+        "detail":  "Bought and labeled \u0027(tzatziki)\u0027 but no step adds feta anywhere; the source stirs 1/4 cup crumbled feta into the tzatziki.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-beef-gyro-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt (Morton) + Black Pepper (Great Value)",
+        "detail":  "Costed (meat + tzatziki portions) but no step uses or seasons with either.",
+        "confidence":  "medium",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-beef-stroganoff-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic: 1 bulb (20 g)",
+        "detail":  "Garlic is costed but never appears in the steps; the source adds minced garlic after browning the beef.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-beef-stroganoff-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "All-Purpose Flour (Great Value): 3 tbsp (72 g)",
+        "detail":  "Flour is costed but the steps never make the roux; the source cooks 3 tbsp flour in butter to thicken the sauce, so our sauce also loses its thickener.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-beef-stroganoff-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Worcestershire Sauce (Lea \u0026 Perrins): 1 tsp",
+        "detail":  "Costed but never used in any step; the source stirs Worcestershire into the cream sauce.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-beef-stroganoff-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt (Morton) + Black Pepper (Great Value)",
+        "detail":  "Both are costed \u0027to taste\u0027 but no step uses or seasons with them.",
+        "confidence":  "medium",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-beef-teriyaki-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Rice Vinegar (Nakano): 1 tsp",
+        "detail":  "Costed but our glaze step whisks only soy/hoisin/honey/broth/sesame oil/garlic/ginger/cornstarch; the source (Mongolian beef) sauce includes 1 tsp rice vinegar. Same defect family as the General Tso card.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-beef-teriyaki-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Red Pepper Flakes (Great Value): 1/4 tsp",
+        "detail":  "Costed but never used; the source sauce includes 1/4 tsp red pepper flakes.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-beef-teriyaki-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper (Great Value): 1/4 tsp",
+        "detail":  "Costed as a measured sauce quantity but never used; the source sauce includes 1/4 tsp black pepper and no step says \u0027season\u0027.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-beef-teriyaki-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Olive Oil: 1 tbsp",
+        "detail":  "Costed but the steps never mention any cooking oil.",
+        "confidence":  "medium",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-beef-teriyaki-bowls",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Yellow Onion",
+        "detail":  "Step 1 says \u0027Brown ... ground beef with the chopped onion\u0027 but no onion of any kind is in the costed list (the source has only green-onion garnish).",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-turkey-enchilada-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Yellow Onion: 1/2 cup diced (275 g)",
+        "detail":  "Costed but never used in the steps; the source sautes the diced onion as the first step.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-turkey-enchilada-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic: 1 clove, crushed",
+        "detail":  "Costed but never used; the source sautes crushed garlic with the onion.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-turkey-enchilada-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Cumin: 1/4 tsp",
+        "detail":  "Costed but never used; the source seasons the turkey with cumin while it browns.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-turkey-enchilada-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt (Morton) + Black Pepper (Great Value)",
+        "detail":  "Both costed but no step uses or seasons with them (source seasons the turkey with salt and pepper).",
+        "confidence":  "medium",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-turkey-lasagna-casserole",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Rice",
+        "detail":  "Final step says \u0027cook the rice, and move the rice into your weighed pot\u0027 but rice is not in the costed list and does not belong in this pasta casserole (the source has none); looks like a copy-paste stray.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-turkey-stir-fry-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Yellow Onion: 1 medium sweet onion, diced (385 g)",
+        "detail":  "Costed but never used in the steps; the source sautes the diced onion as the aromatic base of the stir fry.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-turkey-stir-fry-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Celery: 2 sticks, finely diced (280 g)",
+        "detail":  "Costed but never used; the source sautes celery with the onion for 5 minutes before the turkey goes in.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-turkey-stir-fry-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Green Onions: 3, green parts sliced (90 g)",
+        "detail":  "Costed but never used in any step; the source finishes the bowls with sliced green onions.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-turkey-stir-fry-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Sesame Oil (generic): 2 tsp toasted",
+        "detail":  "Costed but never used; the source\u0027s teriyaki sauce includes 2 tsp toasted sesame oil.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ground-turkey-stir-fry-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Rice Vinegar (Nakano): 1 tbsp vinegar",
+        "detail":  "Costed but never used; the source\u0027s teriyaki sauce includes 1 tbsp vinegar. Same defect family as the General Tso card.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ham-and-white-bean-soup",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Bay Leaves",
+        "detail":  "Steps say \u0027stir in ... bay leaves\u0027 and later \u0027Pull the bay leaves\u0027 but bay leaves are not in the costed list (the source recipe also has none).",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "ham-fried-rice",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt (Morton): 1 tbsp (20 g)",
+        "detail":  "Salt is costed but no step uses it or says \u0027season\u0027 (the source recipe uses no added salt either).",
+        "confidence":  "medium",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "harissa-chicken-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper (Great Value): 0.5 tbsp",
+        "detail":  "Costed but never used; both the chicken rub and tahini sauce steps season with salt only, matching the source which uses no black pepper.",
+        "confidence":  "medium",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "honey-garlic-steak-bites-potatoes",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Potato (generic): 10 (2100 g)",
+        "detail":  "The card is titled \u0027...and Potatoes\u0027 and buys 2.1 kg of potatoes, but no step ever cooks or serves them; the source recipe contains no potatoes at all (they were our addition that never got a step).",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "hainanese-chicken-rice",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Sesame Oil (generic): 0.25 tbsp",
+        "detail":  "Costed but never used; the source\u0027s chili sauce includes sesame oil, and our chili-sauce step only blends jalapeno \u0027with a little of each\u0027 of the other two sauces.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "hainanese-chicken-rice",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Rice Vinegar (Nakano): 0.5 tbsp",
+        "detail":  "Costed but never used; the source\u0027s chili sauce includes 1/2 tsp rice vinegar which our sauce steps drop.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "hainanese-chicken-rice",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper (Great Value): 0.5 tbsp",
+        "detail":  "Costed but no step uses it or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "irish-beef-and-guinness-stew",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Guinness stout (440 ml)",
+        "detail":  "The dish is named for it in our own title, and the source calls the 440 ml of Guinness the sauce\u0027s defining flavor, but our list never buys it and our step only says \u0027add a can of stout here if you are using it\u0027.",
+        "confidence":  "high",
+        "chunk":  "04"
+    },
+    {
+        "slug":  "japanese-turkey-nikujaga",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt + Black Pepper",
+        "detail":  "We cost 1.25 tbsp salt and 0.75 tbsp black pepper but no step ever salts, peppers, or says \u0027season\u0027 anywhere in the recipe.",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "john-wayne-casserole",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt + Black Pepper",
+        "detail":  "We cost 1.25 tbsp salt and 0.5 tbsp pepper but the steps never use them or say \u0027season\u0027 (the source recipe does not call for them either).",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "johnny-marzetti-casserole",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Tomato Sauce",
+        "detail":  "3.7 cans (1562 g) of tomato sauce are costed but the sauce step stirs in only diced tomatoes, brown sugar, dijon and garlic powder; the source (theseasonedmom) builds its sauce from tomatoes PLUS two cans of condensed tomato soup, so the dish as written loses roughly half its sauce liquid.",
+        "confidence":  "high",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "kafta-bil-sanieh-beef-potato-bake",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Parsley",
+        "detail":  "The source (thematbakh) mixes 1 cup finely chopped parsley into the kafta meat as a structural component; our list and steps have no parsley or any herb in the meat mixture.",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "kerala-beef-ularthiyathu-rice-bowls",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Coconut (slices / coconut oil)",
+        "detail":  "The source (paintthekitchenred) toasts 1/2 cup coconut slices in 1/4 cup coconut oil and cites \u0027fresh coconut\u0027 as a signature of the dish; our version has no coconut in any form.",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "kerala-beef-ularthiyathu-rice-bowls",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Curry leaves",
+        "detail":  "The source uses 22 curry leaves across the pressure-cook and saute stages and names them a defining aromatic of Kerala beef fry; they appear nowhere in our list or steps.",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "kharcho-georgian-beef-walnut-soup",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Red Pepper Flakes",
+        "detail":  "0.5 tbsp is costed as our stand-in for the source\u0027s Aleppo pepper (part of the walnut spice paste), but our spice step adds only coriander, cloves, cayenne and garam masala - the flakes are never used.",
+        "confidence":  "high",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "kharcho-georgian-beef-walnut-soup",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "0.25 tbsp black pepper is costed (it is in the source\u0027s spice blend) but our steps never use it; the finish step says only \u0027taste for salt\u0027.",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "korean-beef-bibimbap-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "0.5 tbsp black pepper is costed but no step uses it (salt is used on the cucumbers; pepper appears nowhere).",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "korean-braised-chicken-potatoes-dakdoritang",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "1.25 tbsp (24 g) salt is costed but no step uses salt - the sauce, braise and finish are all seasoned from soy/gochujang only, matching the source which calls for no plain salt.",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "korean-gochujang-ground-pork-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt + Black Pepper",
+        "detail":  "1.25 tbsp salt and 0.5 tbsp pepper are costed but the steps never use them or say \u0027season\u0027 (the source recipe has neither).",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "korean-ground-beef-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Roasted Red Peppers",
+        "detail":  "3 oz of jarred roasted red peppers are costed; the source (masonfit) stirs them into the beef mid-browning, but our steps never mention them.",
+        "confidence":  "high",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "korean-ground-beef-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Red Pepper Flakes",
+        "detail":  "1 tsp crushed red pepper is costed; the source whisks it into the gochujang sauce, but our sauce step lists only gochujang, soy, sesame oil and brown sugar.",
+        "confidence":  "high",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "korean-ground-turkey-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Sesame Oil",
+        "detail":  "Costed but never used; the source (nutritiontofit) whisks 2 tsp sesame oil into the sauce, while our steps build the glaze from teriyaki and honey only.",
+        "confidence":  "high",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "korean-ground-turkey-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Ginger",
+        "detail":  "Costed but never used; it is a source sauce component (1/4 tsp) that our steps silently drop - same General Tso pattern.",
+        "confidence":  "high",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "korean-ground-turkey-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Red Pepper Flakes",
+        "detail":  "Costed but never used; it is a source sauce component (1/4 tsp) that our steps silently drop.",
+        "confidence":  "high",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "korean-turkey-japchae",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt + Black Pepper",
+        "detail":  "1 tbsp salt and 0.5 tbsp pepper are costed but no step uses them or says \u0027season\u0027 (the source at least salts the spinach lightly; our spinach step does not).",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "loaded-beef-taco-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Yellow Onion",
+        "detail":  "280 g of diced onion is costed; the source (wholesomemadeeasy) sautes it with the bell pepper, but our steps never mention onion at all.",
+        "confidence":  "high",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "loaded-beef-taco-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Red Bell Pepper",
+        "detail":  "260 g of diced red bell pepper is costed; the source sautes it in step 2, but our steps never mention it.",
+        "confidence":  "high",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "loaded-beef-taco-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Cumin, Garlic Powder, Dried Oregano, Paprika, Salt, Red Pepper Flakes, Black Pepper",
+        "detail":  "The source sprinkles its full seasoning set (chili powder, cumin, garlic powder, oregano, paprika, salt, red pepper flakes, black pepper) over the meat in one step; our steps use only the chili powder, silently dropping the other seven costed seasonings.",
+        "confidence":  "high",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "loaded-beef-taco-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Vegetable Oil",
+        "detail":  "2 tsp oil is costed (the source browns the meat and vegetables in it) but our steps never mention oil.",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "massaman-beef-curry-potatoes",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt + Black Pepper",
+        "detail":  "1 tbsp salt and 0.5 tbsp pepper are costed but the steps season only with fish sauce, sugar and lime juice and never mention salt or pepper.",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "massaman-chicken-curry",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt + Black Pepper",
+        "detail":  "1 tbsp salt and 0.5 tbsp pepper are costed but no step uses them; seasoning is done via fish sauce, brown sugar and lime, matching the source which lists no salt/pepper.",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "mediterranean-ground-turkey-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Cucumber",
+        "detail":  "1050 g of cucumber is costed (the source tops each bowl with chopped cucumber) but our steps never mention cucumber anywhere.",
+        "confidence":  "high",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "mediterranean-ground-turkey-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "2 minced cloves are costed (the source cooks minced garlic into the turkey) but our steps never use garlic.",
+        "confidence":  "high",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "mediterranean-ground-turkey-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Lemon Juice",
+        "detail":  "Costed for the source\u0027s garlic-dill yogurt sauce, but our steps serve a plain dollop of Greek yogurt and never use lemon juice.",
+        "confidence":  "high",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "mediterranean-ground-turkey-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic Powder + Dried Dill",
+        "detail":  "Both are costed as components of the source\u0027s yogurt sauce, which our steps never build; the only step reference is a vague \u0027whatever dried herbs you like\u0027, which cannot cover garlic powder.",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "middle-eastern-beef-kofta-bowls-with-tzatziki",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Olive Oil",
+        "detail":  "2.25 tbsp olive oil is costed; the source (slenderkitchen) stirs olive oil into the tzatziki, but our tzatziki step lists only yogurt, cucumber, garlic, lemon, mint and salt, and no other step uses oil.",
+        "confidence":  "high",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "middle-eastern-beef-kofta-bowls-with-tzatziki",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Oregano",
+        "detail":  "0.75 tbsp is costed; the source\u0027s tzatziki includes 1/2 tsp oregano, but our steps never use oregano anywhere.",
+        "confidence":  "high",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "million-dollar-baked-spaghetti",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt + Black Pepper",
+        "detail":  "1 tbsp salt and 0.5 tbsp pepper are costed but the steps never use them or say \u0027season\u0027 (the source lists neither).",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "mongolian-ground-beef-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Hoisin Sauce, Sesame Oil, Rice Vinegar, Cornstarch, Beef Broth, Black Pepper, Red Pepper Flakes",
+        "detail":  "All seven are costed and all seven belong to the source\u0027s (eatyourselfskinny) whisked sauce plus cornstarch slurry, but our steps build the glaze from soy sauce and honey only - the dish\u0027s actual sauce is silently dropped.",
+        "confidence":  "high",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "mongolian-ground-beef-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Green Onions",
+        "detail":  "1/4 cup sliced green onions is costed; the source stirs them in off the heat, but our steps never mention them.",
+        "confidence":  "high",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "mongolian-ground-beef-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Olive Oil",
+        "detail":  "1 Tbsp is costed (the source browns the beef in it) but our steps never mention oil.",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "moo-shu-pork-rice-bowls",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Tortilla",
+        "detail":  "The final step serves the dish \u0027with warm tortilla strips standing in for the pancakes\u0027, but no tortilla appears in the costed ingredient list.",
+        "confidence":  "high",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "moo-shu-pork-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "1 tbsp (20 g) salt is costed but no step uses salt; the marinade uses soy/cornstarch/pepper and all later seasoning comes from the sauces.",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "moussaka-greek-beef-eggplant-bake",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chicken Broth",
+        "detail":  "0.06 cups (15 g) of chicken broth is costed - apparently the stand-in for the source\u0027s bechamel stock powder - but the bechamel step (and every other step) never uses it.",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "nigerian-beef-stew-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chicken Broth",
+        "detail":  "0.12 cups (28 g) of chicken broth is costed (the source\u0027s bouillon-powder analog) but the steps use only the reserved beef stock and beef broth, never the chicken broth.",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "one-pot-creamy-cajun-sausage-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt + Black Pepper",
+        "detail":  "1 tbsp salt and 0.5 tbsp pepper are costed but the steps never use them or say \u0027season\u0027 (the source relies on the Cajun seasoning and lists no salt/pepper).",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "malaysian-chicken-rendang-bowls",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Toasted grated coconut (kerisik)",
+        "detail":  "The source (rasamalaysia) finishes with 5 tbsp kerisik, the ingredient that defines rendang against an ordinary coconut curry; our version has no toasted coconut in any form and no substitute beyond the canned coconut milk.",
+        "confidence":  "medium",
+        "chunk":  "05"
+    },
+    {
+        "slug":  "peruvian-tallarines-verdes-con-carne",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Spaghetti (Great Value): 49.5 oz dry",
+        "detail":  "The dish IS green spaghetti (source tosses the sauce with cooked spaghetti), but our steps never boil the 49.5 oz of spaghetti we cost, and the warmed sauce is never combined with any pasta.",
+        "confidence":  "high",
+        "chunk":  "06"
+    },
+    {
+        "slug":  "peruvian-tallarines-verdes-con-carne",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Rice",
+        "detail":  "Step 5 says \u0027Cook the rice according to the package to serve underneath\u0027 but rice is nowhere in the costed ingredient list (the list buys spaghetti instead).",
+        "confidence":  "high",
+        "chunk":  "06"
+    },
+    {
+        "slug":  "oyakodon",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Yellow Onion: 7 (794 g)",
+        "detail":  "We cost 7 yellow onions but no step ever uses them; the source (justonecookbook.com) simmers the sliced onion in the soy-mirin broth as the first cooking step, so the onion should go into our step 3 simmer.",
+        "confidence":  "high",
+        "chunk":  "06"
+    },
+    {
+        "slug":  "oyakodon",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt (1 tbsp) and Black Pepper (0.5 tbsp)",
+        "detail":  "Both are costed but no step uses them or says \u0027season\u0027; the source seasons only with the dashi/soy/mirin/sugar sauce.",
+        "confidence":  "medium",
+        "chunk":  "06"
+    },
+    {
+        "slug":  "salisbury-steak-potato-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Worcestershire Sauce (Lea \u0026 Perrins): 1 tsp (patties) + 1/2 tsp (gravy)",
+        "detail":  "Our own ingredient line annotates it for both patties and gravy, but step 1 mixes the beef with bread crumbs only and the gravy step uses only broth and tomato paste; the source puts Worcestershire in both the patty mix and the gravy.",
+        "confidence":  "high",
+        "chunk":  "06"
+    },
+    {
+        "slug":  "salisbury-steak-potato-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ketchup (generic): 2 tsp (patties) + 1 tsp (gravy)",
+        "detail":  "Costed with explicit patty/gravy annotations, but no step ever mentions ketchup; the source mixes it into the patties and stirs it into the gravy.",
+        "confidence":  "high",
+        "chunk":  "06"
+    },
+    {
+        "slug":  "salisbury-steak-potato-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dijon Mustard (generic): 1 tsp",
+        "detail":  "Costed for the patty mix (source puts 1 tsp mustard in the patties) but our steps never use it.",
+        "confidence":  "high",
+        "chunk":  "06"
+    },
+    {
+        "slug":  "salisbury-steak-potato-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic Powder: 1/2 tsp",
+        "detail":  "Costed but never mentioned in any step; the source mixes it into the patties.",
+        "confidence":  "high",
+        "chunk":  "06"
+    },
+    {
+        "slug":  "salisbury-steak-potato-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Onion Powder: 1/2 tsp",
+        "detail":  "Costed but never mentioned in any step; the source mixes it into the patties.",
+        "confidence":  "high",
+        "chunk":  "06"
+    },
+    {
+        "slug":  "salisbury-steak-potato-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt and Black Pepper (to taste)",
+        "detail":  "Both are in the costed list but no step uses them or says \u0027season\u0027; the source seasons the patty mix with salt and pepper.",
+        "confidence":  "medium",
+        "chunk":  "06"
+    },
+    {
+        "slug":  "philly-cheesesteak-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Olive Oil: 1 1/2 tbsp",
+        "detail":  "Costed but no step mentions oil; the source heats divided oil before browning the beef and again before the vegetables.",
+        "confidence":  "high",
+        "chunk":  "06"
+    },
+    {
+        "slug":  "philly-cheesesteak-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt (2 tsp) and Black Pepper (1/2 tsp)",
+        "detail":  "Both costed but no step uses them or says \u0027season\u0027; the source explicitly seasons the beef and the vegetables with divided salt and pepper.",
+        "confidence":  "medium",
+        "chunk":  "06"
+    },
+    {
+        "slug":  "pakistani-beef-kofta-curry",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper (Great Value): 0.5 tbsp",
+        "detail":  "Costed but no step uses it or says \u0027season\u0027; step 2\u0027s kofta spice list (cumin, coriander, chili powder, salt) and step 8\u0027s garam masala never include black pepper.",
+        "confidence":  "medium",
+        "chunk":  "06"
+    },
+    {
+        "slug":  "panang-chicken-curry",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper (Great Value): 0.5 tbsp",
+        "detail":  "Costed but never used in any step; the paste, simmer, and \u0027season with the fish sauce and sugar\u0027 steps never mention pepper (salt is used in the paste).",
+        "confidence":  "medium",
+        "chunk":  "06"
+    },
+    {
+        "slug":  "sichuan-dan-dan-noodles-with-pork",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Sichuan pepper powder",
+        "detail":  "Source (recipetineats) puts 1 tsp Sichuan pepper powder in the dan dan sauce and the dish is titled \u0027Sichuan\u0027; our card has no Sichuan peppercorn anywhere and Lao Gan Ma chili crisp does not supply the numbing element.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "sloppy-joe-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Paprika",
+        "detail":  "Paprika 1/2 tsp is costed but no step uses it; source (therealfooddietitians) stirs paprika into the simmering sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "sloppy-joe-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Apple Cider Vinegar",
+        "detail":  "ACV 1 tbsp is costed but no step uses it; source adds 1 tbsp apple cider vinegar to the sloppy joe sauce in the simmer step.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "sloppy-joe-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Olive Oil",
+        "detail":  "Olive oil \u00272 tsp (beef) + oil for base\u0027 is costed but the browning and rice steps never mention oil.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "sloppy-joe-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt; Black Pepper",
+        "detail":  "Salt 1 tsp and pepper 1/4 tsp are costed but no step uses or says \u0027season\u0027; source seasons the sauce with both.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-apple-cider-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Apple Cider",
+        "detail":  "12 oz apple cider is costed but no step pours it in; step 6 even calls the result \u0027cider gravy\u0027 while the source (amindfullmom) mixes the cider with the Dijon before pouring it over.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-apple-cider-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Coriander",
+        "detail":  "Coriander 1/2 tsp is costed but never used; in the source it is part of the spice rub applied to the roast.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-apple-cider-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Thyme",
+        "detail":  "Thyme 1/2 tsp is costed but never used; in the source it is part of the spice rub applied to the roast.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-apple-cider-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt; Black Pepper",
+        "detail":  "Salt 2 tsp and pepper 1/2 tsp are costed but no step uses or says \u0027season\u0027; the source rub includes both.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-balsamic-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Cumin",
+        "detail":  "Cumin 1/2 tsp is costed but never used; source (slenderkitchen) mixes it into the dry rub coated on the tenderloin.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-balsamic-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic Powder",
+        "detail":  "Garlic powder 1/2 tsp is costed but never used; source mixes it into the dry rub coated on the tenderloin.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-balsamic-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chili Powder",
+        "detail":  "Chili powder 1/4 tsp is costed but never used; source mixes it into the dry rub coated on the tenderloin.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-balsamic-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt; Black Pepper",
+        "detail":  "Salt and pepper \u0027to taste\u0027 are costed but no step uses or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-barbacoa-bowl",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Apple Cider Vinegar",
+        "detail":  "ACV 2 tbsp is costed but never used; source (downshiftology) adds 2 tbsp apple cider vinegar with the braising liquid.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-barbacoa-bowl",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Oregano",
+        "detail":  "Oregano 1 tbsp is costed but never used; source adds dried oregano to the slow cooker with the other seasonings.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-barbacoa-bowl",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Bay Leaves",
+        "detail":  "2 bay leaves are costed but never used; source adds 3 bay leaves before covering.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-bbq-pulled-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt; Black Pepper",
+        "detail":  "Salt and pepper 1/2 tsp each are costed but no step uses or says \u0027season\u0027; source (budgetbytes) includes both in the sprinkle-on seasoning mix.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-brown-sugar-sesame-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Sesame Oil",
+        "detail":  "Sesame oil 2 tbsp is costed but step 2 only stirs brown sugar and soy sauce; the source sauce (themagicalslowcooker) includes sesame oil.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-brown-sugar-sesame-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "White Vinegar",
+        "detail":  "White vinegar 2 tbsp is costed but never used; the source sauce includes 2 tbsp white vinegar.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-brown-sugar-sesame-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Ginger",
+        "detail":  "Ground ginger 3/4 tsp is costed but never used; the source sauce includes 3/4 tsp ground ginger.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-brown-sugar-sesame-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "Garlic 2 cloves is costed but never used; the source sauce includes 2 minced garlic cloves.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-buffalo-chicken-bowl",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Butter",
+        "detail":  "Butter \u00271/4 cup melted\u0027 (180 g) is costed but no step ever uses it; the source (eatingbirdfood) is a 3-ingredient recipe with no butter, so it is bought for nothing.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-buffalo-chicken-bowl",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Olive Oil",
+        "detail":  "Olive oil \u0027~2 tsp (broccoli)\u0027 is costed but step 4 says only \u0027roast or steam the broccoli\u0027 without oil.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-buffalo-chicken-bowl",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "Salt 1/2 tsp is costed but no step uses or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-butter-chicken-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ginger",
+        "detail":  "Fresh ginger 1 tbsp is costed but never used; source (slenderkitchen) blooms ginger with the aromatics for the sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-butter-chicken-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garam Masala",
+        "detail":  "Garam masala 2 tsp is costed but never used; it is the defining butter-chicken spice and the source cooks it into the sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-butter-chicken-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chili Powder",
+        "detail":  "Chili powder 1 tsp is costed but never used; source adds it with the garam masala.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-butter-chicken-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Cumin",
+        "detail":  "Cumin 1 tsp is costed but never used; source adds it with the garam masala.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-butter-chicken-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Cayenne Pepper",
+        "detail":  "Cayenne 1/2 tsp is costed but never used; source adds it with the other spices.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-butter-chicken-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Bay Leaves",
+        "detail":  "1 bay leaf is costed but never used; source cooks a bay leaf in the sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-butter-chicken-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Lemon Juice",
+        "detail":  "Lemon juice 2 tsp is costed but never used; source adds it with the butter.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-butter-chicken-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Half and Half",
+        "detail":  "Half and half 1/4 cup (140 g) is costed but never used; source stirs it in with the milk and yogurt.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-butter-chicken-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt; Black Pepper",
+        "detail":  "Salt and pepper \u0027to taste\u0027 are costed but no step uses or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-char-siu-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ketchup",
+        "detail":  "Ketchup 3 tbsp is costed but step 2 whisks only hoisin, soy, honey and broth; the source marinade (andreasrecipes) includes 3 tbsp ketchup.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-char-siu-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "Garlic 2 tsp minced is costed but never used; the source marinade includes it.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-char-siu-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ginger",
+        "detail":  "Fresh ginger 2 tsp is costed but never used; the source marinade includes it.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-char-siu-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Sesame Oil",
+        "detail":  "Dark sesame oil 1 tsp is costed but never used; the source marinade includes it.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-char-siu-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Five-Spice Powder",
+        "detail":  "Five-spice 1/2 tsp is costed but never used; it is the defining char siu spice in the source marinade.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-adobo-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Bay Leaves",
+        "detail":  "3 bay leaves are costed but never used; bay is a core adobo aromatic and the source (hungryhobby) mixes 2-3 leaves into the sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-adobo-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper (peppercorns)",
+        "detail":  "1 tsp peppercorns is costed but never used; whole peppercorns are a defining adobo ingredient in the source sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-cacciatore-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Balsamic Vinegar",
+        "detail":  "Balsamic \u00271 tbsp + 1/2 tsp\u0027 is costed but never used; source (wellplated) sautes 1 tbsp with the aromatics and stirs 1/2 tsp in at the finish.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-cacciatore-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Italian Seasoning",
+        "detail":  "Italian seasoning 2 tsp is costed but never used; source adds it with the tomatoes and vegetables.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-cacciatore-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt; Black Pepper",
+        "detail":  "Salt 1 tsp and pepper 1/2 tsp are costed but no step uses or says \u0027season\u0027; source seasons the chicken before searing.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-chile-verde-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Poblano Peppers",
+        "detail":  "1.5 poblanos (200 g) are costed but never used; source (ambitiouskitchen) roasts and blends them into the verde sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-chile-verde-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Jalapeno",
+        "detail":  "1 jalapeno is costed but never used; source roasts and blends it into the verde sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-chile-verde-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "1 bulb of garlic is costed but never used; source roasts and blends the cloves into the sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-chile-verde-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Fresh Cilantro",
+        "detail":  "1 bunch cilantro is costed but never used; source blends a whole bunch into the verde sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-chile-verde-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Lime Juice",
+        "detail":  "Juice of 2 limes is costed but never used; source blends lime juice into the sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-chile-verde-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Cumin",
+        "detail":  "Cumin is costed but never used; source blends 2 tsp into the sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-chile-verde-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Oregano",
+        "detail":  "Oregano is costed but never used; source blends 2 tsp into the sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-chile-verde-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chicken Broth",
+        "detail":  "1 carton (240 g) broth is costed but never used; source blends 3/4 cup broth into the sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-chile-verde-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt; Black Pepper",
+        "detail":  "Salt and pepper are costed but no step uses or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-curry-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt; Black Pepper",
+        "detail":  "Salt 2 tsp and pepper 1/2 tsp are costed but no step uses or says \u0027season\u0027; source (laurenfitfoodie) tosses both into the spice blend.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-gyro-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Oregano",
+        "detail":  "Oregano 1 1/2 tsp is costed but never used; source (seasonandthyme) whisks it into the herb-oil mixture that defines the gyro seasoning.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-gyro-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Dill",
+        "detail":  "Dill 1 1/2 tsp is costed but never used; source whisks it into the herb-oil mixture.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-gyro-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Basil",
+        "detail":  "Basil 1 1/2 tsp is costed but never used; source whisks it into the herb-oil mixture.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-gyro-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt; Black Pepper",
+        "detail":  "Salt and pepper 1 tsp each are costed but no step uses or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-korma-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ginger",
+        "detail":  "Ginger 3 tsp is costed but never used; source (wholesomelicious) blends it into the cashew sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-korma-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garam Masala",
+        "detail":  "Garam masala 2 tsp is costed but never used; it is the korma\u0027s defining spice, blended into the source sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-korma-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Cumin",
+        "detail":  "Cumin 1 tsp is costed but never used; source blends it into the sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-korma-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Turmeric",
+        "detail":  "Turmeric 1 tsp is costed but never used; source blends it into the sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-korma-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Cinnamon",
+        "detail":  "Cinnamon 1 tsp is costed but never used; source blends it into the sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-korma-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "Salt 1 tsp is costed but no step uses or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-pozole-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chicken Broth",
+        "detail":  "4 cups (1440 g) broth is costed but never added; the source (isabeleats) is a soup built on 4 cups broth in the slow cooker.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-pozole-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "4 cloves are costed but never used; source combines minced garlic in the cooker.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-pozole-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chili Powder",
+        "detail":  "Chili powder 1 tbsp is costed but never used; source combines it in the cooker.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-pozole-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Cumin",
+        "detail":  "Cumin 2 tsp is costed but never used; source combines it in the cooker.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-pozole-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Oregano",
+        "detail":  "Mexican oregano 1 tbsp is costed but never used; source stirs it in with the hominy.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-pozole-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "Salt 1 tsp is costed but no step uses or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-saag-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ginger",
+        "detail":  "3 inches fresh ginger is costed but never used; source (everydaymaven) puts it in the slow-cooker sauce base.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-saag-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garam Masala",
+        "detail":  "Garam masala 1 tbsp is costed but never used; source cooks 1 tbsp in the sauce base.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-saag-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Coriander",
+        "detail":  "Coriander 1 tbsp is costed but never used; source cooks 1 tbsp in the sauce base.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-saag-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Cumin",
+        "detail":  "Cumin 1 tbsp is costed but never used; source cooks 1 tbsp in the sauce base.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-saag-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Cayenne Pepper",
+        "detail":  "Cayenne 1/8 tsp is costed but never used; source includes it in the sauce base.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-saag-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "Salt 1.5 tsp is costed but no step uses or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-shawarma-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Cumin",
+        "detail":  "Cumin 1 1/2 tsp is costed but never used; source (skinnyfitalicious) mixes all shawarma spices into the pot in step 1.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-shawarma-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Paprika",
+        "detail":  "Paprika 1 tsp is costed but never used; part of the source\u0027s shawarma spice mix.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-shawarma-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Parsley",
+        "detail":  "Parsley 1 tsp is costed but never used; part of the source\u0027s shawarma spice mix.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-shawarma-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Curry Powder",
+        "detail":  "Curry powder 1/2 tsp is costed but never used; part of the source\u0027s shawarma spice mix.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-shawarma-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Cinnamon",
+        "detail":  "Cinnamon 1/4 tsp is costed but never used; part of the source\u0027s shawarma spice mix.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-shawarma-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Coriander",
+        "detail":  "Coriander 1/4 tsp is costed but never used; part of the source\u0027s shawarma spice mix.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-shawarma-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt; Black Pepper",
+        "detail":  "Salt and pepper \u0027to taste\u0027 are costed but no step uses or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tacos-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Lime Juice",
+        "detail":  "Juice of 3 limes is costed but never used; source (joyfoodsunshine) stirs lime juice into the salsa mixture.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tacos-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "Garlic 1 tbsp minced is costed but never used; source combines it with the salsa in step 1.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tacos-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Cumin",
+        "detail":  "Cumin 1 tsp is costed but never used; part of the source\u0027s taco seasoning stirred into the salsa.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tacos-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Paprika",
+        "detail":  "Paprika 1 tsp is costed but never used; part of the source\u0027s taco seasoning.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tacos-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chili Powder",
+        "detail":  "Chili powder 1/4 tsp is costed but never used; part of the source\u0027s taco seasoning.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tacos-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Coriander",
+        "detail":  "Coriander 1/2 tsp is costed but never used; part of the source\u0027s taco seasoning.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tacos-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt; Black Pepper",
+        "detail":  "Salt and pepper are costed but no step uses or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tagine-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Coriander",
+        "detail":  "Coriander 1 1/2 tsp is costed and step 2 says \u0027so the spices... coat\u0027 but no step ever adds it; source (cookingclassy) blooms it with the aromatics.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tagine-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Cumin",
+        "detail":  "Cumin 1 tsp is costed but no step adds it; source blooms it with the aromatics.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tagine-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Turmeric",
+        "detail":  "Turmeric 1/2 tsp is costed but no step adds it; source blooms it with the aromatics.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tagine-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Cinnamon",
+        "detail":  "Cinnamon 1/2 tsp is costed but no step adds it; source blooms it with the aromatics.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tagine-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Ginger",
+        "detail":  "Ground ginger 1/2 tsp is costed but no step adds it; source blooms it with the aromatics.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tagine-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Fresh Cilantro",
+        "detail":  "Cilantro 1/4 cup is costed but never used; source stirs it in at the finish with the lemon juice.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tagine-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt; Black Pepper",
+        "detail":  "Salt and pepper \u0027to taste\u0027 are costed but no step uses or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tikka-masala-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garam Masala",
+        "detail":  "A whole jar of garam masala is costed but never used; it is the tikka masala\u0027s defining spice, in the source (ministryofcurry) marinade.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tikka-masala-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Yellow Onion",
+        "detail":  "2 medium onions (500 g) are costed but never used; source sautes them and layers them under the chicken.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tikka-masala-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "Garlic 1 tbsp is costed but never used; part of the source marinade.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tikka-masala-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ginger",
+        "detail":  "Ginger 1 tbsp is costed but never used; part of the source marinade.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tikka-masala-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Vegetable Oil",
+        "detail":  "Oil 2 tbsp is costed but never used; source uses it to saute the onions.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tikka-masala-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chili Powder",
+        "detail":  "Chili powder 1 tbsp is costed but never used; part of the source marinade.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tikka-masala-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Turmeric",
+        "detail":  "Turmeric 1/2 tsp is costed but never used; part of the source marinade.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tikka-masala-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Plain Yogurt",
+        "detail":  "Yogurt 3 tbsp is costed but never used; it is the source\u0027s marinade base.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tikka-masala-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Tomato Paste",
+        "detail":  "Tomato paste 1-2 tbsp is costed but never used; source stirs it in at the finish.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tikka-masala-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Lemon Juice",
+        "detail":  "Lemon juice 1 tbsp is costed but never used; part of the source marinade.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tikka-masala-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "Salt 2.5 tsp is costed but no step uses or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tinga-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "2 cloves are costed but never used; source (themagicalslowcooker) sprinkles minced garlic over the chicken.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tinga-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Oregano",
+        "detail":  "Oregano 1 tsp is costed but never used; source sprinkles it over the chicken with the chipotle.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tinga-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt; Black Pepper",
+        "detail":  "Salt 1 tsp and pepper 1/4 tsp are costed but no step uses or says \u0027season\u0027; source sprinkles both in step 2.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tortilla-soup-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chicken Broth",
+        "detail":  "4 cups (1680 g) broth is costed but never added; the source (eatyourselfskinny) soup is built on 4 cups broth.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tortilla-soup-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Enchilada Sauce",
+        "detail":  "A 10 oz can (570 g) is costed but never used; source adds the whole can with the tomatoes.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tortilla-soup-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Diced Green Chiles",
+        "detail":  "A 4.5 oz can is costed but never used; source adds it with the enchilada sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tortilla-soup-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Yellow Onion",
+        "detail":  "1 medium onion is costed but never used; source sautes it as the aromatic base.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tortilla-soup-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "3 cloves are costed but never used; source sautes them with the onion.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tortilla-soup-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Cumin",
+        "detail":  "Cumin 1 tbsp is costed but never used; a core soup seasoning in the source.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tortilla-soup-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chili Powder",
+        "detail":  "Chili powder 1 tbsp is costed but never used; a core soup seasoning in the source.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tortilla-soup-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Bay Leaves",
+        "detail":  "1 bay leaf is costed but never used; source simmers it in the soup.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tortilla-soup-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Lime Juice",
+        "detail":  "Juice of 1 lime is costed but never used; source finishes the soup with it.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tortilla-soup-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt; Black Pepper",
+        "detail":  "Salt 1 tsp and pepper 1/4 tsp are costed but no step uses or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-cilantro-lime-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Fresh Cilantro",
+        "detail":  "2 cups packed cilantro (120 g) is costed but never used in a recipe titled Cilantro Lime Chicken; the source (realfoodwholelife) blends it into the sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-cilantro-lime-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "3 cloves are costed but never used; source blends them into the sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-cilantro-lime-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Cumin",
+        "detail":  "Cumin 1 tsp is costed but never used; source blends it into the sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-cilantro-lime-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "Salt 1 tsp is costed but no step uses or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-creamy-chicken-mushroom-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Thyme",
+        "detail":  "Thyme 1/2 tsp is costed but never used; source (skinnyms) puts it in the pot in step 1.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-creamy-chicken-mushroom-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Worcestershire Sauce",
+        "detail":  "Worcestershire 2 tsp is costed but never used; source puts it in the pot in step 1.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-creamy-chicken-mushroom-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt; Black Pepper",
+        "detail":  "Salt 1 tsp and pepper 1/2 tsp are costed but no step uses or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-cuban-mojo-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Oregano",
+        "detail":  "Oregano is costed but never used; oregano is a defining mojo ingredient whisked into the source sauce (eatingonadime).",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-cuban-mojo-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Fresh Cilantro",
+        "detail":  "1 cup chopped cilantro is costed but never used; source whisks it into the mojo sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-cuban-mojo-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Fresh Mint",
+        "detail":  "1/3 cup chopped mint is costed but never used; source whisks it into the mojo sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-cuban-mojo-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Cornstarch",
+        "detail":  "Cornstarch 1 tbsp is costed but never used; source whisks it into the sauce as thickener.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-cuban-mojo-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt; Black Pepper",
+        "detail":  "Salt and pepper 1 tsp each are costed but no step uses or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-dr-pepper-pulled-pork-bowls",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Zero-sugar soda (Dr Pepper)",
+        "detail":  "Step 2 says \u0027Pour the zero-sugar soda over the pork\u0027 but no soda appears anywhere in the costed ingredient list, so the shopper cannot make the recipe\u0027s namesake braise.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-dr-pepper-pulled-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt; Black Pepper; Garlic Powder",
+        "detail":  "All three are costed with the annotation \u0027for rub\u0027 but no step performs a rub or seasons the pork; the source (spendwithpennies) seasons the roast with them before cooking.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-filipino-pork-adobo-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Bay Leaves",
+        "detail":  "3 bay leaves are costed but never used; bay is a core adobo aromatic that the source (skinnytaste) combines in step 1.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-filipino-pork-adobo-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper (peppercorns)",
+        "detail":  "6 peppercorns are costed but never used; the source combines them in the braise in step 1.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-french-onion-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Condensed French Onion Soup",
+        "detail":  "2 cans (600 g) are costed but never used; the source (ohsnapmacros) sauce is built on the condensed soup, so the dish\u0027s namesake ingredient is bought and dropped.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-french-onion-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Swiss Cheese",
+        "detail":  "Swiss \u00272.5 oz + topping\u0027 (180 g) is costed but never used; source melts it on top at the finish.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-french-onion-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Worcestershire Sauce",
+        "detail":  "Worcestershire 1 tbsp is costed but never used; source whisks it into the sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-french-onion-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt; Black Pepper",
+        "detail":  "Salt and pepper \u0027to taste\u0027 are costed but no step uses or says \u0027season\u0027; source seasons the chicken in step 1.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-greek-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Oregano",
+        "detail":  "A jar of oregano is costed but never used; oregano is the defining Greek seasoning whisked into the source sauce (rachelcooks).",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-greek-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Onion Powder",
+        "detail":  "Onion powder 1/2 tsp is costed but never used; source whisks it into the sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-greek-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt; Black Pepper",
+        "detail":  "Salt 1 tsp and pepper 1/4 tsp are costed but no step uses or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-honey-garlic-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chicken Broth",
+        "detail":  "Broth 3/4 cup is costed but never used; source (themagicalslowcooker) whisks broth with cornstarch as the glaze base.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-honey-garlic-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Cornstarch",
+        "detail":  "Cornstarch 3 tbsp is costed but never used; source whisks it into the glaze to thicken it.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-honey-garlic-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Onion Powder",
+        "detail":  "Onion powder 1/2 tsp is costed but never used; part of the source glaze.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-honey-garlic-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Red Pepper Flakes",
+        "detail":  "Red pepper flakes 1/2 tsp are costed but never used; part of the source glaze.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-honey-garlic-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Ginger",
+        "detail":  "Ground ginger 1/4 tsp is costed but never used; part of the source glaze.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-honey-sesame-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "Pepper 1/4 tsp is costed but no step uses or says \u0027season\u0027; source (kristineskitchenblog) whisks it into the sauce.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-italian-beef-bowl",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Black Pepper",
+        "detail":  "Step 2 says \u0027season with a little salt and pepper\u0027 but black pepper is not in the costed ingredient list (salt is).",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-italian-chicken-penne",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Red Pepper Flakes",
+        "detail":  "Red pepper flakes 1/4 tsp are costed but never used; the source (thewholecook) adds crushed red pepper to the pot with everything else.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-italian-chicken-penne",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Paprika",
+        "detail":  "Paprika 1/2 tsp is costed but never used in any step (it is not in the source either).",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-italian-chicken-penne",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt; Black Pepper",
+        "detail":  "Salt 1 tsp and pepper 1/2 tsp are costed but no step uses or says \u0027season\u0027; both are in the source pot.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-italian-pork-loin-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Italian Seasoning",
+        "detail":  "A jar of Italian seasoning is costed but never used in an \u0027Italian\u0027 pork recipe; the source (bettycrocker) mixes 1 tbsp into the bean layer.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-italian-pork-loin-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "Salt 2 tsp is costed but no step uses or says \u0027season\u0027; source salts both the bean mixture and the pork.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-jerk-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chicken Broth",
+        "detail":  "Broth \u00271/2-1 cup\u0027 is costed but never used; the source (garlicandzest) adds it to the slow cooker with the seasoned pork.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-kalua-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Liquid Smoke",
+        "detail":  "Liquid smoke is costed but never used; it is the ingredient that makes kalua pork, poured over the pork in the source (downshiftology).",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-king-ranch-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Corn Tortillas",
+        "detail":  "15 torn corn tortillas (450 g) are costed but never used in any step; source (houseofyumm) serves the soup over tortilla chips.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-king-ranch-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Butter",
+        "detail":  "Butter 8 tbsp (250 g) is costed but never used; source melts it for the roux that thickens the soup.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-king-ranch-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "All-Purpose Flour",
+        "detail":  "Flour 1/2 cup is costed but never used; source whisks it into the butter roux.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-king-ranch-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chicken Broth",
+        "detail":  "4 cups (1440 g) broth is costed but never added; the source soup is built on 4 cups broth whisked into the roux.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-king-ranch-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "2 cloves are costed but never used; source cooks them in the butter.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-king-ranch-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chili Powder",
+        "detail":  "Chili powder 4 tsp is costed but never used; a core seasoning stirred into the source broth.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-king-ranch-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Cumin",
+        "detail":  "Cumin 1 tbsp is costed but never used; stirred into the source broth.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-king-ranch-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic Powder",
+        "detail":  "Garlic powder 1 tbsp is costed but never used; stirred into the source broth.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-king-ranch-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Jalapeno",
+        "detail":  "1 medium jalapeno is costed but never used; source adds it minced with the tomatoes.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-king-ranch-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt; Black Pepper",
+        "detail":  "Salt 1 tsp and pepper \u0027to taste\u0027 are costed but no step uses or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-korean-shredded-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Rice Vinegar",
+        "detail":  "Rice vinegar is costed but never used; source (slenderkitchen) whisks 1 tbsp rice wine vinegar into the sauce.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-korean-shredded-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Jalapeno",
+        "detail":  "2 diced jalapenos (or Sriracha) are costed but never used; source puts them in the sauce and they are the dish\u0027s only heat.",
+        "confidence":  "high",
+        "chunk":  "07"
+    },
+    {
+        "slug":  "slow-cooker-kung-pao-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ginger",
+        "detail":  "1 tsp minced ginger is costed but no step mentions it; the source puts ginger in the step-3 sauce mix.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-kung-pao-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Red Pepper Flakes",
+        "detail":  "1/4-1/2 tsp flakes costed but never used in steps; source sauce includes 1/4-1/2 tsp dried chili flakes.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-kung-pao-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "Both costed; steps never say salt, pepper, or season (source seasons the chicken with them before browning).",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-maple-dijon-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "Both costed; steps never say salt, pepper, or season (source step 1 seasons the pork with them).",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-mediterranean-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Oregano",
+        "detail":  "1 tsp costed but no step uses it; source adds oregano to the slow cooker in step 3.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-mediterranean-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Thyme",
+        "detail":  "1 tsp costed but no step uses it; source adds thyme to the slow cooker in step 3.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-mediterranean-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Rosemary",
+        "detail":  "1 tsp costed but no step uses it; source adds rosemary to the slow cooker in step 3.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-mediterranean-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Bay Leaves",
+        "detail":  "1 leaf costed but no step uses it; source adds a bay leaf to the slow cooker in step 3.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-mediterranean-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "Both costed; steps never say salt, pepper, or season (source seasons to taste in step 4).",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-mississippi-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Au Jus Gravy Mix",
+        "detail":  "A 1-oz packet is costed but steps sprinkle only the ranch mix; source step 2 sprinkles au jus AND ranch over the meat.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-mississippi-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Cornstarch",
+        "detail":  "2 tbsp costed but no slurry/thickening step exists; source steps 6-7 thicken the juices with a cornstarch slurry.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-mongolian-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Rice Vinegar",
+        "detail":  "2 tbsp costed but the step-1 sauce is only soy/brown sugar/hoisin/sesame oil/garlic; source sauce includes 2 tbsp rice wine vinegar.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-mongolian-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ginger",
+        "detail":  "1 tsp grated costed but never used in steps; source sauce includes 1 tsp grated ginger.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-mongolian-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Sriracha",
+        "detail":  "1-2 tsp costed but never used in steps; source sauce includes 1-2 tsp Sriracha.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-orange-chicken-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Rice Vinegar",
+        "detail":  "1 oz costed but the step-2 sauce is only OJ/soy/honey/sesame oil; source sauce includes 1 oz rice vinegar.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-orange-chicken-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Ginger",
+        "detail":  "1 tsp costed but never used in steps; source sauce includes 1 tsp ground ginger.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-orange-chicken-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Orange Zest",
+        "detail":  "Zest is costed as its own line but never used in steps; source whisks orange zest into the sauce.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-orange-chicken-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "1/2 tsp costed; steps never mention pepper or seasoning (source sauce includes 1/2 tsp black pepper).",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-birria-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salsa (Pace)",
+        "detail":  "1.25 cups salsa costed but no step ever uses it; it maps to the source\u0027s pico de gallo taco topping which our steps dropped.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-carnitas-bowl",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Oregano",
+        "detail":  "1/2 tbsp costed but the rub step names only cumin/chili powder/onion powder/salt/pepper; oregano is not in the source either.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-carnitas-bowl",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Cinnamon",
+        "detail":  "Costed as \u00272 small sticks\u0027 but never used in any step and absent from the source recipe.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-green-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chicken Broth",
+        "detail":  "2 cups costed but never added in steps; source step 1 combines 2 cups stock into the slow cooker base.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-green-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Jalapeno",
+        "detail":  "1-2 jalapenos costed but never used; source step 1 adds chopped jalapeno to the base.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-green-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "4 cloves costed but never used; source step 1 adds minced garlic to the base.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-green-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Cumin",
+        "detail":  "1 tbsp costed but never used; source step 1 adds all spices including cumin.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-green-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Smoked Paprika",
+        "detail":  "1/2 tsp costed but never used; it is part of the source\u0027s step-1 spice set.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-green-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Cayenne Pepper",
+        "detail":  "1/2 tsp costed but never used; it is part of the source\u0027s step-1 spice set.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-green-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Oregano",
+        "detail":  "1/4 tsp costed but never used; it is part of the source\u0027s step-1 spice set.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-green-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Butter",
+        "detail":  "2 tbsp costed but never used; source steps 5-7 make a butter-flour roux to thicken the chili.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-green-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "All-Purpose Flour",
+        "detail":  "1/4 cup costed but never used; it is the other half of the source\u0027s roux.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-green-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Lime Juice",
+        "detail":  "1 lime costed but never used; source step 8 finishes the chili with fresh lime juice.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-green-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Green Chile Sauce",
+        "detail":  "The 16-oz jar is never explicitly added (step 2 pours only chiles and salsa verde); step 4\u0027s \u0027stir it through the green chili sauce\u0027 reads as the pot\u0027s sauce, not the jar.",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-green-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "Both costed; steps never say salt, pepper, or season (source includes both in the step-1 spice set).",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-posole-verde-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "1 bulb costed but never used; source step 2 adds minced garlic to the slow cooker.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-posole-verde-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Oregano",
+        "detail":  "Mexican oregano costed but never used; source step 1 seasons the pork with it.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-posole-verde-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Cumin",
+        "detail":  "Costed but never used; source step 1 seasons the pork with cumin.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-posole-verde-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chili Powder",
+        "detail":  "Costed but never used; source step 1 seasons the pork with chili powder.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-posole-verde-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Orange Juice",
+        "detail":  "1/2 cup costed but never used; source step 2 squeezes orange juice into the pot.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-posole-verde-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Lime Juice",
+        "detail":  "2 limes costed but never used; source step 2 squeezes lime juice into the pot.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-posole-verde-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chicken Broth",
+        "detail":  "A carton is costed but steps add \u0027enough water to nearly cover\u0027 instead; source uses broth plus stock, never plain water.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-posole-verde-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "Both costed; steps never say salt, pepper, or season (source step 1 seasons the pork with both).",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-tinga-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Vegetable Oil",
+        "detail":  "1 tbsp costed but our steps have no browning; source step 1 browns the pork in the oil.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-tinga-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Worcestershire Sauce",
+        "detail":  "1 tbsp costed but never used; source step 2 stirs Worcestershire into the slow cooker.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-tinga-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Oregano",
+        "detail":  "1 tsp costed but never used; source step 2 adds oregano to the slow cooker.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pork-tinga-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "Both costed \u0027to taste\u0027; steps never say salt, pepper, or season.",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-pulled-pork-bowl",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Smoked Paprika",
+        "detail":  "2 tsp costed but the seasoning step names only garlic powder, onion powder, salt and pepper; paprika is not in the source either.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-ranch-pork-potato-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "Both costed; steps only rub the pork with oil and never season (source step 1 seasons all sides with salt and pepper).",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-root-beer-pulled-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Smoked Paprika",
+        "detail":  "2 tbsp costed but there is no rub step; source rubs the pork with a smoked-paprika-based dry rub before cooking.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-root-beer-pulled-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Cumin",
+        "detail":  "2 tsp costed but never used; cumin is part of the source\u0027s dry rub.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-root-beer-pulled-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Cayenne Pepper",
+        "detail":  "1/4-1/2 tsp costed but never used; cayenne is part of the source\u0027s dry rub.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-root-beer-pulled-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "Both costed; steps never say salt, pepper, or season (both are in the source\u0027s dry rub).",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-salsa-verde-chicken-bowl",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Yellow Onion",
+        "detail":  "About 3 onions (330 g) costed but no step mentions onion; the source has no onion at all.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-salsa-verde-chicken-bowl",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Green Bell Pepper",
+        "detail":  "About 3 peppers (350 g) costed but no step mentions bell pepper; the source has no bell pepper.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-salsa-verde-chicken-bowl",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic Powder",
+        "detail":  "Costed but never used in any step and absent from the source recipe.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-salsa-verde-chicken-bowl",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "Costed \u0027to taste\u0027; steps use salt and cumin but never pepper.",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-salsa-verde-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Brown Sugar",
+        "detail":  "1/3 cup (150 g) costed but never used; source step 4 blends the brown sugar into the salsa verde sauce.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-salsa-verde-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "1/4 tsp kosher salt costed; steps never say salt or season (source blends it into the sauce).",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-sweet-and-sour-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "2 crushed cloves costed but the step-2 sauce is only honey/soy/pineapple; source whisks garlic into the sauce.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-sweet-and-sour-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Brown Sugar",
+        "detail":  "Costed but never used; source rubs the pork with a brown sugar and ginger mix before cooking.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-sweet-and-sour-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Ginger",
+        "detail":  "1 tsp costed but never used; it is the other half of the source\u0027s pork rub.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-sweet-and-sour-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Sweet Chili Sauce",
+        "detail":  "2 tbsp costed but never used; source whisks sweet chili sauce into the sauce.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-sweet-and-sour-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "White Wine Vinegar",
+        "detail":  "1 tbsp costed but never used; the vinegar is the \u0027sour\u0027 of the source\u0027s sweet and sour sauce.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-sweet-and-sour-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Red Pepper Flakes",
+        "detail":  "1 tsp costed but never used; source whisks red pepper flakes into the sauce.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-teriyaki-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Pineapple Juice",
+        "detail":  "6 oz costed but the step-2 pour is only teriyaki/broth/honey/garlic; source whisks pineapple juice into the slow cooker sauce.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-teriyaki-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Red Pepper Flakes",
+        "detail":  "1/2 tsp costed but never used; source seasons the pork with chili flakes before searing.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-teriyaki-pork-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "1/4 tsp costed; steps never mention pepper or seasoning (source seasons the pork with it).",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-thai-peanut-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Rice Vinegar",
+        "detail":  "2 tbsp costed but the step-1 sauce omits it; source whisks 2 tbsp rice vinegar into the peanut sauce.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-turkey-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Vegetable Oil",
+        "detail":  "Costed \u0027for frying\u0027 but our steps add the turkey raw with no browning; source browns the turkey and sautes aromatics in oil.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-turkey-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "3 cloves costed but never used; source sautes garlic with the onion in step 2.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-turkey-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Celery",
+        "detail":  "3 large stalks (200 g) costed but never used; source cooks celery with the bell peppers in step 3.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-turkey-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chicken Broth",
+        "detail":  "1 cup costed but never added; source adds 1 cup broth with the beans and tomatoes.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-turkey-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Taco Seasoning",
+        "detail":  "1 tbsp costed but never used; source adds taco seasoning with the chili powder in step 4.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-turkey-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "Both costed \u0027to taste\u0027; steps never say salt, pepper, or season.",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-turkey-pasta-e-fagioli",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Parmesan Cheese",
+        "detail":  "7.25 oz costed but no step ever uses it; source serves the soup topped with grated Parmesan.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-tuscan-chicken-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Shallots",
+        "detail":  "1/2 cup chopped (180 g) costed but never used; source sautes the shallots as the aromatic base in step 2.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-tuscan-chicken-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "2 cloves costed but never used; source sautes garlic with the shallots.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-tuscan-chicken-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Italian Seasoning",
+        "detail":  "1 tsp costed but never used; source adds Italian seasoning to the slow cooker in step 4.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-tuscan-chicken-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Cornstarch",
+        "detail":  "1 tbsp costed but never used; source whisks cornstarch into the cream to thicken the sauce in step 6.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-tuscan-chicken-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Spinach",
+        "detail":  "3 cups fresh spinach costed but never used; source wilts the spinach into the sauce at the end, and it is a defining element of the Tuscan dish.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-tuscan-chicken-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "Both costed; steps never say salt, pepper, or season.",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-white-chicken-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Jalapeno",
+        "detail":  "1 jalapeno costed but never used; source layers diced jalapeno in the base.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-white-chicken-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "1 bulb costed but never used; source layers 6 minced cloves in the base.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-white-chicken-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Cumin",
+        "detail":  "Costed but never used; source adds 2.5 tsp cumin with the base spices.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-white-chicken-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Oregano",
+        "detail":  "Costed but never used; source adds 1 tsp oregano with the base spices.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-white-chicken-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chili Powder",
+        "detail":  "Costed but never used; source adds 1 tbsp chili powder with the base spices.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-white-chicken-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chicken Broth",
+        "detail":  "1 carton costed but never added; source pours the broth over everything in step 3 (our steps cook in coconut milk alone).",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-white-chicken-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Lime Juice",
+        "detail":  "2 limes costed but never used; source finishes the chili with lime juice in step 6.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-white-chicken-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Fresh Cilantro",
+        "detail":  "A full bunch is costed but never used; source stirs 1/2 cup chopped cilantro into the chili at the finish.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "slow-cooker-white-chicken-chili-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "Both costed; steps never say salt, pepper, or season (source seasons to taste in step 6).",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "spanish-turkey-albondigas-over-rice",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Paprika",
+        "detail":  "1.5 tbsp plain paprika is costed as its own line but steps only ever say \u0027smoked paprika\u0027; the source sauce uses 1 tsp plain paprika.",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "spicy-vodka-rigatoni-italian-sausage",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Vodka",
+        "detail":  "Our title names vodka and the source deglazes with 1/2 cup vodka to build the sauce, but our card neither buys nor mentions any vodka or substitute deglazing liquid.",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "spicy-vodka-rigatoni-italian-sausage",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "1.5 tbsp costed; steps salt the pasta water but never use black pepper or say season.",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "sudado-de-cerdo-colombian-pork-stew",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Rice",
+        "detail":  "The final step says \u0027Cook the rice per the package to serve underneath\u0027 but rice is not in the costed ingredient list (source serves over white rice).",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "swedish-meatball-potato-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Eggs",
+        "detail":  "1 large egg costed but the meatball mix step uses only beef/crumbs/milk/onion; the egg is the binder in the source\u0027s meatball mix.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "swedish-meatball-potato-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "All-Purpose Flour",
+        "detail":  "1/4 cup costed but never used; source makes a butter-flour roux for the gravy (our gravy is broth plus sour cream only).",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "swedish-meatball-potato-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Butter",
+        "detail":  "1 tbsp costed but never used; it is half the fat for the source\u0027s roux.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "swedish-meatball-potato-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Olive Oil",
+        "detail":  "Costed with the note \u0027(sauce)\u0027 but never used; it is the other half of the source\u0027s roux fat.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "swedish-meatball-potato-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Vegetable Oil",
+        "detail":  "Costed with the note \u0027(meatballs)\u0027 but the browning step never names any oil.",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "swedish-meatball-potato-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Brown Sugar",
+        "detail":  "Costed as \u00271 tsp (meatballs) + 1 tsp (sauce)\u0027 but neither use appears in any step; source uses it in both places.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "swedish-meatball-potato-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Nutmeg",
+        "detail":  "1/4 tsp costed but never used; nutmeg is one of the two defining Swedish meatball spices in the source mix.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "swedish-meatball-potato-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Allspice",
+        "detail":  "1/4 tsp costed but never used; allspice is the other defining Swedish meatball spice in the source mix.",
+        "confidence":  "high",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "swedish-meatball-potato-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "Both costed; steps never say salt, pepper, or season (both are in the source meatball mix).",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "szegedin-goulash-pork-sauerkraut",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "1.75 tbsp salt and pepper costed; steps never say salt, pepper, or season (source adds both with the caraway in step 3).",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "taiwanese-braised-beef-noodle-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "1/2 tbsp costed; steps adjust only \u0027the salt\u0027 and never mention pepper.",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "taiwanese-lu-rou-fan-pork-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "1 tbsp costed; steps never say salt or season (black pepper is used, salt is not).",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "taiwanese-three-cup-chicken",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "Both costed; steps never say salt, pepper, or season.",
+        "confidence":  "medium",
+        "chunk":  "08"
+    },
+    {
+        "slug":  "tex-mex-beef-rice-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chili Powder (ground chipotle)",
+        "detail":  "Costed at 2 tsp but our steps only use paprika and cumin; the masonfit source coats the beef with all six spices (paprika, chipotle, cumin, garlic powder, pepper, salt) before browning.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "tex-mex-beef-rice-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic Powder",
+        "detail":  "Costed at 1 tsp but never mentioned in our steps; the source includes it in the spice rub applied to the beef in step 2.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "tex-mex-beef-rice-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "Both are costed but our steps never use them and never say \u0027season\u0027; the source puts both in the beef spice rub.",
+        "confidence":  "medium",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "thai-basil-beef-bowls-with-coconut-rice",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "0.5 tbsp is costed but no step uses it or says \u0027season\u0027 (salt is used only as a pinch in the rice).",
+        "confidence":  "medium",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "thai-basil-chicken-pad-krapow",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "1 tbsp salt and 0.5 tbsp pepper are costed but no step uses either or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "thai-basil-pork-pad-kra-pao-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Rice",
+        "detail":  "4.25 cups dry rice (770 g) is costed for a \u0027Bowls\u0027 dish but the steps end at wilting the basil and never cook, mention, or plate the rice.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "thai-cashew-chicken",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "1 tbsp salt and 0.5 tbsp pepper are costed but no step uses either or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "thai-coconut-curry-turkey-meatballs",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Curry Powder",
+        "detail":  "Costed at 0.75 tbsp; the wholesomelicious source puts curry powder in the meatball mix, but our step 3 lists the meatball spices (garlic powder, ground ginger, dried basil, salt, pepper) without it and no other step uses it.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "thai-coconut-curry-turkey-meatballs",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Red Bell Pepper",
+        "detail":  "2.3 peppers (280 g) are costed; the source sautes red bell pepper into the curry sauce with the onion, but our step 5 cooks only onion, garlic, ginger, and curry paste and no step ever mentions the bell pepper.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "thai-drunken-noodles-chicken",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "1 tbsp salt and 0.5 tbsp pepper are costed but no step uses either or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "thai-green-curry-chicken",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Green curry paste",
+        "detail":  "The recipetineats source is built on Thai GREEN curry paste (Maesri), but our list buys Thai Kitchen RED curry paste (10 oz) for a dish titled \u0027Thai Green Curry Chicken\u0027, changing the title-defining flavor.",
+        "confidence":  "medium",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "thai-pork-drunken-noodles",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Sweet soy sauce (kecap manis) / sugar",
+        "detail":  "The platingsandpairings sauce is 1/4 cup fish sauce + 1/4 cup SWEET soy + rice vinegar; ours subs plain soy and buys no sugar at all, dropping the sauce\u0027s defining sweetness even though the catalog stocks ABC Kecap Manis (used in turkey-nasi-goreng).",
+        "confidence":  "medium",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "thai-pork-drunken-noodles",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "1 tbsp salt and 0.5 tbsp pepper are costed but no step uses either or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "thai-turkey-larb-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Fish Sauce",
+        "detail":  "3 Tbsp fish sauce is costed but the steps never add it; in the trifectanutrition source fish sauce is THE larb seasoning, incorporated into the turkey while it cooks (source step 3).",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "thai-turkey-larb-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Jalapeno (dry chiles / chile powder)",
+        "detail":  "The costed \u00273-4 dry chiles or 1.5 Tbsp chile powder\u0027 never appears in our steps; the source toasts and grinds the chiles and mixes the powder in first during assembly.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "thai-turkey-larb-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Fresh Cilantro",
+        "detail":  "1/2 cup chopped cilantro is costed but never used in our steps; the source mixes it structurally into the larb, not as a garnish.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "thai-turkey-larb-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Fresh Mint",
+        "detail":  "1/3 cup mint is costed but never used in our steps; mint mixed into the meat is a defining larb herb in the source.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "thai-turkey-larb-bowls",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Salt",
+        "detail":  "Our step 4 says \u0027season with salt to taste\u0027 but salt is not in the costed ingredient list.",
+        "confidence":  "medium",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-ants-climbing-a-tree",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "1 tbsp salt and 0.5 tbsp pepper are costed but no step uses either or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-chile-relleno-casserole-skillet",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Rice",
+        "detail":  "4.25 cups dry rice (770 g) is costed but the steps never cook, mention, or serve it; the mytherapistcooks source only suggests rice as an optional accompaniment.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-chili-mac",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chicken Broth",
+        "detail":  "2.5 cups (1800 g) of broth is costed but the steps never add it; the skinnyfitalicious source simmers the chili in it for 10-12 minutes.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-chili-mac",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "1 tbsp minced garlic is costed but never used in our steps; the source sautes it with the onion in step 1.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-chili-mac",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Ground Cumin",
+        "detail":  "Costed but never used in our steps; the source blooms it with the tomato paste in step 3.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-chili-mac",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Paprika",
+        "detail":  "Costed but never used in our steps; the source blooms it with the tomato paste in step 3.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-chili-mac",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chili Powder",
+        "detail":  "Costed but never used in our steps - a chili mac whose instructions never add chili powder; the source blooms it with the tomato paste in step 3.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-chili-mac",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic Powder",
+        "detail":  "Costed but never used in our steps; the source adds it with the other spices in step 3.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-chili-mac",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Olive Oil",
+        "detail":  "1 tbsp is costed but the steps brown the turkey with no oil mentioned; the source heats the oil first.",
+        "confidence":  "medium",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-chili-mac",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "Both are costed (\u0027to taste\u0027) but no step uses either or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-chili-verde-white-beans",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Salsa verde",
+        "detail":  "Our step 5 says \u0027pour in the jarred salsa verde\u0027 but the list buys generic \u0027Salsa (Pace)\u0027 (7 cups); the thewheatlesskitchen source explicitly requires salsa verde, \u0027not regular salsa\u0027.",
+        "confidence":  "medium",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-drunken-noodles",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "1 tbsp salt and 0.5 tbsp pepper are costed but no step uses either or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-egg-roll-in-a-bowl-over-rice",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "1.25 tbsp salt and 0.5 tbsp pepper are costed but no step uses either or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-fajita-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Fajita Seasoning",
+        "detail":  "A full packet is costed but the steps never season the meat; in the lillieeatsandtells source the fajita spice blend added with the tomato paste is the entire flavor of the dish.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-fajita-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Balsamic Vinegar",
+        "detail":  "2 Tbsp is costed but never used in our steps; the source stirs it in with the salsa verde and cream cheese in step 4.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-fajita-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "Two garlic cubes are costed but never used in our steps; the source adds them with the spices and tomato paste.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-kabsa-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garam Masala",
+        "detail":  "2.5 tbsp (the largest spice purchase, standing in for the source\u0027s cardamom/cloves/nutmeg kabsa mix) is costed, but step 4 enumerates the spice mix as cinnamon, cumin, coriander, allspice, paprika, cloves, and bay leaves without garam masala, and no other step uses it.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-kabsa-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "0.5 tbsp salt and 0.5 tbsp pepper are costed but no step uses either or says \u0027season\u0027; the source seasons the chicken with both before searing.",
+        "confidence":  "medium",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-keema-curry-with-peas",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "1 tbsp salt and 0.5 tbsp pepper are costed but no step uses either or says \u0027season\u0027; the fellybull source salts the onions and seasons to taste at the end.",
+        "confidence":  "medium",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-manicotti-ricotta",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Rice",
+        "detail":  "The final step says \u0027cook the rice, and move the rice into your weighed pot\u0027 but rice is not in the costed ingredient list of this pasta dish.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-meatball-marinara-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Eggs",
+        "detail":  "1 beaten egg is costed as the meatball binder (per the reciperunner source) but our steps never make meatballs - they brown the turkey into \u0027meatball-sized chunks\u0027 and never use the egg.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-meatball-marinara-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Panko Breadcrumbs",
+        "detail":  "1/4 cup is costed for the source\u0027s meatball binder but never appears in our steps.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-meatball-marinara-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Worcestershire Sauce",
+        "detail":  "1 tbsp is costed for the source\u0027s meatball mix but never appears in our steps.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-meatball-marinara-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "1 clove is costed for the source\u0027s meatball mix but never appears in our steps.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-meatball-marinara-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Basil",
+        "detail":  "1 tsp is costed for the source\u0027s meatball mix but never appears in our steps.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-meatball-marinara-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Oregano",
+        "detail":  "1 tsp is costed for the source\u0027s meatball mix but never appears in our steps.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-meatball-marinara-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Mozzarella Cheese",
+        "detail":  "510 g is costed (the source stuffs cubes into each meatball and tops with shredded) but mozzarella never appears in our steps - only parmesan is used as a finish.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-meatball-marinara-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt \u0026 Black Pepper",
+        "detail":  "Both are costed (\u0027to taste\u0027) but no step uses either or says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-meatball-sub-bake",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Rice",
+        "detail":  "Step 6 says \u0027Cook the rice and move it into your weighed pot\u0027 but rice is not in the costed ingredient list of this sub-roll dish.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-meatloaf-with-mashed-potatoes",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Potatoes (mashed)",
+        "detail":  "Our title promises \u0027with Mashed Potatoes\u0027 but no potatoes are bought or cooked anywhere - the steps serve the meatloaf over rice, and the thecozycook source only suggests mashed potatoes as a side.",
+        "confidence":  "medium",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-minestrone",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Parmesan Cheese",
+        "detail":  "5.75 oz (162 g) is costed but no step uses or portions it; in the skinnyspatula source parmesan is the serving topping, which our steps dropped.",
+        "confidence":  "high",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-nasi-goreng",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Green Onions",
+        "detail":  "8.75 tbsp are costed but never mentioned in our steps; the recipetineats source finishes the rice with sliced green onion.",
+        "confidence":  "medium",
+        "chunk":  "09"
+    },
+    {
+        "slug":  "turkey-picadillo-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Green Olives",
+        "detail":  "We buy \u00272 tbsp pitted Spanish olives + 2 tbsp brine\u0027 but our steps never mention olives, while the Skinnytaste source stirs olives with their brine into the meat as picadillo\u0027s defining ingredient.",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-picadillo-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "We buy 2 cloves minced garlic but no step uses garlic; the source\u0027s sofrito is built on it.",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-picadillo-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Bay Leaves",
+        "detail":  "We buy 2 small bay leaves but no step adds them; the source simmers the picadillo with bay leaves.",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-picadillo-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "1 tsp kosher salt is in the list but the steps never salt or say \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-ragu-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Turkey Bacon",
+        "detail":  "We buy 396 g chopped turkey bacon but no step cooks it; the crunchtimekitchen source opens by crisping the turkey bacon as the flavor base.",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-ragu-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Celery",
+        "detail":  "2 diced stalks bought; steps only soften onion and carrots, dropping the source\u0027s onion-carrot-celery soffritto.",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-ragu-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "2 chopped cloves bought; no step uses garlic though the source cooks it with the vegetables.",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-ragu-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Thyme",
+        "detail":  "1 tsp bought; no step uses thyme though the source adds it with the vegetables.",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-ragu-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "Bought but the steps never salt anything or say \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-ragu-pasta",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "Bought but never referenced in any step.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-san-choy-bow-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "1 tbsp bought; steps never salt anything or say \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-san-choy-bow-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "0.5 tbsp bought; never referenced in any step.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-singapore-curry-noodles",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "1 tbsp bought; steps never salt anything or say \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-singapore-curry-noodles",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "0.5 tbsp bought; never referenced in any step.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-singapore-curry-noodles",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "cooking oil",
+        "detail":  "Step 3 says to scramble the eggs \u0027in a hot oiled pan\u0027 but no oil of any kind is in the costed list.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-sloppy-joe-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Chicken Broth",
+        "detail":  "3/4 cup (540 g) bought but no step adds it; the source whisks broth into the sloppy joe sauce, and our steps instead say \u0027add a splash of water\u0027.",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-sloppy-joe-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Soy Sauce",
+        "detail":  "Bought as the coconut-aminos substitute but never used; it is a core component of the source\u0027s sauce.",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-sloppy-joe-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Apple Cider Vinegar",
+        "detail":  "1 tbsp bought but never used; the source sauce depends on it for the tangy half of sweet-tangy.",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-sloppy-joe-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Smoked Paprika",
+        "detail":  "Bought but never used; present in the source\u0027s sauce mix.",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-sloppy-joe-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Garlic",
+        "detail":  "3 cloves bought but no step uses garlic; the source cooks it with the turkey and vegetables.",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-sloppy-joe-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Olive Oil",
+        "detail":  "2 tsp bought; steps brown the turkey with no oil mentioned.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-sloppy-joe-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "Bought but the steps never salt anything or say \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-sloppy-joe-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "Bought but never referenced in any step.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-soboro-don",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "1 tbsp bought; the two sauce bowls (soy, mirin, sugar, broth, ginger) and no other step ever use salt or say \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-soboro-don",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "0.5 tbsp bought; never referenced in any step.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-tamale-pie",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "0.5 tbsp bought; the filling spices (chili powder, cumin, paprika, garlic powder) and the batter steps never mention pepper.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "turkey-zha-jiang-mian",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "0.5 tbsp bought; step 6 adds sugar, cinnamon, black pepper and bay leaves but salt is never used and no step says \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "unstuffed-cabbage-roll-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Dried Oregano",
+        "detail":  "Bought but no step uses it; the source stirs oregano in with the tomatoes in its combine-and-simmer step.",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "unstuffed-cabbage-roll-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Paprika",
+        "detail":  "Bought but no step uses it; part of the source\u0027s seasoning set added at simmer.",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "unstuffed-cabbage-roll-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Red Pepper Flakes",
+        "detail":  "Bought but no step uses them; part of the source\u0027s seasoning set added at simmer.",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "unstuffed-cabbage-roll-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Olive Oil",
+        "detail":  "2 tbsp bought; the source cooks the cabbage in the oil but our steps never use it.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "unstuffed-pepper-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Tomato Paste",
+        "detail":  "2 tbsp bought but never used; the source caramelizes the tomato paste as its flavor-development step.",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "unstuffed-pepper-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Worcestershire Sauce",
+        "detail":  "2 tsp bought but never used; the source adds it with the liquids for umami.",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "unstuffed-pepper-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Paprika",
+        "detail":  "1 tsp bought but never used; in the source\u0027s liquid-and-seasoning step.",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "unstuffed-pepper-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Cheddar Cheese",
+        "detail":  "1/2 cup shredded bought but step 5 melts only the mozzarella; the source tops with both mozzarella and cheddar.",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "unstuffed-pepper-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Olive Oil",
+        "detail":  "1 tbsp bought; steps brown the beef with no oil mentioned.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "unstuffed-pepper-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "Bought but the steps never salt anything or say \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "unstuffed-pepper-skillet-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "Bought but never referenced in any step.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "vietnamese-bo-kho-lemongrass-beef-stew",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Bay Leaves",
+        "detail":  "Step 5 says to return the beef \u0027with the remaining marinade, the chicken broth, soy sauce, and bay leaves\u0027 but bay leaves are not in the costed list (the Woks of Life source uses star anise, not bay).",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "vietnamese-caramelized-ground-beef-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Apple Cider Vinegar",
+        "detail":  "0.75 cups bought for the source\u0027s pickled red onion and carrot, but our steps prep those vegetables fresh and never pickle anything.",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "vietnamese-caramelized-ground-beef-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Sugar",
+        "detail":  "0.5 tbsp granulated sugar bought (the source\u0027s pickling sugar, distinct from the brown sugar caramel) but never used in any step.",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "vietnamese-caramelized-ground-beef-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "Bought but the steps never salt anything or say \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "vietnamese-caramelized-ground-beef-rice-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "Bought but never referenced in any step.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "vietnamese-caramelized-ground-beef-rice-bowls",
+        "class":  "STEP-CONTRADICTION",
+        "ingredient":  "Chicken Broth",
+        "detail":  "Step 6 says to add \u0027the splash of chicken broth\u0027 but chicken broth is not in the costed list (nor in the Kitchen Sanctuary source).",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "vietnamese-lemongrass-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Cayenne Pepper",
+        "detail":  "0.25 tbsp bought; the Flavor Bender source puts cayenne in the marinade but our step 2 marinade (fish sauce, lemongrass, garlic, honey, soy, pepper, sugar) omits it.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "vietnamese-lemongrass-chicken-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "1 tbsp bought; steps never salt anything or say \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "vietnamese-lemongrass-pork-chops-with-broken-rice",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "1 tbsp bought; steps never salt anything or say \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "vietnamese-lemongrass-pork-chops-with-broken-rice",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "0.5 tbsp bought; never referenced in any step.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "vietnamese-lemongrass-pork-noodle-bowls",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Lemongrass",
+        "detail":  "Our own title is \u0027Lemongrass Pork Noodle Bowls (Bun Thit Nuong)\u0027 and the RecipeTin Eats source uses lemongrass-marinated pork, but no lemongrass in any form appears in our list or steps; our marinade is only fish sauce and sugar.",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "vietnamese-lemongrass-pork-noodle-bowls",
+        "class":  "MISSING-KEY-INGREDIENT",
+        "ingredient":  "Garlic",
+        "detail":  "The source\u0027s nuoc cham contains 5 cloves of finely chopped garlic (and the marinade more), but garlic appears nowhere in our list or steps.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "vietnamese-lemongrass-pork-noodle-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "1 tbsp bought; steps never salt anything or say \u0027season\u0027.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "vietnamese-lemongrass-pork-noodle-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "0.5 tbsp bought; never referenced in any step.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "vietnamese-turkey-banh-mi-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Fresh Basil",
+        "detail":  "28 tbsp (42 g) bought but no step mentions basil; the This Healthy Table source mixes 1/2 cup chopped basil into the turkey.",
+        "confidence":  "high",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "vietnamese-turkey-banh-mi-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Salt",
+        "detail":  "1 tbsp bought; steps never salt anything or say \u0027season\u0027 (the pickle uses only vinegar and sugar, unlike the source which salts it).",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "vietnamese-turkey-banh-mi-bowls",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Black Pepper",
+        "detail":  "0.5 tbsp bought; never referenced in any step.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    },
+    {
+        "slug":  "west-african-jollof-rice-and-chicken",
+        "class":  "UNUSED-PURCHASE",
+        "ingredient":  "Paprika",
+        "detail":  "Plain paprika (0.75 tbsp) is bought alongside smoked paprika, but the steps only ever use smoked paprika; the source\u0027s rice seasoning includes regular paprika.",
+        "confidence":  "medium",
+        "chunk":  "10"
+    }
+]

@@ -1,0 +1,366 @@
+[
+    {
+        "slug": "american-goulash-pasta",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Celery",
+        "detail": "We buy '1 stick, finely chopped (120 g)' but no step uses celery; the source (natashaskitchen) sautes it with the onion and carrot in step 2.",
+        "confidence": "high"
+    },
+    {
+        "slug": "american-goulash-pasta",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Worcestershire Sauce",
+        "detail": "We buy 1 tbsp Worcestershire but no step uses it; the source stirs it in with the tomatoes and broth in step 3.",
+        "confidence": "high"
+    },
+    {
+        "slug": "american-goulash-pasta",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Sugar",
+        "detail": "We buy 1/4 tsp sugar but no step uses it; the source seasons the vegetables with sugar in step 2.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "american-goulash-pasta",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Olive Oil",
+        "detail": "We buy 1 tbsp olive oil but the steps brown the beef with no oil mentioned; the source browns the beef in oil in step 1.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "american-goulash-pasta",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Salt",
+        "detail": "We buy 2 tsp salt but the steps never say salt or season; the source seasons in step 2.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "american-goulash-pasta",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Black Pepper",
+        "detail": "We buy 1/2 tsp pepper but the steps never say pepper or season.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "al-pastor-pork-taco-bowl-with-cilantro-lime-rice",
+        "class": "MISSING-KEY-INGREDIENT",
+        "ingredient": "Cilantro and lime (cilantro lime rice)",
+        "detail": "Our title promises 'Cilantro Lime Rice' and the source's rice uses lime zest/juice and 1 cup cilantro, but our list and steps contain no cilantro or lime; our rice step substitutes 'a squeeze of the pineapple juice'.",
+        "confidence": "high"
+    },
+    {
+        "slug": "baked-turkey-kibbeh-casserole",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Fresh Mint",
+        "detail": "We buy 18.75 tbsp fresh mint but no step uses mint; the filling step instead says to stir in 'chopped fresh basil' (the source kibbeh uses mint/basil in the shell mixture).",
+        "confidence": "high"
+    },
+    {
+        "slug": "baked-turkey-kibbeh-casserole",
+        "class": "STEP-CONTRADICTION",
+        "ingredient": "Fresh basil",
+        "detail": "Step 5 says 'stir in the chopped fresh basil off the heat' but basil is not in our list; the purchased herb is fresh mint, so the step names the wrong herb.",
+        "confidence": "high"
+    },
+    {
+        "slug": "baked-ziti-with-ground-beef",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Garlic Powder",
+        "detail": "We buy 0.5 tbsp garlic powder but no step uses it; the source (realfoodwholelife) includes it in the beef seasonings in step 3.",
+        "confidence": "high"
+    },
+    {
+        "slug": "beef-birria-rice-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Rice",
+        "detail": "We buy 4.25 cups dry rice for 'Rice Bowls' but no step ever cooks or combines the rice; the steps end at shredding the beef into the consomme.",
+        "confidence": "high"
+    },
+    {
+        "slug": "beef-bourguignon-bowls",
+        "class": "MISSING-KEY-INGREDIENT",
+        "ingredient": "Red wine (or acid substitute)",
+        "detail": "The source braises in 750ml Pinot Noir, the ingredient the dish is named for; our card replaces it with beef broth only, with no acid (vinegar/grape juice) substituted - likely the deliberate site-wide no-alcohol adaptation, but nothing replaces the wine's role.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "beef-chili-mac",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Olive Oil",
+        "detail": "We buy 2 tsp olive oil but no step uses it; the source heats the oil before browning the beef.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "beef-chili-mac",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Salt",
+        "detail": "We buy salt 'to taste (15 g)' but the steps never say salt or season; the source seasons in step 2.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "beef-chili-mac",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Black Pepper",
+        "detail": "We buy pepper 'to taste (4 g)' but the steps never say pepper or season.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "beef-enchilada-skillet-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Corn Tortillas",
+        "detail": "We buy '5, cut into triangles (440 g)' but no step uses tortillas; the source coats the tortilla triangles in the sauce in step 3 - this is the dish's enchilada component.",
+        "confidence": "high"
+    },
+    {
+        "slug": "beef-enchilada-skillet-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Yellow Onion",
+        "detail": "We buy '1/2 onion, diced (190 g)' but no step uses onion; the source browns it with the beef in step 2.",
+        "confidence": "high"
+    },
+    {
+        "slug": "beef-enchilada-skillet-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Garlic Powder",
+        "detail": "We buy 1/2 tsp garlic powder but no step uses it; the source adds it with the chili powder and cumin in step 2.",
+        "confidence": "high"
+    },
+    {
+        "slug": "beef-enchilada-skillet-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Olive Oil",
+        "detail": "We buy 1 tbsp olive oil but no step uses it; the source heats it before browning the beef.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "beef-enchilada-skillet-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Salt",
+        "detail": "We buy salt 'to taste (18 g)' but the steps never say salt or season; the source seasons the beef in step 2.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "beef-enchilada-skillet-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Black Pepper",
+        "detail": "We buy pepper 'to taste (4 g)' but the steps never say pepper or season.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "beef-honey-black-pepper-sauce-bowls",
+        "class": "STEP-CONTRADICTION",
+        "ingredient": "Cornstarch",
+        "detail": "Step 2 says 'toss it with cornstarch and a splash of the soy sauce' but cornstarch is not in our list (the source uses no cornstarch at all).",
+        "confidence": "high"
+    },
+    {
+        "slug": "beef-honey-black-pepper-sauce-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Salt",
+        "detail": "We buy 1 tbsp salt but the steps never say salt or season.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "beef-mushroom-stir-fry-rice-plate",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Salt",
+        "detail": "We buy 0.5 tbsp salt but the steps never say salt or season; the source puts 1/2 tsp salt in the sauce mix.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "beef-picadillo-rice-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Capers",
+        "detail": "We buy '2 tablespoons, drained (36 g)' but no step uses capers; the source adds them to the tomato sauce mixture in step 3 as part of the dish's signature briny flavor.",
+        "confidence": "high"
+    },
+    {
+        "slug": "beef-picadillo-rice-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Dried Oregano",
+        "detail": "We buy a jar of oregano but no step uses it; the source adds it with the cumin in step 3.",
+        "confidence": "high"
+    },
+    {
+        "slug": "beef-picadillo-rice-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Bay Leaves",
+        "detail": "We buy 1 bay leaf but no step adds or removes it; the source simmers it in step 3 and removes it in step 5.",
+        "confidence": "high"
+    },
+    {
+        "slug": "beef-picadillo-rice-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Salt",
+        "detail": "We buy salt but the steps never say salt or season; the source salts to taste at the end.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "beef-picadillo-rice-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Black Pepper",
+        "detail": "We buy 1/4 tsp pepper but the steps never say pepper or season.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "beef-ragu-pasta",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Vegetable Oil",
+        "detail": "We buy 1 tbsp vegetable oil but no step uses it; the source heats oil before browning the beef.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "beef-ragu-pasta",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Sugar",
+        "detail": "We buy 1 tsp sugar but no step uses it; the source stirs sugar in as an explicit finishing step.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "beef-ragu-pasta",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Salt",
+        "detail": "We buy 1/2 tsp salt but the steps never say salt or season; the source salts the beef while browning.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "beef-ragu-pasta",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Black Pepper",
+        "detail": "We buy 1/4 tsp pepper but the steps never say pepper or season.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "beef-rendang-rice-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Rice",
+        "detail": "We buy 4.25 cups dry rice for 'Rice Bowls' but no step ever cooks or combines the rice; the steps end at pulling the rendang off the heat.",
+        "confidence": "high"
+    },
+    {
+        "slug": "beijing-zha-jiang-mian-pork-noodles",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Bay Leaves",
+        "detail": "We buy 0.25 oz (9 g) of bay leaves but no step uses them; the source infuses the oil with bay leaves, cinnamon, star anise, and Sichuan peppercorn before cooking the pork.",
+        "confidence": "high"
+    },
+    {
+        "slug": "beijing-zha-jiang-mian-pork-noodles",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Ground Cinnamon",
+        "detail": "We buy 0.75 tbsp ground cinnamon but no step uses it; the source's cinnamon goes into the aromatic oil infusion our steps dropped.",
+        "confidence": "high"
+    },
+    {
+        "slug": "beijing-zha-jiang-mian-pork-noodles",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Sugar",
+        "detail": "We buy 0.75 tbsp sugar but no step uses it; the source adds sugar with the bean sauces.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "beijing-zha-jiang-mian-pork-noodles",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Black Pepper",
+        "detail": "We buy 1.5 tbsp black pepper but the steps never say pepper or season.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "beijing-zha-jiang-mian-pork-noodles",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Salt",
+        "detail": "We buy 0.5 tbsp salt but the steps never say salt or season.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "bigos-polish-hunters-stew",
+        "class": "STEP-CONTRADICTION",
+        "ingredient": "Mushrooms",
+        "detail": "Step 2 says 'slice the mushrooms' and step 4 says 'add the mushrooms and let them give up their water,' but no mushrooms are in our list (the source uses dried porcini).",
+        "confidence": "high"
+    },
+    {
+        "slug": "brazilian-galinhada",
+        "class": "MISSING-KEY-INGREDIENT",
+        "ingredient": "Saffron (or turmeric substitute)",
+        "detail": "Our title promises 'Chicken and Saffron Rice' and the source steeps 5 saffron threads into the rice liquid, but our list and steps have no saffron and no turmeric substitute (our own arroz con pollo card shows turmeric is the available budget stand-in).",
+        "confidence": "high"
+    },
+    {
+        "slug": "brazilian-galinhada",
+        "class": "STEP-CONTRADICTION",
+        "ingredient": "Salt and black pepper",
+        "detail": "Step 2 says 'season them with salt, black pepper and the lemon juice' but neither salt nor black pepper is in our costed list, unlike every sibling card that buys them.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "buffalo-turkey-potato-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Garlic Powder",
+        "detail": "We buy 1 Tbsp garlic powder but no step uses it; the source stirs it in with the celery salt and pepper in step 3.",
+        "confidence": "high"
+    },
+    {
+        "slug": "buffalo-turkey-potato-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Celery Salt",
+        "detail": "We buy 1 tsp celery salt but no step uses it; the source adds it in step 3 before the buffalo sauce.",
+        "confidence": "high"
+    },
+    {
+        "slug": "buffalo-turkey-potato-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Black Pepper",
+        "detail": "We buy 1 tsp ground pepper but the steps never say pepper or season; the source adds it in step 3.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "cajun-chicken-etouffee-rice-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Diced Tomatoes",
+        "detail": "We buy 3.4 cans (1389 g) of diced tomatoes but no step uses them; the source adds the canned tomatoes with the Worcestershire and Creole seasoning in step 4 as the sauce's acidic component.",
+        "confidence": "high"
+    },
+    {
+        "slug": "cajun-chicken-etouffee-rice-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Salt",
+        "detail": "We buy 1 tbsp salt but the steps never say salt or season.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "cajun-chicken-etouffee-rice-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Black Pepper",
+        "detail": "We buy 0.5 tbsp pepper but the steps never say pepper or season.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "cantonese-beef-tomato-egg-rice",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Rice",
+        "detail": "We buy 4.25 cups dry rice for a dish served 'over Rice' but no step ever cooks or combines the rice; the steps end at folding the eggs back in.",
+        "confidence": "high"
+    },
+    {
+        "slug": "cantonese-turkey-rice-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Salt",
+        "detail": "We buy 1 tbsp salt but the steps never say salt or season (the source relies on soy and oyster sauce for salt and lists none).",
+        "confidence": "medium"
+    },
+    {
+        "slug": "albondigas-en-chipotle-rice-bowls",
+        "class": "FETCH-FAILED",
+        "ingredient": "n/a",
+        "detail": "Source URL https://www.mexicoinmykitchen.com/chipotle-sauce-meatballs-albondigas/ returns HTTP 403 (bot-wall) on repeated fetches; internal list-vs-steps check was clean, source comparison not performed.",
+        "confidence": "high"
+    },
+    {
+        "slug": "cambodian-beef-lok-lak-rice-bowls",
+        "class": "FETCH-FAILED",
+        "ingredient": "n/a",
+        "detail": "Source URL https://www.marionskitchen.com/cambodian-pepper-beef-lok-lak/ returns HTTP 403 (bot-wall) on repeated fetches; internal list-vs-steps check was clean, source comparison not performed.",
+        "confidence": "high"
+    }
+]

@@ -1,0 +1,149 @@
+[
+    {
+        "slug": "country-pork-meatballs-onion-gravy",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Olive Oil",
+        "detail": "We buy 5.25 tbsp (71 g) olive oil but our steps bake the meatballs on sheet pans and build the gravy entirely on butter; the source (RecipeTin) uses its 1.5 tbsp oil to pan-brown the meatballs, a step our adaptation removed without removing the purchase.",
+        "confidence": "high"
+    },
+    {
+        "slug": "creamy-ground-turkey-shell-pasta",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Tomato Sauce",
+        "detail": "We buy 2.3 cans (992 g) of tomato sauce but our sauce step only whisks in beef broth then heavy cream; the source (Kroll's Korner step 4) pours in 'beef broth and tomato sauce' together, so our steps silently dropped a core sauce component the shopper paid for.",
+        "confidence": "high"
+    },
+    {
+        "slug": "creamy-turkey-rice-mushroom-soup",
+        "class": "STEP-CONTRADICTION",
+        "ingredient": "Wild Rice",
+        "detail": "Steps say 'Cook the wild rice separately... It takes longer than white rice, so start it first' and later 'Add the cooked wild rice', but the list buys plain Rice (Member's Mark) white rice; the wild-rice language survived the budget swap from the source's wild-rice soup.",
+        "confidence": "high"
+    },
+    {
+        "slug": "curry-ground-turkey-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Curry Powder",
+        "detail": "The dish is named Curry Ground Turkey Bowls and we buy curry powder, but the steps only add 'the chili powder and cumin'; the source (Family Food on the Table step 3) blooms curry powder as the lead spice.",
+        "confidence": "high"
+    },
+    {
+        "slug": "curry-ground-turkey-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Frozen Peas",
+        "detail": "We buy 1 cup frozen peas (490 g) but no step ever adds them; the source is literally titled 'Curry Ground Turkey with Rice and Peas' and stirs the peas in with the tomatoes.",
+        "confidence": "high"
+    },
+    {
+        "slug": "curry-ground-turkey-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Garlic",
+        "detail": "We buy 2 cloves minced garlic but the steps go straight from onion to spices; the source sautes garlic with the onion in step 1.",
+        "confidence": "high"
+    },
+    {
+        "slug": "curry-ground-turkey-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Olive Oil",
+        "detail": "We buy 1 tsp EVOO but step 1 just says 'Brown the ground turkey in a large skillet' with no oil mention anywhere.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "curry-ground-turkey-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Salt",
+        "detail": "Salt is in the costed list but no step says salt or 'season'; this card's steps are an outlier (5 steps, no weigh-the-pot opener) and look truncated versus the rest of the catalog.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "dak-galbi-chicken-cabbage-skillet",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Salt",
+        "detail": "We buy 1 tbsp (20 g) salt but the marinade step enumerates every other seasoning (gochujang, soy, sugar, garlic, ginger, curry powder, red pepper flakes, black pepper) and no step says salt or 'season'.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "ethiopian-doro-wat-chicken-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Black Pepper",
+        "detail": "We buy 0.5 tbsp black pepper but the only seasoning in our steps is 'a big pinch of salt' in step 2 and no step says 'season'; the source (Chili Pepper Madness) seasons with salt and pepper in its flavor-base and chicken steps.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "filipino-beef-caldereta",
+        "class": "STEP-CONTRADICTION",
+        "ingredient": "Broth",
+        "detail": "Step 4 says to add 'the tomato sauce, tomato paste, soy sauce, and the broths' and step 6 blends livers 'with a ladle of the hot broth', but no broth of any kind is in the costed list (the source uses water plus beef powder).",
+        "confidence": "high"
+    },
+    {
+        "slug": "filipino-beef-pares-rice-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Salt",
+        "detail": "We buy a substantial 3.5 tbsp (63 g) of salt but no step uses it and none says 'season'; the source salts its broth with 1 tbsp and seasons the asado and rice to taste.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "filipino-beef-pares-rice-bowls",
+        "class": "MISSING-KEY-INGREDIENT",
+        "ingredient": "Star Anise",
+        "detail": "The source's pares braising sauce (Kawaling Pinoy) simmers 2 star anise with the soy and brown sugar, the aromatic that distinguishes pares from plain braised beef; it appears nowhere in our list or steps.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "filipino-pork-menudo-rice-bowls",
+        "class": "STEP-CONTRADICTION",
+        "ingredient": "Rice",
+        "detail": "The dish is 'Pork Menudo Rice Bowls' and the final step says 'cook rice separately to serve underneath', but rice is not in the costed list, unlike every sibling rice-bowl card in this chunk.",
+        "confidence": "high"
+    },
+    {
+        "slug": "five-spice-turkey-noodle-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Green Onions",
+        "detail": "We buy 14.75 tbsp (88 g) of green onions but no step slices or adds them; the source (Jennie-O step 6) garnishes the finished bowls with the green onions.",
+        "confidence": "high"
+    },
+    {
+        "slug": "frito-pie-walking-taco-casserole",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Black Pepper",
+        "detail": "We buy 0.5 tbsp black pepper but the steps season only with taco seasoning and salt and no step says 'season'; the source list has no black pepper either, so ours is a purchase with no use anywhere.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "greek-beef-and-chickpea-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Chickpeas",
+        "detail": "Chickpeas are in the dish's name and we buy 5.8 cans (1488 g), yet no step drains, heats, or plates them; the source (Chelsea's Messy Apron step 1) folds the chickpeas into the browning beef.",
+        "confidence": "high"
+    },
+    {
+        "slug": "greek-ground-turkey-lemon-rice-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Sun-Dried Tomatoes",
+        "detail": "We buy 17.25 tbsp (60 g) of sun-dried tomatoes but step 5 stirs in only the olive oil and olives; the source (Chelsea's Messy Apron) stirs sun-dried tomatoes in with the olives and lemon off the heat.",
+        "confidence": "high"
+    },
+    {
+        "slug": "greek-turkey-moussaka",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Potato",
+        "detail": "We buy 15.3 potatoes (3268 g), the second-largest line on the card, but the steps layer only eggplant, meat sauce, and bechamel and never boil, slice, or layer a potato; the source (Coley Cooks) states a true moussaka 'will only have eggplant and meat topped with a white sauce'.",
+        "confidence": "high"
+    },
+    {
+        "slug": "greek-turkey-moussaka",
+        "class": "STEP-CONTRADICTION",
+        "ingredient": "Rice",
+        "detail": "The final step says 'Cook the rice, move it into your weighed pot, and cut the moussaka into 14 even squares', but rice is not in the costed list (and the source serves moussaka with no rice at all).",
+        "confidence": "high"
+    },
+    {
+        "slug": "ghanaian-shoko-beef-spinach-stew",
+        "class": "FETCH-FAILED",
+        "ingredient": "",
+        "detail": "https://www.196flavors.com/ghana-shoko/ returned HTTP 500 Internal Server Error on three separate attempts, so the source comparison could not be made; the internal steps-vs-list check found no unused purchases or step contradictions.",
+        "confidence": "high"
+    }
+]

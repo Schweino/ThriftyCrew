@@ -1,0 +1,352 @@
+[
+  {
+    "slug": "tex-mex-beef-rice-skillet-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Chili Powder (ground chipotle)",
+    "detail": "Costed at 2 tsp but our steps only use paprika and cumin; the masonfit source coats the beef with all six spices (paprika, chipotle, cumin, garlic powder, pepper, salt) before browning.",
+    "confidence": "high"
+  },
+  {
+    "slug": "tex-mex-beef-rice-skillet-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Garlic Powder",
+    "detail": "Costed at 1 tsp but never mentioned in our steps; the source includes it in the spice rub applied to the beef in step 2.",
+    "confidence": "high"
+  },
+  {
+    "slug": "tex-mex-beef-rice-skillet-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Salt & Black Pepper",
+    "detail": "Both are costed but our steps never use them and never say 'season'; the source puts both in the beef spice rub.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "thai-basil-beef-bowls-with-coconut-rice",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Black Pepper",
+    "detail": "0.5 tbsp is costed but no step uses it or says 'season' (salt is used only as a pinch in the rice).",
+    "confidence": "medium"
+  },
+  {
+    "slug": "thai-basil-chicken-pad-krapow",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Salt & Black Pepper",
+    "detail": "1 tbsp salt and 0.5 tbsp pepper are costed but no step uses either or says 'season'.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "thai-basil-pork-pad-kra-pao-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Rice",
+    "detail": "4.25 cups dry rice (770 g) is costed for a 'Bowls' dish but the steps end at wilting the basil and never cook, mention, or plate the rice.",
+    "confidence": "high"
+  },
+  {
+    "slug": "thai-cashew-chicken",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Salt & Black Pepper",
+    "detail": "1 tbsp salt and 0.5 tbsp pepper are costed but no step uses either or says 'season'.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "thai-coconut-curry-turkey-meatballs",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Curry Powder",
+    "detail": "Costed at 0.75 tbsp; the wholesomelicious source puts curry powder in the meatball mix, but our step 3 lists the meatball spices (garlic powder, ground ginger, dried basil, salt, pepper) without it and no other step uses it.",
+    "confidence": "high"
+  },
+  {
+    "slug": "thai-coconut-curry-turkey-meatballs",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Red Bell Pepper",
+    "detail": "2.3 peppers (280 g) are costed; the source sautes red bell pepper into the curry sauce with the onion, but our step 5 cooks only onion, garlic, ginger, and curry paste and no step ever mentions the bell pepper.",
+    "confidence": "high"
+  },
+  {
+    "slug": "thai-drunken-noodles-chicken",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Salt & Black Pepper",
+    "detail": "1 tbsp salt and 0.5 tbsp pepper are costed but no step uses either or says 'season'.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "thai-green-curry-chicken",
+    "class": "MISSING-KEY-INGREDIENT",
+    "ingredient": "Green curry paste",
+    "detail": "The recipetineats source is built on Thai GREEN curry paste (Maesri), but our list buys Thai Kitchen RED curry paste (10 oz) for a dish titled 'Thai Green Curry Chicken', changing the title-defining flavor.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "thai-pork-drunken-noodles",
+    "class": "MISSING-KEY-INGREDIENT",
+    "ingredient": "Sweet soy sauce (kecap manis) / sugar",
+    "detail": "The platingsandpairings sauce is 1/4 cup fish sauce + 1/4 cup SWEET soy + rice vinegar; ours subs plain soy and buys no sugar at all, dropping the sauce's defining sweetness even though the catalog stocks ABC Kecap Manis (used in turkey-nasi-goreng).",
+    "confidence": "medium"
+  },
+  {
+    "slug": "thai-pork-drunken-noodles",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Salt & Black Pepper",
+    "detail": "1 tbsp salt and 0.5 tbsp pepper are costed but no step uses either or says 'season'.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "thai-turkey-larb-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Fish Sauce",
+    "detail": "3 Tbsp fish sauce is costed but the steps never add it; in the trifectanutrition source fish sauce is THE larb seasoning, incorporated into the turkey while it cooks (source step 3).",
+    "confidence": "high"
+  },
+  {
+    "slug": "thai-turkey-larb-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Jalapeno (dry chiles / chile powder)",
+    "detail": "The costed '3-4 dry chiles or 1.5 Tbsp chile powder' never appears in our steps; the source toasts and grinds the chiles and mixes the powder in first during assembly.",
+    "confidence": "high"
+  },
+  {
+    "slug": "thai-turkey-larb-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Fresh Cilantro",
+    "detail": "1/2 cup chopped cilantro is costed but never used in our steps; the source mixes it structurally into the larb, not as a garnish.",
+    "confidence": "high"
+  },
+  {
+    "slug": "thai-turkey-larb-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Fresh Mint",
+    "detail": "1/3 cup mint is costed but never used in our steps; mint mixed into the meat is a defining larb herb in the source.",
+    "confidence": "high"
+  },
+  {
+    "slug": "thai-turkey-larb-bowls",
+    "class": "STEP-CONTRADICTION",
+    "ingredient": "Salt",
+    "detail": "Our step 4 says 'season with salt to taste' but salt is not in the costed ingredient list.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "turkey-ants-climbing-a-tree",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Salt & Black Pepper",
+    "detail": "1 tbsp salt and 0.5 tbsp pepper are costed but no step uses either or says 'season'.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "turkey-chile-relleno-casserole-skillet",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Rice",
+    "detail": "4.25 cups dry rice (770 g) is costed but the steps never cook, mention, or serve it; the mytherapistcooks source only suggests rice as an optional accompaniment.",
+    "confidence": "high"
+  },
+  {
+    "slug": "turkey-chili-mac",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Chicken Broth",
+    "detail": "2.5 cups (1800 g) of broth is costed but the steps never add it; the skinnyfitalicious source simmers the chili in it for 10-12 minutes.",
+    "confidence": "high"
+  },
+  {
+    "slug": "turkey-chili-mac",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Garlic",
+    "detail": "1 tbsp minced garlic is costed but never used in our steps; the source sautes it with the onion in step 1.",
+    "confidence": "high"
+  },
+  {
+    "slug": "turkey-chili-mac",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Ground Cumin",
+    "detail": "Costed but never used in our steps; the source blooms it with the tomato paste in step 3.",
+    "confidence": "high"
+  },
+  {
+    "slug": "turkey-chili-mac",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Paprika",
+    "detail": "Costed but never used in our steps; the source blooms it with the tomato paste in step 3.",
+    "confidence": "high"
+  },
+  {
+    "slug": "turkey-chili-mac",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Chili Powder",
+    "detail": "Costed but never used in our steps - a chili mac whose instructions never add chili powder; the source blooms it with the tomato paste in step 3.",
+    "confidence": "high"
+  },
+  {
+    "slug": "turkey-chili-mac",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Garlic Powder",
+    "detail": "Costed but never used in our steps; the source adds it with the other spices in step 3.",
+    "confidence": "high"
+  },
+  {
+    "slug": "turkey-chili-mac",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Olive Oil",
+    "detail": "1 tbsp is costed but the steps brown the turkey with no oil mentioned; the source heats the oil first.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "turkey-chili-mac",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Salt & Black Pepper",
+    "detail": "Both are costed ('to taste') but no step uses either or says 'season'.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "turkey-chili-verde-white-beans",
+    "class": "STEP-CONTRADICTION",
+    "ingredient": "Salsa verde",
+    "detail": "Our step 5 says 'pour in the jarred salsa verde' but the list buys generic 'Salsa (Pace)' (7 cups); the thewheatlesskitchen source explicitly requires salsa verde, 'not regular salsa'.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "turkey-drunken-noodles",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Salt & Black Pepper",
+    "detail": "1 tbsp salt and 0.5 tbsp pepper are costed but no step uses either or says 'season'.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "turkey-egg-roll-in-a-bowl-over-rice",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Salt & Black Pepper",
+    "detail": "1.25 tbsp salt and 0.5 tbsp pepper are costed but no step uses either or says 'season'.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "turkey-fajita-rice-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Fajita Seasoning",
+    "detail": "A full packet is costed but the steps never season the meat; in the lillieeatsandtells source the fajita spice blend added with the tomato paste is the entire flavor of the dish.",
+    "confidence": "high"
+  },
+  {
+    "slug": "turkey-fajita-rice-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Balsamic Vinegar",
+    "detail": "2 Tbsp is costed but never used in our steps; the source stirs it in with the salsa verde and cream cheese in step 4.",
+    "confidence": "high"
+  },
+  {
+    "slug": "turkey-fajita-rice-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Garlic",
+    "detail": "Two garlic cubes are costed but never used in our steps; the source adds them with the spices and tomato paste.",
+    "confidence": "high"
+  },
+  {
+    "slug": "turkey-kabsa-rice-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Garam Masala",
+    "detail": "2.5 tbsp (the largest spice purchase, standing in for the source's cardamom/cloves/nutmeg kabsa mix) is costed, but step 4 enumerates the spice mix as cinnamon, cumin, coriander, allspice, paprika, cloves, and bay leaves without garam masala, and no other step uses it.",
+    "confidence": "high"
+  },
+  {
+    "slug": "turkey-kabsa-rice-bowls",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Salt & Black Pepper",
+    "detail": "0.5 tbsp salt and 0.5 tbsp pepper are costed but no step uses either or says 'season'; the source seasons the chicken with both before searing.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "turkey-keema-curry-with-peas",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Salt & Black Pepper",
+    "detail": "1 tbsp salt and 0.5 tbsp pepper are costed but no step uses either or says 'season'; the fellybull source salts the onions and seasons to taste at the end.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "turkey-manicotti-ricotta",
+    "class": "STEP-CONTRADICTION",
+    "ingredient": "Rice",
+    "detail": "The final step says 'cook the rice, and move the rice into your weighed pot' but rice is not in the costed ingredient list of this pasta dish.",
+    "confidence": "high"
+  },
+  {
+    "slug": "turkey-meatball-marinara-pasta",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Eggs",
+    "detail": "1 beaten egg is costed as the meatball binder (per the reciperunner source) but our steps never make meatballs - they brown the turkey into 'meatball-sized chunks' and never use the egg.",
+    "confidence": "high"
+  },
+  {
+    "slug": "turkey-meatball-marinara-pasta",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Panko Breadcrumbs",
+    "detail": "1/4 cup is costed for the source's meatball binder but never appears in our steps.",
+    "confidence": "high"
+  },
+  {
+    "slug": "turkey-meatball-marinara-pasta",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Worcestershire Sauce",
+    "detail": "1 tbsp is costed for the source's meatball mix but never appears in our steps.",
+    "confidence": "high"
+  },
+  {
+    "slug": "turkey-meatball-marinara-pasta",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Garlic",
+    "detail": "1 clove is costed for the source's meatball mix but never appears in our steps.",
+    "confidence": "high"
+  },
+  {
+    "slug": "turkey-meatball-marinara-pasta",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Dried Basil",
+    "detail": "1 tsp is costed for the source's meatball mix but never appears in our steps.",
+    "confidence": "high"
+  },
+  {
+    "slug": "turkey-meatball-marinara-pasta",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Dried Oregano",
+    "detail": "1 tsp is costed for the source's meatball mix but never appears in our steps.",
+    "confidence": "high"
+  },
+  {
+    "slug": "turkey-meatball-marinara-pasta",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Mozzarella Cheese",
+    "detail": "510 g is costed (the source stuffs cubes into each meatball and tops with shredded) but mozzarella never appears in our steps - only parmesan is used as a finish.",
+    "confidence": "high"
+  },
+  {
+    "slug": "turkey-meatball-marinara-pasta",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Salt & Black Pepper",
+    "detail": "Both are costed ('to taste') but no step uses either or says 'season'.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "turkey-meatball-sub-bake",
+    "class": "STEP-CONTRADICTION",
+    "ingredient": "Rice",
+    "detail": "Step 6 says 'Cook the rice and move it into your weighed pot' but rice is not in the costed ingredient list of this sub-roll dish.",
+    "confidence": "high"
+  },
+  {
+    "slug": "turkey-meatloaf-with-mashed-potatoes",
+    "class": "MISSING-KEY-INGREDIENT",
+    "ingredient": "Potatoes (mashed)",
+    "detail": "Our title promises 'with Mashed Potatoes' but no potatoes are bought or cooked anywhere - the steps serve the meatloaf over rice, and the thecozycook source only suggests mashed potatoes as a side.",
+    "confidence": "medium"
+  },
+  {
+    "slug": "turkey-minestrone",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Parmesan Cheese",
+    "detail": "5.75 oz (162 g) is costed but no step uses or portions it; in the skinnyspatula source parmesan is the serving topping, which our steps dropped.",
+    "confidence": "high"
+  },
+  {
+    "slug": "turkey-nasi-goreng",
+    "class": "UNUSED-PURCHASE",
+    "ingredient": "Green Onions",
+    "detail": "8.75 tbsp are costed but never mentioned in our steps; the recipetineats source finishes the rice with sliced green onion.",
+    "confidence": "medium"
+  }
+]

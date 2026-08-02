@@ -1,0 +1,184 @@
+[
+    {
+        "slug": "cape-malay-chicken-curry",
+        "class": "MISSING-KEY-INGREDIENT",
+        "ingredient": "cardamom",
+        "detail": "Source (beyondkimchee.com) grinds 15 cardamom pods into the signature Cape Malay spice blend; cardamom appears nowhere in our list or steps.",
+        "confidence": "high"
+    },
+    {
+        "slug": "cape-malay-chicken-curry",
+        "class": "MISSING-KEY-INGREDIENT",
+        "ingredient": "fennel",
+        "detail": "Source blend includes 2 tsp ground fennel; absent from our card, whose list instead carries 2.5 tbsp Italian Seasoning that appears nowhere in the source recipe.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "carne-guisada-beef-potato-stew",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Potato",
+        "detail": "We buy 21.6 potatoes (4609 g) and the dish is titled 'Beef and Potato Stew', but no step ever adds potatoes; the source (isabeleats.com) contains no potatoes, so the steps track the source while the list added an ingredient the cook never uses.",
+        "confidence": "high"
+    },
+    {
+        "slug": "carne-guisada-beef-potato-stew",
+        "class": "STEP-CONTRADICTION",
+        "ingredient": "Rice",
+        "detail": "Final step says 'then cook the rice separately' but rice is not in our costed ingredient list (source serves with tortillas/Mexican rice as a side suggestion only).",
+        "confidence": "high"
+    },
+    {
+        "slug": "cheeseburger-rice-bowls",
+        "class": "FETCH-FAILED",
+        "ingredient": "n/a",
+        "detail": "https://www.budgetbytes.com/cheeseburger-rice/ returns HTTP 404, and a site-restricted search finds no 'Cheeseburger Rice' recipe on budgetbytes.com (nearest match is 'One Pot Cheeseburger Pasta' at /skillet-cheeseburger-pasta/).",
+        "confidence": "high"
+    },
+    {
+        "slug": "cheeseburger-rice-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Worcestershire Sauce (Lea & Perrins)",
+        "detail": "1 Tbsp (50 g) Worcestershire is in the costed list but the five steps (brown beef, stir in broth/tomatoes/ketchup/dijon/garlic, simmer, rice, cheese) never mention it.",
+        "confidence": "high"
+    },
+    {
+        "slug": "cheeseburger-rice-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Olive Oil",
+        "detail": "1 Tbsp (45 g) olive oil is costed but no step uses any oil; the beef is browned with no fat mentioned.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "cheeseburger-rice-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Salt + Black Pepper",
+        "detail": "Salt (1 tsp) and black pepper (1/2 tsp) are costed but no step salts, peppers, or says 'season' anywhere.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "cheesy-taco-spaghetti",
+        "class": "STEP-CONTRADICTION",
+        "ingredient": "jalapenos",
+        "detail": "Step 4 says 'Add the garlic and diced jalapenos' but no jalapenos are in the costed list; source (ohsweetbasil.com) uses no jalapenos either, so the step likely garbles the Ro-Tel green chilies that ARE bought.",
+        "confidence": "high"
+    },
+    {
+        "slug": "cheesy-taco-spaghetti",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Black Pepper",
+        "detail": "0.5 tbsp black pepper is costed but no step uses pepper or says 'season' (salt is used in the pasta water only).",
+        "confidence": "medium"
+    },
+    {
+        "slug": "cheesy-zucchini-beef-rice-skillet",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Garlic",
+        "detail": "4 cloves garlic are costed but no step ever adds garlic; the source (confessionsofafitfoodie.com) contains no garlic at all, so it was added to the list but never wired into the method.",
+        "confidence": "high"
+    },
+    {
+        "slug": "cheesy-zucchini-beef-rice-skillet",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Beef Broth",
+        "detail": "2 cups (720 g) beef broth are costed but never used; step 6 tells the cook to 'splash in a quarter cup of water' instead, and the source uses only water.",
+        "confidence": "high"
+    },
+    {
+        "slug": "cheesy-zucchini-beef-rice-skillet",
+        "class": "STEP-CONTRADICTION",
+        "ingredient": "olive oil",
+        "detail": "Step 3 says to heat 'a little olive oil' but the list buys vegetable/canola oil, not olive oil.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "cheesy-zucchini-beef-rice-skillet",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Black Pepper",
+        "detail": "Black pepper 'to taste (2 g)' is costed but no step uses pepper or says 'season' (only a 'pinch of salt' in step 4).",
+        "confidence": "medium"
+    },
+    {
+        "slug": "chicken-and-dumplings",
+        "class": "STEP-CONTRADICTION",
+        "ingredient": "Rice",
+        "detail": "Final step says 'Cook the rice separately and put a scoop in the bottom of each container' but rice is not in the costed ingredient list.",
+        "confidence": "high"
+    },
+    {
+        "slug": "chicken-biryani-rice-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Milk",
+        "detail": "The list carries 'Milk (Fairlife): 0 tbsp (1 g)' - a vestige of the source's optional saffron-soaked-in-milk step - and no step ever uses milk.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "chicken-biryani-rice-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Black Pepper",
+        "detail": "0.5 tbsp black pepper is costed but no step uses pepper or says 'season' (the marinade and rice steps use salt only).",
+        "confidence": "medium"
+    },
+    {
+        "slug": "chicken-jalfrezi",
+        "class": "STEP-CONTRADICTION",
+        "ingredient": "ground coriander",
+        "detail": "Step 6 toasts 'the cumin, coriander, turmeric, paprika, garam masala, and chili powder' but coriander is not in our costed list, even though it is 1 tsp of the source's (seasonsandsuppers.ca) core six-spice blend.",
+        "confidence": "high"
+    },
+    {
+        "slug": "chicken-jalfrezi",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Black Pepper",
+        "detail": "0.5 tbsp black pepper is costed but no step uses pepper or says 'season'.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "chicken-lo-mein-noodle-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Salt + Black Pepper",
+        "detail": "Salt (1 tbsp) and black pepper (0.5 tbsp) are costed but no step salts the noodle water, seasons the chicken, or says 'season'.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "chicken-mole-rice-bowls",
+        "class": "MISSING-KEY-INGREDIENT",
+        "ingredient": "mole poblano base (dried chiles + chocolate)",
+        "detail": "Source (chilipeppermadness.com) finishes the chicken in a mole poblano sauce built on dried chiles (ancho/guajillo/pasilla/mulato) and chocolate; our card sells 'Chicken Mole' but its sauce is only fresh poblano + peanut + chili powder, with no dried chiles or chocolate anywhere.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "chicken-sausage-gumbo",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Smoked Turkey Sausage (Butterball)",
+        "detail": "1.25 lb of sausage is costed and the dish is titled 'Chicken and Sausage Gumbo', but no step ever browns or adds the sausage; the source (africanbites.com) browns it in step 2 and returns it near the end.",
+        "confidence": "high"
+    },
+    {
+        "slug": "chicken-sausage-gumbo",
+        "class": "STEP-CONTRADICTION",
+        "ingredient": "italian seasoning",
+        "detail": "Step 5 adds 'garlic, thyme, smoked paprika, italian seasoning, bay leaves, salt, and pepper' but italian seasoning is not in the costed list (and is not in the source either).",
+        "confidence": "high"
+    },
+    {
+        "slug": "chile-relleno-casserole-ground-beef",
+        "class": "FETCH-FAILED",
+        "ingredient": "n/a",
+        "detail": "WebFetch is blocked from www.thespruceeats.com ('Claude Code is unable to fetch from www.thespruceeats.com'), so the source at /chiles-rellenos-casserole-3057402 could not be read; our card's internal list-vs-steps check found no defect.",
+        "confidence": "high"
+    },
+    {
+        "slug": "coq-au-vin",
+        "class": "STEP-CONTRADICTION",
+        "ingredient": "bay leaves",
+        "detail": "Step 5 says to 'add the thyme and bay leaves' but bay leaves are not in our costed ingredient list.",
+        "confidence": "high"
+    },
+    {
+        "slug": "coq-au-vin",
+        "class": "STEP-CONTRADICTION",
+        "ingredient": "flour",
+        "detail": "Step 8 says to 'knead the rest of the butter with flour into a paste' (the source's beurre manie thickener) but flour is not in our costed ingredient list.",
+        "confidence": "high"
+    }
+]

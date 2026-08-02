@@ -1,0 +1,100 @@
+[
+    {
+        "slug": "peruvian-tallarines-verdes-con-carne",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Spaghetti (Great Value): 49.5 oz dry",
+        "detail": "The dish IS green spaghetti (source tosses the sauce with cooked spaghetti), but our steps never boil the 49.5 oz of spaghetti we cost, and the warmed sauce is never combined with any pasta.",
+        "confidence": "high"
+    },
+    {
+        "slug": "peruvian-tallarines-verdes-con-carne",
+        "class": "STEP-CONTRADICTION",
+        "ingredient": "Rice",
+        "detail": "Step 5 says 'Cook the rice according to the package to serve underneath' but rice is nowhere in the costed ingredient list (the list buys spaghetti instead).",
+        "confidence": "high"
+    },
+    {
+        "slug": "oyakodon",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Yellow Onion: 7 (794 g)",
+        "detail": "We cost 7 yellow onions but no step ever uses them; the source (justonecookbook.com) simmers the sliced onion in the soy-mirin broth as the first cooking step, so the onion should go into our step 3 simmer.",
+        "confidence": "high"
+    },
+    {
+        "slug": "oyakodon",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Salt (1 tbsp) and Black Pepper (0.5 tbsp)",
+        "detail": "Both are costed but no step uses them or says 'season'; the source seasons only with the dashi/soy/mirin/sugar sauce.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "salisbury-steak-potato-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Worcestershire Sauce (Lea & Perrins): 1 tsp (patties) + 1/2 tsp (gravy)",
+        "detail": "Our own ingredient line annotates it for both patties and gravy, but step 1 mixes the beef with bread crumbs only and the gravy step uses only broth and tomato paste; the source puts Worcestershire in both the patty mix and the gravy.",
+        "confidence": "high"
+    },
+    {
+        "slug": "salisbury-steak-potato-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Ketchup (generic): 2 tsp (patties) + 1 tsp (gravy)",
+        "detail": "Costed with explicit patty/gravy annotations, but no step ever mentions ketchup; the source mixes it into the patties and stirs it into the gravy.",
+        "confidence": "high"
+    },
+    {
+        "slug": "salisbury-steak-potato-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Dijon Mustard (generic): 1 tsp",
+        "detail": "Costed for the patty mix (source puts 1 tsp mustard in the patties) but our steps never use it.",
+        "confidence": "high"
+    },
+    {
+        "slug": "salisbury-steak-potato-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Garlic Powder: 1/2 tsp",
+        "detail": "Costed but never mentioned in any step; the source mixes it into the patties.",
+        "confidence": "high"
+    },
+    {
+        "slug": "salisbury-steak-potato-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Onion Powder: 1/2 tsp",
+        "detail": "Costed but never mentioned in any step; the source mixes it into the patties.",
+        "confidence": "high"
+    },
+    {
+        "slug": "salisbury-steak-potato-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Salt and Black Pepper (to taste)",
+        "detail": "Both are in the costed list but no step uses them or says 'season'; the source seasons the patty mix with salt and pepper.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "philly-cheesesteak-skillet-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Olive Oil: 1 1/2 tbsp",
+        "detail": "Costed but no step mentions oil; the source heats divided oil before browning the beef and again before the vegetables.",
+        "confidence": "high"
+    },
+    {
+        "slug": "philly-cheesesteak-skillet-bowls",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Salt (2 tsp) and Black Pepper (1/2 tsp)",
+        "detail": "Both costed but no step uses them or says 'season'; the source explicitly seasons the beef and the vegetables with divided salt and pepper.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "pakistani-beef-kofta-curry",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Black Pepper (Great Value): 0.5 tbsp",
+        "detail": "Costed but no step uses it or says 'season'; step 2's kofta spice list (cumin, coriander, chili powder, salt) and step 8's garam masala never include black pepper.",
+        "confidence": "medium"
+    },
+    {
+        "slug": "panang-chicken-curry",
+        "class": "UNUSED-PURCHASE",
+        "ingredient": "Black Pepper (Great Value): 0.5 tbsp",
+        "detail": "Costed but never used in any step; the paste, simmer, and 'season with the fish sauce and sugar' steps never mention pepper (salt is used in the paste).",
+        "confidence": "medium"
+    }
+]
