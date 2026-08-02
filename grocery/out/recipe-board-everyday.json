@@ -133,7 +133,7 @@
                                               "per_unit":  0.1806,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "item":  "Countryside Creamery Salted Butter",
+                                              "item":  "Countryside Creamery Unsalted Butter 16 OZ",
                                               "size":  "16 oz"
                                           },
                                           {
@@ -283,7 +283,7 @@
                                               "per_unit":  0.1696,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "item":  "Priano Balsamic Vinegar16.9 fl oz",
+                                              "item":  "Priano Balsamic Vinegar 16.9 FL OZ",
                                               "size":  "16.9 fl oz"
                                           },
                                           {
@@ -295,14 +295,6 @@
                                               "size":  "16.9 fl oz"
                                           },
                                           {
-                                              "store":  "Baker\u0027s",
-                                              "per_unit":  0.2264,
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "item":  "Filippo Berio Balsamic Vinegar of Modena",
-                                              "size":  "16.9 fl oz"
-                                          },
-                                          {
                                               "store":  "Hy-Vee",
                                               "per_unit":  0.2264,
                                               "unit":  "oz",
@@ -310,6 +302,14 @@
                                               "bulk":  false,
                                               "membership":  false,
                                               "item":  "Nothing But The Truth Organic Balsamic Vinegar",
+                                              "size":  "16.9 fl oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.2264,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Filippo Berio Balsamic Vinegar of Modena",
                                               "size":  "16.9 fl oz"
                                           },
                                           {
@@ -510,19 +510,19 @@
                                               "size":  "80 oz"
                                           },
                                           {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.995,
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "item":  "Carrots, Package",
-                                              "size":  "2 lb"
-                                          },
-                                          {
                                               "store":  "Hy-Vee",
                                               "per_unit":  0.995,
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "item":  "Bunny Luv Organic Whole Carrots",
+                                              "size":  "2 lb"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.995,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Carrots, Package",
                                               "size":  "2 lb"
                                           },
                                           {
@@ -618,7 +618,7 @@
                                               "per_unit":  0.2056,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "item":  "Happy Farms Shredded Mozzarella Cheese 16 OZ",
+                                              "item":  "Happy Farms Shredded Mild Cheddar Cheese 16 OZ",
                                               "size":  "16 oz"
                                           },
                                           {
@@ -1344,19 +1344,19 @@
                                               "size":  "14.5 oz"
                                           },
                                           {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.0538,
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "item":  "Great Value No Salt Added Cut Green Beans, 14.5 oz",
-                                              "size":  "14.5 oz"
-                                          },
-                                          {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  0.0538,
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "item":  "Smart Way Cut Green Beans",
+                                              "size":  "14.5 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.0538,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Great Value No Salt Added Cut Green Beans, 14.5 oz",
                                               "size":  "14.5 oz"
                                           },
                                           {
@@ -1399,7 +1399,7 @@
                                               "size":  "lb"
                                           },
                                           {
-                                              "store":  "Family Fare",
+                                              "store":  "Baker\u0027s",
                                               "per_unit":  0.99,
                                               "type":  "everyday",
                                               "bulk":  false,
@@ -1407,7 +1407,7 @@
                                               "size":  "lb"
                                           },
                                           {
-                                              "store":  "Baker\u0027s",
+                                              "store":  "Family Fare",
                                               "per_unit":  0.99,
                                               "type":  "everyday",
                                               "bulk":  false,
@@ -1715,22 +1715,22 @@
                            "commodity":  "Kidney Beans",
                            "category":  "Beans \u0026 Canned",
                            "unit":  "oz",
-                           "cheapest_store":  "Walmart",
+                           "cheapest_store":  "Aldi",
                            "stores":  [
-                                          {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.0548,
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "item":  "Great Value Dark Red Kidney Beans, 15.5 oz",
-                                              "size":  "15.5 oz"
-                                          },
                                           {
                                               "store":  "Aldi",
                                               "per_unit":  0.0548,
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "item":  "Dakota S Pride Dark Red Kidney Beans 15.5 OZ",
+                                              "size":  "15.5 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.0548,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Great Value Dark Red Kidney Beans, 15.5 oz",
                                               "size":  "15.5 oz"
                                           },
                                           {
@@ -1791,18 +1791,18 @@
                                               "size":  "16 oz"
                                           },
                                           {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.1244,
-                                              "type":  "everyday",
-                                              "bulk":  false
-                                          },
-                                          {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  0.1244,
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "item":  "Kroger Light Sour Cream",
                                               "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.1244,
+                                              "type":  "everyday",
+                                              "bulk":  false
                                           },
                                           {
                                               "store":  "Sam\u0027s Club",
@@ -1862,7 +1862,7 @@
                                               "per_unit":  0.0829,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "item":  "Our Family Pasta Sauce, Tomato, Onion \u0026 Garlic 24 Oz",
+                                              "item":  "Our Family Pasta Sauce, Tomato, Basil \u0026 Garlic 24 Oz",
                                               "size":  "24 oz"
                                           }
                                       ]
@@ -1915,9 +1915,11 @@
                            "stores":  [
                                           {
                                               "store":  "Aldi",
-                                              "per_unit":  0.23,
+                                              "per_unit":  0.265,
                                               "type":  "everyday",
-                                              "bulk":  false
+                                              "bulk":  false,
+                                              "item":  "Tuscan Garden Large Pitted Black Ripe Olives 6 OZ",
+                                              "size":  "6 oz"
                                           },
                                           {
                                               "store":  "Sam\u0027s Club",
@@ -1983,19 +1985,19 @@
                                               "size":  "2.12 oz"
                                           },
                                           {
-                                              "store":  "Baker\u0027s",
-                                              "per_unit":  0.625,
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "item":  "Smart Way Ground Paprika",
-                                              "size":  "2 oz"
-                                          },
-                                          {
                                               "store":  "Hy-Vee",
                                               "per_unit":  0.625,
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "item":  "Thats Smart Paprika",
+                                              "size":  "2 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.625,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Smart Way Ground Paprika",
                                               "size":  "2 oz"
                                           },
                                           {
@@ -2349,7 +2351,7 @@
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Priano Red Wine Vinegar16.9 fl oz",
+                                              "item":  "Priano Red Wine Vinegar 16.9 FL OZ",
                                               "size":  "16.9 fl oz"
                                           },
                                           {
@@ -2677,7 +2679,7 @@
                            "stores":  [
                                           {
                                               "store":  "Family Fare",
-                                              "per_unit":  1.99,
+                                              "per_unit":  2.49,
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "item":  "Tomatillos",
@@ -2757,19 +2759,19 @@
                                               "size":  "6 oz"
                                           },
                                           {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.1575,
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "item":  "Hy-Vee Tomato Paste",
-                                              "size":  "12 oz"
-                                          },
-                                          {
                                               "store":  "Family Fare",
                                               "per_unit":  0.1575,
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "item":  "Our Family Tomato Paste 12 Oz",
+                                              "size":  "12 oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.1575,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Hy-Vee Tomato Paste",
                                               "size":  "12 oz"
                                           }
                                       ]
@@ -2875,7 +2877,7 @@
                                               "per_unit":  0.0829,
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "item":  "Our Family Pasta Sauce, Tomato, Onion \u0026 Garlic 24 Oz",
+                                              "item":  "Our Family Pasta Sauce, Tomato, Basil \u0026 Garlic 24 Oz",
                                               "size":  "24 oz"
                                           }
                                       ]
@@ -2969,19 +2971,19 @@
                                               "size":  "128 fl oz"
                                           },
                                           {
-                                              "store":  "Baker\u0027s",
-                                              "per_unit":  0.0314,
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "item":  "Kroger Distilled White Vinegar",
-                                              "size":  "1 gal"
-                                          },
-                                          {
                                               "store":  "Family Fare",
                                               "per_unit":  0.0314,
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "item":  "That\u0027s Smart! Vinegar, White Distilled 1 Gal",
+                                              "size":  "1 gal"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.0314,
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "item":  "Kroger Distilled White Vinegar",
                                               "size":  "1 gal"
                                           },
                                           {
@@ -3010,13 +3012,13 @@
                                               "size":  "6 ea"
                                           },
                                           {
-                                              "store":  "Walmart",
+                                              "store":  "Baker\u0027s",
                                               "per_unit":  1,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
-                                              "store":  "Baker\u0027s",
+                                              "store":  "Walmart",
                                               "per_unit":  1,
                                               "type":  "everyday",
                                               "bulk":  false
@@ -3042,26 +3044,6 @@
                            "category":  "Meat \u0026 Poultry",
                            "stores":  [
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  9.29,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Our Certified 93% Lean / 7% Fat, Lean Ground Beef Roll, 1 Lb. 16 Oz",
-                                              "size":  "16 oz"
-                                          },
-                                          {
-                                              "store":  "Walmart",
-                                              "per_unit":  6.97,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "93% Lean / 7% Fat Lean Ground Beef, 1 lb Roll, Fresh, All Natural*",
-                                              "size":  "1 lb Roll"
-                                          },
-                                          {
                                               "store":  "Sam\u0027s Club",
                                               "per_unit":  6.17,
                                               "unit":  "lb",
@@ -3069,7 +3051,27 @@
                                               "bulk":  false,
                                               "membership":  true,
                                               "item":  "Member\u0027s Mark 93/7 Ground Beef, priced per pound",
-                                              "size":  "priced per lb"
+                                              "size":  "lb"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  6.62,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "93% Lean / 7% Fat Lean Ground Beef, 3 lb Roll, Fresh, All Natural*",
+                                              "size":  "lb"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  7.39,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "93 Lean Ground Beef Per LB",
+                                              "size":  "lb"
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -3078,18 +3080,18 @@
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Lean Ground Beef 93% Lean 7% Fat",
-                                              "size":  "1 lb"
+                                              "item":  "93% Lean 7% Fat Fresh Ground Beef",
+                                              "size":  "16 oz"
                                           },
                                           {
-                                              "store":  "Aldi",
-                                              "per_unit":  7.49,
+                                              "store":  "Family Fare",
+                                              "per_unit":  9.29,
                                               "unit":  "lb",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "93% Ground Beef",
-                                              "size":  "1 lb"
+                                              "item":  "Our Certified 93% Lean / 7% Fat, Lean Ground Beef Roll, 1 Lb. 16 Oz",
+                                              "size":  "16 oz"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -3265,16 +3267,6 @@
                                               "size":  "lb"
                                           },
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  10.99,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Fresh Beef Chuck Roast, Boneless",
-                                              "size":  "lb"
-                                          },
-                                          {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  10.99,
                                               "unit":  "lb",
@@ -3282,6 +3274,16 @@
                                               "bulk":  false,
                                               "membership":  false,
                                               "item":  "Choice Beef Chuck Roast",
+                                              "size":  "lb"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  10.99,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Fresh Beef Chuck Roast, Boneless",
                                               "size":  "lb"
                                           }
                                       ],
@@ -3905,16 +3907,6 @@
                                               "size":  "3 ct"
                                           },
                                           {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.79,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Jumbo Garlic",
-                                              "size":  "1 ct"
-                                          },
-                                          {
                                               "store":  "Family Fare",
                                               "per_unit":  0.79,
                                               "unit":  "each",
@@ -3923,6 +3915,16 @@
                                               "membership":  false,
                                               "item":  "Fresh Garlic",
                                               "size":  "1 ea"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.79,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Jumbo Garlic",
+                                              "size":  "1 ct"
                                           }
                                       ],
                            "cheapest_store":  "Baker\u0027s",
@@ -5378,16 +5380,6 @@
                                               "size":  "24 oz"
                                           },
                                           {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.4988,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Valued Naturals Sun Dried Tomatoes PrePriced",
-                                              "size":  "8 oz"
-                                          },
-                                          {
                                               "store":  "Aldi",
                                               "per_unit":  0.4988,
                                               "unit":  "oz",
@@ -5395,6 +5387,16 @@
                                               "bulk":  false,
                                               "membership":  false,
                                               "item":  "Tuscan Garden Sundried Tomatoes 8 OZ",
+                                              "size":  "8 oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.4988,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Valued Naturals Sun Dried Tomatoes PrePriced",
                                               "size":  "8 oz"
                                           },
                                           {
@@ -5601,16 +5603,6 @@
                                               "size":  "15 fl oz"
                                           },
                                           {
-                                              "store":  "Baker\u0027s",
-                                              "per_unit":  0.199,
-                                              "unit":  "floz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Kroger Teriyaki Marinade and Sauce",
-                                              "size":  "10 fl oz"
-                                          },
-                                          {
                                               "store":  "Hy-Vee",
                                               "per_unit":  0.199,
                                               "unit":  "floz",
@@ -5618,6 +5610,16 @@
                                               "bulk":  false,
                                               "membership":  false,
                                               "item":  "Hy-Vee Teriyaki Sauce",
+                                              "size":  "10 fl oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.199,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Kroger Teriyaki Marinade and Sauce",
                                               "size":  "10 fl oz"
                                           },
                                           {
@@ -5804,16 +5806,6 @@
                                               "size":  "lb"
                                           },
                                           {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  1.99,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Zucchini Squash",
-                                              "size":  "lb"
-                                          },
-                                          {
                                               "store":  "Family Fare",
                                               "per_unit":  1.99,
                                               "unit":  "lb",
@@ -5821,6 +5813,16 @@
                                               "bulk":  false,
                                               "membership":  false,
                                               "item":  "Yellow Zucchini/Yellow Squash",
+                                              "size":  "lb"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  1.99,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Zucchini Squash",
                                               "size":  "lb"
                                           }
                                       ],
@@ -6049,16 +6051,6 @@
                                               "size":  "10 fl oz"
                                           },
                                           {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.2492,
-                                              "unit":  "floz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Marukan Genuine Brewed Rice Vinegar",
-                                              "size":  "12 fl oz"
-                                          },
-                                          {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  0.2492,
                                               "unit":  "floz",
@@ -6066,6 +6058,16 @@
                                               "bulk":  false,
                                               "membership":  false,
                                               "item":  "Nakano Organic Natural Rice Vinegar",
+                                              "size":  "12 fl oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.2492,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Marukan Genuine Brewed Rice Vinegar",
                                               "size":  "12 fl oz"
                                           },
                                           {
@@ -6283,16 +6285,6 @@
                                               "size":  "64 oz"
                                           },
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.0381,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Iodized Salt Our Family",
-                                              "size":  "26 oz"
-                                          },
-                                          {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  0.0381,
                                               "unit":  "oz",
@@ -6300,6 +6292,16 @@
                                               "bulk":  false,
                                               "membership":  false,
                                               "item":  "Kroger Iodized Salt",
+                                              "size":  "26 oz"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.0381,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Iodized Salt Our Family",
                                               "size":  "26 oz"
                                           },
                                           {
@@ -6395,13 +6397,13 @@
                                               "size":  "each"
                                           },
                                           {
-                                              "store":  "Family Fare",
+                                              "store":  "Baker\u0027s",
                                               "per_unit":  0.99,
                                               "unit":  "each",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Cilantro (Chinese Parsley/Coriander)",
+                                              "item":  "Cilantro",
                                               "size":  "1 ct"
                                           },
                                           {
@@ -6415,13 +6417,13 @@
                                               "size":  "1 ct"
                                           },
                                           {
-                                              "store":  "Baker\u0027s",
+                                              "store":  "Family Fare",
                                               "per_unit":  0.99,
                                               "unit":  "each",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Cilantro",
+                                              "item":  "Cilantro (Chinese Parsley/Coriander)",
                                               "size":  "1 ct"
                                           },
                                           {
@@ -6466,16 +6468,6 @@
                                               "size":  "lb"
                                           },
                                           {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  2.99,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Jalapeno Pepper",
-                                              "size":  "lb"
-                                          },
-                                          {
                                               "store":  "Family Fare",
                                               "per_unit":  2.99,
                                               "unit":  "lb",
@@ -6483,6 +6475,16 @@
                                               "bulk":  false,
                                               "membership":  false,
                                               "item":  "Jalapeno Peppers",
+                                              "size":  "lb"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  2.99,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Jalapeno Pepper",
                                               "size":  "lb"
                                           }
                                       ],
@@ -6548,16 +6550,6 @@
                            "category":  "Sauces \u0026 Condiments",
                            "stores":  [
                                           {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.1,
-                                              "unit":  "floz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Great Value Worcestershire Sauce, 10 fl oz",
-                                              "size":  "10 fl oz"
-                                          },
-                                          {
                                               "store":  "Hy-Vee",
                                               "per_unit":  0.1,
                                               "unit":  "floz",
@@ -6565,6 +6557,16 @@
                                               "bulk":  false,
                                               "membership":  false,
                                               "item":  "That\u0027s Smart Worcestershire Sauce",
+                                              "size":  "10 fl oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.1,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Worcestershire Sauce, 10 fl oz",
                                               "size":  "10 fl oz"
                                           },
                                           {
@@ -6598,7 +6600,7 @@
                                               "size":  "2 pk 20 fl oz"
                                           }
                                       ],
-                           "cheapest_store":  "Walmart",
+                           "cheapest_store":  "Hy-Vee",
                            "cheapest_price":  0.0686,
                            "cheapest_type":  "everyday"
                        },
@@ -7011,7 +7013,7 @@
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Happy Farms Shredded Mozzarella Cheese 16 OZ",
+                                              "item":  "Happy Farms Shredded Mild Cheddar Cheese 16 OZ",
                                               "size":  "16 oz"
                                           },
                                           {
@@ -7249,16 +7251,6 @@
                                               "size":  "each"
                                           },
                                           {
-                                              "store":  "Baker\u0027s",
-                                              "per_unit":  2.59,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Sleeved Celery",
-                                              "size":  "1 ct"
-                                          },
-                                          {
                                               "store":  "Aldi",
                                               "per_unit":  2.59,
                                               "unit":  "each",
@@ -7267,6 +7259,16 @@
                                               "membership":  false,
                                               "item":  "Organic Celery Hearts Each",
                                               "size":  "each"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  2.59,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Sleeved Celery",
+                                              "size":  "1 ct"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -7453,16 +7455,6 @@
                            "category":  "Produce",
                            "stores":  [
                                           {
-                                              "store":  "Baker\u0027s",
-                                              "per_unit":  1.19,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Green Onions",
-                                              "size":  "1 ct"
-                                          },
-                                          {
                                               "store":  "Aldi",
                                               "per_unit":  1.19,
                                               "unit":  "each",
@@ -7471,6 +7463,16 @@
                                               "membership":  false,
                                               "item":  "Green Onions, Bag",
                                               "size":  "5.5 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  1.19,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Green Onions",
+                                              "size":  "1 ct"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -7493,7 +7495,7 @@
                                               "size":  "1 ct"
                                           }
                                       ],
-                           "cheapest_store":  "Baker\u0027s",
+                           "cheapest_store":  "Aldi",
                            "cheapest_price":  1.19,
                            "cheapest_type":  "everyday"
                        },
@@ -7595,16 +7597,6 @@
                                               "size":  "32 fl oz"
                                           },
                                           {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.1247,
-                                              "unit":  "floz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Hy-Vee Reconstituted Lemon 100% Juice",
-                                              "size":  "32 fl oz"
-                                          },
-                                          {
                                               "store":  "Family Fare",
                                               "per_unit":  0.1247,
                                               "unit":  "floz",
@@ -7612,6 +7604,16 @@
                                               "bulk":  false,
                                               "membership":  false,
                                               "item":  "Our Family Lemon 100% Juice 32 Fl Oz",
+                                              "size":  "32 fl oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.1247,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Hy-Vee Reconstituted Lemon 100% Juice",
                                               "size":  "32 fl oz"
                                           }
                                       ],
@@ -7860,16 +7862,6 @@
                                               "size":  "32 fl oz"
                                           },
                                           {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.0778,
-                                              "unit":  "floz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Great Value Half and Half, 64 fl oz Carton",
-                                              "size":  "64 fl oz"
-                                          },
-                                          {
                                               "store":  "Aldi",
                                               "per_unit":  0.0778,
                                               "unit":  "floz",
@@ -7878,6 +7870,16 @@
                                               "membership":  false,
                                               "item":  "Friendly Farms Half \u0026 Half",
                                               "size":  "32 fl oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.0778,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Half and Half, 64 fl oz Carton",
+                                              "size":  "64 fl oz"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -8344,7 +8346,7 @@
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Happy Farms Shredded Mozzarella Cheese 16 OZ",
+                                              "item":  "Happy Farms Shredded Mild Cheddar Cheese 16 OZ",
                                               "size":  "16 oz"
                                           },
                                           {
@@ -8974,6 +8976,6 @@
                                       ]
                        }
                    ],
-    "built_at":  "2026-08-01T17:51:50",
+    "built_at":  "2026-08-02T08:27:09",
     "reverified":  "2026-07-07 (monthly floor re-verify: Sam\u0027s+Walmart full re-pull; Aldi/Hy-Vee/Baker\u0027s spot-confirmed)"
 }
