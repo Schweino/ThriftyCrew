@@ -20,12 +20,12 @@
     "intro_html":  "This is a burrito bowl built for meal prep and built for a budget. A few cheap ingredients go in the slow cooker and turn into tender, saucy shredded chicken while you go about your day. Pile it over rice with black beans and cheddar, and you have two weeks of dinners that taste like takeout.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2495 g)",
-                                "\u003cstrong\u003eTaco Seasoning (Great Value):\u003c/strong\u003e 1 packet (84 g)",
+                                "\u003cstrong\u003eTaco Seasoning (Great Value):\u003c/strong\u003e 10 tbsp (84 g)",
                                 "\u003cstrong\u003eDiced Green Chiles (Old El Paso):\u003c/strong\u003e 1 can (113 g)",
-                                "\u003cstrong\u003eSalsa (Pace):\u003c/strong\u003e 2 jars (1360 g)",
+                                "\u003cstrong\u003eSalsa (Pace):\u003c/strong\u003e 5 1/4 cups (1360 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (800 g)",
                                 "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 4 cans (910 g)",
-                                "\u003cstrong\u003eFat Free Cheddar (Great Value):\u003c/strong\u003e 1 bag (196 g)"
+                                "\u003cstrong\u003eFat Free Cheddar (Great Value):\u003c/strong\u003e 1 3/4 cups (196 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$2.74 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -65,7 +65,7 @@
                                {
                                    "item":  "Taco Seasoning",
                                    "grams":  84,
-                                   "buy":  "1 packet",
+                                   "buy":  "10 tbsp",
                                    "bid":  "taco-seasoning",
                                    "gpu":  "28.350"
                                },
@@ -79,7 +79,7 @@
                                {
                                    "item":  "Salsa",
                                    "grams":  1360,
-                                   "buy":  "2 jars",
+                                   "buy":  "5 1/4 cups",
                                    "bid":  "salsa",
                                    "gpu":  "28.350"
                                },
@@ -100,7 +100,7 @@
                                {
                                    "item":  "Fat Free Cheddar",
                                    "grams":  196,
-                                   "buy":  "1 bag",
+                                   "buy":  "1 3/4 cups",
                                    "bid":  "fat-free-cheddar",
                                    "gpu":  "28.350"
                                }

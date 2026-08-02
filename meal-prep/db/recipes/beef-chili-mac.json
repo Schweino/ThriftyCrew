@@ -20,16 +20,16 @@
     "intro_html":  "Chili and macaroni in one skillet, the way it should be. This crowd-pleaser stacks 53 grams of protein per bowl for about $4.75 (at everyday cost) and makes 14 servings. It is warm, filling, and cheap enough that you will wonder why you ever bought the boxed version.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2230 g)",
-                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 3 boxs (969 g)",
+                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 9 2/3 cups (969 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (250 g)",
-                                "\u003cstrong\u003eKidney Beans (generic):\u003c/strong\u003e 1 can (430 g)",
+                                "\u003cstrong\u003eKidney Beans (generic):\u003c/strong\u003e 2 1/2 cups (430 g)",
                                 "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2 cans (800 g)",
-                                "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 2 cans (450 g)",
-                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 carton (900 g)",
-                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 1 bag (160 g)",
-                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1 jar (14 g)",
-                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 jar (8 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (15 g)",
+                                "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 1 3/4 cups (450 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 3 3/4 cups (900 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 1 1/3 cups (160 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1 3/4 tbsp (14 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 1/4 tbsp (8 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 cloves (15 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2 tsp (27 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e to taste (15 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
@@ -70,7 +70,7 @@
                                {
                                    "item":  "Penne Pasta",
                                    "grams":  969,
-                                   "buy":  "3 boxs",
+                                   "buy":  "9 2/3 cups",
                                    "bid":  "penne-pasta",
                                    "gpu":  28.3495
                                },
@@ -84,7 +84,7 @@
                                {
                                    "item":  "Kidney Beans",
                                    "grams":  430,
-                                   "buy":  "1 can",
+                                   "buy":  "2 1/2 cups",
                                    "bid":  "kidney-beans",
                                    "gpu":  "28.350"
                                },
@@ -98,42 +98,42 @@
                                {
                                    "item":  "Tomato Sauce",
                                    "grams":  450,
-                                   "buy":  "2 cans",
+                                   "buy":  "1 3/4 cups",
                                    "bid":  "tomato-sauce",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Beef Broth",
                                    "grams":  900,
-                                   "buy":  "1 carton",
+                                   "buy":  "3 3/4 cups",
                                    "bid":  "beef-broth",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Cheddar Cheese, Shredded",
                                    "grams":  160,
-                                   "buy":  "1 bag",
+                                   "buy":  "1 1/3 cups",
                                    "bid":  "cheddar-cheese-shredded",
                                    "gpu":  28.3495
                                },
                                {
                                    "item":  "Chili Powder",
                                    "grams":  14,
-                                   "buy":  "1 jar",
+                                   "buy":  "1 3/4 tbsp",
                                    "bid":  "chili-powder",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Ground Cumin",
                                    "grams":  8,
-                                   "buy":  "1 jar",
+                                   "buy":  "1 1/4 tbsp",
                                    "bid":  "ground-cumin",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Garlic",
                                    "grams":  15,
-                                   "buy":  "1 bulb",
+                                   "buy":  "3 cloves",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },

@@ -22,11 +22,11 @@
                                 "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 8 lb (3300 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (940 g)",
                                 "\u003cstrong\u003eSalsa Verde (Herdez):\u003c/strong\u003e 1 jar (450 g)",
-                                "\u003cstrong\u003eDiced Green Chiles (Old El Paso):\u003c/strong\u003e 2 cans (120 g)",
-                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 3 cans (750 g)",
-                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (480 g)",
-                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1 bottle (45 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (12 g)",
+                                "\u003cstrong\u003eDiced Green Chiles (Old El Paso):\u003c/strong\u003e 8 tbsp (120 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 4 1/2 cups (750 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2 cups (480 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 3 tbsp (45 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (12 g)",
                                 "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1/3 cup (150 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/4 tsp kosher salt (4 g)"
                             ],
@@ -81,35 +81,35 @@
                                {
                                    "item":  "Diced Green Chiles",
                                    "grams":  120,
-                                   "buy":  "2 cans",
+                                   "buy":  "8 tbsp",
                                    "bid":  "canned-green-chilies",
                                    "gpu":  28.3495
                                },
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "grams":  750,
-                                   "buy":  "3 cans",
+                                   "buy":  "4 1/2 cups",
                                    "bid":  "canned-corn",
                                    "gpu":  28.3495
                                },
                                {
                                    "item":  "Chicken Broth",
                                    "grams":  480,
-                                   "buy":  "1 carton",
+                                   "buy":  "2 cups",
                                    "bid":  "chicken-broth",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Lime Juice",
                                    "grams":  45,
-                                   "buy":  "1 bottle",
+                                   "buy":  "3 tbsp",
                                    "bid":  "limes",
                                    "gpu":  "30.000"
                                },
                                {
                                    "item":  "Garlic",
                                    "grams":  12,
-                                   "buy":  "1 bulb",
+                                   "buy":  "2 cloves",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },

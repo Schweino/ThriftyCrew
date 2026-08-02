@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Ground Beef Fried Rice Bowls",
     "slug":  "ground-beef-fried-rice-bowls",
     "cuisine":  "Asian",
@@ -21,12 +21,12 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2450 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1020 g)",
-                                "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 2 bags (400 g)",
+                                "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 3 cups (400 g)",
                                 "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 1 lb (300 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (250 g)",
-                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 bottle (180 g)",
-                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1 bottle (30 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (20 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 2/3 cup (180 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 2 1/4 tbsp (30 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 cloves (20 g)",
                                 "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 1 root (12 g)",
                                 "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 3 large eggs (500 g)",
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 2 Tbsp (100 g)",
@@ -77,7 +77,7 @@
                                {
                                    "item":  "Frozen Green Peas",
                                    "grams":  400,
-                                   "buy":  "2 bags",
+                                   "buy":  "3 cups",
                                    "bid":  "frozen-peas",
                                    "gpu":  28.3495
                                },
@@ -98,21 +98,21 @@
                                {
                                    "item":  "Soy Sauce",
                                    "grams":  180,
-                                   "buy":  "1 bottle",
+                                   "buy":  "2/3 cup",
                                    "bid":  "soy-sauce",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Sesame Oil",
                                    "grams":  30,
-                                   "buy":  "1 bottle",
+                                   "buy":  "2 1/4 tbsp",
                                    "bid":  "sesame-oil",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Garlic",
                                    "grams":  20,
-                                   "buy":  "1 bulb",
+                                   "buy":  "4 cloves",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },

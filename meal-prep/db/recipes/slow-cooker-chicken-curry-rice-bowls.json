@@ -23,11 +23,11 @@
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1020 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
                                 "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 1 lb (350 g)",
-                                "\u003cstrong\u003eCurry Powder (generic):\u003c/strong\u003e 1 jar (40 g)",
+                                "\u003cstrong\u003eCurry Powder (generic):\u003c/strong\u003e 1/2 cup (40 g)",
                                 "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1 tub (340 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (12 g)",
-                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (120 g)",
-                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 1 boxs (16 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (12 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1/2 cup (120 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 2 tbsp (16 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tsp (36 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (5 g)"
                             ],
@@ -89,7 +89,7 @@
                                {
                                    "item":  "Curry Powder",
                                    "grams":  40,
-                                   "buy":  "1 jar",
+                                   "buy":  "1/2 cup",
                                    "bid":  "curry-powder",
                                    "gpu":  "28.350"
                                },
@@ -103,21 +103,21 @@
                                {
                                    "item":  "Garlic",
                                    "grams":  12,
-                                   "buy":  "1 bulb",
+                                   "buy":  "2 cloves",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },
                                {
                                    "item":  "Chicken Broth",
                                    "grams":  120,
-                                   "buy":  "1 carton",
+                                   "buy":  "1/2 cup",
                                    "bid":  "chicken-broth",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Cornstarch",
                                    "grams":  16,
-                                   "buy":  "1 boxs",
+                                   "buy":  "2 tbsp",
                                    "bid":  "cornstarch",
                                    "gpu":  "28.350"
                                },

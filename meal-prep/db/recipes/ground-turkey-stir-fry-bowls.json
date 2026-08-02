@@ -23,12 +23,12 @@
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (900 g)",
                                 "\u003cstrong\u003eZucchini:\u003c/strong\u003e 4 zucchinis (620 g)",
                                 "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3 peppers (360 g)",
-                                "\u003cstrong\u003eTeriyaki Sauce (Kikkoman):\u003c/strong\u003e 1 bottle (180 g)",
-                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1 bottle (42 g)",
-                                "\u003cstrong\u003eHot Sauce (Frank\u0027s RedHot):\u003c/strong\u003e 1 bottle (30 g)",
-                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (27 g)",
+                                "\u003cstrong\u003eTeriyaki Sauce (Kikkoman):\u003c/strong\u003e 2/3 cup (180 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 2 tbsp (42 g)",
+                                "\u003cstrong\u003eHot Sauce (Frank\u0027s RedHot):\u003c/strong\u003e 2 tbsp (30 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2 tbsp (27 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 medium sweet onion, diced (385 g)",
-                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 2 sticks, finely diced (280 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 5 stalks, finely diced (280 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2-3 cloves, minced (42 g)",
                                 "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 3, green parts sliced (90 g)",
                                 "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 2 tsp toasted (35 g)",
@@ -92,28 +92,28 @@
                                {
                                    "item":  "Teriyaki Sauce",
                                    "grams":  180,
-                                   "buy":  "1 bottle",
+                                   "buy":  "2/3 cup",
                                    "bid":  "teriyaki-sauce",
                                    "gpu":  "34.000"
                                },
                                {
                                    "item":  "Honey",
                                    "grams":  42,
-                                   "buy":  "1 bottle",
+                                   "buy":  "2 tbsp",
                                    "bid":  "honey",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Hot Sauce",
                                    "grams":  30,
-                                   "buy":  "1 bottle",
+                                   "buy":  "2 tbsp",
                                    "bid":  "hot-sauce",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Olive Oil",
                                    "grams":  27,
-                                   "buy":  "1 bottle",
+                                   "buy":  "2 tbsp",
                                    "bid":  "olive-oil",
                                    "gpu":  "28.000"
                                },
@@ -127,7 +127,7 @@
                                {
                                    "item":  "Celery",
                                    "grams":  280,
-                                   "buy":  "2 sticks, finely diced",
+                                   "buy":  "5 stalks, finely diced",
                                    "bid":  "celery",
                                    "gpu":  "450.000"
                                },

@@ -21,12 +21,12 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3400 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (800 g)",
-                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 4 bags (1200 g)",
-                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 bottle (180 g)",
-                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1 bag (55 g)",
-                                "\u003cstrong\u003eHoisin Sauce (generic):\u003c/strong\u003e 1 jar (60 g)",
-                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1 bottle (20 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (24 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 14 cups (1200 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 2/3 cup (180 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1/4 cup (55 g)",
+                                "\u003cstrong\u003eHoisin Sauce (generic):\u003c/strong\u003e 3 3/4 tbsp (60 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1 1/2 tbsp (20 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5 cloves (24 g)",
                                 "\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 2 tbsp (100 g)",
                                 "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 1 tsp grated (7 g)",
                                 "\u003cstrong\u003eSriracha (Huy Fong Foods):\u003c/strong\u003e 1-2 tsp (25 g)",
@@ -75,42 +75,42 @@
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  1200,
-                                   "buy":  "4 bags",
+                                   "buy":  "14 cups",
                                    "bid":  "frozen-broccoli-florets",
                                    "gpu":  28.3495
                                },
                                {
                                    "item":  "Soy Sauce",
                                    "grams":  180,
-                                   "buy":  "1 bottle",
+                                   "buy":  "2/3 cup",
                                    "bid":  "soy-sauce",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Brown Sugar",
                                    "grams":  55,
-                                   "buy":  "1 bag",
+                                   "buy":  "1/4 cup",
                                    "bid":  "brown-sugar",
                                    "gpu":  "453.592"
                                },
                                {
                                    "item":  "Hoisin Sauce",
                                    "grams":  60,
-                                   "buy":  "1 jar",
+                                   "buy":  "3 3/4 tbsp",
                                    "bid":  "hoisin-sauce",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Sesame Oil",
                                    "grams":  20,
-                                   "buy":  "1 bottle",
+                                   "buy":  "1 1/2 tbsp",
                                    "bid":  "sesame-oil",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Garlic",
                                    "grams":  24,
-                                   "buy":  "1 bulb",
+                                   "buy":  "5 cloves",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },

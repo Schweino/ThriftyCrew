@@ -24,11 +24,11 @@
                                 "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 6 peppers (700 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
                                 "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2 cans (800 g)",
-                                "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 2 cans (450 g)",
-                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 carton (500 g)",
-                                "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 1 bag (170 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (20 g)",
-                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 1 jar (6 g)",
+                                "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 1 3/4 cups (450 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 2 cups (500 g)",
+                                "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 6 slices (170 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 cloves (20 g)",
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 1 1/2 tbsp (6 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 tbsp (42 g)",
                                 "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 2 tsp (30 g)",
                                 "\u003cstrong\u003ePaprika:\u003c/strong\u003e 1 tsp (8 g)",
@@ -101,35 +101,35 @@
                                {
                                    "item":  "Tomato Sauce",
                                    "grams":  450,
-                                   "buy":  "2 cans",
+                                   "buy":  "1 3/4 cups",
                                    "bid":  "tomato-sauce",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Beef Broth",
                                    "grams":  500,
-                                   "buy":  "1 carton",
+                                   "buy":  "2 cups",
                                    "bid":  "beef-broth",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Reduced Fat Mozzarella",
                                    "grams":  170,
-                                   "buy":  "1 bag",
+                                   "buy":  "6 slices",
                                    "bid":  "reduced-fat-mozzarella",
                                    "gpu":  28.3495
                                },
                                {
                                    "item":  "Garlic",
                                    "grams":  20,
-                                   "buy":  "1 bulb",
+                                   "buy":  "4 cloves",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },
                                {
                                    "item":  "Italian Seasoning",
                                    "grams":  6,
-                                   "buy":  "1 jar",
+                                   "buy":  "1 1/2 tbsp",
                                    "bid":  "italian-seasoning",
                                    "gpu":  "28.350"
                                },

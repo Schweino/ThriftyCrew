@@ -20,11 +20,11 @@
     "intro_html":  "Pozole is warm, hearty, and hominy makes it stick to your ribs in the best way. This one is built for meal prep, packing solid protein into a cheap-per-serving bowl with real depth of flavor. One batch makes 14 servings.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3200 g)",
-                                "\u003cstrong\u003eHominy (generic):\u003c/strong\u003e 5 cans (3400 g)",
+                                "\u003cstrong\u003eHominy (generic):\u003c/strong\u003e 21 cups (3400 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
-                                "\u003cstrong\u003eEnchilada Sauce (Old El Paso):\u003c/strong\u003e 2 cans (300 g)",
+                                "\u003cstrong\u003eEnchilada Sauce (Old El Paso):\u003c/strong\u003e 1 1/4 cups (300 g)",
                                 "\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 1 lb (400 g)",
-                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (140 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2/3 cup (140 g)",
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 4 cups (1440 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 cloves (35 g)",
                                 "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1 tbsp (16 g)",
@@ -69,7 +69,7 @@
                                {
                                    "item":  "Hominy",
                                    "grams":  3400,
-                                   "buy":  "5 cans",
+                                   "buy":  "21 cups",
                                    "bid":  "hominy",
                                    "gpu":  "28.350"
                                },
@@ -83,7 +83,7 @@
                                {
                                    "item":  "Enchilada Sauce",
                                    "grams":  300,
-                                   "buy":  "2 cans",
+                                   "buy":  "1 1/4 cups",
                                    "bid":  "enchilada-sauce",
                                    "gpu":  "28.350"
                                },
@@ -97,7 +97,7 @@
                                {
                                    "item":  "Olive Oil",
                                    "grams":  140,
-                                   "buy":  "1 bottle",
+                                   "buy":  "2/3 cup",
                                    "bid":  "olive-oil",
                                    "gpu":  "28.000"
                                },

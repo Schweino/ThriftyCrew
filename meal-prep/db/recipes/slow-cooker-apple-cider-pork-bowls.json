@@ -23,9 +23,9 @@
                                 "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 6 lb (2700 g)",
                                 "\u003cstrong\u003eApple (generic):\u003c/strong\u003e 4 apples (700 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (320 g)",
-                                "\u003cstrong\u003eHoney Dijon Mustard (Great Value):\u003c/strong\u003e 1 bottle (60 g)",
-                                "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 1 jar (8 g)",
-                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 jar (8 g)",
+                                "\u003cstrong\u003eHoney Dijon Mustard (Great Value):\u003c/strong\u003e 4 tbsp (60 g)",
+                                "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 1 tbsp (8 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 3/4 tbsp (8 g)",
                                 "\u003cstrong\u003eApple Cider:\u003c/strong\u003e 12 oz (600 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tsp kosher (16 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (3 g)",
@@ -90,21 +90,21 @@
                                {
                                    "item":  "Honey Dijon Mustard",
                                    "grams":  60,
-                                   "buy":  "1 bottle",
+                                   "buy":  "4 tbsp",
                                    "bid":  "honey-dijon-mustard",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Onion Powder",
                                    "grams":  8,
-                                   "buy":  "1 jar",
+                                   "buy":  "1 tbsp",
                                    "bid":  "onion-powder",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Garlic Powder",
                                    "grams":  8,
-                                   "buy":  "1 jar",
+                                   "buy":  "3/4 tbsp",
                                    "bid":  "garlic-powder",
                                    "gpu":  "28.350"
                                },

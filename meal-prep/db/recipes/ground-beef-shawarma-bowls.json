@@ -24,11 +24,11 @@
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
                                 "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1 tub (500 g)",
                                 "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 1 can (400 g)",
-                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 carton (300 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (25 g)",
-                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 jar (8 g)",
-                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 1 jar (8 g)",
-                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 jar (6 g)"
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 1/4 cups (300 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5 cloves (25 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 1/4 tbsp (8 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 1 1/4 tbsp (8 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 2/3 tbsp (6 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$3.96 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -94,35 +94,35 @@
                                {
                                    "item":  "Beef Broth",
                                    "grams":  300,
-                                   "buy":  "1 carton",
+                                   "buy":  "1 1/4 cups",
                                    "bid":  "beef-broth",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Garlic",
                                    "grams":  25,
-                                   "buy":  "1 bulb",
+                                   "buy":  "5 cloves",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },
                                {
                                    "item":  "Ground Cumin",
                                    "grams":  8,
-                                   "buy":  "1 jar",
+                                   "buy":  "1 1/4 tbsp",
                                    "bid":  "ground-cumin",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Paprika",
                                    "grams":  8,
-                                   "buy":  "1 jar",
+                                   "buy":  "1 1/4 tbsp",
                                    "bid":  "paprika",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Garlic Powder",
                                    "grams":  6,
-                                   "buy":  "1 jar",
+                                   "buy":  "2/3 tbsp",
                                    "bid":  "garlic-powder",
                                    "gpu":  "28.350"
                                }

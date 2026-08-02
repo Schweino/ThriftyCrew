@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Ground Beef and Broccoli Bowls",
     "slug":  "ground-beef-and-broccoli-bowls",
     "cuisine":  "Chinese",
@@ -21,14 +21,14 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2240 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (981 g)",
-                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 5 bags (1500 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 18 cups (1500 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
-                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 bottle (180 g)",
-                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 carton (300 g)",
-                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1 bag (70 g)",
-                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1 bottle (30 g)",
-                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 1 boxs (30 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (20 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 2/3 cup (180 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 1/4 cups (300 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1/3 cup (70 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 2 1/4 tbsp (30 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 3 3/4 tbsp (30 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 cloves (20 g)",
                                 "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 1 root (15 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e to taste (15 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
@@ -76,7 +76,7 @@
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  1500,
-                                   "buy":  "5 bags",
+                                   "buy":  "18 cups",
                                    "bid":  "frozen-broccoli-florets",
                                    "gpu":  28.3495
                                },
@@ -90,42 +90,42 @@
                                {
                                    "item":  "Soy Sauce",
                                    "grams":  180,
-                                   "buy":  "1 bottle",
+                                   "buy":  "2/3 cup",
                                    "bid":  "soy-sauce",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Beef Broth",
                                    "grams":  300,
-                                   "buy":  "1 carton",
+                                   "buy":  "1 1/4 cups",
                                    "bid":  "beef-broth",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Brown Sugar",
                                    "grams":  70,
-                                   "buy":  "1 bag",
+                                   "buy":  "1/3 cup",
                                    "bid":  "brown-sugar",
                                    "gpu":  "453.592"
                                },
                                {
                                    "item":  "Sesame Oil",
                                    "grams":  30,
-                                   "buy":  "1 bottle",
+                                   "buy":  "2 1/4 tbsp",
                                    "bid":  "sesame-oil",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Cornstarch",
                                    "grams":  30,
-                                   "buy":  "1 boxs",
+                                   "buy":  "3 3/4 tbsp",
                                    "bid":  "cornstarch",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Garlic",
                                    "grams":  20,
-                                   "buy":  "1 bulb",
+                                   "buy":  "4 cloves",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },

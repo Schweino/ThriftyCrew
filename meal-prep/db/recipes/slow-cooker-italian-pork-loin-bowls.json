@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Slow Cooker Italian Pork and White Bean Bowls",
     "slug":  "slow-cooker-italian-pork-loin-bowls",
     "cuisine":  "Italian",
@@ -20,13 +20,13 @@
     "intro_html":  "This one eats like a rustic Italian dinner, with tender pork, white beans, tomatoes, and a little melted mozzarella on top. It is the protein champ of the group at 66 grams a bowl, all for about $3.20 a serving (at everyday cost). Fourteen servings from one pot is a hearty, filling week sorted.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 8 lb (3300 g)",
-                                "\u003cstrong\u003eCannellini Beans (generic):\u003c/strong\u003e 6 cans (2500 g)",
+                                "\u003cstrong\u003eCannellini Beans (generic):\u003c/strong\u003e 15 cups (2500 g)",
                                 "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2 cans (700 g)",
                                 "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2 peppers (150 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (120 g)",
-                                "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 1 bag (150 g)",
-                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (30 g)",
-                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 1 jar (6 g)",
+                                "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 5 slices (150 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2 1/4 tbsp (30 g)",
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 1 1/2 tbsp (6 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tsp (16 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
@@ -66,7 +66,7 @@
                                {
                                    "item":  "Cannellini Beans",
                                    "grams":  2500,
-                                   "buy":  "6 cans",
+                                   "buy":  "15 cups",
                                    "bid":  "cannellini-beans",
                                    "gpu":  "28.350"
                                },
@@ -94,21 +94,21 @@
                                {
                                    "item":  "Reduced Fat Mozzarella",
                                    "grams":  150,
-                                   "buy":  "1 bag",
+                                   "buy":  "5 slices",
                                    "bid":  "reduced-fat-mozzarella",
                                    "gpu":  28.3495
                                },
                                {
                                    "item":  "Olive Oil",
                                    "grams":  30,
-                                   "buy":  "1 bottle",
+                                   "buy":  "2 1/4 tbsp",
                                    "bid":  "olive-oil",
                                    "gpu":  "28.000"
                                },
                                {
                                    "item":  "Italian Seasoning",
                                    "grams":  6,
-                                   "buy":  "1 jar",
+                                   "buy":  "1 1/2 tbsp",
                                    "bid":  "italian-seasoning",
                                    "gpu":  "28.350"
                                },

@@ -21,13 +21,13 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3100 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (980 g)",
-                                "\u003cstrong\u003eOrange Juice:\u003c/strong\u003e 1 carton (240 g)",
-                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 bottle (60 g)",
-                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1 bottle (84 g)",
-                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 1 boxs (32 g)",
-                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1 bottle (14 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (8 g)",
-                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 2 bags (500 g)",
+                                "\u003cstrong\u003eOrange Juice:\u003c/strong\u003e 1 cup (240 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 3 3/4 tbsp (60 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 4 tbsp (84 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 1/4 cup (32 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1 tbsp (14 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (8 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 6 cups (500 g)",
                                 "\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 1 oz (50 g)",
                                 "\u003cstrong\u003eGround Ginger (Great Value):\u003c/strong\u003e 1 tsp (5 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (3 g)",
@@ -77,49 +77,49 @@
                                {
                                    "item":  "Orange Juice",
                                    "grams":  240,
-                                   "buy":  "1 carton",
+                                   "buy":  "1 cup",
                                    "bid":  "orange-juice",
                                    "gpu":  "31.000"
                                },
                                {
                                    "item":  "Soy Sauce",
                                    "grams":  60,
-                                   "buy":  "1 bottle",
+                                   "buy":  "3 3/4 tbsp",
                                    "bid":  "soy-sauce",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Honey",
                                    "grams":  84,
-                                   "buy":  "1 bottle",
+                                   "buy":  "4 tbsp",
                                    "bid":  "honey",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Cornstarch",
                                    "grams":  32,
-                                   "buy":  "1 boxs",
+                                   "buy":  "1/4 cup",
                                    "bid":  "cornstarch",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Sesame Oil",
                                    "grams":  14,
-                                   "buy":  "1 bottle",
+                                   "buy":  "1 tbsp",
                                    "bid":  "sesame-oil",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Garlic",
                                    "grams":  8,
-                                   "buy":  "1 bulb",
+                                   "buy":  "2 cloves",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  500,
-                                   "buy":  "2 bags",
+                                   "buy":  "6 cups",
                                    "bid":  "frozen-broccoli-florets",
                                    "gpu":  28.3495
                                },

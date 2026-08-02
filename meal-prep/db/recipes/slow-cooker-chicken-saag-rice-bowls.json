@@ -21,10 +21,10 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3200 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (950 g)",
-                                "\u003cstrong\u003eFrozen Chopped Spinach (generic):\u003c/strong\u003e 3 boxs (900 g)",
+                                "\u003cstrong\u003eFrozen Chopped Spinach (generic):\u003c/strong\u003e 11 cups (900 g)",
                                 "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 1 can (425 g)",
-                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 1 can (240 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (18 g)",
+                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 1 cups (240 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 cloves (18 g)",
                                 "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 3 inches (75 g)",
                                 "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 1 tbsp (18 g)",
                                 "\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 1 tbsp (15 g)",
@@ -76,7 +76,7 @@
                                {
                                    "item":  "Frozen Chopped Spinach",
                                    "grams":  900,
-                                   "buy":  "3 boxs",
+                                   "buy":  "11 cups",
                                    "bid":  "frozen-chopped-spinach",
                                    "gpu":  28.3495
                                },
@@ -90,14 +90,14 @@
                                {
                                    "item":  "Coconut Milk",
                                    "grams":  240,
-                                   "buy":  "1 can",
+                                   "buy":  "1 cups",
                                    "bid":  "coconut-milk-canned",
                                    "gpu":  29.57
                                },
                                {
                                    "item":  "Garlic",
                                    "grams":  18,
-                                   "buy":  "1 bulb",
+                                   "buy":  "4 cloves",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },

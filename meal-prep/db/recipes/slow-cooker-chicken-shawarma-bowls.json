@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Slow Cooker Chicken Shawarma Bowls",
     "slug":  "slow-cooker-chicken-shawarma-bowls",
     "cuisine":  "Middle Eastern",
@@ -21,13 +21,13 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3450 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (880 g)",
-                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 3 bags (1000 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 12 cups (1000 g)",
                                 "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1 tub (240 g)",
-                                "\u003cstrong\u003eTahini (generic):\u003c/strong\u003e 1 jar (60 g)",
-                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1 bottle (60 g)",
-                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (14 g)",
-                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (60 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (18 g)",
+                                "\u003cstrong\u003eTahini (generic):\u003c/strong\u003e 1/4 cup (60 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 4 tbsp (60 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 tbsp (14 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1/4 cup (60 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 cloves (18 g)",
                                 "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 1/2 tsp (12 g)",
                                 "\u003cstrong\u003ePaprika:\u003c/strong\u003e 1 tsp (8 g)",
                                 "\u003cstrong\u003eDried Parsley (Great Value):\u003c/strong\u003e 1 tsp (4 g)",
@@ -80,7 +80,7 @@
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  1000,
-                                   "buy":  "3 bags",
+                                   "buy":  "12 cups",
                                    "bid":  "frozen-broccoli-florets",
                                    "gpu":  28.3495
                                },
@@ -94,35 +94,35 @@
                                {
                                    "item":  "Tahini",
                                    "grams":  60,
-                                   "buy":  "1 jar",
+                                   "buy":  "1/4 cup",
                                    "bid":  "tahini",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Lime Juice",
                                    "grams":  60,
-                                   "buy":  "1 bottle",
+                                   "buy":  "4 tbsp",
                                    "bid":  "limes",
                                    "gpu":  "30.000"
                                },
                                {
                                    "item":  "Olive Oil",
                                    "grams":  14,
-                                   "buy":  "1 bottle",
+                                   "buy":  "1 tbsp",
                                    "bid":  "olive-oil",
                                    "gpu":  "28.000"
                                },
                                {
                                    "item":  "Chicken Broth",
                                    "grams":  60,
-                                   "buy":  "1 carton",
+                                   "buy":  "1/4 cup",
                                    "bid":  "chicken-broth",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Garlic",
                                    "grams":  18,
-                                   "buy":  "1 bulb",
+                                   "buy":  "4 cloves",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },

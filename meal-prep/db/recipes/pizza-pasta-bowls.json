@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Pizza Pasta Bowls",
     "slug":  "pizza-pasta-bowls",
     "cuisine":  "Italian-American",
@@ -19,10 +19,10 @@
              },
     "intro_html":  "All the fun of pizza night, none of the delivery fee. Turkey pepperoni, high-protein rotini, marinara, and gooey mozzarella bake up into a bowl the kids will actually ask for again. It reheats great, it costs about $1.20 a serving (at everyday cost), and it scratches the pizza itch without the twenty-dollar order.",
     "ingredients_display":  [
-                                "\u003cstrong\u003eTurkey Pepperoni (Great Value):\u003c/strong\u003e 1 package (about 9.5 oz) (261 g)",
-                                "\u003cstrong\u003eRotini Pasta (Barilla):\u003c/strong\u003e 3 boxes (14.5 oz each) (959 g)",
+                                "\u003cstrong\u003eTurkey Pepperoni (Great Value):\u003c/strong\u003e 9 1/4 oz (about 9.5 oz) (261 g)",
+                                "\u003cstrong\u003eRotini Pasta (Barilla):\u003c/strong\u003e 9 2/3 cups (14.5 oz each) (959 g)",
                                 "\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e 2 jars (24 oz each) (1148 g)",
-                                "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 2 bags (8 oz each) (392 g)"
+                                "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 14 slices (8 oz each) (392 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$1.20 a bowl\u003c/strong\u003e (at everyday cost) for pizza-night flavor. A large delivery pizza runs $18 or more, so this is one of the easiest swaps on the menu.",
@@ -53,14 +53,14 @@
                                {
                                    "item":  "Turkey Pepperoni",
                                    "grams":  261,
-                                   "buy":  "1 package (about 9.5 oz)",
+                                   "buy":  "9 1/4 oz (about 9.5 oz)",
                                    "bid":  "turkey-pepperoni",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Rotini Pasta",
                                    "grams":  959,
-                                   "buy":  "3 boxes (14.5 oz each)",
+                                   "buy":  "9 2/3 cups (14.5 oz each)",
                                    "bid":  "rotini-pasta",
                                    "gpu":  "28.350"
                                },
@@ -68,15 +68,15 @@
                                    "item":  "Marinara Sauce",
                                    "grams":  1148,
                                    "buy":  "2 jars (24 oz each)",
-                                   "bid":"marinara-sauce",
-                                   "gpu":28.3495
+                                   "bid":  "marinara-sauce",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Reduced Fat Mozzarella",
                                    "grams":  392,
-                                   "buy":  "2 bags (8 oz each)",
-                                   "bid":"reduced-fat-mozzarella",
-                                   "gpu":28.3495
+                                   "buy":  "14 slices (8 oz each)",
+                                   "bid":  "reduced-fat-mozzarella",
+                                   "gpu":  28.3495
                                }
                            ]
                },

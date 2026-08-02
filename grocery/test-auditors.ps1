@@ -3061,6 +3061,35 @@ else {
   $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $asc -Quiet 2>&1 | Out-String
   if ($LASTEXITCODE -eq 0) { Ok 'no recipe spec contradicts itself worse than the recorded baseline (stat-vs-prose, stale money, head quantities all at ZERO)' }
   else { Bad ('a spec-contradiction class got WORSE: ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL' }) -join ' ')) }
+
+  # ------------------------------------------------- cook measures, not purchase labels (2026-08-02)
+  # Brad, from one card: "the ingredients section should only list what we need to COOK the recipe, not
+  # what to purchase". The list was printing the purchase label, so 120 g of soy sauce read "1 bottle" and
+  # 90 g of brown sugar read "1 bag". Measured across 513 specs: 6,999 ingredient lines, 459 of them a
+  # package noun that does not weigh what the recipe uses. The fixtures below pin BOTH halves of the fix -
+  # the rewrite itself, and the serving scaler that re-renders these labels in the browser.
+  $rcm = Join-Path $mpPipe 'repair-cook-measures.ps1'
+  if (-not (Test-Path $rcm)) { Bad 'repair-cook-measures.ps1 is missing - the ingredients list can go back to naming packages a cook cannot measure' }
+  else {
+    $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $rcm -SelfTest 2>&1 | Out-String
+    if ($r -match 'SELF-TEST PASS') { Ok 'cook measures: a package noun that cannot prove it equals the grams is still replaced, a whole can is still left alone, and a WEIGHT label is still out of scope' }
+    else { Bad ('repair-cook-measures -SelfTest failed: ' + ($r -replace "`n", ' ')) }
+
+    $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $rcm 2>&1 | Out-String
+    $n = 0
+    $m = [regex]::Match($r, 'cook-measure repair: (\d+) false label')
+    if ($m.Success) { $n = [int]$m.Groups[1].Value }
+    if ($n -eq 0) { Ok 'no ingredient line names a package the recipe does not actually use (0 false labels across 513 specs)' }
+    else { Bad ("$n ingredient line(s) again state a package quantity the recipe does not use - the Ingredients list is telling a cook to measure out a bottle or a bag. Run meal-prep\pipeline\repair-cook-measures.ps1 -Apply, then rebuild and republish those cards.") }
+
+    # THE BROWSER HALF. The PowerShell twin is what the fixture can run; this pins the JS it mirrors, so a
+    # future edit to the template cannot quietly restore the multiply-every-number behaviour that turned
+    # "1/2 tsp" into "2/4 tsp" the moment a reader changed the serving count.
+    $tpl = Get-Content (Join-Path $mpPipe 'tpl2-scaler-prefix.html') -Raw
+    if (($tpl -match 'function parseQty') -and ($tpl -match 'function fmtCook') -and ($tpl -notmatch 'buy\.replace\(/\\d\+')) {
+      Ok 'serving scaler still scales only the leading quantity and understands fractions (the JS matches its PowerShell twin)'
+    } else { Bad 'tpl2-scaler-prefix.html no longer carries the fraction-aware scaleBuy - changing the servings will render "2/4 tsp" again' }
+  }
 }
 
 # ---------------------------------------------------------------- identity eval set (2026-08-02, L1)

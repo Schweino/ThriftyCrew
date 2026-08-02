@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Slow Cooker Mediterranean Chicken Bowls",
     "slug":  "slow-cooker-mediterranean-chicken-bowls",
     "cuisine":  "Mediterranean",
@@ -22,12 +22,12 @@
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3450 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (940 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (200 g)",
-                                "\u003cstrong\u003eRoasted Red Peppers (generic):\u003c/strong\u003e 1 jar (240 g)",
-                                "\u003cstrong\u003eOlives (generic):\u003c/strong\u003e 1 jar (140 g)",
-                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (14 g)",
-                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (120 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (9 g)",
-                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1 bottle (30 g)",
+                                "\u003cstrong\u003eRoasted Red Peppers (generic):\u003c/strong\u003e 1 3/4 cups (240 g)",
+                                "\u003cstrong\u003eOlives (generic):\u003c/strong\u003e 1 cups (140 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 tbsp (14 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1/2 cup (120 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (9 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 2 tbsp (30 g)",
                                 "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 tsp (7 g)",
                                 "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 1 tsp (7 g)",
                                 "\u003cstrong\u003eDried Rosemary:\u003c/strong\u003e 1 tsp (7 g)",
@@ -85,42 +85,42 @@
                                {
                                    "item":  "Roasted Red Peppers",
                                    "grams":  240,
-                                   "buy":  "1 jar",
+                                   "buy":  "1 3/4 cups",
                                    "bid":  "roasted-red-peppers",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Olives",
                                    "grams":  140,
-                                   "buy":  "1 jar",
+                                   "buy":  "1 cups",
                                    "bid":  "green-olives",
                                    "gpu":  28.3495
                                },
                                {
                                    "item":  "Olive Oil",
                                    "grams":  14,
-                                   "buy":  "1 bottle",
+                                   "buy":  "1 tbsp",
                                    "bid":  "olive-oil",
                                    "gpu":  "28.000"
                                },
                                {
                                    "item":  "Chicken Broth",
                                    "grams":  120,
-                                   "buy":  "1 carton",
+                                   "buy":  "1/2 cup",
                                    "bid":  "chicken-broth",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Garlic",
                                    "grams":  9,
-                                   "buy":  "1 bulb",
+                                   "buy":  "2 cloves",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },
                                {
                                    "item":  "Lime Juice",
                                    "grams":  30,
-                                   "buy":  "1 bottle",
+                                   "buy":  "2 tbsp",
                                    "bid":  "limes",
                                    "gpu":  "30.000"
                                },

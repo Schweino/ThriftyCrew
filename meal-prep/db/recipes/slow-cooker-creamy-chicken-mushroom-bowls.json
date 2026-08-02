@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Slow Cooker Creamy Chicken and Mushroom Bowls",
     "slug":  "slow-cooker-creamy-chicken-mushroom-bowls",
     "cuisine":  "American",
@@ -21,11 +21,11 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3300 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (900 g)",
-                                "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 4 packages (900 g)",
-                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (720 g)",
-                                "\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 1 block (168 g)",
+                                "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 13 cups (900 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 3 cups (720 g)",
+                                "\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 3/4 cup (168 g)",
                                 "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1 tub (340 g)",
-                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 jar (12 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 1/4 tbsp (12 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp kosher salt (13 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (3 g)",
                                 "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 1/2 tsp (2 g)",
@@ -74,21 +74,21 @@
                                {
                                    "item":  "White Mushrooms",
                                    "grams":  900,
-                                   "buy":  "4 packages",
+                                   "buy":  "13 cups",
                                    "bid":  "mushrooms",
                                    "gpu":  28.3495
                                },
                                {
                                    "item":  "Chicken Broth",
                                    "grams":  720,
-                                   "buy":  "1 carton",
+                                   "buy":  "3 cups",
                                    "bid":  "chicken-broth",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "1/3 Fat Cream Cheese",
                                    "grams":  168,
-                                   "buy":  "1 block",
+                                   "buy":  "3/4 cup",
                                    "bid":  "1-3-fat-cream-cheese",
                                    "gpu":  28.3495
                                },
@@ -102,7 +102,7 @@
                                {
                                    "item":  "Garlic Powder",
                                    "grams":  12,
-                                   "buy":  "1 jar",
+                                   "buy":  "1 1/4 tbsp",
                                    "bid":  "garlic-powder",
                                    "gpu":  "28.350"
                                },

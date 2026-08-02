@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Chicken Enchilada Rice Bowls",
     "slug":  "chicken-enchilada-rice-bowls",
     "cuisine":  "Tex-Mex",
@@ -22,8 +22,8 @@
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb raw (1587 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.5 cups dry jasmine (700 g)",
                                 "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 4 cans, drained (910 g)",
-                                "\u003cstrong\u003eEnchilada Sauce (Old El Paso):\u003c/strong\u003e 2 cans (about 1 3/4 cups) (420 g)",
-                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 2 cans, drained (420 g)",
+                                "\u003cstrong\u003eEnchilada Sauce (Old El Paso):\u003c/strong\u003e 1 3/4 cups (about 1 3/4 cups) (420 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 2 1/2 cups, drained (420 g)",
                                 "\u003cstrong\u003eFat Free Cheddar (Great Value):\u003c/strong\u003e about 1 3/4 cups shredded (196 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (10 g)"
                             ],
@@ -65,29 +65,29 @@
                                    "item":  "Rice",
                                    "grams":  700,
                                    "buy":  "3.5 cups dry jasmine",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Seasoned Black Beans",
                                    "grams":  910,
                                    "buy":  "4 cans, drained",
-                                   "bid":"seasoned-black-beans",
-                                   "gpu":28.3495
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Enchilada Sauce",
                                    "grams":  420,
-                                   "buy":  "2 cans (about 1 3/4 cups)",
+                                   "buy":  "1 3/4 cups (about 1 3/4 cups)",
                                    "bid":  "enchilada-sauce",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "grams":  420,
-                                   "buy":  "2 cans, drained",
-                                   "bid":"canned-corn",
-                                   "gpu":28.3495
+                                   "buy":  "2 1/2 cups, drained",
+                                   "bid":  "canned-corn",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Fat Free Cheddar",

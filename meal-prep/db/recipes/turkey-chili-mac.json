@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "High-Protein Turkey Chili Mac",
     "slug":  "turkey-chili-mac",
     "cuisine":  "American",
@@ -20,12 +20,12 @@
     "intro_html":  "Chili and mac and cheese had a baby, and it happens to be loaded with protein. This one-skillet meal hits a serious 56 grams of protein per serving for around $4.99 (at everyday cost), and it makes 14 hearty bowls. Comfort food that actually works for your goals and your wallet.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 7 lb (3000 g)",
-                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 2 boxs (620 g)",
+                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 6 1/4 cups (620 g)",
                                 "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 2 cans (600 g)",
-                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 3 cans (900 g)",
-                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1 can (130 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 3 3/4 cups (900 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1/2 cup (130 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (240 g)",
-                                "\u003cstrong\u003eFat Free Cheddar (Great Value):\u003c/strong\u003e 1 bag (180 g)",
+                                "\u003cstrong\u003eFat Free Cheddar (Great Value):\u003c/strong\u003e 1 2/3 cups (180 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 tbsp (42 g)",
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2 1/2 cups low sodium (1800 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 tbsp minced (~3 cloves) (45 g)",
@@ -73,7 +73,7 @@
                                {
                                    "item":  "Penne Pasta",
                                    "grams":  620,
-                                   "buy":  "2 boxs",
+                                   "buy":  "6 1/4 cups",
                                    "bid":  "penne-pasta",
                                    "gpu":  28.3495
                                },
@@ -87,14 +87,14 @@
                                {
                                    "item":  "Diced Tomatoes",
                                    "grams":  900,
-                                   "buy":  "3 cans",
+                                   "buy":  "3 3/4 cups",
                                    "bid":  "diced-tomatoes",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Tomato Paste",
                                    "grams":  130,
-                                   "buy":  "1 can",
+                                   "buy":  "1/2 cup",
                                    "bid":  "tomato-paste",
                                    "gpu":  "28.350"
                                },
@@ -108,7 +108,7 @@
                                {
                                    "item":  "Fat Free Cheddar",
                                    "grams":  180,
-                                   "buy":  "1 bag",
+                                   "buy":  "1 2/3 cups",
                                    "bid":  "fat-free-cheddar",
                                    "gpu":  "28.350"
                                },

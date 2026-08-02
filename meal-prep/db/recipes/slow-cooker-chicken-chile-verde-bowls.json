@@ -24,17 +24,17 @@
                                 "\u003cstrong\u003eTomatillos (generic):\u003c/strong\u003e 2 lb (700 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
                                 "\u003cstrong\u003eDiced Green Chiles (Old El Paso):\u003c/strong\u003e 2 cans (200 g)",
-                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 2 bags (400 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 4 2/3 cups (400 g)",
                                 "\u003cstrong\u003ePoblano Peppers (generic):\u003c/strong\u003e 1.5 poblano peppers (200 g)",
                                 "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 1 jalapeno (30 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (12 g)",
-                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1 bunch (28 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (12 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1 3/4 cups (28 g)",
                                 "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 2 limes, juiced (60 g)",
-                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 jar (8 g)",
-                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 jar (4 g)",
-                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 container (10 g)",
-                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 jar (4 g)",
-                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (240 g)"
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 1/4 tbsp (8 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 1/3 tbsp (4 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/2 tbsp (10 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tbsp (4 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 cup (240 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$4.23 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -101,7 +101,7 @@
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  400,
-                                   "buy":  "2 bags",
+                                   "buy":  "4 2/3 cups",
                                    "bid":  "frozen-broccoli-florets",
                                    "gpu":  28.3495
                                },
@@ -122,14 +122,14 @@
                                {
                                    "item":  "Garlic",
                                    "grams":  12,
-                                   "buy":  "1 bulb",
+                                   "buy":  "2 cloves",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },
                                {
                                    "item":  "Fresh Cilantro",
                                    "grams":  28,
-                                   "buy":  "1 bunch",
+                                   "buy":  "1 3/4 cups",
                                    "bid":  "cilantro",
                                    "gpu":  57
                                },
@@ -143,35 +143,35 @@
                                {
                                    "item":  "Ground Cumin",
                                    "grams":  8,
-                                   "buy":  "1 jar",
+                                   "buy":  "1 1/4 tbsp",
                                    "bid":  "ground-cumin",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Dried Oregano",
                                    "grams":  4,
-                                   "buy":  "1 jar",
+                                   "buy":  "1 1/3 tbsp",
                                    "bid":  "dried-oregano",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Salt",
                                    "grams":  10,
-                                   "buy":  "1 container",
+                                   "buy":  "1/2 tbsp",
                                    "bid":  "salt",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Black Pepper",
                                    "grams":  4,
-                                   "buy":  "1 jar",
+                                   "buy":  "1/2 tbsp",
                                    "bid":  "black-pepper",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Chicken Broth",
                                    "grams":  240,
-                                   "buy":  "1 carton",
+                                   "buy":  "1 cup",
                                    "bid":  "chicken-broth",
                                    "gpu":  "29.570"
                                }

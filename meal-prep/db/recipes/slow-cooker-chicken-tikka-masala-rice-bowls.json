@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Slow Cooker Chicken Tikka Masala Rice Bowls",
     "slug":  "slow-cooker-chicken-tikka-masala-rice-bowls",
     "cuisine":  "Indian",
@@ -21,10 +21,10 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3100 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (820 g)",
-                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2 cans (500 g)",
-                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 2 cans (550 g)",
-                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 2 bags (400 g)",
-                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 1 jar (14 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2 cups (500 g)",
+                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 2 1/2 cups (550 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 4 2/3 cups (400 g)",
+                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 2 1/3 tbsp (14 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 medium (500 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 tbsp minced (35 g)",
                                 "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 1 tbsp grated (35 g)",
@@ -80,28 +80,28 @@
                                {
                                    "item":  "Diced Tomatoes",
                                    "grams":  500,
-                                   "buy":  "2 cans",
+                                   "buy":  "2 cups",
                                    "bid":  "diced-tomatoes",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Coconut Milk",
                                    "grams":  550,
-                                   "buy":  "2 cans",
+                                   "buy":  "2 1/2 cups",
                                    "bid":  "coconut-milk-canned",
                                    "gpu":  29.57
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  400,
-                                   "buy":  "2 bags",
+                                   "buy":  "4 2/3 cups",
                                    "bid":  "frozen-broccoli-florets",
                                    "gpu":  28.3495
                                },
                                {
                                    "item":  "Garam Masala",
                                    "grams":  14,
-                                   "buy":  "1 jar",
+                                   "buy":  "2 1/3 tbsp",
                                    "bid":  "garam-masala",
                                    "gpu":  "28.350"
                                },

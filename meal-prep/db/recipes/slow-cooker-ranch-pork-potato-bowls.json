@@ -21,10 +21,10 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 8 lb (3300 g)",
                                 "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 6 lb (2650 g)",
-                                "\u003cstrong\u003eShredded Carrots:\u003c/strong\u003e 4 bags (1000 g)",
+                                "\u003cstrong\u003eShredded Carrots:\u003c/strong\u003e 9 cups (1000 g)",
                                 "\u003cstrong\u003eRanch Seasoning Mix (Hidden Valley):\u003c/strong\u003e 1 packet (27 g)",
-                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1 boxs (60 g)",
-                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (27 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1/4 cup (60 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2 tbsp (27 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp kosher (8 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 tsp (4 g)"
                             ],
@@ -72,7 +72,7 @@
                                {
                                    "item":  "Shredded Carrots",
                                    "grams":  1000,
-                                   "buy":  "4 bags",
+                                   "buy":  "9 cups",
                                    "bid":  "shredded-carrots",
                                    "gpu":  "28.350"
                                },
@@ -86,14 +86,14 @@
                                {
                                    "item":  "Butter",
                                    "grams":  60,
-                                   "buy":  "1 boxs",
+                                   "buy":  "1/4 cup",
                                    "bid":  "butter",
                                    "gpu":  "453.592"
                                },
                                {
                                    "item":  "Olive Oil",
                                    "grams":  27,
-                                   "buy":  "1 bottle",
+                                   "buy":  "2 tbsp",
                                    "bid":  "olive-oil",
                                    "gpu":  "28.000"
                                },

@@ -21,12 +21,12 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 8 lb (3400 g)",
                                 "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 8 lb (3400 g)",
-                                "\u003cstrong\u003eGreen Beans (generic):\u003c/strong\u003e 3 bags (900 g)",
-                                "\u003cstrong\u003eBalsamic Vinegar (generic):\u003c/strong\u003e 1 bottle (120 g)",
-                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1 bag (90 g)",
-                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 bottle (60 g)",
-                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (240 g)",
-                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (30 g)",
+                                "\u003cstrong\u003eGreen Beans (generic):\u003c/strong\u003e 8 1/4 cups (900 g)",
+                                "\u003cstrong\u003eBalsamic Vinegar (generic):\u003c/strong\u003e 1/2 cup (120 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1/2 cup (90 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 3 3/4 tbsp (60 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 cup (240 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2 1/4 tbsp (30 g)",
                                 "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1/2 tsp (4 g)",
                                 "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1/2 tsp (4 g)",
                                 "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1/4 tsp (2 g)",
@@ -77,42 +77,42 @@
                                {
                                    "item":  "Green Beans",
                                    "grams":  900,
-                                   "buy":  "3 bags",
+                                   "buy":  "8 1/4 cups",
                                    "bid":  "frozen-green-beans",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Balsamic Vinegar",
                                    "grams":  120,
-                                   "buy":  "1 bottle",
+                                   "buy":  "1/2 cup",
                                    "bid":  "balsamic-vinegar",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Brown Sugar",
                                    "grams":  90,
-                                   "buy":  "1 bag",
+                                   "buy":  "1/2 cup",
                                    "bid":  "brown-sugar",
                                    "gpu":  "453.592"
                                },
                                {
                                    "item":  "Soy Sauce",
                                    "grams":  60,
-                                   "buy":  "1 bottle",
+                                   "buy":  "3 3/4 tbsp",
                                    "bid":  "soy-sauce",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Chicken Broth",
                                    "grams":  240,
-                                   "buy":  "1 carton",
+                                   "buy":  "1 cup",
                                    "bid":  "chicken-broth",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Olive Oil",
                                    "grams":  30,
-                                   "buy":  "1 bottle",
+                                   "buy":  "2 1/4 tbsp",
                                    "bid":  "olive-oil",
                                    "gpu":  "28.000"
                                },

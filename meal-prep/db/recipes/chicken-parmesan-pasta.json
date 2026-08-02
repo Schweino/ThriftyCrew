@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Chicken Parmesan Pasta",
     "slug":  "chicken-parmesan-pasta",
     "cuisine":  "Italian-American",
@@ -20,7 +20,7 @@
     "intro_html":  "Chicken parm is a restaurant order that usually comes with a restaurant price. This meal-prep version skips the breading and the deep fryer but keeps everything you actually love: tender chicken, marinara, and a blanket of melty cheese over high-protein pasta. At 42 grams of protein a bowl for about $3.30 (at everyday cost), it is a filling, high-protein dinner.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb raw (1587 g)",
-                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 2 boxes (14.5 oz each) (719 g)",
+                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 7 1/4 cups (14.5 oz each) (719 g)",
                                 "\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e about 3.5 cups (861 g)",
                                 "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 7/8 cup grated (98 g)",
                                 "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 1 3/4 cups shredded (196 g)",
@@ -70,30 +70,30 @@
                                {
                                    "item":  "Penne Pasta",
                                    "grams":  719,
-                                   "buy":  "2 boxes (14.5 oz each)",
-                                   "bid":"penne-pasta",
-                                   "gpu":28.3495
+                                   "buy":  "7 1/4 cups (14.5 oz each)",
+                                   "bid":  "penne-pasta",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Marinara Sauce",
                                    "grams":  861,
                                    "buy":  "about 3.5 cups",
-                                   "bid":"marinara-sauce",
-                                   "gpu":28.3495
+                                   "bid":  "marinara-sauce",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Parmesan Cheese",
                                    "grams":  98,
                                    "buy":  "7/8 cup grated",
-                                   "bid":"parmesan",
-                                   "gpu":28.3495
+                                   "bid":  "parmesan",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Reduced Fat Mozzarella",
                                    "grams":  196,
                                    "buy":  "1 3/4 cups shredded",
-                                   "bid":"reduced-fat-mozzarella",
-                                   "gpu":28.3495
+                                   "bid":  "reduced-fat-mozzarella",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Olive Oil",

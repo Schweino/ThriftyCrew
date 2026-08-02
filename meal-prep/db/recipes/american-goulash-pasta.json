@@ -20,17 +20,17 @@
     "intro_html":  "Old-school American goulash, the humble one-pot dinner that fed families for generations because it stretched a dollar. This version packs 55 grams of protein per serving for about $5.63 (at everyday cost) and makes 14 bowls. Cheap, hearty, and honestly hard to beat for feeding a crowd.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2450 g)",
-                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 3 boxs (1050 g)",
+                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 10 cups (1050 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
                                 "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 1 lb (200 g)",
                                 "\u003cstrong\u003eCrushed Tomatoes (generic):\u003c/strong\u003e 2 cans (1300 g)",
-                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1 can (120 g)",
-                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 carton (700 g)",
-                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 1 container (80 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (20 g)",
-                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 1 jar (6 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1/2 cup (120 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 3 cups (700 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 1 cup (80 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 cloves (20 g)",
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 1 1/2 tbsp (6 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 tbsp (42 g)",
-                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 1 stick, finely chopped (120 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 2 stalks, finely chopped (120 g)",
                                 "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1 tbsp (45 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tsp (36 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (4 g)",
@@ -72,7 +72,7 @@
                                {
                                    "item":  "Penne Pasta",
                                    "grams":  1050,
-                                   "buy":  "3 boxs",
+                                   "buy":  "10 cups",
                                    "bid":  "penne-pasta",
                                    "gpu":  28.3495
                                },
@@ -100,35 +100,35 @@
                                {
                                    "item":  "Tomato Paste",
                                    "grams":  120,
-                                   "buy":  "1 can",
+                                   "buy":  "1/2 cup",
                                    "bid":  "tomato-paste",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Beef Broth",
                                    "grams":  700,
-                                   "buy":  "1 carton",
+                                   "buy":  "3 cups",
                                    "bid":  "beef-broth",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Parmesan Cheese",
                                    "grams":  80,
-                                   "buy":  "1 container",
+                                   "buy":  "1 cup",
                                    "bid":  "parmesan",
                                    "gpu":  28.3495
                                },
                                {
                                    "item":  "Garlic",
                                    "grams":  20,
-                                   "buy":  "1 bulb",
+                                   "buy":  "4 cloves",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },
                                {
                                    "item":  "Italian Seasoning",
                                    "grams":  6,
-                                   "buy":  "1 jar",
+                                   "buy":  "1 1/2 tbsp",
                                    "bid":  "italian-seasoning",
                                    "gpu":  "28.350"
                                },
@@ -142,7 +142,7 @@
                                {
                                    "item":  "Celery",
                                    "grams":  120,
-                                   "buy":  "1 stick, finely chopped",
+                                   "buy":  "2 stalks, finely chopped",
                                    "bid":  "celery",
                                    "gpu":  "450.000"
                                },

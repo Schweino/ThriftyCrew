@@ -126,7 +126,26 @@ if(window.__smpScaler2)return; window.__smpScaler2=1;
 var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null,feedData=null,feedFailed=false;
 function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
 function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
-function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+// Scale ONLY the leading quantity, and understand fractions while doing it.
+// The old version multiplied every number in the string, which broke two ways the moment a reader touched
+// the servings control: "1/2 tsp" at 2x became "2/4 tsp" (it scaled the numerator AND the denominator),
+// and a compound label like "2 pk 12 oz" had its pack SIZE scaled along with the count. A recipe list is
+// "<quantity> <unit> <optional note>", so the quantity is the only number that may move.
+function parseQty(s){ var m;
+  if((m=s.match(/^(\d+)\s+(\d+)\/(\d+)$/))) return parseFloat(m[1])+parseFloat(m[2])/parseFloat(m[3]);
+  if((m=s.match(/^(\d+)\/(\d+)$/))) return parseFloat(m[1])/parseFloat(m[2]);
+  return parseFloat(s); }
+function fmtCook(v){ // render back in kitchen fractions, the way the label was written
+  if(v>=10) return String(Math.round(v));
+  var w=Math.floor(v+1e-9), fr=v-w, names=[[0,''],[0.25,'1/4'],[1/3,'1/3'],[0.5,'1/2'],[2/3,'2/3'],[0.75,'3/4'],[1,'']], b='', bd=9, c=0;
+  for(var i=0;i<names.length;i++){ var d=Math.abs(fr-names[i][0]); if(d<bd){ bd=d; b=names[i][1]; c=(names[i][0]>=1)?1:0; } }
+  w+=c;
+  if(!b) return (w<1)?String(Math.round(v*100)/100):String(w);
+  return (w<1)?b:(String(w)+' '+b); }
+function scaleBuy(buy,f){
+  var m=buy.match(/^(\s*)(\d+\s+\d+\/\d+|\d+\/\d+|\d+(?:\.\d+)?)/);
+  if(!m) return buy;
+  return m[1]+fmtCook(parseQty(m[2])*f)+buy.slice(m[0].length); }
 function esc(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
 function money(v){ return '$'+v.toFixed(2); }
 function rm(){ return (window.TC&&window.TC.rm)?window.TC.rm():false; }

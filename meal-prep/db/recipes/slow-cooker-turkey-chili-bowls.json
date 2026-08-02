@@ -20,13 +20,13 @@
     "intro_html":  "Dump-and-go chili that does all the work while you go live your life. Each bowl brings 54 grams of protein for about $5.28 a serving (at everyday cost). It makes 14 servings, so your crock pot is basically running a meal-prep shop.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 7 lb (3120 g)",
-                                "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 6 cans (2391 g)",
+                                "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 14 cups (2391 g)",
                                 "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 5 cans (1800 g)",
-                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 2 cans (200 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 3/4 cup (200 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (320 g)",
                                 "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 2 peppers (240 g)",
-                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1 jar (20 g)",
-                                "\u003cstrong\u003eChipotle in Adobo (La Costena):\u003c/strong\u003e 1 can (60 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 2 1/2 tbsp (20 g)",
+                                "\u003cstrong\u003eChipotle in Adobo (La Costena):\u003c/strong\u003e 3 1/2 tbsp (60 g)",
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e for frying (~1 tbsp) (24 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 cloves (25 g)",
                                 "\u003cstrong\u003eCelery:\u003c/strong\u003e 3 large stalks (200 g)",
@@ -67,7 +67,7 @@
                                {
                                    "item":  "Seasoned Black Beans",
                                    "grams":  2391,
-                                   "buy":  "6 cans",
+                                   "buy":  "14 cups",
                                    "bid":  "seasoned-black-beans",
                                    "gpu":  28.3495
                                },
@@ -81,7 +81,7 @@
                                {
                                    "item":  "Tomato Paste",
                                    "grams":  200,
-                                   "buy":  "2 cans",
+                                   "buy":  "3/4 cup",
                                    "bid":  "tomato-paste",
                                    "gpu":  "28.350"
                                },
@@ -102,14 +102,14 @@
                                {
                                    "item":  "Chili Powder",
                                    "grams":  20,
-                                   "buy":  "1 jar",
+                                   "buy":  "2 1/2 tbsp",
                                    "bid":  "chili-powder",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Chipotle in Adobo",
                                    "grams":  60,
-                                   "buy":  "1 can",
+                                   "buy":  "3 1/2 tbsp",
                                    "bid":  "chipotle-adobo",
                                    "gpu":  28.3495
                                },

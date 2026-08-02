@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Slow Cooker King Ranch Chicken Bowls",
     "slug":  "slow-cooker-king-ranch-chicken-bowls",
     "cuisine":  "Tex-Mex",
@@ -21,9 +21,9 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3100 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (850 g)",
-                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 1 can (200 g)",
-                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 2 bags (280 g)",
-                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 2 bags (400 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 3/4 cup (200 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 2 1/2 cups (280 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 4 2/3 cups (400 g)",
                                 "\u003cstrong\u003eCorn Tortillas:\u003c/strong\u003e 15 corn tortillas, torn (450 g)",
                                 "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 8 tbsp (250 g)",
                                 "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 1/2 cup (140 g)",
@@ -80,21 +80,21 @@
                                {
                                    "item":  "Diced Tomatoes",
                                    "grams":  200,
-                                   "buy":  "1 can",
+                                   "buy":  "3/4 cup",
                                    "bid":  "diced-tomatoes",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Cheddar Cheese, Shredded",
                                    "grams":  280,
-                                   "buy":  "2 bags",
+                                   "buy":  "2 1/2 cups",
                                    "bid":  "cheddar-cheese-shredded",
                                    "gpu":  28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  400,
-                                   "buy":  "2 bags",
+                                   "buy":  "4 2/3 cups",
                                    "bid":  "frozen-broccoli-florets",
                                    "gpu":  28.3495
                                },

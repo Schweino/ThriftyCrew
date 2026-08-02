@@ -21,12 +21,12 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 8 lb (3300 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (900 g)",
-                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 3 bags (700 g)",
-                                "\u003cstrong\u003eTeriyaki Sauce (Kikkoman):\u003c/strong\u003e 1 bottle (200 g)",
-                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1 bottle (63 g)",
-                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (27 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (27 g)",
-                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1 bottle (15 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 8 1/4 cups (700 g)",
+                                "\u003cstrong\u003eTeriyaki Sauce (Kikkoman):\u003c/strong\u003e 2/3 cup (200 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 3 tbsp (63 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2 tbsp (27 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5 cloves (27 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1 tbsp (15 g)",
                                 "\u003cstrong\u003eGround Ginger (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)",
                                 "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1/4 tsp crushed (2 g)"
                             ],
@@ -73,42 +73,42 @@
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  700,
-                                   "buy":  "3 bags",
+                                   "buy":  "8 1/4 cups",
                                    "bid":  "frozen-broccoli-florets",
                                    "gpu":  28.3495
                                },
                                {
                                    "item":  "Teriyaki Sauce",
                                    "grams":  200,
-                                   "buy":  "1 bottle",
+                                   "buy":  "2/3 cup",
                                    "bid":  "teriyaki-sauce",
                                    "gpu":  "34.000"
                                },
                                {
                                    "item":  "Honey",
                                    "grams":  63,
-                                   "buy":  "1 bottle",
+                                   "buy":  "3 tbsp",
                                    "bid":  "honey",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Olive Oil",
                                    "grams":  27,
-                                   "buy":  "1 bottle",
+                                   "buy":  "2 tbsp",
                                    "bid":  "olive-oil",
                                    "gpu":  "28.000"
                                },
                                {
                                    "item":  "Garlic",
                                    "grams":  27,
-                                   "buy":  "1 bulb",
+                                   "buy":  "5 cloves",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },
                                {
                                    "item":  "Sesame Oil",
                                    "grams":  15,
-                                   "buy":  "1 bottle",
+                                   "buy":  "1 tbsp",
                                    "bid":  "sesame-oil",
                                    "gpu":  "29.570"
                                },

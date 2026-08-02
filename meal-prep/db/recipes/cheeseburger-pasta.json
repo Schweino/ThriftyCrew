@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "High-Protein Cheeseburger Pasta",
     "slug":  "cheeseburger-pasta",
     "cuisine":  "American",
@@ -20,7 +20,7 @@
     "intro_html":  "Think of the boxed hamburger dinner you grew up on, then give it a protein makeover. Lean beef, high-protein penne, real marinara, and melty mozzarella come together into a comfort-food bowl that packs 38 grams of protein for about $2.64 (at everyday cost). Kids inhale it and the macros still behave.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb raw (1587 g)",
-                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 2 boxes (14.5 oz each) (719 g)",
+                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 7 1/4 cups (14.5 oz each) (719 g)",
                                 "\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e about 3.5 cups (most of two 24 oz jars) (861 g)",
                                 "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e about 1 3/4 cups shredded (196 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e onion powder/fresh onion in most versions (250 g)"
@@ -56,29 +56,29 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  1587,
                                    "buy":  "3.5 lb raw",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Penne Pasta",
                                    "grams":  719,
-                                   "buy":  "2 boxes (14.5 oz each)",
-                                   "bid":"penne-pasta",
-                                   "gpu":28.3495
+                                   "buy":  "7 1/4 cups (14.5 oz each)",
+                                   "bid":  "penne-pasta",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Marinara Sauce",
                                    "grams":  861,
                                    "buy":  "about 3.5 cups (most of two 24 oz jars)",
-                                   "bid":"marinara-sauce",
-                                   "gpu":28.3495
+                                   "bid":  "marinara-sauce",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Reduced Fat Mozzarella",
                                    "grams":  196,
                                    "buy":  "about 1 3/4 cups shredded",
-                                   "bid":"reduced-fat-mozzarella",
-                                   "gpu":28.3495
+                                   "bid":  "reduced-fat-mozzarella",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Yellow Onion",

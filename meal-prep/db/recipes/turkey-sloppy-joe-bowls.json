@@ -20,13 +20,13 @@
     "intro_html":  "The messy sandwich you grew up on, turned into a tidy bowl over crispy potatoes. Each serving carries 46 grams of protein for about $5.87 (at everyday cost). Fourteen servings means the whole family or the whole week is handled.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 7 lb (3160 g)",
-                                "\u003cstrong\u003eFries (Great Value):\u003c/strong\u003e 4 bags (3051 g)",
-                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 3 cans (400 g)",
+                                "\u003cstrong\u003eFries (Great Value):\u003c/strong\u003e 6 3/4 lb (3051 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1 1/2 cups (400 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
                                 "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 2 peppers (240 g)",
-                                "\u003cstrong\u003eShredded Carrots:\u003c/strong\u003e 1 bag (170 g)",
-                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1 bottle (42 g)",
-                                "\u003cstrong\u003eHoney Dijon Mustard (Great Value):\u003c/strong\u003e 1 bottle (40 g)",
+                                "\u003cstrong\u003eShredded Carrots:\u003c/strong\u003e 1 1/2 cups (170 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 2 tbsp (42 g)",
+                                "\u003cstrong\u003eHoney Dijon Mustard (Great Value):\u003c/strong\u003e 2 2/3 tbsp (40 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2 tsp (28 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 cloves (1 tbsp) (45 g)",
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 3/4 cup (540 g)",
@@ -72,14 +72,14 @@
                                {
                                    "item":  "Fries",
                                    "grams":  3051,
-                                   "buy":  "4 bags",
+                                   "buy":  "6 3/4 lb",
                                    "bid":  "fries",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Tomato Paste",
                                    "grams":  400,
-                                   "buy":  "3 cans",
+                                   "buy":  "1 1/2 cups",
                                    "bid":  "tomato-paste",
                                    "gpu":  "28.350"
                                },
@@ -100,21 +100,21 @@
                                {
                                    "item":  "Shredded Carrots",
                                    "grams":  170,
-                                   "buy":  "1 bag",
+                                   "buy":  "1 1/2 cups",
                                    "bid":  "shredded-carrots",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Honey",
                                    "grams":  42,
-                                   "buy":  "1 bottle",
+                                   "buy":  "2 tbsp",
                                    "bid":  "honey",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Honey Dijon Mustard",
                                    "grams":  40,
-                                   "buy":  "1 bottle",
+                                   "buy":  "2 2/3 tbsp",
                                    "bid":  "honey-dijon-mustard",
                                    "gpu":  "28.350"
                                },

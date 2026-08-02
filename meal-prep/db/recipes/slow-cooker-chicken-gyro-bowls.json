@@ -21,12 +21,12 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3450 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (880 g)",
-                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 3 bags (1000 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 12 cups (1000 g)",
                                 "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1 tub (300 g)",
-                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (28 g)",
-                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1 bottle (45 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2 tbsp (28 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 3 tbsp (45 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (120 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (12 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (12 g)",
                                 "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 1/2 tsp (7 g)",
                                 "\u003cstrong\u003eDried Dill (Great Value):\u003c/strong\u003e 1 1/2 tsp (4 g)",
                                 "\u003cstrong\u003eDried Basil (Great Value):\u003c/strong\u003e 1 1/2 tsp (5 g)",
@@ -76,7 +76,7 @@
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  1000,
-                                   "buy":  "3 bags",
+                                   "buy":  "12 cups",
                                    "bid":  "frozen-broccoli-florets",
                                    "gpu":  28.3495
                                },
@@ -90,14 +90,14 @@
                                {
                                    "item":  "Olive Oil",
                                    "grams":  28,
-                                   "buy":  "1 bottle",
+                                   "buy":  "2 tbsp",
                                    "bid":  "olive-oil",
                                    "gpu":  "28.000"
                                },
                                {
                                    "item":  "Lime Juice",
                                    "grams":  45,
-                                   "buy":  "1 bottle",
+                                   "buy":  "3 tbsp",
                                    "bid":  "limes",
                                    "gpu":  "30.000"
                                },
@@ -111,7 +111,7 @@
                                {
                                    "item":  "Garlic",
                                    "grams":  12,
-                                   "buy":  "1 bulb",
+                                   "buy":  "2 cloves",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },

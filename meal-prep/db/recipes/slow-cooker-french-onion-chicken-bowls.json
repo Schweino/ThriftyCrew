@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Slow Cooker French Onion Chicken Bowls",
     "slug":  "slow-cooker-french-onion-chicken-bowls",
     "cuisine":  "American",
@@ -22,10 +22,10 @@
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3450 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (820 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 9 onions (900 g)",
-                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 carton (480 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 2 cups (480 g)",
                                 "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1 tub (340 g)",
-                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 1 container (140 g)",
-                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 jar (12 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 1 1/2 cups (140 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 1/4 tbsp (12 g)",
                                 "\u003cstrong\u003eCondensed French Onion Soup:\u003c/strong\u003e 2 cans (10.5 oz each) (600 g)",
                                 "\u003cstrong\u003eSwiss Cheese (generic (USDA)):\u003c/strong\u003e 2.5 oz + topping (180 g)",
                                 "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1 tbsp (40 g)",
@@ -82,7 +82,7 @@
                                {
                                    "item":  "Beef Broth",
                                    "grams":  480,
-                                   "buy":  "1 carton",
+                                   "buy":  "2 cups",
                                    "bid":  "beef-broth",
                                    "gpu":  "29.570"
                                },
@@ -96,14 +96,14 @@
                                {
                                    "item":  "Parmesan Cheese",
                                    "grams":  140,
-                                   "buy":  "1 container",
+                                   "buy":  "1 1/2 cups",
                                    "bid":  "parmesan",
                                    "gpu":  28.3495
                                },
                                {
                                    "item":  "Garlic Powder",
                                    "grams":  12,
-                                   "buy":  "1 jar",
+                                   "buy":  "1 1/4 tbsp",
                                    "bid":  "garlic-powder",
                                    "gpu":  "28.350"
                                },

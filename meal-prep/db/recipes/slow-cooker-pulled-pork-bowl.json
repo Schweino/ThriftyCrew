@@ -20,12 +20,12 @@
     "intro_html":  "This is comfort food that basically cooks itself. You load the slow cooker in the morning, and by dinner you have tender BBQ pulled pork piled over rice with sweet corn. One batch fills 14 containers, so a week of lunches and dinners is done in a single afternoon.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 5 lb (2268 g)",
-                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (240 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 cup (240 g)",
                                 "\u003cstrong\u003eBBQ Sauce (Sugar Free) (Sweet Baby Ray\u0027s):\u003c/strong\u003e 1 bottle (450 g)",
-                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 jar (8 g)",
-                                "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 1 jar (8 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 3/4 tbsp (8 g)",
+                                "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 1 tbsp (8 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1000 g)",
-                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 4 cans (840 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 5 cups (840 g)",
                                 "\u003cstrong\u003eSmoked Paprika (Great Value):\u003c/strong\u003e 2 tsp (12 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (15 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (common in rub) (4 g)"
@@ -68,7 +68,7 @@
                                {
                                    "item":  "Chicken Broth",
                                    "grams":  240,
-                                   "buy":  "1 carton",
+                                   "buy":  "1 cup",
                                    "bid":  "chicken-broth",
                                    "gpu":  "29.570"
                                },
@@ -82,14 +82,14 @@
                                {
                                    "item":  "Garlic Powder",
                                    "grams":  8,
-                                   "buy":  "1 jar",
+                                   "buy":  "3/4 tbsp",
                                    "bid":  "garlic-powder",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Onion Powder",
                                    "grams":  8,
-                                   "buy":  "1 jar",
+                                   "buy":  "1 tbsp",
                                    "bid":  "onion-powder",
                                    "gpu":  "28.350"
                                },
@@ -103,7 +103,7 @@
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "grams":  840,
-                                   "buy":  "4 cans",
+                                   "buy":  "5 cups",
                                    "bid":  "canned-corn",
                                    "gpu":  28.3495
                                },

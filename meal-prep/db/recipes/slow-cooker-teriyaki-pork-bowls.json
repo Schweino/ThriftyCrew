@@ -21,12 +21,12 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 8 lb (3300 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (850 g)",
-                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 3 bags (900 g)",
-                                "\u003cstrong\u003eTeriyaki Sauce (Kikkoman):\u003c/strong\u003e 1 bottle (250 g)",
-                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (360 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 11 cups (900 g)",
+                                "\u003cstrong\u003eTeriyaki Sauce (Kikkoman):\u003c/strong\u003e 3/4 cup (250 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 1/2 cups (360 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (160 g)",
-                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1 bottle (80 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (12 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 3 3/4 tbsp (80 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (12 g)",
                                 "\u003cstrong\u003ePineapple Juice:\u003c/strong\u003e 6 oz (400 g)",
                                 "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1/2 tsp red chili pepper flakes (2 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)"
@@ -75,21 +75,21 @@
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  900,
-                                   "buy":  "3 bags",
+                                   "buy":  "11 cups",
                                    "bid":  "frozen-broccoli-florets",
                                    "gpu":  28.3495
                                },
                                {
                                    "item":  "Teriyaki Sauce",
                                    "grams":  250,
-                                   "buy":  "1 bottle",
+                                   "buy":  "3/4 cup",
                                    "bid":  "teriyaki-sauce",
                                    "gpu":  "34.000"
                                },
                                {
                                    "item":  "Chicken Broth",
                                    "grams":  360,
-                                   "buy":  "1 carton",
+                                   "buy":  "1 1/2 cups",
                                    "bid":  "chicken-broth",
                                    "gpu":  "29.570"
                                },
@@ -103,14 +103,14 @@
                                {
                                    "item":  "Honey",
                                    "grams":  80,
-                                   "buy":  "1 bottle",
+                                   "buy":  "3 3/4 tbsp",
                                    "bid":  "honey",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Garlic",
                                    "grams":  12,
-                                   "buy":  "1 bulb",
+                                   "buy":  "2 cloves",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },

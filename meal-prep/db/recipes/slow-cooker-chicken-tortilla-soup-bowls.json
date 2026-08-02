@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Slow Cooker Chicken Tortilla Soup Bowls",
     "slug":  "slow-cooker-chicken-tortilla-soup-bowls",
     "cuisine":  "Mexican",
@@ -21,10 +21,10 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3000 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (820 g)",
-                                "\u003cstrong\u003eCrushed Tomatoes (generic):\u003c/strong\u003e 1 can (600 g)",
+                                "\u003cstrong\u003eCrushed Tomatoes (generic):\u003c/strong\u003e 2 1/2 cups (600 g)",
                                 "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 2 cans (500 g)",
-                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 2 cans (400 g)",
-                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 1 bag (112 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 2 1/2 cups (400 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 1 cup (112 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 medium (220 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 cloves (30 g)",
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 4 cups (1680 g)",
@@ -81,7 +81,7 @@
                                {
                                    "item":  "Crushed Tomatoes",
                                    "grams":  600,
-                                   "buy":  "1 can",
+                                   "buy":  "2 1/2 cups",
                                    "bid":  "crushed-tomatoes",
                                    "gpu":  "28.350"
                                },
@@ -95,14 +95,14 @@
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "grams":  400,
-                                   "buy":  "2 cans",
+                                   "buy":  "2 1/2 cups",
                                    "bid":  "canned-corn",
                                    "gpu":  28.3495
                                },
                                {
                                    "item":  "Cheddar Cheese, Shredded",
                                    "grams":  112,
-                                   "buy":  "1 bag",
+                                   "buy":  "1 cup",
                                    "bid":  "cheddar-cheese-shredded",
                                    "gpu":  28.3495
                                },

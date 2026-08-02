@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Ground Turkey Fajita Rice Bowls",
     "slug":  "turkey-fajita-rice-bowls",
     "cuisine":  "Tex-Mex",
@@ -23,9 +23,9 @@
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (786 g)",
                                 "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 7 peppers (795 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (330 g)",
-                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1 can (130 g)",
-                                "\u003cstrong\u003eSalsa Verde (Herdez):\u003c/strong\u003e 1 jar (130 g)",
-                                "\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 1 block (65 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1/2 cup (130 g)",
+                                "\u003cstrong\u003eSalsa Verde (Herdez):\u003c/strong\u003e 1/2 cup (130 g)",
+                                "\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 1/4 cup (65 g)",
                                 "\u003cstrong\u003eFajita Seasoning (Taco Bell):\u003c/strong\u003e 1 packet (40 g)",
                                 "\u003cstrong\u003eBalsamic Vinegar (generic):\u003c/strong\u003e 2 Tbsp (84 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 frozen garlic cubes or minced cloves (28 g)"
@@ -88,21 +88,21 @@
                                {
                                    "item":  "Tomato Paste",
                                    "grams":  130,
-                                   "buy":  "1 can",
+                                   "buy":  "1/2 cup",
                                    "bid":  "tomato-paste",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Salsa Verde",
                                    "grams":  130,
-                                   "buy":  "1 jar",
+                                   "buy":  "1/2 cup",
                                    "bid":  "salsa-verde",
                                    "gpu":  28.3495
                                },
                                {
                                    "item":  "1/3 Fat Cream Cheese",
                                    "grams":  65,
-                                   "buy":  "1 block",
+                                   "buy":  "1/4 cup",
                                    "bid":  "1-3-fat-cream-cheese",
                                    "gpu":  28.3495
                                },

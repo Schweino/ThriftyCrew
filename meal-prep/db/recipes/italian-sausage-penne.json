@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Italian Sausage Penne with Peppers",
     "slug":  "italian-sausage-penne",
     "cuisine":  "Italian-American",
@@ -20,8 +20,8 @@
     "intro_html":  "Sometimes you just want comfort food that does not blow the budget or the whole day. Spicy Italian sausage, high-protein penne, marinara, and sweet peppers come together in one pan into a rich, satisfying bowl that still costs less than a fast-food value meal. This one is a little heartier on the fat side, and worth every gram.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHot Italian Sausage (Johnsonville):\u003c/strong\u003e 2 lb (two ~1 lb packages) (735 g)",
-                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 2 boxes (14.5 oz each) (719 g)",
-                                "\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e 2 jars (24 oz each) (1076 g)",
+                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 7 1/4 cups (14.5 oz each) (719 g)",
+                                "\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e 4 1/3 cups (24 oz each) (1076 g)",
                                 "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 1 cup grated (98 g)",
                                 "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 4 medium (416 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1/2 yellow onion, sliced (220 g)",
@@ -58,36 +58,36 @@
                                    "item":  "Hot Italian Sausage",
                                    "grams":  735,
                                    "buy":  "2 lb (two ~1 lb packages)",
-                                   "bid":"italian-sausage",
-                                   "gpu":453.592
+                                   "bid":  "italian-sausage",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Penne Pasta",
                                    "grams":  719,
-                                   "buy":  "2 boxes (14.5 oz each)",
-                                   "bid":"penne-pasta",
-                                   "gpu":28.3495
+                                   "buy":  "7 1/4 cups (14.5 oz each)",
+                                   "bid":  "penne-pasta",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Marinara Sauce",
                                    "grams":  1076,
-                                   "buy":  "2 jars (24 oz each)",
-                                   "bid":"marinara-sauce",
-                                   "gpu":28.3495
+                                   "buy":  "4 1/3 cups (24 oz each)",
+                                   "bid":  "marinara-sauce",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Parmesan Cheese",
                                    "grams":  98,
                                    "buy":  "1 cup grated",
-                                   "bid":"parmesan",
-                                   "gpu":28.3495
+                                   "bid":  "parmesan",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Green Bell Peppers",
                                    "grams":  416,
                                    "buy":  "4 medium",
-                                   "bid":"green-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Yellow Onion",

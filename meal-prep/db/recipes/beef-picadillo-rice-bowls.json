@@ -24,11 +24,11 @@
                                 "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3 peppers (340 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (320 g)",
                                 "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 2 cans (800 g)",
-                                "\u003cstrong\u003eOlives (generic):\u003c/strong\u003e 1 jar (120 g)",
-                                "\u003cstrong\u003eGolden Raisins (generic):\u003c/strong\u003e 1 bag (120 g)",
-                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 jar (6 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (12 g)",
-                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 jar (6 g)",
+                                "\u003cstrong\u003eOlives (generic):\u003c/strong\u003e 1 cup (120 g)",
+                                "\u003cstrong\u003eGolden Raisins (generic):\u003c/strong\u003e 3/4 cup (120 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (6 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (12 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 2 tbsp (6 g)",
                                 "\u003cstrong\u003eCapers (generic (USDA)):\u003c/strong\u003e 2 tablespoons, drained (36 g)",
                                 "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 1 (1 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/8 to 1/2 tsp fine salt (6 g)",
@@ -99,35 +99,35 @@
                                {
                                    "item":  "Olives",
                                    "grams":  120,
-                                   "buy":  "1 jar",
+                                   "buy":  "1 cup",
                                    "bid":  "green-olives",
                                    "gpu":  28.3495
                                },
                                {
                                    "item":  "Golden Raisins",
                                    "grams":  120,
-                                   "buy":  "1 bag",
+                                   "buy":  "3/4 cup",
                                    "bid":  "golden-raisins",
                                    "gpu":  28.3495
                                },
                                {
                                    "item":  "Ground Cumin",
                                    "grams":  6,
-                                   "buy":  "1 jar",
+                                   "buy":  "1 tbsp",
                                    "bid":  "ground-cumin",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Garlic",
                                    "grams":  12,
-                                   "buy":  "1 bulb",
+                                   "buy":  "2 cloves",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },
                                {
                                    "item":  "Dried Oregano",
                                    "grams":  6,
-                                   "buy":  "1 jar",
+                                   "buy":  "2 tbsp",
                                    "bid":  "dried-oregano",
                                    "gpu":  "28.350"
                                },

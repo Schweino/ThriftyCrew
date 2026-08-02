@@ -20,11 +20,11 @@
     "intro_html":  "A hearty, saucy ragu that tastes like it simmered all day but comes together in one skillet. At about $4.87 a serving (at everyday cost) with 52 grams of protein, it is a comforting one. It makes 14 servings, so cook once and eat all week.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 7 lb (3100 g)",
-                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 2 boxs (700 g)",
-                                "\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e 3 jars (1400 g)",
+                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 7 cups (700 g)",
+                                "\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e 5 2/3 cups (1400 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
-                                "\u003cstrong\u003eShredded Carrots:\u003c/strong\u003e 1 bag (250 g)",
-                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (42 g)",
+                                "\u003cstrong\u003eShredded Carrots:\u003c/strong\u003e 2 1/4 cups (250 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3 tbsp (42 g)",
                                 "\u003cstrong\u003eTurkey Bacon:\u003c/strong\u003e 4 oz, chopped (396 g)",
                                 "\u003cstrong\u003eCelery:\u003c/strong\u003e 2 stalks, diced (280 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves, chopped (35 g)",
@@ -69,14 +69,14 @@
                                {
                                    "item":  "Penne Pasta",
                                    "grams":  700,
-                                   "buy":  "2 boxs",
+                                   "buy":  "7 cups",
                                    "bid":  "penne-pasta",
                                    "gpu":  28.3495
                                },
                                {
                                    "item":  "Marinara Sauce",
                                    "grams":  1400,
-                                   "buy":  "3 jars",
+                                   "buy":  "5 2/3 cups",
                                    "bid":  "marinara-sauce",
                                    "gpu":  28.3495
                                },
@@ -90,14 +90,14 @@
                                {
                                    "item":  "Shredded Carrots",
                                    "grams":  250,
-                                   "buy":  "1 bag",
+                                   "buy":  "2 1/4 cups",
                                    "bid":  "shredded-carrots",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Olive Oil",
                                    "grams":  42,
-                                   "buy":  "1 bottle",
+                                   "buy":  "3 tbsp",
                                    "bid":  "olive-oil",
                                    "gpu":  "28.000"
                                },

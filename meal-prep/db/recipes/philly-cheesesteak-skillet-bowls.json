@@ -21,12 +21,12 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (1960 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1188 g)",
-                                "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 2 packages (368 g)",
+                                "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 5 1/4 cups (368 g)",
                                 "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3 peppers (307 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 4 onions (350 g)",
                                 "\u003cstrong\u003eProvolone Cheese (generic):\u003c/strong\u003e 1 pack (162 g)",
-                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 carton (250 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (15 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 cups (250 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 cloves (15 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 1/2 tbsp (45 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tsp (25 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (6 g)"
@@ -74,7 +74,7 @@
                                {
                                    "item":  "White Mushrooms",
                                    "grams":  368,
-                                   "buy":  "2 packages",
+                                   "buy":  "5 1/4 cups",
                                    "bid":  "mushrooms",
                                    "gpu":  28.3495
                                },
@@ -102,14 +102,14 @@
                                {
                                    "item":  "Beef Broth",
                                    "grams":  250,
-                                   "buy":  "1 carton",
+                                   "buy":  "1 cups",
                                    "bid":  "beef-broth",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Garlic",
                                    "grams":  15,
-                                   "buy":  "1 bulb",
+                                   "buy":  "3 cloves",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },

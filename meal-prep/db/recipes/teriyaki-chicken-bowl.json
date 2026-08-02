@@ -20,10 +20,10 @@
     "intro_html":  "This is a takeout favorite made at home for a fraction of the cost, and it batches beautifully into 14 dinners. Chicken breast, tender broccoli, and sweet carrots get tossed in teriyaki sauce and spooned over rice. It reheats like a champ, so future you gets a hot dinner with zero effort.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2495 g)",
-                                "\u003cstrong\u003eTeriyaki Sauce (Kikkoman):\u003c/strong\u003e 2 bottles (700 g)",
-                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (30 g)",
+                                "\u003cstrong\u003eTeriyaki Sauce (Kikkoman):\u003c/strong\u003e 2 1/2 cups (700 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2 1/4 tbsp (30 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (900 g)",
-                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 2 bags (595 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 7 cups (595 g)",
                                 "\u003cstrong\u003eShredded Carrots:\u003c/strong\u003e 1 lb (200 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
@@ -64,14 +64,14 @@
                                {
                                    "item":  "Teriyaki Sauce",
                                    "grams":  700,
-                                   "buy":  "2 bottles",
+                                   "buy":  "2 1/2 cups",
                                    "bid":  "teriyaki-sauce",
                                    "gpu":  "34.000"
                                },
                                {
                                    "item":  "Olive Oil",
                                    "grams":  30,
-                                   "buy":  "1 bottle",
+                                   "buy":  "2 1/4 tbsp",
                                    "bid":  "olive-oil",
                                    "gpu":  "28.000"
                                },
@@ -85,7 +85,7 @@
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  595,
-                                   "buy":  "2 bags",
+                                   "buy":  "7 cups",
                                    "bid":  "frozen-broccoli-florets",
                                    "gpu":  28.3495
                                },

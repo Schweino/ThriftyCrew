@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Ground Turkey Enchilada Skillet Bowls",
     "slug":  "ground-turkey-enchilada-skillet-bowls",
     "cuisine":  "Tex-Mex",
@@ -21,11 +21,11 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 7 lb (3000 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (750 g)",
-                                "\u003cstrong\u003eEnchilada Sauce (Old El Paso):\u003c/strong\u003e 4 cans (900 g)",
+                                "\u003cstrong\u003eEnchilada Sauce (Old El Paso):\u003c/strong\u003e 3 2/3 cups (900 g)",
                                 "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 3 cans (900 g)",
-                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 2 cans (500 g)",
-                                "\u003cstrong\u003eChipotle in Adobo (La Costena):\u003c/strong\u003e 1 can (60 g)",
-                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 1 bag (168 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 3 cups (500 g)",
+                                "\u003cstrong\u003eChipotle in Adobo (La Costena):\u003c/strong\u003e 3 1/2 tbsp (60 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 1 1/2 cups (168 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1/2 cup diced (275 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 clove, crushed (18 g)",
                                 "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1/4 tsp (2 g)",
@@ -75,7 +75,7 @@
                                {
                                    "item":  "Enchilada Sauce",
                                    "grams":  900,
-                                   "buy":  "4 cans",
+                                   "buy":  "3 2/3 cups",
                                    "bid":  "enchilada-sauce",
                                    "gpu":  "28.350"
                                },
@@ -89,21 +89,21 @@
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "grams":  500,
-                                   "buy":  "2 cans",
+                                   "buy":  "3 cups",
                                    "bid":  "canned-corn",
                                    "gpu":  28.3495
                                },
                                {
                                    "item":  "Chipotle in Adobo",
                                    "grams":  60,
-                                   "buy":  "1 can",
+                                   "buy":  "3 1/2 tbsp",
                                    "bid":  "chipotle-adobo",
                                    "gpu":  28.3495
                                },
                                {
                                    "item":  "Cheddar Cheese, Shredded",
                                    "grams":  168,
-                                   "buy":  "1 bag",
+                                   "buy":  "1 1/2 cups",
                                    "bid":  "cheddar-cheese-shredded",
                                    "gpu":  28.3495
                                },

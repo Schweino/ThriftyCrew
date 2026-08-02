@@ -21,11 +21,11 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2170 g)",
                                 "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 11 lb (4562 g)",
-                                "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 2 packages (430 g)",
+                                "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 6 1/4 cups (430 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (320 g)",
-                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 carton (720 g)",
-                                "\u003cstrong\u003eBread Crumbs (generic):\u003c/strong\u003e 1 container (120 g)",
-                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1 can (60 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 3 cups (720 g)",
+                                "\u003cstrong\u003eBread Crumbs (generic):\u003c/strong\u003e 1 cups (120 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 3 3/4 tbsp (60 g)",
                                 "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1 tsp (patties) + 1/2 tsp (gravy) (25 g)",
                                 "\u003cstrong\u003eKetchup (generic):\u003c/strong\u003e 2 tsp (patties) + 1 tsp (gravy) (50 g)",
                                 "\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 1 tsp (18 g)",
@@ -78,7 +78,7 @@
                                {
                                    "item":  "White Mushrooms",
                                    "grams":  430,
-                                   "buy":  "2 packages",
+                                   "buy":  "6 1/4 cups",
                                    "bid":  "mushrooms",
                                    "gpu":  28.3495
                                },
@@ -92,21 +92,21 @@
                                {
                                    "item":  "Beef Broth",
                                    "grams":  720,
-                                   "buy":  "1 carton",
+                                   "buy":  "3 cups",
                                    "bid":  "beef-broth",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Bread Crumbs",
                                    "grams":  120,
-                                   "buy":  "1 container",
+                                   "buy":  "1 cups",
                                    "bid":  "bread-crumbs",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Tomato Paste",
                                    "grams":  60,
-                                   "buy":  "1 can",
+                                   "buy":  "3 3/4 tbsp",
                                    "bid":  "tomato-paste",
                                    "gpu":  "28.350"
                                },

@@ -20,13 +20,13 @@
     "intro_html":  "Chicken cacciatore is rustic Italian at its finest, all peppers, mushrooms, and tomato simmered until the flavors marry. This version tosses it with penne for a hearty pasta bowl at 67 grams of protein and about $4.35 a serving (at everyday cost). One batch makes 14 servings, so a Sunday in the slow cooker sets up more than a week of dinners.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3300 g)",
-                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 3 boxs (980 g)",
-                                "\u003cstrong\u003eTraditional Pasta Sauce (Great Value):\u003c/strong\u003e 2 jars (900 g)",
-                                "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 2 packages (450 g)",
+                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 9 3/4 cups (980 g)",
+                                "\u003cstrong\u003eTraditional Pasta Sauce (Great Value):\u003c/strong\u003e 3 2/3 cups (900 g)",
+                                "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 6 1/2 cups (450 g)",
                                 "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 2 peppers (240 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (160 g)",
-                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (20 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (9 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 1/2 tbsp (20 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (9 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp kosher salt (12 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (3 g)",
                                 "\u003cstrong\u003eBalsamic Vinegar (generic):\u003c/strong\u003e 1 tbsp + 1/2 tsp (40 g)",
@@ -68,21 +68,21 @@
                                {
                                    "item":  "Penne Pasta",
                                    "grams":  980,
-                                   "buy":  "3 boxs",
+                                   "buy":  "9 3/4 cups",
                                    "bid":  "penne-pasta",
                                    "gpu":  28.3495
                                },
                                {
                                    "item":  "Traditional Pasta Sauce",
                                    "grams":  900,
-                                   "buy":  "2 jars",
+                                   "buy":  "3 2/3 cups",
                                    "bid":  "traditional-pasta-sauce",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "White Mushrooms",
                                    "grams":  450,
-                                   "buy":  "2 packages",
+                                   "buy":  "6 1/2 cups",
                                    "bid":  "mushrooms",
                                    "gpu":  28.3495
                                },
@@ -103,14 +103,14 @@
                                {
                                    "item":  "Olive Oil",
                                    "grams":  20,
-                                   "buy":  "1 bottle",
+                                   "buy":  "1 1/2 tbsp",
                                    "bid":  "olive-oil",
                                    "gpu":  "28.000"
                                },
                                {
                                    "item":  "Garlic",
                                    "grams":  9,
-                                   "buy":  "1 bulb",
+                                   "buy":  "2 cloves",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },

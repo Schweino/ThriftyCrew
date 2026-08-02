@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Slow Cooker Jerk Pork Bowls",
     "slug":  "slow-cooker-jerk-pork-bowls",
     "cuisine":  "Jamaican",
@@ -21,9 +21,9 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 8 lb (3200 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (950 g)",
-                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 4 bags (1200 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 14 cups (1200 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (200 g)",
-                                "\u003cstrong\u003eJerk Seasoning (McCormick):\u003c/strong\u003e 1 jar (40 g)",
+                                "\u003cstrong\u003eJerk Seasoning (McCormick):\u003c/strong\u003e 4 1/2 tbsp (40 g)",
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1/2-1 cup low-sodium vegetable or chicken broth (240 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
@@ -70,7 +70,7 @@
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  1200,
-                                   "buy":  "4 bags",
+                                   "buy":  "14 cups",
                                    "bid":  "frozen-broccoli-florets",
                                    "gpu":  28.3495
                                },
@@ -84,7 +84,7 @@
                                {
                                    "item":  "Jerk Seasoning",
                                    "grams":  40,
-                                   "buy":  "1 jar",
+                                   "buy":  "4 1/2 tbsp",
                                    "bid":  "jerk-seasoning",
                                    "gpu":  "28.350"
                                },

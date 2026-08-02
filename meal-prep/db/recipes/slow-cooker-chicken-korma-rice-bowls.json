@@ -21,13 +21,13 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3100 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (920 g)",
-                                "\u003cstrong\u003eCashews (generic):\u003c/strong\u003e 1 bag (130 g)",
-                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 1 can (200 g)",
-                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (360 g)",
-                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1 can (66 g)",
+                                "\u003cstrong\u003eCashews (generic):\u003c/strong\u003e 1 cup (130 g)",
+                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 1 cup (200 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 1/2 cups (360 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1/4 cup (66 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (150 g)",
-                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1 bottle (14 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (12 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 2/3 tbsp (14 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (12 g)",
                                 "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 3 tsp chopped (35 g)",
                                 "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 2 tsp (12 g)",
                                 "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tsp (6 g)",
@@ -79,28 +79,28 @@
                                {
                                    "item":  "Cashews",
                                    "grams":  130,
-                                   "buy":  "1 bag",
+                                   "buy":  "1 cup",
                                    "bid":  "cashews",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Coconut Milk",
                                    "grams":  200,
-                                   "buy":  "1 can",
+                                   "buy":  "1 cup",
                                    "bid":  "coconut-milk-canned",
                                    "gpu":  29.57
                                },
                                {
                                    "item":  "Chicken Broth",
                                    "grams":  360,
-                                   "buy":  "1 carton",
+                                   "buy":  "1 1/2 cups",
                                    "bid":  "chicken-broth",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Tomato Paste",
                                    "grams":  66,
-                                   "buy":  "1 can",
+                                   "buy":  "1/4 cup",
                                    "bid":  "tomato-paste",
                                    "gpu":  "28.350"
                                },
@@ -114,14 +114,14 @@
                                {
                                    "item":  "Honey",
                                    "grams":  14,
-                                   "buy":  "1 bottle",
+                                   "buy":  "2/3 tbsp",
                                    "bid":  "honey",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Garlic",
                                    "grams":  12,
-                                   "buy":  "1 bulb",
+                                   "buy":  "2 cloves",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },

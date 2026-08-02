@@ -21,8 +21,8 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2730 g)",
                                 "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 8 lb (3505 g)",
-                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 carton (720 g)",
-                                "\u003cstrong\u003eBread Crumbs (generic):\u003c/strong\u003e 1 container (120 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 3 cups (720 g)",
+                                "\u003cstrong\u003eBread Crumbs (generic):\u003c/strong\u003e 1 cups (120 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (160 g)",
                                 "\u003cstrong\u003eLight Sour Cream (generic):\u003c/strong\u003e 1 tub (180 g)",
                                 "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 1 quart (120 g)",
@@ -80,14 +80,14 @@
                                {
                                    "item":  "Beef Broth",
                                    "grams":  720,
-                                   "buy":  "1 carton",
+                                   "buy":  "3 cups",
                                    "bid":  "beef-broth",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Bread Crumbs",
                                    "grams":  120,
-                                   "buy":  "1 container",
+                                   "buy":  "1 cups",
                                    "bid":  "bread-crumbs",
                                    "gpu":  "28.350"
                                },
