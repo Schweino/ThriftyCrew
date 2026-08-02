@@ -1,0 +1,38 @@
+﻿{
+    "stores":  [
+                   {
+                       "store":  "Fareway",
+                       "file":  "fareway-regular-2026-08-01.json",
+                       "rows":  576,
+                       "checked":  553,
+                       "unbacked":  23,
+                       "capture_files":  5,
+                       "violations":  0,
+                       "detail":  [
+
+                                  ]
+                   },
+                   {
+                       "store":  "Aldi",
+                       "file":  "aldi-regular-2026-08-01.json",
+                       "rows":  1675,
+                       "checked":  1466,
+                       "unbacked":  209,
+                       "capture_files":  2,
+                       "violations":  0,
+                       "detail":  [
+
+                                  ]
+                   }
+               ],
+    "unwatched":  [
+                      "Baker\u0027s (Kroger API - as_of is stamped at fetch, no separate dated artefact to check it against)",
+                      "Hy-Vee (Aisles Online API - same)",
+                      "Family Fare (headless pull - same)",
+                      "Sam\u0027s Club (dated-file union ranked by freshness, guard 6 owns it)",
+                      "Walmart (dated-file union ranked by freshness, guard 6 owns it)"
+                  ],
+    "blind":  [
+
+              ]
+}

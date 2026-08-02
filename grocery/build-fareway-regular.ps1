@@ -16,6 +16,10 @@
   Last writer wins per id (pass core first, then the rest). Skips NOT FOUND / empty-price rows.
 #>
 param([string[]]$In = @(), [string]$OutDir = "", [string]$Today = "", [string]$ModeVerified = "", [switch]$Force,
+  # See the EXTRACT DATING block below. 14 days is not a new policy number - it is the same cap
+  # carry-forward-regular.ps1 already applies to every row it copies, applied here to the extracts this
+  # script merges, because merging an old extract and carrying an old row are the same act.
+  [int]$MaxExtractDays = 14,
   # -SelfTest runs the frozen fixtures below by RE-INVOKING this very script over a fixture capture, so the
   # assertions exercise the real emit path end to end instead of a copy of it (the 2026-07-29 lesson: two
   # same-day fixes regressed because their self-test could not reach the new code).
@@ -234,6 +238,42 @@ if ($SelfTest) {
     $t2 = @($doc2.deals) | Where-Object { $_.item -eq 'Country Daybreak Large White Eggs' }
     Chk '(n twin) gallon row with no stated volume STILL relabelled "gallon"' ($t1 -and $t1.size -eq 'gallon' -and $t1.ad_price -eq '$5.75') ("$($t1.ad_price) / $($t1.size)")
     Chk '(o twin) dozen row with no count anywhere keeps the pack price undivided' ($t2 -and $t2.size -eq 'dozen' -and $t2.ad_price -eq '$1.47') ("$($t2.ad_price) / $($t2.size)")
+
+    # ---- (q)-(t) EXTRACT DATING, its own child run because it needs THREE extracts of different ages ----
+    # This script merges every extract in out\fareway and stamps the result. Until 2026-08-02 it stamped
+    # them all with the BUILD date, so 431 of 577 live rows wore a date newer than the capture that produced
+    # them and guard 9 read a fabricated 78% freshness against a true 9%. The ranch-dressing row below is the
+    # founding case verbatim, caught at the shelf by the C3 sample: last seen in the 07-23/07-27/07-31
+    # extracts, absent from 08-01, published as_of 2026-08-01, real shelf price $2.48 against a published
+    # $0.99. Frozen with a THREE-file layout because the bug is invisible in any single-extract run.
+    # NOTE the invocation: no -In. The child discovers its own extracts from -OutDir, both because that is
+    # the real path this runs on and because a string[] does not survive `powershell -File` (it arrives
+    # flattened into one element), which has cost this estate two same-day regressions.
+    $mDir = Join-Path $T 'multi\fareway'
+    New-Item -ItemType Directory -Path $mDir -Force | Out-Null
+    (@(
+      # 17 days old -> beyond the 14-day cap: the whole extract must be skipped and NAMED
+      @{ id = 'bottled-water'; name = 'Fareway Purified Drinking Water'; price = '1.11'; per = ''; orig = ''; unit = ''; size = '24 ct'; url = '' }
+    ) | ConvertTo-Json -Depth 4) | Set-Content (Join-Path $mDir 'fareway-shop-2026-07-15.json') -Encoding UTF8
+    (@(
+      # 9 days old -> inside the cap, so it still prices the board, but it must SAY 2026-07-23
+      @{ id = 'ranch-dressing'; name = 'Fareway Ranch Dressing'; price = '0.99'; per = ''; orig = ''; unit = ''; size = '16 fl oz'; url = '' },
+      @{ id = 'tomatoes'; name = 'NatureSweet Cherubs Tomatoes'; price = '9.99'; per = ''; orig = ''; unit = ''; size = '10 oz'; url = '' }
+    ) | ConvertTo-Json -Depth 4) | Set-Content (Join-Path $mDir 'fareway-shop-2026-07-23.json') -Encoding UTF8
+    (@(
+      @{ id = 'tomatoes'; name = 'NatureSweet Cherubs Tomatoes'; price = '3.99'; per = ''; orig = ''; unit = ''; size = '10 oz'; url = '' }
+    ) | ConvertTo-Json -Depth 4) | Set-Content (Join-Path $mDir 'fareway-shop-2026-08-01.json') -Encoding UTF8
+    $out3 = & powershell -NoProfile -ExecutionPolicy Bypass -File $selfPath -OutDir (Join-Path $T 'multi') -Today '2026-08-01' -ModeVerified '2026-08-01' -NoCarry 2>&1 | Out-String
+    $doc3 = Get-Content (Join-Path $T 'multi\regular\fareway-regular-2026-08-01.json') -Raw | ConvertFrom-Json
+    $b3 = @{}; foreach ($d in @($doc3.deals)) { $b3[[string]$d.item] = $d }
+    $q1 = $b3['Fareway Ranch Dressing']
+    Chk '(q) row from a 07-23 extract keeps as_of 2026-07-23, NOT the build date' ($q1 -and $q1.as_of -eq '2026-07-23') ("as_of=$($q1.as_of)")
+    Chk '(r) extract 17 days old is skipped whole - its row never publishes' (-not $b3.ContainsKey('Fareway Purified Drinking Water')) 'row present'
+    $agedLine = (($out3 -split "`r?`n") | Where-Object { $_ -match 'AGED OUT' }) -join ' '
+    Chk '(r) the skipped extract is NAMED, not quietly dropped' ($agedLine -match '2026-07-15') "agedLine=[$agedLine]"
+    $s1 = $b3['NatureSweet Cherubs Tomatoes']
+    Chk '(s) CLEAN TWIN today''s extract still dates as today  2026-08-01' ($s1 -and $s1.as_of -eq '2026-08-01') ("as_of=$($s1.as_of)")
+    Chk '(t) CLEAN TWIN last-writer-wins survives  $3.99 beats the older $9.99' ($s1 -and $s1.ad_price -eq '$3.99') ("$($s1.ad_price)")
   } finally { Remove-Item $T -Recurse -Force -ErrorAction SilentlyContinue }
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
 }
@@ -247,8 +287,54 @@ $byUrl = [ordered]@{}
 # below rather than silently swallowed: a dropped cell must always be a named decision, never a quiet gap.
 $basisConflicts = 0
 $basisConflictIds = @()
+
+# ------------------------------------------------- EXTRACT DATING (2026-08-02, found by the C3 sample)
+# A ROW'S as_of IS THE DATE OF THE EXTRACT IT CAME FROM, never the date of this build. This script reads
+# EVERY out\fareway\fareway-shop-*.json and takes last-writer-wins per commodity - that merge is a coverage
+# feature and it stays - but it used to stamp all of them with -Today. Measured on the live 08-01 file:
+# 431 of 577 published rows carried a date NEWER than the extract that supplied them, and 450 rows claimed
+# as_of=2026-08-01 when only 51 came from that day's extract.
+# WHY A LAUNDERED DATE IS WORSE THAN A MISSING ONE. Guard 9 measures this store's freshness as "rows whose
+# as_of == today", so the stamp fed the staleness guard a fabricated 78% against a true 9%: the only check
+# watching this store's clock was reading a number this script had written to be true, and no amount of
+# staleness could ever move it. Out-of-band verification C3 caught the consequence at the shelf - 'Fareway
+# Ranch Dressing' $0.99 last appears in the 07-23/07-27/07-31 extracts, is absent from 08-01, published
+# as_of 2026-08-01, and the store charges $2.48 (the board printed $0.0619/floz against a real $0.155).
+# Three of the four measured Fareway defects are this one mechanism.
+# THE CAP. Honest dating alone still lets an arbitrarily old extract price the board - the 07-15 file was
+# still supplying a live cell 18 days on - so an extract older than -MaxExtractDays is dropped whole and
+# NAMED. Merging a 3-week-old extract and carrying a 3-week-old row are the same act, so it is the same cap.
+# The date comes from the FILENAME, which is how every other dated surface in this estate is read; a file
+# that does not carry one falls back to its mtime and is reported, because guessing "today" here is the
+# exact bug being fixed.
+$buildDate = [datetime]$asofS
+$srcDates = @{}
+$agedOut = @()
+$undatedSrc = @()
+$keptIn = New-Object System.Collections.Generic.List[string]
+foreach ($f in @($In)) {
+  if (-not (Test-Path $f)) { continue }
+  $bn = [System.IO.Path]::GetFileNameWithoutExtension($f)
+  $dm = [regex]::Match($bn, '(\d{4}-\d{2}-\d{2})$')
+  $sd = $null
+  if ($dm.Success) { try { $sd = [datetime]$dm.Groups[1].Value } catch { $sd = $null } }
+  if (-not $sd) {
+    $sd = (Get-Item $f).LastWriteTime.Date
+    $undatedSrc += ("{0} (no date in the filename; using its mtime {1})" -f (Split-Path $f -Leaf), $sd.ToString('yyyy-MM-dd'))
+  }
+  $ageD = [int]($buildDate - $sd).TotalDays
+  if ($ageD -gt $MaxExtractDays) {
+    $agedOut += ("{0} ({1} days old)" -f (Split-Path $f -Leaf), $ageD)
+    continue
+  }
+  $srcDates[$f] = $sd.ToString('yyyy-MM-dd')
+  $keptIn.Add($f)
+}
+$In = @($keptIn.ToArray())
+
 foreach ($f in $In) {
   if (-not (Test-Path $f)) { continue }
+  $srcAsOf = if ($srcDates.ContainsKey($f)) { $srcDates[$f] } else { $asofS }
   foreach ($r in (Get-Content $f -Raw -Encoding UTF8 | ConvertFrom-Json)) {
   # The storefront capture is UTF-8; reading it under the system ANSI codepage turned brand names into
   # mojibake that then shipped to the board ("Mott(junk)s", "Saran(junk)"). Repair on ingest - see capture-lib.
@@ -407,7 +493,7 @@ foreach ($f in $In) {
     # exactly the bug that had Hy-Vee sirloin at $13.99/lb while the store charged $11.99.
     $curNum = 0.0
     [void][double]::TryParse(($adp -replace '[^0-9.]',''), [ref]$curNum)
-    $row = [ordered]@{ store='Fareway'; item=$name; ad_price=$adp; size=$sz; regular=$reg; source_ad='shop.fareway.com'; as_of=$asofS }
+    $row = [ordered]@{ store='Fareway'; item=$name; ad_price=$adp; size=$sz; regular=$reg; source_ad='shop.fareway.com'; as_of=$srcAsOf }
     # identity rule: the link belongs ON the price row (derive-links reads link_url verbatim), not only in
     # the url-inputs side file - two homes for one fact is how they drift.
     if ($r.url -and "$($r.url)" -ne '') { $row['link_url'] = [string]$r.url }
@@ -462,6 +548,17 @@ if ($urlRows.Count) {
   Write-Output ("store-fareway1-urls.json: $($urlRows.Count) Fareway product links")
 }
 Write-Output ("fareway-regular-$asofS.json: $($deals.Count) commodities")
+# Say out loud how much of this file is actually today's price. The whole point of the dating fix is that
+# this number can now be wrong in the direction that gets noticed, instead of always reading 100%.
+$freshN = @($deals | Where-Object { ([string]$_.as_of) -eq $asofS }).Count
+$dateMix = @($deals | Group-Object { [string]$_.as_of } | Sort-Object Name -Descending | ForEach-Object { "$($_.Name)=$($_.Count)" }) -join '  '
+Write-Output ("  as_of: $freshN of $($deals.Count) row(s) priced from TODAY's extract   [$dateMix]")
+if ($agedOut.Count -gt 0) {
+  Write-Output ("  AGED OUT - skipped $($agedOut.Count) extract(s) older than $MaxExtractDays days, so any commodity carried only by them has no Fareway cell today (absent by decision, not by accident): " + ($agedOut -join ', '))
+}
+if ($undatedSrc.Count -gt 0) {
+  Write-Output ("  UNDATED SOURCE - $($undatedSrc.Count) extract(s) carry no date in the filename; their rows are dated from the file's mtime, which is a weaker claim than a capture date: " + ($undatedSrc -join ', '))
+}
 if ($basisConflicts -gt 0) {
   Write-Output ("  BASIS CONFLICT - dropped $basisConflicts row(s): the catalog slug says per-pound but the commodity is priced per-each, so the price could mean either a pound or a whole item. No number is honest here; these cells are absent by decision, not by accident: " + (($basisConflictIds | Sort-Object -Unique) -join ', '))
 }
@@ -476,5 +573,10 @@ if (-not $NoCarry) {
 # price 48x too high and the band drops the store from the row. Re-adopt the prior capture's size when
 # item AND price are identical. See heal-degraded-sizes.ps1.
 & powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'heal-degraded-sizes.ps1') -Store fareway | Write-Output
+# 2026-08-02: the two steps above copy rows out of PRIOR regular files, and every file built before today
+# carries laundered as_of dates - so carry-forward faithfully preserves a date that was never measured.
+# This re-dates such a row DOWN to the newest capture that actually holds it and drops it if that honest
+# date is past the window. Runs LAST because it has to see what carry-forward and the size-heal wrote.
+& powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'repair-asof-evidence.ps1') -Store fareway -MaxAgeDays $MaxExtractDays | Write-Output
 }
 

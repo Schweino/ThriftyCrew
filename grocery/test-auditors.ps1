@@ -2735,6 +2735,32 @@ else { Bad ('build-fareway-regular -SelfTest failed (rc=' + $r.rc + ') - Fareway
 $r = RunPS 'heal-degraded-sizes.ps1' @('-Store','fareway','-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'size-heal: still heals across a store RENAME on the catalog product id, and still refuses when the price moved' }
 else { Bad ('heal-degraded-sizes -SelfTest failed (rc=' + $r.rc + ') - a renamed product loses its pack size again and the band drops the store: ' + ($r.text -replace "`n", ' ')) }
+
+# ---------------------------------------------------------------- as_of laundering (2026-08-02, C3 sample)
+# THE ONLY BUG CLASS WHERE THE DETECTOR ITSELF IS THE VICTIM. build-fareway-regular merges every extract on
+# disk and used to stamp them all with the BUILD date: 431 of 577 live rows wore a date newer than the
+# capture that produced them, and guard 9 - which measures freshness as "as_of == today" - reported a
+# fabricated 78% against a true 6%. Nothing downstream could see it, because every freshness check in the
+# estate reads as_of and as_of said the rows were fresh. The C3 out-of-band sample found the shopper end:
+# ranch dressing published at $0.99 as_of today, last actually captured 07-23, real shelf price $2.48.
+# THREE watchers, and all three have to keep working: the builder must date from the extract, the guard must
+# fail when something re-launders, and the repair must undo dates inherited from pre-fix files.
+$r = RunPS 'audit-asof-evidence.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'as_of evidence: a row dated fresher than any capture that holds it still fires, and a carried OLDER date still does not' }
+else { Bad ('audit-asof-evidence -SelfTest failed (rc=' + $r.rc + ') - the freshness guards can be fed an invented date again: ' + ($r.text -replace "`n", ' ')) }
+
+$r = RunPS 'repair-asof-evidence.ps1' @('-Store','fareway','-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'as_of repair: still re-dates a laundered row DOWN to its evidence, still never forward, still leaves unbacked rows alone' }
+else { Bad ('repair-asof-evidence -SelfTest failed (rc=' + $r.rc + ') - dates inherited from pre-fix files stay laundered: ' + ($r.text -replace "`n", ' ')) }
+
+# The builder's own dating cases live in its -SelfTest above, but that test passes if the fixture stops
+# REACHING the dating code. Pin the three things the (q)-(t) cases depend on: the param, the per-extract
+# stamp, and the tail call. Each one was a live bug the day this was written.
+$bfrSrc = Get-Content (Join-Path $root 'build-fareway-regular.ps1') -Raw
+if ($bfrSrc -match '\$MaxExtractDays' -and $bfrSrc -match 'as_of=\$srcAsOf') { Ok 'fareway builder still dates each row from the EXTRACT it came from, not the build date' }
+else { Bad 'build-fareway-regular no longer stamps as_of from the source extract ($srcAsOf) - the laundering is back and guard 9 will read 100% freshness on a stale file' }
+if ($bfrSrc -match 'repair-asof-evidence\.ps1') { Ok 'fareway builder still runs the as_of repair after carry-forward' }
+else { Bad 'build-fareway-regular no longer calls repair-asof-evidence - carried rows keep whatever date a pre-fix file gave them' }
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2
 

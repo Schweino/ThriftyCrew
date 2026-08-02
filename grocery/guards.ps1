@@ -274,6 +274,15 @@ foreach ($g in @(
     # is not a gate that can never arm. Exit 3 (blind - missing/empty/unevaluable list, or a board with no
     # named priced cells) surfaces here as a WARN naming what went unproven, never as a silent pass.
     @{ f='audit-known-wrong.ps1';       n='no product a reasoner already ruled wrong is priced on the board (known-wrong blocklist)' },
+    # as_of evidence (2026-08-02) - "no published price may claim a date newer than the capture it came
+    # from". build-fareway-regular merged every extract on disk and stamped them all with the BUILD date, so
+    # 431 of 577 live rows wore a date newer than the capture that produced them. That is worse than a
+    # missing date: guard 9 below measures freshness as "as_of == today" and was reading a fabricated 78%
+    # against a true 6%, the carry cap's clock was reset on every build, and the C3 out-of-band sample found
+    # the shopper-visible end of it (ranch dressing published at $0.99 as_of today, real shelf price $2.48).
+    # Every downstream freshness check is correct code reading an invented input, which is why this needs a
+    # check of its own rather than trusting the builder to stay fixed.
+    @{ f='audit-asof-evidence.ps1';     n='no published price claims a date newer than the capture it came from (as_of evidence)' },
     @{ f='audit-tile-integrity.ps1';    n='ZERO shipped links disagree with their tile (hard), and no store regressed on coverage (ratchet)' })) {
   $p = Join-Path $root $g.f
   if (-not (Test-Path $p)) { [void]$fail.Add(("MISSING GUARD SCRIPT: " + $g.f)); continue }
