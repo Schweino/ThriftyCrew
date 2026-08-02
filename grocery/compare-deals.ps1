@@ -1,4 +1,4 @@
-<#
+﻿<#
   compare-deals.ps1 - The Omaha cross-store comparison engine.
   Brand-agnostic: every deal is bucketed into a COMMODITY (chicken breast, cottage cheese, ...),
   its price + size normalized to ONE canonical unit (per lb / oz / fl oz / each / dozen), then the
@@ -300,7 +300,7 @@ function Get-ItemPrice([string]$priceText, [string]$nameText, $regular) {
     if ($n -gt 0) { return @{ per_item = $tot/$n; kind=@{perlb=$perlb;pereach=$pereach}; note="$n for `$$tot" } }
   }
   # cents: "88" with cent sign or explicit cents
-  $m = [regex]::Match($p, '(\d+)\s*(?:¢|cents?)')
+  $m = [regex]::Match($p, '(\d+)\s*(?:Â¢|cents?)')
   if ($m.Success) { return @{ per_item = ([double]$m.Groups[1].Value)/100.0; kind=@{perlb=$perlb;pereach=$pereach}; note='cents' } }
   # plain dollar amount (take the LAST one, which is usually the sale/ad price)
   $dm = [regex]::Matches($p, '\$\s*([\d]+(?:\.\d{1,2})?)')
@@ -424,6 +424,33 @@ function Get-RegularSrcDate([string]$store, [string]$baseName) {
   $m = [regex]::Match($baseName, '(\d{4}-\d{2}-\d{2})$')   # [regex]::Match, never -match: $Matches is global
   if (-not $m.Success) { return '' }
   return $m.Groups[1].Value
+}
+
+function Get-RowSrcDate([string]$store, $row, [string]$fileDate) {
+  # A ROW IS AS OLD AS ITS OWN EVIDENCE, NEVER AS YOUNG AS ITS FILE (2026-08-02).
+  # Get-RegularSrcDate above dates every row in a file by the file's NAME. That was fine while a store's
+  # out\regular file was written whole by one capture. It stopped being fine the moment a file could hold
+  # rows of MIXED age: refresh-sams-verified.ps1 re-prices the ~20 hand-verified Sam's rows a fresh capture
+  # confirms and carries the other 40 unchanged, so naming the result sams-regular-2026-08-01.json handed
+  # all 60 rows an 08-01 stamp. The 40 carried rows then out-ranked Sam's real 2026-07-29 feed and took
+  # cells off it: sandwich-bags flipped from the 580-ct Ziploc at $0.0168/ea to a 300-ct SNACK bag at
+  # $0.0309/ea - 84% dearer, on a row nothing had re-verified. The guards caught it before it published.
+  # DIRECTIONAL ON PURPOSE. A row's own as_of is used only when it is OLDER than the file date, which can
+  # only ever make a row rank LOWER. The opposite direction - trusting a row that claims to be fresher than
+  # the file it lives in - is the as_of laundering fixed in the Fareway builder the same day, and it is the
+  # one mistake that could let a stale price out-rank a live one.
+  # SAM'S ONLY, and that limit was MEASURED, not assumed. Applied to Walmart as well, this moved three cells
+  # the wrong way in one rebuild (lime-juice, pudding-cups and taco-sauce all landed at ~2x their own stored
+  # link) because Walmart's rows are carried forward across a 14-day UNION with their original as_of: re-dating
+  # them changes which capture is "newest" for a commodity, and a different product wins the cell. That union
+  # has its own ordering discipline and its own guard; perturbing it is a separate piece of work with its own
+  # evidence. Sam's is the store with a mixed-age file, so Sam's is the store this fixes.
+  if (-not $fileDate) { return '' }
+  if ($store -ne "Sam's Club") { return $fileDate }
+  $ao = ''
+  if ($row.PSObject.Properties['as_of']) { $ao = [string]$row.as_of }
+  if (($ao -match '^\d{4}-\d{2}-\d{2}$') -and ($ao -lt $fileDate)) { return $ao }
+  return $fileDate
 }
 
 function Select-FreshestCaptureRows($rows) {
@@ -666,6 +693,28 @@ if ($SelfTest) {
   ))
   _Eq 'sole stale capture still prices its commodity' $only.Count 1
 
+  # --- 25-27: a file of MIXED age must not lend its date to the rows it merely carries -------------------
+  # FROZEN FOUNDING BUG (2026-08-02). refresh-sams-verified.ps1 re-prices the hand-verified Sam's rows a
+  # fresh capture confirms and carries the rest unchanged, so out\regular\sams-regular-2026-08-01.json holds
+  # 20 rows dated 08-01 and 40 still dated 07-26. Get-RegularSrcDate dates by FILENAME, so all 60 claimed
+  # 08-01 and the carried ones out-ranked Sam's real 07-29 feed. Measured on the board that produced this
+  # fix: sandwich-bags flipped from the 580-ct Ziploc at $0.0168/ea to a 300-ct SNACK bag at $0.0309/ea,
+  # 84% dearer and re-verified by nobody. Guard 4 caught it at 0.54x against the stored link.
+  _Eq 'a carried row keeps its OWN older date, not the file''s' (Get-RowSrcDate "Sam's Club" ([pscustomobject]@{ as_of = '2026-07-26' }) '2026-08-01') '2026-07-26'
+  $mixed = @(Select-FreshestCaptureRows @(
+    (_Row 'Ziploc Snack Bags'                  0.0309 (Get-RowSrcDate "Sam's Club" ([pscustomobject]@{ as_of = '2026-07-26' }) '2026-08-01')),
+    (_Row 'Ziploc Brand Sandwich Bags, 580 ct' 0.0168 '2026-07-29')
+  ) | Sort-Object unit_price | Select-Object -First 1)
+  _Eq 'the real feed still wins over a merely-carried row' $mixed.name 'Ziploc Brand Sandwich Bags, 580 ct'
+  # CLEAN TWIN: the direction that must NOT work. A row claiming to be FRESHER than the file it lives in is
+  # the as_of laundering fixed in the Fareway builder the same day; taking its word would let a stale price
+  # out-rank a live one, which is the exact failure this whole family of fixes exists to prevent.
+  _Eq 'a row claiming to be FRESHER than its file is ignored' (Get-RowSrcDate "Sam's Club" ([pscustomobject]@{ as_of = '2026-08-05' }) '2026-08-01') '2026-08-01'
+  # CLEAN TWIN: Walmart is deliberately OUT of scope. Its 14-day union carries rows forward with their
+  # original as_of, so re-dating them changes which capture owns a commodity - measured live on 2026-08-02 as
+  # three cells landing at ~2x their own link. Pinned here so nobody widens the rule without redoing that work.
+  _Eq 'Walmart rows still take the FILE date (its union owns their ordering)' (Get-RowSrcDate 'Walmart' ([pscustomobject]@{ as_of = '2026-07-18' }) '2026-08-01') '2026-08-01'
+
   Write-Output ('-'*54)
   if ($script:fail -eq 0) { Write-Output 'SELF-TEST PASS  (all multibuy / BOGO cases correct)'; exit 0 }
   else { Write-Output ("SELF-TEST FAIL: $script:fail case(s)"); exit 1 }
@@ -809,7 +858,10 @@ if (Test-Path $regDir) {
     # Sam's has a SECOND everyday source (out\sams) that its out\regular copy has to be ranked against; every
     # other store's out\regular file is its only everyday source and stays date-less.
     $sd = Get-RegularSrcDate ([string]$ex.store) ([string]$rf.BaseName)
-    foreach ($d in $ex.deals) { Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt $sd }
+    # $sd is the FILE's date. Get-RowSrcDate lets a row carrying an OLDER as_of keep it, so a file that holds
+    # rows of mixed age (refresh-sams-verified re-prices some rows and carries the rest) cannot hand the
+    # carried ones the refreshed file's freshness. Backward only - see that function.
+    foreach ($d in $ex.deals) { Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt (Get-RowSrcDate ([string]$ex.store) $d $sd) }
   }
 }
 

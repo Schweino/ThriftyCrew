@@ -2761,6 +2761,16 @@ if ($bfrSrc -match '\$MaxExtractDays' -and $bfrSrc -match 'as_of=\$srcAsOf') { O
 else { Bad 'build-fareway-regular no longer stamps as_of from the source extract ($srcAsOf) - the laundering is back and guard 9 will read 100% freshness on a stale file' }
 if ($bfrSrc -match 'repair-asof-evidence\.ps1') { Ok 'fareway builder still runs the as_of repair after carry-forward' }
 else { Bad 'build-fareway-regular no longer calls repair-asof-evidence - carried rows keep whatever date a pre-fix file gave them' }
+
+# ---------------------------------------------------------------- Sam's verified-row refresh (2026-08-02)
+# build-sams-deals refuses any row it cannot check with qty = linePrice / unitPrice, which is correct and
+# permanent - but it leaves the "sft" goods (foil/wrap/parchment/toilet paper, 45 of 74 rejects) and the
+# no-unitPrice goods (cauliflower, pineapple, rotisserie chicken, 20 more) unbuildable forever. This takes
+# the store's current price and keeps the size that was already hand-verified. Every refusal in its fixture
+# is a way that move can go wrong, and each one publishes a wrong PRICE if it stops firing.
+$r = RunPS 'refresh-sams-verified.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok "Sam's verified refresh: still re-prices sft/no-unitPrice rows, and still refuses an ambiguous price, a changed pack, a per-unit size and a size that is a price" }
+else { Bad ('refresh-sams-verified -SelfTest failed (rc=' + $r.rc + ") - Sam's hand-verified rows either stay stale or get re-priced against the wrong pack: " + ($r.text -replace "`n", ' ')) }
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2
 
