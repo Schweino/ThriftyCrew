@@ -279,12 +279,45 @@ Fifteen minutes in the Ads UI, real Quality-Score money.
 
 ## Section 4: CAPTURE SESSIONS (browser work, not code - NOT blocked on Brad; Claude drives his Chrome)
 
-**C1. Rescue worklists** from `out\rescue-terms-*.txt`: Walmart 21, Sam's 25, Fareway 28, Aldi 6 terms
-(DEEP per term, per the file header). The Sam's list is what retires the 18-day orphan capture that
-guard 9 keeps warning about (60 rows, ~22 live cells, no headless refresh path).
-**C2. Aldi tile-reading capture**: the puller reads product pages, which do not carry multipack counts;
-the tiles do. Until the capture changes, `audit-unit-basis-outlier` is the defense.
-**C3. Aldi/Fareway out-of-band verification cells** (never yet measured).
+**C1. DONE 2026-08-01 - all four stores captured.** Sam's 26 terms + 24 targeted orphan names (554+456
+rows), Aldi 6 (92 rows), Fareway 28 (291 rows), Walmart 21 (1,123 rows). ZERO bot walls anywhere.
+Recovered: Fareway 413 -> 425 cells with 12 of its 28 dropped commodities back; Walmart's 21 terms were
+all EXPIRING with 0 days left and were refreshed the day before they aged out of the union window.
+FOUR HARD LESSONS, each of which nearly shipped a regression:
+- **A narrow capture wins a commodity with thinner data.** Fed raw, the Sam's pull moved 24 crowns the
+  WRONG way (Kinder's Honey Brown Sugar SEASONING took honey; Kinder's Cowboy Butter SEASONING took
+  butter). Fix: rule-filter every capture to the commodity its term was searched FOR, the same filter
+  prime-batch-headless uses. 865 -> 122 on-target, crown moves 24 -> 3.
+- **That filter cannot catch the cross-commodity leak.** A "cauliflower" search returned a Broccoli and
+  Cauliflower MEDLEY which legitimately passes cauliflower's rules, and compare-deals then matched it to
+  BROCCOLI and took Walmart's crown. The filter knows what a row was searched for, not what claims it
+  downstream.
+- **A partial pull must never become the newest file.** The 92-row Aldi build sat next to a 1,664-row
+  file and compare-deals takes newest-per-store: it would have cost ~1,570 cells.
+  `carry-forward-regular -Store aldi` is the sanctioned fix (1,675 rows: 92 fresh, 1,583 carried).
+  Walmart unions across 14 days so the board was safe, but guard 6 still (correctly) failed the 145-row
+  file as a collapse; carry-forward refuses walmart by design, so those rows were merged by hand on
+  item+size into 4,881.
+- **Both SPA storefronts need `&k=<term>`** or they render a recommendation grid and report success.
+  Aldi's first sweep "succeeded" on all six terms and was worthless. Poll the document TITLE, never a timer.
+**STILL OPEN on C1:** 20 live Sam's cells remain on the 2026-07-14 orphan, so guard 9 still warns. They
+were CAPTURED and then REJECTED by the builder, for two honest reasons: Sam's prices foil/wrap/parchment/
+toilet paper per SQUARE FOOT against commodities priced per EACH (a basis change, not a unit conversion -
+build-sams-deals' header is a quarantine notice about exactly this class), and cauliflower/charcoal/
+rotisserie chicken return no unitPrice at all so pack size cannot be derived.
+
+**C2. MEASURED 2026-08-01, AND THE PREMISE IS WRONG.** The plan said product pages do not carry multipack
+counts and the tiles do. Neither source is reliably the count-carrier - it varies per product. The Aldi
+tile gave "6 ct" for Specially Selected Brioche Buns and "11 oz" for L'oven Fresh Hamburger Buns.
+That is exactly why none of Aldi's 6 dropped commodities came back: all six are unit=EACH, and every store
+that successfully prices them has a COUNT in the name (Walmart "11 oz, 8 Count", Hy-Vee "8 Count", Family
+Fare "8 Ct", Baker's "8 pk 1.5 oz"). The Aldi row has "11 oz" and no count, so the engine correctly
+declined rather than divide by nothing. Closing those cells needs a PRODUCT-PAGE pass for the count; the
+tile sweep stays right for the products whose tile does carry one.
+
+**C3. Aldi/Fareway out-of-band verification cells** (never yet measured). NOT STARTED - and it is the only
+one of C1-C3 with nothing done. Both storefront sessions are already proven In-Store/Omaha, so this is
+the cheapest remaining capture item.
 
 ## Section 5: LATER (valuable, not urgent)
 
@@ -311,7 +344,12 @@ already fast enough that nobody but the machines notices.
 cheapest basis (MUST ship together), specs/prose re-sync, #124 credit retrofit.
 **L5. Elite-layer Wave 3 remainder**: OG images, unlock moment, capture after-state, formerly-free
 gate + 404, receipt footer, Shop-This-Recipe board side + winning-store feed field.
-**L6. R300 leftovers**: proxy item_ids, cassoulet title, canon-rule promotion.
+**L6. DONE 2026-08-01.** The 4 R10 canon rules are promoted into `canon-rules-standing.json` (patis ->
+Fish Sauce, oil-for-the-pan -> Vegetable Oil, lemon-with-rind -> Lemon Juice, turkey stock -> Chicken
+Broth), inserted at the FRONT because that file is first-match-wins; all 10 phrasings verified to map, and
+six existing mappings verified unchanged. The other two items were checked against the files rather than
+trusted: cassoulet IS genuinely turkey (every surviving "Italian" is Italian SEASONING plus the override
+note recording the swap), and the proxy item_ids were already registered on 2026-07-26.
 **L7. DONE 2026-08-01.** `price-history.json`, `board.json` and `smp-feed.json` now write through
 `[IO.File]::WriteAllText` with a BOM-less encoding and were regenerated; `free-dinners.json` is patched at
 the writer and clears on its next daily rotation. Source-scanned in test-auditors rather than file-checked,
@@ -322,8 +360,20 @@ start passing for the wrong reason.
 
 ## Where this stands after the 2026-08-01 plan run
 
-**CLOSED: Section 1 (1b, 2b), all of Section 2 (F1 a/b/c, F2, F3, F4, F5), D6, L2, L7.**
-Fourteen commits, test-auditors 296 -> 336, guards green, board published clean twice.
+**CLOSED: Section 1 (1b, 2b), all of Section 2 (F1 a/b/c, F2, F3, F4, F5), all of D6, C1, C2, L2, L6, L7.**
+Twenty-five commits, test-auditors 296 -> 336, guards green, board published clean from a green run five
+times.
+
+**TWO THINGS QUEUED FOR A FRESH SESSION (both diagnosed, neither hacked around):**
+1. **The mixed-vegetable medley rules.** `broccoli`, `cauliflower` AND `frozen-broccoli` all match a
+   broccoli-and-cauliflower medley, which belongs to `frozen-vegetables`. The three-commodity exclude was
+   attempted and the gate REVERTED it twice - first for theft (the medley simply moved to
+   frozen-broccoli), then on guards - so it needs its own cycle with link healing. Worked around for now
+   by dropping the 7 medley rows from the Walmart capture.
+2. **The Sam's `sft` / no-unitPrice builder gaps** (see C1 above), which still leave 20 cells on the
+   2026-07-14 orphan and guard 9 warning every run. There is a clean path modelled on
+   pull-regular-hyvee - take the store's price, keep the size we already verified - but it changes the one
+   builder whose header is a quarantine notice.
 
 **STILL OPEN, and honestly why:**
 - **L1 identity-lane fine-tune** - a real ML task (build a HARD negative set from ~6,000 adjudicated pairs,
