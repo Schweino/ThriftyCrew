@@ -239,6 +239,8 @@ if (-not $Report) {
     n_drawn     = [int]$key.n_drawn
     n_recorded  = $recorded.Count
     population  = [int]$key.population
+    # A run older than the -Store flag has no scope recorded; it was necessarily a whole-board draw.
+    store_scope = $(if ($key.PSObject.Properties['store_scope'] -and [string]$key.store_scope) { [string]$key.store_scope } else { 'whole-board' })
     strata      = $key.strata
     verdicts    = $recorded.ToArray()
   }
@@ -268,6 +270,24 @@ $newest = [datetime]($dates | Sort-Object -Descending | Select-Object -First 1)
 $cutoff = $newest.AddDays(-7 * $PoolWeeks)
 $pool = @($runs | Where-Object { $_.board_date -match '^\d{4}-\d{2}-\d{2}$' -and ([datetime]$_.board_date) -gt $cutoff })
 if ($pool.Count -eq 0) { $pool = @($runs | Select-Object -Last 1) }
+
+# POOL ONLY WHAT ESTIMATES THE SAME POPULATION (2026-08-02). A store-scoped draw and a whole-board draw
+# are samples of DIFFERENT populations; averaging them yields a number that describes neither. Measured the
+# first time a scoped sample was recorded: an Aldi+Fareway run pooled into the previous whole-board run and
+# reported 14 defects - Sam's Club, Hy-Vee, Family Fare and Walmart cells among them - against a 760-cell
+# Aldi+Fareway denominator, i.e. a numerator drawn from outside its own denominator.
+# The NEWEST run in the window decides the scope; older runs of a different scope are dropped and NAMED,
+# never silently averaged in.
+function RunScope($r) { if ($r.PSObject.Properties['store_scope'] -and [string]$r.store_scope) { return [string]$r.store_scope } return 'whole-board' }
+$poolSorted = @($pool | Sort-Object { [datetime]$_.board_date })
+$scopeWanted = RunScope $poolSorted[$poolSorted.Count - 1]
+$dropScope = @($pool | Where-Object { (RunScope $_) -ne $scopeWanted })
+if ($dropScope.Count -gt 0) {
+  $pool = @($pool | Where-Object { (RunScope $_) -eq $scopeWanted })
+  Say ('record-sample-verdict: pooling only the ' + $scopeWanted + ' run(s). DROPPED ' + $dropScope.Count +
+    ' run(s) drawn from a different population (' + ((@($dropScope | ForEach-Object { $_.board_date + '=' + (RunScope $_) }) | Sort-Object -Unique) -join ', ') +
+    ') - a scoped sample and a whole-board sample estimate different things and must not be averaged.')
+}
 
 # THE BOARD BARELY MOVES: 99.3% of cells are byte-identical day to day, so pooling weeks re-verifies many of
 # the SAME cells. A cell verified more than once inside the pool is counted ONCE, at its most recent verdict -

@@ -52,6 +52,10 @@ param(
   [double]$CrownShare = 0.6,
   [string]$CompareFile = '',
   [string]$Seed = '',
+  # scope the draw to named stores (exact names from stores.json). Empty = whole board, as before.
+  # A per-store rate needs a per-store POPULATION; slicing a whole-board sample afterwards just yields
+  # ~14% of n per store and quotes an interval too wide to act on.
+  [string[]]$Store = @(),
   [switch]$Force,
   [switch]$Quiet
 )
@@ -154,6 +158,14 @@ foreach ($r in $board.comparison) {
   $cheap = [string]$r.cheapest_store
   foreach ($s in @($r.stores)) {
     if ($null -eq $s.per_unit) { continue }          # an unpriced cell publishes no number to be wrong about
+    # -Store scopes the draw to named stores (C3, 2026-08-02). The whole-board sample answers "how accurate
+    # is the board"; it cannot answer "how accurate is ALDI", because a proportional draw gives each store
+    # ~14% of n and a 5-defect stratum quotes nothing useful. Aldi and Fareway had never been measured at
+    # all, and they are the two stores whose prices come from an Instacart storefront rather than a
+    # first-party feed - the one architecture that has already served us a marked-up catalogue.
+    # It filters the POPULATION before the draw, so the crown/other stratification, the deterministic hash
+    # ordering and the reweighting downstream all keep working unchanged on the smaller population.
+    if ($Store.Count -gt 0 -and ($Store -notcontains ([string]$s.store))) { continue }
     $isCrown = ($cheap -ne '' -and ([string]$s.store) -eq $cheap)
     $cell = [pscustomobject]@{
       id       = [string]$r.id
@@ -232,6 +244,12 @@ $keyObj = [pscustomobject]@{
     crown    = [pscustomobject]@{ population = $popCrown; sampled = $alloc.crown }
     noncrown = [pscustomobject]@{ population = $popOther; sampled = $alloc.noncrown }
   }
+  # WHICH POPULATION THIS RUN ESTIMATES (2026-08-02, added with -Store). A store-scoped draw and a
+  # whole-board draw are samples of DIFFERENT populations, and pooling them produces a number that
+  # describes neither: the first run of an Aldi+Fareway sample pooled straight into the previous
+  # whole-board run and reported 14 defects - including Sam's Club, Hy-Vee and Walmart cells - against a
+  # 760-cell Aldi+Fareway denominator. record-sample-verdict pools only runs whose scope matches this.
+  store_scope = $(if ($Store.Count -gt 0) { (@($Store) | Sort-Object) -join '+' } else { 'whole-board' })
   population  = $popAll
   cells       = $keyRows
 }

@@ -1721,6 +1721,28 @@ $acbSrcHv = [regex]::Match($acbSrc, "resolve-hyvee-links\.ps1'\)\s*@hvArgs")
 if ($acbSrcHv.Success -and $acbSrc -match '\$hvArgs = @\{ Ids = @\(\$TouchedIds\) \}') { Ok 'rule-batch link repair calls resolve-hyvee-links SCOPED to the batch, not in bulk' }
 else { Bad 'apply-coverage-batch runs a BULK resolve-hyvee-links in its repair chain again - a one-commodity edit will rewrite every Hy-Vee link' }
 
+# ---------------------------------------------------------------- N10. sample scope (C3)
+# MUST FIRE: a STORE-SCOPED verification draw and a WHOLE-BOARD draw sample different populations, and
+# pooling them yields a number that describes neither. Measured the first time a scoped sample was recorded
+# (Aldi+Fareway, 2026-08-01): it pooled straight into the previous whole-board run and reported 14 defects -
+# Sam's Club, Hy-Vee, Family Fare and Walmart cells among them - against a 760-cell Aldi+Fareway
+# denominator. A numerator drawn from outside its own denominator is not a rate.
+$vsSrc = Get-Content (Join-Path $root 'build-verification-sample.ps1') -Raw
+if ($vsSrc -match 'store_scope\s*=') { Ok 'verification sample records WHICH population it estimates (store scope)' }
+else { Bad 'build-verification-sample no longer records store_scope - a scoped draw will pool into a whole-board one and quote a rate for neither' }
+$rsSrc = Get-Content (Join-Path $root 'record-sample-verdict.ps1') -Raw
+if ($rsSrc -match 'DROPPED ' -and $rsSrc -match 'RunScope' -and $rsSrc -match '\$scopeWanted') {
+  Ok 'verdict recorder pools only same-population runs and NAMES the ones it drops'
+} else { Bad 'record-sample-verdict pools runs of different store scope again - it will average a scoped sample into a whole-board one' }
+# and the live history must not contain a run with no scope recorded
+$vhP = Join-Path $root 'out\verification-history.json'
+if (Test-Path $vhP) {
+  $vh = $null; try { $vh = ((Get-Content $vhP -Raw) + '').Trim() | ConvertFrom-Json } catch {}
+  $noScope = @(@($vh.runs) | Where-Object { -not ($_.PSObject.Properties['store_scope']) })
+  if ($noScope.Count -eq 0) { Ok 'every banked verification run declares the population it estimates' }
+  else { Bad ('verification history holds ' + $noScope.Count + ' run(s) with no store_scope - they will pool with anything') }
+}
+
 # ---------------------------------------------------------------- N9. public feeds are BOM-less (L7)
 # Set-Content -Encoding UTF8 emits a UTF-8 BOM in PS 5.1. Browsers strip it per spec, so the live page was
 # never broken - but PS 5.1's OWN ConvertFrom-Json chokes on it, which is how a verification pass reported

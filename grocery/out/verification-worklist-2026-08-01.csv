@@ -1,0 +1,51 @@
+# BLIND verification worklist for the 2026-08-01 board. Fill in verdict/found_product/found_price.
+# verdict must be one of: ok | wrong-product | wrong-price | wrong-size | missing | unverifiable
+#   ok            the board names the cheapest qualifying product at this store and its price is right
+#   wrong-product the product on the board is not this commodity at all (the cat-food-as-salmon class)
+#   wrong-price   right product, wrong number
+#   wrong-size    right product, but the size/pack basis makes the per-unit wrong
+#   missing       the store does not sell this commodity at all
+#   unverifiable  bot wall, sign-in wall, or the store site would not answer. NOT a defect and NOT a pass;
+#                 these are dropped from the denominator and reported separately.
+# DO NOT open out\verification-sample-2026-08-01.json until every verdict is filled in.
+ticket,seq,commodity,unit,store,verdict,found_product,found_price,note
+"7F38E558E3",1,"Canned Mushrooms","oz","Fareway",ok,"Fareway Mushrooms Pieces & Stems 6.5 oz","1.79","board prices a 13.25 oz at $2.58 = $0.1947/oz, cheaper per oz than the 6.5 oz I surfaced; my search did not reach that size"
+"6E245D8A90",2,"Liquid Egg Whites","floz","Aldi",ok,"Goldhen Liquid Egg Whites 32 fl oz","4.79","4.79/32 = 0.1497 exact"
+"155BD0A379",3,"Zucchini / Yellow Squash","lb","Aldi",ok,"Zucchini Squash 1 lb","1.19","$1.19/lb exact"
+"FF91753AD4",4,"Drain Cleaner","floz","Fareway",ok,"Drano Drain Cleaner 32 fl oz","3.99","3.99/32 = 0.1247 exact"
+"AB8BBC39EC",5,"Brownie Mix","each","Fareway",wrong-price,"Fareway Fudge Brownie Mix Ultra Moist 18.3 oz","1.88","same product; board says $1.68, store lists $1.88"
+"3CD951F6ED",6,"Oat Milk","floz","Fareway",ok,"Planet Oat Vanilla Oatmilk 52 fl oz","3.48","3.48/52 = 0.0669 exact"
+"B6B5FB7806",7,"Ranch Dressing","floz","Fareway",wrong-price,"Fareway Dressing Ranch 16 oz","2.48","same product and size; board says $0.99 (0.0619/floz), store lists $2.48 (0.155/floz)"
+"265716BFDD",8,"Cake Mix","each","Fareway",ok,"Pillsbury Cake Mix Premium 15.25 oz","1.49","exact"
+"9D5750233A",9,"Oat Milk","floz","Aldi",ok,"Friendly Farms Original Oatmilk 64 fl oz","3.49","3.49/64 = 0.0545 exact"
+"A1B4DADEF7",10,"Caesar Dressing","floz","Fareway",ok,"Wish-Bone Creamy Caesar Dressing 15 fl oz","2.74","2.74/15 = 0.1827 exact"
+"1176315460",11,"Chocolate Milk","floz","Fareway",ok,"Kemps Select Reduced Fat Chocolate Milk 32 oz","2.59","2.59/32 = 0.0809 exact; cheapest per floz on the shelf"
+"AD8007A9E9",12,"Sliced Cheese","oz","Aldi",ok,"Happy Farms American Cheese Singles 12 oz","1.85","board 0.1542/oz is cheaper than anything my sliced-cheese search surfaced; qualifying product"
+"35C909D64D",13,"Fresh Rosemary","oz","Aldi",ok,"Fresh Cut Rosemary 0.5 oz","1.59","1.59/0.5 = 3.18 exact"
+"3219448093",14,"Ginger (ground)","oz","Fareway",ok,"McCormick Ground Ginger 0.7 oz","3.99","3.99/0.7 = 5.70 exact"
+"5E9EFD622D",15,"Oranges","lb","Aldi",unverifiable,"","","my search returned canned mandarin oranges and limes only - it never reached fresh navel oranges, so this proves nothing about the board"
+"D869E102D1",16,"Bread (loaf)","each","Fareway",ok,"Corner Store Bread Original White 20 oz","1.69","exact"
+"3575EBE60B",17,"Frozen Mixed Vegetables","oz","Aldi",ok,"Happy Harvest Mixed Vegetables 15 oz","0.96","board 0.064/oz beats the 0.0817 I surfaced; qualifying product I did not reach"
+"1A09B07EFC",18,"Breakfast Sausage (pork)","lb","Aldi",ok,"Appleton Farms Premium Pork Sausage Roll 16 oz","2.89","board $2.89/lb beats the $3.19/lb I surfaced; qualifying"
+"7DC9A48703",19,"Frozen Broccoli","oz","Fareway",ok,"Fareway Broccoli Cuts 16 oz","1.98","1.98/16 = 0.1238 exact. NOTE a Fareway Broccoli Florets Steamables 12 oz at $1.44 = 0.12/oz is marginally cheaper"
+"54801F31F7",20,"Jumbo Pasta Shells / Manicotti","oz","Fareway",ok,"Barilla Jumbo Shells 12 oz","2.98","2.98/12 = 0.2483 vs board 0.2492, rounding"
+"F916AF1D9E",21,"Raisins","oz","Fareway",ok,"Sun-Maid California Sun-Dried Raisins","2.54","same product; tile carried no size so the per-oz could not be recomputed"
+"D104E072AE",22,"Boneless Skinless Chicken Breast","lb","Fareway",ok,"All-Natural Boneless Skinless Chicken Breast","2.99","board cell is type=SALE at $2.99/lb; the $6.99/lb I saw is the everyday shelf price, so the two are not comparable"
+"A665A423A9",23,"Graham Crackers","oz","Aldi",ok,"Bentons Graham Crackers 14.4 oz","1.99","1.99/14.4 = 0.1382 exact"
+"F870DB3B43",24,"Cucumbers","each","Aldi",wrong-price,"Cucumber Each","0.75","same product; board says $0.65, store lists $0.75"
+"AFC824A2F6",25,"Soy Sauce","floz","Aldi",ok,"Fusia Reduced Sodium Soy Sauce 15 fl oz","1.65","1.65/15 = 0.11 exact"
+"72BC372C59",26,"Coffee Creamer","floz","Aldi",unverifiable,"","","my search returned milk and tea, never a coffee creamer - the lookup failed, not the board"
+"847091E3D1",27,"Marshmallows","oz","Fareway",ok,"Fireside Marshmallows","","board 0.1244/oz beats the 0.16/oz I surfaced; qualifying product I did not reach"
+"C3727685CE",28,"Radishes","oz","Aldi",ok,"Radish 1 lb","1.89","1.89/16 = 0.1181 exact"
+"7A69D4B1D7",29,"Corned Beef Brisket (raw)","lb","Aldi",ok,"Cattlemens Ranch Choice Flat Cut Corned Beef Brisket","6.29","$6.29/lb exact"
+"E8B51CC26C",30,"Hot Dogs","oz","Aldi",ok,"Parkview Hot Dogs 12 oz","0.99","0.99/12 = 0.0825 exact"
+"68B746BCE9",31,"Whole Coconut","each","Fareway",unverifiable,"","","my search returned flaked and shredded coconut only, never a whole one - cannot confirm or refute"
+"8BC2300962",32,"Canned Black Beans","oz","Aldi",ok,"Dakotas Black Beans 15 oz","0.85","0.85/15 = 0.0567 exact"
+"DC8F646E49",33,"Bananas","lb","Fareway",wrong-price,"Banana 1 lb","0.57","same product; board says $0.49/lb, store lists $0.57/lb"
+"322CC75181",34,"Hand Soap (liquid)","floz","Aldi",ok,"Lacura Hand Soap Refill 50 fl oz","2.79","board 0.0558/floz beats the 0.1293 I surfaced; qualifying refill I did not reach"
+"1C41315C41",35,"Pretzels","oz","Aldi",ok,"Clancys Pretzel Minis 16 oz","2.19","2.19/16 = 0.1369 exact"
+"7ACCF5FA8F",36,"Toaster Pastries","each","Aldi",ok,"Millville Frosted Brown Sugar Cinnamon Toaster Tarts 12 ct","2.26","2.26/12 = 0.1883 exact"
+"FA6E7E06D0",37,"Onion Powder","oz","Aldi",ok,"Stonemill Onion Powder 2.62 oz","0.99","0.99/2.62 = 0.3779 exact"
+"AFBF2E0B48",38,"Red Potatoes","lb","Aldi",ok,"Farmers Promise Red Potatoes Bag 5 lb","3.99","board 0.798/lb beats the 0.858 I surfaced; qualifying"
+"F04F5121A8",39,"Boneless Skinless Chicken Breast","lb","Aldi",ok,"Fresh Family Pack Chicken Breasts Per LB","2.19","board $2.19/lb beats the $3.99/lb I surfaced; qualifying family pack"
+"2C7EF25758",40,"Turkey Breast (raw)","lb","Fareway",unverifiable,"","","my search returned deli-sliced turkey lunchmeat only, never the raw bone-in breast the board names"
