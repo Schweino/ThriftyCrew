@@ -41,11 +41,37 @@ function Log($m) {
     $script:logFallback = Join-Path $root ('local-daily-log.LOCKED-' + (Get-Date -Format 'yyyy-MM-dd') + '.txt')
     try {
       Add-Content -Path $script:logFallback -Value ("[" + (Get-Date).ToString('s') + "] local-daily-log.txt is LOCKED by another process - this run's log lives here. Find the holder (handle.exe / Get-Process) and release it, or the primary log stays frozen.") -ErrorAction Stop
-      & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject 'Grocery: local-daily-log.txt is locked - the daily pipeline cannot log' -Body ("run-daily-local.ps1 could not append to grocery\local-daily-log.txt (exclusive lock held by another process). The run itself continues and the board is unaffected, but the wrapper's audit trail is going to " + $script:logFallback + " instead. This exact lock sat unnoticed from 2026-07-25 to 2026-07-30 because the old fallback was Write-Host, which a scheduled task discards. Find and kill the holding process, then delete the sidecar.") | Out-Null
+      & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject 'Grocery: local-daily-log.txt is locked - the daily pipeline cannot log' -Body ("run-daily-local.ps1 could not append to grocery\local-daily-log.txt (exclusive lock held by another process). The run itself continues and the board is unaffected, but the wrapper's audit trail is going to " + $script:logFallback + " instead. This exact lock sat unnoticed from 2026-07-25 to 2026-07-30 because the old fallback was Write-Host, which a scheduled task discards. Find and kill the holding process. Do NOT simply delete the sidecar: it holds the only trail of this run. The next run that can write the primary log folds it back in and clears it by itself (SIDECAR RECOVERY block, 2026-08-02); merge by hand only if you need it sooner.") | Out-Null
     } catch { }
   }
   try { Add-Content -Path $script:logFallback -Value $line -ErrorAction Stop } catch { try { Write-Host ('[log locked, not written] ' + $line) } catch {} }
 }
+
+# ---- SIDECAR RECOVERY: a locked log costs one file, not the record - but only if someone puts the -------
+# record BACK. Until 2026-08-02 nothing did: the alert told a human to "delete the sidecar", which throws
+# away the only trail of the run it describes, and the 08-02 sidecar had to be folded in by hand. So before
+# this run writes a line, fold any PRIOR day's LOCKED-* sidecar into the primary log and clear it. Runs
+# before the rotation block on purpose: on the 1st, last month's recovered lines belong in last month's
+# archived log. TODAY's sidecar is deliberately left alone - a same-day double-fire may still be appending
+# to it, and tomorrow's run collects it. Append is retried the same way Log does; if the primary log is
+# still locked, nothing is deleted and the sidecar simply waits for a run that can write. Non-fatal.
+# >>> SIDECAR-RECOVERY (self-test extracts between these sentinels; see test-log-sidecar-recovery.ps1)
+$script:sidecarsMerged = @()
+try {
+  $todayStamp = (Get-Date -Format 'yyyy-MM-dd')
+  foreach ($sc in @(Get-ChildItem (Join-Path $root 'local-daily-log.LOCKED-*.txt') -ErrorAction SilentlyContinue | Sort-Object Name)) {
+    if ($sc.BaseName -match 'LOCKED-(\d{4}-\d{2}-\d{2})$') { $scDay = $Matches[1] } else { continue }
+    if ($scDay -ge $todayStamp) { continue }
+    $scBody = @(Get-Content $sc.FullName -ErrorAction SilentlyContinue)
+    if ($scBody.Count -eq 0) { Remove-Item $sc.FullName -Force -ErrorAction SilentlyContinue; continue }
+    $scMark = ("[" + (Get-Date).ToString('s') + "] --- recovered from " + $sc.Name + " (" + $scBody.Count + " lines): the primary log was locked during that run, so its trail went to the lock sidecar. Those lines are folded back here in order; the sidecar is removed. ---")
+    $scOk = $false
+    for ($i = 0; $i -lt 5; $i++) { try { Add-Content -Path $log -Value (@($scMark) + $scBody) -ErrorAction Stop; $scOk = $true; break } catch { Start-Sleep -Milliseconds 120 } }
+    if ($scOk) { Remove-Item $sc.FullName -Force -ErrorAction SilentlyContinue; $script:sidecarsMerged += $sc.Name }
+  }
+} catch { }
+# <<< SIDECAR-RECOVERY
+if ($script:sidecarsMerged.Count) { Log ('sidecar recovery: merged and cleared ' + ($script:sidecarsMerged -join ', ')) }
 
 # ---- LOG ROTATION (1st of the month): the pipeline logs grow forever and every line rides every bot ----
 # commit. Roll last month's logs into a gitignored archive; git history keeps the old content anyway.

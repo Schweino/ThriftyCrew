@@ -27,3 +27,29 @@
 [2026-08-02T08:30:03] pull:  * branch              main       -> FETCH_HEAD
 [2026-08-02T08:30:03] pull: Already up to date.
 [2026-08-02T08:30:03] running check-ad-cycles
+[2026-08-02T11:00:00] --- recovered from local-daily-log.LOCKED-2026-08-02.txt (25 lines): the primary log was locked from 08:30:03 onward, so this run wrote its trail to the lock sidecar. Those lines are folded back here in order; the sidecar is removed. ---
+[2026-08-02T09:12:51] local-daily-log.txt is LOCKED by another process - this run's log lives here. Find the holder (handle.exe / Get-Process) and release it, or the primary log stays frozen.
+[2026-08-02T09:12:50] check-ad-cycles exit 0
+[2026-08-02T09:12:52] add: The following paths are ignored by one of your .gitignore files:
+[2026-08-02T09:12:53] add: grocery/sale-windows.json
+[2026-08-02T09:12:54] add: hint: Use -f if you really want to add them.
+[2026-08-02T09:12:54] add: hint: Disable this message with "git config set advice.addIgnoredFile false"
+[2026-08-02T09:12:55] commit: [main 4e5d0427] Daily pipeline: refresh prices + feed (2026-08-02) [local]
+[2026-08-02T09:12:56] commit:  42 files changed, 179505 insertions(+), 12773 deletions(-)
+[2026-08-02T09:12:56] commit:  create mode 100644 grocery/out/ads-2026-08-02.json
+[2026-08-02T09:12:57] commit:  create mode 100644 grocery/out/aisle-alert.sig
+[2026-08-02T09:12:58] commit:  create mode 100644 grocery/out/regular/bakers-regular-2026-08-02.json
+[2026-08-02T09:12:58] commit:  create mode 100644 grocery/out/regular/hyvee-regular-2026-08-02.json
+[2026-08-02T09:12:59] commit:  delete mode 100644 grocery/out/sale-fallback-alert.sig
+[2026-08-02T09:13:00] commit:  create mode 100644 grocery/out/semantic-alert.sig
+[2026-08-02T09:13:00] commit:  create mode 100644 grocery/out/taxonomy-disagreements-2026-08-02.json
+[2026-08-02T09:13:02] rebase[1]: warning: in the working copy of 'grocery/check-ad-cycles.ps1', LF will be replaced by CRLF the next time Git touches it
+[2026-08-02T09:13:02] rebase[1]: warning: in the working copy of 'meal-prep/pipeline/v2-perserving.json', LF will be replaced by CRLF the next time Git touches it
+[2026-08-02T09:13:03] rebase[1]: Created autostash: f3432388
+[2026-08-02T09:13:04] rebase[1]: Current branch main is up to date.
+[2026-08-02T09:13:04] rebase[1]: Applied autostash.
+[2026-08-02T09:13:08] push[1]: To https://github.com/Schweino/SimpleMoneyPlaybook.git
+[2026-08-02T09:13:08] push[1]:    c01aca32..4e5d0427  HEAD -> main
+[2026-08-02T09:13:09] pushed on attempt 1
+[2026-08-02T09:13:10] feed fresh: week 2026-08-02, 513 recipes, 571 ingredients
+[2026-08-02T09:13:10] done
