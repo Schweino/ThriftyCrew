@@ -6193,7 +6193,10 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bbroccoli\\b",
+                        "\\bcauliflower\\b",
+                        "\\bblend\\b"
                     ]
     },
     {
@@ -6370,7 +6373,11 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bcauliflower\\b",
+                        "\\bmedley\\b",
+                        "\\bblend\\b",
+                        "\\bcarrots?\\b"
                     ]
     },
     {
@@ -11139,8 +11146,12 @@
                         "peas\\s+(?:\u0026|and)\\s+carrots",
                         "vegetable\\s+medley",
                         "vegetables\\b.{0,12}mixed",
-                        "\\bblend\\b.{0,20}frozen\\s+vegetables",
-                        "frozen\\s+vegetables\\s+mix"
+                        "\\bblend\\b.{0,60}frozen\\s+vegetables",
+                        "frozen\\s+vegetables\\s+mix",
+                        "(?:california|normandy|winter|italian|garden|country)\\s+blend",
+                        "broccoli\\b[^.]{0,40}\\bcauliflower\\b",
+                        "cauliflower\\b[^.]{0,40}\\bbroccoli\\b",
+                        "carrots\\b[^.]{0,40}\\bbroccoli\\b"
                     ],
         "exclude":  [
                         "\\bsoup\\b",
@@ -11231,7 +11242,8 @@
                         "\\bheart\\s+health\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bfresh\\b(?!\\s+frozen)"
                     ]
     },
     {
@@ -14099,7 +14111,11 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "\\bbroccoli\\b",
+                        "\\bmedley\\b",
+                        "\\bblend\\b",
+                        "\\bcarrots?\\b"
                     ]
     },
     {
@@ -28355,7 +28371,11 @@
                         "\\bheart\\s+health\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bcauliflower\\b",
+                        "\\bmedley\\b",
+                        "\\bblend\\b",
+                        "\\bcarrots?\\b"
                     ]
     },
     {

@@ -2771,6 +2771,62 @@ else { Bad 'build-fareway-regular no longer calls repair-asof-evidence - carried
 $r = RunPS 'refresh-sams-verified.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok "Sam's verified refresh: still re-prices sft/no-unitPrice rows, and still refuses an ambiguous price, a changed pack, a per-unit size and a size that is a price" }
 else { Bad ('refresh-sams-verified -SelfTest failed (rc=' + $r.rc + ") - Sam's hand-verified rows either stay stale or get re-priced against the wrong pack: " + ($r.text -replace "`n", ' ')) }
+
+# ---------------------------------------------------------------- mixed-vegetable medleys (2026-08-02)
+# A PRODUCT THAT NAMES A SECOND VEGETABLE IS NOT THE FIRST ONE. Walmart carries seven broccoli/cauliflower/
+# carrot blends and every one of them matched a SINGLE-vegetable commodity: the fresh medley matched
+# broccoli AND cauliflower, and the two Birds Eye frozen blends matched CARROTS - a victim nobody had
+# noticed, because the rules that already said "medley" and "mixed veg" say nothing about "California Blend".
+# Nothing showed on the board only because each blend happened to lose on price to the real vegetable beside
+# it; the day Walmart's plain broccoli goes missing, the medley IS the broccoli cell.
+# THE PREVIOUS TWO ATTEMPTS WERE BOTH REVERTED BY THE GATES, and the fixture below is why: excluding a blend
+# from two commodities just moves it to the third. Adding \bcarrots?\b was not in the plan either - it came
+# from watching 'Birds Eye Shredded Carrots & Broccoli Florets' hop OFF carrots and ONTO broccoli in the
+# match-soundness report. So this pins the whole family at once, in both directions.
+$cmMed = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
+function Get-MatchingCommodities([string]$name, $catalog) {
+  $hits = New-Object System.Collections.Generic.List[string]
+  foreach ($cm in $catalog) {
+    $inc = @($cm.include); if ($inc.Count -eq 0) { continue }
+    $ok = $false
+    foreach ($p in $inc) { if ($name -match $p) { $ok = $true; break } }
+    if (-not $ok) { continue }
+    $bad = $false
+    foreach ($p in @($cm.exclude)) { if ($p -and ($name -match $p)) { $bad = $true; break } }
+    if (-not $bad) { $hits.Add([string]$cm.id) }
+  }
+  return $hits
+}
+# FROZEN: every name below is verbatim from out\regular\walmart-regular-2026-08-01.json.
+$SINGLE_VEG = @('broccoli', 'cauliflower', 'frozen-broccoli', 'carrots')
+$medleyMust = @(
+  'Marketside Fresh Broccoli and Cauliflower Medley, 12 oz',
+  'Birds Eye California Blend with Carrots, Broccoli, Cauliflower, Frozen Vegetables, 60 oz. Bag',
+  'Birds Eye Steamfresh Carrots, Broccoli and Cauliflower, Frozen Vegetables, 10.8 oz. Bag',
+  'Great Value Steamable Broccoli & Cauliflower Florets, 12 oz',
+  'Birds Eye Shredded Carrots & Broccoli Florets',
+  'Birds Eye Oven Roasters Seasoned Broccoli and Cauliflower, Frozen Vegetables, 14 oz. Bag',
+  'Pictsweet Farms Frozen Broccoli Florets, Red Potatoes & Carrots Vegetables for Roasting'
+)
+$medleyLeak = @()
+foreach ($n in $medleyMust) {
+  $hit = @(Get-MatchingCommodities $n $cmMed)
+  foreach ($s in $SINGLE_VEG) { if ($hit -contains $s) { $medleyLeak += ($s + ' <- ' + $n) } }
+}
+if ($medleyLeak.Count -eq 0) { Ok 'medley rules: no broccoli/cauliflower/carrot BLEND matches a single-vegetable commodity (all 7 live Walmart blends)' }
+else { Bad ('a mixed-vegetable blend is matching a single-vegetable commodity again - it will take that cell the day the real vegetable is dearer or missing: ' + ($medleyLeak -join ' | ')) }
+# CLEAN TWINS - the plain vegetables must still match, or the excludes have eaten the commodity they protect.
+$medleyTwin = @(
+  @{ n = 'Great Value Broccoli Florets, 14 oz';            want = 'broccoli' },
+  @{ n = 'Great Value Broccoli Florets, 32 oz Bag (Frozen)'; want = 'frozen-broccoli' },
+  @{ n = 'Fresh Whole White Cauliflower';                  want = 'cauliflower' },
+  @{ n = 'Marketside Whole Carrots, 2 lb Bag';             want = 'carrots' },
+  @{ n = 'Our Family Mixed Vegetables, Fresh Frozen 24 Oz'; want = 'frozen-vegetables' }
+)
+$twinMiss = @()
+foreach ($t in $medleyTwin) { if (-not (@(Get-MatchingCommodities $t.n $cmMed) -contains $t.want)) { $twinMiss += ($t.want + ' NO LONGER matches ' + $t.n) } }
+if ($twinMiss.Count -eq 0) { Ok 'medley rules CLEAN TWIN: plain broccoli/cauliflower/carrots and "Fresh Frozen" mixed veg still match their own commodity' }
+else { Bad ('the medley excludes have eaten a real product - a missing cell is the cost of an exclude written too wide: ' + ($twinMiss -join ' | ')) }
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2
 
