@@ -300,11 +300,27 @@ FOUR HARD LESSONS, each of which nearly shipped a regression:
   item+size into 4,881.
 - **Both SPA storefronts need `&k=<term>`** or they render a recommendation grid and report success.
   Aldi's first sweep "succeeded" on all six terms and was worthless. Poll the document TITLE, never a timer.
-**STILL OPEN on C1:** 20 live Sam's cells remain on the 2026-07-14 orphan, so guard 9 still warns. They
-were CAPTURED and then REJECTED by the builder, for two honest reasons: Sam's prices foil/wrap/parchment/
-toilet paper per SQUARE FOOT against commodities priced per EACH (a basis change, not a unit conversion -
-build-sams-deals' header is a quarantine notice about exactly this class), and cauliflower/charcoal/
-rotisserie chicken return no unitPrice at all so pack size cannot be derived.
+**C1 CLOSED 2026-08-02 - `refresh-sams-verified.ps1`.** The two reject classes are permanent and correct:
+build-sams-deals derives pack size from `qty = linePrice / unitPrice` and refuses anything it cannot check
+that way, which leaves "sft" goods (foil/wrap/parchment/toilet paper - 45 of 74 rejects) and no-unitPrice
+goods (cauliflower, pineapple, rotisserie chicken - 20 more) unbuildable forever.
+**The move is that we never needed to DERIVE the size - we already had it, hand-verified.** Take the store's
+current linePrice, keep the verified size, same as pull-regular-hyvee does when it cannot re-derive a row.
+20 of 60 rows re-priced, 8 of the 11 stale cells closed, and two silently wrong prices corrected (cream
+cheese published $6.47 against a real $6.63; tomato sauce $5.30 against $5.18). Refusals are frozen as
+fixtures because each is a way this mints a WRONG price: two prices under one name, a pack that changed
+under the same name (the live aluminum-foil case), a bare per-unit size against a pack price, a size field
+holding a price, and a capture from another day. Still stale and NAMED: aluminum-foil, plastic-wrap,
+pork-tenderloin.
+**AND IT BROKE SOMETHING ELSE ON THE FIRST RUN, which is the more useful half.** Naming the output
+`sams-regular-2026-08-01.json` gave all 60 rows an 08-01 stamp, because compare-deals dates out\regular rows
+by FILENAME - fine when one capture writes a whole file, wrong the moment a file holds rows of MIXED age.
+The 40 merely-carried rows out-ranked Sam's real 07-29 feed and sandwich-bags flipped from the 580-ct Ziploc
+at $0.0168/ea to a 300-ct SNACK bag at $0.0309/ea. Guard 4 caught it at 0.54x against its own link.
+Fix: **a row is as old as its own evidence, never as young as its file**, applied BACKWARD only.
+**Scoped to Sam's, and that limit was measured** - applied to Walmart it moved three more cells to ~2x their
+own link, because Walmart's 14-day union carries rows with their original as_of and re-dating them changes
+which capture owns a commodity. Pinned with a clean twin.
 
 **C2. MEASURED 2026-08-01, AND THE PREMISE IS WRONG.** The plan said product pages do not carry multipack
 counts and the tiles do. Neither source is reliably the count-carrier - it varies per product. The Aldi
@@ -315,9 +331,33 @@ Fare "8 Ct", Baker's "8 pk 1.5 oz"). The Aldi row has "11 oz" and no count, so t
 declined rather than divide by nothing. Closing those cells needs a PRODUCT-PAGE pass for the count; the
 tile sweep stays right for the products whose tile does carry one.
 
-**C3. Aldi/Fareway out-of-band verification cells** (never yet measured). NOT STARTED - and it is the only
-one of C1-C3 with nothing done. Both storefront sessions are already proven In-Store/Omaha, so this is
-the cheapest remaining capture item.
+**C3. DONE 2026-08-02 - Aldi and Fareway measured out-of-band for the first time.**
+40 cells drawn from the 760-cell Aldi+Fareway population, verified BLIND against each store's own site:
+
+    ALDI + FAREWAY:  3.5% defect rate,  95% CI 1.4% to 23.2%
+    crown 4 of 20 verified | non-crown 0 of 16 | 4 unverifiable (out of the denominator)
+
+**THE DEFECT MODE IS THE FINDING, and it inverts the whole-board picture.** All four defects are
+WRONG-PRICE and all four are on CROWN cells; ZERO wrong-product - against the 2026-07-30 whole-board
+sample where 9 of 14 defects were identity errors. These two stores get the product right and the number
+wrong.
+**ROOT CAUSE, behind three of the four:** `build-fareway-regular` reads EVERY extract in `out\fareway\`
+and stamps every emitted row with `-Today`. A row sourced from a 10-day-old extract is published as_of the
+build date. Traced exactly: 'Fareway Ranch Dressing' $0.99 is present in the 07-23/07-27/07-31 extracts,
+absent from 08-01, published as_of 2026-08-01, while the store lists $2.48 - the board prints
+$0.0619/floz against a real $0.155. Same shape for the brownie mix and bananas.
+That is STALENESS LAUNDERING: an old number wearing a fresh date, which no freshness check can see
+because the date says it is fresh. NOT fixed - it changes what every Fareway row's as_of means.
+
+Two things had to be built to answer the question: `build-verification-sample -Store` (a whole-board draw
+gives each store ~14% of n and quotes an interval too wide to act on), and - caught on its first run - a
+population-scope guard, because a scoped draw pooled straight into the previous whole-board run and quoted
+14 defects including Sam's/Hy-Vee/Walmart cells against a 760-cell Aldi+Fareway denominator. A numerator
+drawn from outside its own denominator is not a rate.
+**Method limit, stated because it bounds the result:** 3 of the 4 unverifiable rows are MY search terms,
+not the stores ("oranges" at Aldi returned canned mandarins; "turkey breast" at Fareway returned deli
+lunchmeat). Verification also ran one day after the board date, so a small produce move could be genuine
+overnight repricing - the 150% ranch-dressing gap is not.
 
 ## Section 5: LATER (valuable, not urgent)
 
@@ -364,16 +404,50 @@ start passing for the wrong reason.
 Twenty-five commits, test-auditors 296 -> 336, guards green, board published clean from a green run five
 times.
 
-**TWO THINGS QUEUED FOR A FRESH SESSION (both diagnosed, neither hacked around):**
-1. **The mixed-vegetable medley rules.** `broccoli`, `cauliflower` AND `frozen-broccoli` all match a
-   broccoli-and-cauliflower medley, which belongs to `frozen-vegetables`. The three-commodity exclude was
-   attempted and the gate REVERTED it twice - first for theft (the medley simply moved to
-   frozen-broccoli), then on guards - so it needs its own cycle with link healing. Worked around for now
-   by dropping the 7 medley rows from the Walmart capture.
-2. **The Sam's `sft` / no-unitPrice builder gaps** (see C1 above), which still leave 20 cells on the
-   2026-07-14 orphan and guard 9 warning every run. There is a clean path modelled on
-   pull-regular-hyvee - take the store's price, keep the size we already verified - but it changes the one
-   builder whose header is a quarantine notice.
+**BOTH QUEUED ITEMS ARE DONE 2026-08-02.**
+1. **The mixed-vegetable medley rules - CLOSED, and wider than written here.** All SEVEN live Walmart
+   blends were matching a single-vegetable commodity, and `carrots` was a victim nobody had named: its
+   rules already say "medley" and "mixed veg" and say nothing about "California Blend", so two 60-oz frozen
+   blends sat on the fresh-carrot row. **Nothing showed on the board, and that is the uneasy part** - each
+   blend simply lost on price to the real vegetable beside it. The fresh medley matched BROCCOLI first by
+   array order and lost at $3.39/lb; on CAULIFLOWER it would have won outright, $2.54 against Walmart's
+   $3.97 whole head, and the only reason it never got there is that broccoli claimed it first. A bug held
+   off by a competitor's price is pending, not fixed.
+   The fix is both halves - the four commodities exclude each other's names plus medley/blend, AND
+   frozen-vegetables now CLAIMS the blends (its `\bblend\b.{0,20}frozen vegetables` was 16 characters too
+   narrow for how Walmart writes the name). **The hop happened again mid-fix and the gate caught it:** with
+   carrots excluding broccoli, 'Birds Eye Shredded Carrots & Broccoli Florets' moved onto BROCCOLI, one
+   commodity further along. `\bcarrots?\b` on the three broccoli/cauliflower commodities closed it. Two more
+   wrong cells fell out of the same pass (a Pictsweet broccoli/potato/carrot roasting mix priced as plain
+   frozen broccoli; a Green Giant sauced three-vegetable blend as carrots). 5 products moved or dropped,
+   ZERO landing on a single-vegetable commodity, 2,840 cells before and after.
+2. **The Sam's `sft` / no-unitPrice builder gaps - CLOSED.** See C1 above.
+
+## The 2026-08-02 run
+
+**CLOSED: C3, both queued items (medley + Sam's builder gaps), and three bugs the work itself uncovered.**
+Six commits, test-auditors 336 -> 346, guards green, board published clean from a green run three times.
+
+**THE THEME OF THE DAY WAS DATES THAT WERE WRITTEN RATHER THAN MEASURED**, and it turned up in three
+different places from one starting point (the C3 sample):
+1. `build-fareway-regular` stamped every row with the BUILD date - 431 of 577 live rows wore a date newer
+   than the capture that produced them, and guard 9 read a fabricated 78% freshness against a true 6%.
+2. `carry-forward-regular` faithfully preserved those laundered dates into every later file, so the fix
+   needed a repair pass as well as a builder fix, plus a guard so it stays fixed.
+3. `compare-deals` dated out\regular rows by FILENAME, which is fine until a file holds rows of MIXED age -
+   and the Sam's refresh created exactly that file, immediately taking a cell off Sam's real feed.
+Each one was correct code reading an invented input. That is why every symptom reached the surface as a
+PRICE rather than a date, and it is why `audit-asof-evidence.ps1` now exists as its own watcher.
+
+**ALSO FIXED, found by the guards on today's rebuilds and not by anyone looking for them:**
+- **A box of ice pops was priced as LIMES at Family Fare** ('Bomb Pop ... Cherry, Lime & Blue Raspberry
+  Pops 24 Ea', $0.3746 "per lime"). The rule already excluded popsicles/freeze pops/fruit pops/ice bars and
+  the product walked through all of them because it is spelled "Pops". Tokens baked into all 107 fruit/veg
+  commodities, which also dropped an orange-flavoured ice pop off `oranges` and moved a mango ice pop to
+  `popsicles`.
+- **A stale Family Fare popsicles link** pruned: the board priced Jolly Rancher Freezer Pops while the link
+  opened a different product 46% dearer. Headless repair was unavailable (Freshop 400s after ~40 calls and
+  the morning pull had spent the budget), so the documented no-browser remedy applied.
 
 **STILL OPEN, and honestly why:**
 - **L1 identity-lane fine-tune** - a real ML task (build a HARD negative set from ~6,000 adjudicated pairs,
@@ -384,8 +458,12 @@ times.
 - **L6 R300 leftovers** - proxy item_ids, the cassoulet title call, canon-rule promotion.
 - **L3** - deliberately last, see above.
 - **Section 3 D2/D3/D4/D5** - these are decisions, not work. D4 in particular is Brad in the Ads UI.
-- **Section 4 C1-C3 capture sessions** - browser work against walled stores. C1 is what finally retires
-  the 18-day Sam's orphan capture that guard 9 warns about on every run.
+- **The Fareway `as_of` residual**, self-healing: rows carried out of files built before 2026-08-02 can
+  still inherit a laundered date, and repair-asof-evidence corrects them on every build. It reached zero
+  the day it shipped and the guard is what proves it stays there.
+- **Three Sam's cells still stale and named**: aluminum-foil (Sam's changed the pack under the same name),
+  plastic-wrap (Sam's inserted "Clear" into the name), pork-tenderloin (absent from the capture, and a
+  per-lb size besides). Each needs a browser pass, not code.
 
 ## Ranking rationale
 
