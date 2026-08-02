@@ -1,0 +1,446 @@
+﻿[
+    {
+        "name":  "Kodiak Protein-Packed Buttermilk \u0026 Vanilla Power Waffles, Frozen, 40 Count, 53.6 oz.",
+        "lp":  "$14.87",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Dole Tropical Gold Pineapple Chunks, 15.25 oz., 6 pk.",
+        "lp":  "$11.48",
+        "up":  "$0.12/oz",
+        "reason":  "NAME CONFLICT: name states 15.25, 91.5 oz but none reproduces Sam\u0027s 0.12/oz (lp/up derives 95.667)"
+    },
+    {
+        "name":  "Q-tips Cotton Swabs, 1750 ct., 3 pk.",
+        "lp":  "$7.34",
+        "up":  "$0.00/ea",
+        "reason":  "zero price"
+    },
+    {
+        "name":  "Purell Advanced Hand Sanitizer, Refreshing Gel, 33.8 fl. oz.",
+        "lp":  "$7.48",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Purell Advanced Gel Hand Sanitizer Refill 1,200 mL, 2 ct.",
+        "lp":  "$43.48",
+        "up":  "$43.48/ea",
+        "reason":  "NAME CONFLICT: name states 2 ct but none reproduces Sam\u0027s 43.48/ct (lp/up derives 1)"
+    },
+    {
+        "name":  "Purell Push-Style Hand Sanitizer Dispenser, White 1 pk.",
+        "lp":  "$10.88",
+        "up":  "$5.44/ea",
+        "reason":  "NAME CONFLICT: name states 1 ct but none reproduces Sam\u0027s 5.44/ct (lp/up derives 2)"
+    },
+    {
+        "name":  "Member\u0027s Mark Oven Roasted Turkey Breast, Sliced 1 lb. 6 oz.",
+        "lp":  "$8.92",
+        "up":  "$0.41/oz",
+        "reason":  "NAME CONFLICT: name states 16, 6 oz but none reproduces Sam\u0027s 0.41/oz (lp/up derives 21.756)"
+    },
+    {
+        "name":  "Member\u0027s Mark Honey Roasted Turkey Breast, Sliced, 1 lb. 6 oz.",
+        "lp":  "$8.92",
+        "up":  "$0.41/oz",
+        "reason":  "NAME CONFLICT: name states 16, 6 oz but none reproduces Sam\u0027s 0.41/oz (lp/up derives 21.756)"
+    },
+    {
+        "name":  "Member\u0027s Mark Four Peppered Turkey Breast, Sliced, 1 lb. 6 oz.",
+        "lp":  "$9.57",
+        "up":  "$6.96/lb",
+        "reason":  "NAME CONFLICT: name states 1, 0.375 lb but none reproduces Sam\u0027s 6.96/lb (lp/up derives 1.375)"
+    },
+    {
+        "name":  "Premium Carved Oven Roasted Turkey Breast",
+        "lp":  "$10.68",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Country Pasta Homemade Style Egg Pasta 56 oz.",
+        "lp":  "$7.98",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Quilted Northern Ultra Soft \u0026 Strong 2-Ply Toilet Paper 32 rolls, 244 sheets/roll",
+        "lp":  "$20.98",
+        "up":  "$0.03/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Quilted Northern Ultra Plush 3-Ply Toilet Paper 36 rolls, 255 sheets/roll",
+        "lp":  "$24.48",
+        "up":  "$0.03/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Charmin Ultra Strong 2-Ply Toilet Paper 32 rolls, 231 sheets/roll",
+        "lp":  "$24.98",
+        "up":  "$0.03/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Ultra Premium 2-Ply Toilet Paper 45 rolls, 235 sheets/roll",
+        "lp":  "$24.76",
+        "up":  "$0.02/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Charmin Ultra Soft 2-Ply Toilet Paper 32 rolls, 215 sheets/roll",
+        "lp":  "$29.98",
+        "up":  "$0.04/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Scott 1000 1-Ply Toilet Paper 45 rolls, 1,000 sheets/roll",
+        "lp":  "$30.48",
+        "up":  "$0.01/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Marathon Jumbo Roll 2-Ply White Toilet Paper 6 rolls, 1000 ft./roll",
+        "lp":  "$26.77",
+        "up":  "$0.02/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "POM 2-Ply Toilet Paper 45 rolls, 473 sheets/roll",
+        "lp":  "$26.98",
+        "up":  "$0.01/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Tork Universal 2-Ply White Bath Tissue, 96 rolls, 500 sheets/roll",
+        "lp":  "$64.48",
+        "up":  "$0.01/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Boardwalk Jumbo Roll 2-Ply Toilet Paper 12 rolls, 1000 ft./roll",
+        "lp":  "$48.98",
+        "up":  "$0.01/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Tork Universal 2-Ply White Jumbo Bath Tissue, 12 rolls, 1,000 ft./roll",
+        "lp":  "$51.74",
+        "up":  "$0.01/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Reynolds Wrap Every Day 12\" Aluminum Foil, 200 sq. ft., 2 pk.",
+        "lp":  "$24.98",
+        "up":  "$0.06/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Reynolds Wrap Heavy Duty 18\" Aluminum Foil, 120 sq. ft., 2 pk.",
+        "lp":  "$21.78",
+        "up":  "$0.09/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Standard Foodservice Aluminum Foil 18\" x 500 ft.",
+        "lp":  "$31.58",
+        "up":  "$0.04/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Reynolds Wrap Non-Stick 12\" Aluminum Foil 130 sq. ft., 2 pk.",
+        "lp":  "$23.98",
+        "up":  "$0.09/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Foodservice Aluminum Foil 12 in. x 1000 ft., 1,000 ft.",
+        "lp":  "$44.58",
+        "up":  "$0.04/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Standard Foodservice Aluminum Foil, 18\" x 400\u0027",
+        "lp":  "$27.18",
+        "up":  "$0.05/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Reynolds Wrap Heavy Duty 18\" Aluminum Foil, 150 sq. ft., 2 pk.",
+        "lp":  "$27.78",
+        "up":  "$0.09/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Reynolds Wrap Everyday 12\" Aluminum Foil 250 sq. ft., 2 pk.",
+        "lp":  "$28.88",
+        "up":  "$0.06/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "State Fair Classic Corn Dogs, Frozen, 30 ct.",
+        "lp":  "$13.47",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark Seasoned Rotisserie Chicken",
+        "lp":  "$4.98",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark No Antibiotics Ever Rotisserie Seasoned Chicken Breast, Sliced, 1 lb. 6 oz.",
+        "lp":  "$9.57",
+        "up":  "$6.96/lb",
+        "reason":  "NAME CONFLICT: name states 1, 0.375 lb but none reproduces Sam\u0027s 6.96/lb (lp/up derives 1.375)"
+    },
+    {
+        "name":  "Kingsford Original Charcoal Briquets, 2-Pack, 20 lbs.",
+        "lp":  "$23.48",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Kingsford Match Light Instant Charcoal Briquettes 2 Pack, 16 Lbs. Each",
+        "lp":  "$23.48",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Kingsford Miller Lite Beercoal Charcoal Briquettes, 16 lbs.",
+        "lp":  "$11.98",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Pineapple",
+        "lp":  "$2.97",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Glad Press\u0027n Seal Plastic Food Wrap 140 sq. ft./roll, 2 rolls",
+        "lp":  "$8.64",
+        "up":  "$0.03/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "stretch-tite Pro Multi-Purpose Professional 18\" Food Wrap, 4500 sq. ft.",
+        "lp":  "$23.98",
+        "up":  "$0.01/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Glad Cling ‘N Seal Clear Plastic Food Wrap 400 sq. ft./roll, 2 rolls",
+        "lp":  "$6.98",
+        "up":  "$0.01/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "stretch-tite Pro Multi-Purpose Professional 12\" Food Wrap, 3000 sq. ft.",
+        "lp":  "$17.98",
+        "up":  "$0.01/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Cauliflower, 1 ct.",
+        "lp":  "$3.82",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark Unbleached Parchment Paper, 205 sq. ft., 2 pk.",
+        "lp":  "$15.52",
+        "up":  "$0.04/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Reynolds Wrap Heavy Duty 18\" Aluminum Foil, 120 sq. ft., 2 pk.",
+        "lp":  "$21.78",
+        "up":  "$0.09/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Reynolds Wrap Heavy Duty 18\" Aluminum Foil, 150 sq. ft., 2 pk.",
+        "lp":  "$27.78",
+        "up":  "$0.09/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Reynolds Wrap Non-Stick 12\" Aluminum Foil 130 sq. ft., 2 pk.",
+        "lp":  "$23.98",
+        "up":  "$0.09/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Reynolds Wrap Every Day 12\" Aluminum Foil, 200 sq. ft., 2 pk.",
+        "lp":  "$24.98",
+        "up":  "$0.06/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Standard Foodservice Aluminum Foil 18\" x 500 ft.",
+        "lp":  "$31.58",
+        "up":  "$0.04/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Foodservice Aluminum Foil 12 in. x 1000 ft., 1,000 ft.",
+        "lp":  "$44.58",
+        "up":  "$0.04/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Standard Foodservice Aluminum Foil, 18\" x 400\u0027",
+        "lp":  "$27.18",
+        "up":  "$0.05/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Reynolds Wrap Everyday 12\" Aluminum Foil 250 sq. ft., 2 pk.",
+        "lp":  "$28.88",
+        "up":  "$0.06/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Cauliflower, 1 ct.",
+        "lp":  "$3.82",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Kingsford Original Charcoal Briquets, 2-Pack, 20 lbs.",
+        "lp":  "$23.48",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Kingsford Match Light Instant Charcoal Briquettes 2 Pack, 16 Lbs. Each",
+        "lp":  "$23.48",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Kingsford Miller Lite Beercoal Charcoal Briquettes, 16 lbs.",
+        "lp":  "$11.98",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "State Fair Classic Corn Dogs, Frozen, 30 ct.",
+        "lp":  "$13.47",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Country Pasta Homemade Style Egg Pasta 56 oz.",
+        "lp":  "$7.98",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark Unbleached Parchment Paper, 205 sq. ft., 2 pk.",
+        "lp":  "$15.52",
+        "up":  "$0.04/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Pineapple",
+        "lp":  "$2.97",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark by FujiSan Salmon Pineapple Roll, 10 pcs.",
+        "lp":  "$9.97",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Glad Press\u0027n Seal Plastic Food Wrap 140 sq. ft./roll, 2 rolls",
+        "lp":  "$8.64",
+        "up":  "$0.03/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Glad Cling ‘N Seal Clear Plastic Food Wrap 400 sq. ft./roll, 2 rolls",
+        "lp":  "$6.98",
+        "up":  "$0.01/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Member\u0027s Mark Seasoned Rotisserie Chicken",
+        "lp":  "$4.98",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark No Antibiotics Ever Rotisserie Seasoned Chicken Breast, Sliced, 1 lb. 6 oz.",
+        "lp":  "$9.57",
+        "up":  "$6.96/lb",
+        "reason":  "NAME CONFLICT: name states 1, 0.375 lb but none reproduces Sam\u0027s 6.96/lb (lp/up derives 1.375)"
+    },
+    {
+        "name":  "Member\u0027s Mark Ultra Premium 2-Ply Toilet Paper 45 rolls, 235 sheets/roll",
+        "lp":  "$24.76",
+        "up":  "$0.02/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "POM 2-Ply Toilet Paper 45 rolls, 473 sheets/roll",
+        "lp":  "$26.98",
+        "up":  "$0.01/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Boardwalk Jumbo Roll 2-Ply Toilet Paper 12 rolls, 1000 ft./roll",
+        "lp":  "$48.98",
+        "up":  "$0.01/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Charmin Ultra Soft 2-Ply Toilet Paper 32 rolls, 215 sheets/roll",
+        "lp":  "$29.98",
+        "up":  "$0.04/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Quilted Northern Ultra Plush 3-Ply Toilet Paper 36 rolls, 255 sheets/roll",
+        "lp":  "$24.48",
+        "up":  "$0.03/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Scott 1000 1-Ply Toilet Paper 45 rolls, 1,000 sheets/roll",
+        "lp":  "$30.48",
+        "up":  "$0.01/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Charmin Ultra Strong 2-Ply Toilet Paper 32 rolls, 231 sheets/roll",
+        "lp":  "$24.98",
+        "up":  "$0.03/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Marathon Jumbo Roll 2-Ply White Toilet Paper 6 rolls, 1000 ft./roll",
+        "lp":  "$26.77",
+        "up":  "$0.02/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Quilted Northern Ultra Soft \u0026 Strong 2-Ply Toilet Paper 32 rolls, 244 sheets/roll",
+        "lp":  "$20.98",
+        "up":  "$0.03/sft",
+        "reason":  "unknown unit \"sft\""
+    },
+    {
+        "name":  "Tork Universal 2-Ply White Jumbo Bath Tissue, 12 rolls, 1,000 ft./roll",
+        "lp":  "$51.74",
+        "up":  "$0.01/sft",
+        "reason":  "unknown unit \"sft\""
+    }
+]

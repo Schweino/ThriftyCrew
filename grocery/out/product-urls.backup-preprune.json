@@ -2573,11 +2573,11 @@
                                                           "board_pu":  0.1869
                                                       },
                                            "Walmart":  {
-                                                           "url":  "https://www.walmart.com/ip/10421951",
-                                                           "price":  2.97,
-                                                           "size":  "16 fl oz",
-                                                           "name":  "KC Masterpiece Classic Steakhouse Marinade, 16 fl oz Bottle",
-                                                           "board_pu":  0.1856
+                                                           "url":  "https://www.walmart.com/ip/16940530",
+                                                           "name":  "Great Value Herb \u0026 Garlic Marinade, 12.25 fl oz",
+                                                           "price":  "$1.98",
+                                                           "size":  "12.25 fl oz",
+                                                           "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                        }
                                        },
                   "bottled-water":  {
@@ -2604,12 +2604,6 @@
                                                             "name":  "Purified Drinking Water Our Family (24 Ct   16.9 Oz)",
                                                             "board_pu":  0.1662
                                                         },
-                                        "Fareway":  {
-                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20544533-fareway-drinking-water-purified-24-each",
-                                                        "price":  3.87,
-                                                        "size":  "each",
-                                                        "name":  "Fareway Purified Drinking Water"
-                                                    },
                                         "Hy-Vee":  {
                                                        "url":  "https://www.hy-vee.com/aisles-online/p/56357/hy-vee-spring-water-24pk",
                                                        "name":  "Hy-Vee Spring Water 24Pk",
@@ -2624,6 +2618,13 @@
                                                         "size":  "24 ct",
                                                         "name":  "Great Value Purified Drinking Water 24 Count",
                                                         "board_pu":  0.1533
+                                                    },
+                                        "Fareway":  {
+                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20544533-fareway-drinking-water-purified-24-each",
+                                                        "name":  "Fareway Purified Drinking Water",
+                                                        "price":  "$3.87",
+                                                        "size":  "24 ct",
+                                                        "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                     }
                                     },
                   "bouillon":  {
@@ -7784,12 +7785,6 @@
                                                           "size":  "8 pk 1.5 oz",
                                                           "verified":  "2026-08-01"
                                                       },
-                                     "Fareway":  {
-                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84386686-fareway-all-butter-croissants-3-ct",
-                                                     "price":  5.99,
-                                                     "size":  "each",
-                                                     "name":  "Fareway All Butter Croissants"
-                                                 },
                                      "Hy-Vee":  {
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/74585/croissants-6-count",
                                                     "price":  5.99,
@@ -7804,7 +7799,14 @@
                                                              "size":  "12 ct",
                                                              "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
                                                              "board_pu":  0.455
-                                                         }
+                                                         },
+                                     "Fareway":  {
+                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84386686-fareway-all-butter-croissants-3-ct",
+                                                     "name":  "Fareway All Butter Croissants",
+                                                     "price":  "$5.99",
+                                                     "size":  "3 ct",
+                                                     "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                 }
                                  },
                   "crushed-tomatoes":  {
                                            "commodity":  "Crushed Tomatoes",
@@ -8445,13 +8447,6 @@
                                                                    "size":  "43 ea",
                                                                    "board_pu":  0.2788
                                                                },
-                                               "Fareway":  {
-                                                               "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/95570163-cascade-complete-dishwasher-detergent-pods-with-dawn-fresh-16-ct",
-                                                               "name":  "Cascade Complete Dishwasher Detergent Fresh",
-                                                               "price":  "$6.49",
-                                                               "size":  "16 ct",
-                                                               "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
-                                                           },
                                                "Sam\u0027s Club":  {
                                                                        "url":  "https://www.samsclub.com/ip/18766722402",
                                                                        "name":  "Member\u0027s Mark Platinum Clean Automatic Dishwasher Pacs, Fresh Clean, 110 ct.",
@@ -8459,7 +8454,14 @@
                                                                        "size":  "110 ct",
                                                                        "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
                                                                        "board_pu":  0.1362
-                                                                   }
+                                                                   },
+                                               "Fareway":  {
+                                                               "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/63362548-bright-essentials-dishwasher-pacs-fresh-scent-triple-action-43-each",
+                                                               "name":  "Bright Essentials Dishwasher Pacs, Fresh Scent, Triple Action",
+                                                               "price":  "$9.99",
+                                                               "size":  "43 ct",
+                                                               "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                           }
                                            },
                   "disinfectant-spray":  {
                                              "commodity":  "disinfectant-spray",
@@ -9110,12 +9112,6 @@
                                                            "size":  "144 ea",
                                                            "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
                                                        },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/26952710-bright-essentials-dryer-sheets-wrinkle-reducing-unscented-120-each",
-                                                       "price":  3.94,
-                                                       "size":  "each",
-                                                       "name":  "Bright Essentials Dryer Sheets, Wrinkle Reducing, Unscented"
-                                                   },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/4209829/hy-vee-island-scent-fabric-softener-sheets",
                                                       "name":  "Hy-Vee Island Scent Fabric Softener Sheets",
@@ -9138,6 +9134,13 @@
                                                        "size":  "960 ct",
                                                        "name":  "(4 pack) Bounce Dryer Sheets, Free \u0026 Gentle, Unscented, 240 Count",
                                                        "verified":  "2026-07-31 price-pull self-capture"
+                                                   },
+                                       "Fareway":  {
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/26952710-bright-essentials-dryer-sheets-wrinkle-reducing-unscented-120-each",
+                                                       "name":  "Bright Essentials Dryer Sheets, Wrinkle Reducing, Unscented",
+                                                       "price":  "$3.94",
+                                                       "size":  "120 ct",
+                                                       "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                    }
                                    },
                   "egg-noodles":  {
@@ -9240,12 +9243,6 @@
                                                    "size":  "30 ct",
                                                    "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
                                                },
-                               "Fareway":  {
-                                               "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2915637-dutch-farms-18-grade-a-large-eggs-18-ct",
-                                               "price":  2.17,
-                                               "size":  "dozen",
-                                               "name":  "Dutch Farms 18 Grade A Large Eggs"
-                                           },
                                "Hy-Vee":  {
                                               "url":  "https://www.hy-vee.com/aisles-online/p/4143167/that-s-smart-large-eggs",
                                               "name":  "That\u0027s Smart! Large Eggs",
@@ -9253,7 +9250,14 @@
                                               "price":  1.47,
                                               "size":  "dozen",
                                               "verified":  "2026-07-25 Hy-Vee GraphQL (storeId 1465, current shelf price)"
-                                          }
+                                          },
+                               "Fareway":  {
+                                               "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2915637-dutch-farms-18-grade-a-large-eggs-18-ct",
+                                               "name":  "Dutch Farms 18 Grade A Large Eggs",
+                                               "price":  "$1.45",
+                                               "size":  "dozen",
+                                               "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                           }
                            },
                   "egg-whites":  {
                                      "commodity":  "egg-whites",
@@ -11522,15 +11526,6 @@
                                                         "size":  "10.5 oz",
                                                         "name":  "Badia Spices Garlic Powder"
                                                     },
-                                        "Sam\u0027s Club":  {
-                                                                "url":  "https://www.samsclub.com/ip/15490511237",
-                                                                "name":  "Member\u0027s Mark Garlic Powder, 22.5 oz.",
-                                                                "price":  9.98,
-                                                                "size":  "22.5 oz",
-                                                                "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
-                                                                "board_pu":  0.4436,
-                                                                "recipe_pu":  0.44
-                                                            },
                                         "Walmart":  {
                                                         "url":  "https://www.walmart.com/ip/676979470",
                                                         "name":  "Great Value Garlic Powder, 3.4 oz",
@@ -11539,7 +11534,14 @@
                                                         "verified":  "2026-07-17 Walmart warm-browser board-match; stored record re-prices to the board",
                                                         "board_pu":  0.3176,
                                                         "recipe_pu":  0.318
-                                                    }
+                                                    },
+                                        "Sam\u0027s Club":  {
+                                                                "url":  "https://www.samsclub.com/ip/13576272578",
+                                                                "name":  "Member\u0027s Mark Granulated Garlic, 26 oz.",
+                                                                "price":  "$9.28",
+                                                                "size":  "26 oz",
+                                                                "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                            }
                                     },
                   "gelatin":  {
                                   "commodity":  "gelatin",
@@ -11881,12 +11883,6 @@
                                                            "size":  "10 ea",
                                                            "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
                                                        },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/89865-sunbelt-bakery-granola-bars-peanut-butter-chip-chewy-10-ea",
-                                                       "price":  2.88,
-                                                       "size":  "each",
-                                                       "name":  "Sunbelt Bakery Peanut Butter Chip Chewy Granola Bars"
-                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/13621570154",
                                                                "name":  "Quaker Chewy Granola Bar, Variety Pack, 60 ct.",
@@ -11901,6 +11897,13 @@
                                                        "size":  "24 ct",
                                                        "name":  "Great Value Chewy Granola Bars Variety Pack",
                                                        "board_pu":  0.1842
+                                                   },
+                                       "Fareway":  {
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/89865-sunbelt-bakery-granola-bars-peanut-butter-chip-chewy-10-ea",
+                                                       "name":  "Sunbelt Bakery Peanut Butter Chip Chewy Granola Bars",
+                                                       "price":  "$2.88",
+                                                       "size":  "10 ct",
+                                                       "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                    }
                                    },
                   "grapefruit":  {
@@ -15936,12 +15939,6 @@
                                                    "size":  "1 gal",
                                                    "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                },
-                               "Fareway":  {
-                                               "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25586562-fareway-2-reduced-fat-milk-05-gal",
-                                               "price":  3.15,
-                                               "size":  "gallon",
-                                               "name":  "Fareway 2% Reduced Fat Milk"
-                                           },
                                "Sam\u0027s Club":  {
                                                        "url":  "https://www.samsclub.com/ip/16776455630",
                                                        "name":  "Member\u0027s Mark 2% Reduced Fat Milk 1 gal.",
@@ -15958,6 +15955,13 @@
                                                "verified":  "2026-07-23 DERIVED from the price row (same record the board priced)",
                                                "board_pu":  3.02,
                                                "recipe_pu":  3
+                                           },
+                               "Fareway":  {
+                                               "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25586562-fareway-2-reduced-fat-milk-05-gal",
+                                               "name":  "Fareway 2% Reduced Fat Milk",
+                                               "price":  "$3.15",
+                                               "size":  "0.5 gal",
+                                               "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                            }
                            },
                   "minced-garlic":  {
@@ -16483,21 +16487,20 @@
                                                  "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)",
                                                  "board_pu":  0.1021
                                              },
-                                  "Sam\u0027s Club":  {
-                                                          "url":  "https://www.samsclub.com/ip/3000041000",
-                                                          "name":  "Quaker Old Fashioned Oats, 160 oz.",
-                                                          "price":  7.98,
-                                                          "size":  "160 oz",
-                                                          "verified":  "2026-07-23 DERIVED from the price row (same record the board priced)",
-                                                          "board_pu":  0.0499
-                                                      },
                                   "Walmart":  {
                                                   "url":  "https://www.walmart.com/ip/10314925",
                                                   "name":  "Great Value 100% Whole Grain Old Fashioned Oats, 42 oz",
                                                   "price":  "$4.18",
                                                   "size":  "42 oz",
                                                   "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
-                                              }
+                                              },
+                                  "Sam\u0027s Club":  {
+                                                          "url":  "https://www.samsclub.com/ip/3000031582",
+                                                          "name":  "Quaker Quick 1-Minute Oats, 160 oz.",
+                                                          "price":  "$7.98",
+                                                          "size":  "160 oz",
+                                                          "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                      }
                               },
                   "oat-milk":  {
                                    "commodity":  "oat-milk",
@@ -16690,15 +16693,6 @@
                                                       "size":  "2.75 oz",
                                                       "verified":  "2026-07-27 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
-                                       "Sam\u0027s Club":  {
-                                                               "url":  "https://www.samsclub.com/ip/15498910247",
-                                                               "name":  "Member\u0027s Mark Onion Powder, 21 oz.",
-                                                               "price":  8.98,
-                                                               "size":  "21 oz",
-                                                               "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
-                                                               "board_pu":  0.4276,
-                                                               "recipe_pu":  0.43
-                                                           },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/705601418",
                                                        "name":  "Great Value Onion Powder, 3.25 oz",
@@ -16707,7 +16701,14 @@
                                                        "verified":  "2026-07-17 Walmart warm-browser board-match; stored record re-prices to the board",
                                                        "board_pu":  0.3323,
                                                        "recipe_pu":  0.332
-                                                   }
+                                                   },
+                                       "Sam\u0027s Club":  {
+                                                               "url":  "https://www.samsclub.com/ip/15194473572",
+                                                               "name":  "Member\u0027s Mark Granulated Onion, 6 lbs.",
+                                                               "price":  "$39.48",
+                                                               "size":  "96 oz",
+                                                               "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                           }
                                    },
                   "onions":  {
                                  "commodity":  "Yellow / Sweet Onions",
@@ -21239,11 +21240,11 @@
                                                                   "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
                                                               },
                                           "Walmart":  {
-                                                          "url":  "https://www.walmart.com/ip/10452560",
-                                                          "name":  "Great Value Colby \u0026 Monterey Jack Shredded Cheese, 32 oz Bag",
+                                                          "url":  "https://www.walmart.com/ip/10452379",
+                                                          "name":  "Great Value Low-Moisture Part-Skim Mozzarella Shredded Cheese, 32 oz Bag",
                                                           "price":  "$6.92",
                                                           "size":  "32 oz",
-                                                          "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
+                                                          "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                       }
                                       },
                   "shrimp":  {
@@ -22120,12 +22121,6 @@
                                                            "name":  "Our Family Freezer Bags, Resealable, Gallon Size 30 Ea",
                                                            "board_pu":  0.113
                                                        },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39736208-bright-essentials-storage-bags-double-zipper-20-gallon-20-each",
-                                                       "price":  2.28,
-                                                       "size":  "each",
-                                                       "name":  "Bright Essentials Storage Bags, Double Zipper, 20 Gallon"
-                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/2570014879",
                                                                "name":  "Ziploc Brand Quart Freezer Storage Bags, Stay Open Design, Easy to Fill, 216 ct.",
@@ -22139,6 +22134,13 @@
                                                        "price":  "$5.23",
                                                        "size":  "80 ct",
                                                        "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
+                                                   },
+                                       "Fareway":  {
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39736208-bright-essentials-storage-bags-double-zipper-20-gallon-20-each",
+                                                       "name":  "Bright Essentials Storage Bags, Double Zipper, 20 Gallon",
+                                                       "price":  "$2.28",
+                                                       "size":  "20 ct",
+                                                       "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                    }
                                    },
                   "strawberries":  {
@@ -23885,12 +23887,6 @@
                                                           "board_pu":  0.1499,
                                                           "verified":  "2026-08-01"
                                                       },
-                                     "Fareway":  {
-                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39667951-bright-essentials-trash-bags-black-drawstring-unscented-large-28-each",
-                                                     "price":  7.88,
-                                                     "size":  "each",
-                                                     "name":  "Bright Essentials Trash Bags, Black, Drawstring, Unscented, Large"
-                                                 },
                                      "Hy-Vee":  {
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/2913522/tall-kitchen-bags-with-twist-ties",
                                                     "name":  "Tall Kitchen Bags With Twist Ties",
@@ -23912,6 +23908,13 @@
                                                      "size":  "200 ct",
                                                      "name":  "Great Value 13-Gallon Strong Flex Tall Kitchen Drawstring Trash Bags, 200 Count",
                                                      "verified":  "2026-07-30 price-pull self-capture"
+                                                 },
+                                     "Fareway":  {
+                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39667951-bright-essentials-trash-bags-black-drawstring-unscented-large-28-each",
+                                                     "name":  "Bright Essentials Trash Bags, Black, Drawstring, Unscented, Large",
+                                                     "price":  "$7.88",
+                                                     "size":  "28 ct",
+                                                     "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                  }
                                  },
                   "turkey-bacon":  {

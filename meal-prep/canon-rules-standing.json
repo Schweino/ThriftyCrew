@@ -1,6 +1,22 @@
 {
-    "readme":  "STANDING canon-rules base, promoted 2026-07-25 from the audit-passed r300 build (authored 208 + rebased-r100 223 + latent-bug patches: sage \b, sausages->Bratwurst, mushroom-vs-cream-of, egg-in-eggplant, butter-in-butternut...). Future runs load THIS file first, then their own run-specific additions. Rebuild/promote only from an audit-passed run (see NEXT-RUN-PLAYBOOK stage 2.5 note). First match wins, case-insensitive.",
+    "readme":  "STANDING canon-rules base, promoted 2026-07-25 from the audit-passed r300 build (authored 208 + rebased-r100 223 + latent-bug patches: sage \b, sausages-\u003eBratwurst, mushroom-vs-cream-of, egg-in-eggplant, butter-in-butternut...). Future runs load THIS file first, then their own run-specific additions. Rebuild/promote only from an audit-passed run (see NEXT-RUN-PLAYBOOK stage 2.5 note). First match wins, case-insensitive.",
     "rules":  [
+                  [
+                      "\\bpatis\\b",
+                      "Fish Sauce"
+                  ],
+                  [
+                      "oil for the pan|oil for frying|^oil$",
+                      "Vegetable Oil"
+                  ],
+                  [
+                      "lemon with rind|whole lemon|lemon halves",
+                      "Lemon Juice"
+                  ],
+                  [
+                      "turkey stock|chicken stock",
+                      "Chicken Broth"
+                  ],
                   [
                       "^(sauce|sides|rub|stew|gravy|spices|seasonings|topping|toppings|topping options|meatballs|serve with|to serve|you also need|taco ingredients|meat \u0026 binder|chicken and rice|pork birria|turkey filling|hashweh filling|kibbeh mixture|for the sauce|sauce ingredients|wet ingredients \u0026 seasonings)$",
                       "DROP"

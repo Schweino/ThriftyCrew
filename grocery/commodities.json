@@ -12611,7 +12611,10 @@
                         "rice\\s+cakes?",
                         "\\bbrats?\\b",
                         "teriyaki",
-                        "\\bsausage\\b"
+                        "\\bsausage\\b",
+                        "\\bsauce\\b",
+                        "\\bjuice\\b",
+                        "salsa"
                     ]
     },
     {
@@ -24760,7 +24763,8 @@
                         "\\bheart\\s+health\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "pine\\s*apple"
                     ]
     },
     {

@@ -1,4 +1,4 @@
-﻿{
+{
     "readme":  "Rows guards.ps1 invariant 5 would hard-fail, that a human has REVIEWED and cleared. Two kinds live here, and each entry must say which it is and how it was checked. (1) SIZE IS ALREADY THE TOTAL, verified against the store\u0027s own page - needed only when the name states no per-unit weight for the guard to multiply (\u0027Summit Cola 12 Pack\u0027), since as of 2026-07-16 the guard does that arithmetic itself whenever the name carries the weight. (2) REVIEWED, NOT A PER-UNIT BUG - the name\u0027s pack count does not describe the priced unit, and the row\u0027s own price proves it. Never add an entry to silence a gate you have not actually checked: the point of the guard is to catch the opposite case (Sam\u0027s \u00271 gal., 2 pk.\u0027 recorded as ONE gallon, published at 2x).",
     "allow":  [
                   {
@@ -98,6 +98,13 @@
                       "why":  "TOTAL: the 10 oz in the name is the PACKAGE weight, not the per-stick weight - 12 sticks x 0.83 oz = 10 oz, which is the real Frigo Cheese Heads stick size. Verified first-party against Freshop 2026-07-30 (app_key family_fare, store_id 6401, product 1564405684715396619): the store\u0027s own catalog record reads name=\"Frigo Whole Milk String Cheese, Mozzarella, 12 Pack 10 Oz\", size=\"10 oz\", base_price=5.99, so the captured row is byte-faithful to the source. Guard 5 cannot tell this shape from \"12 Pack 1 Oz\" where the weight IS per-unit (Test-MpClassify returns reject for both), and it is right not to guess. Price check both ways: 5.99/10 oz = $0.599/oz, which sits correctly ABOVE all six store brands on the board ($0.197-$0.333/oz) for a branded whole-milk product; the 12x reading would be $0.0499/oz, four times cheaper than the cheapest store, and would falsely crown the commodity.",
                       "reviewed":  "2026-07-30",
                       "reviewed_source":  "Freshop API product record (first-party), re-verified independently this session"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Red Baron Pizzas, French Bread, Pepperoni, Singles, 2 Pack 2 Ea",
+                      "why":  "TOTAL: size 10.80 oz IS the 2-pack total (2 x 5.4 oz). The name states a pack COUNT (\"2 Pack 2 Ea\") but no per-unit weight, so repair-multipack-sizes correctly REFUSED to multiply it and routed it here. Verified against the peer product on the same board: Bakers carries \"Kroger Pepperoni French Bread Frozen Pizza\" at size \"2 pk 5 oz\", i.e. the identical 2-pack-of-~5oz shape, so 10.80 oz is a pack total and not one unit. At $5.69 that is $0.527/oz; read as ONE unit it would imply a 21.6 oz pack, which no French-bread-singles product is.",
+                      "reviewed":  "2026-08-01",
+                      "reviewed_source":  "peer product on the live 2026-08-01 board (Bakers 2 pk 5 oz) + the name arithmetic"
                   }
               ]
 }

@@ -400,3 +400,26 @@
 [2026-08-01T16:06:04]   Family Fare everyday prices: 4676 catalog items (671 fresh, 4005 carried forward, 0 expired past 14 d; 466 terms still empty) -> C:\Codex\income\grocery\out\regular\family-fare-regular-2026-08-01.json
 [2026-08-01T16:06:04]   Family Fare: catalog healthy - 4676 items, 0 expired, 4272 re-verified in 48h (no alert)
 [2026-08-01T16:06:04] sweep done rc=0 - cursor #101 -> #188
+[2026-08-01T19:00:02] sweep start (cursor before = #188, MaxMinutes=9)
+[2026-08-01T19:06:44]   Family Fare: 527 search term(s) across 526 commodit(y/ies) - 1 are ADDITIONAL terms on multi-term commodities and each one spends a budget slot every rotation
+[2026-08-01T19:06:44]   Family Fare: term cursor at #188 of 527 - this run's budget starts there and wraps
+[2026-08-01T19:06:44]   Family Fare: throttle streak (15 empties) - cooling down 45s...
+[2026-08-01T19:06:44]   Family Fare: throttle streak (15 empties) - cooling down 45s...
+[2026-08-01T19:06:44]   Family Fare: throttle streak (15 empties) - cooling down 45s...
+[2026-08-01T19:06:44]   Family Fare: throttle streak (15 empties) - cooling down 45s...
+[2026-08-01T19:06:44]   Family Fare: throttle streak (15 empties) - cooling down 45s...
+[2026-08-01T19:06:44]   Family Fare: ABORTING - 60 consecutive empty terms after 782 rows. API said: HTTP 400 x188. Continuing would burn time for nothing and push the limit out further. Carrying forward and writing what we have.
+[2026-08-01T19:06:44]   Family Fare: term cursor advanced to #286 (this run bought terms #188..#285)
+[2026-08-01T19:06:44]   WARNING: Family Fare: 463 term(s) STILL empty after recovery (not carried, or persistent throttle): coconut oil, apple
+[2026-08-01T19:06:44]   cider vinegar, worcestershire sauce, barbecue sauce, italian dressing, dill pickle spears, sweet relish, pinto beans
+[2026-08-01T19:06:44]   can, refried beans, baked beans, chili with beans can, cut green beans can, sweet peas can, mushroom pieces and stems,
+[2026-08-01T19:06:44]   chicken noodle soup, mixed nuts, saltine crackers, cheese crackers, pretzel twists, microwave popcorn, chocolate chip
+[2026-08-01T19:06:44]   cookies, sandwich cookies, chewy granola bars, protein bars, fruit snacks, toaster pastries, granola, rice cakes, beef
+[2026-08-01T19:06:44]   jerky, fruit cups, frozen burritos, frozen meatballs, frozen lasagna, frozen hash browns, frozen mixed berries,
+[2026-08-01T19:06:44]   popsicles, ice pops, dryer sheets, liquid fabric softener, laundry detergent pods
+[2026-08-01T19:06:44]   WARNING: Family Fare: throttled - got only 782 items vs 4676 in the last good file. Diagnostic copy:
+[2026-08-01T19:06:44]   C:\Codex\income\grocery\out\throttled\family-fare-2026-08-01.throttled.json. These rows are REAL and are being MERGED
+[2026-08-01T19:06:44]   (today's prices win, everything else carries forward).
+[2026-08-01T19:06:44]   Family Fare everyday prices: 4683 catalog items (778 fresh, 3905 carried forward, 0 expired past 14 d; 463 terms still empty) -> C:\Codex\income\grocery\out\regular\family-fare-regular-2026-08-01.json
+[2026-08-01T19:06:44]   Family Fare: catalog healthy - 4683 items, 0 expired, 4302 re-verified in 48h (no alert)
+[2026-08-01T19:06:44] sweep done rc=0 - cursor #188 -> #286
