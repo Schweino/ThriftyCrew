@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "One-Pot Creamy Cajun Sausage Pasta",
     "slug":  "one-pot-creamy-cajun-sausage-pasta",
     "cuisine":  "cajun",
@@ -76,7 +76,7 @@
                     "Pour in the chicken broth and the diced tomatoes and bring it to a boil, scraping the bottom clean.",
                     "Stir in the dry pasta, drop it to a simmer, and cook uncovered while stirring often so nothing sticks. The pasta will drink most of the liquid.",
                     "Whisk the cornstarch into a little cold water to make a slurry, then stir it into the pot and let it thicken for a minute.",
-                    "Turn the heat low, return the sausage, and stir in the heavy cream and parmesan until the sauce goes smooth."
+                    "Turn the heat low, return the sausage, and stir in the heavy cream and parmesan until the sauce goes smooth, then taste and season with the salt and black pepper."
                 ],
     "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container, stirring between scoops so the sausage stays even. Every bowl lands near 660 calories and 25 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thestayathomechef.com/creamy-cajun-sausage-pasta/\" target=\"_blank\" rel=\"noopener\"\u003ethestayathomechef.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
@@ -111,16 +111,16 @@
                                    "canon":  "Red Bell Pepper",
                                    "grams":  280,
                                    "buy":  "2.3",
-                                   "bid":"red-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Smoked Turkey Sausage",
                                    "canon":  "Smoked Turkey Sausage",
                                    "grams":  919,
                                    "buy":  "2 lb",
-                                   "bid":"smoked-turkey-sausage",
-                                   "gpu":453.592
+                                   "bid":  "smoked-turkey-sausage",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Garlic",
@@ -183,8 +183,8 @@
                                    "canon":  "Parmesan Cheese",
                                    "grams":  210,
                                    "buy":  "7.5 oz",
-                                   "bid":"parmesan",
-                                   "gpu":28.3495
+                                   "bid":  "parmesan",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Salt",
@@ -230,7 +230,7 @@
                                "Cook the onion and red pepper in the fat, then add the garlic and Cajun seasoning.",
                                "Add the chicken broth and diced tomatoes and bring to a boil.",
                                "Stir in the dry pasta and simmer uncovered, stirring often, until tender.",
-                               "Thicken with a cornstarch slurry, then return the sausage and stir in the cream and parmesan."
+                               "Thicken with a cornstarch slurry, return the sausage, stir in the cream and parmesan, and season with salt and pepper."
                            ]
              },
     "ingredients_grams":  [

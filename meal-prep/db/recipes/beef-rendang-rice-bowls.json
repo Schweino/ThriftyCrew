@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Beef Rendang Rice Bowls",
     "slug":  "beef-rendang-rice-bowls",
     "cuisine":  "Indonesian",
@@ -76,7 +76,7 @@
                     "Add the beef cut into large cubes and turn it in the paste until every piece is coated.",
                     "Pour in the coconut milk with the brown sugar and salt, bring it to a simmer, and cook uncovered on low for 2 to 3 hours. Stir every 20 minutes or so, more often near the end.",
                     "Keep going past the point where it looks done. The liquid will reduce, then break, then the beef starts frying in the coconut oil that separates out and everything turns deep brown. That is rendang, and it is a different dish from the milky stew it was an hour earlier.",
-                    "Taste for salt and pull it off the heat while there is still a little gloss on the meat."
+                    "Taste for salt and pull it off the heat while there is still a little gloss on the meat, then cook the rice separately and serve the rendang over it."
                 ],
     "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. Scoop to that gram target and each container lands at \u003cstrong\u003e836 calories\u003c/strong\u003e. Rendang is dense, so the portions look smaller than you expect and eat bigger than you expect. Trust the scale over your eyes.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.chilipeppermadness.com/recipes/beef-rendang/\" target=\"_blank\" rel=\"noopener\"\u003echilipeppermadness.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
@@ -103,8 +103,8 @@
                                    "canon":  "Jalapeno",
                                    "grams":  180,
                                    "buy":  "6.25 oz",
-                                   "bid":"jalapenos",
-                                   "gpu":453.592
+                                   "bid":  "jalapenos",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Garlic",
@@ -119,8 +119,8 @@
                                    "canon":  "Ginger",
                                    "grams":  56,
                                    "buy":  "9.25 tbsp",
-                                   "bid":"fresh-ginger",
-                                   "gpu":453.592
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Ground Turmeric",
@@ -159,8 +159,8 @@
                                    "canon":  "Coconut Milk",
                                    "grams":  1582,
                                    "buy":  "4 cans",
-                                   "bid":"coconut-milk-canned",
-                                   "gpu":29.57
+                                   "bid":  "coconut-milk-canned",
+                                   "gpu":  29.57
                                },
                                {
                                    "item":  "Bay Leaves",
@@ -207,8 +207,8 @@
                                    "canon":  "Rice",
                                    "grams":  770,
                                    "buy":  "4.25 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                }
                            ]
                },
@@ -238,7 +238,7 @@
                                "Coat the cubed beef in the paste, then add coconut milk, brown sugar, and salt.",
                                "Simmer uncovered 2 to 3 hours, stirring often, until the liquid reduces and breaks.",
                                "Keep cooking until the beef fries in the separated oil and turns deep brown.",
-                               "Weigh the pot and divide into 14 containers."
+                               "Cook the rice, weigh the pot, and divide the rendang over the rice into 14 containers."
                            ]
              },
     "ingredients_grams":  [

@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Korean Gochujang Ground Pork Rice Bowls",
     "slug":  "korean-gochujang-ground-pork-rice-bowls",
     "cuisine":  "Korean",
@@ -19,7 +19,22 @@
                  "cost_ps":  "3.11"
              },
     "intro_html":  "Sweet, spicy, garlicky ground pork glazed in gochujang and mirin, piled over rice with green onions and toasted sesame. It tastes like takeout and costs like leftovers: \u003cstrong\u003e26 grams of protein\u003c/strong\u003e per bowl at about \u003cstrong\u003e$3.11\u003c/strong\u003e (at everyday cost). Ground pork is one of the best protein deals in the store, and this recipe makes it earn its keep.",
-    "ingredients_display": ["\u003cstrong\u003eGround Pork:\u003c/strong\u003e 3.75 lb (1667 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (257 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.75 tbsp (74 g)","\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 18.25 tbsp (110 g)","\u003cstrong\u003eGochujang (generic):\u003c/strong\u003e 1 cups (294 g)","\u003cstrong\u003eMirin (Mizkan):\u003c/strong\u003e 4.75 oz (132 g)","\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 7.25 tbsp (92 g)","\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 3.75 tbsp (59 g)","\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 3.75 tbsp (50 g)","\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 18.25 tbsp (110 g)","\u003cstrong\u003eToasted Sesame Seeds (generic):\u003c/strong\u003e 3 tbsp (26 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 2 cups dry (376 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
+    "ingredients_display":  [
+                                "\u003cstrong\u003eGround Pork:\u003c/strong\u003e 3.75 lb (1667 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (257 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.75 tbsp (74 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 18.25 tbsp (110 g)",
+                                "\u003cstrong\u003eGochujang (generic):\u003c/strong\u003e 1 cups (294 g)",
+                                "\u003cstrong\u003eMirin (Mizkan):\u003c/strong\u003e 4.75 oz (132 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 7.25 tbsp (92 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 3.75 tbsp (59 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 3.75 tbsp (50 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 18.25 tbsp (110 g)",
+                                "\u003cstrong\u003eToasted Sesame Seeds (generic):\u003c/strong\u003e 3 tbsp (26 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 2 cups dry (376 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
+                            ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Ground Pork, 3.75 lb: ~$12.53. \u003cstrong\u003eBuy 4 lbs: $13.64.\u003c/strong\u003e",
@@ -45,7 +60,7 @@
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Cook the rice: 2 cups dry with water per your usual method.",
                     "Stir the sauce together: gochujang, mirin, sugar, soy sauce, and half the sesame oil.",
-                    "Brown the ground pork in your big pot over medium-high heat, breaking it up, until no pink remains. Drain if needed.",
+                    "Brown the ground pork in your big pot over medium-high heat, breaking it up, until no pink remains. Drain if needed, then season with the salt and black pepper.",
                     "Add the diced onion, garlic, and ginger and cook 3 to 4 minutes until fragrant.",
                     "Pour in the sauce and simmer 5 minutes until it glazes the pork and thickens slightly.",
                     "Finish with the rest of the sesame oil, most of the green onions, and the toasted sesame seeds. Serve over the rice with the last of the green onions on top."
@@ -87,8 +102,8 @@
                                    "item":  "Ginger",
                                    "grams":  110,
                                    "buy":  "18.25 tbsp",
-                                   "bid":"fresh-ginger",
-                                   "gpu":453.592
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Gochujang",
@@ -143,8 +158,8 @@
                                    "item":  "Rice",
                                    "grams":  376,
                                    "buy":  "2 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Salt",
@@ -187,7 +202,7 @@
                  "steps":  [
                                "Cook the rice.",
                                "Stir together gochujang, mirin, sugar, soy sauce, and half the sesame oil.",
-                               "Brown the ground pork, then cook with onion, garlic, and ginger until fragrant.",
+                               "Brown the ground pork and season with salt and black pepper, then cook with onion, garlic, and ginger until fragrant.",
                                "Add the sauce and simmer until it glazes the pork.",
                                "Finish with sesame oil, green onions, and sesame seeds, then serve over rice in 14 bowls."
                            ]

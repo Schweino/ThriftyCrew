@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Korean Braised Chicken and Potatoes (Dakdoritang)",
     "slug":  "korean-braised-chicken-potatoes-dakdoritang",
     "cuisine":  "Korean",
@@ -78,7 +78,7 @@
                    ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
-                    "Whisk the gochujang, soy sauce, honey, mirin, garlic, ginger, sesame oil, red pepper flakes, and black pepper into a sauce. Taste it and decide how hot you want the week to be, because this is your only chance to adjust.",
+                    "Whisk the gochujang, soy sauce, honey, mirin, garlic, ginger, sesame oil, red pepper flakes, salt, and black pepper into a sauce. Taste it and decide how hot you want the week to be, because this is your only chance to adjust.",
                     "Cut the chicken thighs into large pieces and toss them with about half the sauce.",
                     "Cut the potatoes and carrots into big chunks. Small pieces will disappear into the sauce over a long braise, and you want them to stay recognizable.",
                     "Put the chicken, potatoes, carrots, and onion into a wide heavy pot, pour the rest of the sauce over, and add the chicken broth. It should come about halfway up, not cover everything.",
@@ -103,8 +103,8 @@
                                    "canon":  "Boneless Skinless Chicken Thigh",
                                    "grams":  3500,
                                    "buy":  "7.75 lb",
-                                   "bid":"boneless-skinless-chicken-thigh",
-                                   "gpu":453.592
+                                   "bid":  "boneless-skinless-chicken-thigh",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -119,24 +119,24 @@
                                    "canon":  "Carrots",
                                    "grams":  700,
                                    "buy":  "11.5",
-                                   "bid":"carrots",
-                                   "gpu":453.592
+                                   "bid":  "carrots",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Potato",
                                    "canon":  "Potato",
                                    "grams":  2262,
                                    "buy":  "10.6",
-                                   "bid":"russet-potatoes",
-                                   "gpu":453.592
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Jalapeno",
                                    "canon":  "Jalapeno",
                                    "grams":  78,
                                    "buy":  "8.75 tbsp",
-                                   "bid":"jalapenos",
-                                   "gpu":453.592
+                                   "bid":  "jalapenos",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Green Onions",
@@ -199,8 +199,8 @@
                                    "canon":  "Ginger",
                                    "grams":  14,
                                    "buy":  "2.25 tbsp",
-                                   "bid":"fresh-ginger",
-                                   "gpu":453.592
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Mirin",
@@ -260,7 +260,7 @@
                                           "8.75 tbsp jalapeno and 14 tbsp green onions"
                                       ],
                  "steps":  [
-                               "Whisk gochujang, soy sauce, honey, mirin, garlic, ginger, sesame oil, and pepper flakes into a sauce.",
+                               "Whisk gochujang, soy sauce, honey, mirin, garlic, ginger, sesame oil, pepper flakes, salt, and black pepper into a sauce.",
                                "Toss the cut chicken thighs with half the sauce.",
                                "Add chicken, potatoes, carrots, and onion to a wide pot with the rest of the sauce and the broth.",
                                "Simmer covered 25 minutes, then uncover, add jalapeno, and reduce 15 to 20 minutes.",

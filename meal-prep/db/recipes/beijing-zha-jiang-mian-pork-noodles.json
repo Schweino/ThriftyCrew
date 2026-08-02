@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Beijing Zha Jiang Mian Pork Noodles",
     "slug":  "beijing-zha-jiang-mian-pork-noodles",
     "cuisine":  "Chinese (Beijing)",
@@ -77,10 +77,10 @@
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Dice the pork shoulder small, roughly pea-sized, so it eats like a sauce rather than a stew.",
-                    "Heat the vegetable oil in a heavy pot and cook the pork over medium-high heat until it browns and renders its fat.",
+                    "Heat the vegetable oil in a heavy pot with the bay leaves, ground cinnamon, and black pepper and let them sizzle a minute to flavor the oil, then cook the pork over medium-high heat until it browns and renders its fat. Fish out the bay leaves once the oil smells fragrant.",
                     "Add the garlic, ginger, and the white parts of the green onions and cook until fragrant.",
-                    "Stir in the hoisin sauce and soy sauce and let them fry in the fat for a minute, which is what takes the raw edge off.",
-                    "Pour in the chicken broth, drop the heat to low, and simmer uncovered until the sauce is thick and glossy and the pork is tender.",
+                    "Stir in the hoisin sauce, soy sauce, and sugar and let them fry in the fat for a minute, which is what takes the raw edge off.",
+                    "Pour in the chicken broth, season with the salt, drop the heat to low, and simmer uncovered until the sauce is thick and glossy and the pork is tender.",
                     "Boil the lo mein noodles to just tender, drain, and rinse briefly so they do not clump.",
                     "Cut the cucumber and carrots into matchsticks, then serve the sauce over the noodles with the raw vegetables and the green onion tops piled on."
                 ],
@@ -125,8 +125,8 @@
                                    "canon":  "Ginger",
                                    "grams":  37,
                                    "buy":  "6.25 tbsp",
-                                   "bid":"fresh-ginger",
-                                   "gpu":453.592
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Bay Leaves",
@@ -205,16 +205,16 @@
                                    "canon":  "Carrots",
                                    "grams":  269,
                                    "buy":  "4.4",
-                                   "bid":"carrots",
-                                   "gpu":453.592
+                                   "bid":  "carrots",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Cucumber",
                                    "canon":  "Cucumber",
                                    "grams":  255,
                                    "buy":  "1",
-                                   "bid":"cucumbers",
-                                   "gpu":300
+                                   "bid":  "cucumbers",
+                                   "gpu":  300
                                },
                                {
                                    "item":  "Garlic",
@@ -248,9 +248,9 @@
                                           "5.75 tbsp garlic"
                                       ],
                  "steps":  [
-                               "Dice the pork shoulder small and brown it in hot oil until the fat renders.",
+                               "Dice the pork shoulder small and brown it in oil infused with bay leaves, cinnamon, and black pepper until the fat renders.",
                                "Add garlic, ginger, and green onion whites and cook until fragrant.",
-                               "Fry the hoisin and soy sauce in the fat, then pour in the broth.",
+                               "Fry the hoisin, soy sauce, and sugar in the fat, then pour in the broth and season with salt.",
                                "Simmer uncovered until the sauce is thick and the pork is tender.",
                                "Boil the lo mein noodles and cut the cucumber and carrots into matchsticks.",
                                "Portion noodles into 14 containers, then top with sauce and raw vegetables."

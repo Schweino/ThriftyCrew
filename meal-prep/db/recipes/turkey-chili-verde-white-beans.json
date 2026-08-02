@@ -69,7 +69,7 @@
                     "Cook the rice separately per the package and set it aside covered.",
                     "Brown the ground turkey in the olive oil in your big pot over medium-high heat, breaking it up until it is cooked through.",
                     "Add the diced onion and cook until translucent, then stir in the minced garlic for the last minute.",
-                    "Pour in the jarred salsa verde and the chicken broth, scrape the bottom of the pot, and bring it to a simmer.",
+                    "Pour in the jarred salsa and the chicken broth, scrape the bottom of the pot, and bring it to a simmer.",
                     "Add the drained cannellini beans, mash a scoop of them against the side of the pot to thicken the chili, and simmer 25 minutes.",
                     "Season with salt and black pepper, stir in the chopped cilantro off the heat, and keep the sour cream separate for topping."
                 ],
@@ -90,8 +90,8 @@
                                    "canon":  "93/7 Ground Turkey",
                                    "grams":  1588,
                                    "buy":  "3.5 lb",
-                                   "bid":"93-7-ground-turkey",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -162,24 +162,24 @@
                                    "canon":  "Fresh Cilantro",
                                    "grams":  25,
                                    "buy":  "25 tbsp",
-                                   "bid":"cilantro",
-                                   "gpu":57
+                                   "bid":  "cilantro",
+                                   "gpu":  57
                                },
                                {
                                    "item":  "Light Sour Cream",
                                    "canon":  "Light Sour Cream",
                                    "grams":  300,
                                    "buy":  "1.25 cups",
-                                   "bid":"sour-cream",
-                                   "gpu":28.3495
+                                   "bid":  "sour-cream",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Rice",
                                    "canon":  "Rice",
                                    "grams":  700,
                                    "buy":  "3.75 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                }
                            ]
                },
@@ -206,7 +206,7 @@
                  "steps":  [
                                "Cook the rice separately and set it aside.",
                                "Brown the ground turkey in olive oil, then soften the onion and garlic.",
-                               "Pour in the salsa verde and chicken broth and bring to a simmer.",
+                               "Pour in the jarred salsa and chicken broth and bring to a simmer.",
                                "Add the cannellini beans, mash some to thicken, and simmer 25 minutes.",
                                "Season, finish with cilantro, serve over rice, and top with sour cream."
                            ]

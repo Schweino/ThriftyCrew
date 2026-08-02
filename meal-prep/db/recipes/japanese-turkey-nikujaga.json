@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Japanese Turkey Nikujaga (Meat and Potato Stew)",
     "slug":  "japanese-turkey-nikujaga",
     "cuisine":  "japanese",
@@ -74,7 +74,7 @@
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Cut the turkey breast into thin strips. Thin is important, because strips soak up the broth while chunks just sit in it.",
                     "Peel the potatoes and cut them into large chunks, slice the carrots on a diagonal, and cut the onion into thick wedges.",
-                    "Heat the vegetable oil in a large heavy pot and sear the turkey strips until they lose their pink, then add the onion wedges and cook 3 minutes.",
+                    "Heat the vegetable oil in a large heavy pot and sear the turkey strips, seasoned with the salt and black pepper, until they lose their pink, then add the onion wedges and cook 3 minutes.",
                     "Add the potatoes and carrots, then pour in the chicken broth, soy sauce, mirin, and sugar. The liquid should come most of the way up the vegetables but not drown them.",
                     "Bring it to a simmer, then lay a round of parchment right on the surface and cover the pot. That paper lid is the Japanese trick that keeps everything basted without boiling the potatoes apart.",
                     "Simmer on low for 25 to 30 minutes until the potatoes are fork tender and the turkey has reached 165F, shaking the pot instead of stirring so nothing breaks up.",
@@ -105,16 +105,16 @@
                                    "canon":  "Potato",
                                    "grams":  5060,
                                    "buy":  "24",
-                                   "bid":"russet-potatoes",
-                                   "gpu":453.592
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Carrots",
                                    "canon":  "Carrots",
                                    "grams":  123,
                                    "buy":  "2",
-                                   "bid":"carrots",
-                                   "gpu":453.592
+                                   "bid":  "carrots",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -212,7 +212,7 @@
                                       ],
                  "steps":  [
                                "Slice the turkey breast thin and cut the potatoes, carrots, and onion into chunks.",
-                               "Sear the turkey in vegetable oil, then add the onion wedges.",
+                               "Season the turkey with salt and black pepper and sear it in vegetable oil, then add the onion wedges.",
                                "Add potatoes and carrots with chicken broth, soy sauce, mirin, and sugar.",
                                "Cover with a parchment lid and simmer 25 to 30 minutes until the potatoes are tender and the turkey reaches 165F.",
                                "Add the green beans in the last 5 minutes and rest off the heat 15 minutes.",

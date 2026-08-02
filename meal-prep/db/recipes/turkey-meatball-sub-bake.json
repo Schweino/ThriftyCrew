@@ -75,7 +75,7 @@
                     "Roll the mixture into meatballs and set them on lined sheet pans. Two per serving is the target size, so aim a little bigger than a golf ball.",
                     "Bake at 400F for 20 minutes until browned and cooked through to 165F.",
                     "Warm the marinara in a pot, then slide the baked meatballs in and simmer them 15 minutes so they drink up the sauce instead of just wearing it.",
-                    "Cook the rice and move it into your weighed pot.",
+                    "Portion the meatballs and sauce into the containers using the weighed-pot method, dividing them evenly across all fourteen.",
                     "Split the buns and lay them out. Do not assemble them all now, since bread that sits in sauce for four days is a texture nobody wants.",
                     "Shred or portion out the mozzarella and keep it in its own small container."
                 ],
@@ -112,24 +112,24 @@
                                    "canon":  "93/7 Ground Turkey",
                                    "grams":  1191,
                                    "buy":  "2.75 lb",
-                                   "bid":"93-7-ground-turkey",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Smoked Turkey Sausage",
                                    "canon":  "Smoked Turkey Sausage",
                                    "grams":  953,
                                    "buy":  "2 lb",
-                                   "bid":"smoked-turkey-sausage",
-                                   "gpu":453.592
+                                   "bid":  "smoked-turkey-sausage",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Parmesan Cheese",
                                    "canon":  "Parmesan Cheese",
                                    "grams":  94,
                                    "buy":  "3.25 oz",
-                                   "bid":"parmesan",
-                                   "gpu":28.3495
+                                   "bid":  "parmesan",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -144,8 +144,8 @@
                                    "canon":  "White Mushrooms",
                                    "grams":  76,
                                    "buy":  "2.75 oz",
-                                   "bid":"mushrooms",
-                                   "gpu":28.3495
+                                   "bid":  "mushrooms",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Garlic",
@@ -176,8 +176,8 @@
                                    "canon":  "Marinara Sauce",
                                    "grams":  1429,
                                    "buy":  "5.75 cups",
-                                   "bid":"marinara-sauce",
-                                   "gpu":28.3495
+                                   "bid":  "marinara-sauce",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Keto Bun",
@@ -190,8 +190,8 @@
                                    "canon":  "Reduced Fat Mozzarella",
                                    "grams":  476,
                                    "buy":  "16.75 oz",
-                                   "bid":"reduced-fat-mozzarella",
-                                   "gpu":28.3495
+                                   "bid":  "reduced-fat-mozzarella",
+                                   "gpu":  28.3495
                                }
                            ]
                },
@@ -221,8 +221,7 @@
                                "Finely chop the smoked turkey sausage and mix it with ground turkey, eggs, bread crumbs, parmesan, garlic, onion, mushrooms, salt, and pepper.",
                                "Roll into meatballs and bake at 400F for 20 minutes to 165F.",
                                "Simmer the meatballs in warmed marinara for 15 minutes.",
-                               "Cook the rice.",
-                               "Portion rice by weight into 14 containers and add an even share of meatballs and sauce.",
+                               "Portion the meatballs and sauce evenly into the 14 containers.",
                                "Pack the split buns and mozzarella separately to assemble and broil fresh."
                            ]
              },

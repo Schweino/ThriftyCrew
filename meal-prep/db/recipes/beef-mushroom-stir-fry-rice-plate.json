@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Beef and Mushroom Stir-Fry Rice Plate",
     "slug":  "beef-mushroom-stir-fry-rice-plate",
     "cuisine":  "Cantonese",
@@ -81,7 +81,7 @@
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Slice the beef thin against the grain and toss it with most of the cornstarch, a pinch of baking soda, some soy sauce, and a splash of water, then let it sit for at least fifteen minutes.",
                     "Cook the rice according to the package while the beef rests.",
-                    "Stir the remaining cornstarch into a little cold water and mix it with the oyster sauce, the rest of the soy sauce, the beef broth, the chicken broth, sugar, and black pepper to make the sauce.",
+                    "Stir the remaining cornstarch into a little cold water and mix it with the oyster sauce, the rest of the soy sauce, the beef broth, the chicken broth, sugar, salt, and black pepper to make the sauce.",
                     "Heat the vegetable oil in a large skillet or wok until it smokes and sear the beef in batches in a single layer, just until browned, then set it aside. Do not cook it through, since it will finish in the sauce.",
                     "Add the butter to the pan and cook the mushrooms hard, without stirring much, until they release their water, it cooks off, and they brown.",
                     "Add the ginger, garlic, and the white parts of the green onions and cook until fragrant.",
@@ -192,8 +192,8 @@
                                    "canon":  "Ginger",
                                    "grams":  32,
                                    "buy":  "5.25 tbsp",
-                                   "bid":"fresh-ginger",
-                                   "gpu":453.592
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Garlic",
@@ -216,8 +216,8 @@
                                    "canon":  "White Mushrooms",
                                    "grams":  992,
                                    "buy":  "2.25 lb",
-                                   "bid":"mushrooms",
-                                   "gpu":28.3495
+                                   "bid":  "mushrooms",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Chicken Broth",
@@ -240,8 +240,8 @@
                                    "canon":  "Rice",
                                    "grams":  1258,
                                    "buy":  "6.75 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                }
                            ]
                },
@@ -270,7 +270,7 @@
                  "steps":  [
                                "Slice the beef thin and velvet it with cornstarch, baking soda, and soy sauce.",
                                "Cook the rice while the beef rests.",
-                               "Mix oyster sauce, soy sauce, broths, sugar, and a cornstarch slurry into a sauce.",
+                               "Mix oyster sauce, soy sauce, broths, sugar, salt, and a cornstarch slurry into a sauce.",
                                "Sear the beef in batches in smoking hot oil, then set aside.",
                                "Brown the mushrooms in butter, then add ginger, garlic, and green onion whites.",
                                "Add the sauce, thicken, return the beef, finish with sesame oil, and portion over rice into 14 containers."

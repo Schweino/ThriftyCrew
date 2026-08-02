@@ -74,7 +74,7 @@
                     "Toast the cashews in a dry skillet over medium heat for 3 to 4 minutes, shaking the pan, until they smell nutty and go a shade darker. Tip them onto a plate immediately so they stop cooking.",
                     "Whisk the soy sauce, fish sauce and sugar together with a splash of water and set the sauce next to the stove.",
                     "Cook the rice first and let it steam covered off the heat while you stir fry.",
-                    "Slice the chicken breast thin. Heat the vegetable oil in your largest skillet or wok over high heat and sear the chicken in batches for 3 to 4 minutes until browned and cooked through, then set it aside.",
+                    "Slice the chicken breast thin. Heat the vegetable oil in your largest skillet or wok over high heat and sear the chicken in batches for 3 to 4 minutes until browned and cooked through, seasoning with the salt and black pepper, then set it aside.",
                     "Add the minced garlic to the hot pan for 15 seconds, then the sliced onion, red bell pepper and green bell pepper. Stir fry 2 to 3 minutes so they soften at the edges but keep their bite.",
                     "Return the chicken, pour in the sauce, and toss for a minute until everything is coated and the liquid has reduced to a glaze.",
                     "Kill the heat and fold in the toasted cashews and the green onions, then combine with the rice in your mixing pot."
@@ -128,16 +128,16 @@
                                    "canon":  "Red Bell Pepper",
                                    "grams":  280,
                                    "buy":  "2.3",
-                                   "bid":"red-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Green Bell Peppers",
                                    "canon":  "Green Bell Peppers",
                                    "grams":  280,
                                    "buy":  "2.3",
-                                   "bid":"green-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Cashews",
@@ -200,8 +200,8 @@
                                    "canon":  "Rice",
                                    "grams":  700,
                                    "buy":  "3.75 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                }
                            ]
                },
@@ -229,7 +229,7 @@
                  "steps":  [
                                "Toast the cashews in a dry skillet 3 to 4 minutes and set aside.",
                                "Whisk soy sauce, fish sauce and sugar with a splash of water, and cook the rice.",
-                               "Sear the sliced chicken in hot oil in batches, then set aside.",
+                               "Season and sear the sliced chicken in hot oil in batches, then set aside.",
                                "Stir fry garlic, onion and both bell peppers 2 to 3 minutes, return the chicken, and add the sauce.",
                                "Fold in the cashews and green onions off the heat, combine with the rice, and portion into 14 containers."
                            ]

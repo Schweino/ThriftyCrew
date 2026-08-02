@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Sudado de Cerdo (Colombian Pork and Potato Stew)",
     "slug":  "sudado-de-cerdo-colombian-pork-stew",
     "cuisine":  "Colombian",
@@ -71,7 +71,7 @@
                     "Add the diced tomatoes with their juice and let them cook down for about five minutes into a thick base.",
                     "Return the pork chops to the pot, tuck in the sliced carrots and the peeled and quartered potatoes, cover tightly, and cook on low heat for about an hour.",
                     "Resist adding water. The vegetables and tomato give off enough liquid to make the sauce, and that is where the flavor concentration comes from.",
-                    "When the potatoes are fork tender, stir in the chopped green onions and cilantro and taste for salt. Cook the rice per the package to serve underneath."
+                    "When the potatoes are fork tender, stir in the chopped green onions and cilantro and taste for salt."
                 ],
     "portion_html":  "Spread the cooked rice across your 14 containers, then set the pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and spoon that exact weight of pork, potatoes and sauce over the rice. Every plate lands near 670 calories with 54 grams of protein, a genuinely high number for a pork and potato stew.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.mycolombianrecipes.com/sudado-de-cerdo-colombian-pork-stew/\" target=\"_blank\" rel=\"noopener\"\u003emycolombianrecipes.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
@@ -162,24 +162,24 @@
                                    "canon":  "Carrots",
                                    "grams":  427,
                                    "buy":  "7",
-                                   "bid":"carrots",
-                                   "gpu":453.592
+                                   "bid":  "carrots",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Potato",
                                    "canon":  "Potato",
                                    "grams":  4570,
                                    "buy":  "21.5",
-                                   "bid":"russet-potatoes",
-                                   "gpu":453.592
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Fresh Cilantro",
                                    "canon":  "Fresh Cilantro",
                                    "grams":  25,
                                    "buy":  "25 tbsp",
-                                   "bid":"cilantro",
-                                   "gpu":57
+                                   "bid":  "cilantro",
+                                   "gpu":  57
                                },
                                {
                                    "item":  "Salt",
@@ -215,7 +215,7 @@
                                "Cook the onion and garlic in the same pot, then add the diced tomatoes and reduce.",
                                "Return the pork and add the carrots and potatoes, then cover tightly.",
                                "Cook on low about an hour without adding water, until the potatoes are tender.",
-                               "Finish with green onions and cilantro and serve over cooked rice."
+                               "Finish with green onions and cilantro just before serving."
                            ]
              },
     "ingredients_grams":  [

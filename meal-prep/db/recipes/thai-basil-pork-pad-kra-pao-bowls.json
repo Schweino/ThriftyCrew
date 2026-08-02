@@ -69,13 +69,15 @@
                    ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice per the package and set it aside, since these are rice bowls and the rice is the base of each one.",
                     "Mince the garlic and jalapenos together, coarsely, so you get bursts of heat rather than an even burn.",
                     "Stir the fish sauce, soy sauce, oyster sauce, sugar, and chicken broth together in a bowl so the sauce goes in all at once later.",
                     "Heat the vegetable oil in a very large skillet or wok over high heat until it shimmers.",
                     "Add the garlic and jalapenos and cook for about thirty seconds, just until fragrant, without letting the garlic brown.",
                     "Add the ground pork and cook hard, breaking it up, until it is browned and the liquid has cooked off.",
                     "Pour in the sauce mixture and let it bubble and glaze the pork, then season with salt and black pepper to taste.",
-                    "Kill the heat, dump in all the basil at once, and fold it through until it just wilts."
+                    "Kill the heat, dump in all the basil at once, and fold it through until it just wilts.",
+                    "Divide the rice into the containers and spoon the basil pork over the top."
                 ],
     "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight from Step 1, and divide by 14. Scoop that weight into each container. Every serving comes in at \u003cstrong\u003e838 calories with 37 grams of protein\u003c/strong\u003e. The basil darkens overnight, which is normal and does not hurt a thing.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://hungryinthailand.com/pad-kra-pao/\" target=\"_blank\" rel=\"noopener\"\u003ehungryinthailand.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
@@ -110,8 +112,8 @@
                                    "canon":  "Jalapeno",
                                    "grams":  392,
                                    "buy":  "13.75 oz",
-                                   "bid":"jalapenos",
-                                   "gpu":453.592
+                                   "bid":  "jalapenos",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Ground Pork",
@@ -174,8 +176,8 @@
                                    "canon":  "Rice",
                                    "grams":  770,
                                    "buy":  "4.25 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Salt",
@@ -216,12 +218,12 @@
                                           "0.12 lb chicken broth"
                                       ],
                  "steps":  [
+                               "Cook the rice and set it aside as the base for the bowls.",
                                "Coarsely mince the garlic and jalapenos together.",
                                "Whisk the fish sauce, soy sauce, oyster sauce, sugar, and broth into one sauce.",
-                               "Cook the garlic and chilies in very hot oil for about thirty seconds.",
-                               "Add the ground pork and cook hard until browned and dry.",
-                               "Pour in the sauce and let it glaze the pork.",
-                               "Fold in all the basil off the heat and portion into 14 containers."
+                               "Cook the garlic and chilies in very hot oil, then add the ground pork and cook hard until browned and dry.",
+                               "Pour in the sauce, glaze the pork, and season with salt and black pepper.",
+                               "Fold in all the basil off the heat, then portion the rice into 14 containers and spoon the pork over."
                            ]
              },
     "ingredients_grams":  [

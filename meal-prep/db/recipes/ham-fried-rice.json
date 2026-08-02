@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Ham Fried Rice",
     "slug":  "ham-fried-rice",
     "cuisine":  "chinese-american",
@@ -71,7 +71,7 @@
                     "Add more oil and fry the diced ham until the edges crisp, then add the carrots and the white parts of the green onions and cook until the carrots soften.",
                     "Add the garlic for a few seconds, then add the cold rice and press it into the hot pan. Let it sit undisturbed between stirs so it toasts instead of steaming.",
                     "Pour the soy sauce around the edges of the pan rather than into the middle so it hits hot metal and caramelizes.",
-                    "Kill the heat, fold in the scrambled egg and the green onion tops, then finish with the sesame oil and black pepper."
+                    "Kill the heat, fold in the scrambled egg and the green onion tops, then finish with the sesame oil, a little salt, and black pepper."
                 ],
     "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container, tossing between scoops so the ham and egg stay even. Every bowl lands near 565 calories and 28 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.spendwithpennies.com/ham-fried-rice/\" target=\"_blank\" rel=\"noopener\"\u003espendwithpennies.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
@@ -138,16 +138,16 @@
                                    "canon":  "Carrots",
                                    "grams":  770,
                                    "buy":  "12.6",
-                                   "bid":"carrots",
-                                   "gpu":453.592
+                                   "bid":  "carrots",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Rice",
                                    "canon":  "Rice",
                                    "grams":  1180,
                                    "buy":  "6.5 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Soy Sauce",
@@ -199,7 +199,7 @@
                                "Scramble the beaten eggs in a little oil, then remove and chop them.",
                                "Fry the diced ham until crisp at the edges, then add carrots and the white parts of the green onions.",
                                "Add the garlic, then the cold rice, pressing it into the hot pan so it toasts.",
-                               "Pour the soy sauce around the pan edges, fold in the egg and green onion tops, and finish with sesame oil."
+                               "Pour the soy sauce around the pan edges, fold in the egg and green onion tops, and finish with sesame oil, a little salt, and black pepper."
                            ]
              },
     "ingredients_grams":  [

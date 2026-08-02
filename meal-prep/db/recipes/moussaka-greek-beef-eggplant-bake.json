@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Moussaka (Greek Beef and Eggplant Bake)",
     "slug":  "moussaka-greek-beef-eggplant-bake",
     "cuisine":  "Greek",
@@ -88,7 +88,7 @@
                     "Slice the eggplant into thick rounds, salt them, and let them sweat in a colander for 30 minutes. Pat them dry, brush with olive oil, and roast at 425F until soft and golden, about 25 minutes. This step is what keeps moussaka from turning watery.",
                     "While the eggplant roasts, cook the onion in olive oil until soft, add the garlic, then brown the ground beef and break it up as it cooks.",
                     "Stir in the crushed tomatoes, tomato paste, beef broth, sugar, cinnamon, oregano, bay leaves, salt, and pepper. Simmer until it thickens and most of the liquid is gone, about 30 minutes. A wet meat sauce makes a sloppy bake.",
-                    "Make the bechamel. Melt the butter, whisk in the flour and cook it for two minutes, then add the milk slowly while whisking until it thickens. Off the heat, stir in the parmesan and nutmeg, then temper in the beaten eggs so they do not scramble.",
+                    "Make the bechamel. Melt the butter, whisk in the flour and cook it for two minutes, then add the milk and the splash of chicken broth slowly while whisking until it thickens. Off the heat, stir in the parmesan and nutmeg, then temper in the beaten eggs so they do not scramble.",
                     "Scatter bread crumbs across the bottom of a large baking dish, then layer roasted eggplant, meat sauce, more eggplant, and pour the bechamel over the top so it reaches every corner.",
                     "Bake at 350F for 45 minutes, until the top is set and browned in patches. Let it rest at least 30 minutes before cutting. Cut it hot and the layers slide apart.",
                     "Cook the rice while the bake rests and put a scoop in the bottom of each container to round the meal out."
@@ -150,8 +150,8 @@
                                    "canon":  "93/7 Ground Beef",
                                    "grams":  1482,
                                    "buy":  "3.25 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Beef Broth",
@@ -222,8 +222,8 @@
                                    "canon":  "All-Purpose Flour",
                                    "grams":  93,
                                    "buy":  "11.5 tbsp",
-                                   "bid":"flour",
-                                   "gpu":453.592
+                                   "bid":  "flour",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Milk",
@@ -246,8 +246,8 @@
                                    "canon":  "Parmesan Cheese",
                                    "grams":  105,
                                    "buy":  "3.75 oz",
-                                   "bid":"parmesan",
-                                   "gpu":28.3495
+                                   "bid":  "parmesan",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Eggs",
@@ -286,8 +286,8 @@
                                    "canon":  "Rice",
                                    "grams":  700,
                                    "buy":  "3.75 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                }
                            ]
                },
@@ -317,7 +317,7 @@
                  "steps":  [
                                "Salt, dry, oil, and roast the eggplant slices at 425F until golden.",
                                "Brown the beef with onion and garlic, then simmer with tomatoes, paste, broth, and spices until thick.",
-                               "Make a bechamel from butter, flour, and milk, then finish it with parmesan and tempered eggs.",
+                               "Make a bechamel from butter, flour, milk, and a splash of chicken broth, then finish it with parmesan and tempered eggs.",
                                "Layer bread crumbs, eggplant, meat sauce, and eggplant in a large dish and pour the bechamel over the top.",
                                "Bake at 350F for 45 minutes and rest 30 minutes before cutting into 14 portions."
                            ]

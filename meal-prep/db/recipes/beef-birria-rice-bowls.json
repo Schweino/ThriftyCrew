@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Beef Birria Rice Bowls",
     "slug":  "beef-birria-rice-bowls",
     "cuisine":  "Mexican",
@@ -79,8 +79,8 @@
                     "Blend the drained chiles with the diced tomatoes, onion, garlic, white vinegar, cumin, oregano, cinnamon, and cloves until completely smooth. Strain it if you want a silkier consomme.",
                     "Cut the chuck roast into large chunks, season with salt and black pepper, and sear them in the olive oil until browned.",
                     "Pour the chile sauce and the beef broth over the beef, add the bay leaves, and bring it to a bare simmer.",
-                    "Cover and cook 3.5 to 4 hours on the lowest heat that keeps it moving, until the beef falls apart when pushed.",
-                    "Shred the beef and return it to the consomme, then taste and correct the salt and the vinegar."
+                    "Cover and cook 3.5 to 4 hours on the lowest heat that keeps it moving, until the beef falls apart when pushed. Cook the rice separately near the end.",
+                    "Shred the beef and return it to the consomme, then taste and correct the salt and the vinegar. Serve the beef and consomme over the rice."
                 ],
     "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of shredded beef and consomme into each of 14 containers, making sure every one gets its share of the liquid and not just the meat. Each bowl lands at \u003cstrong\u003e780 calories with 58 grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.isabeleats.com/authentic-birria/\" target=\"_blank\" rel=\"noopener\"\u003eisabeleats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
@@ -235,8 +235,8 @@
                                    "canon":  "Rice",
                                    "grams":  770,
                                    "buy":  "4.25 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                }
                            ]
                },
@@ -264,8 +264,8 @@
                                "Toast the stemmed and seeded chiles in a dry pan, then soak them 20 minutes in hot water.",
                                "Blend the chiles with tomatoes, onion, garlic, vinegar, and spices until smooth.",
                                "Sear the seasoned chuck roast chunks in olive oil.",
-                               "Add the chile sauce, beef broth, and bay leaves and simmer 3.5 to 4 hours.",
-                               "Shred the beef back into the consomme and portion into 14 containers."
+                               "Add the chile sauce, beef broth, and bay leaves and simmer 3.5 to 4 hours, cooking the rice separately near the end.",
+                               "Shred the beef back into the consomme and portion over the rice into 14 containers."
                            ]
              },
     "ingredients_grams":  [

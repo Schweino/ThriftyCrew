@@ -18,7 +18,21 @@
                  "cost_ps":  "4.99"
              },
     "intro_html":  "Drunken noodles with ground turkey: all the basil, jalapeno, and chewy rice noodles of pad kee mao, with 9 grams of fat per bowl instead of takeout\u0027s mystery number. Each serving brings \u003cstrong\u003e30 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.99\u003c/strong\u003e (at everyday cost).",
-    "ingredients_display": ["\u003cstrong\u003eRice Noodles (Thai Kitchen):\u003c/strong\u003e 45.5 oz dry (1293 g)","\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.75 cups (223 g)","\u003cstrong\u003eOyster Sauce (Lee Kum Kee):\u003c/strong\u003e 6.75 oz (189 g)","\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 2.25 tbsp (42 g)","\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 3.5 tbsp (47 g)","\u003cstrong\u003eSriracha (Huy Fong Foods):\u003c/strong\u003e 1.25 tbsp (18 g)","\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.5 lb (1588 g)","\u003cstrong\u003eJalapeno:\u003c/strong\u003e 11 tbsp (98 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)","\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 6.25 cups (315 g)","\u003cstrong\u003eFresh Basil:\u003c/strong\u003e 28 tbsp (42 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
+    "ingredients_display":  [
+                                "\u003cstrong\u003eRice Noodles (Thai Kitchen):\u003c/strong\u003e 45.5 oz dry (1293 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.75 cups (223 g)",
+                                "\u003cstrong\u003eOyster Sauce (Lee Kum Kee):\u003c/strong\u003e 6.75 oz (189 g)",
+                                "\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 2.25 tbsp (42 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 3.5 tbsp (47 g)",
+                                "\u003cstrong\u003eSriracha (Huy Fong Foods):\u003c/strong\u003e 1.25 tbsp (18 g)",
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 11 tbsp (98 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 6.25 cups (315 g)",
+                                "\u003cstrong\u003eFresh Basil:\u003c/strong\u003e 28 tbsp (42 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
+                            ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Rice Noodles, 45.5 oz dry: ~$15.51. \u003cstrong\u003eBuy 4 14oz boxs: $19.05.\u003c/strong\u003e",
@@ -42,7 +56,7 @@
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Soak or boil the rice noodles per the package until just shy of tender, drain, and rinse.",
                     "Stir together the soy sauce, oyster sauce, fish sauce, brown sugar, and sriracha for the sauce.",
-                    "Heat your largest skillet or pot over high heat and brown the ground turkey, breaking it into crumbles, until cooked through to 165F with some crispy edges.",
+                    "Heat your largest skillet or pot over high heat and brown the ground turkey, breaking it into crumbles, until cooked through to 165F with some crispy edges. Season with the salt and black pepper as it browns.",
                     "Add the garlic and jalapeno and stir fry 1 minute.",
                     "Add the noodles and the sauce and toss until the noodles drink up the sauce and everything is glossy.",
                     "Off the heat, fold in the green onions and fresh basil so they wilt without cooking flat."
@@ -98,22 +112,22 @@
                                    "item":  "Sriracha",
                                    "grams":  18,
                                    "buy":  "1.25 tbsp",
-                                   "bid":"sriracha",
-                                   "gpu":29.57
+                                   "bid":  "sriracha",
+                                   "gpu":  29.57
                                },
                                {
                                    "item":  "93/7 Ground Turkey",
                                    "grams":  1588,
                                    "buy":  "3.5 lb",
-                                   "bid":"93-7-ground-turkey",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Jalapeno",
                                    "grams":  98,
                                    "buy":  "11 tbsp",
-                                   "bid":"jalapenos",
-                                   "gpu":453.592
+                                   "bid":  "jalapenos",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Garlic",
@@ -175,7 +189,7 @@
                  "steps":  [
                                "Soak or boil rice noodles until just shy of tender, then drain.",
                                "Mix soy, oyster sauce, fish sauce, brown sugar, and sriracha into a sauce.",
-                               "Brown ground turkey to 165F, then add garlic and jalapeno.",
+                               "Brown ground turkey to 165F and season with salt and black pepper, then add garlic and jalapeno.",
                                "Toss in noodles and sauce until glossy.",
                                "Fold in green onions and basil off the heat, then portion into 14 containers."
                            ]

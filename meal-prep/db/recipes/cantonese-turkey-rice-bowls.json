@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Cantonese Turkey Rice Bowls",
     "slug":  "cantonese-turkey-rice-bowls",
     "cuisine":  "chinese",
@@ -70,7 +70,7 @@
                    ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
-                    "Heat the vegetable oil in a wide skillet over medium-high, add the ground turkey, and brown it, breaking it into fine crumbles, until it is cooked through to 165F.",
+                    "Heat the vegetable oil in a wide skillet over medium-high, add the ground turkey, and brown it, breaking it into fine crumbles and seasoning with the salt, until it is cooked through to 165F.",
                     "Add the diced onion and minced garlic and cook 4 minutes until the onion softens and goes translucent.",
                     "Pour in the chicken broth, oyster sauce, soy sauce, and black pepper, and bring it to a simmer for 5 minutes so the flavors settle in together.",
                     "Whisk the cornstarch with a half cup of cold water until smooth. Cold water, always, since cornstarch in hot liquid turns into lumps you cannot whisk out.",
@@ -103,8 +103,8 @@
                                    "canon":  "93/7 Ground Turkey",
                                    "grams":  1589,
                                    "buy":  "3.5 lb",
-                                   "bid":"93-7-ground-turkey",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -167,8 +167,8 @@
                                    "canon":  "Frozen Green Peas",
                                    "grams":  469,
                                    "buy":  "1 lb",
-                                   "bid":"frozen-peas",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-peas",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Cornstarch",
@@ -183,8 +183,8 @@
                                    "canon":  "Rice",
                                    "grams":  1035,
                                    "buy":  "5.5 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Salt",
@@ -218,7 +218,7 @@
                                           "3.5 tbsp vegetable oil"
                                       ],
                  "steps":  [
-                               "Brown the ground turkey in vegetable oil to 165F.",
+                               "Brown the ground turkey in vegetable oil with a little salt to 165F.",
                                "Add onion and garlic and cook 4 minutes.",
                                "Add chicken broth, oyster sauce, soy sauce, and pepper and simmer 5 minutes.",
                                "Whisk cornstarch with cold water and stir it in to thicken the gravy.",

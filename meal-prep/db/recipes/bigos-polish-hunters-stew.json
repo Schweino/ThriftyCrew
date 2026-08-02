@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Bigos (Polish Hunter\u0027s Stew)",
     "slug":  "bigos-polish-hunters-stew",
     "cuisine":  "polish",
@@ -72,9 +72,9 @@
                    ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
-                    "Drain the sauerkraut but do not rinse all the tang out of it. Core and shred the fresh cabbage, dice the onions, and slice the mushrooms.",
+                    "Drain the sauerkraut but do not rinse all the tang out of it. Core and shred the fresh cabbage and dice the onions.",
                     "Heat the olive oil in a large heavy pot and brown the chicken thighs and the sliced smoked sausage until both have real color on them. Take them out and set them aside.",
-                    "Cook the onions in the same pot until soft, then add the mushrooms and let them give up their water.",
+                    "Cook the onions in the same pot until soft and lightly golden.",
                     "Stir in the sauerkraut, the shredded cabbage, the tomato sauce, the caraway seeds and the bay leaves.",
                     "Return the meat, add enough water to keep everything just submerged, and bring it to a bare simmer.",
                     "Cover and cook low and slow for a couple of hours, stirring now and then. This is a stew that rewards patience, not heat.",
@@ -105,32 +105,32 @@
                                    "canon":  "Green Cabbage",
                                    "grams":  525,
                                    "buy":  "1.25 lb",
-                                   "bid":"cabbage",
-                                   "gpu":453.592
+                                   "bid":  "cabbage",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Boneless Skinless Chicken Thigh",
                                    "canon":  "Boneless Skinless Chicken Thigh",
                                    "grams":  700,
                                    "buy":  "1.5 lb",
-                                   "bid":"boneless-skinless-chicken-thigh",
-                                   "gpu":453.592
+                                   "bid":  "boneless-skinless-chicken-thigh",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Smoked Turkey Sausage",
                                    "canon":  "Smoked Turkey Sausage",
                                    "grams":  772,
                                    "buy":  "1.75 lb",
-                                   "bid":"smoked-turkey-sausage",
-                                   "gpu":453.592
+                                   "bid":  "smoked-turkey-sausage",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Golden Raisins",
                                    "canon":  "Golden Raisins",
                                    "grams":  8,
                                    "buy":  "1 tbsp",
-                                   "bid":"golden-raisins",
-                                   "gpu":28.3495
+                                   "bid":  "golden-raisins",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -193,8 +193,8 @@
                                    "canon":  "Rice",
                                    "grams":  1197,
                                    "buy":  "6.5 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                }
                            ]
                },
@@ -219,9 +219,9 @@
                                           "6.5 cups dry rice"
                                       ],
                  "steps":  [
-                               "Drain the sauerkraut, shred the fresh cabbage, dice the onions and slice the mushrooms.",
+                               "Drain the sauerkraut, shred the fresh cabbage, and dice the onions.",
                                "Brown the chicken thighs and sliced smoked sausage in olive oil, then set them aside.",
-                               "Cook the onions and mushrooms in the same pot until soft.",
+                               "Cook the onions in the same pot until soft.",
                                "Add the sauerkraut, cabbage, tomato sauce, caraway and bay leaves, return the meat, and add water to just cover.",
                                "Simmer covered for a couple of hours, stir in the raisins, season, and serve over cooked rice."
                            ]

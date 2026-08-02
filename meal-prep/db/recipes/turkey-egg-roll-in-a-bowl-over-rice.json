@@ -73,7 +73,7 @@
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Shred the cabbage thin and slice the onion. Do this before you turn the stove on, because once the pan is hot this dish moves fast.",
                     "Whisk the soy sauce, rice vinegar, and brown sugar together in a small bowl so the sauce is ready to pour.",
-                    "Heat the vegetable oil in your largest skillet or a wide pot over medium-high, add the ground turkey, and brown it hard, breaking it up, until it is cooked through to 165F.",
+                    "Heat the vegetable oil in your largest skillet or a wide pot over medium-high, add the ground turkey, and brown it hard, breaking it up, until it is cooked through to 165F. Season with the salt and black pepper.",
                     "Add the sliced onion and the minced garlic and cook 3 minutes until fragrant.",
                     "Pile in the cabbage. It will look like too much and then it will cook down by half in about 6 minutes. Stir it often and stop while it still has some bite left.",
                     "Pour in the sauce, toss everything to coat, and cook 2 minutes more so the liquid clings instead of pooling in the bottom.",
@@ -96,8 +96,8 @@
                                    "canon":  "93/7 Ground Turkey",
                                    "grams":  1111,
                                    "buy":  "2.5 lb",
-                                   "bid":"93-7-ground-turkey",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -128,8 +128,8 @@
                                    "canon":  "Green Cabbage",
                                    "grams":  1458,
                                    "buy":  "1.6",
-                                   "bid":"cabbage",
-                                   "gpu":453.592
+                                   "bid":  "cabbage",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Brown Sugar",
@@ -184,8 +184,8 @@
                                    "canon":  "Rice",
                                    "grams":  1320,
                                    "buy":  "7.25 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                }
                            ]
                },
@@ -212,7 +212,7 @@
                  "steps":  [
                                "Shred the cabbage and slice the onion.",
                                "Whisk soy sauce, rice vinegar, and brown sugar into a sauce.",
-                               "Brown the ground turkey in vegetable oil to 165F, then add onion and garlic.",
+                               "Brown the ground turkey in vegetable oil to 165F, season with salt and black pepper, then add onion and garlic.",
                                "Add the cabbage and cook about 6 minutes until wilted but still crisp.",
                                "Pour in the sauce and toss 2 minutes to coat.",
                                "Cook the rice, portion by weight into 14 containers, and top with the skillet mixture and green onions."

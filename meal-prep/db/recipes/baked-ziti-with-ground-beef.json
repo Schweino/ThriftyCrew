@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Baked Ziti with Ground Beef",
     "slug":  "baked-ziti-with-ground-beef",
     "cuisine":  "American",
@@ -18,7 +18,23 @@
                  "cost_ps":  "4.57"
              },
     "intro_html":  "Baked ziti is the casserole that never lets you down: beefy marinara, creamy ricotta, and a browned mozzarella top. This meal prep version delivers \u003cstrong\u003e41 grams of protein\u003c/strong\u003e and 628 calories per serving at about \u003cstrong\u003e$4.57\u003c/strong\u003e (at everyday cost). It reheats like it was born for it.",
-    "ingredients_display": ["\u003cstrong\u003eZiti Pasta (Great Value):\u003c/strong\u003e 28 oz dry (794 g)","\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2.25 tbsp (32 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 (128 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)","\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 2.25 lb (1058 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.75 tbsp (14 g)","\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 0.75 tbsp (3 g)","\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 0.5 tbsp (4 g)","\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)","\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e 6.25 cups (1588 g)","\u003cstrong\u003eRicotta Cheese (Great Value):\u003c/strong\u003e 35 oz (992 g)","\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 2 large eggs (117 g)","\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 9.25 oz (264 g)","\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 5.5 oz (158 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
+    "ingredients_display":  [
+                                "\u003cstrong\u003eZiti Pasta (Great Value):\u003c/strong\u003e 28 oz dry (794 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2.25 tbsp (32 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 (128 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)",
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 2.25 lb (1058 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.75 tbsp (14 g)",
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 0.75 tbsp (3 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)",
+                                "\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e 6.25 cups (1588 g)",
+                                "\u003cstrong\u003eRicotta Cheese (Great Value):\u003c/strong\u003e 35 oz (992 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 2 large eggs (117 g)",
+                                "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 9.25 oz (264 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 5.5 oz (158 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
+                            ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Ziti Pasta, 28 oz dry: ~$1.71. \u003cstrong\u003eBuy 2 16oz boxs: $1.95.\u003c/strong\u003e",
@@ -37,11 +53,15 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $14.45 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $56.71. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$4.57 a bowl\u003c/strong\u003e (at everyday cost) for baked ziti that an Italian restaurant would charge you six or seven times as much for, bread not included.",
-    "shop_smart":  ["Ground beef is the priciest line here, so watch the per-pound price on the bigger packs and grab extra when it drops; it freezes clean in 1 lb portions.","Store-brand marinara does the same job as the fancy stuff, which can run several times the price, once it bakes under cheese for half an hour. Save the splurge for a dish where the sauce is the star.","Ricotta tubs go on sale around holidays. Check the price per ounce against the small tubs; the 15 oz size is almost always the better buy."],
+    "shop_smart":  [
+                       "Ground beef is the priciest line here, so watch the per-pound price on the bigger packs and grab extra when it drops; it freezes clean in 1 lb portions.",
+                       "Store-brand marinara does the same job as the fancy stuff, which can run several times the price, once it bakes under cheese for half an hour. Save the splurge for a dish where the sauce is the star.",
+                       "Ricotta tubs go on sale around holidays. Check the price per ounce against the small tubs; the 15 oz size is almost always the better buy."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Preheat the oven to 375F. Boil the ziti in salted water until just shy of al dente, about 2 minutes under the package time. Drain.",
-                    "While the pasta cooks, heat the olive oil in a large skillet and brown the ground beef with the diced onion, breaking it up as it goes, until no pink remains (160F for ground beef). Add the garlic for the last minute, then stir in the marinara, Italian seasoning, and red pepper flakes.",
+                    "While the pasta cooks, heat the olive oil in a large skillet and brown the ground beef with the diced onion, breaking it up as it goes, until no pink remains (160F for ground beef). Add the garlic for the last minute, then stir in the marinara, Italian seasoning, garlic powder, and red pepper flakes.",
                     "In a bowl, mix the ricotta, eggs, half the Parmesan, salt, and pepper.",
                     "In two 9x13 pans, layer: a third of the meat sauce, half the pasta, half the ricotta mixture in spoonfuls, then repeat, finishing with sauce on top.",
                     "Top with the mozzarella and remaining Parmesan. Bake 25 to 30 minutes until bubbly and browned at the edges.",
@@ -91,8 +111,8 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  1058,
                                    "buy":  "2.25 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Salt",
@@ -126,15 +146,15 @@
                                    "item":  "Marinara Sauce",
                                    "grams":  1588,
                                    "buy":  "6.25 cups",
-                                   "bid":"marinara-sauce",
-                                   "gpu":28.3495
+                                   "bid":  "marinara-sauce",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Ricotta Cheese",
                                    "grams":  992,
                                    "buy":  "35 oz",
-                                   "bid":"ricotta",
-                                   "gpu":28.3495
+                                   "bid":  "ricotta",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Eggs",
@@ -147,15 +167,15 @@
                                    "item":  "Reduced Fat Mozzarella",
                                    "grams":  264,
                                    "buy":  "9.25 oz",
-                                   "bid":"reduced-fat-mozzarella",
-                                   "gpu":28.3495
+                                   "bid":  "reduced-fat-mozzarella",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Parmesan Cheese",
                                    "grams":  158,
                                    "buy":  "5.5 oz",
-                                   "bid":"parmesan",
-                                   "gpu":28.3495
+                                   "bid":  "parmesan",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Black Pepper",
@@ -184,7 +204,7 @@
                                       ],
                  "steps":  [
                                "Boil the ziti 2 minutes shy of al dente and drain.",
-                               "Brown the beef with onion and garlic until no pink remains, then stir in marinara and seasonings.",
+                               "Brown the beef with onion and garlic until no pink remains, then stir in marinara, Italian seasoning, garlic powder, and red pepper flakes.",
                                "Mix ricotta with eggs and half the Parmesan.",
                                "Layer sauce, pasta, and ricotta in two 9x13 pans, then top with mozzarella and Parmesan.",
                                "Bake at 375F for 25 to 30 minutes until bubbly, rest 10 minutes, and portion into 14 containers."

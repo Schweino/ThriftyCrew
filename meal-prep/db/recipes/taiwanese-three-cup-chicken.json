@@ -75,7 +75,7 @@
                     "Start the rice.",
                     "Heat the sesame oil and vegetable oil together in a wide pan over medium heat and fry the sliced ginger until the edges curl and go slightly crisp. Do not rush this, because that fried ginger is a signature of the dish.",
                     "Add the whole peeled garlic cloves and the dried arbol chiles and cook until the garlic turns golden. Whole cloves, not minced. They go sweet and soft during the braise.",
-                    "Turn the heat up, add the chicken, and brown it on all sides.",
+                    "Turn the heat up, add the chicken, season it with the salt and black pepper, and brown it on all sides.",
                     "Pour in the soy sauce, chicken broth, and sugar, bring it to a boil, then simmer uncovered 20 to 25 minutes while the sauce reduces down and turns glossy and dark. Stir now and then so nothing catches.",
                     "Kill the heat, throw in the entire pile of basil leaves, and stir just until they wilt. Ten seconds. Basil cooked any longer than that turns black and loses everything."
                 ],
@@ -96,8 +96,8 @@
                                    "canon":  "Boneless Skinless Chicken Thigh",
                                    "grams":  3360,
                                    "buy":  "7.5 lb",
-                                   "bid":"boneless-skinless-chicken-thigh",
-                                   "gpu":453.592
+                                   "bid":  "boneless-skinless-chicken-thigh",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Vegetable Oil",
@@ -120,8 +120,8 @@
                                    "canon":  "Ginger",
                                    "grams":  47,
                                    "buy":  "7.75 tbsp",
-                                   "bid":"fresh-ginger",
-                                   "gpu":453.592
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Garlic",
@@ -192,8 +192,8 @@
                                    "canon":  "Rice",
                                    "grams":  700,
                                    "buy":  "3.75 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                }
                            ]
                },
@@ -222,7 +222,7 @@
                                "Cut and dry the chicken thighs and start the rice.",
                                "Fry sliced ginger in sesame and vegetable oil until the edges curl.",
                                "Add whole garlic cloves and dried chiles and cook until golden.",
-                               "Brown the chicken, then add soy sauce, broth, and sugar.",
+                               "Season and brown the chicken, then add soy sauce, broth, and sugar.",
                                "Simmer uncovered 20 to 25 minutes until the sauce reduces and glazes.",
                                "Kill the heat, stir in the basil until just wilted, and portion with rice into 14 containers."
                            ]

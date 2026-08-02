@@ -78,7 +78,7 @@
                     "Heat the vegetable oil in a heavy pot and fry the ginger, garlic, yellow onion, and the white parts of the green onions until fragrant.",
                     "Stir in the doubanjiang, tomato paste, and dried arbol chiles and cook for a minute until the oil turns red.",
                     "Add the beef back with the diced tomatoes, soy sauce, chicken broth, sugar, and enough water to cover. Bring it to a simmer and skim off anything that rises.",
-                    "Cover and simmer low for 2 to 3 hours, until the beef is tender enough to break with chopsticks. Taste the broth and adjust the salt at the end, not the beginning.",
+                    "Cover and simmer low for 2 to 3 hours, until the beef is tender enough to break with chopsticks. Taste the broth and adjust the salt and black pepper at the end, not the beginning.",
                     "Cook the lo mein noodles just short of done, drain, and rinse them in cold water so they stop cooking and do not clump.",
                     "Divide the noodles into the containers, ladle the beef and broth over the top, and finish with the green onion tops and chopped cilantro."
                 ],
@@ -115,8 +115,8 @@
                                    "canon":  "Ginger",
                                    "grams":  21,
                                    "buy":  "3.5 tbsp",
-                                   "bid":"fresh-ginger",
-                                   "gpu":453.592
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Garlic",
@@ -211,8 +211,8 @@
                                    "canon":  "Fresh Cilantro",
                                    "grams":  25,
                                    "buy":  "25 tbsp",
-                                   "bid":"cilantro",
-                                   "gpu":57
+                                   "bid":  "cilantro",
+                                   "gpu":  57
                                },
                                {
                                    "item":  "Salt",
@@ -258,7 +258,7 @@
                  "steps":  [
                                "Blanch the cubed beef briefly, then drain and rinse for a clear broth.",
                                "Fry ginger, garlic, and onions in oil, then add doubanjiang, tomato paste, and dried chiles.",
-                               "Return the beef with tomatoes, soy sauce, broth, and water and simmer 2 to 3 hours until tender.",
+                               "Return the beef with tomatoes, soy sauce, broth, and water and simmer 2 to 3 hours until tender, adjusting the salt and black pepper at the end.",
                                "Cook the lo mein noodles just short of done and rinse in cold water.",
                                "Portion noodles into 14 containers, ladle beef and broth over, and top with green onion and cilantro."
                            ]

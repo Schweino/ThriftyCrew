@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Oyakodon (Japanese Chicken and Egg Rice Bowls)",
     "slug":  "oyakodon",
     "cuisine":  "Japanese",
@@ -18,7 +18,19 @@
                  "cost_ps":  "3.28"
              },
     "intro_html":  "Oyakodon is Japan\u0027s great weeknight bowl: chicken thighs and eggs simmered together in a sweet soy and mirin broth, spooned over rice so the sauce soaks in. Two proteins in one pot pushes each bowl to \u003cstrong\u003e48 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.28\u003c/strong\u003e (at everyday cost). Humble ingredients, restaurant results.",
-    "ingredients_display": ["\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 7 (794 g)","\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 4.25 lb (1984 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2 lb (952 g)","\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 24 large eggs (1225 g)","\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 cups (224 g)","\u003cstrong\u003eMirin (Mizkan):\u003c/strong\u003e 9 oz (252 g)","\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 4.75 tbsp (59 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 7 cups dry (1295 g)","\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 8.5 cups (420 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
+    "ingredients_display":  [
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 7 (794 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 4.25 lb (1984 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2 lb (952 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 24 large eggs (1225 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 cups (224 g)",
+                                "\u003cstrong\u003eMirin (Mizkan):\u003c/strong\u003e 9 oz (252 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 4.75 tbsp (59 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 7 cups dry (1295 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 8.5 cups (420 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
+                            ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Yellow Onion, 7: ~$2.00. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
@@ -36,13 +48,17 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $10.60 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.07. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$3.28 a bowl\u003c/strong\u003e (at everyday cost) for a donburi that Japanese restaurants serve for $13. The chicken-and-egg combo is an affordable high-protein pairing, and this dish was built around it.",
-    "shop_smart":  ["Boneless skinless thighs beat breast on price and are the traditional cut here anyway. The right choice is also the cheap one for once.","Eggs do heavy protein lifting for very little each by the dozen. When eggs go on sale, this recipe should move to the top of your list.","Mirin is the one specialty buy. One bottle covers this batch with plenty left, and a splash of it upgrades stir fry sauce and teriyaki for months."],
+    "shop_smart":  [
+                       "Boneless skinless thighs beat breast on price and are the traditional cut here anyway. The right choice is also the cheap one for once.",
+                       "Eggs do heavy protein lifting for very little each by the dozen. When eggs go on sale, this recipe should move to the top of your list.",
+                       "Mirin is the one specialty buy. One bottle covers this batch with plenty left, and a splash of it upgrades stir fry sauce and teriyaki for months."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Cook the rice: 7 cups dry with water per your usual method.",
-                    "In your big pot, combine the chicken broth, soy sauce, mirin, and sugar and bring to a simmer.",
+                    "In your big pot, combine the chicken broth, soy sauce, mirin, and sugar, add the sliced yellow onions, and bring to a simmer so the onions soften.",
                     "Add the chicken thighs cut into bite-size pieces and most of the green onions. Simmer 8 to 10 minutes until the chicken reads 165 F.",
-                    "Beat the eggs lightly, just until streaky, not uniform.",
+                    "Beat the eggs lightly with a pinch of the salt and black pepper, just until streaky, not uniform.",
                     "Pour the eggs evenly over the simmering chicken, cover, and cook 2 to 3 minutes. For meal prep that reheats safely, cook the eggs fully set, not runny.",
                     "Spoon the chicken and egg mixture with plenty of broth over rice in each container and top with the remaining green onions."
                 ],
@@ -69,8 +85,8 @@
                                    "item":  "Boneless Skinless Chicken Thigh",
                                    "grams":  1984,
                                    "buy":  "4.25 lb",
-                                   "bid":"boneless-skinless-chicken-thigh",
-                                   "gpu":453.592
+                                   "bid":  "boneless-skinless-chicken-thigh",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Chicken Broth",
@@ -111,8 +127,8 @@
                                    "item":  "Rice",
                                    "grams":  1295,
                                    "buy":  "7 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Green Onions",
@@ -157,9 +173,9 @@
                                       ],
                  "steps":  [
                                "Cook the rice.",
-                               "Simmer broth, soy sauce, mirin, and sugar, then add bite-size chicken thighs and green onions.",
+                               "Simmer broth, soy sauce, mirin, sugar, and sliced yellow onions, then add bite-size chicken thighs and green onions.",
                                "Cook 8 to 10 minutes until the chicken reaches 165 F.",
-                               "Pour lightly beaten eggs over the top, cover, and cook until fully set.",
+                               "Pour lightly beaten eggs, seasoned with salt and pepper, over the top, cover, and cook until fully set.",
                                "Spoon chicken, egg, and broth over rice in 14 containers and top with green onions."
                            ]
              },

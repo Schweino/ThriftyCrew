@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Brazilian Galinhada (Chicken and Saffron Rice)",
     "slug":  "brazilian-galinhada",
     "cuisine":  "Brazilian",
@@ -73,7 +73,7 @@
                    ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
-                    "Cut the chicken thighs into large pieces and season them with salt, black pepper and the lemon juice. Let them sit 20 minutes while you chop everything else.",
+                    "Cut the chicken thighs into large pieces and season them with the lemon juice. Let them sit 20 minutes while you chop everything else.",
                     "Heat the vegetable oil in your largest heavy pot over medium-high and brown the chicken in batches until it has real color on both sides. Do not rush this, because the fond on the bottom of the pot is the entire flavor base. Set the chicken aside.",
                     "Cook the diced onion and green bell pepper in the same pot for 5 minutes, then add the garlic and the tomato paste and cook 2 more minutes until the paste turns brick red.",
                     "Stir in the dry rice and toast it for 2 minutes so every grain gets coated in the tomato and the drippings.",
@@ -98,8 +98,8 @@
                                    "canon":  "Boneless Skinless Chicken Thigh",
                                    "grams":  2800,
                                    "buy":  "6.25 lb",
-                                   "bid":"boneless-skinless-chicken-thigh",
-                                   "gpu":453.592
+                                   "bid":  "boneless-skinless-chicken-thigh",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Vegetable Oil",
@@ -122,8 +122,8 @@
                                    "canon":  "Green Bell Peppers",
                                    "grams":  336,
                                    "buy":  "3",
-                                   "bid":"green-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Garlic",
@@ -138,8 +138,8 @@
                                    "canon":  "Rice",
                                    "grams":  1036,
                                    "buy":  "5.5 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Chicken Broth",
@@ -178,8 +178,8 @@
                                    "canon":  "Frozen Green Peas",
                                    "grams":  305,
                                    "buy":  "10.75 oz",
-                                   "bid":"frozen-peas",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-peas",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Lemon Juice",
@@ -220,7 +220,7 @@
                                           "14 tbsp green onions"
                                       ],
                  "steps":  [
-                               "Season the cut chicken with salt, pepper and lemon juice and rest 20 minutes.",
+                               "Season the cut chicken with the lemon juice and rest 20 minutes.",
                                "Brown the chicken in oil in batches, then set aside and soften onion and bell pepper with garlic and tomato paste.",
                                "Toast the dry rice in the pot for 2 minutes.",
                                "Add tomatoes, broth and bay leaves, return the chicken, cover, and cook on low 20 to 25 minutes.",

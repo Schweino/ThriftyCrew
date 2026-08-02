@@ -75,7 +75,7 @@
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Soak the dry rice noodles in warm water until they are pliable but still firm in the center, about 20 minutes. They finish cooking in the pan, so pulling them early is correct.",
                     "Whisk the oyster sauce, soy sauce, fish sauce and sugar together with a splash of water. Have it ready at the stove; there is no time to mix once the pan is hot.",
-                    "Slice the chicken thighs thin. Heat the vegetable oil in your largest skillet or wok as hot as it goes and sear the chicken in batches for 3 to 4 minutes until browned, then set it aside.",
+                    "Slice the chicken thighs thin. Heat the vegetable oil in your largest skillet or wok as hot as it goes and sear the chicken in batches for 3 to 4 minutes until browned, seasoning with the salt and black pepper, then set it aside.",
                     "Add the minced garlic, sliced jalapeno and sliced onion to the same pan and cook 1 minute until fragrant and just starting to soften.",
                     "Add the drained noodles and the sauce and toss constantly for 3 to 4 minutes. Let the noodles sit still for a few seconds at a time so they char in spots, then move them again. Those charred edges are the whole point of the dish.",
                     "Return the chicken and toss everything together until the sauce has coated every strand and there is no liquid pooling in the pan.",
@@ -122,8 +122,8 @@
                                    "canon":  "Jalapeno",
                                    "grams":  131,
                                    "buy":  "4.5 oz",
-                                   "bid":"jalapenos",
-                                   "gpu":453.592
+                                   "bid":  "jalapenos",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -138,8 +138,8 @@
                                    "canon":  "Boneless Skinless Chicken Thigh",
                                    "grams":  1191,
                                    "buy":  "2.75 lb",
-                                   "bid":"boneless-skinless-chicken-thigh",
-                                   "gpu":453.592
+                                   "bid":  "boneless-skinless-chicken-thigh",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Fish Sauce",
@@ -230,7 +230,7 @@
                  "steps":  [
                                "Soak the rice noodles in warm water about 20 minutes until pliable but firm, then drain.",
                                "Whisk oyster sauce, soy sauce, fish sauce and sugar with a splash of water.",
-                               "Sear the sliced chicken in very hot oil in batches, then set aside and cook garlic, jalapeno and onion 1 minute.",
+                               "Season and sear the sliced chicken in very hot oil in batches, then set aside and cook garlic, jalapeno and onion 1 minute.",
                                "Toss the noodles and sauce in the pan 3 to 4 minutes, letting them char in spots, then return the chicken.",
                                "Fold in basil and green onions off the heat and portion into 14 containers."
                            ]

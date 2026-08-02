@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Honey Garlic Steak Bites and Potatoes",
     "slug":  "honey-garlic-steak-bites-potatoes",
     "cuisine":  "American",
@@ -67,9 +67,9 @@
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Cut the sirloin into even bite sized cubes and season them with salt, black pepper, and red pepper flakes.",
                     "Sear the cubes in the vegetable oil in batches over high heat, just long enough to brown the outside. They should still be rare in the middle.",
-                    "Move the seared beef to the slow cooker with any browned bits from the pan.",
-                    "Whisk the honey, soy sauce, and minced garlic together and pour it over the beef.",
-                    "Cover and cook on low for 3 hours, until the cubes are tender but still holding their shape.",
+                    "Move the seared beef to the slow cooker with any browned bits from the pan, and add the potatoes cut into bite sized chunks.",
+                    "Whisk the honey, soy sauce, and minced garlic together and pour it over the beef and potatoes.",
+                    "Cover and cook on low for 3 hours, until the cubes are tender and the potatoes are cooked through.",
                     "Whisk the cornstarch with a little cold water, stir it in, and cook on high 15 minutes until the glaze coats the back of a spoon.",
                     "Stir in the butter off the heat so the glaze goes glossy, then taste for salt."
                 ],
@@ -170,8 +170,8 @@
                                    "canon":  "Potato",
                                    "grams":  2100,
                                    "buy":  "10",
-                                   "bid":"russet-potatoes",
-                                   "gpu":453.592
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  453.592
                                }
                            ]
                },
@@ -195,7 +195,7 @@
                  "steps":  [
                                "Cut the sirloin into even cubes and season with salt, pepper, and chili flakes.",
                                "Sear the cubes in batches over high heat, browning the outside only.",
-                               "Slow cook on low 3 hours in honey, soy sauce, and garlic.",
+                               "Add the seared beef and the cubed potatoes to the slow cooker and cook on low 3 hours in honey, soy sauce, and garlic.",
                                "Stir in a cornstarch slurry and thicken on high 15 minutes.",
                                "Finish with butter off the heat and portion into 14 containers."
                            ]

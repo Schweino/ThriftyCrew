@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Moo Shu Pork Rice Bowls",
     "slug":  "moo-shu-pork-rice-bowls",
     "cuisine":  "Chinese-American",
@@ -85,9 +85,9 @@
                     "Shred the cabbage, cut the carrots into matchsticks, slice the mushrooms, mince the garlic, and separate the green onion whites from the tops.",
                     "Beat the eggs and scramble them in a little of the vegetable oil until just set, then take them out and chop them roughly.",
                     "Get your largest pan very hot, add more oil, and stir fry the marinated pork in batches until it is browned and cooked through. Crowding the pan will steam the pork instead of searing it.",
-                    "Add the garlic and the green onion whites, then the mushrooms, carrots and cabbage, and stir fry until the cabbage wilts but still has some bite left in it.",
+                    "Add the garlic and the green onion whites, then the mushrooms, carrots and cabbage, and stir fry until the cabbage wilts but still has some bite left in it, seasoning with a little salt.",
                     "Return the pork, add the hoisin sauce, oyster sauce, the rest of the soy sauce and the chicken broth, and toss until everything is glazed.",
-                    "Kill the heat, fold in the scrambled egg and the green onion tops, finish with the sesame oil, and serve over rice with warm tortilla strips standing in for the pancakes."
+                    "Kill the heat, fold in the scrambled egg and the green onion tops, finish with the sesame oil, and serve over rice."
                 ],
     "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount over rice in each container, tossing between scoops so the pork does not settle. Every bowl lands near 593 calories and 25 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thewoksoflife.com/moo-shu-pork-recipe/\" target=\"_blank\" rel=\"noopener\"\u003ethewoksoflife.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
@@ -186,24 +186,24 @@
                                    "canon":  "Green Cabbage",
                                    "grams":  490,
                                    "buy":  "1 lb",
-                                   "bid":"cabbage",
-                                   "gpu":453.592
+                                   "bid":  "cabbage",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Carrots",
                                    "canon":  "Carrots",
                                    "grams":  385,
                                    "buy":  "6.3",
-                                   "bid":"carrots",
-                                   "gpu":453.592
+                                   "bid":  "carrots",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "White Mushrooms",
                                    "canon":  "White Mushrooms",
                                    "grams":  188,
                                    "buy":  "6.75 oz",
-                                   "bid":"mushrooms",
-                                   "gpu":28.3495
+                                   "bid":  "mushrooms",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Chicken Broth",
@@ -226,8 +226,8 @@
                                    "canon":  "Rice",
                                    "grams":  936,
                                    "buy":  "5 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Salt",
@@ -266,7 +266,7 @@
                                "Slice the pork shoulder thin and marinate it in soy sauce, cornstarch and black pepper.",
                                "Scramble the beaten eggs in oil, then remove and chop them.",
                                "Stir fry the marinated pork in batches in a very hot pan until browned.",
-                               "Add the garlic, green onion whites, mushrooms, carrots and cabbage and stir fry until the cabbage wilts.",
+                               "Add the garlic, green onion whites, mushrooms, carrots and cabbage and stir fry until the cabbage wilts, seasoning with a little salt.",
                                "Return the pork, glaze with hoisin, oyster sauce, soy sauce and broth, then fold in the egg and finish with sesame oil."
                            ]
              },

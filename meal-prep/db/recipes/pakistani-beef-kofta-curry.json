@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Pakistani Beef Kofta Curry",
     "slug":  "pakistani-beef-kofta-curry",
     "cuisine":  "Pakistani",
@@ -72,7 +72,7 @@
                    ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
-                    "Mix the ground beef with a small amount of finely grated onion, minced jalapeno, chopped cilantro, the flour, and the ground cumin, coriander, chili powder, and salt. Knead it until it is smooth and slightly sticky.",
+                    "Mix the ground beef with a small amount of finely grated onion, minced jalapeno, chopped cilantro, the flour, and the ground cumin, coriander, chili powder, salt, and black pepper. Knead it until it is smooth and slightly sticky.",
                     "Roll the mixture into even meatballs and set them on a tray in the fridge while you build the gravy.",
                     "Slice the rest of the onions thin and fry them in the vegetable oil over medium heat, patiently, until they are deep golden brown. This step is the entire dish, so do not rush it.",
                     "Add the minced garlic and the turmeric and cook 1 minute, then take the pot off the heat for a moment.",
@@ -121,8 +121,8 @@
                                    "canon":  "Greek Yogurt",
                                    "grams":  1015,
                                    "buy":  "4.25 cups",
-                                   "bid":"greek-yogurt",
-                                   "gpu":28.3495
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Ground Cumin",
@@ -177,32 +177,32 @@
                                    "canon":  "93/7 Ground Beef",
                                    "grams":  1750,
                                    "buy":  "3.75 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "All-Purpose Flour",
                                    "canon":  "All-Purpose Flour",
                                    "grams":  56,
                                    "buy":  "7 tbsp",
-                                   "bid":"flour",
-                                   "gpu":453.592
+                                   "bid":  "flour",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Jalapeno",
                                    "canon":  "Jalapeno",
                                    "grams":  98,
                                    "buy":  "11 tbsp",
-                                   "bid":"jalapenos",
-                                   "gpu":453.592
+                                   "bid":  "jalapenos",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Fresh Cilantro",
                                    "canon":  "Fresh Cilantro",
                                    "grams":  7,
                                    "buy":  "7 tbsp",
-                                   "bid":"cilantro",
-                                   "gpu":57
+                                   "bid":  "cilantro",
+                                   "gpu":  57
                                },
                                {
                                    "item":  "Black Pepper",
@@ -217,8 +217,8 @@
                                    "canon":  "Rice",
                                    "grams":  700,
                                    "buy":  "3.75 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                }
                            ]
                },
@@ -242,7 +242,7 @@
                                           "3.75 cups dry rice"
                                       ],
                  "steps":  [
-                               "Knead ground beef with grated onion, jalapeno, cilantro, flour, and spices and roll into koftas.",
+                               "Knead ground beef with grated onion, jalapeno, cilantro, flour, cumin, coriander, chili powder, salt, and black pepper and roll into koftas.",
                                "Fry the sliced onions in oil until deep golden, then add garlic and turmeric.",
                                "Whisk in the yogurt off the heat, then cook until the oil separates.",
                                "Lower in the koftas with a little water and simmer 25 to 30 minutes.",

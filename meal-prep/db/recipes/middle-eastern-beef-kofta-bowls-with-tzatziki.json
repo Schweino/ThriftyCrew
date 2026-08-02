@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Middle Eastern Beef Kofta Bowls with Tzatziki",
     "slug":  "middle-eastern-beef-kofta-bowls-with-tzatziki",
     "cuisine":  "Middle Eastern",
@@ -19,7 +19,26 @@
                  "cost_ps":  "6.23"
              },
     "intro_html":  "Kofta is spiced beef shaped into little logs and roasted until browned, then served over rice with cool garlic tzatziki, tomatoes, and herbs. It is a serious flavor-per-effort bargain. Each bowl carries a hefty \u003cstrong\u003e47 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$6.23\u003c/strong\u003e (at everyday cost), still less than a third of the restaurant plate.",
-    "ingredients_display": ["\u003cstrong\u003eCucumber:\u003c/strong\u003e 9.4 (2828 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (10 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 6 tbsp (52 g)","\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 3.5 cups (858 g)","\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2.25 tbsp (32 g)","\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 0.75 tbsp (2 g)","\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 1.7 (82 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (2 g)","\u003cstrong\u003eRed Onion:\u003c/strong\u003e 2.7 (302 g)","\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 4.75 lb (2112 g)","\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 3.5 tbsp (22 g)","\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)","\u003cstrong\u003eFresh Mint:\u003c/strong\u003e 3 tbsp (5 g)","\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 0.25 tbsp (2 g)","\u003cstrong\u003eGround Allspice (Great Value):\u003c/strong\u003e 0 oz (2 g)","\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 5 tbsp (5 g)","\u003cstrong\u003eCherry Tomatoes:\u003c/strong\u003e 7 cups (1043 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.5 cups dry (851 g)"],
+    "ingredients_display":  [
+                                "\u003cstrong\u003eCucumber:\u003c/strong\u003e 9.4 (2828 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (10 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6 tbsp (52 g)",
+                                "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 3.5 cups (858 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2.25 tbsp (32 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 0.75 tbsp (2 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 1.7 (82 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (2 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 2.7 (302 g)",
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 4.75 lb (2112 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 3.5 tbsp (22 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)",
+                                "\u003cstrong\u003eFresh Mint:\u003c/strong\u003e 3 tbsp (5 g)",
+                                "\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 0.25 tbsp (2 g)",
+                                "\u003cstrong\u003eGround Allspice (Great Value):\u003c/strong\u003e 0 oz (2 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 5 tbsp (5 g)",
+                                "\u003cstrong\u003eCherry Tomatoes:\u003c/strong\u003e 7 cups (1043 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.5 cups dry (851 g)"
+                            ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Cucumber, 9.4: ~$7.16. \u003cstrong\u003eBuy 10 eachs: $7.60.\u003c/strong\u003e",
@@ -39,10 +58,14 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $20.98 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $73.60. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$6.23 a bowl\u003c/strong\u003e (at everyday cost) for a kofta plate that runs $15 or more at a Mediterranean grill, and it still beats eating out by a wide margin.",
-    "shop_smart":  ["Cherry tomatoes are one of the bigger produce lines here. If romas or regular tomatoes are cheaper the week you shop, dice those instead and pocket the difference.","Making tzatziki from a big tub of plain Greek yogurt costs a fraction of the little store-made tubs, and one 32 ounce tub covered all 14 servings.","Beef is the anchor of this whole batch. Watch for the 5 pound value pack price and cook this recipe the week it drops."],
+    "shop_smart":  [
+                       "Cherry tomatoes are one of the bigger produce lines here. If romas or regular tomatoes are cheaper the week you shop, dice those instead and pocket the difference.",
+                       "Making tzatziki from a big tub of plain Greek yogurt costs a fraction of the little store-made tubs, and one 32 ounce tub covered all 14 servings.",
+                       "Beef is the anchor of this whole batch. Watch for the 5 pound value pack price and cook this recipe the week it drops."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
-                    "Make the tzatziki: grate about a third of the cucumbers, salt them, and squeeze out the water hard. Stir into the Greek yogurt with half the garlic, a splash of lemon juice, the mint, and a pinch of salt. Refrigerate.",
+                    "Make the tzatziki: grate about a third of the cucumbers, salt them, and squeeze out the water hard. Stir into the Greek yogurt with half the garlic, a splash of lemon juice, the olive oil, the dried oregano, the mint, and a pinch of salt. Refrigerate.",
                     "Cook the rice: 4.5 cups dry with water per your usual method.",
                     "Grate one of the red onions and squeeze it dry. Mix it into the ground beef with the remaining garlic, cumin, cinnamon, allspice, red pepper flakes, salt, and pepper.",
                     "Shape the beef into small logs or ovals, about 3 per serving, and set them on foil-lined sheet pans.",
@@ -66,8 +89,8 @@
                                    "item":  "Cucumber",
                                    "grams":  2828,
                                    "buy":  "9.4",
-                                   "bid":"cucumbers",
-                                   "gpu":300
+                                   "bid":  "cucumbers",
+                                   "gpu":  300
                                },
                                {
                                    "item":  "Salt",
@@ -87,8 +110,8 @@
                                    "item":  "Greek Yogurt",
                                    "grams":  858,
                                    "buy":  "3.5 cups",
-                                   "bid":"greek-yogurt",
-                                   "gpu":28.3495
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Olive Oil",
@@ -122,15 +145,15 @@
                                    "item":  "Red Onion",
                                    "grams":  302,
                                    "buy":  "2.7",
-                                   "bid":"red-onion",
-                                   "gpu":453.592
+                                   "bid":  "red-onion",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2112,
                                    "buy":  "4.75 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Ground Cumin",
@@ -171,22 +194,22 @@
                                    "item":  "Fresh Cilantro",
                                    "grams":  5,
                                    "buy":  "5 tbsp",
-                                   "bid":"cilantro",
-                                   "gpu":57
+                                   "bid":  "cilantro",
+                                   "gpu":  57
                                },
                                {
                                    "item":  "Cherry Tomatoes",
                                    "grams":  1043,
                                    "buy":  "7 cups",
-                                   "bid":"cherry-tomatoes",
-                                   "gpu":28.3495
+                                   "bid":  "cherry-tomatoes",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  851,
                                    "buy":  "4.5 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                }
                            ]
                },
@@ -211,7 +234,7 @@
                                           "1.7 lemon juice portions"
                                       ],
                  "steps":  [
-                               "Make tzatziki: squeeze grated salted cucumber dry, then mix with Greek yogurt, garlic, lemon juice, and mint. Chill.",
+                               "Make tzatziki: squeeze grated salted cucumber dry, then mix with Greek yogurt, garlic, lemon juice, olive oil, oregano, and mint. Chill.",
                                "Cook the rice.",
                                "Mix beef with squeezed grated onion, garlic, and the spices, then shape into small logs.",
                                "Broil or bake at 450 F for 12 to 15 minutes until browned and cooked through.",

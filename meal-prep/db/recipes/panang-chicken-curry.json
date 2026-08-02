@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Panang Chicken Curry",
     "slug":  "panang-chicken-curry",
     "cuisine":  "Thai",
@@ -78,7 +78,7 @@
                    ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
-                    "Soak the dried chiles in hot water for 20 minutes. Drain them and blend with the peanuts, lemongrass paste, ginger, garlic, ground coriander, salt and a splash of the soaking water into a thick, coarse paste.",
+                    "Soak the dried chiles in hot water for 20 minutes. Drain them and blend with the peanuts, lemongrass paste, ginger, garlic, ground coriander, salt, black pepper, and a splash of the soaking water into a thick, coarse paste.",
                     "Spoon the thick cream off the top of the unshaken coconut milk cans into your largest pot, reserving the thin liquid. Cook it with the vegetable oil over medium-high for 3 to 5 minutes until the oil splits out.",
                     "Add your panang paste and the diced onion and fry it in that oil for 3 to 4 minutes, stirring hard, until it darkens a shade and smells nutty and sharp at the same time.",
                     "Add the chicken thighs cut into strips and turn them in the paste for 3 minutes, then pour in the reserved coconut liquid and the chicken broth.",
@@ -103,8 +103,8 @@
                                    "canon":  "Boneless Skinless Chicken Thigh",
                                    "grams":  1135,
                                    "buy":  "2.5 lb",
-                                   "bid":"boneless-skinless-chicken-thigh",
-                                   "gpu":453.592
+                                   "bid":  "boneless-skinless-chicken-thigh",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Chicken Broth",
@@ -151,8 +151,8 @@
                                    "canon":  "Ginger",
                                    "grams":  17,
                                    "buy":  "2.75 tbsp",
-                                   "bid":"fresh-ginger",
-                                   "gpu":453.592
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Garlic",
@@ -183,8 +183,8 @@
                                    "canon":  "Coconut Milk",
                                    "grams":  791,
                                    "buy":  "2 cans",
-                                   "bid":"coconut-milk-canned",
-                                   "gpu":29.57
+                                   "bid":  "coconut-milk-canned",
+                                   "gpu":  29.57
                                },
                                {
                                    "item":  "Sugar",
@@ -231,8 +231,8 @@
                                    "canon":  "Rice",
                                    "grams":  700,
                                    "buy":  "3.75 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Black Pepper",
@@ -266,7 +266,7 @@
                                           "3.75 cups dry rice"
                                       ],
                  "steps":  [
-                               "Soak the dried chiles, then blend with peanuts, lemongrass, ginger, garlic and coriander into a coarse paste.",
+                               "Soak the dried chiles, then blend with peanuts, lemongrass, ginger, garlic, coriander, salt, and black pepper into a coarse paste.",
                                "Fry the thick coconut cream with oil until it splits, then fry the paste and onion 3 to 4 minutes.",
                                "Add the chicken, the reserved coconut liquid and the broth, and simmer uncovered 20 to 25 minutes until thick.",
                                "Season with fish sauce and sugar and add the green beans for 4 minutes.",

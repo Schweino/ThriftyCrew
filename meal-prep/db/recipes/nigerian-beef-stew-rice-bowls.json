@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Nigerian Beef Stew over Rice",
     "slug":  "nigerian-beef-stew-rice-bowls",
     "cuisine":  "Nigerian",
@@ -80,7 +80,7 @@
                     "Blend the diced tomatoes with the bell peppers, jalapeno, remaining onion, garlic, and ginger until smooth.",
                     "Heat the vegetable oil and olive oil in a wide pot and pour in the blended base. Fry it, stirring, until it thickens noticeably and the raw edge cooks off.",
                     "Stir in the tomato paste and keep frying a few more minutes so the paste loses its metallic taste.",
-                    "Add the boiled beef, the reserved stock, and the beef broth. Simmer uncovered 30 to 40 minutes until the sauce is thick enough to sit on a spoon.",
+                    "Add the boiled beef, the reserved stock, the beef broth, and the chicken broth. Simmer uncovered 30 to 40 minutes until the sauce is thick enough to sit on a spoon.",
                     "Taste and correct the salt and pepper. The stew should taste sharper than you think, because the rice will mute it.",
                     "Cook the rice separately and keep it plain."
                 ],
@@ -157,16 +157,16 @@
                                    "canon":  "Green Bell Peppers",
                                    "grams":  420,
                                    "buy":  "3.5",
-                                   "bid":"green-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Jalapeno",
                                    "canon":  "Jalapeno",
                                    "grams":  49,
                                    "buy":  "5.5 tbsp",
-                                   "bid":"jalapenos",
-                                   "gpu":453.592
+                                   "bid":  "jalapenos",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Diced Tomatoes",
@@ -189,8 +189,8 @@
                                    "canon":  "Ginger",
                                    "grams":  13,
                                    "buy":  "2.25 tbsp",
-                                   "bid":"fresh-ginger",
-                                   "gpu":453.592
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Vegetable Oil",
@@ -237,8 +237,8 @@
                                    "canon":  "Rice",
                                    "grams":  700,
                                    "buy":  "3.75 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                }
                            ]
                },
@@ -268,7 +268,7 @@
                                "Boil the cubed beef with onion, bay, thyme, and curry powder, then reserve the stock.",
                                "Blend tomatoes, bell peppers, jalapeno, onion, garlic, and ginger smooth.",
                                "Fry the blended base in oil until thick, then fry in the tomato paste.",
-                               "Add the beef, reserved stock, and broth and simmer 30 to 40 minutes.",
+                               "Add the beef, reserved stock, beef broth, and chicken broth and simmer 30 to 40 minutes.",
                                "Cook the rice and portion stew and rice into 14 containers."
                            ]
              },

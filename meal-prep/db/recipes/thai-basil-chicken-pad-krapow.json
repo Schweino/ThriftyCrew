@@ -71,7 +71,7 @@
                     "Chop the chicken thighs into small pieces, roughly the size of a thumbnail, so they cook through in the time a stir fry allows.",
                     "Cook the rice first and let it steam covered off the heat while you do everything else.",
                     "Heat the vegetable oil in your largest skillet or wok over the highest heat you have. Add the minced garlic and sliced jalapeno and cook 20 seconds, just until the garlic turns pale gold.",
-                    "Add the chicken in batches so the pan never cools down and stir hard for 4 to 5 minutes until it is cooked through and browned in spots. Crowding the pan is the one mistake that ruins this dish.",
+                    "Add the chicken in batches so the pan never cools down and stir hard for 4 to 5 minutes until it is cooked through and browned in spots, seasoning with the salt and black pepper as it cooks. Crowding the pan is the one mistake that ruins this dish.",
                     "Return all the chicken to the pan, pour in the sauce, and let it bubble and reduce for a minute until it clings to the meat.",
                     "Kill the heat, throw in the fresh basil and the sliced green onions all at once, and fold until the basil just wilts. Then combine with the rice in your mixing pot."
                 ],
@@ -92,8 +92,8 @@
                                    "canon":  "Boneless Skinless Chicken Thigh",
                                    "grams":  1575,
                                    "buy":  "3.5 lb",
-                                   "bid":"boneless-skinless-chicken-thigh",
-                                   "gpu":453.592
+                                   "bid":  "boneless-skinless-chicken-thigh",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Green Onions",
@@ -124,8 +124,8 @@
                                    "canon":  "Jalapeno",
                                    "grams":  98,
                                    "buy":  "11 tbsp",
-                                   "bid":"jalapenos",
-                                   "gpu":453.592
+                                   "bid":  "jalapenos",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Vegetable Oil",
@@ -164,8 +164,8 @@
                                    "canon":  "Rice",
                                    "grams":  1197,
                                    "buy":  "6.5 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Salt",
@@ -208,7 +208,7 @@
                  "steps":  [
                                "Whisk oyster sauce, soy sauce and sugar with a splash of water and set the sauce aside.",
                                "Cook the rice and steam it covered off the heat.",
-                               "Sizzle garlic and jalapeno in very hot oil for 20 seconds, then stir fry the chopped chicken in batches 4 to 5 minutes.",
+                               "Sizzle garlic and jalapeno in very hot oil for 20 seconds, then stir fry the chopped chicken in batches 4 to 5 minutes, seasoning with salt and black pepper.",
                                "Return all the chicken, add the sauce, and reduce a minute until it clings.",
                                "Fold in the basil and green onions off the heat, combine with the rice, and portion into 14 containers."
                            ]

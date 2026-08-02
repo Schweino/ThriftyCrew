@@ -70,7 +70,7 @@
                     "Heat the vegetable oil in a wok or wide pot, add the grated ginger and the white parts of the green onions, and cook 30 seconds.",
                     "Add the ground turkey and brown it into fine crumbles until it is cooked through to 165F.",
                     "Push the meat aside and fry the doubanjiang in the oil for 1 minute until it turns the fat a deep red. This step is what pulls the flavor out of the paste, and skipping it leaves the dish tasting flat and raw.",
-                    "Add the chicken broth, soy sauce, and sugar, stir everything together, and bring it to a simmer.",
+                    "Add the chicken broth, soy sauce, sugar, salt, and black pepper, stir everything together, and bring it to a simmer.",
                     "Add the drained noodles, stir to submerge them, and simmer 6 to 8 minutes until they have drunk up most of the liquid and gone glossy. Stir often so they do not weld to the bottom.",
                     "Kill the heat, fold in the green onion tops, and move everything into your weighed pot."
                 ],
@@ -107,8 +107,8 @@
                                    "canon":  "Ginger",
                                    "grams":  42,
                                    "buy":  "7 tbsp",
-                                   "bid":"fresh-ginger",
-                                   "gpu":453.592
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Doubanjiang",
@@ -123,8 +123,8 @@
                                    "canon":  "93/7 Ground Turkey",
                                    "grams":  1540,
                                    "buy":  "3.5 lb",
-                                   "bid":"93-7-ground-turkey",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Chicken Broth",
@@ -199,7 +199,7 @@
                                "Soak the dried noodles in warm water 15 minutes and drain.",
                                "Cook ginger and green onion whites in vegetable oil, then brown the ground turkey to 165F.",
                                "Fry the doubanjiang in the oil for 1 minute until it turns the fat red.",
-                               "Add chicken broth, soy sauce, and sugar and bring to a simmer.",
+                               "Add chicken broth, soy sauce, sugar, salt, and black pepper and bring to a simmer.",
                                "Add the noodles and simmer 6 to 8 minutes until the liquid is absorbed.",
                                "Fold in green onion tops and portion by weight into 14 containers."
                            ]

@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Massaman Chicken Curry",
     "slug":  "massaman-chicken-curry",
     "cuisine":  "Thai",
@@ -79,7 +79,7 @@
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Spoon the thick cream off the top of the unshaken coconut milk cans into your largest pot, keeping the thin liquid aside. Cook it with the olive oil over medium-high for 3 to 5 minutes until the oil separates.",
                     "Add the curry paste and the diced onion and fry them in that oil for 3 minutes, stirring, until the paste darkens and smells toasted.",
-                    "Add the chicken cut into chunks along with the garlic and grated ginger, and turn everything until coated.",
+                    "Add the chicken cut into chunks along with the garlic and grated ginger, season with the salt and black pepper, and turn everything until coated.",
                     "Pour in the reserved coconut liquid, then add the cubed potatoes and sliced carrots. Bring it to a simmer.",
                     "Stir in the peanut butter, brown sugar and fish sauce, then simmer uncovered 30 to 35 minutes until the potatoes are fork tender and the sauce has reduced and thickened around them.",
                     "Turn off the heat and stir in the lime juice, tasting as you go. Massaman should read sweet first, salty second and sour last, in that order.",
@@ -126,24 +126,24 @@
                                    "canon":  "Potato",
                                    "grams":  1193,
                                    "buy":  "5.6",
-                                   "bid":"russet-potatoes",
-                                   "gpu":453.592
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Carrots",
                                    "canon":  "Carrots",
                                    "grams":  342,
                                    "buy":  "5.6",
-                                   "bid":"carrots",
-                                   "gpu":453.592
+                                   "bid":  "carrots",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Ginger",
                                    "canon":  "Ginger",
                                    "grams":  11,
                                    "buy":  "1.75 tbsp",
-                                   "bid":"fresh-ginger",
-                                   "gpu":453.592
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Garlic",
@@ -166,8 +166,8 @@
                                    "canon":  "Coconut Milk",
                                    "grams":  2240,
                                    "buy":  "5.6 cans",
-                                   "bid":"coconut-milk-canned",
-                                   "gpu":29.57
+                                   "bid":  "coconut-milk-canned",
+                                   "gpu":  29.57
                                },
                                {
                                    "item":  "Peanut Butter",
@@ -214,8 +214,8 @@
                                    "canon":  "Fresh Cilantro",
                                    "grams":  25,
                                    "buy":  "25 tbsp",
-                                   "bid":"cilantro",
-                                   "gpu":57
+                                   "bid":  "cilantro",
+                                   "gpu":  57
                                },
                                {
                                    "item":  "Salt",
@@ -258,7 +258,7 @@
                                       ],
                  "steps":  [
                                "Fry the thick coconut cream with oil until it splits, then fry the curry paste and onion 3 minutes.",
-                               "Add the chunked chicken, garlic and ginger and coat in the paste.",
+                               "Add the chunked chicken, garlic and ginger, season with salt and black pepper, and coat in the paste.",
                                "Add the reserved coconut liquid, potatoes and carrots and bring to a simmer.",
                                "Stir in peanut butter, brown sugar and fish sauce and simmer uncovered 30 to 35 minutes until thick.",
                                "Finish with lime juice, chopped peanuts and cilantro, then portion into 14 containers."

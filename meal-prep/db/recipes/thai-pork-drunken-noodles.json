@@ -18,7 +18,22 @@
                  "cost_ps":  "4.36"
              },
     "intro_html":  "Pad kee mao, drunken noodles, is the spicy, basil-loaded stir fry that ruins mild takeout forever. Each bowl packs \u003cstrong\u003e31 grams of protein\u003c/strong\u003e from ground pork for about \u003cstrong\u003e$4.36\u003c/strong\u003e (at everyday cost), with jalapeno heat and wide rice noodles that actually catch the sauce.",
-    "ingredients_display": ["\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 1 cups (252 g)","\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.75 cups (223 g)","\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 2.25 tbsp (35 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 12.25 tbsp (105 g)","\u003cstrong\u003eJalapeno:\u003c/strong\u003e 7 oz (196 g)","\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.75 cups (147 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.4 (262 g)","\u003cstrong\u003eGround Pork:\u003c/strong\u003e 3.5 lb (1588 g)","\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3.5 (420 g)","\u003cstrong\u003eRice Noodles (Thai Kitchen):\u003c/strong\u003e 42 oz dry (1191 g)","\u003cstrong\u003eFresh Basil:\u003c/strong\u003e 23.25 tbsp (35 g)","\u003cstrong\u003eLime Juice:\u003c/strong\u003e 7 tbsp (105 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
+    "ingredients_display":  [
+                                "\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 1 cups (252 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.75 cups (223 g)",
+                                "\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 2.25 tbsp (35 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 12.25 tbsp (105 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 7 oz (196 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.75 cups (147 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.4 (262 g)",
+                                "\u003cstrong\u003eGround Pork:\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3.5 (420 g)",
+                                "\u003cstrong\u003eRice Noodles (Thai Kitchen):\u003c/strong\u003e 42 oz dry (1191 g)",
+                                "\u003cstrong\u003eFresh Basil:\u003c/strong\u003e 23.25 tbsp (35 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 7 tbsp (105 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
+                            ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Fish Sauce, 1 cups: ~$2.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -43,7 +58,7 @@
                     "Soak or boil the rice noodles per the package until just shy of tender, then drain and rinse. They finish in the pan.",
                     "Stir together the fish sauce, soy sauce, and rice vinegar for the sauce.",
                     "Heat the vegetable oil in your largest skillet or pot over high heat. Cook the onion 2 minutes, then add the garlic and jalapeno for 1 minute more.",
-                    "Add the ground pork and brown it hard, breaking it into crumbles, until cooked through with crispy edges.",
+                    "Add the ground pork and brown it hard, breaking it into crumbles, until cooked through with crispy edges. Season with the salt and black pepper as it browns.",
                     "Add the noodles and the sauce and toss until the noodles soak it up and everything is coated.",
                     "Kill the heat and fold in the fresh basil, sliced bell pepper, and lime juice. The basil should wilt in the residual heat, not cook."
                 ],
@@ -91,8 +106,8 @@
                                    "item":  "Jalapeno",
                                    "grams":  196,
                                    "buy":  "7 oz",
-                                   "bid":"jalapenos",
-                                   "gpu":453.592
+                                   "bid":  "jalapenos",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Vegetable Oil",
@@ -119,8 +134,8 @@
                                    "item":  "Red Bell Pepper",
                                    "grams":  420,
                                    "buy":  "3.5",
-                                   "bid":"red-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Rice Noodles",
@@ -182,7 +197,7 @@
                  "steps":  [
                                "Soak or boil rice noodles until just shy of tender, then drain.",
                                "Mix fish sauce, soy sauce, and rice vinegar into a sauce.",
-                               "Stir fry onion, garlic, and jalapeno in oil, then brown the ground pork.",
+                               "Stir fry onion, garlic, and jalapeno in oil, then brown the ground pork and season with salt and black pepper.",
                                "Toss in noodles and sauce until absorbed and coated.",
                                "Fold in basil, bell pepper, and lime juice off the heat, then portion into 14 containers."
                            ]

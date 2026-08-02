@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Cheesy Taco Spaghetti",
     "slug":  "cheesy-taco-spaghetti",
     "cuisine":  "American",
@@ -18,7 +18,21 @@
                  "cost_ps":  "4.13"
              },
     "intro_html":  "Taco night and spaghetti night stopped fighting for the calendar and merged: taco-seasoned beef, tomatoes, jalapenos, and two cheeses tangled through a pot of pasta. Each bowl brings \u003cstrong\u003e43 grams of protein\u003c/strong\u003e and 603 calories for about \u003cstrong\u003e$4.13\u003c/strong\u003e (at everyday cost). The kids will not ask questions; neither should you.",
-    "ingredients_display": ["\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1588 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 6 tbsp (52 g)","\u003cstrong\u003eTaco Seasoning (Great Value):\u003c/strong\u003e 12.25 tbsp (98 g)","\u003cstrong\u003eDiced Tomatoes \u0026 Green Chilies (Great Value (Ro-Tel style)):\u003c/strong\u003e 3.5 cans (992 g)","\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 3.5 tbsp (56 g)","\u003cstrong\u003eSpaghetti (Great Value):\u003c/strong\u003e 28 oz dry (794 g)","\u003cstrong\u003eMexican Cheese Blend (Great Value):\u003c/strong\u003e 14 oz (396 g)","\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 7 oz (198 g)","\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 3.5 cans (1438 g)","\u003cstrong\u003eOlives (generic):\u003c/strong\u003e 1.5 cups (198 g)","\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 7 tbsp (7 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6 tbsp (52 g)",
+                                "\u003cstrong\u003eTaco Seasoning (Great Value):\u003c/strong\u003e 12.25 tbsp (98 g)",
+                                "\u003cstrong\u003eDiced Tomatoes \u0026 Green Chilies (Great Value (Ro-Tel style)):\u003c/strong\u003e 3.5 cans (992 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 3.5 tbsp (56 g)",
+                                "\u003cstrong\u003eSpaghetti (Great Value):\u003c/strong\u003e 28 oz dry (794 g)",
+                                "\u003cstrong\u003eMexican Cheese Blend (Great Value):\u003c/strong\u003e 14 oz (396 g)",
+                                "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 7 oz (198 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 3.5 cans (1438 g)",
+                                "\u003cstrong\u003eOlives (generic):\u003c/strong\u003e 1.5 cups (198 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 7 tbsp (7 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
+                            ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Beef, 3.5 lb: ~$21.99. \u003cstrong\u003eBuy 4 lbs: $25.12.\u003c/strong\u003e",
@@ -45,9 +59,9 @@
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Boil the spaghetti in salted water until just shy of al dente, then drain, saving a cup of pasta water.",
-                    "Meanwhile, brown the ground beef in your largest pot over medium-high heat, breaking it up, until no pink remains; ground beef should hit 160F. Drain excess fat.",
-                    "Add the garlic and diced jalapenos and cook 2 to 3 minutes, then stir in the taco seasoning and tomato paste.",
-                    "Pour in the diced tomatoes with their juice and simmer 8 to 10 minutes until the sauce thickens.",
+                    "Meanwhile, brown the ground beef in your largest pot over medium-high heat, breaking it up and seasoning with the black pepper, until no pink remains; ground beef should hit 160F. Drain excess fat.",
+                    "Add the garlic and cook 2 to 3 minutes, then stir in the taco seasoning and tomato paste.",
+                    "Pour in the diced tomatoes and the diced tomatoes and green chilies with their juice and simmer 8 to 10 minutes until the sauce thickens.",
                     "Fold in the spaghetti with a splash of the reserved pasta water, then stir in the Mexican cheese blend until it melts into the sauce.",
                     "Top with the mozzarella, cover on low heat 3 to 4 minutes until melted, then finish with the sliced olives and chopped cilantro."
                 ],
@@ -67,8 +81,8 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  1588,
                                    "buy":  "3.5 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Garlic",
@@ -116,8 +130,8 @@
                                    "item":  "Reduced Fat Mozzarella",
                                    "grams":  198,
                                    "buy":  "7 oz",
-                                   "bid":"reduced-fat-mozzarella",
-                                   "gpu":28.3495
+                                   "bid":  "reduced-fat-mozzarella",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Diced Tomatoes",
@@ -130,15 +144,15 @@
                                    "item":  "Olives",
                                    "grams":  198,
                                    "buy":  "1.5 cups",
-                                   "bid":"green-olives",
-                                   "gpu":28.3495
+                                   "bid":  "green-olives",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Fresh Cilantro",
                                    "grams":  7,
                                    "buy":  "7 tbsp",
-                                   "bid":"cilantro",
-                                   "gpu":57
+                                   "bid":  "cilantro",
+                                   "gpu":  57
                                },
                                {
                                    "item":  "Salt",
@@ -174,8 +188,8 @@
                                       ],
                  "steps":  [
                                "Boil the spaghetti just shy of al dente and reserve a cup of pasta water.",
-                               "Brown the beef to 160F, drain, then cook the garlic and jalapenos with taco seasoning and tomato paste.",
-                               "Add the diced tomatoes and simmer 8 to 10 minutes.",
+                               "Brown and season the beef to 160F, drain, then cook the garlic with taco seasoning and tomato paste.",
+                               "Add the diced tomatoes and the tomatoes and green chilies and simmer 8 to 10 minutes.",
                                "Fold in the spaghetti and melt in the Mexican cheese blend.",
                                "Top with mozzarella, olives, and cilantro, then portion into 14 containers."
                            ]
